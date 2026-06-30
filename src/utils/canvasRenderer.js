@@ -299,23 +299,36 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       width: width - (boxMargin * 2),
       height: height - (boxMargin * 2),
       fill: '#ffffff',
-      shadow: new fabric.Shadow({ color: 'rgba(0,0,0,0.15)', blur: 20 * scale, offsetX: 0, offsetY: 10 * scale }),
+      shadow: 'rgba(0,0,0,0.15) 0px 10px 20px',
       rx: 10 * scale,
       ry: 10 * scale,
       selectable: false
     });
     canvas.add(boxRect);
 
-    const textObj = new fabric.Textbox(processText(slide.text), {
-      left: boxMargin + (40 * scale),
+    const innerWidth = width - (boxMargin * 2) - (80 * scale);
+    const cleanText = processText(slide.text);
+    // Shrink font if a very long word would overflow the inner box width.
+    const longestWord = cleanText.split(/\s+/).reduce((a, b) => (b.length > a.length ? b : a), '');
+    let boxFont = fs(slide.fontSize || 36);
+    // rough width estimate: ~0.6em per char; reduce font so longest word fits
+    const estWordWidth = longestWord.length * boxFont * 0.6;
+    if (estWordWidth > innerWidth) {
+      boxFont = boxFont * (innerWidth / estWordWidth) * 0.95;
+    }
+
+    const textObj = new fabric.Textbox(cleanText, {
+      left: width / 2,
       top: height / 2,
+      originX: 'center',
       originY: 'center',
-      width: width - (boxMargin * 2) - (80 * scale),
-      fontSize: fs(slide.fontSize || 36),
+      width: innerWidth,
+      fontSize: boxFont,
       fontFamily: fontFamily,
       fill: '#1a1a1a', // Force dark on white box
       textAlign: 'center',
-      lineHeight: 1.4
+      lineHeight: 1.35,
+      breakWords: true
     });
     canvas.add(textObj);
   }

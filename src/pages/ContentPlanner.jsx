@@ -13,6 +13,7 @@ import BulkImportModal from '../components/BulkImportModal';
 import { renderSlide } from '../utils/canvasRenderer';
 import { brandRuleSets } from '../constants/brandData';
 import { createSmartSlide } from '../utils/slideHelpers';
+import { attachSmartImages } from '../utils/smartLayoutGenerator';
 
 const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText } = FiIcons;
 
@@ -189,6 +190,35 @@ const ContentPlanner = () => {
     setTimeout(() => setSaveStatus(''), 2000);
   };
 
+  // RELOAD: re-initialize the ALREADY GENERATED posts (not the import text).
+  // Re-runs smart image matching on every slide using the current image pool,
+  // so newly uploaded images get assigned to existing posts.
+  const handleReloadPlan = async () => {
+    if (!weekPlan || weekPlan.length === 0) return;
+    setLoading(true);
+    setSaveStatus('Lade Posts neu...');
+    try {
+      const imagePool = brandSettings?.brandImages || [];
+      const reloadedPlan = [];
+      for (const day of weekPlan) {
+        const withImages = await attachSmartImages(day.slides, imagePool);
+        reloadedPlan.push({ ...day, slides: withImages });
+      }
+      updateBrandSettings({ contentPlan: reloadedPlan });
+      setSaveStatus(
+        imagePool.length > 0
+          ? 'Posts neu generiert – Bilder zugeordnet!'
+          : 'Neu generiert (keine Bilder im Pool).'
+      );
+    } catch (e) {
+      console.error('reload failed', e);
+      setSaveStatus('Fehler beim Neuladen.');
+    } finally {
+      setLoading(false);
+      setTimeout(() => setSaveStatus(''), 3500);
+    }
+  };
+
   const handleExportAll = async () => {
     if (!weekPlan || weekPlan.length === 0) return;
     setIsExportingAll(true);
@@ -264,7 +294,10 @@ const ContentPlanner = () => {
           <div className="flex flex-wrap gap-2 items-center justify-end">
             <button onClick={() => setShowImportModal(true)} className="px-3 py-2 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700 transition-colors flex items-center shadow-md whitespace-nowrap text-xs"><SafeIcon icon={FiFileText} className="mr-2" /> Bulk Import</button>
             {hasActiveBrand && (
+              <>
               <button onClick={() => setShowStyleShifter(!showStyleShifter)} className={`flex items-center px-4 py-2 rounded-lg border transition-all text-xs font-bold ${showStyleShifter ? 'bg-purple-600 text-white border-purple-600 shadow-inner' : 'bg-white border-purple-200 text-purple-700 hover:bg-purple-50 hover:border-purple-300 shadow-sm'}`} title="Style Shifter (Fonts/Colors)"><SafeIcon icon={FiRefreshCw} className="mr-2 text-sm" /> Shifter</button>
+              <button onClick={handleReloadPlan} disabled={loading || weekPlan.length === 0} className="flex items-center px-4 py-2 rounded-lg border border-emerald-200 bg-white text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300 shadow-sm transition-all text-xs font-bold disabled:opacity-40" title="Posts neu generieren (Bilder neu zuordnen)"><SafeIcon icon={FiRefreshCw} className={`mr-2 text-sm ${loading ? 'animate-spin' : ''}`} /> Neu laden</button>
+              </>
             )}
             <div className="h-6 w-px bg-gray-300 mx-1"></div>
             <button onClick={handleManualSave} className="p-2 hover:bg-white rounded-md text-green-700 transition-colors" title="Speichern"><SafeIcon icon={FiSave} /></button>
