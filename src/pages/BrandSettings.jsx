@@ -51,8 +51,33 @@ const BrandSettings = () => {
   const updateCurrentBrand = (field, value) => {
     if (!brandSettings.currentBrandConfig) return;
     const updatedConfig = { ...brandSettings.currentBrandConfig, [field]: value };
-    // IMMEDIATE UPDATE to insure preview reflects changes instantly
-    updateBrandSettings({ currentBrandConfig: updatedConfig });
+
+    // Cascade color/typography changes onto ALL existing posts so the
+    // settings always win and Feed + Posts stay identical.
+    const patch = { currentBrandConfig: updatedConfig };
+    if (field === 'colors' || field === 'typography') {
+      const c = updatedConfig.colors || {};
+      const t = updatedConfig.typography || {};
+      const applyToSlide = (s) => ({
+        ...s,
+        ...(field === 'colors' ? {
+          color: c.primary,
+          backgroundColor: c.background,
+          secondaryColor: c.secondary,
+          accentColor: c.accent,
+        } : {
+          fontFamily: t.fontFamily,
+          accentFontFamily: t.accentFontFamily,
+        }),
+      });
+      if (Array.isArray(brandSettings.contentPlan)) {
+        patch.contentPlan = brandSettings.contentPlan.map((day) => ({
+          ...day,
+          slides: (day.slides || []).map(applyToSlide),
+        }));
+      }
+    }
+    updateBrandSettings(patch);
   };
 
   const handleSave = () => {
