@@ -14,8 +14,9 @@ import { renderSlide } from '../utils/canvasRenderer';
 import { brandRuleSets } from '../constants/brandData';
 import { createSmartSlide } from '../utils/slideHelpers';
 import { attachSmartImages } from '../utils/smartLayoutGenerator';
+import { weightedLayoutPool, getRating, setRating } from '../utils/layoutRatings';
 
-const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText } = FiIcons;
+const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown } = FiIcons;
 
 const ContentPlanner = () => {
   const { brandSettings, updateBrandSettings } = useBrand();
@@ -29,6 +30,7 @@ const ContentPlanner = () => {
   const [isExportingAll, setIsExportingAll] = useState(false);
   const [exportingDayId, setExportingDayId] = useState(null);
   const [saveStatus, setSaveStatus] = useState('');
+  const [ratingTick, setRatingTick] = useState(0); // bump to refresh thumb UI
   const [autoApplyStyle, setAutoApplyStyle] = useState(true);
 
   const currentBrand = brandSettings.currentBrandConfig;
@@ -157,12 +159,14 @@ const ContentPlanner = () => {
     const brandConfig = brandSettings.currentBrandConfig;
     const ruleKey = brandConfig?.ruleSet;
     const rules = (ruleKey && brandRuleSets[ruleKey]) ? brandRuleSets[ruleKey] : { layoutRules: [] };
-    const allowedLayouts = rules.layoutRules.length > 0 ? rules.layoutRules : ['minimal_quote', 'centered_focus', 'glass_layer'];
+    const baseLayouts = rules.layoutRules.length > 0 ? rules.layoutRules : ['minimal_quote', 'centered_focus', 'glass_layer'];
+    const allowedLayouts = weightedLayoutPool(baseLayouts);
 
     const newPlan = importedDays.map((dayData, dIdx) => {
-        const forcedLayout = allowedLayouts[dIdx % allowedLayouts.length];
         const slides = dayData.slides.map((text, sIdx) => {
-            const layout = sIdx === 0 ? forcedLayout : 'glass_layer'; 
+            // Rotate through allowed layouts (offset per day) so slides vary
+            // instead of always using the same layout.
+            const layout = allowedLayouts[(dIdx + sIdx) % allowedLayouts.length];
             return createSmartSlide(brandConfig, { text, layout }, sIdx, dayData.slides.length);
         });
 
@@ -348,6 +352,30 @@ const ContentPlanner = () => {
                       <div className="flex items-center space-x-2 flex-1 mr-4"><SafeIcon icon={FiType} className="text-gray-400 text-xs"/><input type="range" min="16" max="160" value={activeSlide.fontSize} onChange={(e) => updateActiveSlideFontSize(day.day, parseInt(e.target.value))} className="flex-1 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-600" /></div>
                       <button onClick={() => setExpandedCaptionId(isCaptionOpen ? null : day.day)} className={`p-2 rounded-lg transition-colors ${isCaptionOpen ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}><SafeIcon icon={FiMessageSquare} /></button>
                     </div>
+                    {/* Layout-Bewertung: Daumen hoch/runter fürs aktuelle Layout */}
+                    {(() => {
+                      const lay = dynamicActiveSlide.layout || dynamicActiveSlide.layoutId;
+                      const rating = getRating(lay);
+                      return (
+                        <div className="flex items-center justify-center gap-3 mb-4 text-xs text-gray-500">
+                          <span>Layout «{lay}»</span>
+                          <button
+                            onClick={() => { setRating(lay, 1); setRatingTick((t) => t + 1); }}
+                            className={`p-1.5 rounded-lg border transition-colors ${rating === 1 ? 'bg-emerald-100 border-emerald-300 text-emerald-700' : 'bg-white border-gray-200 text-gray-400 hover:text-emerald-600'}`}
+                            title="Dieses Layout öfter nutzen"
+                          >
+                            <SafeIcon icon={FiThumbsUp} />
+                          </button>
+                          <button
+                            onClick={() => { setRating(lay, -1); setRatingTick((t) => t + 1); }}
+                            className={`p-1.5 rounded-lg border transition-colors ${rating === -1 ? 'bg-red-100 border-red-300 text-red-700' : 'bg-white border-gray-200 text-gray-400 hover:text-red-600'}`}
+                            title="Dieses Layout seltener/nicht nutzen"
+                          >
+                            <SafeIcon icon={FiThumbsDown} />
+                          </button>
+                        </div>
+                      );
+                    })()}
                     {isCaptionOpen && (
                       <div className="mb-4 p-3 bg-blue-50 text-sm text-blue-900 rounded-lg border border-blue-100 relative"><p className="whitespace-pre-wrap pr-6">{day.caption || "Keine Caption verfügbar."}</p><button onClick={() => navigator.clipboard.writeText(day.caption)} className="absolute top-2 right-2 p-1 hover:bg-blue-100 rounded text-blue-500" title="Kopieren"><SafeIcon icon={FiCopy} /></button></div>
                     )}
