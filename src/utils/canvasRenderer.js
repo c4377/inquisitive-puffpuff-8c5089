@@ -30,6 +30,30 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   const accentColor = slide.accentColor || '#000000';
   const fontFamily = slide.fontFamily || 'Inter';
   const accentFont = slide.accentFontFamily || fontFamily;
+
+  // Helper: luminance of a hex color (0=dark, 255=light)
+  const hexLuminance = (hex) => {
+    if (!hex || typeof hex !== 'string') return 128;
+    let h = hex.replace('#', '');
+    if (h.length === 3) h = h.split('').map((c) => c + c).join('');
+    const r = parseInt(h.slice(0, 2), 16);
+    const g = parseInt(h.slice(2, 4), 16);
+    const b = parseInt(h.slice(4, 6), 16);
+    if ([r, g, b].some(Number.isNaN)) return 128;
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+
+  // Contrast-safe text color: if chosen color is too close to the background,
+  // flip to white/black so text never disappears on same-tone backgrounds.
+  const bgLum = hexLuminance(slide.backgroundColor || '#ffffff');
+  const contrastColor = (preferred) => {
+    const prefLum = hexLuminance(preferred);
+    // if preferred and background are both dark or both light -> low contrast
+    if (Math.abs(prefLum - bgLum) < 60) {
+      return bgLum > 140 ? '#111111' : '#FFFFFF';
+    }
+    return preferred;
+  };
   
   // Helper: Arrow
   const drawArrow = (fromX, fromY, toX, toY, color) => {
@@ -46,8 +70,41 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     canvas.add(arrow);
   };
 
-  // Helper: Text Processor
-  const processText = (text) => text || '';
+  // Helper: Text Processor — strips *accent* markers so asterisks never show
+  // as literal characters in any layout. (Accent styling for layouts that
+  // support it is applied separately via parseAccent below.)
+  const processText = (text) => (text || '').replace(/\*([^*]+)\*/g, '$1');
+
+  // Helper: parse *accent* segments out of a string.
+  // Returns { plain, segments: [{text, accent}] } for per-character styling.
+  const parseAccent = (text) => {
+    const raw = text || '';
+    const parts = raw.split(/(\*[^*]+\*)/g).filter((s) => s !== '');
+    const segments = parts.map((seg) => {
+      const isAccent = seg.startsWith('*') && seg.endsWith('*') && seg.length > 2;
+      return { text: isAccent ? seg.slice(1, -1) : seg, accent: isAccent };
+    });
+    return { plain: segments.map((s) => s.text).join(''), segments };
+  };
+
+  // Helper: apply accent color + accent font to *..* parts of a Textbox
+  const applyAccentStyles = (textObj, segments) => {
+    try {
+      let idx = 0;
+      segments.forEach((s) => {
+        if (s.accent && s.text.length) {
+          textObj.setSelectionStyles(
+            { fill: accentColor, fontStyle: 'italic', fontFamily: accentFont },
+            idx,
+            idx + s.text.length
+          );
+        }
+        idx += s.text.length;
+      });
+    } catch (e) {
+      // best-effort; plain text still renders
+    }
+  };
 
   // === STRATEGY: LAYOUT ENGINE ===
   const layout = slide.layout || 'centered_focus';
@@ -81,17 +138,19 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     }
 
     // Main Body
-    const mainText = new fabric.Textbox(processText(slide.text), {
+    const { plain: ecPlain, segments: ecSegs } = parseAccent(slide.text);
+    const mainText = new fabric.Textbox(ecPlain, {
       left: padding,
       top: currentY,
       width: width - (padding * 2),
       fontSize: (slide.fontSize || 40) * scale,
       fontFamily: fontFamily,
-      fill: primaryColor,
+      fill: contrastColor(primaryColor),
       lineHeight: 1.3,
       textAlign: 'left',
       fontWeight: slide.fontWeight || 'normal'
     });
+    applyAccentStyles(mainText, ecSegs);
     canvas.add(mainText);
   }
 
@@ -210,19 +269,42 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
      });
   }
 
-  // 5. CENTERED FOCUS (Default)
+  // 5. MINIMAL QUOTE (Cover / Brand preview) — supports *accent* word
+  else if (layout === 'minimal_quote' || layout === 'maximized_bold' || layout === 'tweet_card') {
+    const mainColor = contrastColor(primaryColor);
+    const { plain, segments } = parseAccent(slide.text);
+
+    const textObj = new fabric.Textbox(plain, {
+      left: padding,
+      top: height / 2,
+      originY: 'center',
+      width: width - (padding * 2),
+      fontSize: (slide.fontSize || 44) * scale,
+      fontFamily: fontFamily,
+      fill: mainColor,
+      textAlign: slide.textAlign || 'center',
+      lineHeight: 1.25,
+      fontWeight: slide.fontWeight || 'bold',
+    });
+    applyAccentStyles(textObj, segments);
+    canvas.add(textObj);
+  }
+
+  // 6. CENTERED FOCUS (Default)
   else {
-    const textObj = new fabric.Textbox(processText(slide.text), {
+    const { plain: cfPlain, segments: cfSegs } = parseAccent(slide.text);
+    const textObj = new fabric.Textbox(cfPlain, {
       left: padding,
       top: height / 2,
       originY: 'center',
       width: width - (padding * 2),
       fontSize: (slide.fontSize || 48) * scale,
       fontFamily: fontFamily,
-      fill: primaryColor,
+      fill: contrastColor(primaryColor),
       textAlign: slide.textAlign || 'center',
       lineHeight: 1.3
     });
+    applyAccentStyles(textObj, cfSegs);
     canvas.add(textObj);
   }
 

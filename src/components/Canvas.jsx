@@ -59,36 +59,53 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "MUSE 
     const canvas = fabricRef.current;
     if (!canvas || !data) return;
 
-    // Dimensions
-    let canvasWidth = 400;
-    let canvasHeight = 500;
+    // Dimensions (internal render resolution — kept high for crisp scaling)
+    let canvasWidth = 800;
+    let canvasHeight = 1000;
 
     if (data.format === '16:9') {
       canvasWidth = 960;
       canvasHeight = 540;
     } else if (data.format === '9:16') {
-      canvasWidth = 400;
-      canvasHeight = 711;
+      canvasWidth = 800;
+      canvasHeight = 1422;
     } else if (data.format === '1:1') {
-        canvasWidth = 500;
-        canvasHeight = 500;
+        canvasWidth = 800;
+        canvasHeight = 800;
+    } else if (data.format === '4:5') {
+        canvasWidth = 800;
+        canvasHeight = 1000;
     }
 
     // Update Dimensions
     canvas.setDimensions({ width: canvasWidth, height: canvasHeight });
 
-    // Render
+    // Render — scale fonts/spacing proportionally to the internal width.
+    // Base design width was 400px, so scale = width/400 keeps text proportions.
+    const renderScale = canvasWidth / 400;
     renderSlide(canvas, data, canvasWidth, canvasHeight, { 
       slideIndex: data.slideNumber ? data.slideNumber - 1 : 0, 
       totalSlides: data.totalSlides || (data.slideNumber ? 2 : 1), 
-      scale: 1, 
+      scale: renderScale, 
       globalBrandName: brandName 
     });
+
+    // FIX: Fabric renders at an internal resolution (e.g. 400x500). Scale the
+    // visible <canvas> to the container WIDTH while keeping aspect ratio, so the
+    // content shrinks/grows proportionally instead of being cut off or oversized.
+    const el = canvas.lowerCanvasEl;
+    if (el) {
+      el.style.width = '100%';
+      el.style.height = 'auto';
+      el.style.display = 'block';
+      el.style.maxHeight = '100%';
+      el.style.objectFit = 'contain';
+    }
 
   }, [data, fontLoaded, brandName]);
 
   return (
-    <div className="w-full h-full bg-white overflow-hidden shadow-sm relative">
+    <div className="w-full h-full bg-white overflow-hidden shadow-sm relative flex items-center justify-center">
       <canvas ref={canvasRef} />
     </div>
   );
