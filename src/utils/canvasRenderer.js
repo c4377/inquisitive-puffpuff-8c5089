@@ -623,17 +623,31 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const mainColor = contrastColor(primaryColor);
     const { plain, segments } = parseAccent(slide.text);
 
+    const boxWidth = width - (padding * 2);
+    let fontSize = fs(slide.fontSize || 44);
+
+    // Auto-shrink so the longest single word fits the box width.
+    // (maximized_bold uses huge fonts; long German words can overflow.)
+    try {
+      const longestWord = plain.split(/\s+/).reduce((a, b) => (a.length >= b.length ? a : b), '');
+      const measure = new fabric.Text(longestWord, { fontSize, fontFamily, fontWeight: slide.fontWeight || 'bold' });
+      if (measure.width > boxWidth && measure.width > 0) {
+        fontSize = Math.floor(fontSize * (boxWidth / measure.width) * 0.96);
+      }
+    } catch (e) { /* measure best-effort */ }
+
     const textObj = new fabric.Textbox(plain, {
       left: padding,
       top: height / 2,
       originY: 'center',
-      width: width - (padding * 2),
-      fontSize: fs(slide.fontSize || 44),
+      width: boxWidth,
+      fontSize: fontSize,
       fontFamily: fontFamily,
       fill: mainColor,
       textAlign: slide.textAlign || 'center',
       lineHeight: 1.25,
       fontWeight: slide.fontWeight || 'bold',
+      splitByGrapheme: false,
     });
     applyAccentStyles(textObj, segments);
     canvas.add(textObj);
