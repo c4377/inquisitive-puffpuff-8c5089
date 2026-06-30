@@ -195,23 +195,49 @@ const ContentPlanner = () => {
   };
 
   // RELOAD: re-initialize the ALREADY GENERATED posts (not the import text).
-  // Re-runs smart image matching on every slide using the current image pool,
-  // so newly uploaded images get assigned to existing posts.
+  // Cover rule: of the 7 day-covers, days 1,3,5,7 get a background image,
+  // days 2,4,6 stay image-free (layout only). Content slides keep images.
   const handleReloadPlan = async () => {
     if (!weekPlan || weekPlan.length === 0) return;
     setLoading(true);
     setSaveStatus('Lade Posts neu...');
     try {
       const imagePool = brandSettings?.brandImages || [];
+      // Fixed pattern: which day-INDEX (0-based) gets a cover image.
+      // days 1,3,5,7 => indices 0,2,4,6
+      const coverGetsImage = (dayIdx) => dayIdx % 2 === 0;
+
       const reloadedPlan = [];
-      for (const day of weekPlan) {
+      for (let dayIdx = 0; dayIdx < weekPlan.length; dayIdx++) {
+        const day = weekPlan[dayIdx];
         const withImages = await attachSmartImages(day.slides, imagePool);
-        reloadedPlan.push({ ...day, slides: withImages });
+
+        // Enforce cover rule on slide 0 (the cover)
+        const adjusted = withImages.map((slide, sIdx) => {
+          if (sIdx !== 0) return slide; // only the cover is governed by the rule
+          if (coverGetsImage(dayIdx)) {
+            return slide; // keep assigned image
+          }
+          // remove image -> layout-only cover
+          const { background, overlay, _autoImage, ...rest } = slide;
+          // If the cover had a photo-only layout (cover_*/sarah_cover), swap to
+          // a strong text layout so the image-free cover still looks designed.
+          const photoLayouts = ['sarah_cover', 'cover_top_left', 'cover_bottom_left', 'cover_bottom_center', 'cover_center_hero', 'cover_top_center'];
+          const textCoverLayouts = ['minimal_quote', 'maximized_bold', 'editorial_classic', 'diagonal_overlay'];
+          const curLayout = rest.layout || rest.layoutId;
+          const newLayout = photoLayouts.includes(curLayout)
+            ? textCoverLayouts[dayIdx % textCoverLayouts.length]
+            : curLayout;
+          return { ...rest, background: null, layout: newLayout, layoutId: newLayout };
+        });
+
+        reloadedPlan.push({ ...day, slides: adjusted });
       }
       updateBrandSettings({ contentPlan: reloadedPlan });
+      const imgCovers = weekPlan.filter((_, i) => coverGetsImage(i)).length;
       setSaveStatus(
         imagePool.length > 0
-          ? 'Posts neu generiert – Bilder zugeordnet!'
+          ? `Neu generiert – ${imgCovers} Cover mit Bild, Rest mit Layout.`
           : 'Neu generiert (keine Bilder im Pool).'
       );
     } catch (e) {
