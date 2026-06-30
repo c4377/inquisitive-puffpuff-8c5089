@@ -260,25 +260,16 @@ const ContentPlanner = () => {
       for (const day of weekPlan) {
         for (let i = 0; i < day.slides.length; i++) {
           const slide = day.slides[i];
-          
-          // Fabric Export Logic
           const canvasEl = document.createElement('canvas');
           const canvasWidth = 1080;
           const canvasHeight = slide.format === '9:16' ? 1920 : 1350;
-          const scale = canvasWidth / 400; // Base width logic
-
+          const scale = canvasWidth / 400;
           const fCanvas = new fabric.StaticCanvas(canvasEl, { width: canvasWidth, height: canvasHeight });
-          
-          await renderSlide(fCanvas, { ...slide, visualElements: slide.visualElements || [] }, canvasWidth, canvasHeight, { 
-            slideIndex: i, 
-            totalSlides: day.slides.length,
-            scale,
-            globalBrandName
+          await renderSlide(fCanvas, { ...slide, visualElements: slide.visualElements || [] }, canvasWidth, canvasHeight, {
+            slideIndex: i, totalSlides: day.slides.length, scale, globalBrandName
           });
-          
           const dataUrl = fCanvas.toDataURL({ format: 'png', multiplier: 1 });
           const blob = await (await fetch(dataUrl)).blob();
-          
           if (blob) {
             const cleanTitle = day.title.replace(/[^a-z0-9]/gi, '_').substring(0, 20);
             folder.file(`Tag_${day.day}_${cleanTitle}_Slide_${i + 1}.png`, blob);
@@ -292,6 +283,38 @@ const ContentPlanner = () => {
       console.error("Export Failed", e);
     } finally {
       setIsExportingAll(false);
+    }
+  };
+
+  // Export a SINGLE day (was previously a dead button).
+  const handleExportDay = async (day) => {
+    if (!day || !day.slides?.length) return;
+    setExportingDayId(day.day);
+    try {
+      const zip = new JSZip();
+      const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "MUSE MENTORING";
+      for (let i = 0; i < day.slides.length; i++) {
+        const slide = day.slides[i];
+        const canvasEl = document.createElement('canvas');
+        const canvasWidth = 1080;
+        const canvasHeight = slide.format === '9:16' ? 1920 : 1350;
+        const scale = canvasWidth / 400;
+        const fCanvas = new fabric.StaticCanvas(canvasEl, { width: canvasWidth, height: canvasHeight });
+        await renderSlide(fCanvas, { ...slide, visualElements: slide.visualElements || [] }, canvasWidth, canvasHeight, {
+          slideIndex: i, totalSlides: day.slides.length, scale, globalBrandName
+        });
+        const dataUrl = fCanvas.toDataURL({ format: 'png', multiplier: 1 });
+        const blob = await (await fetch(dataUrl)).blob();
+        if (blob) zip.file(`Slide_${i + 1}.png`, blob);
+        fCanvas.dispose();
+      }
+      const content = await zip.generateAsync({ type: "blob" });
+      const cleanTitle = (day.title || `Tag_${day.day}`).replace(/[^a-z0-9]/gi, '_').substring(0, 20);
+      saveAs(content, `Tag_${day.day}_${cleanTitle}.zip`);
+    } catch (e) {
+      console.error("Day export failed", e);
+    } finally {
+      setExportingDayId(null);
     }
   };
 
@@ -407,7 +430,7 @@ const ContentPlanner = () => {
                     )}
                     <div className="grid grid-cols-3 gap-2">
                       <button onClick={() => handleEditDay(day)} className="bg-white border border-gray-200 text-gray-700 py-2.5 px-3 rounded-lg font-bold text-xs flex items-center justify-center hover:bg-gray-50 hover:border-purple-300 hover:text-purple-700 transition-all"><SafeIcon icon={FiEdit3} className="mr-1.5" /> Bearbeiten</button>
-                      <button onClick={() => { setExportingDayId(day.day); /* ...export logic */ }} disabled={isExportingThisDay} className="bg-gray-100 border border-gray-200 text-gray-700 py-2.5 px-3 rounded-lg font-bold text-xs flex items-center justify-center hover:bg-gray-200 hover:text-purple-700 transition-all disabled:opacity-50">{isExportingThisDay ? <span className="animate-spin mr-1.5"><SafeIcon icon={FiRefreshCw} /></span> : <SafeIcon icon={FiDownload} className="mr-1.5" />} Export</button>
+                      <button onClick={() => handleExportDay(day)} disabled={isExportingThisDay} className="bg-gray-100 border border-gray-200 text-gray-700 py-2.5 px-3 rounded-lg font-bold text-xs flex items-center justify-center hover:bg-gray-200 hover:text-purple-700 transition-all disabled:opacity-50">{isExportingThisDay ? <span className="animate-spin mr-1.5"><SafeIcon icon={FiRefreshCw} /></span> : <SafeIcon icon={FiDownload} className="mr-1.5" />} Export</button>
                       <button onClick={() => navigate('/create')} className="bg-gray-50 text-gray-500 py-2.5 px-3 rounded-lg font-bold text-xs flex items-center justify-center hover:bg-gray-100 transition-colors"><SafeIcon icon={FiExternalLink} className="mr-1.5" /> Neu</button>
                     </div>
                   </div>

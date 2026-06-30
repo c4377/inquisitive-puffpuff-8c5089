@@ -32,16 +32,28 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         (img) => {
           if (!img) return resolve(false);
           // Cover-fit: scale so image fills the whole canvas, center-crop.
-          const scaleFactor = Math.max(width / img.width, height / img.height);
+          const baseScale = Math.max(width / img.width, height / img.height);
+          // Apply user Zoom (imageScale, default 1) and position offsets.
+          const userZoom = typeof slide.imageScale === 'number' ? slide.imageScale : 1;
+          const offsetX = (typeof slide.imageX === 'number' ? slide.imageX : 0) * scale;
+          const offsetY = (typeof slide.imageY === 'number' ? slide.imageY : 0) * scale;
+          const finalScale = baseScale * userZoom;
           img.set({
             originX: 'center',
             originY: 'center',
-            left: width / 2,
-            top: height / 2,
-            scaleX: scaleFactor,
-            scaleY: scaleFactor,
+            left: width / 2 + offsetX,
+            top: height / 2 + offsetY,
+            scaleX: finalScale,
+            scaleY: finalScale,
             selectable: false,
           });
+          // Optional blur via fabric filter
+          if (typeof slide.blur === 'number' && slide.blur > 0 && fabric.Image.filters.Blur) {
+            try {
+              img.filters = [new fabric.Image.filters.Blur({ blur: Math.min(slide.blur / 20, 1) })];
+              img.applyFilters();
+            } catch (e) { /* blur optional */ }
+          }
           canvas.add(img);
           canvas.sendToBack(img);
 
@@ -673,11 +685,60 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     canvas.add(brandText);
   }
 
+  // --- GRAIN TEXTURE ---
+  // Subtle noise overlay across the whole slide (slide.grain 0..0.5).
+  if (typeof slide.grain === 'number' && slide.grain > 0) {
+    try {
+      const gCan = document.createElement('canvas');
+      gCan.width = 120; gCan.height = 120;
+      const gctx = gCan.getContext('2d');
+      const imgData = gctx.createImageData(120, 120);
+      for (let i = 0; i < imgData.data.length; i += 4) {
+        const v = Math.random() * 255;
+        imgData.data[i] = v; imgData.data[i + 1] = v; imgData.data[i + 2] = v;
+        imgData.data[i + 3] = 255;
+      }
+      gctx.putImageData(imgData, 0, 0);
+      const grainImg = new fabric.Pattern({ source: gCan, repeat: 'repeat' });
+      canvas.add(new fabric.Rect({
+        left: 0, top: 0, width, height,
+        fill: grainImg, opacity: Math.min(slide.grain, 0.5), selectable: false,
+      }));
+    } catch (e) { /* grain optional */ }
+  }
+
+  // --- LOGO / STICKER OVERLAY (second image on top) ---
+  const drawOverlayImage = (src) =>
+    new Promise((resolve) => {
+      if (!src) return resolve(false);
+      fabric.Image.fromURL(src, (img) => {
+        if (!img) return resolve(false);
+        const sc = (typeof slide.overlayImageScale === 'number' ? slide.overlayImageScale : 0.3);
+        // scale so the overlay image's width = sc * canvas width
+        const targetW = width * sc;
+        const factor = targetW / img.width;
+        const ox = (typeof slide.overlayImageX === 'number' ? slide.overlayImageX : 0) * scale;
+        const oy = (typeof slide.overlayImageY === 'number' ? slide.overlayImageY : 0) * scale;
+        img.set({
+          originX: 'center', originY: 'center',
+          left: width / 2 + ox, top: height / 2 + oy,
+          scaleX: factor, scaleY: factor, selectable: false,
+        });
+        if (slide.overlayImageRounded) {
+          img.clipPath = new fabric.Circle({
+            radius: Math.min(img.width, img.height) / 2,
+            originX: 'center', originY: 'center',
+          });
+        }
+        canvas.add(img);
+        resolve(true);
+      }, { crossOrigin: 'anonymous' });
+    });
+
+  if (slide.overlayImage) {
+    try { await drawOverlayImage(slide.overlayImage); } catch (e) { /* optional */ }
+  }
+
   // Render & Wait
   canvas.renderAll();
-  
-  // If images (overlay) need loading, we handle them:
-  if (slide.visualElements?.length > 0) {
-      // Basic support for visual elements if needed
-  }
 };
