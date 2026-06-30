@@ -252,7 +252,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     return;
   }
 
-  if (hasBgImage) {
+  const coverLayouts = ['cover_top_left', 'cover_bottom_left', 'cover_bottom_center', 'cover_center_hero', 'cover_top_center'];
+  if (hasBgImage && coverLayouts.includes(layout)) {
     const { plain, segments } = parseAccent(slide.text);
 
     // Position priority: explicit cover_* layout > image quiet zone > center
