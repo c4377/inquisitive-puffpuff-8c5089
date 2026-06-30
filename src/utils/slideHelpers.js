@@ -66,7 +66,7 @@ export const createSmartSlide = (brandConfig, overrides = {}, index = 0, totalSl
     imageX: 0,
     imageY: 0,
     overlay: layout === 'tweet_card' ? 0.1 : 0.25,
-    blur: layout === 'tweet_card' ? 12 : 8,
+    blur: 0,
     background: overrides.background || null,
     // Merge any other overrides
     ...overrides

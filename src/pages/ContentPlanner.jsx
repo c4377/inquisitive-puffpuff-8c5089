@@ -214,12 +214,15 @@ const ContentPlanner = () => {
 
         // Enforce cover rule on slide 0 (the cover)
         const adjusted = withImages.map((slide, sIdx) => {
-          if (sIdx !== 0) return slide; // only the cover is governed by the rule
+          // Reset any stale default blur from older generations (was 8/12).
+          const cleaned = { ...slide };
+          if (cleaned.blur === 8 || cleaned.blur === 12) cleaned.blur = 0;
+          if (sIdx !== 0) return cleaned; // only the cover is governed by the rule
           if (coverGetsImage(dayIdx)) {
-            return slide; // keep assigned image
+            return cleaned; // keep assigned image
           }
           // remove image -> layout-only cover
-          const { background, overlay, _autoImage, ...rest } = slide;
+          const { background, overlay, _autoImage, ...rest } = cleaned;
           // If the cover had a photo-only layout (cover_*/sarah_cover), swap to
           // a strong text layout so the image-free cover still looks designed.
           const photoLayouts = ['sarah_cover', 'cover_top_left', 'cover_bottom_left', 'cover_bottom_center', 'cover_center_hero', 'cover_top_center'];

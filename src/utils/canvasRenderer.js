@@ -47,10 +47,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
             scaleY: finalScale,
             selectable: false,
           });
-          // Optional blur via fabric filter
-          if (typeof slide.blur === 'number' && slide.blur > 0 && fabric.Image.filters.Blur) {
+          // Optional blur via fabric filter (only when explicitly set > 0).
+          // Slider range is 0..20; map to fabric's 0..1 blur amount.
+          if (typeof slide.blur === 'number' && slide.blur >= 1 && fabric.Image.filters?.Blur) {
             try {
-              img.filters = [new fabric.Image.filters.Blur({ blur: Math.min(slide.blur / 20, 1) })];
+              img.filters = [new fabric.Image.filters.Blur({ blur: Math.min(slide.blur / 40, 0.5) })];
               img.applyFilters();
             } catch (e) { /* blur optional */ }
           }
