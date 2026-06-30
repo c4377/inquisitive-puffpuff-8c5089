@@ -22,6 +22,10 @@ export const colorGenerators = {
   petrol_editorial: () => ({ primary: '#FFFFFF', secondary: '#003D4C', tertiary: '#002935', accent: '#66D2EA', neutral: '#F1F5F9', background: '#004E64' }),
   warm_business: () => ({ primary: '#2F2F2F', secondary: '#B7A89A', tertiary: '#CFC9C3', accent: '#9FAE9C', neutral: '#CFC9C3', background: '#F6F4F1' }),
   preuss_yellow: () => ({ primary: '#1a1a1a', secondary: '#1a1a1a', tertiary: '#ffffff', accent: '#ffffff', neutral: '#fef3c7', background: '#FDE047' }),
+  // --- Sarah-Joy inspired warm bordeaux / cognac world ---
+  bordeaux_luxe: () => ({ primary: '#FBF6EF', secondary: '#7B2D2D', tertiary: '#5A1E1E', accent: '#E8C9A0', neutral: '#3A1414', background: '#5C1F1F' }),
+  cognac_editorial: () => ({ primary: '#FBF6EF', secondary: '#8A5A2B', tertiary: '#6B4422', accent: '#D9A86C', neutral: '#3A2817', background: '#6F4A28' }),
+  warm_cream_serif: () => ({ primary: '#3A2817', secondary: '#8A5A2B', tertiary: '#B08D5B', accent: '#9A3B2E', neutral: '#F0E6D8', background: '#EFE5D6' }),
 };
 
 // UPDATED TYPOGRAPHY GENERATORS: NOW WITH ACCENT FONTS
@@ -116,6 +120,12 @@ export const layoutGenerators = {
   story_bottom_right: (w, h) => ({ textPosition: { x: w * 0.9, y: h * 0.85 }, textAlign: 'right', maxTextWidth: w * 0.75, id: 'story_bottom_right' }),
   story_text_box: (w, h) => ({ textPosition: { x: w / 2, y: h / 2 }, textAlign: 'center', maxTextWidth: w * 0.80, id: 'story_text_box' }),
   badge_centered: (w, h) => ({ textPosition: { x: w / 2, y: h / 2 + (h * 0.05) }, textAlign: 'center', maxTextWidth: w * 0.85, id: 'badge_centered' }),
+  // --- Cover layouts (photo background, Sarah-Joy style) ---
+  cover_top_left: (w, h) => ({ textPosition: { x: w * 0.08, y: h * 0.12 }, textAlign: 'left', maxTextWidth: w * 0.78, id: 'cover_top_left' }),
+  cover_bottom_left: (w, h) => ({ textPosition: { x: w * 0.08, y: h * 0.88 }, textAlign: 'left', maxTextWidth: w * 0.78, id: 'cover_bottom_left' }),
+  cover_bottom_center: (w, h) => ({ textPosition: { x: w / 2, y: h * 0.85 }, textAlign: 'center', maxTextWidth: w * 0.82, id: 'cover_bottom_center' }),
+  cover_center_hero: (w, h) => ({ textPosition: { x: w / 2, y: h / 2 }, textAlign: 'center', maxTextWidth: w * 0.80, id: 'cover_center_hero' }),
+  cover_top_center: (w, h) => ({ textPosition: { x: w / 2, y: h * 0.14 }, textAlign: 'center', maxTextWidth: w * 0.82, id: 'cover_top_center' }),
 };
 
 export const brandRuleSets = {
@@ -298,6 +308,33 @@ export const brandRuleSets = {
     layoutRules: ['maximized_bold'],
     typographyRules: ['impact_bold'],
     tags: ['bold', 'red']
+  },
+  bordeauxLuxe: {
+    name: "Bordeaux Luxe",
+    description: 'Editorial Bordeaux with cream serif & cognac accent.',
+    colorStrategy: 'bordeaux_luxe',
+    vibe: 'luxury_warm',
+    layoutRules: ['cover_top_left', 'cover_bottom_left', 'cover_center_hero', 'minimal_quote'],
+    typographyRules: ['editorial_serif'],
+    tags: ['bordeaux', 'editorial', 'luxury', 'warm']
+  },
+  cognacStudio: {
+    name: "Cognac Studio",
+    description: 'Warm cognac tones, photo covers, elegant serif mix.',
+    colorStrategy: 'cognac_editorial',
+    vibe: 'luxury_warm',
+    layoutRules: ['cover_bottom_left', 'cover_top_left', 'cover_bottom_center', 'editorial_classic'],
+    typographyRules: ['classic_garamond'],
+    tags: ['cognac', 'warm', 'editorial']
+  },
+  warmCreamSerif: {
+    name: "Warm Cream Editorial",
+    description: 'Cream background, espresso serif, terracotta accent.',
+    colorStrategy: 'warm_cream_serif',
+    vibe: 'soft_warm',
+    layoutRules: ['cover_center_hero', 'cover_top_center', 'minimal_quote', 'editorial_classic'],
+    typographyRules: ['editorial_serif'],
+    tags: ['cream', 'warm', 'editorial', 'soft']
   },
 };
 

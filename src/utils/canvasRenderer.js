@@ -167,12 +167,25 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // When a background photo is present, ignore the abstract layout and place
   // the title where the image has free/quiet space (from image analysis).
   if (hasBgImage) {
-    const zone = slide._autoImage?.quietZone || 'center';
     const { plain, segments } = parseAccent(slide.text);
 
-    // Map a 3x3 zone label to an anchor point + alignment.
-    const col = zone.includes('left') ? 'left' : zone.includes('right') ? 'right' : 'center';
-    const row = zone.includes('top') ? 'top' : zone.includes('bottom') ? 'bottom' : 'mid';
+    // Position priority: explicit cover_* layout > image quiet zone > center
+    const coverPositions = {
+      cover_top_left:      { col: 'left',   row: 'top' },
+      cover_bottom_left:   { col: 'left',   row: 'bottom' },
+      cover_bottom_center: { col: 'center', row: 'bottom' },
+      cover_center_hero:   { col: 'center', row: 'mid' },
+      cover_top_center:    { col: 'center', row: 'top' },
+    };
+
+    let col, row;
+    if (coverPositions[layout]) {
+      ({ col, row } = coverPositions[layout]);
+    } else {
+      const zone = slide._autoImage?.quietZone || 'center';
+      col = zone.includes('left') ? 'left' : zone.includes('right') ? 'right' : 'center';
+      row = zone.includes('top') ? 'top' : zone.includes('bottom') ? 'bottom' : 'mid';
+    }
 
     const boxWidth = width * 0.8;
     let left = width / 2;
