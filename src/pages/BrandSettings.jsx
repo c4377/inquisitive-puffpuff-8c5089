@@ -64,6 +64,8 @@ const BrandSettings = () => {
           color: c.primary,
           backgroundColor: c.background,
           secondaryColor: c.secondary,
+          tertiaryColor: c.tertiary,
+          neutralColor: c.neutral,
           accentColor: c.accent,
         } : {
           fontFamily: t.fontFamily,
@@ -409,6 +411,20 @@ const BrandSettings = () => {
               <ColorPalette
                 selectedColor={brandSettings.currentBrandConfig.colors.secondary}
                 onColorSelect={(c) => updateCurrentBrand('colors', { ...brandSettings.currentBrandConfig.colors, secondary: c })}
+              />
+            </div>
+            <div className="border-t border-gray-100 pt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Tertiary Color (oft Cognac / Zwischenton)</label>
+              <ColorPalette
+                selectedColor={brandSettings.currentBrandConfig.colors.tertiary}
+                onColorSelect={(c) => updateCurrentBrand('colors', { ...brandSettings.currentBrandConfig.colors, tertiary: c })}
+              />
+            </div>
+            <div className="border-t border-gray-100 pt-4">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Neutral Color (heller Hilfston)</label>
+              <ColorPalette
+                selectedColor={brandSettings.currentBrandConfig.colors.neutral}
+                onColorSelect={(c) => updateCurrentBrand('colors', { ...brandSettings.currentBrandConfig.colors, neutral: c })}
               />
             </div>
           </div>

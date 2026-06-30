@@ -389,12 +389,15 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // 2. PAPER BOX (Shadow Box)
   else if (layout === 'paper_box' || layout === 'story_text_box') {
     const boxMargin = width * 0.12;
+    // Use the brand's secondary or background tone for the card, not hardcoded white.
+    const boxFill = slide.secondaryColor || slide.backgroundColor || '#ffffff';
+    const boxTextColor = contrastColor(boxFill);
     const boxRect = new fabric.Rect({
       left: boxMargin,
       top: boxMargin,
       width: width - (boxMargin * 2),
       height: height - (boxMargin * 2),
-      fill: '#ffffff',
+      fill: boxFill,
       shadow: 'rgba(0,0,0,0.15) 0px 10px 20px',
       rx: 10 * scale,
       ry: 10 * scale,
@@ -421,7 +424,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       width: innerWidth,
       fontSize: boxFont,
       fontFamily: fontFamily,
-      fill: '#1a1a1a', // Force dark on white box
+      fill: boxTextColor,
       textAlign: 'center',
       lineHeight: 1.35,
       breakWords: true
@@ -431,8 +434,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
   // 3. SPLIT COLOR (Top/Bottom)
   else if (layout === 'split_color') {
-    // Top Half (White)
-    canvas.add(new fabric.Rect({ left: 0, top: 0, width: width, height: height * 0.4, fill: '#ffffff', selectable: false }));
+    const topFill = slide.backgroundColor || '#ffffff';
+    // Top Half (brand background)
+    canvas.add(new fabric.Rect({ left: 0, top: 0, width: width, height: height * 0.4, fill: topFill, selectable: false }));
     // Bottom Half (Accent)
     canvas.add(new fabric.Rect({ left: 0, top: height * 0.4, width: width, height: height * 0.6, fill: accentColor, selectable: false }));
 
@@ -445,7 +449,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         width: width - (padding * 2),
         fontSize: fs(42),
         fontFamily: accentFont,
-        fill: primaryColor,
+        fill: contrastColor(topFill),
         textAlign: 'center',
         fontStyle: 'italic'
       }));
@@ -459,7 +463,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       width: width - (padding * 2),
       fontSize: fs(slide.fontSize || 38),
       fontFamily: fontFamily,
-      fill: '#ffffff',
+      fill: contrastColor(accentColor),
       textAlign: 'center',
       fontWeight: 'bold'
     }));

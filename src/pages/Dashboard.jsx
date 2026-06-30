@@ -88,7 +88,7 @@ const Dashboard = () => {
 
                         {/* Color palette as bars */}
                         <div className="flex rounded-lg overflow-hidden h-8 w-full max-w-xs shadow-sm border border-gray-100">
-                            {Object.values(currentBrand.colors || {}).slice(0, 5).map((c, i) => (
+                            {[currentBrand.colors?.primary, currentBrand.colors?.secondary, currentBrand.colors?.accent, currentBrand.colors?.background].filter(Boolean).map((c, i) => (
                                 <div key={i} className="flex-1" style={{ backgroundColor: c }} title={c} />
                             ))}
                         </div>

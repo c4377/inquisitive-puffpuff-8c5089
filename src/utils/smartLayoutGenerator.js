@@ -177,6 +177,8 @@ export const assignSmartLayouts = (rawSlides, brandConfig) => {
       backgroundColor: c.background || '#ffffff',
       color: c.primary || '#111111',
       secondaryColor: c.secondary || '#666666',
+      tertiaryColor: c.tertiary || c.secondary || '#999999',
+      neutralColor: c.neutral || c.background || '#F5F5F5',
       accentColor: c.accent || c.secondary || '#B8860B',
       // Brand fonts
       fontFamily: t.fontFamily || 'Inter',
