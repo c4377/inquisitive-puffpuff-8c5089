@@ -5,6 +5,14 @@ import SafeIcon from '../common/SafeIcon';
 
 const LayoutPicker = ({ currentLayout, onUpdate }) => {
   const layouts = [
+    // --- COVER LAYOUTS (Photo background, Sarah-Joy style) ---
+    { id: 'sarah_cover', name: 'Editorial Cover', icon: FiImage, description: 'Foto + Label + Script-Akzent' },
+    { id: 'cover_top_left', name: 'Cover Oben Links', icon: FiArrowUpLeft, description: 'Titel oben links auf Foto' },
+    { id: 'cover_bottom_left', name: 'Cover Unten Links', icon: FiArrowDownRight, description: 'Titel unten links auf Foto' },
+    { id: 'cover_bottom_center', name: 'Cover Unten', icon: FiArrowDown, description: 'Titel unten zentriert' },
+    { id: 'cover_center_hero', name: 'Cover Mitte', icon: FiMaximize, description: 'Großer Titel mittig' },
+    { id: 'cover_top_center', name: 'Cover Oben', icon: FiAlignLeft, description: 'Titel oben zentriert' },
+
     // NEW PREUSS STYLE
     { id: 'badge_centered', name: 'Badge Focus', icon: FiHexagon, description: 'Preuss Style Header' },
     
