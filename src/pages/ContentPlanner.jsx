@@ -16,7 +16,7 @@ import { createSmartSlide } from '../utils/slideHelpers';
 import { attachSmartImages } from '../utils/smartLayoutGenerator';
 import { weightedLayoutPool, getRating, setRating } from '../utils/layoutRatings';
 
-const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown } = FiIcons;
+const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2 } = FiIcons;
 
 const ContentPlanner = () => {
   const { brandSettings, updateBrandSettings } = useBrand();
@@ -321,6 +321,44 @@ const ContentPlanner = () => {
     }
   };
 
+  // Share the day's slides as image FILES via the native share sheet.
+  // On iPhone this offers "Save to Photos" / "In Fotos sichern" directly.
+  const handleShareDay = async (day) => {
+    if (!day || !day.slides?.length) return;
+    setExportingDayId(day.day);
+    try {
+      const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "MUSE MENTORING";
+      const files = [];
+      for (let i = 0; i < day.slides.length; i++) {
+        const slide = day.slides[i];
+        const canvasEl = document.createElement('canvas');
+        const canvasWidth = 1080;
+        const canvasHeight = slide.format === '9:16' ? 1920 : 1350;
+        const scale = canvasWidth / 400;
+        const fCanvas = new fabric.StaticCanvas(canvasEl, { width: canvasWidth, height: canvasHeight });
+        await renderSlide(fCanvas, { ...slide, visualElements: slide.visualElements || [] }, canvasWidth, canvasHeight, {
+          slideIndex: i, totalSlides: day.slides.length, scale, globalBrandName
+        });
+        const dataUrl = fCanvas.toDataURL({ format: 'png', multiplier: 1 });
+        const blob = await (await fetch(dataUrl)).blob();
+        fCanvas.dispose();
+        if (blob) files.push(new File([blob], `Tag${day.day}_Slide${i + 1}.png`, { type: 'image/png' }));
+      }
+
+      // Try native share with files (best on mobile -> "Save to Photos")
+      if (navigator.canShare && navigator.canShare({ files })) {
+        await navigator.share({ files, title: `Tag ${day.day}` });
+      } else {
+        // Fallback: download each image individually (desktop / unsupported)
+        for (const f of files) saveAs(f, f.name);
+      }
+    } catch (e) {
+      if (e?.name !== 'AbortError') console.error("Share failed", e);
+    } finally {
+      setExportingDayId(null);
+    }
+  };
+
   const handleEditDay = (dayData) => {
     navigate('/editor', { state: { slides: dayData.slides, dayId: dayData.day, dayTitle: dayData.title } });
   };
@@ -434,6 +472,7 @@ const ContentPlanner = () => {
                     <div className="grid grid-cols-3 gap-2">
                       <button onClick={() => handleEditDay(day)} className="bg-white border border-gray-200 text-gray-700 py-2.5 px-3 rounded-lg font-bold text-xs flex items-center justify-center hover:bg-gray-50 hover:border-purple-300 hover:text-purple-700 transition-all"><SafeIcon icon={FiEdit3} className="mr-1.5" /> Bearbeiten</button>
                       <button onClick={() => handleExportDay(day)} disabled={isExportingThisDay} className="bg-gray-100 border border-gray-200 text-gray-700 py-2.5 px-3 rounded-lg font-bold text-xs flex items-center justify-center hover:bg-gray-200 hover:text-purple-700 transition-all disabled:opacity-50">{isExportingThisDay ? <span className="animate-spin mr-1.5"><SafeIcon icon={FiRefreshCw} /></span> : <SafeIcon icon={FiDownload} className="mr-1.5" />} Export</button>
+                      <button onClick={() => handleShareDay(day)} disabled={isExportingThisDay} className="bg-purple-600 border border-purple-600 text-white py-2.5 px-3 rounded-lg font-bold text-xs flex items-center justify-center hover:bg-purple-700 transition-all disabled:opacity-50"><SafeIcon icon={FiShare2} className="mr-1.5" /> In Fotos</button>
                       <button onClick={() => navigate('/create')} className="bg-gray-50 text-gray-500 py-2.5 px-3 rounded-lg font-bold text-xs flex items-center justify-center hover:bg-gray-100 transition-colors"><SafeIcon icon={FiExternalLink} className="mr-1.5" /> Neu</button>
                     </div>
                   </div>
