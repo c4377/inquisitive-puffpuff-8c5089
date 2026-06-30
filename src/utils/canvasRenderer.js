@@ -501,8 +501,112 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
      });
   }
 
+  // === TWEET CARD: white rounded card like a tweet/post ===
+  else if (layout === 'tweet_card') {
+    const cardMargin = width * 0.08;
+    const cardTop = height * 0.18;
+    const cardH = height * 0.64;
+    canvas.add(new fabric.Rect({
+      left: cardMargin, top: cardTop, width: width - cardMargin * 2, height: cardH,
+      fill: '#FFFFFF', rx: fs(24), ry: fs(24),
+      shadow: 'rgba(0,0,0,0.18) 0px 12px 30px', selectable: false,
+    }));
+    // little avatar dot + handle line
+    canvas.add(new fabric.Circle({
+      left: cardMargin + fs(28), top: cardTop + fs(28), radius: fs(20),
+      fill: accentColor, selectable: false,
+    }));
+    canvas.add(new fabric.Text('@deinhandle', {
+      left: cardMargin + fs(64), top: cardTop + fs(34), fontSize: fs(18),
+      fontFamily: 'Inter', fill: '#657786', selectable: false,
+    }));
+    const { plain, segments } = parseAccent(slide.text);
+    const tw = new fabric.Textbox(plain, {
+      left: cardMargin + fs(28), top: cardTop + fs(90),
+      width: width - cardMargin * 2 - fs(56),
+      fontSize: fs(slide.fontSize || 34), fontFamily: fontFamily,
+      fill: '#15202B', lineHeight: 1.35, textAlign: 'left',
+    });
+    applyAccentStyles(tw, segments);
+    canvas.add(tw);
+  }
+
+  // === GLASS OVERLAY: frosted translucent panel over background ===
+  else if (layout === 'glass_layer') {
+    const gm = width * 0.1;
+    const gTop = height * 0.28;
+    const gH = height * 0.44;
+    // translucent panel
+    canvas.add(new fabric.Rect({
+      left: gm, top: gTop, width: width - gm * 2, height: gH,
+      fill: hasBgImage ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.10)',
+      stroke: 'rgba(255,255,255,0.45)', strokeWidth: 1.5 * scale,
+      rx: fs(20), ry: fs(20), selectable: false,
+    }));
+    const { plain, segments } = parseAccent(slide.text);
+    const gtext = new fabric.Textbox(plain, {
+      left: width / 2, top: gTop + gH / 2, originX: 'center', originY: 'center',
+      width: width - gm * 2 - fs(48),
+      fontSize: fs(slide.fontSize || 40), fontFamily: fontFamily,
+      fill: hasBgImage ? '#FFFFFF' : contrastColor(primaryColor),
+      textAlign: 'center', lineHeight: 1.25, fontWeight: '600',
+      shadow: hasBgImage ? 'rgba(0,0,0,0.4) 0px 2px 8px' : '',
+    });
+    applyAccentStyles(gtext, segments);
+    canvas.add(gtext);
+  }
+
+  // === AESTHETIC CHECKLIST: list with check marks + thin lines ===
+  else if (layout === 'aesthetic_checklist') {
+    const items = (slide.text || '').split('\n').map((l) => l.replace(/^[-•*]\s*/, '').trim()).filter(Boolean);
+    const startY = height * 0.28;
+    const lineGap = Math.min((height * 0.5) / Math.max(items.length, 1), fs(90));
+    const leftX = width * 0.14;
+    items.forEach((item, i) => {
+      const y = startY + i * lineGap;
+      // check circle
+      canvas.add(new fabric.Circle({
+        left: leftX, top: y, radius: fs(12), fill: '', stroke: accentColor,
+        strokeWidth: 2 * scale, selectable: false,
+      }));
+      // check mark
+      canvas.add(new fabric.Path(`M ${leftX + fs(5)} ${y + fs(12)} L ${leftX + fs(10)} ${y + fs(18)} L ${leftX + fs(20)} ${y + fs(5)}`, {
+        stroke: accentColor, strokeWidth: 2.5 * scale, fill: '', selectable: false,
+      }));
+      // item text
+      canvas.add(new fabric.Textbox(item, {
+        left: leftX + fs(40), top: y - fs(2), width: width - leftX - fs(80),
+        fontSize: fs(28), fontFamily: fontFamily, fill: contrastColor(primaryColor),
+        lineHeight: 1.2, selectable: false,
+      }));
+      // thin separator line
+      canvas.add(new fabric.Line([leftX, y + lineGap * 0.62, width - width * 0.14, y + lineGap * 0.62], {
+        stroke: 'rgba(150,150,150,0.3)', strokeWidth: 1 * scale, selectable: false,
+      }));
+    });
+  }
+
+  // === DIAGONAL OVERLAY: modern diagonal split ===
+  else if (layout === 'diagonal_overlay') {
+    // diagonal accent triangle (bottom-left)
+    canvas.add(new fabric.Polygon(
+      [ { x: 0, y: height }, { x: 0, y: height * 0.45 }, { x: width, y: height } ],
+      { fill: accentColor, opacity: hasBgImage ? 0.82 : 1, selectable: false }
+    ));
+    const { plain, segments } = parseAccent(slide.text);
+    const dtext = new fabric.Textbox(plain, {
+      left: width * 0.08, top: height * 0.78, originY: 'center',
+      width: width * 0.8,
+      fontSize: fs(slide.fontSize || 40), fontFamily: fontFamily,
+      fill: '#FFFFFF', textAlign: 'left', lineHeight: 1.2, fontWeight: '700',
+      shadow: 'rgba(0,0,0,0.3) 0px 2px 6px',
+    });
+    applyAccentStyles(dtext, segments);
+    canvas.add(dtext);
+  }
+
   // 5. MINIMAL QUOTE (Cover / Brand preview) — supports *accent* word
-  else if (layout === 'minimal_quote' || layout === 'maximized_bold' || layout === 'tweet_card') {
+  else if (layout === 'minimal_quote' || layout === 'maximized_bold') {
     const mainColor = contrastColor(primaryColor);
     const { plain, segments } = parseAccent(slide.text);
 
