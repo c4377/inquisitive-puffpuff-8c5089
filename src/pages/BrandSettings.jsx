@@ -7,6 +7,7 @@ import { useBrand } from '../context/BrandContext';
 import ColorPalette from '../components/ColorPalette';
 import FontSelector from '../components/FontSelector';
 import BrandRandomizer from '../components/BrandRandomizer';
+import { uploadImageToCloud, listCloudImages } from '../supabase';
 
 const { FiShuffle, FiDroplet, FiType, FiImage, FiSettings, FiSave, FiUpload, FiEdit3, FiTrash2, FiCheckCircle, FiEye, FiTag, FiX, FiAlertCircle, FiUsers, FiCheck, FiRefreshCw } = FiIcons;
 
@@ -16,6 +17,23 @@ const BrandSettings = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
+
+  // On mount: pull cloud images (cross-device) and merge with local pool.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const cloud = await listCloudImages();
+      if (cancelled || !cloud.length) return;
+      const existing = brandSettings.brandImages || [];
+      // Merge, avoid duplicates (cloud URLs are unique)
+      const merged = [...existing];
+      cloud.forEach((url) => { if (!merged.includes(url)) merged.push(url); });
+      if (merged.length !== existing.length) {
+        updateBrandSettings({ brandImages: merged });
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   const sections = [
     { id: 'identity', label: 'Meine Brands', icon: FiUsers },
@@ -89,14 +107,28 @@ const BrandSettings = () => {
     setUploadError('');
     try {
       const processedImages = [];
+      let cloudCount = 0;
       for (const file of files) {
-        const processed = await resizeImage(file);
-        processedImages.push(processed);
+        // 1. Try cloud upload first (cross-device). 2. Fallback: local base64.
+        const cloudUrl = await uploadImageToCloud(file);
+        if (cloudUrl) {
+          processedImages.push(cloudUrl);
+          cloudCount++;
+        } else {
+          const processed = await resizeImage(file);
+          processedImages.push(processed);
+        }
       }
       const currentImages = brandSettings.brandImages || [];
       updateBrandSettings({ brandImages: [...currentImages, ...processedImages] });
-      setSuccessMessage(`${files.length} Bilder gespeichert!`);
-      setTimeout(() => setSuccessMessage(''), 3000);
+      if (cloudCount === files.length) {
+        setSuccessMessage(`${files.length} Bilder in der Cloud gespeichert (geräteübergreifend)!`);
+      } else if (cloudCount > 0) {
+        setSuccessMessage(`${cloudCount}/${files.length} in Cloud, Rest lokal gespeichert.`);
+      } else {
+        setSuccessMessage(`${files.length} Bilder lokal gespeichert (Cloud nicht verfügbar).`);
+      }
+      setTimeout(() => setSuccessMessage(''), 4000);
     } catch (error) {
       console.error("Upload error", error);
       setUploadError('Fehler beim Upload.');

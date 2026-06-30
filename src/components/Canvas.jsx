@@ -83,11 +83,16 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "MUSE 
     // Render — scale fonts/spacing proportionally to the internal width.
     // Base design width was 400px, so scale = width/400 keeps text proportions.
     const renderScale = canvasWidth / 400;
-    renderSlide(canvas, data, canvasWidth, canvasHeight, { 
-      slideIndex: data.slideNumber ? data.slideNumber - 1 : 0, 
-      totalSlides: data.totalSlides || (data.slideNumber ? 2 : 1), 
-      scale: renderScale, 
-      globalBrandName: brandName 
+    Promise.resolve(
+      renderSlide(canvas, data, canvasWidth, canvasHeight, { 
+        slideIndex: data.slideNumber ? data.slideNumber - 1 : 0, 
+        totalSlides: data.totalSlides || (data.slideNumber ? 2 : 1), 
+        scale: renderScale, 
+        globalBrandName: brandName 
+      })
+    ).catch((err) => {
+      // never let a render error crash the page
+      console.error('renderSlide failed:', err);
     });
 
     // FIX: Fabric renders at an internal resolution (e.g. 400x500). Scale the

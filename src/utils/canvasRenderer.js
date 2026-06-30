@@ -91,7 +91,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // Contrast-safe text color: if chosen color is too close to the background,
   // flip to white/black so text never disappears on same-tone backgrounds.
   // When a photo background is present, always use white (photo is darkened).
-  const hasBgImage = !!slide.background;
+  const hasBgImage = typeof slide.background === 'string' && slide.background.length > 5;
   const bgLum = hexLuminance(slide.backgroundColor || '#ffffff');
   const contrastColor = (preferred) => {
     if (hasBgImage) return '#FFFFFF';
@@ -106,7 +106,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // Draw the full-bleed background photo FIRST (before any text layout),
   // so all text is drawn on top of the image + readability overlay.
   if (hasBgImage) {
-    await drawBackgroundImage(slide.background);
+    try {
+      await drawBackgroundImage(slide.background);
+    } catch (e) {
+      // image failed — fall back to solid background, keep rendering
+    }
   }
   
   // Helper: Arrow
@@ -211,7 +215,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       textAlign,
       lineHeight: 1.2,
       fontWeight: slide.fontWeight || 'bold',
-      shadow: new fabric.Shadow({ color: 'rgba(0,0,0,0.45)', blur: 8, offsetX: 0, offsetY: 2 }),
+      shadow: 'rgba(0,0,0,0.45) 0px 2px 8px',
     });
     // accent word keeps accent color even on photo
     try {
