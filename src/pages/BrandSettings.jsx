@@ -25,10 +25,15 @@ const BrandSettings = () => {
       const cloud = await listCloudImages();
       if (cancelled || !cloud.length) return;
       const existing = brandSettings.brandImages || [];
-      // Merge, avoid duplicates (cloud URLs are unique)
-      const merged = [...existing];
-      cloud.forEach((url) => { if (!merged.includes(url)) merged.push(url); });
-      if (merged.length !== existing.length) {
+      // Keep only LOCAL (base64) images from the existing pool; the cloud list
+      // is the single source of truth for cloud images. This prevents the same
+      // cloud image being appended again on every mount/reload.
+      const localOnly = existing.filter((img) => typeof img === 'string' && img.startsWith('data:'));
+      // Dedupe cloud URLs too, just in case.
+      const uniqueCloud = [...new Set(cloud)];
+      const merged = [...localOnly, ...uniqueCloud];
+      // Only write if something actually changed (avoid render loop).
+      if (JSON.stringify(merged) !== JSON.stringify(existing)) {
         updateBrandSettings({ brandImages: merged });
       }
     })();
@@ -464,9 +469,28 @@ const BrandSettings = () => {
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <h3 className="text-xl font-bold text-gray-900">Brand Assets</h3>
-              <span className="text-xs bg-gray-100 px-2 py-1 rounded">
-                {(brandSettings.brandImages || []).length} / 20
-              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    const imgs = brandSettings.brandImages || [];
+                    const unique = [...new Set(imgs)];
+                    if (unique.length !== imgs.length) {
+                      updateBrandSettings({ brandImages: unique });
+                      setSuccessMessage(`${imgs.length - unique.length} Duplikate entfernt.`);
+                    } else {
+                      setSuccessMessage('Keine Duplikate gefunden.');
+                    }
+                    setTimeout(() => setSuccessMessage(''), 3000);
+                  }}
+                  className="text-xs px-2 py-1 rounded border border-gray-200 text-gray-600 hover:bg-gray-50"
+                  title="Doppelte Bilder entfernen"
+                >
+                  Duplikate entfernen
+                </button>
+                <span className="text-xs bg-gray-100 px-2 py-1 rounded">
+                  {(brandSettings.brandImages || []).length} / 20
+                </span>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <label className={`aspect-square border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors ${isUploading ? 'opacity-50' : ''}`}>
