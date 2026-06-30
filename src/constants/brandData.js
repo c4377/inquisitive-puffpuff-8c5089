@@ -314,7 +314,7 @@ export const brandRuleSets = {
     description: 'Editorial Bordeaux with cream serif & cognac accent.',
     colorStrategy: 'bordeaux_luxe',
     vibe: 'luxury_warm',
-    layoutRules: ['cover_top_left', 'cover_bottom_left', 'cover_center_hero', 'minimal_quote'],
+    layoutRules: ['sarah_cover', 'cover_top_left', 'cover_bottom_left', 'cover_center_hero', 'minimal_quote'],
     typographyRules: ['editorial_serif'],
     tags: ['bordeaux', 'editorial', 'luxury', 'warm']
   },

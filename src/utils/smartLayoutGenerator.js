@@ -84,48 +84,36 @@ export const attachSmartImages = async (slides, imagePool = []) => {
   const analyses = await analyzeImagePool(imagePool);
   if (analyses.length === 0) return slides; // nothing to attach
 
-  const cohesive = cohesiveOrder(analyses);
-  const used = new Set();
-  let rotationOffset = 0; // ensures we cycle through the pool for variety
+  // VARIETY MODE: shuffle the pool randomly each run, then hand out images
+  // round-robin so every image is used once before any repeats. Fit/zone
+  // matching is intentionally ignored here (user chose variety over fit).
+  const shuffled = [...analyses];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  const n = shuffled.length;
 
   return slides.map((slide, index) => {
     const layoutId = slide.layoutId || slide.layout || 'editorial_classic';
     const textZone = LAYOUT_TEXT_ZONE[layoutId] ?? 4;
 
-    // Rank candidates by fit, but rotate the starting point each slide so we
-    // don't keep picking the same "best" image for every slide.
-    let best = null;
-    let bestScore = Infinity;
-    const n = cohesive.length;
-    for (let i = 0; i < n; i++) {
-      const a = cohesive[(i + rotationOffset) % n];
-      let score = scoreImageForTextZone(a, textZone);
-      if (used.has(a.src)) score += 1000; // strongly discourage repeats
-      // small rotation bonus to the next-in-line image for variety
-      score += ((i + rotationOffset) % n) * 0.5;
-      if (score < bestScore) {
-        bestScore = score;
-        best = a;
-      }
-    }
-
+    // Round-robin pick: image index follows the slide index through the
+    // shuffled pool, so all images cycle through before repeating.
+    const best = shuffled[index % n];
     if (!best) return slide;
-    used.add(best.src);
-    // If we've used every image once, allow repeats again but keep rotating.
-    if (used.size >= n) used.clear();
-    rotationOffset = (rotationOffset + 1) % Math.max(n, 1);
 
-    const { overlay, textColorHint } = overlayDecision(best, textZone, bestScore);
+    const { overlay, textColorHint } = overlayDecision(best, textZone, 50);
 
     return {
       ...slide,
       background: best.src,
       overlay,
-      // expose hints the renderer/editor can optionally use
       _autoImage: {
         textZone: ZONE_LABELS[textZone],
         quietZone: best.quietLabel,
-        fitScore: Math.round(bestScore),
+        fitScore: 0,
         textColorHint,
         ok: best.ok,
       },

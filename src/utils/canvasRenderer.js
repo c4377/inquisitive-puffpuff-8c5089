@@ -170,6 +170,88 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // === COVER WITH PHOTO: auto-place title in the image's quiet zone ===
   // When a background photo is present, ignore the abstract layout and place
   // the title where the image has free/quiet space (from image analysis).
+  // === SARAH-JOY STYLE COVER (editorial photo cover) ===
+  // Rich cover: photo bg + small label chip (top) + serif title with one
+  // italic/script accent word + subtitle + small brand mark (bottom).
+  if (hasBgImage && (layout === 'sarah_cover' || slide.coverStyle === 'sarah')) {
+    const { plain, segments } = parseAccent(slide.text);
+
+    // Extra readability: dark gradient-ish band at the bottom third.
+    canvas.add(new fabric.Rect({
+      left: 0, top: height * 0.55, width, height: height * 0.45,
+      fill: 'rgba(0,0,0,0.28)', selectable: false,
+    }));
+
+    // 1) LABEL CHIP (top-left) — e.g. "GRATIS CHALLENGE"
+    if (slide.label) {
+      const labelText = String(slide.label).toUpperCase();
+      const chipPadX = fs(14);
+      const chipFontSize = fs(13);
+      const tmp = new fabric.Text(labelText, { fontSize: chipFontSize, fontFamily: 'Inter', fontWeight: 'bold' });
+      const chipW = tmp.width + chipPadX * 2;
+      const chipH = fs(34);
+      canvas.add(new fabric.Rect({
+        left: width * 0.08, top: height * 0.09, width: chipW, height: chipH,
+        fill: '#FFFFFF', rx: fs(4), ry: fs(4), selectable: false,
+      }));
+      canvas.add(new fabric.Text(labelText, {
+        left: width * 0.08 + chipPadX, top: height * 0.09 + chipH / 2,
+        originY: 'center', fontSize: chipFontSize, fontFamily: 'Inter',
+        fontWeight: 'bold', fill: '#1a1a1a', charSpacing: 80, selectable: false,
+      }));
+    }
+
+    // 2) TITLE (lower third), serif, with italic/script accent word
+    const titleObj = new fabric.Textbox(plain, {
+      left: width * 0.08,
+      top: height * 0.72,
+      originX: 'left',
+      originY: 'center',
+      width: width * 0.84,
+      fontSize: fs(slide.fontSize || 52),
+      fontFamily: fontFamily,
+      fill: '#FFFFFF',
+      textAlign: 'left',
+      lineHeight: 1.1,
+      fontWeight: slide.fontWeight || '600',
+      shadow: 'rgba(0,0,0,0.35) 0px 2px 10px',
+    });
+    try {
+      let idx = 0;
+      segments.forEach((s) => {
+        if (s.accent && s.text.length) {
+          titleObj.setSelectionStyles(
+            { fill: accentColor, fontStyle: 'italic', fontFamily: accentFont },
+            idx, idx + s.text.length
+          );
+        }
+        idx += s.text.length;
+      });
+    } catch (e) { /* best-effort */ }
+    canvas.add(titleObj);
+
+    // 3) SUBTITLE (small, under title)
+    if (slide.secondaryText) {
+      canvas.add(new fabric.Textbox(slide.secondaryText, {
+        left: width * 0.08, top: height * 0.86, originX: 'left',
+        width: width * 0.7, fontSize: fs(20), fontFamily: 'Inter',
+        fill: 'rgba(255,255,255,0.9)', lineHeight: 1.3, selectable: false,
+      }));
+    }
+
+    // 4) BRAND MARK (bottom-left small)
+    if (options.globalBrandName) {
+      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+        left: width * 0.08, top: height - (padding * 0.5), fontSize: fs(13),
+        fill: 'rgba(255,255,255,0.85)', fontFamily: 'Inter', charSpacing: 120,
+        originY: 'bottom', selectable: false,
+      }));
+    }
+
+    canvas.renderAll();
+    return;
+  }
+
   if (hasBgImage) {
     const { plain, segments } = parseAccent(slide.text);
 
