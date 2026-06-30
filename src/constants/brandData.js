@@ -121,6 +121,7 @@ export const layoutGenerators = {
   story_text_box: (w, h) => ({ textPosition: { x: w / 2, y: h / 2 }, textAlign: 'center', maxTextWidth: w * 0.80, id: 'story_text_box' }),
   badge_centered: (w, h) => ({ textPosition: { x: w / 2, y: h / 2 + (h * 0.05) }, textAlign: 'center', maxTextWidth: w * 0.85, id: 'badge_centered' }),
   // --- Cover layouts (photo background, Sarah-Joy style) ---
+  sarah_cover: (w, h) => ({ textPosition: { x: w * 0.08, y: h * 0.72 }, textAlign: 'left', maxTextWidth: w * 0.84, id: 'sarah_cover' }),
   cover_top_left: (w, h) => ({ textPosition: { x: w * 0.08, y: h * 0.12 }, textAlign: 'left', maxTextWidth: w * 0.78, id: 'cover_top_left' }),
   cover_bottom_left: (w, h) => ({ textPosition: { x: w * 0.08, y: h * 0.88 }, textAlign: 'left', maxTextWidth: w * 0.78, id: 'cover_bottom_left' }),
   cover_bottom_center: (w, h) => ({ textPosition: { x: w / 2, y: h * 0.85 }, textAlign: 'center', maxTextWidth: w * 0.82, id: 'cover_bottom_center' }),
