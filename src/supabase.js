@@ -77,3 +77,27 @@ export const listCloudImages = async () => {
     return [];
   }
 };
+
+/**
+ * Löscht ein Bild aus dem Cloud-Storage anhand seiner öffentlichen URL.
+ * Gibt true zurück bei Erfolg (oder wenn es keine Cloud-URL war).
+ */
+export const deleteCloudImage = async (url) => {
+  if (!supabase || !url || typeof url !== 'string') return true;
+  // Only handle our own cloud URLs (contain the bucket path)
+  const marker = `/${BUCKET}/`;
+  const idx = url.indexOf(marker);
+  if (idx === -1) return true; // not a cloud image (local base64) -> nothing to delete
+  const path = url.substring(idx + marker.length).split('?')[0];
+  try {
+    const { error } = await supabase.storage.from(BUCKET).remove([path]);
+    if (error) {
+      console.error('deleteCloudImage error:', error.message);
+      return false;
+    }
+    return true;
+  } catch (e) {
+    console.error('deleteCloudImage failed:', e);
+    return false;
+  }
+};

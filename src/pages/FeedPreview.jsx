@@ -299,17 +299,17 @@ const FeedPreview = () => {
                 <div className="absolute inset-0">
                   {/* OVERRIDE CANVAS WITH CURRENT BRAND CONFIG FOR LIVE PREVIEW */}
                   <Canvas 
-                    key={`${brandConfig?.colors.primary}-${brandConfig?.typography.fontFamily}-${showShifter}`}
+                    key={`${post.uniqueId}-${post.color}-${post.backgroundColor}-${post.fontFamily}`}
                     data={{
                         ...post,
                         slideNumber: undefined,
-                        // Override logic: Use global settings if Shifter is likely active or we want consistency
-                        fontFamily: brandConfig?.typography?.fontFamily || post.fontFamily,
-                        accentFontFamily: brandConfig?.typography?.accentFontFamily || post.accentFontFamily,
-                        color: brandConfig?.colors?.primary || post.color,
-                        backgroundColor: brandConfig?.colors?.background || post.backgroundColor,
-                        secondaryColor: brandConfig?.colors?.secondary || post.secondaryColor,
-                        accentColor: brandConfig?.colors?.accent || post.accentColor,
+                        // Use the POST's own styling so the feed matches the real post.
+                        fontFamily: post.fontFamily || brandConfig?.typography?.fontFamily,
+                        accentFontFamily: post.accentFontFamily || brandConfig?.typography?.accentFontFamily,
+                        color: post.color || brandConfig?.colors?.primary,
+                        backgroundColor: post.backgroundColor || brandConfig?.colors?.background,
+                        secondaryColor: post.secondaryColor || brandConfig?.colors?.secondary,
+                        accentColor: post.accentColor || brandConfig?.colors?.accent,
                     }} 
                     brandName={brandSettings.currentBrandConfig?.name} 
                   />
@@ -360,16 +360,16 @@ const FeedPreview = () => {
                   <div className="absolute inset-0">
                     {/* OVERRIDE CANVAS HERE TOO */}
                     <Canvas 
-                        key={`list-${brandConfig?.colors.primary}-${brandConfig?.typography.fontFamily}`}
+                        key={`list-${post.uniqueId}-${post.color}-${post.backgroundColor}-${post.fontFamily}`}
                         data={{
                             ...post,
                             slideNumber: undefined,
-                            fontFamily: brandConfig?.typography?.fontFamily || post.fontFamily,
-                            accentFontFamily: brandConfig?.typography?.accentFontFamily || post.accentFontFamily,
-                            color: brandConfig?.colors?.primary || post.color,
-                            backgroundColor: brandConfig?.colors?.background || post.backgroundColor,
-                            secondaryColor: brandConfig?.colors?.secondary || post.secondaryColor,
-                            accentColor: brandConfig?.colors?.accent || post.accentColor,
+                            fontFamily: post.fontFamily || brandConfig?.typography?.fontFamily,
+                            accentFontFamily: post.accentFontFamily || brandConfig?.typography?.accentFontFamily,
+                            color: post.color || brandConfig?.colors?.primary,
+                            backgroundColor: post.backgroundColor || brandConfig?.colors?.background,
+                            secondaryColor: post.secondaryColor || brandConfig?.colors?.secondary,
+                            accentColor: post.accentColor || brandConfig?.colors?.accent,
                         }} 
                         brandName={brandSettings.currentBrandConfig?.name} 
                     />

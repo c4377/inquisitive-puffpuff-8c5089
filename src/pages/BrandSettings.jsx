@@ -7,7 +7,7 @@ import { useBrand } from '../context/BrandContext';
 import ColorPalette from '../components/ColorPalette';
 import FontSelector from '../components/FontSelector';
 import BrandRandomizer from '../components/BrandRandomizer';
-import { uploadImageToCloud, listCloudImages } from '../supabase';
+import { uploadImageToCloud, listCloudImages, deleteCloudImage } from '../supabase';
 
 const { FiShuffle, FiDroplet, FiType, FiImage, FiSettings, FiSave, FiUpload, FiEdit3, FiTrash2, FiCheckCircle, FiEye, FiTag, FiX, FiAlertCircle, FiUsers, FiCheck, FiRefreshCw } = FiIcons;
 
@@ -143,12 +143,21 @@ const BrandSettings = () => {
     }
   };
 
-  const removeImage = (indexToRemove) => {
+  const removeImage = async (indexToRemove) => {
     if(!window.confirm("Bild wirklich löschen?")) return;
     const currentImages = brandSettings.brandImages || [];
+    const imgToRemove = currentImages[indexToRemove];
+    // Remove from local pool first (instant feedback)
     const updatedImages = currentImages.filter((_, index) => index !== indexToRemove);
     updateBrandSettings({ brandImages: updatedImages });
     setSuccessMessage("Bild gelöscht.");
+    // Also delete from cloud so it doesn't reappear on next load
+    try {
+      const ok = await deleteCloudImage(imgToRemove);
+      if (!ok) setUploadError('Bild lokal entfernt, aber Cloud-Löschen fehlgeschlagen.');
+    } catch (e) {
+      console.error(e);
+    }
     setTimeout(() => setSuccessMessage(''), 2000);
   };
 
