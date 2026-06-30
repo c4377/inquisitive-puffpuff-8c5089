@@ -165,11 +165,26 @@ export const assignSmartLayouts = (rawSlides, brandConfig) => {
     // In a real NLP system we'd find keywords, here we use structural heuristics.
     const formattedText = applyEditorialHighlighting(primaryText);
 
+    // Pull colors + fonts from the active brand (Brandomizer) so every slide
+    // is styled with the current brand identity.
+    const c = brandConfig?.colors || {};
+    const t = brandConfig?.typography || {};
+
     return {
       ...slide,
       text: formattedText,
       secondaryText: secondaryText,
       layoutId: layoutId,
+      layout: layoutId, // renderer reads slide.layout
+      // Brand colors (from Brandomizer)
+      backgroundColor: c.background || '#ffffff',
+      color: c.primary || '#111111',
+      secondaryColor: c.secondary || '#666666',
+      accentColor: c.accent || c.secondary || '#B8860B',
+      // Brand fonts
+      fontFamily: t.fontFamily || 'Inter',
+      accentFontFamily: t.accentFontFamily || t.fontFamily || 'Playfair Display',
+      fontWeight: t.fontWeight || 'normal',
       // Default styles based on layout vibe
       textAlign: layoutId === 'editorial_classic' ? 'left' : 'center',
       fontSize: layoutId === 'paper_box' ? 36 : 42,
@@ -177,21 +192,21 @@ export const assignSmartLayouts = (rawSlides, brandConfig) => {
   });
 };
 
-// Helper: Bold specific parts of the text to create visual interest
+// Helper: mark specific parts of the text as *accent* (single asterisks,
+// matching the renderer's accent parser).
 const applyEditorialHighlighting = (text) => {
   const lines = text.split('\n');
   return lines.map(line => {
     const words = line.split(' ');
-    // Heuristic: If line is short (< 8 words), bold the whole line (Impact statement)
+    // Heuristic: If line is short (< 8 words), accent the whole line (Impact statement)
     if (words.length < 8 && words.length > 2) {
-      return `**${line}**`;
+      return `*${line}*`;
     }
-    // Heuristic: Identify "keywords" or bold the first few words of long paragraphs
+    // Heuristic: bold the first few words of long paragraphs as a lead-in
     if (words.length > 15) {
-      // Bold first 3-4 words as a "lead-in"
       const leadIn = words.slice(0, 4).join(' ');
       const rest = words.slice(4).join(' ');
-      return `**${leadIn}** ${rest}`;
+      return `*${leadIn}* ${rest}`;
     }
     return line;
   }).join('\n');

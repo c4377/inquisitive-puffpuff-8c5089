@@ -21,8 +21,53 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   if (canvas.setWidth) canvas.setWidth(width);
   if (canvas.setHeight) canvas.setHeight(height);
 
+  // --- FULL-BLEED BACKGROUND IMAGE (Cover with photo) ---
+  // If the slide has a background image (e.g. auto-assigned in Bulk import),
+  // draw it edge-to-edge, then add a readability gradient on the text side.
+  const drawBackgroundImage = (src) =>
+    new Promise((resolve) => {
+      if (!src) return resolve(false);
+      fabric.Image.fromURL(
+        src,
+        (img) => {
+          if (!img) return resolve(false);
+          // Cover-fit: scale so image fills the whole canvas, center-crop.
+          const scaleFactor = Math.max(width / img.width, height / img.height);
+          img.set({
+            originX: 'center',
+            originY: 'center',
+            left: width / 2,
+            top: height / 2,
+            scaleX: scaleFactor,
+            scaleY: scaleFactor,
+            selectable: false,
+          });
+          canvas.add(img);
+          canvas.sendToBack(img);
+
+          // Readability overlay. Darken toward the text zone so light text reads.
+          const ov = typeof slide.overlay === 'number' ? slide.overlay : 0.35;
+          const overlayRect = new fabric.Rect({
+            left: 0,
+            top: 0,
+            width,
+            height,
+            fill: `rgba(0,0,0,${ov})`,
+            selectable: false,
+          });
+          canvas.add(overlayRect);
+          resolve(true);
+        },
+        { crossOrigin: 'anonymous' }
+      );
+    });
+
   const scale = options.scale || 1;
   const padding = width * 0.08;
+
+  // Global text size factor — reduces all text ~20% so defaults look balanced.
+  const FONT = 0.8;
+  const fs = (size) => size * scale * FONT;
   
   // Resolve Style Props (Fallback to defaults if missing in slide)
   const primaryColor = slide.color || '#000000';
@@ -45,8 +90,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
   // Contrast-safe text color: if chosen color is too close to the background,
   // flip to white/black so text never disappears on same-tone backgrounds.
+  // When a photo background is present, always use white (photo is darkened).
+  const hasBgImage = !!slide.background;
   const bgLum = hexLuminance(slide.backgroundColor || '#ffffff');
   const contrastColor = (preferred) => {
+    if (hasBgImage) return '#FFFFFF';
     const prefLum = hexLuminance(preferred);
     // if preferred and background are both dark or both light -> low contrast
     if (Math.abs(prefLum - bgLum) < 60) {
@@ -54,6 +102,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     }
     return preferred;
   };
+
+  // Draw the full-bleed background photo FIRST (before any text layout),
+  // so all text is drawn on top of the image + readability overlay.
+  if (hasBgImage) {
+    await drawBackgroundImage(slide.background);
+  }
   
   // Helper: Arrow
   const drawArrow = (fromX, fromY, toX, toY, color) => {
@@ -109,6 +163,71 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // === STRATEGY: LAYOUT ENGINE ===
   const layout = slide.layout || 'centered_focus';
 
+  // === COVER WITH PHOTO: auto-place title in the image's quiet zone ===
+  // When a background photo is present, ignore the abstract layout and place
+  // the title where the image has free/quiet space (from image analysis).
+  if (hasBgImage) {
+    const zone = slide._autoImage?.quietZone || 'center';
+    const { plain, segments } = parseAccent(slide.text);
+
+    // Map a 3x3 zone label to an anchor point + alignment.
+    const col = zone.includes('left') ? 'left' : zone.includes('right') ? 'right' : 'center';
+    const row = zone.includes('top') ? 'top' : zone.includes('bottom') ? 'bottom' : 'mid';
+
+    const boxWidth = width * 0.8;
+    let left = width / 2;
+    let originX = 'center';
+    let textAlign = 'center';
+    if (col === 'left') { left = width * 0.08; originX = 'left'; textAlign = 'left'; }
+    else if (col === 'right') { left = width * 0.92; originX = 'right'; textAlign = 'right'; }
+
+    let top = height / 2;
+    let originY = 'center';
+    if (row === 'top') { top = height * 0.12; originY = 'top'; }
+    else if (row === 'bottom') { top = height * 0.88; originY = 'bottom'; }
+
+    const titleObj = new fabric.Textbox(plain, {
+      left,
+      top,
+      originX,
+      originY,
+      width: boxWidth,
+      fontSize: fs(slide.fontSize || 46),
+      fontFamily: fontFamily,
+      fill: '#FFFFFF',
+      textAlign,
+      lineHeight: 1.2,
+      fontWeight: slide.fontWeight || 'bold',
+      shadow: new fabric.Shadow({ color: 'rgba(0,0,0,0.45)', blur: 8, offsetX: 0, offsetY: 2 }),
+    });
+    // accent word keeps accent color even on photo
+    try {
+      let idx = 0;
+      segments.forEach((s) => {
+        if (s.accent && s.text.length) {
+          titleObj.setSelectionStyles(
+            { fill: accentColor, fontStyle: 'italic', fontFamily: accentFont },
+            idx, idx + s.text.length
+          );
+        }
+        idx += s.text.length;
+      });
+    } catch (e) { /* best-effort */ }
+    canvas.add(titleObj);
+
+    // Brand name + slide number still drawn below
+    if (options.globalBrandName) {
+      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+        left: width / 2, top: height - (padding / 2), fontSize: fs(14),
+        fill: 'rgba(255,255,255,0.85)', fontFamily: 'Inter',
+        originX: 'center', originY: 'bottom',
+      }));
+    }
+    canvas.renderAll();
+    return; // cover is complete — skip the abstract layout engine
+  }
+
+
   // 1. EDITORIAL CLASSIC (Line + Title + Body)
   if (layout === 'editorial_classic' || layout === 'minimal_editorial') {
     // Top Line
@@ -127,7 +246,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         left: padding,
         top: currentY,
         width: width - (padding * 2),
-        fontSize: 32 * scale,
+        fontSize: fs(32),
         fontFamily: accentFont,
         fill: secondaryColor,
         fontStyle: 'italic',
@@ -143,7 +262,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       left: padding,
       top: currentY,
       width: width - (padding * 2),
-      fontSize: (slide.fontSize || 40) * scale,
+      fontSize: fs(slide.fontSize || 40),
       fontFamily: fontFamily,
       fill: contrastColor(primaryColor),
       lineHeight: 1.3,
@@ -175,7 +294,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       top: height / 2,
       originY: 'center',
       width: width - (boxMargin * 2) - (80 * scale),
-      fontSize: (slide.fontSize || 36) * scale,
+      fontSize: fs(slide.fontSize || 36),
       fontFamily: fontFamily,
       fill: '#1a1a1a', // Force dark on white box
       textAlign: 'center',
@@ -198,7 +317,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         top: (height * 0.4) / 2,
         originY: 'center',
         width: width - (padding * 2),
-        fontSize: 42 * scale,
+        fontSize: fs(42),
         fontFamily: accentFont,
         fill: primaryColor,
         textAlign: 'center',
@@ -212,7 +331,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       top: (height * 0.4) + ((height * 0.6) / 2),
       originY: 'center',
       width: width - (padding * 2),
-      fontSize: (slide.fontSize || 38) * scale,
+      fontSize: fs(slide.fontSize || 38),
       fontFamily: fontFamily,
       fill: '#ffffff',
       textAlign: 'center',
@@ -235,7 +354,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
             const numObj = new fabric.Text(num, {
                 left: padding,
                 top: currentY,
-                fontSize: 64 * scale,
+                fontSize: fs(64),
                 fontFamily: accentFont,
                 fill: accentColor,
                 fontWeight: 'bold',
@@ -247,7 +366,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
                 left: padding + (80 * scale),
                 top: currentY + (10 * scale),
                 width: width - (padding * 2) - (80 * scale),
-                fontSize: 32 * scale,
+                fontSize: fs(32),
                 fontFamily: fontFamily,
                 fill: primaryColor,
                 originY: 'top'
@@ -259,7 +378,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
                 left: padding,
                 top: currentY,
                 width: width - (padding * 2),
-                fontSize: 32 * scale,
+                fontSize: fs(32),
                 fontFamily: fontFamily,
                 fill: primaryColor
             });
@@ -279,7 +398,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       top: height / 2,
       originY: 'center',
       width: width - (padding * 2),
-      fontSize: (slide.fontSize || 44) * scale,
+      fontSize: fs(slide.fontSize || 44),
       fontFamily: fontFamily,
       fill: mainColor,
       textAlign: slide.textAlign || 'center',
@@ -298,7 +417,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       top: height / 2,
       originY: 'center',
       width: width - (padding * 2),
-      fontSize: (slide.fontSize || 48) * scale,
+      fontSize: fs(slide.fontSize || 48),
       fontFamily: fontFamily,
       fill: contrastColor(primaryColor),
       textAlign: slide.textAlign || 'center',
