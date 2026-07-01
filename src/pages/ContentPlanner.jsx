@@ -180,12 +180,17 @@ const ContentPlanner = () => {
     };
     const allowedLayouts = weightedLayoutPool(baseLayouts).map(resolveLayout);
 
+    const anchorCycle = ['top', 'center', 'bottom'];
     const newPlan = importedDays.map((dayData, dIdx) => {
         const slides = dayData.slides.map((text, sIdx) => {
             // Rotate through allowed layouts (offset per day) so slides vary
             // instead of always using the same layout.
             const layout = allowedLayouts[(dIdx + sIdx) % allowedLayouts.length];
-            return createSmartSlide(brandConfig, { text, layout }, sIdx, dayData.slides.length);
+            // Rotate the vertical text anchor too, so text-only posts don't all
+            // cling to the top. Cover slide (sIdx 0) varies per day.
+            const textAnchor = anchorCycle[(dIdx + sIdx) % anchorCycle.length];
+            const s = createSmartSlide(brandConfig, { text, layout }, sIdx, dayData.slides.length);
+            return { ...s, textAnchor };
         });
 
         return {

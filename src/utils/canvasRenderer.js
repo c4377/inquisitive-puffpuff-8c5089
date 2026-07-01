@@ -483,7 +483,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     });
     canvas.add(line);
 
+    // Vertical anchor: vary the starting Y so text-only posts don't all sit at
+    // the top. top -> just under the line; center -> vertically centered;
+    // bottom -> lower third.
     let currentY = padding + (40 * scale);
+    if (slide.textAnchor === 'center') currentY = height * 0.40;
+    else if (slide.textAnchor === 'bottom') currentY = height * 0.58;
 
     // Optional Secondary Text (Hook)
     if (slide.secondaryText) {
