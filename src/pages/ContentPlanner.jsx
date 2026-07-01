@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import * as FiIcons from 'react-icons/fi';
@@ -39,6 +39,7 @@ const ContentPlanner = () => {
   // Saved post sets (named snapshots of the current plan).
   const [savedSets, setSavedSets] = useState([]);
   const [showSets, setShowSets] = useState(false);
+  const lastImageOffsetRef = useRef(-1); // avoid repeating the same reload shuffle
 
   const currentBrand = brandSettings.currentBrandConfig;
   const hasActiveBrand = !!currentBrand;
@@ -320,7 +321,16 @@ const ContentPlanner = () => {
       const imagePool = brandSettings?.brandImages || [];
 
       let globalIndex = 0;
-      let imageOffset = 0; // global image cursor across the whole plan
+      // Start at a RANDOM point in the pool so every reload shifts which photo
+      // lands where — otherwise the same images always map to the same slots.
+      // Pick a value different from the previous reload when the pool allows it.
+      let imageOffset = 0;
+      if (imagePool.length > 1) {
+        do {
+          imageOffset = Math.floor(Math.random() * imagePool.length);
+        } while (imageOffset === lastImageOffsetRef.current);
+        lastImageOffsetRef.current = imageOffset;
+      }
       const reloadedPlan = [];
       for (let dayIdx = 0; dayIdx < weekPlan.length; dayIdx++) {
         const day = weekPlan[dayIdx];
