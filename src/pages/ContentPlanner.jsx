@@ -248,9 +248,8 @@ const ContentPlanner = () => {
     setLoading(false);
     setSaveStatus(`Plan importiert – ${withPhotos}/${totalSlides} mit Bild (Pool: ${imagePool.length}).`);
     setTimeout(() => setSaveStatus(''), 5000);
-
-    // Jump straight to the grid feed so the whole plan is visible at once.
-    navigate('/feed-preview');
+    // The planner view itself is now the grid feed, so we stay here and the
+    // covers appear immediately.
   };
 
   const handleManualSave = () => {
@@ -495,7 +494,7 @@ const ContentPlanner = () => {
       {loading ? (
         <div className="space-y-6 pt-4">{[1, 2, 3].map(i => <div key={i} className="h-64 bg-gray-100 rounded-xl animate-pulse"></div>)}</div>
       ) : (
-        <div className="space-y-8">
+        <div>
           {weekPlan.length === 0 ? (
             <div className="text-center py-20 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
               <h3 className="text-lg font-bold text-gray-700 mb-2">Noch kein Plan erstellt</h3>
@@ -503,68 +502,67 @@ const ContentPlanner = () => {
               <div className="flex justify-center gap-4"><button onClick={() => setShowImportModal(true)} className="bg-purple-600 text-white px-6 py-3 rounded-lg font-bold shadow-md hover:bg-purple-700 transition-colors">Bulk Import Starten</button></div>
             </div>
           ) : (
-            weekPlan.map((day, dayIndex) => {
-              const activeIndex = activeIndices[day.day] || 0;
-              const activeSlide = day.slides[activeIndex];
-              const isCaptionOpen = expandedCaptionId === day.day;
-              const dynamicActiveSlide = { ...activeSlide, visualElements: activeSlide.visualElements || [], format: activeSlide.format || '4:5' };
-              const isExportingThisDay = exportingDayId === day.day;
-              return (
-                <motion.div key={`${day.day}-${day.title}`} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: dayIndex * 0.1 }} className="bg-white rounded-xl overflow-hidden shadow-md border border-gray-100">
-                  <div className="border-b border-gray-100 px-4 py-3 flex justify-between items-center bg-gray-50">
-                    <span className="font-bold text-gray-900">Tag {day.day}</span>
-                    <div className="flex items-center space-x-2"><span className="text-xs text-purple-700 bg-purple-50 px-2 py-1 rounded border border-purple-100 font-bold uppercase tracking-wider">{day.type === 'hook' ? 'Hook' : 'Post'}</span></div>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-normal text-gray-900 font-playfair mb-2">{day.title}</h3>
-                    <div className="relative bg-gray-100 rounded-lg overflow-hidden border border-gray-200 aspect-[4/5] mb-4 shadow-inner">
-                      <div className="w-full h-full flex items-center justify-center">
-                        <div className="w-full h-full max-h-full transition-all duration-300">
-                          <Canvas key={`${day.day}-${activeIndex}-${dynamicActiveSlide.color}-${dynamicActiveSlide.secondaryColor}-${dynamicActiveSlide.fontFamily}-${dynamicActiveSlide.backgroundColor}`} data={{...dynamicActiveSlide, slideNumber: undefined}} brandName={brandName} />
-                        </div>
+            // GRID FEED: one cover per day. Tap a cover to edit that day.
+            <div className="grid grid-cols-3 gap-1">
+              {weekPlan.map((day, dayIndex) => {
+                const activeIndex = activeIndices[day.day] || 0;
+                const activeSlide = day.slides[activeIndex] || day.slides[0];
+                const dynamicActiveSlide = { ...activeSlide, visualElements: activeSlide.visualElements || [], format: activeSlide.format || '4:5' };
+                const isExportingThisDay = exportingDayId === day.day;
+                return (
+                  <motion.div
+                    key={`${day.day}-${day.title}`}
+                    initial={{ opacity: 0, scale: 0.96 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: dayIndex * 0.04 }}
+                    className="relative group aspect-[4/5] bg-gray-100 overflow-hidden cursor-pointer"
+                    onClick={() => handleEditDay(day)}
+                    title={`Tag ${day.day} – ${day.title} · tippen zum Bearbeiten`}
+                  >
+                    <div className="absolute inset-0 pointer-events-none">
+                      <Canvas key={`${day.day}-${activeIndex}-${dynamicActiveSlide.color}-${dynamicActiveSlide.secondaryColor}-${dynamicActiveSlide.fontFamily}-${dynamicActiveSlide.backgroundColor}`} data={{...dynamicActiveSlide, slideNumber: undefined}} brandName={brandName} />
+                    </div>
+
+                    {/* Day badge */}
+                    <div className="absolute top-1 left-1 bg-black/55 text-white text-[9px] font-bold px-1.5 py-0.5 rounded z-10">
+                      Tag {day.day}
+                    </div>
+
+                    {/* Carousel indicator */}
+                    {day.slides.length > 1 && (
+                      <div className="absolute top-1 right-1 bg-black/55 text-white text-[9px] font-bold px-1.5 py-0.5 rounded z-10 flex items-center">
+                        <SafeIcon icon={FiLayers} className="mr-0.5 text-[9px]" /> {day.slides.length}
+                      </div>
+                    )}
+
+                    {/* Hover overlay with quick actions */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex flex-col items-center justify-center gap-1.5 opacity-0 group-hover:opacity-100 z-20">
+                      <div className="bg-white/95 text-gray-800 text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center">
+                        <SafeIcon icon={FiEdit3} className="mr-1" /> Bearbeiten
+                      </div>
+                      <div className="flex gap-1.5">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleShareDay(day); }}
+                          disabled={isExportingThisDay}
+                          className="bg-purple-600 text-white text-[9px] font-bold px-2 py-1 rounded-full flex items-center hover:bg-purple-700 disabled:opacity-50"
+                          title="In Fotos speichern"
+                        >
+                          <SafeIcon icon={FiShare2} className="mr-0.5" /> Fotos
+                        </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleExportDay(day); }}
+                          disabled={isExportingThisDay}
+                          className="bg-white/90 text-gray-700 text-[9px] font-bold px-2 py-1 rounded-full flex items-center hover:bg-white disabled:opacity-50"
+                          title="Exportieren"
+                        >
+                          {isExportingThisDay ? <span className="animate-spin"><SafeIcon icon={FiRefreshCw} /></span> : <><SafeIcon icon={FiDownload} className="mr-0.5" /> Export</>}
+                        </button>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2 flex-1 mr-4"><SafeIcon icon={FiType} className="text-gray-400 text-xs"/><input type="range" min="16" max="160" value={activeSlide.fontSize} onChange={(e) => updateActiveSlideFontSize(day.day, parseInt(e.target.value))} className="flex-1 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-600" /></div>
-                      <button onClick={() => setExpandedCaptionId(isCaptionOpen ? null : day.day)} className={`p-2 rounded-lg transition-colors ${isCaptionOpen ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}><SafeIcon icon={FiMessageSquare} /></button>
-                    </div>
-                    {/* Layout-Bewertung: Daumen hoch/runter fürs aktuelle Layout */}
-                    {(() => {
-                      const lay = dynamicActiveSlide.layout || dynamicActiveSlide.layoutId;
-                      const rating = getRating(lay);
-                      return (
-                        <div className="flex items-center justify-center gap-3 mb-4 text-xs text-gray-500">
-                          <span>Layout «{lay}»</span>
-                          <button
-                            onClick={() => { setRating(lay, 1); setRatingTick((t) => t + 1); }}
-                            className={`p-1.5 rounded-lg border transition-colors ${rating === 1 ? 'bg-emerald-100 border-emerald-300 text-emerald-700' : 'bg-white border-gray-200 text-gray-400 hover:text-emerald-600'}`}
-                            title="Dieses Layout öfter nutzen"
-                          >
-                            <SafeIcon icon={FiThumbsUp} />
-                          </button>
-                          <button
-                            onClick={() => { setRating(lay, -1); setRatingTick((t) => t + 1); }}
-                            className={`p-1.5 rounded-lg border transition-colors ${rating === -1 ? 'bg-red-100 border-red-300 text-red-700' : 'bg-white border-gray-200 text-gray-400 hover:text-red-600'}`}
-                            title="Dieses Layout seltener/nicht nutzen"
-                          >
-                            <SafeIcon icon={FiThumbsDown} />
-                          </button>
-                        </div>
-                      );
-                    })()}
-                    {isCaptionOpen && (
-                      <div className="mb-4 p-3 bg-blue-50 text-sm text-blue-900 rounded-lg border border-blue-100 relative"><p className="whitespace-pre-wrap pr-6">{day.caption || "Keine Caption verfügbar."}</p><button onClick={() => navigator.clipboard.writeText(day.caption)} className="absolute top-2 right-2 p-1 hover:bg-blue-100 rounded text-blue-500" title="Kopieren"><SafeIcon icon={FiCopy} /></button></div>
-                    )}
-                    <div className="grid grid-cols-3 gap-2">
-                      <button onClick={() => handleEditDay(day)} className="bg-white border border-gray-200 text-gray-700 py-2.5 px-3 rounded-lg font-bold text-xs flex items-center justify-center hover:bg-gray-50 hover:border-purple-300 hover:text-purple-700 transition-all"><SafeIcon icon={FiEdit3} className="mr-1.5" /> Bearbeiten</button>
-                      <button onClick={() => handleExportDay(day)} disabled={isExportingThisDay} className="bg-gray-100 border border-gray-200 text-gray-700 py-2.5 px-3 rounded-lg font-bold text-xs flex items-center justify-center hover:bg-gray-200 hover:text-purple-700 transition-all disabled:opacity-50">{isExportingThisDay ? <span className="animate-spin mr-1.5"><SafeIcon icon={FiRefreshCw} /></span> : <SafeIcon icon={FiDownload} className="mr-1.5" />} Export</button>
-                      <button onClick={() => handleShareDay(day)} disabled={isExportingThisDay} className="bg-purple-600 border border-purple-600 text-white py-2.5 px-3 rounded-lg font-bold text-xs flex items-center justify-center hover:bg-purple-700 transition-all disabled:opacity-50"><SafeIcon icon={FiShare2} className="mr-1.5" /> In Fotos</button>
-                      <button onClick={() => navigate('/create')} className="bg-gray-50 text-gray-500 py-2.5 px-3 rounded-lg font-bold text-xs flex items-center justify-center hover:bg-gray-100 transition-colors"><SafeIcon icon={FiExternalLink} className="mr-1.5" /> Neu</button>
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })
+                  </motion.div>
+                );
+              })}
+            </div>
           )}
         </div>
       )}
