@@ -7,6 +7,7 @@ import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import SafeIcon from '../common/SafeIcon';
 import Canvas from '../components/Canvas';
+import { useSwipe } from '../hooks/useSwipe';
 import TextEditor from '../components/TextEditor';
 import BulkTextEditor from '../components/BulkTextEditor';
 import ImageUpload from '../components/ImageUpload';
@@ -63,6 +64,11 @@ const CreateContent = () => {
   }]);
 
   const currentSlide = slides[currentSlideIndex] || slides[0];
+
+  const slideSwipe = useSwipe({
+    onLeft: () => setCurrentSlideIndex((i) => Math.min(slides.length - 1, i + 1)),
+    onRight: () => setCurrentSlideIndex((i) => Math.max(0, i - 1)),
+  });
 
   useEffect(() => {
     if (thumbnailsRef.current) {
@@ -231,7 +237,7 @@ const CreateContent = () => {
       </AnimatePresence>
       <div className="flex-1 overflow-hidden grid grid-cols-1 md:grid-cols-[1fr_420px]">
         <div className="relative bg-gray-100 flex flex-col items-center justify-center p-4 md:p-8 overflow-y-auto">
-          <div className={`shadow-2xl rounded-sm overflow-hidden bg-white w-full transition-all duration-300 relative shrink-0 ${currentSlide.format === '9:16' ? 'max-w-[280px] aspect-[9/16]' : (currentSlide.format === '16:9' ? 'max-w-[800px] aspect-video' : 'max-w-[400px] aspect-[4/5]')}`}>
+          <div {...(slides.length > 1 ? slideSwipe : {})} className={`shadow-2xl rounded-sm overflow-hidden bg-white w-full transition-all duration-300 relative shrink-0 ${currentSlide.format === '9:16' ? 'max-w-[280px] aspect-[9/16]' : (currentSlide.format === '16:9' ? 'max-w-[800px] aspect-video' : 'max-w-[400px] aspect-[4/5]')}`}>
             <Canvas ref={mainCanvasRef} data={{...currentSlide, slideNumber: slides.length > 1 ? currentSlideIndex + 1 : undefined, totalSlides: slides.length}} brandName={brandName} />
             <button id="save-lib-btn" onClick={handleSaveToLibrary} className="absolute bottom-4 right-4 bg-white/90 backdrop-blur border border-gray-200 shadow-lg text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center hover:bg-white hover:text-purple-600 transition-colors"><SafeIcon icon={FiSave} className="mr-1" /> Save</button>
           </div>
