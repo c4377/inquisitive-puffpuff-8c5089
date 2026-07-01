@@ -51,7 +51,7 @@ const LayoutPicker = ({ currentLayout, onUpdate }) => {
         {layouts.map((layout) => (
           <button
             key={layout.id}
-            onClick={() => onUpdate({ layout: layout.id })}
+            onClick={() => onUpdate({ layout: layout.id, xOffset: 0, yOffset: 0, secondaryXOffset: 0, secondaryYOffset: 0, textAnchor: null })}
             className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all relative ${currentLayout === layout.id ? 'border-purple-600 bg-purple-50 text-purple-700 shadow-sm' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-600'}`}
           >
             <SafeIcon icon={layout.icon} className="text-2xl mb-2" />

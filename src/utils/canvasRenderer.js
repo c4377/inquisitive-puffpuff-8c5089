@@ -21,6 +21,43 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   if (canvas.setWidth) canvas.setWidth(width);
   if (canvas.setHeight) canvas.setHeight(height);
 
+  // === CENTRAL MANUAL-OVERRIDE WRAPPER ===
+  // Every text object added by any layout passes through here. This is what
+  // makes "the last one wins": manual Position (xOffset/yOffset), Opacity,
+  // Align and font choices from the Editor always override the layout's
+  // computed values, no matter which layout block created the object.
+  const uiScale = (options.scale || 1);
+  const isPrimaryText = (obj) => {
+    // Heuristic: the main body text is the largest Textbox. We tag primary vs
+    // secondary by checking against slide.secondaryText content.
+    if (!obj || obj.type !== 'textbox') return false;
+    return true;
+  };
+  const applyManualOverrides = (obj) => {
+    try {
+      if (!obj || (obj.type !== 'textbox' && obj.type !== 'text')) return;
+      // Identify whether this object is the secondary text (subtext).
+      const objText = (obj.text || '').trim();
+      const secText = (slide.secondaryText || '').trim();
+      const isSecondary = secText && objText === secText;
+
+      const xOff = isSecondary ? slide.secondaryXOffset : slide.xOffset;
+      const yOff = isSecondary ? slide.secondaryYOffset : slide.yOffset;
+      const opacity = isSecondary ? slide.secondaryTextOpacity : slide.textOpacity;
+
+      if (typeof xOff === 'number' && xOff !== 0) obj.left = obj.left + xOff * uiScale;
+      if (typeof yOff === 'number' && yOff !== 0) obj.top = obj.top + yOff * uiScale;
+      if (typeof opacity === 'number') obj.opacity = Math.max(0, Math.min(1, opacity));
+      obj.setCoords && obj.setCoords();
+    } catch (e) { /* override best-effort */ }
+  };
+  const _origAdd = canvas.__origAdd || canvas.add.bind(canvas);
+  canvas.__origAdd = _origAdd;
+  canvas.add = (...objs) => {
+    objs.forEach(applyManualOverrides);
+    return _origAdd(...objs);
+  };
+
   // --- FULL-BLEED BACKGROUND IMAGE (Cover with photo) ---
   // If the slide has a background image (e.g. auto-assigned in Bulk import),
   // draw it edge-to-edge, then add a readability gradient on the text side.
@@ -434,11 +471,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         left: padding,
         top: currentY,
         width: width - (padding * 2),
-        fontSize: fs(32),
-        fontFamily: accentFont,
-        fill: secondaryColor,
-        fontStyle: 'italic',
-        textAlign: 'left'
+        fontSize: fs(slide.secondaryFontSize || 32),
+        fontFamily: slide.secondaryFontFamily || accentFont,
+        fill: slide.secondaryTextColor || secondaryColor,
+        fontStyle: slide.secondaryFontStyle || 'italic',
+        textAlign: slide.secondaryTextAlign || 'left'
       });
       canvas.add(secText);
       currentY += secText.height + (20 * scale);
@@ -452,10 +489,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       width: width - (padding * 2),
       fontSize: fs(slide.fontSize || 40),
       fontFamily: fontFamily,
-      fill: contrastColor(primaryColor),
+      fill: slide.color || contrastColor(primaryColor),
       lineHeight: 1.3,
-      textAlign: 'left',
+      textAlign: slide.textAlign || 'left',
       fontWeight: slide.fontWeight || 'normal',
+      fontStyle: slide.fontStyle || 'normal',
       shadow: slide.noShadow ? '' : textShadow
     });
     applyAccentStyles(mainText, ecSegs);
@@ -523,11 +561,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         top: (height * 0.4) / 2,
         originY: 'center',
         width: width - (padding * 2),
-        fontSize: fs(42),
-        fontFamily: accentFont,
-        fill: contrastColor(topFill),
-        textAlign: 'center',
-        fontStyle: 'italic'
+        fontSize: fs(slide.secondaryFontSize || 42),
+        fontFamily: slide.secondaryFontFamily || accentFont,
+        fill: slide.secondaryTextColor || contrastColor(topFill),
+        textAlign: slide.secondaryTextAlign || 'center',
+        fontStyle: slide.secondaryFontStyle || 'italic'
       }));
     }
 
@@ -728,7 +766,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       width: boxWidth,
       fontSize: fontSize,
       fontFamily: fontFamily,
-      fill: mainColor,
+      fill: slide.color || mainColor,
       textAlign: slide.textAlign || 'center',
       lineHeight: 1.25,
       fontWeight: slide.fontWeight || defaultWeight,
@@ -749,7 +787,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       width: width - (padding * 2),
       fontSize: fs(slide.fontSize || 48),
       fontFamily: fontFamily,
-      fill: contrastColor(primaryColor),
+      fill: slide.color || contrastColor(primaryColor),
       textAlign: slide.textAlign || 'center',
       lineHeight: 1.3,
       shadow: textShadow
