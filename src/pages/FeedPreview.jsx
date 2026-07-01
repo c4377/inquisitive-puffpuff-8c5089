@@ -5,15 +5,34 @@ import SafeIcon from '../common/SafeIcon';
 import Canvas from '../components/Canvas';
 import StyleShifter from '../components/StyleShifter'; // IMPORT
 import { useBrand } from '../context/BrandContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const { FiGrid, FiPlus, FiEdit3, FiImage, FiTrash2, FiCamera, FiX, FiCheck, FiList, FiUpload, FiMenu, FiHeart, FiMessageCircle, FiSend, FiUser, FiChevronDown, FiLayers, FiRefreshCw } = FiIcons;
 
 const FeedPreview = () => {
   const { brandSettings, updateFeedProfile, addPostToFeed, removePostFromFeed } = useBrand();
+  const navigate = useNavigate();
   const feedProfile = brandSettings.feedProfile || {};
   const contentPlan = brandSettings.contentPlan || [];
   const savedDesigns = brandSettings.savedDesigns || [];
+
+  // Click a feed post -> open it in the editor.
+  // For plan posts we open the whole day (carousel); for extra/library posts
+  // we open that single slide.
+  const handleEditPost = (post) => {
+    try {
+      if (post.isPlan) {
+        const day = contentPlan.find(d => `plan-${d.day}` === post.uniqueId);
+        if (day) {
+          navigate('/editor', { state: { slides: day.slides, dayId: day.day, dayTitle: day.title } });
+          return;
+        }
+      }
+      // Single-slide fallback (extra post, library item, or plan day not found).
+      const { uniqueId, isPlan, isExtra, dayTitle, ...slide } = post;
+      navigate('/editor', { state: { slides: [slide], dayTitle: dayTitle || 'Post' } });
+    } catch (e) { /* navigation best-effort */ }
+  };
   
   const [isEditingProfile, setIsEditingProfile] = useState(false);
   const [showLibrary, setShowLibrary] = useState(false);
@@ -295,8 +314,13 @@ const FeedPreview = () => {
           // GRID VIEW (4:5 Aspect Ratio)
           <div className="grid grid-cols-3 gap-0.5">
             {allPosts.map((post) => (
-              <div key={post.uniqueId} className="aspect-[4/5] bg-gray-100 relative group overflow-hidden">
-                <div className="absolute inset-0">
+              <div
+                key={post.uniqueId}
+                onClick={() => handleEditPost(post)}
+                className="aspect-[4/5] bg-gray-100 relative group overflow-hidden cursor-pointer"
+                title="Zum Bearbeiten tippen"
+              >
+                <div className="absolute inset-0 pointer-events-none">
                   {/* OVERRIDE CANVAS WITH CURRENT BRAND CONFIG FOR LIVE PREVIEW */}
                   <Canvas 
                     key={`${post.uniqueId}-${post.color}-${post.backgroundColor}-${post.fontFamily}`}
@@ -314,11 +338,18 @@ const FeedPreview = () => {
                     brandName={brandSettings.currentBrandConfig?.name} 
                   />
                 </div>
+
+                {/* Edit hint on hover */}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center z-10">
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 text-gray-800 text-[10px] font-bold px-2 py-1 rounded-full flex items-center">
+                    <SafeIcon icon={FiEdit3} className="mr-1" /> Bearbeiten
+                  </div>
+                </div>
                 
                 {/* Overlay for Extra Posts */}
                 {post.isExtra && (
                   <button 
-                    onClick={() => removePostFromFeed(post.id)}
+                    onClick={(e) => { e.stopPropagation(); removePostFromFeed(post.id); }}
                     className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-20"
                   >
                     <SafeIcon icon={FiTrash2} className="text-xs" />
@@ -356,8 +387,12 @@ const FeedPreview = () => {
                   </div>
                   <span className="font-bold text-sm">{feedProfile.username}</span>
                 </div>
-                <div className="w-full aspect-[4/5] bg-gray-100 relative">
-                  <div className="absolute inset-0">
+                <div
+                  className="w-full aspect-[4/5] bg-gray-100 relative cursor-pointer group"
+                  onClick={() => handleEditPost(post)}
+                  title="Zum Bearbeiten tippen"
+                >
+                  <div className="absolute inset-0 pointer-events-none">
                     {/* OVERRIDE CANVAS HERE TOO */}
                     <Canvas 
                         key={`list-${post.uniqueId}-${post.color}-${post.backgroundColor}-${post.fontFamily}`}

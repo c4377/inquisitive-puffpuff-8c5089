@@ -558,15 +558,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       }));
     }
 
-    // Accent line for text-only posts (adds brand structure).
-    if (!hasBgImage) {
-      const lineY = row === 'top' ? height * 0.14 : row === 'bottom' ? height * 0.60 : height * 0.30;
-      const lx1 = col === 'left' ? width * 0.10 : width * 0.30;
-      const lx2 = col === 'left' ? width * 0.40 : width * 0.70;
-      canvas.add(new fabric.Line([lx1, lineY, lx2, lineY], {
-        stroke: accentColor, strokeWidth: 2 * scale, selectable: false,
-      }));
-    }
+    // (Accent line removed — the brand mark near the text carries the brand.)
 
     // Position.
     let left = width / 2, originX = 'center', textAlign = 'center';
@@ -590,18 +582,27 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     applyAccentStyles(titleObj, segments);
     canvas.add(titleObj);
 
-    // Brand mark (bottom center), out of the way of the headline.
-    if (options.globalBrandName && row !== 'bottom') {
+    // Brand mark coupled DIRECTLY to the text: above it when the text sits low,
+    // below it otherwise. Aligned to the same column as the text.
+    if (options.globalBrandName) {
+      const brandColor = hasBgImage ? 'rgba(255,255,255,0.9)' : accentColor;
+      const gap = fs(26);
+      // Estimate the text block height to place the mark just outside it.
+      let th = fs(slide.fontSize || 42) * 1.2;
+      try { th = titleObj.height || th; } catch (e) { /* best-effort */ }
+      const putAbove = (row === 'bottom');
+      let markTop, markOriginY;
+      if (putAbove) {
+        // text anchored at bottom (originY bottom): its top edge ≈ top - th
+        markTop = top - th - gap; markOriginY = 'bottom';
+      } else if (row === 'top') {
+        markTop = top + th + gap; markOriginY = 'top';
+      } else { // mid (originY center): below the block
+        markTop = top + th / 2 + gap; markOriginY = 'top';
+      }
       canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
-        left: width / 2, top: height - fs(30), originX: 'center', originY: 'bottom',
-        fontSize: fs(12), fill: hasBgImage ? 'rgba(255,255,255,0.9)' : accentColor,
-        fontFamily: 'Inter', charSpacing: 150, selectable: false,
-      }));
-    } else if (options.globalBrandName && row === 'bottom') {
-      // headline is at the bottom -> put brand mark at the top
-      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
-        left: width / 2, top: fs(30), originX: 'center', originY: 'top',
-        fontSize: fs(12), fill: hasBgImage ? 'rgba(255,255,255,0.9)' : accentColor,
+        left, top: markTop, originX, originY: markOriginY,
+        fontSize: fs(12), fill: brandColor,
         fontFamily: 'Inter', charSpacing: 150, selectable: false,
       }));
     }

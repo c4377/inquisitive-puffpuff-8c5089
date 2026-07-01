@@ -248,6 +248,9 @@ const ContentPlanner = () => {
     setLoading(false);
     setSaveStatus(`Plan importiert – ${withPhotos}/${totalSlides} mit Bild (Pool: ${imagePool.length}).`);
     setTimeout(() => setSaveStatus(''), 5000);
+
+    // Jump straight to the grid feed so the whole plan is visible at once.
+    navigate('/feed-preview');
   };
 
   const handleManualSave = () => {
