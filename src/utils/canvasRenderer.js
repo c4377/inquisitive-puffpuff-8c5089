@@ -177,6 +177,18 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // flip to white/black so text never disappears on same-tone backgrounds.
   // When a photo background is present, always use white (photo is darkened).
   const hasBgImage = typeof slide.background === 'string' && slide.background.length > 5;
+
+  // Resolve the layout up-front (it's used below for the framed-photo check).
+  // Image-only magazine layouts (split/framed/card) look broken without a
+  // photo — half-empty panels, empty frames. If there's no image, fall back
+  // to a clean text layout so text-only posts always look intentional.
+  let layoutResolved = slide.layout || 'centered_focus';
+  const imageOnlyLayouts = ['split_photo', 'split_photo_v', 'framed_photo', 'card_on_photo'];
+  if (imageOnlyLayouts.includes(layoutResolved) && !hasBgImage) {
+    const textFallbacks = ['editorial_classic', 'minimal_quote', 'paper_box'];
+    const pick = (slide.text ? slide.text.length : 0) % textFallbacks.length;
+    layoutResolved = textFallbacks[pick];
+  }
   const bgLum = hexLuminance(slide.backgroundColor || '#ffffff');
   const contrastColor = (preferred) => {
     if (hasBgImage) return '#FFFFFF';
@@ -192,7 +204,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // so all text is drawn on top of the image + readability overlay.
   // EXCEPTION: framed_photo draws the photo small & framed inside its block,
   // not full-bleed — so skip the full-bleed draw for it.
-  const isFramedPhoto = layout === 'framed_photo';
+  const isFramedPhoto = layoutResolved === 'framed_photo';
   if (hasBgImage && !isFramedPhoto) {
     try {
       await drawBackgroundImage(slide.background);
@@ -253,7 +265,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   };
 
   // === STRATEGY: LAYOUT ENGINE ===
-  const layout = slide.layout || 'centered_focus';
+  let layout = layoutResolved;
   // Strong text shadow whenever text sits on a photo, for readability.
   const textShadow = hasBgImage ? 'rgba(0,0,0,0.7) 0px 2px 12px' : '';
 

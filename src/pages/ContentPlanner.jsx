@@ -187,39 +187,58 @@ const ContentPlanner = () => {
     return mixed;
   };
 
-  const handleImportPlan = (importedDays) => {
+  const handleImportPlan = async (importedDays) => {
     setLoading(true);
     const brandConfig = brandSettings.currentBrandConfig;
-    const mixedLayouts = buildLayoutRotation(brandConfig);
+    const imagePool = brandSettings?.brandImages || [];
 
+    // Two separate layout pools: image layouts only go to slides that actually
+    // have a photo; text layouts go to text-only slides. This prevents empty
+    // split panels / empty frames on text-only posts.
+    const imageLayouts = ['split_photo', 'split_photo_v', 'framed_photo', 'card_on_photo', 'sarah_cover'];
+    const textLayouts = ['editorial_classic', 'minimal_quote', 'maximized_bold', 'paper_box', 'glass_layer', 'diagonal_overlay'];
     const anchorCycle = ['top', 'center', 'bottom'];
-    const newPlan = importedDays.map((dayData, dIdx) => {
-        const slides = dayData.slides.map((text, sIdx) => {
-            // Rotate through allowed layouts (offset per day) so slides vary
-            // instead of always using the same layout.
-            const layout = mixedLayouts[(dIdx + sIdx) % mixedLayouts.length];
-            // Rotate the vertical text anchor too, so text-only posts don't all
-            // cling to the top. Cover slide (sIdx 0) varies per day.
-            const textAnchor = anchorCycle[(dIdx + sIdx) % anchorCycle.length];
-            const s = createSmartSlide(brandConfig, { text, layout }, sIdx, dayData.slides.length);
-            return { ...s, textAnchor };
-        });
 
-        return {
-            day: dayData.day,
-            title: dayData.title,
-            caption: dayData.caption,
-            type: slides.length > 1 ? 'carousel' : 'hook',
-            slides: slides
-        };
-    });
+    const newPlan = [];
+    for (let dIdx = 0; dIdx < importedDays.length; dIdx++) {
+      const dayData = importedDays[dIdx];
+      // Build base slides (no layout yet).
+      let slides = dayData.slides.map((text, sIdx) =>
+        createSmartSlide(brandConfig, { text }, sIdx, dayData.slides.length)
+      );
+      // Attach images (so we know which slides end up WITH a photo).
+      try { slides = await attachSmartImages(slides, imagePool); } catch (e) { /* keep slides */ }
+
+      // Now pick the layout based on whether the slide got an image.
+      slides = slides.map((slide, sIdx) => {
+        const hasImg = typeof slide.background === 'string' && slide.background.length > 5;
+        const pool = hasImg ? imageLayouts : textLayouts;
+        const layout = pool[(dIdx + sIdx) % pool.length];
+        const textAnchor = anchorCycle[(dIdx + sIdx) % anchorCycle.length];
+        return { ...slide, layout, layoutId: layout, textAnchor };
+      });
+
+      newPlan.push({
+        day: dayData.day,
+        title: dayData.title,
+        caption: dayData.caption,
+        type: slides.length > 1 ? 'carousel' : 'hook',
+        slides,
+      });
+    }
 
     const finalPlan = applyBrandStyling(newPlan, brandConfig);
     updateBrandSettings({ contentPlan: finalPlan });
-    
+
+    // Count how many slides actually received a photo, so the user sees
+    // immediately whether the image pool was found and attached.
+    const withPhotos = finalPlan.reduce((acc, day) =>
+      acc + day.slides.filter(s => typeof s.background === 'string' && s.background.length > 5).length, 0);
+    const totalSlides = finalPlan.reduce((acc, day) => acc + day.slides.length, 0);
+
     setLoading(false);
-    setSaveStatus('Plan importiert!');
-    setTimeout(() => setSaveStatus(''), 3000);
+    setSaveStatus(`Plan importiert – ${withPhotos}/${totalSlides} mit Bild (Pool: ${imagePool.length}).`);
+    setTimeout(() => setSaveStatus(''), 5000);
   };
 
   const handleManualSave = () => {
