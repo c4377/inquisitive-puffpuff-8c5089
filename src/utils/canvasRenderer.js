@@ -1051,8 +1051,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     canvas.add(numText);
   }
 
-  // Brand Name
-  if (options.globalBrandName) {
+  // Brand Name — skip for layouts that position their own brand mark, so it
+  // doesn't appear twice.
+  const drawsOwnBrandMark = ['split_photo', 'split_photo_v', 'framed_photo', 'card_on_photo'];
+  if (options.globalBrandName && !drawsOwnBrandMark.includes(layout)) {
     const brandText = new fabric.Text(options.globalBrandName.toUpperCase(), {
       left: width / 2,
       top: height - (padding / 2),
@@ -1102,10 +1104,13 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       const timer = setTimeout(() => done(false), 6000);
       fabric.Image.fromURL(src, (img) => {
         clearTimeout(timer);
-        // A failed load gives an image with no dimensions.
-        if (!img || !img.width || !img.height) return done(false);
+        // Match the working full-bleed loader: treat any returned image object
+        // as valid. A truly failed load returns null/undefined.
+        if (!img) return done(false);
         try {
-          const s = Math.max(box.w / img.width, box.h / img.height);
+          const iw = img.width || img.naturalWidth || 1;
+          const ih = img.height || img.naturalHeight || 1;
+          const s = Math.max(box.w / iw, box.h / ih);
           img.set({
             originX: 'center', originY: 'center',
             left: box.x + box.w / 2, top: box.y + box.h / 2,
