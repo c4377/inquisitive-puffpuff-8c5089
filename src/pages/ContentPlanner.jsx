@@ -195,6 +195,7 @@ const ContentPlanner = () => {
 
     // Fully automatic: the engine decides image / text position / bold per post.
     let globalIndex = 0;
+    let imageOffset = 0; // global image cursor across the whole plan
     const newPlan = [];
     for (let dIdx = 0; dIdx < importedDays.length; dIdx++) {
       const dayData = importedDays[dIdx];
@@ -205,7 +206,10 @@ const ContentPlanner = () => {
       );
 
       if (wantsImage) {
-        try { slides = await attachSmartImages(slides, imagePool); } catch (e) { /* keep */ }
+        try {
+          slides = await attachSmartImages(slides, imagePool, imageOffset);
+          imageOffset += slides.length; // advance cursor so next day differs
+        } catch (e) { /* keep */ }
       }
 
       slides = slides.map((slide) => {
@@ -270,13 +274,15 @@ const ContentPlanner = () => {
       const imagePool = brandSettings?.brandImages || [];
 
       let globalIndex = 0;
+      let imageOffset = 0; // global image cursor across the whole plan
       const reloadedPlan = [];
       for (let dayIdx = 0; dayIdx < weekPlan.length; dayIdx++) {
         const day = weekPlan[dayIdx];
         const wantsImage = dayHasImage(dayIdx) && imagePool.length > 0;
         let daySlides = day.slides;
         if (wantsImage) {
-          daySlides = await attachSmartImages(day.slides, imagePool);
+          daySlides = await attachSmartImages(day.slides, imagePool, imageOffset);
+          imageOffset += daySlides.length; // advance so next day gets new images
         }
 
         const adjusted = daySlides.map((slide) => {

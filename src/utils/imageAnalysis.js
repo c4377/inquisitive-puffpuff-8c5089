@@ -42,10 +42,17 @@ export const analyzeImage = (src) =>
       return;
     }
 
+    // Safety timeout: if an image hasn't loaded/analyzed within 8s (slow network,
+    // Supabase hiccup, etc.), resolve with a fallback so the batch keeps moving.
+    let settled = false;
+    const done = (result) => { if (!settled) { settled = true; resolve(result); } };
+    const timer = setTimeout(() => done(fallbackAnalysis(src)), 8000);
+
     const img = new Image();
     img.crossOrigin = 'anonymous';
 
     img.onload = async () => {
+      clearTimeout(timer);
       try {
         const canvas = document.createElement('canvas');
         const scale = SAMPLE_SIZE / Math.max(img.width, img.height);
@@ -120,7 +127,7 @@ export const analyzeImage = (src) =>
           if (zoneVariance[z] > zoneVariance[busyZone]) busyZone = z;
         }
 
-        resolve({
+        done({
           src,
           ok: true,
           zoneBrightness,
@@ -140,11 +147,11 @@ export const analyzeImage = (src) =>
         });
       } catch (e) {
         // Tainted canvas (CORS) or other failure -> safe fallback
-        resolve(fallbackAnalysis(src));
+        done(fallbackAnalysis(src));
       }
     };
 
-    img.onerror = () => resolve(fallbackAnalysis(src));
+    img.onerror = () => { clearTimeout(timer); done(fallbackAnalysis(src)); };
     img.src = src;
   });
 
@@ -166,11 +173,40 @@ const fallbackAnalysis = (src) => ({
  * Accepts the brandImages shape (objects with .src or .url) OR plain strings.
  * Returns array of analysis objects, preserving order; failures become fallbacks.
  */
+// Cache analyses by src so re-runs (e.g. "Neu laden") are instant and we never
+// re-analyze the same image twice within a session.
+const _analysisCache = new Map();
+
+/**
+ * Analyze a whole pool of image objects.
+ * Accepts the brandImages shape (objects with .src or .url) OR plain strings.
+ * Returns array of analysis objects, preserving order; failures become fallbacks.
+ *
+ * IMPORTANT: images are analyzed in small BATCHES (not all at once) so a large
+ * pool (68+) never floods the browser with parallel image loads + canvas reads.
+ */
 export const analyzeImagePool = async (pool = []) => {
   const sources = pool
     .map((item) => (typeof item === 'string' ? item : item?.src || item?.url || item?.dataUrl))
     .filter(Boolean);
 
-  // Sequential-ish but allow parallelism; pools are usually small.
-  return Promise.all(sources.map((s) => analyzeImage(s)));
+  const BATCH_SIZE = 6; // how many images to analyze at the same time
+  const results = new Array(sources.length);
+
+  for (let start = 0; start < sources.length; start += BATCH_SIZE) {
+    const batch = sources.slice(start, start + BATCH_SIZE);
+    // Analyze this batch in parallel, then move on to the next batch.
+    const batchResults = await Promise.all(
+      batch.map(async (s) => {
+        if (_analysisCache.has(s)) return _analysisCache.get(s);
+        const r = await analyzeImage(s);
+        _analysisCache.set(s, r);
+        return r;
+      })
+    );
+    for (let i = 0; i < batchResults.length; i++) {
+      results[start + i] = batchResults[i];
+    }
+  }
+  return results;
 };

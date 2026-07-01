@@ -80,28 +80,23 @@ const cohesiveOrder = (analyses) =>
  * @param {Array}  imagePool   brandImages (objects with .src/.url) or strings
  * @returns {Promise<Array>}   slides with background + overlay + image meta set
  */
-export const attachSmartImages = async (slides, imagePool = []) => {
+export const attachSmartImages = async (slides, imagePool = [], startOffset = 0) => {
   const analyses = await analyzeImagePool(imagePool);
   if (analyses.length === 0) return slides; // nothing to attach
 
-  // VARIETY MODE: shuffle the pool randomly each run, then hand out images
-  // round-robin so every image is used once before any repeats. Fit/zone
-  // matching is intentionally ignored here (user chose variety over fit).
-  const shuffled = [...analyses];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-
-  const n = shuffled.length;
+  // VARIETY MODE: hand out images round-robin using a GLOBAL offset so every
+  // post across the whole plan gets a different image (not per-day-reset).
+  // We deliberately do NOT reshuffle per call — a stable order + global offset
+  // guarantees uniqueness across days. The pool itself is shuffled once by the
+  // caller's ordering (upload order), which is fine for variety.
+  const n = analyses.length;
 
   return slides.map((slide, index) => {
     const layoutId = slide.layoutId || slide.layout || 'editorial_classic';
     const textZone = LAYOUT_TEXT_ZONE[layoutId] ?? 4;
 
-    // Round-robin pick: image index follows the slide index through the
-    // shuffled pool, so all images cycle through before repeating.
-    const best = shuffled[index % n];
+    // Global round-robin pick: offset + local index, wrapped over the pool.
+    const best = analyses[(startOffset + index) % n];
     if (!best) return slide;
 
     const { overlay, textColorHint } = overlayDecision(best, textZone, 50);
