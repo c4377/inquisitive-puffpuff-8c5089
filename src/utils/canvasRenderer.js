@@ -204,7 +204,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // so all text is drawn on top of the image + readability overlay.
   // EXCEPTION: framed_photo draws the photo small & framed inside its block,
   // not full-bleed — so skip the full-bleed draw for it.
-  const isFramedPhoto = layoutResolved === 'framed_photo';
+  // These layouts place the photo themselves (framed / in one half), so skip
+  // the full-bleed draw for them.
+  const selfPlacesImage = ['framed_photo', 'split_photo', 'split_photo_v'];
+  const isFramedPhoto = selfPlacesImage.includes(layoutResolved);
   if (hasBgImage && !isFramedPhoto) {
     try {
       await drawBackgroundImage(slide.background);
@@ -783,61 +786,63 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const vertical = layout === 'split_photo_v';
     const { plain, segments } = parseAccent(slide.text);
     const panelColor = slide.secondaryColor || primaryColor;
-    const panelTextColor = hasBgImage ? '#FFFFFF' : contrastColor(panelColor);
+    const panelText = contrastColor(panelColor);
 
-    // The text panel: a solid brand-colored block (or dark scrim over photo).
+    // Photo occupies ONE half; a solid brand panel fills the OTHER half.
+    // (The full-bleed image was skipped for splits — we place it here in a box.)
+    let photoBox, panelRect;
     if (vertical) {
-      canvas.add(new fabric.Rect({
-        left: 0, top: height * 0.52, width, height: height * 0.48,
-        fill: hasBgImage ? 'rgba(0,0,0,0.55)' : panelColor, selectable: false,
-      }));
+      photoBox = { x: 0, y: 0, w: width, h: height * 0.5 };
+      panelRect = { left: 0, top: height * 0.5, width, height: height * 0.5 };
     } else {
-      canvas.add(new fabric.Rect({
-        left: 0, top: 0, width: width * 0.52, height,
-        fill: hasBgImage ? 'rgba(0,0,0,0.55)' : panelColor, selectable: false,
-      }));
+      photoBox = { x: width * 0.5, y: 0, w: width * 0.5, h: height };
+      panelRect = { left: 0, top: 0, width: width * 0.5, height };
     }
 
-    // Brand accent line — a short bar in the accent color (brand signature).
-    const barY = vertical ? height * 0.60 : height * 0.30;
-    const barX = vertical ? width * 0.08 : width * 0.08;
-    canvas.add(new fabric.Rect({
-      left: barX, top: barY, width: fs(46), height: fs(4),
-      fill: accentColor, selectable: false,
-    }));
+    // Solid brand panel first.
+    canvas.add(new fabric.Rect({ ...panelRect, fill: panelColor, selectable: false }));
 
-    // Label chip (e.g. category) if provided.
+    // Photo in its half (cover-fit, clipped to the box).
+    if (hasBgImage) {
+      try {
+        await drawFramedImageCover(slide.background, photoBox);
+      } catch (e) { /* leave panel color if it fails */ }
+    }
+
+    // Accent bar in the text panel.
+    const barX = vertical ? width * 0.10 : width * 0.10;
+    const barY = vertical ? height * 0.60 : height * 0.24;
+    canvas.add(new fabric.Rect({ left: barX, top: barY, width: fs(48), height: fs(4),
+      fill: accentColor, selectable: false }));
+
+    // Label (optional).
     if (slide.label) {
       canvas.add(new fabric.Text(String(slide.label).toUpperCase(), {
-        left: barX, top: barY + fs(16), fontSize: fs(14), fontFamily: 'Inter',
-        fill: panelTextColor, charSpacing: 160, fontWeight: 'bold', selectable: false,
-      }));
+        left: barX, top: barY + fs(14), fontSize: fs(13), fontFamily: 'Inter',
+        fill: panelText, charSpacing: 160, fontWeight: 'bold', selectable: false }));
     }
 
     // Headline in the panel.
     const tb = new fabric.Textbox(plain, {
       left: vertical ? width / 2 : width * 0.28,
-      top: vertical ? height * 0.80 : height * 0.52,
+      top: vertical ? height * 0.75 : height * 0.5,
       originX: 'center', originY: 'center',
-      width: vertical ? width * 0.84 : width * 0.40,
-      fontSize: fs(slide.fontSize || 38), fontFamily: fontFamily,
-      fill: slide.color || panelTextColor,
-      textAlign: vertical ? 'center' : 'left', lineHeight: 1.22,
+      width: vertical ? width * 0.82 : width * 0.40,
+      fontSize: fs(slide.fontSize || 34), fontFamily,
+      fill: slide.color || panelText,
+      textAlign: vertical ? 'center' : 'left', lineHeight: 1.24,
       fontWeight: slide.fontWeight || 'normal',
-      shadow: slide.noShadow ? '' : (hasBgImage ? 'rgba(0,0,0,0.5) 0px 2px 10px' : ''),
     });
     applyAccentStyles(tb, segments);
     canvas.add(tb);
 
-    // Brand mark bottom of the panel.
+    // Brand mark in the panel.
     if (options.globalBrandName) {
       canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
         left: vertical ? width / 2 : width * 0.28,
-        top: vertical ? height - fs(28) : height - fs(28),
-        originX: vertical ? 'center' : 'center',
-        fontSize: fs(12), fill: panelTextColor, opacity: 0.85,
-        fontFamily: 'Inter', charSpacing: 140, selectable: false,
-      }));
+        top: vertical ? height * 0.94 : height - fs(30),
+        originX: 'center', fontSize: fs(11), fill: panelText, opacity: 0.8,
+        fontFamily: 'Inter', charSpacing: 140, selectable: false }));
     }
   }
 
@@ -851,14 +856,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const fw = width * 0.54, fh = height * 0.40;
     const fx = (width - fw) / 2, fy = height * 0.34;
 
-    // Draw the photo FIRST (behind text). If it fails to load, we swap to a
-    // clean text-only composition instead of leaving an empty frame.
+    // Draw the framed photo. If it fails, fall back to clean text.
     let photoOk = false;
-    let dbg = hasBgImage ? 'has-bg' : 'NO-bg';
     if (hasBgImage) {
       try { photoOk = await drawFramedImage(slide.background, { x: fx, y: fy, w: fw, h: fh }); }
-      catch (e) { photoOk = false; dbg = 'err'; }
-      if (!photoOk && dbg === 'has-bg') dbg = 'load-fail';
+      catch (e) { photoOk = false; }
     }
 
     if (photoOk) {
@@ -901,11 +903,6 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       }
     } else {
       // FALLBACK: no usable photo -> clean centered editorial text, no empty frame.
-      // Small diagnostic so we can see WHY (visible on phone). Remove later.
-      canvas.add(new fabric.Text('DEBUG: ' + dbg + ' | ' + String(slide.background || 'null').slice(0, 30), {
-        left: fs(10), top: fs(10), fontSize: fs(11), fill: '#ff6666',
-        fontFamily: 'Inter', selectable: false,
-      }));
       canvas.add(new fabric.Line([width * 0.30, height * 0.30, width * 0.70, height * 0.30], {
         stroke: accentColor, strokeWidth: 2 * scale, selectable: false,
       }));
@@ -1106,38 +1103,46 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // image actually loaded & drew; false otherwise so the caller can fall back.
   // No clipPath (which is fragile in fabric v5) — instead we fit the image to
   // the box height/width and rely on the caller drawing a frame over the edges.
-  const drawFramedImage = (src, box, maskColor) =>
+  // Draw a framed photo using the SAME loader path as the working logo/overlay
+  // image (fabric.Image.fromURL). Fits the photo into the given box.
+  const drawFramedImage = (src, box) =>
     new Promise((resolve) => {
       if (!src) return resolve(false);
-      let settled = false;
-      const done = (v) => { if (!settled) { settled = true; resolve(v); } };
-      const timer = setTimeout(() => done(false), 8000);
-      const isLocal = /^(data:|blob:)/i.test(src);
-      try {
-        const el = new Image();
-        if (!isLocal) el.crossOrigin = 'anonymous';
-        el.onload = () => {
-          clearTimeout(timer);
-          try {
-            const iw = el.naturalWidth || el.width || 1;
-            const ih = el.naturalHeight || el.height || 1;
-            const s = Math.min(box.w / iw, box.h / ih);
-            const img = new fabric.Image(el, {
-              originX: 'center', originY: 'center',
-              left: box.x + box.w / 2, top: box.y + box.h / 2,
-              scaleX: s, scaleY: s, selectable: false,
-            });
-            canvas.add(img);
-            canvas.renderAll();
-            done(true);
-          } catch (e) { done(false); }
-        };
-        el.onerror = () => { clearTimeout(timer); done(false); };
-        el.src = src;
-      } catch (e) {
-        clearTimeout(timer);
-        done(false);
-      }
+      fabric.Image.fromURL(src, (img) => {
+        if (!img) return resolve(false);
+        const iw = img.width || 1, ih = img.height || 1;
+        const factor = Math.min(box.w / iw, box.h / ih);
+        img.set({
+          originX: 'center', originY: 'center',
+          left: box.x + box.w / 2, top: box.y + box.h / 2,
+          scaleX: factor, scaleY: factor, selectable: false,
+        });
+        canvas.add(img);
+        resolve(true);
+      }, { crossOrigin: 'anonymous' });
+    });
+
+  // Cover-fit version: fills the whole box (center-crop), for split halves.
+  const drawFramedImageCover = (src, box) =>
+    new Promise((resolve) => {
+      if (!src) return resolve(false);
+      fabric.Image.fromURL(src, (img) => {
+        if (!img) return resolve(false);
+        const iw = img.width || 1, ih = img.height || 1;
+        const factor = Math.max(box.w / iw, box.h / ih);
+        img.set({
+          originX: 'center', originY: 'center',
+          left: box.x + box.w / 2, top: box.y + box.h / 2,
+          scaleX: factor, scaleY: factor, selectable: false,
+        });
+        img.clipPath = new fabric.Rect({
+          left: box.x + box.w / 2, top: box.y + box.h / 2,
+          width: box.w, height: box.h,
+          originX: 'center', originY: 'center', absolutePositioned: true,
+        });
+        canvas.add(img);
+        resolve(true);
+      }, { crossOrigin: 'anonymous' });
     });
 
   const drawOverlayImage = (src) =>

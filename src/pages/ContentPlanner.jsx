@@ -192,39 +192,49 @@ const ContentPlanner = () => {
     const brandConfig = brandSettings.currentBrandConfig;
     const imagePool = brandSettings?.brandImages || [];
 
-    // Two separate layout pools: image layouts only go to slides that actually
-    // have a photo; text layouts go to text-only slides. This prevents empty
-    // split panels / empty frames on text-only posts.
-    const imageLayouts = ['split_photo', 'split_photo_v', 'framed_photo', 'card_on_photo', 'sarah_cover'];
-    const textLayouts = ['editorial_classic', 'minimal_quote', 'maximized_bold', 'paper_box', 'glass_layer', 'diagonal_overlay'];
+    // Fixed 7-day roles (by day index):
+    //   day 0        -> framed_photo (1x): pool image, framed on background
+    //   days 1,2,3   -> text-only  (3x)
+    //   days 4,5,6   -> photo-with-text full-bleed (3x)
+    // Roles repeat if there are more than 7 days.
+    const textLayouts = ['editorial_classic', 'minimal_quote', 'maximized_bold', 'paper_box'];
+    const photoLayouts = ['sarah_cover', 'split_photo', 'split_photo_v', 'card_on_photo'];
     const anchorCycle = ['top', 'center', 'bottom'];
+
+    const roleForDay = (i) => {
+      const r = i % 7;
+      if (r === 0) return 'framed';
+      if (r <= 3) return 'text';
+      return 'photo';
+    };
 
     const newPlan = [];
     for (let dIdx = 0; dIdx < importedDays.length; dIdx++) {
       const dayData = importedDays[dIdx];
-      // Build base slides (no layout yet).
+      const role = roleForDay(dIdx);
+
       let slides = dayData.slides.map((text, sIdx) =>
         createSmartSlide(brandConfig, { text }, sIdx, dayData.slides.length)
       );
-      // Attach images (so we know which slides end up WITH a photo).
-      try { slides = await attachSmartImages(slides, imagePool); } catch (e) { /* keep slides */ }
 
-      // Now pick the layout based on whether the slide should keep a photo.
-      // Mix: ~ every 2nd post keeps its image, the rest become text posts.
+      // Only attach images for days that should have a photo.
+      if ((role === 'framed' || role === 'photo') && imagePool.length > 0) {
+        try { slides = await attachSmartImages(slides, imagePool); } catch (e) { /* keep */ }
+      }
+
       slides = slides.map((slide, sIdx) => {
-        const globalIdx = dIdx * 10 + sIdx;
-        const keepsImage = imagePool.length > 0 && (globalIdx % 2 === 0);
-        let hasImg;
         let s2 = { ...slide };
-        if (keepsImage && typeof slide.background === 'string' && slide.background.length > 5) {
-          hasImg = true;
-        } else {
+        let layout;
+        if (role === 'text') {
+          // strip any image, pure text layout
           const { background, overlay, _autoImage, ...rest } = s2;
           s2 = { ...rest, background: null };
-          hasImg = false;
+          layout = textLayouts[(dIdx + sIdx) % textLayouts.length];
+        } else if (role === 'framed') {
+          layout = 'framed_photo'; // keeps its attached pool image
+        } else {
+          layout = photoLayouts[(dIdx + sIdx) % photoLayouts.length];
         }
-        const pool = hasImg ? imageLayouts : textLayouts;
-        const layout = pool[(dIdx + sIdx) % pool.length];
         const textAnchor = anchorCycle[(dIdx + sIdx) % anchorCycle.length];
         return { ...s2, layout, layoutId: layout, textAnchor };
       });
@@ -270,40 +280,40 @@ const ContentPlanner = () => {
       const imagePool = brandSettings?.brandImages || [];
       // Fixed pattern: which day-INDEX (0-based) gets a cover image.
       // days 1,3,5,7 => indices 0,2,4,6
-      const coverGetsImage = (dayIdx) => dayIdx % 2 === 0;
-
-      // Layout pools split by image presence (same as import) so image layouts
-      // NEVER land on a text-only post and vice versa.
-      const imageLayouts = ['split_photo', 'split_photo_v', 'framed_photo', 'card_on_photo', 'sarah_cover'];
-      const textLayouts = ['editorial_classic', 'minimal_quote', 'maximized_bold', 'paper_box', 'glass_layer', 'diagonal_overlay'];
+      // Same fixed 7-day roles as import.
+      const textLayouts = ['editorial_classic', 'minimal_quote', 'maximized_bold', 'paper_box'];
+      const photoLayouts = ['sarah_cover', 'split_photo', 'split_photo_v', 'card_on_photo'];
       const anchorCycle = ['top', 'center', 'bottom'];
+      const roleForDay = (i) => {
+        const r = i % 7;
+        if (r === 0) return 'framed';
+        if (r <= 3) return 'text';
+        return 'photo';
+      };
 
       const reloadedPlan = [];
       for (let dayIdx = 0; dayIdx < weekPlan.length; dayIdx++) {
         const day = weekPlan[dayIdx];
-        const withImages = await attachSmartImages(day.slides, imagePool);
+        const role = roleForDay(dayIdx);
+        let daySlides = day.slides;
+        if ((role === 'framed' || role === 'photo') && imagePool.length > 0) {
+          daySlides = await attachSmartImages(day.slides, imagePool);
+        }
 
-        const adjusted = withImages.map((slide, sIdx) => {
+        const adjusted = daySlides.map((slide, sIdx) => {
           const cleaned = { ...slide };
           if (cleaned.blur === 8 || cleaned.blur === 12) cleaned.blur = 0;
 
-          // Decide whether THIS post keeps a photo: mix ~ every 2nd post.
-          const globalIdx = dayIdx * 10 + sIdx;
-          const keepsImage = imagePool.length > 0 && (globalIdx % 2 === 0);
-
-          let hasImg;
-          if (keepsImage && cleaned.background) {
-            hasImg = true;
-          } else {
-            // Drop the photo for text posts.
+          let layout;
+          if (role === 'text') {
             const { background, overlay, _autoImage, ...rest } = cleaned;
             Object.assign(cleaned, rest, { background: null, overlay: undefined, _autoImage: undefined });
-            hasImg = false;
+            layout = textLayouts[(dayIdx + sIdx) % textLayouts.length];
+          } else if (role === 'framed') {
+            layout = 'framed_photo';
+          } else {
+            layout = photoLayouts[(dayIdx + sIdx) % photoLayouts.length];
           }
-
-          // Pick layout from the pool that MATCHES the image status.
-          const pool = hasImg ? imageLayouts : textLayouts;
-          const layout = pool[(dayIdx + sIdx) % pool.length];
           cleaned.layout = layout;
           cleaned.layoutId = layout;
           cleaned.textAnchor = anchorCycle[(dayIdx + sIdx) % anchorCycle.length];
