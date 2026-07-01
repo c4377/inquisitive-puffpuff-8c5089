@@ -71,59 +71,75 @@ const StoryPlanner = () => {
   const handleBulkGenerate = async () => {
     if (!bulkText.trim()) return;
     setLoading(true);
+    try {
+      // Split by "Story 1" / "Slide 1" / "Sequenz 1" markers.
+      let slideTexts = bulkText
+        .split(/(?:Story|Slide|Sequenz)\s*\d+\s*[:.-]?/i)
+        .map(t => t
+          // remove divider lines (⸻, ---, ___) and BLOCK section headers
+          .replace(/^\s*[⸻—\-_]{2,}\s*$/gm, '')
+          .replace(/^\s*BLOCK\s*\d+.*$/gim, '')
+          .replace(/[⸻]/g, '')
+          .trim()
+        )
+        .filter(t => t.length > 0);
+      if (slideTexts.length === 0) slideTexts.push(bulkText.trim());
 
-    // Split by "Story 1" / "Slide 1" / "Sequenz 1" markers (same as before).
-    let slideTexts = bulkText.split(/(?:Story|Slide|Sequenz)\s*\d+\s*[:.-]?/i).filter(t => t.trim().length > 0);
-    if (slideTexts.length === 0) slideTexts.push(bulkText.trim());
+      const brandConfig = brandSettings.currentBrandConfig;
+      const imagePool = brandSettings?.brandImages || [];
 
-    const brandConfig = brandSettings.currentBrandConfig;
-    const imagePool = brandSettings?.brandImages || [];
+      // Build base story slides (9:16), then run the SAME engine as the feed:
+      // auto layout + pool images (variety) + text position/bold decisions.
+      let slides = slideTexts.map((text, index) => ({
+        id: Date.now() + index,
+        format: '9:16',
+        text: text.trim(),
+        fontSize: 40,
+        fontFamily: brandConfig?.typography?.fontFamily || 'Inter',
+        accentFontFamily: brandConfig?.typography?.accentFontFamily,
+        fontWeight: '400',
+        color: brandConfig?.colors?.primary || '#000000',
+        backgroundColor: brandConfig?.colors?.background || '#FFFFFF',
+        secondaryColor: brandConfig?.colors?.secondary || '#CCCCCC',
+        accentColor: brandConfig?.colors?.accent || '#EA580C',
+        layout: 'auto',
+        layoutId: 'auto',
+        textAlign: 'center',
+        visualElements: [],
+        imageScale: 1,
+        slideNumber: index + 1,
+        totalSlides: slideTexts.length,
+      }));
 
-    // Build base story slides (9:16), then run the SAME engine as the feed:
-    // auto layout + pool images (variety) + text position/bold decisions.
-    let slides = slideTexts.map((text, index) => ({
-      id: Date.now() + index,
-      format: '9:16',
-      text: text.trim(),
-      fontSize: 40,
-      fontFamily: brandConfig?.typography?.fontFamily || 'Inter',
-      accentFontFamily: brandConfig?.typography?.accentFontFamily,
-      fontWeight: '400',
-      color: brandConfig?.colors?.primary || '#000000',
-      backgroundColor: brandConfig?.colors?.background || '#FFFFFF',
-      secondaryColor: brandConfig?.colors?.secondary || '#CCCCCC',
-      accentColor: brandConfig?.colors?.accent || '#EA580C',
-      layout: 'auto',
-      layoutId: 'auto',
-      textAlign: 'center',
-      visualElements: [],
-      imageScale: 1,
-      slideNumber: index + 1,
-      totalSlides: slideTexts.length,
-    }));
-
-    // Attach pool images across the whole sequence (global offset = unique images).
-    if (imagePool.length > 0) {
-      try { slides = await attachSmartImages(slides, imagePool, 0); } catch (e) { /* keep */ }
-    }
-
-    // Apply the design engine per slide: position by quiet zone / rotation, bold every 4th.
-    slides = slides.map((slide, index) => {
-      const hasImg = typeof slide.background === 'string' && slide.background.length > 5;
-      if (!hasImg) {
-        const { background, overlay, _autoImage, ...rest } = slide;
-        slide = { ...rest, background: null };
+      // Attach pool images across the whole sequence (global offset = unique images).
+      if (imagePool.length > 0) {
+        try { slides = await attachSmartImages(slides, imagePool, 0); } catch (e) { /* keep text-only */ }
       }
-      const { textAnchor, bold } = decidePostDesign({
-        globalIndex: index, hasImage: hasImg, autoImage: slide._autoImage,
-      });
-      return { ...slide, textAnchor, fontWeight: bold ? '700' : 'normal' };
-    });
 
-    setStories(slides);
-    setShowBulkInput(false);
-    setBulkText('');
-    setLoading(false);
+      // Apply the design engine per slide: position by quiet zone / rotation, bold every 4th.
+      slides = slides.map((slide, index) => {
+        let s2 = { ...slide };
+        const hasImg = typeof s2.background === 'string' && s2.background.length > 5;
+        if (!hasImg) {
+          const { background, overlay, _autoImage, ...rest } = s2;
+          s2 = { ...rest, background: null };
+        }
+        let decision = { textAnchor: { row: 'mid', col: 'center' }, bold: false };
+        try {
+          decision = decidePostDesign({ globalIndex: index, hasImage: hasImg, autoImage: s2._autoImage });
+        } catch (e) { /* fall back to default position */ }
+        return { ...s2, textAnchor: decision.textAnchor, fontWeight: decision.bold ? '700' : 'normal' };
+      });
+
+      setStories(slides);
+      setShowBulkInput(false);
+      setBulkText('');
+    } catch (e) {
+      console.error('Story bulk import failed:', e);
+      alert('Beim Generieren ist ein Fehler aufgetreten. Bitte versuche es erneut.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const downloadDeck = async () => {
