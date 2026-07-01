@@ -279,7 +279,8 @@ const Editor = () => {
     setIsSendingBuffer(true);
     setBufferStatus(mode === 'draft' ? 'Sende als Entwurf…' : 'Sende in die Queue…');
     try {
-      await sendToBuffer({ channelId: selectedChannel, text: caption, imageUrl, mode });
+      const chan = bufferChannels.find(c => c.id === selectedChannel);
+      await sendToBuffer({ channelId: selectedChannel, text: caption, imageUrl, mode, service: chan?.service || '' });
       setBufferStatus(mode === 'draft' ? '✓ Als Entwurf in Buffer gespeichert.' : '✓ In die Buffer-Queue gelegt.');
     } catch (e) {
       setBufferStatus('Fehler: ' + (e.message || 'Senden fehlgeschlagen.'));

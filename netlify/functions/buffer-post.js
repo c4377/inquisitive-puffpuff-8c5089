@@ -83,6 +83,18 @@ exports.handler = async (event) => {
     ? `assets: [{ image: { url: ${JSON.stringify(imageUrl)} } }]`
     : '';
 
+  // Instagram (and some other networks) require a post type. For an Instagram
+  // channel we send metadata { instagram: { type, shouldShareToFeed } }.
+  // igType comes from the client: 'post' (feed), 'story', or 'reel'.
+  const svc = (body.service || '').toLowerCase();
+  const igType = ['post', 'story', 'reel'].includes(body.igType) ? body.igType : 'post';
+  let metadataPart = '';
+  if (svc.includes('instagram')) {
+    // Stories are not shared to the feed; feed posts and reels are.
+    const shareToFeed = igType === 'story' ? 'false' : 'true';
+    metadataPart = `metadata: { instagram: { type: ${igType}, shouldShareToFeed: ${shareToFeed} } }`;
+  }
+
   const mutation = `
     mutation CreatePost {
       createPost(input: {
@@ -91,6 +103,7 @@ exports.handler = async (event) => {
         schedulingType: automatic
         mode: ${wantDraft ? 'draft' : 'addToQueue'}
         ${assetsPart}
+        ${metadataPart}
       }) {
         ... on PostActionSuccess {
           post { id text }
