@@ -1112,26 +1112,28 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       let settled = false;
       const done = (v) => { if (!settled) { settled = true; resolve(v); } };
       const timer = setTimeout(() => done(false), 8000);
-      // data: and blob: URLs must NOT use crossOrigin (it breaks loading).
       const isLocal = /^(data:|blob:)/i.test(src);
-      const opts = isLocal ? {} : { crossOrigin: 'anonymous' };
       try {
-        fabric.Image.fromURL(src, (img) => {
+        const el = new Image();
+        if (!isLocal) el.crossOrigin = 'anonymous';
+        el.onload = () => {
           clearTimeout(timer);
-          if (!img) return done(false);
           try {
-            const iw = img.width || img.naturalWidth || 1;
-            const ih = img.height || img.naturalHeight || 1;
+            const iw = el.naturalWidth || el.width || 1;
+            const ih = el.naturalHeight || el.height || 1;
             const s = Math.min(box.w / iw, box.h / ih);
-            img.set({
+            const img = new fabric.Image(el, {
               originX: 'center', originY: 'center',
               left: box.x + box.w / 2, top: box.y + box.h / 2,
               scaleX: s, scaleY: s, selectable: false,
             });
             canvas.add(img);
+            canvas.renderAll();
             done(true);
           } catch (e) { done(false); }
-        }, opts);
+        };
+        el.onerror = () => { clearTimeout(timer); done(false); };
+        el.src = src;
       } catch (e) {
         clearTimeout(timer);
         done(false);
