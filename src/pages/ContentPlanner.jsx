@@ -285,10 +285,13 @@ const ContentPlanner = () => {
       for (const day of weekPlan) {
         for (let i = 0; i < day.slides.length; i++) {
           const slide = day.slides[i];
-          const canvasEl = document.createElement('canvas');
           const canvasWidth = 1080;
           const canvasHeight = slide.format === '9:16' ? 1920 : 1350;
           const scale = canvasWidth / 400;
+          const canvasEl = document.createElement('canvas');
+          canvasEl.width = canvasWidth; canvasEl.height = canvasHeight;
+          canvasEl.style.display = 'none';
+          document.body.appendChild(canvasEl);
           const fCanvas = new fabric.StaticCanvas(canvasEl, { width: canvasWidth, height: canvasHeight });
           await renderSlide(fCanvas, { ...slide, visualElements: slide.visualElements || [] }, canvasWidth, canvasHeight, {
             slideIndex: i, totalSlides: day.slides.length, scale, globalBrandName
@@ -300,6 +303,7 @@ const ContentPlanner = () => {
             folder.file(`Tag_${day.day}_${cleanTitle}_Slide_${i + 1}.png`, blob);
           }
           fCanvas.dispose();
+          if (canvasEl.parentNode) canvasEl.parentNode.removeChild(canvasEl);
         }
       }
       const content = await zip.generateAsync({ type: "blob" });
@@ -320,10 +324,13 @@ const ContentPlanner = () => {
       const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "MUSE MENTORING";
       for (let i = 0; i < day.slides.length; i++) {
         const slide = day.slides[i];
-        const canvasEl = document.createElement('canvas');
         const canvasWidth = 1080;
         const canvasHeight = slide.format === '9:16' ? 1920 : 1350;
         const scale = canvasWidth / 400;
+        const canvasEl = document.createElement('canvas');
+        canvasEl.width = canvasWidth; canvasEl.height = canvasHeight;
+        canvasEl.style.display = 'none';
+        document.body.appendChild(canvasEl);
         const fCanvas = new fabric.StaticCanvas(canvasEl, { width: canvasWidth, height: canvasHeight });
         await renderSlide(fCanvas, { ...slide, visualElements: slide.visualElements || [] }, canvasWidth, canvasHeight, {
           slideIndex: i, totalSlides: day.slides.length, scale, globalBrandName
@@ -332,6 +339,7 @@ const ContentPlanner = () => {
         const blob = await (await fetch(dataUrl)).blob();
         if (blob) zip.file(`Slide_${i + 1}.png`, blob);
         fCanvas.dispose();
+        if (canvasEl.parentNode) canvasEl.parentNode.removeChild(canvasEl);
       }
       const content = await zip.generateAsync({ type: "blob" });
       const cleanTitle = (day.title || `Tag_${day.day}`).replace(/[^a-z0-9]/gi, '_').substring(0, 20);
@@ -353,10 +361,13 @@ const ContentPlanner = () => {
       const files = [];
       for (let i = 0; i < day.slides.length; i++) {
         const slide = day.slides[i];
-        const canvasEl = document.createElement('canvas');
         const canvasWidth = 1080;
         const canvasHeight = slide.format === '9:16' ? 1920 : 1350;
         const scale = canvasWidth / 400;
+        const canvasEl = document.createElement('canvas');
+        canvasEl.width = canvasWidth; canvasEl.height = canvasHeight;
+        canvasEl.style.display = 'none';
+        document.body.appendChild(canvasEl);
         const fCanvas = new fabric.StaticCanvas(canvasEl, { width: canvasWidth, height: canvasHeight });
         await renderSlide(fCanvas, { ...slide, visualElements: slide.visualElements || [] }, canvasWidth, canvasHeight, {
           slideIndex: i, totalSlides: day.slides.length, scale, globalBrandName
@@ -364,20 +375,27 @@ const ContentPlanner = () => {
         const dataUrl = fCanvas.toDataURL({ format: 'png', multiplier: 1 });
         const blob = await (await fetch(dataUrl)).blob();
         fCanvas.dispose();
+        if (canvasEl.parentNode) canvasEl.parentNode.removeChild(canvasEl);
         if (blob) files.push(new File([blob], `Tag${day.day}_Slide${i + 1}.png`, { type: 'image/png' }));
       }
 
       // Try native share with files (best on mobile -> "Save to Photos")
       if (navigator.canShare && navigator.canShare({ files })) {
         await navigator.share({ files, title: `Tag ${day.day}` });
+        setSaveStatus('Zum Teilen geöffnet.');
       } else {
         // Fallback: download each image individually (desktop / unsupported)
         for (const f of files) saveAs(f, f.name);
+        setSaveStatus(`${files.length} Bild(er) heruntergeladen (Teilen nicht unterstützt).`);
       }
     } catch (e) {
-      if (e?.name !== 'AbortError') console.error("Share failed", e);
+      if (e?.name !== 'AbortError') {
+        console.error("Share failed", e);
+        setSaveStatus('Teilen fehlgeschlagen.');
+      }
     } finally {
       setExportingDayId(null);
+      setTimeout(() => setSaveStatus(''), 3000);
     }
   };
 

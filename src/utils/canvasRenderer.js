@@ -12,10 +12,30 @@ import { fabric } from 'fabric';
  */
 export const renderSlide = async (canvas, slide, width, height, options = {}) => {
   if (!canvas) return;
-  
+  // Guard: a disposed canvas (e.g. export loop reusing/disposing) has no
+  // drawing context. Touching it throws "Cannot read properties of null
+  // (reading 'clearRect')". Bail out safely instead of crashing the export.
+  const hasContext = (c) => {
+    try {
+      if (typeof c.getContext === 'function') return !!c.getContext();
+      // fabric StaticCanvas exposes contextContainer / lowerCanvasEl
+      if (c.contextContainer) return true;
+      if (c.lowerCanvasEl && c.lowerCanvasEl.getContext) return !!c.lowerCanvasEl.getContext('2d');
+      return true; // unknown shape: assume ok, let try/catch handle it
+    } catch (e) { return false; }
+  };
+  if (!hasContext(canvas)) return;
+
   // Clear and setup
-  canvas.clear();
-  canvas.setBackgroundColor(slide.backgroundColor || '#ffffff', canvas.renderAll.bind(canvas));
+  try {
+    canvas.clear();
+    canvas.setBackgroundColor(slide.backgroundColor || '#ffffff', () => {
+      try { canvas.renderAll(); } catch (e) { /* canvas may be gone */ }
+    });
+  } catch (e) {
+    // Canvas became invalid mid-setup — abort this render safely.
+    return;
+  }
   
   // Ensure dimensions
   if (canvas.setWidth) canvas.setWidth(width);

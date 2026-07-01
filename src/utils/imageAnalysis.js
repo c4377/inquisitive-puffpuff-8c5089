@@ -29,6 +29,8 @@ export const ZONE_LABELS = [
 
 const luminance = (r, g, b) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
+import { detectFaceZones } from './faceDetection';
+
 /**
  * Analyze a single image source (data URL or URL).
  * Returns a Promise resolving to the analysis object (or a safe fallback).
@@ -43,7 +45,7 @@ export const analyzeImage = (src) =>
     const img = new Image();
     img.crossOrigin = 'anonymous';
 
-    img.onload = () => {
+    img.onload = async () => {
       try {
         const canvas = document.createElement('canvas');
         const scale = SAMPLE_SIZE / Math.max(img.width, img.height);
@@ -94,11 +96,27 @@ export const analyzeImage = (src) =>
           zoneVariance[z] = variance;
         }
 
-        // Quiet zone = lowest variance (flattest -> safest for text)
-        // Busy zone = highest variance (focal subject)
-        let quietZone = 0, busyZone = 0;
+        // Detect faces and forbid their zones for text placement.
+        // "Text never over the face": faceZones are removed from candidates.
+        let faceZones = new Set();
+        try {
+          faceZones = await detectFaceZones(img, GRID);
+        } catch (e) { /* fallback: no face info */ }
+
+        // Quiet zone = lowest variance (flattest -> safest for text),
+        // but NEVER a zone containing a face. If every non-face zone is worse,
+        // we still prefer a non-face zone over a face zone (strict avoidance).
+        let quietZone = -1, busyZone = 0;
+        for (let z = 0; z < 9; z++) {
+          if (faceZones.has(z)) continue; // skip face zones entirely
+          if (quietZone === -1 || zoneVariance[z] < zoneVariance[quietZone]) quietZone = z;
+        }
+        // If literally every zone has a face (rare), fall back to lowest variance overall.
+        if (quietZone === -1) {
+          quietZone = 0;
+          for (let z = 1; z < 9; z++) if (zoneVariance[z] < zoneVariance[quietZone]) quietZone = z;
+        }
         for (let z = 1; z < 9; z++) {
-          if (zoneVariance[z] < zoneVariance[quietZone]) quietZone = z;
           if (zoneVariance[z] > zoneVariance[busyZone]) busyZone = z;
         }
 
@@ -111,6 +129,8 @@ export const analyzeImage = (src) =>
           busyZone,
           quietLabel: ZONE_LABELS[quietZone],
           busyLabel: ZONE_LABELS[busyZone],
+          faceZones: Array.from(faceZones),
+          hasFace: faceZones.size > 0,
           avgColor: {
             r: Math.round(totalR / totalPx),
             g: Math.round(totalG / totalPx),
