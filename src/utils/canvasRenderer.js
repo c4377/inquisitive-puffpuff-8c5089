@@ -854,9 +854,20 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // Draw the photo FIRST (behind text). If it fails to load, we swap to a
     // clean text-only composition instead of leaving an empty frame.
     let photoOk = false;
+    let diagReason = 'no-image';
     if (hasBgImage) {
+      diagReason = 'loading';
       try { photoOk = await drawFramedImage(slide.background, { x: fx, y: fy, w: fw, h: fh }); }
-      catch (e) { photoOk = false; }
+      catch (e) { photoOk = false; diagReason = 'error:' + (e?.message || 'x'); }
+      if (!photoOk && diagReason === 'loading') diagReason = 'load-failed';
+    }
+    // TEMP diagnostic marker (tiny, bottom-left) so we can see WHY a photo is
+    // missing. Remove once framed_photo is confirmed working.
+    if (typeof window !== 'undefined' && window.__FRAMED_DEBUG) {
+      canvas.add(new fabric.Text(`${diagReason} | ${String(slide.background || '').slice(0, 40)}`, {
+        left: fs(8), top: height - fs(14), fontSize: fs(9), fill: '#ff5555',
+        fontFamily: 'Inter', selectable: false,
+      }));
     }
 
     if (photoOk) {
@@ -902,11 +913,15 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       canvas.add(new fabric.Line([width * 0.30, height * 0.30, width * 0.70, height * 0.30], {
         stroke: accentColor, strokeWidth: 2 * scale, selectable: false,
       }));
-      canvas.add(new fabric.Text((slide.label || 'CARINA.OFFER.DESIGN').toUpperCase(), {
-        left: width / 2, top: height * 0.22, originX: 'center',
-        fontSize: fs(13), fontFamily: 'Inter', charSpacing: 180,
-        fill: accentColor, fontWeight: 'bold', selectable: false,
-      }));
+      // Only show a top label if a real category label exists (not the brand name,
+      // which already appears at the bottom — avoids the duplicate).
+      if (slide.label) {
+        canvas.add(new fabric.Text(String(slide.label).toUpperCase(), {
+          left: width / 2, top: height * 0.22, originX: 'center',
+          fontSize: fs(13), fontFamily: 'Inter', charSpacing: 180,
+          fill: accentColor, fontWeight: 'bold', selectable: false,
+        }));
+      }
       const tt = new fabric.Textbox(plain, {
         left: width / 2, top: height / 2, originX: 'center', originY: 'center',
         width: width * 0.80, fontSize: fs(slide.fontSize || 40), fontFamily,
@@ -1093,40 +1108,36 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // --- LOGO / STICKER OVERLAY (second image on top) ---
   // Draw a SMALL framed photo (not full-bleed). Returns true only if the
   // image actually loaded & drew; false otherwise so the caller can fall back.
-  // Instead of a fragile clipPath, we scale the image to COVER the box, draw
-  // it, then mask any overflow with 4 background-colored bars around the box.
+  // No clipPath (which is fragile in fabric v5) — instead we fit the image to
+  // the box height/width and rely on the caller drawing a frame over the edges.
   const drawFramedImage = (src, box, maskColor) =>
     new Promise((resolve) => {
       if (!src) return resolve(false);
       let settled = false;
       const done = (v) => { if (!settled) { settled = true; resolve(v); } };
-      // Safety timeout: if the image never loads, don't hang — fall back.
-      const timer = setTimeout(() => done(false), 6000);
-      fabric.Image.fromURL(src, (img) => {
+      const timer = setTimeout(() => done(false), 8000);
+      try {
+        fabric.Image.fromURL(src, (img) => {
+          clearTimeout(timer);
+          if (!img) return done(false);
+          try {
+            const iw = img.width || img.naturalWidth || 1;
+            const ih = img.height || img.naturalHeight || 1;
+            // Contain-fit inside the box (whole image visible, no crop overflow).
+            const s = Math.min(box.w / iw, box.h / ih);
+            img.set({
+              originX: 'center', originY: 'center',
+              left: box.x + box.w / 2, top: box.y + box.h / 2,
+              scaleX: s, scaleY: s, selectable: false,
+            });
+            canvas.add(img);
+            done(true);
+          } catch (e) { done(false); }
+        }, { crossOrigin: 'anonymous' });
+      } catch (e) {
         clearTimeout(timer);
-        // Match the working full-bleed loader: treat any returned image object
-        // as valid. A truly failed load returns null/undefined.
-        if (!img) return done(false);
-        try {
-          const iw = img.width || img.naturalWidth || 1;
-          const ih = img.height || img.naturalHeight || 1;
-          const s = Math.max(box.w / iw, box.h / ih);
-          img.set({
-            originX: 'center', originY: 'center',
-            left: box.x + box.w / 2, top: box.y + box.h / 2,
-            scaleX: s, scaleY: s, selectable: false,
-          });
-          img.clipPath = new fabric.Rect({
-            left: box.x + box.w / 2, top: box.y + box.h / 2,
-            width: box.w, height: box.h,
-            originX: 'center', originY: 'center', absolutePositioned: true,
-          });
-          canvas.add(img);
-          done(true);
-        } catch (e) {
-          done(false);
-        }
-      }, { crossOrigin: 'anonymous' });
+        done(false);
+      }
     });
 
   const drawOverlayImage = (src) =>
