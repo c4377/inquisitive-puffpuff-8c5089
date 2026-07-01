@@ -190,7 +190,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
   // Draw the full-bleed background photo FIRST (before any text layout),
   // so all text is drawn on top of the image + readability overlay.
-  if (hasBgImage) {
+  // EXCEPTION: framed_photo draws the photo small & framed inside its block,
+  // not full-bleed — so skip the full-bleed draw for it.
+  const isFramedPhoto = layout === 'framed_photo';
+  if (hasBgImage && !isFramedPhoto) {
     try {
       await drawBackgroundImage(slide.background);
     } catch (e) {
@@ -763,100 +766,171 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
   // === SPLIT PHOTO: photo fills one half, text sits in the other half ===
   // (Like the reference: foto rechts, text links — or top/bottom.)
+  // === SPLIT PHOTO: photo one side, branded text panel on the other ===
   else if (layout === 'split_photo' || layout === 'split_photo_v') {
-    const vertical = layout === 'split_photo_v'; // v = photo top, text bottom
+    const vertical = layout === 'split_photo_v';
     const { plain, segments } = parseAccent(slide.text);
-    // The background photo already fills the whole canvas (drawBackgroundImage).
-    // We darken only the TEXT half so the words read, leaving the photo half clear.
-    if (hasBgImage) {
-      if (vertical) {
-        canvas.add(new fabric.Rect({ left: 0, top: height * 0.5, width, height: height * 0.5,
-          fill: `rgba(0,0,0,0.5)`, selectable: false }));
-      } else {
-        canvas.add(new fabric.Rect({ left: 0, top: 0, width: width * 0.5, height,
-          fill: `rgba(0,0,0,0.5)`, selectable: false }));
-      }
+    const panelColor = slide.secondaryColor || primaryColor;
+    const panelTextColor = hasBgImage ? '#FFFFFF' : contrastColor(panelColor);
+
+    // The text panel: a solid brand-colored block (or dark scrim over photo).
+    if (vertical) {
+      canvas.add(new fabric.Rect({
+        left: 0, top: height * 0.52, width, height: height * 0.48,
+        fill: hasBgImage ? 'rgba(0,0,0,0.55)' : panelColor, selectable: false,
+      }));
     } else {
-      // No photo: use secondary tone block on one side for structure.
-      if (vertical) {
-        canvas.add(new fabric.Rect({ left: 0, top: height * 0.5, width, height: height * 0.5,
-          fill: slide.secondaryColor || accentColor, selectable: false }));
-      } else {
-        canvas.add(new fabric.Rect({ left: 0, top: 0, width: width * 0.5, height,
-          fill: slide.secondaryColor || accentColor, selectable: false }));
-      }
+      canvas.add(new fabric.Rect({
+        left: 0, top: 0, width: width * 0.52, height,
+        fill: hasBgImage ? 'rgba(0,0,0,0.55)' : panelColor, selectable: false,
+      }));
     }
+
+    // Brand accent line — a short bar in the accent color (brand signature).
+    const barY = vertical ? height * 0.60 : height * 0.30;
+    const barX = vertical ? width * 0.08 : width * 0.08;
+    canvas.add(new fabric.Rect({
+      left: barX, top: barY, width: fs(46), height: fs(4),
+      fill: accentColor, selectable: false,
+    }));
+
+    // Label chip (e.g. category) if provided.
+    if (slide.label) {
+      canvas.add(new fabric.Text(String(slide.label).toUpperCase(), {
+        left: barX, top: barY + fs(16), fontSize: fs(14), fontFamily: 'Inter',
+        fill: panelTextColor, charSpacing: 160, fontWeight: 'bold', selectable: false,
+      }));
+    }
+
+    // Headline in the panel.
     const tb = new fabric.Textbox(plain, {
-      left: vertical ? width / 2 : width * 0.26,
-      top: vertical ? height * 0.75 : height / 2,
+      left: vertical ? width / 2 : width * 0.28,
+      top: vertical ? height * 0.80 : height * 0.52,
       originX: 'center', originY: 'center',
-      width: vertical ? width * 0.84 : width * 0.42,
+      width: vertical ? width * 0.84 : width * 0.40,
       fontSize: fs(slide.fontSize || 38), fontFamily: fontFamily,
-      fill: hasBgImage ? '#FFFFFF' : contrastColor(slide.secondaryColor || accentColor),
-      textAlign: 'center', lineHeight: 1.25, fontWeight: slide.fontWeight || 'normal',
-      shadow: slide.noShadow ? '' : (hasBgImage ? 'rgba(0,0,0,0.6) 0px 2px 10px' : ''),
+      fill: slide.color || panelTextColor,
+      textAlign: vertical ? 'center' : 'left', lineHeight: 1.22,
+      fontWeight: slide.fontWeight || 'normal',
+      shadow: slide.noShadow ? '' : (hasBgImage ? 'rgba(0,0,0,0.5) 0px 2px 10px' : ''),
     });
     applyAccentStyles(tb, segments);
     canvas.add(tb);
-  }
 
-  // === FRAMED PHOTO: small centered photo/box, text above and below ===
-  else if (layout === 'framed_photo') {
-    const { plain, segments } = parseAccent(slide.text);
-    // A centered inner frame. If there's a photo it shows through a window;
-    // otherwise it's a tonal panel. Text sits above and below the frame.
-    const fw = width * 0.5, fh = height * 0.34;
-    const fx = (width - fw) / 2, fy = (height - fh) / 2;
-    // Dim everything, then "cut" a bright window by drawing the frame border.
-    if (hasBgImage) {
-      canvas.add(new fabric.Rect({ left: 0, top: 0, width, height, fill: 'rgba(0,0,0,0.45)', selectable: false }));
-    }
-    canvas.add(new fabric.Rect({
-      left: fx, top: fy, width: fw, height: fh,
-      fill: hasBgImage ? 'rgba(0,0,0,0)' : (slide.secondaryColor || accentColor),
-      stroke: hasBgImage ? 'rgba(255,255,255,0.85)' : contrastColor(slide.backgroundColor || '#fff'),
-      strokeWidth: 1.5 * scale, selectable: false,
-    }));
-    // Title above the frame
-    canvas.add(new fabric.Textbox(plain, {
-      left: width / 2, top: fy - fs(30), originX: 'center', originY: 'bottom',
-      width: width * 0.8, fontSize: fs(slide.fontSize || 40), fontFamily: fontFamily,
-      fill: hasBgImage ? '#FFFFFF' : contrastColor(slide.backgroundColor || '#fff'),
-      textAlign: 'center', lineHeight: 1.15, fontWeight: slide.fontWeight || 'normal',
-      shadow: slide.noShadow ? '' : (hasBgImage ? 'rgba(0,0,0,0.6) 0px 2px 10px' : ''),
-    }));
-    // Optional subline below the frame
-    if (slide.secondaryText) {
-      canvas.add(new fabric.Textbox(slide.secondaryText.toUpperCase(), {
-        left: width / 2, top: fy + fh + fs(24), originX: 'center', originY: 'top',
-        width: width * 0.7, fontSize: fs(16), fontFamily: 'Inter',
-        fill: hasBgImage ? 'rgba(255,255,255,0.9)' : (slide.secondaryColor || accentColor),
-        textAlign: 'center', charSpacing: 120, selectable: false,
+    // Brand mark bottom of the panel.
+    if (options.globalBrandName) {
+      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+        left: vertical ? width / 2 : width * 0.28,
+        top: vertical ? height - fs(28) : height - fs(28),
+        originX: vertical ? 'center' : 'center',
+        fontSize: fs(12), fill: panelTextColor, opacity: 0.85,
+        fontFamily: 'Inter', charSpacing: 140, selectable: false,
       }));
     }
   }
 
-  // === CARD ON PHOTO: a clean card floating over a photo/patterned bg ===
+  // === FRAMED PHOTO: the PHOTO itself is small & framed, centered on a
+  // brand-colored background. Label + title above, brand mark below. ===
+  else if (layout === 'framed_photo') {
+    const { plain, segments } = parseAccent(slide.text);
+    const bgIsLight = hexLuminance(slide.backgroundColor || '#ffffff') > 140;
+    const txtColor = slide.color || contrastColor(slide.backgroundColor || '#ffffff');
+
+    // The framed photo box: centered, portrait, in the middle band.
+    const fw = width * 0.56, fh = height * 0.42;
+    const fx = (width - fw) / 2, fy = height * 0.32;
+
+    // Label chip above the photo.
+    const labelText = (slide.label || 'AUS MEINEM ALLTAG').toUpperCase();
+    canvas.add(new fabric.Text(labelText, {
+      left: width / 2, top: height * 0.13, originX: 'center',
+      fontSize: fs(14), fontFamily: 'Inter', charSpacing: 200,
+      fill: accentColor, fontWeight: 'bold', selectable: false,
+    }));
+    // Title above the photo.
+    const tt = new fabric.Textbox(plain, {
+      left: width / 2, top: height * 0.22, originX: 'center', originY: 'center',
+      width: width * 0.82, fontSize: fs(slide.fontSize || 40), fontFamily: fontFamily,
+      fill: txtColor, textAlign: 'center', lineHeight: 1.12,
+      fontWeight: slide.fontWeight || 'normal',
+    });
+    applyAccentStyles(tt, segments);
+    canvas.add(tt);
+
+    // The photo, framed. If no photo, draw a tonal placeholder panel.
+    if (hasBgImage) {
+      try { await drawFramedImage(slide.background, { x: fx, y: fy, w: fw, h: fh }); }
+      catch (e) { /* fall back to panel below */ }
+    } else {
+      canvas.add(new fabric.Rect({ left: fx, top: fy, width: fw, height: fh,
+        fill: slide.secondaryColor || accentColor, selectable: false }));
+    }
+    // The frame border around the photo (the "framed" look).
+    canvas.add(new fabric.Rect({
+      left: fx - fs(6), top: fy - fs(6), width: fw + fs(12), height: fh + fs(12),
+      fill: 'rgba(0,0,0,0)', stroke: txtColor, strokeWidth: 1.5 * scale, selectable: false,
+    }));
+
+    // Brand mark below the photo.
+    if (options.globalBrandName) {
+      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+        left: width / 2, top: fy + fh + fs(30), originX: 'center',
+        fontSize: fs(13), fill: accentColor, fontFamily: 'Inter',
+        charSpacing: 160, selectable: false,
+      }));
+    }
+  }
+
+  // === CARD ON PHOTO: a branded card floating over a photo/tonal bg ===
   else if (layout === 'card_on_photo') {
     const { plain, segments } = parseAccent(slide.text);
-    const cardW = width * 0.66, cardH = height * 0.5;
+    // Slight dim so the card pops off the background.
+    if (hasBgImage) {
+      canvas.add(new fabric.Rect({ left: 0, top: 0, width, height,
+        fill: 'rgba(0,0,0,0.25)', selectable: false }));
+    }
+    const cardW = width * 0.70, cardH = height * 0.56;
     const cx = (width - cardW) / 2, cy = (height - cardH) / 2;
-    const cardFill = slide.backgroundColor && slide.backgroundColor !== '#ffffff'
+    const cardFill = (slide.backgroundColor && slide.backgroundColor !== '#ffffff')
       ? slide.backgroundColor : '#F5F1EA';
+    const cardText = contrastColor(cardFill);
+    // The card.
     canvas.add(new fabric.Rect({
       left: cx, top: cy, width: cardW, height: cardH,
-      fill: cardFill, rx: fs(4), ry: fs(4),
-      shadow: 'rgba(0,0,0,0.25) 0px 12px 30px', selectable: false,
+      fill: cardFill, rx: fs(3), ry: fs(3),
+      shadow: 'rgba(0,0,0,0.28) 0px 14px 34px', selectable: false,
     }));
-    const cardText = contrastColor(cardFill);
+    // Thin inner accent border inside the card (editorial detail).
+    const cin = fs(14);
+    canvas.add(new fabric.Rect({
+      left: cx + cin, top: cy + cin, width: cardW - cin * 2, height: cardH - cin * 2,
+      fill: 'rgba(0,0,0,0)', stroke: accentColor, strokeWidth: 1 * scale, selectable: false,
+    }));
+    // Small label at the top of the card.
+    if (slide.label) {
+      canvas.add(new fabric.Text(String(slide.label).toUpperCase(), {
+        left: width / 2, top: cy + fs(40), originX: 'center',
+        fontSize: fs(13), fontFamily: 'Inter', charSpacing: 180,
+        fill: accentColor, fontWeight: 'bold', selectable: false,
+      }));
+    }
+    // Headline centered in the card.
     const tb = new fabric.Textbox(plain, {
       left: width / 2, top: height / 2, originX: 'center', originY: 'center',
-      width: cardW - fs(48), fontSize: fs(slide.fontSize || 34), fontFamily: fontFamily,
+      width: cardW - fs(72), fontSize: fs(slide.fontSize || 34), fontFamily: fontFamily,
       fill: slide.color || cardText, textAlign: 'center', lineHeight: 1.3,
       fontWeight: slide.fontWeight || 'normal',
     });
     applyAccentStyles(tb, segments);
     canvas.add(tb);
+    // Brand mark at the bottom of the card.
+    if (options.globalBrandName) {
+      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+        left: width / 2, top: cy + cardH - fs(34), originX: 'center',
+        fontSize: fs(11), fill: cardText, opacity: 0.7,
+        fontFamily: 'Inter', charSpacing: 140, selectable: false,
+      }));
+    }
   }
 
   // 5. MINIMAL QUOTE (Cover / Brand preview) — supports *accent* word
@@ -971,6 +1045,26 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   }
 
   // --- LOGO / STICKER OVERLAY (second image on top) ---
+  // Draw a SMALL framed photo (not full-bleed): the image sits inside a
+  // rectangle (like a picture on a wall), center-cropped to fill that box.
+  const drawFramedImage = (src, box) =>
+    new Promise((resolve) => {
+      if (!src) return resolve(false);
+      fabric.Image.fromURL(src, (img) => {
+        if (!img) return resolve(false);
+        const s = Math.max(box.w / img.width, box.h / img.height);
+        img.set({ originX: 'center', originY: 'center',
+          left: box.x + box.w / 2, top: box.y + box.h / 2, scaleX: s, scaleY: s, selectable: false });
+        // Clip to the frame box so the photo doesn't spill out.
+        img.clipPath = new fabric.Rect({
+          left: box.x + box.w / 2, top: box.y + box.h / 2,
+          width: box.w, height: box.h, originX: 'center', originY: 'center', absolutePositioned: true,
+        });
+        canvas.add(img);
+        resolve(true);
+      }, { crossOrigin: 'anonymous' });
+    });
+
   const drawOverlayImage = (src) =>
     new Promise((resolve) => {
       if (!src) return resolve(false);
