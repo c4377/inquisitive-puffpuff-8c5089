@@ -106,6 +106,12 @@ export const attachSmartImages = async (slides, imagePool = []) => {
 
     const { overlay, textColorHint } = overlayDecision(best, textZone, 50);
 
+    // Brightness at the quiet zone (best text spot). Lets the renderer decide:
+    // dark enough -> white text + shadow only; too bright -> needs a scrim.
+    const quietBrightness = (best.zoneBrightness && typeof best.quietZone === 'number')
+      ? best.zoneBrightness[best.quietZone]
+      : (best.zoneBrightness ? best.zoneBrightness[4] : 128);
+
     return {
       ...slide,
       background: best.src,
@@ -113,6 +119,7 @@ export const attachSmartImages = async (slides, imagePool = []) => {
       _autoImage: {
         textZone: ZONE_LABELS[textZone],
         quietZone: best.quietLabel,
+        quietBrightness,
         fitScore: 0,
         textColorHint,
         ok: best.ok,

@@ -357,59 +357,55 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     return; // cover is complete — skip the abstract layout engine
   }
 
-  // === SMART IMAGE TEXT: place text in the image's quiet zone with a local
-  // dark scrim behind only the text (keeps the rest of the photo bright). ===
+  // === SMART IMAGE TEXT: find the best spot in the photo and put text there.
+  // Preferred: clean white text + soft shadow (NO box). Only if the best spot
+  // is still too bright for readable text do we add a gentle local scrim. ===
   const specialImageLayouts = ['tweet_card', 'glass_layer', 'aesthetic_checklist', 'diagonal_overlay', 'split_color', 'paper_box', 'story_text_box', 'bold_number_list'];
   if (hasBgImage && !specialImageLayouts.includes(layout)) {
     const { plain, segments } = parseAccent(slide.text);
     const zone = (slide._autoImage && slide._autoImage.quietZone) || 'center';
+    const quietBrightness = (slide._autoImage && typeof slide._autoImage.quietBrightness === 'number')
+      ? slide._autoImage.quietBrightness : 90;
 
-    // Map the quiet zone to a vertical anchor (row) and horizontal align.
     const isTop = zone.includes('top');
     const isBottom = zone.includes('bottom');
     const isLeft = zone.includes('left');
     const isRight = zone.includes('right');
 
-    const rowY = isTop ? height * 0.24 : isBottom ? height * 0.78 : height * 0.5;
+    const rowY = isTop ? height * 0.22 : isBottom ? height * 0.80 : height * 0.5;
     const align = isLeft ? 'left' : isRight ? 'right' : 'center';
     const boxW = width * 0.84;
-    const boxLeft = align === 'left' ? padding : align === 'right' ? width - padding - boxW : width / 2;
     const originX = align === 'center' ? 'center' : (align === 'right' ? 'right' : 'left');
     const textLeft = align === 'center' ? width / 2 : (align === 'right' ? width - padding : padding);
 
-    let fSize = fs(slide.fontSize || 42);
     const tObj = new fabric.Textbox(plain, {
-      left: textLeft,
-      top: rowY,
-      originX,
-      originY: 'center',
-      width: boxW,
-      fontSize: fSize,
-      fontFamily: fontFamily,
-      fill: '#FFFFFF',
-      textAlign: align,
-      lineHeight: 1.28,
-      fontWeight: '600',
-      shadow: 'rgba(0,0,0,0.7) 0px 2px 12px',
+      left: textLeft, top: rowY, originX, originY: 'center',
+      width: boxW, fontSize: fs(slide.fontSize || 42), fontFamily: fontFamily,
+      fill: '#FFFFFF', textAlign: align, lineHeight: 1.28, fontWeight: '600',
+      shadow: 'rgba(0,0,0,0.85) 0px 2px 16px',
     });
 
-    // Local scrim: a soft dark rounded rect sized to the text, for contrast
-    // only where the words are — the rest of the image stays bright.
-    const tw = tObj.width;
-    const th = tObj.height;
-    const padX = fs(28), padY = fs(22);
-    const scrim = new fabric.Rect({
-      left: (align === 'center' ? width / 2 : (align === 'right' ? width - padding : padding)),
-      top: rowY,
-      originX: originX,
-      originY: 'center',
-      width: Math.min(tw + padX * 2, width - padding),
-      height: th + padY * 2,
-      rx: fs(16), ry: fs(16),
-      fill: 'rgba(0,0,0,0.34)',
-      selectable: false,
-    });
-    canvas.add(scrim);
+    // NOTFALL only: quiet zone is too bright (>135) -> add a soft local scrim
+    // so white text stays legible. Otherwise: shadow alone, no box.
+    if (quietBrightness > 135) {
+      const padX = fs(30), padY = fs(24);
+      const scrim = new fabric.Rect({
+        left: textLeft, top: rowY, originX, originY: 'center',
+        width: Math.min(tObj.width + padX * 2, width - padding * 0.5),
+        height: tObj.height + padY * 2,
+        rx: fs(18), ry: fs(18),
+        fill: new fabric.Gradient({
+          type: 'radial',
+          coords: { x1: (tObj.width) / 2, y1: (tObj.height) / 2, r1: 0, x2: (tObj.width) / 2, y2: (tObj.height) / 2, r2: tObj.width * 0.7 },
+          colorStops: [
+            { offset: 0, color: 'rgba(0,0,0,0.42)' },
+            { offset: 1, color: 'rgba(0,0,0,0.0)' },
+          ],
+        }),
+        selectable: false,
+      });
+      canvas.add(scrim);
+    }
 
     applyAccentStyles(tObj, segments);
     canvas.add(tObj);
