@@ -1,10 +1,16 @@
 import React from 'react';
 // FIX: Use named imports directly to avoid undefined destructuring crashes
-import { FiLayout, FiMaximize, FiSquare, FiList, FiSidebar, FiImage, FiAlignLeft, FiAlignRight, FiBox, FiMessageSquare, FiArrowUpLeft, FiArrowDownRight, FiArrowDown, FiTwitter, FiEdit2, FiType, FiLayers, FiHexagon } from 'react-icons/fi';
+import { FiLayout, FiMaximize, FiSquare, FiList, FiSidebar, FiImage, FiAlignLeft, FiAlignRight, FiBox, FiMessageSquare, FiArrowUpLeft, FiArrowDownRight, FiArrowDown, FiTwitter, FiEdit2, FiType, FiLayers, FiHexagon, FiColumns, FiCreditCard } from 'react-icons/fi';
 import SafeIcon from '../common/SafeIcon';
 
 const LayoutPicker = ({ currentLayout, onUpdate }) => {
   const layouts = [
+    // --- MAGAZINE-STYLE VARIANTS (photo/text structure) ---
+    { id: 'split_photo', name: 'Split Foto', icon: FiColumns, description: 'Foto eine Seite, Text andere' },
+    { id: 'split_photo_v', name: 'Split Vertikal', icon: FiSquare, description: 'Foto oben, Text unten' },
+    { id: 'framed_photo', name: 'Gerahmt', icon: FiImage, description: 'Kleines Foto mittig, Text drumherum' },
+    { id: 'card_on_photo', name: 'Karte auf Foto', icon: FiCreditCard, description: 'Weiße Karte über Hintergrund' },
+
     // --- COVER LAYOUTS (Photo background, Sarah-Joy style) ---
     { id: 'sarah_cover', name: 'Editorial Cover', icon: FiImage, description: 'Foto + Label + Script-Akzent' },
     { id: 'cover_top_left', name: 'Cover Oben Links', icon: FiArrowUpLeft, description: 'Titel oben links auf Foto' },

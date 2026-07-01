@@ -172,20 +172,29 @@ const ContentPlanner = () => {
       minimal_left_accent: 'editorial_classic',
       centered_focus: 'minimal_quote',
     };
-    const realLayouts = ['aesthetic_checklist','bold_number_list','diagonal_overlay','editorial_classic','glass_layer','maximized_bold','minimal_editorial','minimal_quote','paper_box','sarah_cover','split_color','story_text_box','tweet_card'];
+    const realLayouts = ['aesthetic_checklist','bold_number_list','diagonal_overlay','editorial_classic','glass_layer','maximized_bold','minimal_editorial','minimal_quote','paper_box','sarah_cover','split_color','story_text_box','tweet_card','split_photo','split_photo_v','framed_photo','card_on_photo'];
     const resolveLayout = (name) => {
       if (realLayouts.includes(name)) return name;
       if (LAYOUT_ALIAS[name]) return LAYOUT_ALIAS[name];
       return 'editorial_classic';
     };
     const allowedLayouts = weightedLayoutPool(baseLayouts).map(resolveLayout);
+    // Ensure the new magazine-style variants are part of the rotation for
+    // visual variety across the feed (photo/text splits, framed, card).
+    const varietyLayouts = ['split_photo', 'split_photo_v', 'framed_photo', 'card_on_photo', 'editorial_classic', 'minimal_quote'];
+    const mixedLayouts = [];
+    const maxLen = Math.max(allowedLayouts.length, varietyLayouts.length);
+    for (let i = 0; i < maxLen; i++) {
+      if (allowedLayouts[i % allowedLayouts.length]) mixedLayouts.push(allowedLayouts[i % allowedLayouts.length]);
+      mixedLayouts.push(varietyLayouts[i % varietyLayouts.length]);
+    }
 
     const anchorCycle = ['top', 'center', 'bottom'];
     const newPlan = importedDays.map((dayData, dIdx) => {
         const slides = dayData.slides.map((text, sIdx) => {
             // Rotate through allowed layouts (offset per day) so slides vary
             // instead of always using the same layout.
-            const layout = allowedLayouts[(dIdx + sIdx) % allowedLayouts.length];
+            const layout = mixedLayouts[(dIdx + sIdx) % mixedLayouts.length];
             // Rotate the vertical text anchor too, so text-only posts don't all
             // cling to the top. Cover slide (sIdx 0) varies per day.
             const textAnchor = anchorCycle[(dIdx + sIdx) % anchorCycle.length];

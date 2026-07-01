@@ -417,7 +417,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // === SMART IMAGE TEXT: find the best spot in the photo and put text there.
   // Preferred: clean white text + soft shadow (NO box). Only if the best spot
   // is still too bright for readable text do we add a gentle local scrim. ===
-  const specialImageLayouts = ['tweet_card', 'glass_layer', 'aesthetic_checklist', 'diagonal_overlay', 'split_color', 'paper_box', 'story_text_box', 'bold_number_list'];
+  const specialImageLayouts = ['tweet_card', 'glass_layer', 'aesthetic_checklist', 'diagonal_overlay', 'split_color', 'paper_box', 'story_text_box', 'bold_number_list', 'split_photo', 'split_photo_v', 'framed_photo', 'card_on_photo'];
   if (hasBgImage && !specialImageLayouts.includes(layout)) {
     const { plain, segments } = parseAccent(slide.text);
     const zone = (slide._autoImage && slide._autoImage.quietZone) || 'center';
@@ -759,6 +759,104 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     });
     applyAccentStyles(dtext, segments);
     canvas.add(dtext);
+  }
+
+  // === SPLIT PHOTO: photo fills one half, text sits in the other half ===
+  // (Like the reference: foto rechts, text links — or top/bottom.)
+  else if (layout === 'split_photo' || layout === 'split_photo_v') {
+    const vertical = layout === 'split_photo_v'; // v = photo top, text bottom
+    const { plain, segments } = parseAccent(slide.text);
+    // The background photo already fills the whole canvas (drawBackgroundImage).
+    // We darken only the TEXT half so the words read, leaving the photo half clear.
+    if (hasBgImage) {
+      if (vertical) {
+        canvas.add(new fabric.Rect({ left: 0, top: height * 0.5, width, height: height * 0.5,
+          fill: `rgba(0,0,0,0.5)`, selectable: false }));
+      } else {
+        canvas.add(new fabric.Rect({ left: 0, top: 0, width: width * 0.5, height,
+          fill: `rgba(0,0,0,0.5)`, selectable: false }));
+      }
+    } else {
+      // No photo: use secondary tone block on one side for structure.
+      if (vertical) {
+        canvas.add(new fabric.Rect({ left: 0, top: height * 0.5, width, height: height * 0.5,
+          fill: slide.secondaryColor || accentColor, selectable: false }));
+      } else {
+        canvas.add(new fabric.Rect({ left: 0, top: 0, width: width * 0.5, height,
+          fill: slide.secondaryColor || accentColor, selectable: false }));
+      }
+    }
+    const tb = new fabric.Textbox(plain, {
+      left: vertical ? width / 2 : width * 0.26,
+      top: vertical ? height * 0.75 : height / 2,
+      originX: 'center', originY: 'center',
+      width: vertical ? width * 0.84 : width * 0.42,
+      fontSize: fs(slide.fontSize || 38), fontFamily: fontFamily,
+      fill: hasBgImage ? '#FFFFFF' : contrastColor(slide.secondaryColor || accentColor),
+      textAlign: 'center', lineHeight: 1.25, fontWeight: slide.fontWeight || 'normal',
+      shadow: slide.noShadow ? '' : (hasBgImage ? 'rgba(0,0,0,0.6) 0px 2px 10px' : ''),
+    });
+    applyAccentStyles(tb, segments);
+    canvas.add(tb);
+  }
+
+  // === FRAMED PHOTO: small centered photo/box, text above and below ===
+  else if (layout === 'framed_photo') {
+    const { plain, segments } = parseAccent(slide.text);
+    // A centered inner frame. If there's a photo it shows through a window;
+    // otherwise it's a tonal panel. Text sits above and below the frame.
+    const fw = width * 0.5, fh = height * 0.34;
+    const fx = (width - fw) / 2, fy = (height - fh) / 2;
+    // Dim everything, then "cut" a bright window by drawing the frame border.
+    if (hasBgImage) {
+      canvas.add(new fabric.Rect({ left: 0, top: 0, width, height, fill: 'rgba(0,0,0,0.45)', selectable: false }));
+    }
+    canvas.add(new fabric.Rect({
+      left: fx, top: fy, width: fw, height: fh,
+      fill: hasBgImage ? 'rgba(0,0,0,0)' : (slide.secondaryColor || accentColor),
+      stroke: hasBgImage ? 'rgba(255,255,255,0.85)' : contrastColor(slide.backgroundColor || '#fff'),
+      strokeWidth: 1.5 * scale, selectable: false,
+    }));
+    // Title above the frame
+    canvas.add(new fabric.Textbox(plain, {
+      left: width / 2, top: fy - fs(30), originX: 'center', originY: 'bottom',
+      width: width * 0.8, fontSize: fs(slide.fontSize || 40), fontFamily: fontFamily,
+      fill: hasBgImage ? '#FFFFFF' : contrastColor(slide.backgroundColor || '#fff'),
+      textAlign: 'center', lineHeight: 1.15, fontWeight: slide.fontWeight || 'normal',
+      shadow: slide.noShadow ? '' : (hasBgImage ? 'rgba(0,0,0,0.6) 0px 2px 10px' : ''),
+    }));
+    // Optional subline below the frame
+    if (slide.secondaryText) {
+      canvas.add(new fabric.Textbox(slide.secondaryText.toUpperCase(), {
+        left: width / 2, top: fy + fh + fs(24), originX: 'center', originY: 'top',
+        width: width * 0.7, fontSize: fs(16), fontFamily: 'Inter',
+        fill: hasBgImage ? 'rgba(255,255,255,0.9)' : (slide.secondaryColor || accentColor),
+        textAlign: 'center', charSpacing: 120, selectable: false,
+      }));
+    }
+  }
+
+  // === CARD ON PHOTO: a clean card floating over a photo/patterned bg ===
+  else if (layout === 'card_on_photo') {
+    const { plain, segments } = parseAccent(slide.text);
+    const cardW = width * 0.66, cardH = height * 0.5;
+    const cx = (width - cardW) / 2, cy = (height - cardH) / 2;
+    const cardFill = slide.backgroundColor && slide.backgroundColor !== '#ffffff'
+      ? slide.backgroundColor : '#F5F1EA';
+    canvas.add(new fabric.Rect({
+      left: cx, top: cy, width: cardW, height: cardH,
+      fill: cardFill, rx: fs(4), ry: fs(4),
+      shadow: 'rgba(0,0,0,0.25) 0px 12px 30px', selectable: false,
+    }));
+    const cardText = contrastColor(cardFill);
+    const tb = new fabric.Textbox(plain, {
+      left: width / 2, top: height / 2, originX: 'center', originY: 'center',
+      width: cardW - fs(48), fontSize: fs(slide.fontSize || 34), fontFamily: fontFamily,
+      fill: slide.color || cardText, textAlign: 'center', lineHeight: 1.3,
+      fontWeight: slide.fontWeight || 'normal',
+    });
+    applyAccentStyles(tb, segments);
+    canvas.add(tb);
   }
 
   // 5. MINIMAL QUOTE (Cover / Brand preview) — supports *accent* word
