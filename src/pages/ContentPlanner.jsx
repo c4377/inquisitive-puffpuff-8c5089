@@ -16,6 +16,7 @@ import { createSmartSlide } from '../utils/slideHelpers';
 import { attachSmartImages } from '../utils/smartLayoutGenerator';
 import { decidePostDesign, dayHasImage } from '../utils/postDesignEngine';
 import { saveSetsToDB, loadSetsFromDB } from '../utils/storage';
+import { analyzePlanRoles, roleFeedback, ROLE_META } from '../utils/postRole';
 import { weightedLayoutPool, getRating, setRating } from '../utils/layoutRatings';
 
 const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus } = FiIcons;
@@ -40,6 +41,10 @@ const ContentPlanner = () => {
   const [savedSets, setSavedSets] = useState([]);
   const [showSets, setShowSets] = useState(false);
   const lastImageOffsetRef = useRef(-1); // avoid repeating the same reload shuffle
+  const [showStructure, setShowStructure] = useState(false);
+
+  // Live analysis of the feed's red thread (Frage → Beweis → Angebot).
+  const roleAnalysis = React.useMemo(() => analyzePlanRoles(weekPlan), [weekPlan]);
 
   const currentBrand = brandSettings.currentBrandConfig;
   const hasActiveBrand = !!currentBrand;
@@ -582,6 +587,7 @@ const ContentPlanner = () => {
               <button onClick={() => setShowStyleShifter(!showStyleShifter)} className={`flex items-center px-4 py-2 rounded-lg border transition-all text-xs font-bold ${showStyleShifter ? 'bg-purple-600 text-white border-purple-600 shadow-inner' : 'bg-white border-purple-200 text-purple-700 hover:bg-purple-50 hover:border-purple-300 shadow-sm'}`} title="Style Shifter (Fonts/Colors)"><SafeIcon icon={FiRefreshCw} className="mr-2 text-sm" /> Shifter</button>
               <button onClick={handleReloadPlan} disabled={loading || weekPlan.length === 0} className="flex items-center px-4 py-2 rounded-lg border border-emerald-200 bg-white text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300 shadow-sm transition-all text-xs font-bold disabled:opacity-40" title="Posts neu generieren (Bilder neu zuordnen)"><SafeIcon icon={FiRefreshCw} className={`mr-2 text-sm ${loading ? 'animate-spin' : ''}`} /> Neu laden</button>
               <button onClick={() => setShowSets(!showSets)} className={`flex items-center px-4 py-2 rounded-lg border transition-all text-xs font-bold ${showSets ? 'bg-indigo-600 text-white border-indigo-600 shadow-inner' : 'bg-white border-indigo-200 text-indigo-700 hover:bg-indigo-50 hover:border-indigo-300 shadow-sm'}`} title="Sets speichern & wiederherstellen"><SafeIcon icon={FiSave} className="mr-2 text-sm" /> Sets{savedSets.length > 0 ? ` (${savedSets.length})` : ''}</button>
+              <button onClick={() => setShowStructure(!showStructure)} disabled={weekPlan.length === 0} className={`flex items-center px-4 py-2 rounded-lg border transition-all text-xs font-bold disabled:opacity-40 ${showStructure ? 'bg-amber-600 text-white border-amber-600 shadow-inner' : 'bg-white border-amber-200 text-amber-700 hover:bg-amber-50 hover:border-amber-300 shadow-sm'}`} title="Struktur sichtbar machen"><SafeIcon icon={FiLayers} className="mr-2 text-sm" /> Struktur</button>
               </>
             )}
             <div className="h-6 w-px bg-gray-300 mx-1"></div>
@@ -592,6 +598,71 @@ const ContentPlanner = () => {
         <AnimatePresence>
           {showStyleShifter && (
             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden border-t border-gray-100 bg-gray-50"><div className="py-2"><StyleShifter mode="bar" /></div></motion.div>
+          )}
+          {showStructure && weekPlan.length > 0 && (
+            <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden border-t border-gray-100 bg-amber-50/40">
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-bold text-gray-900 flex items-center"><SafeIcon icon={FiLayers} className="mr-2 text-amber-600" /> Dein roter Faden</h3>
+                  <span className="text-[11px] text-gray-400">Struktur ersetzt das Raten</span>
+                </div>
+
+                {/* Balance bars */}
+                <div className="space-y-2 mb-4">
+                  {['frage', 'beweis', 'angebot'].map((role) => {
+                    const meta = ROLE_META[role];
+                    const pct = roleAnalysis.balance[role];
+                    const count = roleAnalysis.counts[role];
+                    return (
+                      <div key={role} className="flex items-center gap-3">
+                        <div className="w-20 shrink-0">
+                          <span className="text-xs font-bold px-2 py-0.5 rounded" style={{ color: meta.color, background: meta.bg }}>{meta.label}</span>
+                        </div>
+                        <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                          <div className="h-full rounded-full transition-all" style={{ width: `${pct}%`, background: meta.color }} />
+                        </div>
+                        <span className="text-[11px] text-gray-500 w-16 text-right">{count}× · {pct}%</span>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Sequence across the feed */}
+                <div className="mb-3">
+                  <div className="text-[11px] text-gray-500 mb-1.5">Reihenfolge im Feed:</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {roleAnalysis.sequence.map((item, i) => {
+                      const meta = ROLE_META[item.role];
+                      return (
+                        <div key={i} className="flex items-center gap-1 px-2 py-1 rounded-md" style={{ background: meta.bg }} title={`Tag ${item.day}: ${meta.label} — ${meta.meaning}`}>
+                          <span className="text-[10px] font-bold" style={{ color: meta.color }}>{item.day}</span>
+                          <span className="w-1.5 h-1.5 rounded-full" style={{ background: meta.color }} />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Warm read on the balance */}
+                <div className="flex items-start gap-2 bg-white rounded-lg p-3 border border-amber-100">
+                  <SafeIcon icon={FiZap} className="text-amber-500 mt-0.5 shrink-0" />
+                  <p className="text-xs text-gray-700 leading-relaxed">{roleFeedback(roleAnalysis)}</p>
+                </div>
+
+                {/* Legend */}
+                <div className="flex flex-wrap gap-3 mt-3">
+                  {['frage', 'beweis', 'angebot'].map((role) => {
+                    const meta = ROLE_META[role];
+                    return (
+                      <div key={role} className="flex items-center gap-1.5">
+                        <span className="w-2.5 h-2.5 rounded-full" style={{ background: meta.color }} />
+                        <span className="text-[11px] text-gray-500"><b className="text-gray-700">{meta.label}:</b> {meta.meaning}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </motion.div>
           )}
           {showSets && (
             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden border-t border-gray-100 bg-indigo-50/40">
@@ -661,6 +732,17 @@ const ContentPlanner = () => {
                     <div className="absolute top-1 left-1 bg-black/55 text-white text-[9px] font-bold px-1.5 py-0.5 rounded z-10">
                       Tag {day.day}
                     </div>
+
+                    {/* Role badge (only when structure view is on) */}
+                    {showStructure && (() => {
+                      const role = roleAnalysis.sequence.find(s => s.day === day.day)?.role || 'beweis';
+                      const meta = ROLE_META[role];
+                      return (
+                        <div className="absolute bottom-1 left-1 text-[9px] font-bold px-1.5 py-0.5 rounded z-10" style={{ color: meta.color, background: meta.bg }}>
+                          {meta.label}
+                        </div>
+                      );
+                    })()}
 
                     {/* Carousel indicator */}
                     {day.slides.length > 1 && (
