@@ -381,8 +381,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const tObj = new fabric.Textbox(plain, {
       left: textLeft, top: rowY, originX, originY: 'center',
       width: boxW, fontSize: fs(slide.fontSize || 42), fontFamily: fontFamily,
-      fill: '#FFFFFF', textAlign: align, lineHeight: 1.28, fontWeight: '600',
-      shadow: 'rgba(0,0,0,0.85) 0px 2px 16px',
+      fill: slide.color || '#FFFFFF', textAlign: slide.textAlign || align, lineHeight: 1.28,
+      fontWeight: slide.fontWeight || 'normal',
+      fontStyle: slide.fontStyle || 'normal',
+      shadow: slide.noShadow ? '' : 'rgba(0,0,0,0.85) 0px 2px 16px',
     });
 
     // NOTFALL only: quiet zone is too bright (>135) -> add a soft local scrim
@@ -453,8 +455,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       fill: contrastColor(primaryColor),
       lineHeight: 1.3,
       textAlign: 'left',
-      fontWeight: hasBgImage ? '600' : (slide.fontWeight || 'normal'),
-      shadow: textShadow
+      fontWeight: slide.fontWeight || 'normal',
+      shadow: slide.noShadow ? '' : textShadow
     });
     applyAccentStyles(mainText, ecSegs);
     canvas.add(mainText);
@@ -539,7 +541,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       fontFamily: fontFamily,
       fill: contrastColor(accentColor),
       textAlign: 'center',
-      fontWeight: 'bold'
+      fontWeight: slide.fontWeight || 'bold'
     }));
   }
 
@@ -640,7 +642,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       width: width - gm * 2 - fs(48),
       fontSize: fs(slide.fontSize || 40), fontFamily: fontFamily,
       fill: hasBgImage ? '#FFFFFF' : contrastColor(primaryColor),
-      textAlign: 'center', lineHeight: 1.25, fontWeight: '600',
+      textAlign: slide.textAlign || 'center', lineHeight: 1.25, fontWeight: slide.fontWeight || 'normal',
       shadow: hasBgImage ? 'rgba(0,0,0,0.4) 0px 2px 8px' : '',
     });
     applyAccentStyles(gtext, segments);
@@ -689,7 +691,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       left: width * 0.08, top: height * 0.78, originY: 'center',
       width: width * 0.8,
       fontSize: fs(slide.fontSize || 40), fontFamily: fontFamily,
-      fill: '#FFFFFF', textAlign: 'left', lineHeight: 1.2, fontWeight: '700',
+      fill: '#FFFFFF', textAlign: 'left', lineHeight: 1.2, fontWeight: slide.fontWeight || '700',
       shadow: 'rgba(0,0,0,0.3) 0px 2px 6px',
     });
     applyAccentStyles(dtext, segments);
@@ -714,9 +716,14 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       }
     } catch (e) { /* measure best-effort */ }
 
+    const anchorY = slide.textAnchor === 'top' ? height * 0.28
+      : slide.textAnchor === 'bottom' ? height * 0.72
+      : height / 2;
+    // maximized_bold is meant to be bold; minimal_quote defaults to normal.
+    const defaultWeight = layout === 'maximized_bold' ? 'bold' : 'normal';
     const textObj = new fabric.Textbox(plain, {
       left: padding,
-      top: height / 2,
+      top: anchorY,
       originY: 'center',
       width: boxWidth,
       fontSize: fontSize,
@@ -724,7 +731,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       fill: mainColor,
       textAlign: slide.textAlign || 'center',
       lineHeight: 1.25,
-      fontWeight: slide.fontWeight || 'bold',
+      fontWeight: slide.fontWeight || defaultWeight,
       splitByGrapheme: false,
       shadow: textShadow,
     });

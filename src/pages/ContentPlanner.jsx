@@ -249,7 +249,11 @@ const ContentPlanner = () => {
           const newLayout = photoLayouts.includes(curLayout)
             ? textCoverLayouts[dayIdx % textCoverLayouts.length]
             : curLayout;
-          return { ...rest, background: null, layout: newLayout, layoutId: newLayout };
+          // Rotate vertical anchor so text-only posts vary (top/center/bottom)
+          // while staying coherent across the grid.
+          const anchors = ['top', 'center', 'bottom'];
+          const textAnchor = anchors[(dayIdx + 1) % anchors.length];
+          return { ...rest, background: null, layout: newLayout, layoutId: newLayout, textAnchor };
         });
 
         reloadedPlan.push({ ...day, slides: adjusted });
