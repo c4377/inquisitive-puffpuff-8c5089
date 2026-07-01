@@ -58,17 +58,16 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           canvas.add(img);
           canvas.sendToBack(img);
 
-          // Readability overlay. Darken the whole image, then add a stronger
-          // gradient band so light text always stands out — even on bright photos.
-          const ov = typeof slide.overlay === 'number' ? slide.overlay : 0.45;
+          // Readability overlay — kept light so the photo stays vibrant.
+          const ov = typeof slide.overlay === 'number' ? slide.overlay : 0.28;
           const overlayRect = new fabric.Rect({
             left: 0, top: 0, width, height,
             fill: `rgba(0,0,0,${ov})`, selectable: false,
           });
           canvas.add(overlayRect);
 
-          // Extra vertical gradient: darker at top and bottom (common text zones),
-          // lighter in the middle. Keeps photo visible but guarantees contrast.
+          // Gentle gradient only at the very top & bottom edges (where brand
+          // mark / slide number sit). Middle stays clear so the image shows.
           try {
             const grad = new fabric.Rect({
               left: 0, top: 0, width, height, selectable: false,
@@ -76,10 +75,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
                 type: 'linear',
                 coords: { x1: 0, y1: 0, x2: 0, y2: height },
                 colorStops: [
-                  { offset: 0,    color: 'rgba(0,0,0,0.45)' },
-                  { offset: 0.35, color: 'rgba(0,0,0,0.10)' },
-                  { offset: 0.65, color: 'rgba(0,0,0,0.10)' },
-                  { offset: 1,    color: 'rgba(0,0,0,0.55)' },
+                  { offset: 0,    color: 'rgba(0,0,0,0.30)' },
+                  { offset: 0.18, color: 'rgba(0,0,0,0.0)' },
+                  { offset: 0.82, color: 'rgba(0,0,0,0.0)' },
+                  { offset: 1,    color: 'rgba(0,0,0,0.35)' },
                 ],
               }),
             });
@@ -356,6 +355,66 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     }
     canvas.renderAll();
     return; // cover is complete — skip the abstract layout engine
+  }
+
+  // === SMART IMAGE TEXT: place text in the image's quiet zone with a local
+  // dark scrim behind only the text (keeps the rest of the photo bright). ===
+  const specialImageLayouts = ['tweet_card', 'glass_layer', 'aesthetic_checklist', 'diagonal_overlay', 'split_color', 'paper_box', 'story_text_box', 'bold_number_list'];
+  if (hasBgImage && !specialImageLayouts.includes(layout)) {
+    const { plain, segments } = parseAccent(slide.text);
+    const zone = (slide._autoImage && slide._autoImage.quietZone) || 'center';
+
+    // Map the quiet zone to a vertical anchor (row) and horizontal align.
+    const isTop = zone.includes('top');
+    const isBottom = zone.includes('bottom');
+    const isLeft = zone.includes('left');
+    const isRight = zone.includes('right');
+
+    const rowY = isTop ? height * 0.24 : isBottom ? height * 0.78 : height * 0.5;
+    const align = isLeft ? 'left' : isRight ? 'right' : 'center';
+    const boxW = width * 0.84;
+    const boxLeft = align === 'left' ? padding : align === 'right' ? width - padding - boxW : width / 2;
+    const originX = align === 'center' ? 'center' : (align === 'right' ? 'right' : 'left');
+    const textLeft = align === 'center' ? width / 2 : (align === 'right' ? width - padding : padding);
+
+    let fSize = fs(slide.fontSize || 42);
+    const tObj = new fabric.Textbox(plain, {
+      left: textLeft,
+      top: rowY,
+      originX,
+      originY: 'center',
+      width: boxW,
+      fontSize: fSize,
+      fontFamily: fontFamily,
+      fill: '#FFFFFF',
+      textAlign: align,
+      lineHeight: 1.28,
+      fontWeight: '600',
+      shadow: 'rgba(0,0,0,0.7) 0px 2px 12px',
+    });
+
+    // Local scrim: a soft dark rounded rect sized to the text, for contrast
+    // only where the words are — the rest of the image stays bright.
+    const tw = tObj.width;
+    const th = tObj.height;
+    const padX = fs(28), padY = fs(22);
+    const scrim = new fabric.Rect({
+      left: (align === 'center' ? width / 2 : (align === 'right' ? width - padding : padding)),
+      top: rowY,
+      originX: originX,
+      originY: 'center',
+      width: Math.min(tw + padX * 2, width - padding),
+      height: th + padY * 2,
+      rx: fs(16), ry: fs(16),
+      fill: 'rgba(0,0,0,0.34)',
+      selectable: false,
+    });
+    canvas.add(scrim);
+
+    applyAccentStyles(tObj, segments);
+    canvas.add(tObj);
+    canvas.renderAll();
+    return;
   }
 
 
