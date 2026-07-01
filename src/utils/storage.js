@@ -152,6 +152,42 @@ export const loadPlanFromDB = async () => {
   }
 };
 
+// --- SAVED POST SETS (named snapshots of a content plan) ---
+// A "set" = { id, name, createdAt, plan: [...days] }. Stored as an array.
+const SETS_KEY = 'saved_post_sets';
+
+export const saveSetsToDB = async (sets) => {
+  try {
+    const db = await initDB();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([STORE_NAME], 'readwrite');
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.put(sets, SETS_KEY);
+      request.onsuccess = () => resolve(true);
+      request.onerror = () => reject(request.error);
+    });
+  } catch (e) {
+    console.error("Failed to save sets to DB", e);
+    return false;
+  }
+};
+
+export const loadSetsFromDB = async () => {
+  try {
+    const db = await initDB();
+    return new Promise((resolve) => {
+      const transaction = db.transaction([STORE_NAME], 'readonly');
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.get(SETS_KEY);
+      request.onsuccess = () => resolve(request.result || []);
+      request.onerror = () => resolve([]);
+    });
+  } catch (e) {
+    console.warn("Could not init DB for loading sets", e);
+    return [];
+  }
+};
+
 // --- COMMUNITY DECKS (NEW) ---
 export const saveCommunityDecksToDB = async (decks) => {
   try {

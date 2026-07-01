@@ -15,9 +15,10 @@ import { brandRuleSets } from '../constants/brandData';
 import { createSmartSlide } from '../utils/slideHelpers';
 import { attachSmartImages } from '../utils/smartLayoutGenerator';
 import { decidePostDesign, dayHasImage } from '../utils/postDesignEngine';
+import { saveSetsToDB, loadSetsFromDB } from '../utils/storage';
 import { weightedLayoutPool, getRating, setRating } from '../utils/layoutRatings';
 
-const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers } = FiIcons;
+const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus } = FiIcons;
 
 const ContentPlanner = () => {
   const { brandSettings, updateBrandSettings } = useBrand();
@@ -29,10 +30,15 @@ const ContentPlanner = () => {
   const [showStyleShifter, setShowStyleShifter] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [isExportingAll, setIsExportingAll] = useState(false);
+  const [exportDayCursor, setExportDayCursor] = useState(0); // next day index to save
   const [exportingDayId, setExportingDayId] = useState(null);
   const [saveStatus, setSaveStatus] = useState('');
   const [ratingTick, setRatingTick] = useState(0); // bump to refresh thumb UI
   const [autoApplyStyle, setAutoApplyStyle] = useState(true);
+
+  // Saved post sets (named snapshots of the current plan).
+  const [savedSets, setSavedSets] = useState([]);
+  const [showSets, setShowSets] = useState(false);
 
   const currentBrand = brandSettings.currentBrandConfig;
   const hasActiveBrand = !!currentBrand;
@@ -154,6 +160,46 @@ const ContentPlanner = () => {
       return () => clearTimeout(timer);
     }
   }, [brandSettings.currentBrandConfig, autoApplyStyle]);
+
+  // Load saved post sets once on mount.
+  useEffect(() => {
+    loadSetsFromDB().then((sets) => setSavedSets(Array.isArray(sets) ? sets : []));
+  }, []);
+
+  // Save the CURRENT plan as a named set.
+  const handleSaveSet = async () => {
+    if (!weekPlan.length) { setSaveStatus('Kein Plan zum Speichern vorhanden.'); return; }
+    const name = window.prompt('Name für dieses Set:', `Set ${new Date().toLocaleDateString('de-AT')}`);
+    if (name === null) return; // cancelled
+    const newSet = {
+      id: `set_${Date.now()}`,
+      name: name.trim() || `Set ${savedSets.length + 1}`,
+      createdAt: Date.now(),
+      count: weekPlan.length,
+      plan: JSON.parse(JSON.stringify(weekPlan)), // deep copy snapshot
+    };
+    const updated = [newSet, ...savedSets];
+    setSavedSets(updated);
+    await saveSetsToDB(updated);
+    setSaveStatus(`✓ „${newSet.name}" gespeichert (${newSet.count} Tage).`);
+    setTimeout(() => setSaveStatus(''), 4000);
+  };
+
+  // Restore a set into the current plan (replaces what's there).
+  const handleRestoreSet = (set) => {
+    if (!set?.plan?.length) return;
+    if (weekPlan.length > 0 && !window.confirm(`Aktuellen Plan durch „${set.name}" ersetzen?`)) return;
+    updateBrandSettings({ contentPlan: JSON.parse(JSON.stringify(set.plan)) });
+    setShowSets(false);
+    setSaveStatus(`✓ „${set.name}" wiederhergestellt.`);
+    setTimeout(() => setSaveStatus(''), 4000);
+  };
+
+  const handleDeleteSet = async (setId) => {
+    const updated = savedSets.filter(s => s.id !== setId);
+    setSavedSets(updated);
+    await saveSetsToDB(updated);
+  };
 
   // Central layout rotation — used by BOTH import and reload so variety is
   // consistent everywhere, not only on fresh import. Returns an array of real
@@ -331,7 +377,6 @@ const ContentPlanner = () => {
     try {
       const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "MUSE MENTORING";
 
-      // Render every slide of every day into image Files.
       const renderDayFiles = async (day) => {
         const files = [];
         for (let i = 0; i < day.slides.length; i++) {
@@ -356,49 +401,51 @@ const ContentPlanner = () => {
         return files;
       };
 
-      // If the device supports sharing files (mobile), save to Photos day by day.
-      // Sharing all ~50 images at once is unreliable, so we go per day and let
-      // the user tap "In Fotos sichern" for each.
       const canShareFiles = typeof navigator !== 'undefined' && navigator.canShare;
-      let sharedAny = false;
 
+      // MOBILE: iOS requires a fresh user tap for each share sheet, so we save
+      // ONE day per tap and advance a cursor. The button label tells the user
+      // which day is next.
       if (canShareFiles) {
-        for (const day of weekPlan) {
-          const files = await renderDayFiles(day);
-          if (files.length && navigator.canShare({ files })) {
-            try {
-              await navigator.share({ files, title: `Tag ${day.day}` });
-              sharedAny = true;
-              setSaveStatus(`Tag ${day.day} zum Speichern geöffnet…`);
-            } catch (e) {
-              if (e?.name === 'AbortError') {
-                // User cancelled the share sheet -> stop the whole run.
-                setSaveStatus('Export abgebrochen.');
-                setIsExportingAll(false);
-                return;
-              }
-              throw e;
+        const idx = exportDayCursor;
+        const day = weekPlan[idx];
+        if (!day) { setExportDayCursor(0); setIsExportingAll(false); return; }
+        const files = await renderDayFiles(day);
+        if (files.length && navigator.canShare({ files })) {
+          try {
+            await navigator.share({ files, title: `Tag ${day.day}` });
+          } catch (e) {
+            if (e?.name === 'AbortError') {
+              setSaveStatus('Abgebrochen. Tippe erneut, um fortzusetzen.');
+              setIsExportingAll(false);
+              return;
             }
+            throw e;
           }
         }
+        const next = idx + 1;
+        if (next >= weekPlan.length) {
+          setExportDayCursor(0);
+          setSaveStatus('✓ Alle Tage in Fotos gesichert.');
+        } else {
+          setExportDayCursor(next);
+          setSaveStatus(`✓ Tag ${day.day} gesichert. Tippe für Tag ${weekPlan[next].day}.`);
+        }
+        setTimeout(() => setSaveStatus(''), 6000);
+        setIsExportingAll(false);
+        return;
       }
 
-      // Desktop / no share support -> fall back to a single ZIP download.
-      if (!sharedAny) {
-        const zip = new JSZip();
-        const folder = zip.folder("Content_Plan_Export");
-        for (const day of weekPlan) {
-          const files = await renderDayFiles(day);
-          for (let i = 0; i < files.length; i++) {
-            folder.file(files[i].name, files[i]);
-          }
-        }
-        const content = await zip.generateAsync({ type: "blob" });
-        saveAs(content, `Content_Plan.zip`);
-        setSaveStatus('Als ZIP heruntergeladen (Teilen nicht unterstützt).');
-      } else {
-        setSaveStatus('Alle Tage zum Speichern in Fotos geöffnet.');
+      // DESKTOP / no share support -> single ZIP download of everything.
+      const zip = new JSZip();
+      const folder = zip.folder("Content_Plan_Export");
+      for (const day of weekPlan) {
+        const files = await renderDayFiles(day);
+        for (let i = 0; i < files.length; i++) folder.file(files[i].name, files[i]);
       }
+      const content = await zip.generateAsync({ type: "blob" });
+      saveAs(content, `Content_Plan.zip`);
+      setSaveStatus('Als ZIP heruntergeladen.');
       setTimeout(() => setSaveStatus(''), 5000);
     } catch (e) {
       console.error("Export Failed", e);
@@ -524,16 +571,45 @@ const ContentPlanner = () => {
               <>
               <button onClick={() => setShowStyleShifter(!showStyleShifter)} className={`flex items-center px-4 py-2 rounded-lg border transition-all text-xs font-bold ${showStyleShifter ? 'bg-purple-600 text-white border-purple-600 shadow-inner' : 'bg-white border-purple-200 text-purple-700 hover:bg-purple-50 hover:border-purple-300 shadow-sm'}`} title="Style Shifter (Fonts/Colors)"><SafeIcon icon={FiRefreshCw} className="mr-2 text-sm" /> Shifter</button>
               <button onClick={handleReloadPlan} disabled={loading || weekPlan.length === 0} className="flex items-center px-4 py-2 rounded-lg border border-emerald-200 bg-white text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300 shadow-sm transition-all text-xs font-bold disabled:opacity-40" title="Posts neu generieren (Bilder neu zuordnen)"><SafeIcon icon={FiRefreshCw} className={`mr-2 text-sm ${loading ? 'animate-spin' : ''}`} /> Neu laden</button>
+              <button onClick={() => setShowSets(!showSets)} className={`flex items-center px-4 py-2 rounded-lg border transition-all text-xs font-bold ${showSets ? 'bg-indigo-600 text-white border-indigo-600 shadow-inner' : 'bg-white border-indigo-200 text-indigo-700 hover:bg-indigo-50 hover:border-indigo-300 shadow-sm'}`} title="Sets speichern & wiederherstellen"><SafeIcon icon={FiSave} className="mr-2 text-sm" /> Sets{savedSets.length > 0 ? ` (${savedSets.length})` : ''}</button>
               </>
             )}
             <div className="h-6 w-px bg-gray-300 mx-1"></div>
             <button onClick={handleManualSave} className="p-2 hover:bg-white rounded-md text-green-700 transition-colors" title="Speichern"><SafeIcon icon={FiSave} /></button>
-            <button onClick={handleExportAll} disabled={isExportingAll || loading} className="p-2 rounded-lg border bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors" title="Alles Exportieren"><SafeIcon icon={FiDownload} className={isExportingAll ? "animate-bounce" : ""} /></button>
+            <button onClick={handleExportAll} disabled={isExportingAll || loading} className="px-3 py-2 rounded-lg border bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors flex items-center gap-1 text-xs font-bold" title="Alle Tage in Fotos speichern"><SafeIcon icon={FiDownload} className={isExportingAll ? "animate-bounce" : ""} />{weekPlan.length > 0 && exportDayCursor > 0 ? `Tag ${weekPlan[exportDayCursor]?.day ?? ''} sichern` : 'Alle in Fotos'}</button>
           </div>
         </div>
         <AnimatePresence>
           {showStyleShifter && (
             <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden border-t border-gray-100 bg-gray-50"><div className="py-2"><StyleShifter mode="bar" /></div></motion.div>
+          )}
+          {showSets && (
+            <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden border-t border-gray-100 bg-indigo-50/40">
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-bold text-gray-900 flex items-center"><SafeIcon icon={FiSave} className="mr-2 text-indigo-600" /> Gespeicherte Sets</h3>
+                  <button onClick={handleSaveSet} disabled={weekPlan.length === 0} className="px-3 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 disabled:opacity-40 flex items-center"><SafeIcon icon={FiPlus} className="mr-1" /> Aktuellen Plan speichern</button>
+                </div>
+                {savedSets.length === 0 ? (
+                  <p className="text-xs text-gray-500">Noch keine Sets gespeichert. Speichere deinen aktuellen Plan, um ihn später wiederherzustellen.</p>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                    {savedSets.map((set) => (
+                      <div key={set.id} className="bg-white rounded-lg border border-gray-200 p-3 flex items-center justify-between gap-2">
+                        <div className="min-w-0">
+                          <div className="text-sm font-bold text-gray-900 truncate">{set.name}</div>
+                          <div className="text-[11px] text-gray-400">{set.count} Tage · {new Date(set.createdAt).toLocaleDateString('de-AT')}</div>
+                        </div>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button onClick={() => handleRestoreSet(set)} className="px-2 py-1 rounded-md bg-indigo-100 text-indigo-700 text-[11px] font-bold hover:bg-indigo-200" title="Wiederherstellen">Laden</button>
+                          <button onClick={() => handleDeleteSet(set.id)} className="p-1.5 rounded-md text-gray-400 hover:text-red-600 hover:bg-red-50" title="Löschen"><SafeIcon icon={FiRefreshCw} className="hidden" /><span className="text-[11px] font-bold">✕</span></button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </motion.div>
           )}
         </AnimatePresence>
         {saveStatus && (<div className="absolute top-16 left-0 right-0 text-center pointer-events-none"><span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold border border-green-200 shadow-sm animate-fade-in-down">{saveStatus}</span></div>)}
