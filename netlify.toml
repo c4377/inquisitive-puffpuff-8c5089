@@ -1,3 +1,11 @@
-[build] 
-command = "npm run build" 
-publish = "dist"
+# Netlify build + functions configuration.
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+# SPA fallback so React Router routes work on refresh/deep-link.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
