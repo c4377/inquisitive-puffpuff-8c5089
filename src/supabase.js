@@ -65,7 +65,7 @@ export const listCloudImages = async () => {
   if (!supabase) return [];
   try {
     const { data, error } = await supabase.storage.from(BUCKET).list('pool', {
-      limit: 100,
+      limit: 1000,
       sortBy: { column: 'created_at', order: 'asc' },
     });
     if (error || !data) return [];

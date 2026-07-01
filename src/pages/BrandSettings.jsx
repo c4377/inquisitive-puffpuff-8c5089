@@ -16,6 +16,7 @@ const BrandSettings = () => {
   const [activeSection, setActiveSection] = useState('identity');
   const [successMessage, setSuccessMessage] = useState('');
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState({ done: 0, total: 0, failed: 0 });
   const [uploadError, setUploadError] = useState('');
 
   // On mount: pull cloud images (cross-device) and merge with local pool.
@@ -137,30 +138,31 @@ const BrandSettings = () => {
     if (!files.length) return;
     setIsUploading(true);
     setUploadError('');
+    setUploadProgress({ done: 0, total: files.length, failed: 0 });
     try {
-      const processedImages = [];
       let cloudCount = 0;
-      for (const file of files) {
-        // 1. Try cloud upload first (cross-device). 2. Fallback: local base64.
+      let failed = 0;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        // Cloud-only: no base64 fallback (prevents browser-memory overflow on
+        // large batches). A failed upload is counted, not stored.
         const cloudUrl = await uploadImageToCloud(file);
         if (cloudUrl) {
-          processedImages.push(cloudUrl);
           cloudCount++;
+          // Save incrementally so a crash mid-batch never loses prior progress.
+          const current = brandSettings.brandImages || [];
+          updateBrandSettings({ brandImages: [...current, cloudUrl] });
         } else {
-          const processed = await resizeImage(file);
-          processedImages.push(processed);
+          failed++;
         }
+        setUploadProgress({ done: i + 1, total: files.length, failed });
       }
-      const currentImages = brandSettings.brandImages || [];
-      updateBrandSettings({ brandImages: [...currentImages, ...processedImages] });
-      if (cloudCount === files.length) {
-        setSuccessMessage(`${files.length} Bilder in der Cloud gespeichert (geräteübergreifend)!`);
-      } else if (cloudCount > 0) {
-        setSuccessMessage(`${cloudCount}/${files.length} in Cloud, Rest lokal gespeichert.`);
+      if (failed === 0) {
+        setSuccessMessage(`${cloudCount} Bilder in der Cloud gespeichert.`);
       } else {
-        setSuccessMessage(`${files.length} Bilder lokal gespeichert (Cloud nicht verfügbar).`);
+        setSuccessMessage(`${cloudCount} gespeichert, ${failed} fehlgeschlagen.`);
       }
-      setTimeout(() => setSuccessMessage(''), 4000);
+      setTimeout(() => setSuccessMessage(''), 5000);
     } catch (error) {
       console.error("Upload error", error);
       setUploadError('Fehler beim Upload.');
@@ -489,7 +491,7 @@ const BrandSettings = () => {
                 <input type="file" accept=".otf,.ttf,.woff,.woff2" onChange={handleFontUpload} className="hidden" />
               </label>
               <div className="mt-2 min-h-[20px]">
-                {isUploading && <span className="text-xs text-purple-600 font-bold animate-pulse">Lade hoch...</span>}
+                {isUploading && <span className="text-xs text-purple-600 font-bold animate-pulse">Lade hoch… {uploadProgress.done}/{uploadProgress.total}{uploadProgress.failed > 0 ? ` (${uploadProgress.failed} fehlgeschlagen)` : ''}</span>}
                 {uploadError && <span className="text-xs text-red-500 font-bold">{uploadError}</span>}
                 {successMessage && <span className="text-xs text-green-600 font-bold">{successMessage}</span>}
               </div>
