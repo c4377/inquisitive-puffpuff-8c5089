@@ -160,7 +160,25 @@ const ContentPlanner = () => {
     const ruleKey = brandConfig?.ruleSet;
     const rules = (ruleKey && brandRuleSets[ruleKey]) ? brandRuleSets[ruleKey] : { layoutRules: [] };
     const baseLayouts = rules.layoutRules.length > 0 ? rules.layoutRules : ['minimal_quote', 'centered_focus', 'glass_layer'];
-    const allowedLayouts = weightedLayoutPool(baseLayouts);
+
+    // Some brand layoutRules reference layout names that have NO renderer block
+    // (e.g. badge_centered, editorial_mask). Those silently fall back to the
+    // centered default -> every slide looks the same. Map them to real layouts.
+    const LAYOUT_ALIAS = {
+      badge_centered: 'minimal_quote',
+      split_vertical_editorial: 'split_color',
+      editorial_mask: 'editorial_classic',
+      editorial_fade_bottom: 'paper_box',
+      minimal_left_accent: 'editorial_classic',
+      centered_focus: 'minimal_quote',
+    };
+    const realLayouts = ['aesthetic_checklist','bold_number_list','diagonal_overlay','editorial_classic','glass_layer','maximized_bold','minimal_editorial','minimal_quote','paper_box','sarah_cover','split_color','story_text_box','tweet_card'];
+    const resolveLayout = (name) => {
+      if (realLayouts.includes(name)) return name;
+      if (LAYOUT_ALIAS[name]) return LAYOUT_ALIAS[name];
+      return 'editorial_classic';
+    };
+    const allowedLayouts = weightedLayoutPool(baseLayouts).map(resolveLayout);
 
     const newPlan = importedDays.map((dayData, dIdx) => {
         const slides = dayData.slides.map((text, sIdx) => {

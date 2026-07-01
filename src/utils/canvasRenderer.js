@@ -58,17 +58,33 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           canvas.add(img);
           canvas.sendToBack(img);
 
-          // Readability overlay. Darken toward the text zone so light text reads.
-          const ov = typeof slide.overlay === 'number' ? slide.overlay : 0.35;
+          // Readability overlay. Darken the whole image, then add a stronger
+          // gradient band so light text always stands out — even on bright photos.
+          const ov = typeof slide.overlay === 'number' ? slide.overlay : 0.45;
           const overlayRect = new fabric.Rect({
-            left: 0,
-            top: 0,
-            width,
-            height,
-            fill: `rgba(0,0,0,${ov})`,
-            selectable: false,
+            left: 0, top: 0, width, height,
+            fill: `rgba(0,0,0,${ov})`, selectable: false,
           });
           canvas.add(overlayRect);
+
+          // Extra vertical gradient: darker at top and bottom (common text zones),
+          // lighter in the middle. Keeps photo visible but guarantees contrast.
+          try {
+            const grad = new fabric.Rect({
+              left: 0, top: 0, width, height, selectable: false,
+              fill: new fabric.Gradient({
+                type: 'linear',
+                coords: { x1: 0, y1: 0, x2: 0, y2: height },
+                colorStops: [
+                  { offset: 0,    color: 'rgba(0,0,0,0.45)' },
+                  { offset: 0.35, color: 'rgba(0,0,0,0.10)' },
+                  { offset: 0.65, color: 'rgba(0,0,0,0.10)' },
+                  { offset: 1,    color: 'rgba(0,0,0,0.55)' },
+                ],
+              }),
+            });
+            canvas.add(grad);
+          } catch (e) { /* gradient optional */ }
           resolve(true);
         },
         { crossOrigin: 'anonymous' }
@@ -179,6 +195,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
   // === STRATEGY: LAYOUT ENGINE ===
   const layout = slide.layout || 'centered_focus';
+  // Strong text shadow whenever text sits on a photo, for readability.
+  const textShadow = hasBgImage ? 'rgba(0,0,0,0.7) 0px 2px 12px' : '';
 
   // === COVER WITH PHOTO: auto-place title in the image's quiet zone ===
   // When a background photo is present, ignore the abstract layout and place
@@ -380,7 +398,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       fill: contrastColor(primaryColor),
       lineHeight: 1.3,
       textAlign: 'left',
-      fontWeight: slide.fontWeight || 'normal'
+      fontWeight: hasBgImage ? '600' : (slide.fontWeight || 'normal'),
+      shadow: textShadow
     });
     applyAccentStyles(mainText, ecSegs);
     canvas.add(mainText);
@@ -652,6 +671,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       lineHeight: 1.25,
       fontWeight: slide.fontWeight || 'bold',
       splitByGrapheme: false,
+      shadow: textShadow,
     });
     applyAccentStyles(textObj, segments);
     canvas.add(textObj);
@@ -669,7 +689,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       fontFamily: fontFamily,
       fill: contrastColor(primaryColor),
       textAlign: slide.textAlign || 'center',
-      lineHeight: 1.3
+      lineHeight: 1.3,
+      shadow: textShadow
     });
     applyAccentStyles(textObj, cfSegs);
     canvas.add(textObj);
