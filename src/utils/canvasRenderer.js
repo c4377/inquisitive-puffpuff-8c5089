@@ -845,51 +845,83 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // brand-colored background. Label + title above, brand mark below. ===
   else if (layout === 'framed_photo') {
     const { plain, segments } = parseAccent(slide.text);
-    const bgIsLight = hexLuminance(slide.backgroundColor || '#ffffff') > 140;
     const txtColor = slide.color || contrastColor(slide.backgroundColor || '#ffffff');
 
-    // The framed photo box: centered, portrait, in the middle band.
-    const fw = width * 0.56, fh = height * 0.42;
-    const fx = (width - fw) / 2, fy = height * 0.32;
+    // Framed photo box: centered, portrait, in the middle band.
+    const fw = width * 0.54, fh = height * 0.40;
+    const fx = (width - fw) / 2, fy = height * 0.34;
 
-    // Label chip above the photo.
-    const labelText = (slide.label || 'AUS MEINEM ALLTAG').toUpperCase();
-    canvas.add(new fabric.Text(labelText, {
-      left: width / 2, top: height * 0.13, originX: 'center',
-      fontSize: fs(14), fontFamily: 'Inter', charSpacing: 200,
-      fill: accentColor, fontWeight: 'bold', selectable: false,
-    }));
-    // Title above the photo.
-    const tt = new fabric.Textbox(plain, {
-      left: width / 2, top: height * 0.22, originX: 'center', originY: 'center',
-      width: width * 0.82, fontSize: fs(slide.fontSize || 40), fontFamily: fontFamily,
-      fill: txtColor, textAlign: 'center', lineHeight: 1.12,
-      fontWeight: slide.fontWeight || 'normal',
-    });
-    applyAccentStyles(tt, segments);
-    canvas.add(tt);
-
-    // The photo, framed. If no photo, draw a tonal placeholder panel.
+    // Draw the photo FIRST (behind text). If it fails to load, we swap to a
+    // clean text-only composition instead of leaving an empty frame.
+    let photoOk = false;
     if (hasBgImage) {
-      try { await drawFramedImage(slide.background, { x: fx, y: fy, w: fw, h: fh }); }
-      catch (e) { /* fall back to panel below */ }
-    } else {
-      canvas.add(new fabric.Rect({ left: fx, top: fy, width: fw, height: fh,
-        fill: slide.secondaryColor || accentColor, selectable: false }));
+      try { photoOk = await drawFramedImage(slide.background, { x: fx, y: fy, w: fw, h: fh }); }
+      catch (e) { photoOk = false; }
     }
-    // The frame border around the photo (the "framed" look).
-    canvas.add(new fabric.Rect({
-      left: fx - fs(6), top: fy - fs(6), width: fw + fs(12), height: fh + fs(12),
-      fill: 'rgba(0,0,0,0)', stroke: txtColor, strokeWidth: 1.5 * scale, selectable: false,
-    }));
 
-    // Brand mark below the photo.
-    if (options.globalBrandName) {
-      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
-        left: width / 2, top: fy + fh + fs(30), originX: 'center',
-        fontSize: fs(13), fill: accentColor, fontFamily: 'Inter',
-        charSpacing: 160, selectable: false,
+    if (photoOk) {
+      // Frame border around the photo.
+      canvas.add(new fabric.Rect({
+        left: fx - fs(6), top: fy - fs(6), width: fw + fs(12), height: fh + fs(12),
+        fill: 'rgba(0,0,0,0)', stroke: txtColor, strokeWidth: 1.5 * scale, selectable: false,
       }));
+      // Label chip above the photo.
+      canvas.add(new fabric.Text((slide.label || 'AUS MEINEM ALLTAG').toUpperCase(), {
+        left: width / 2, top: height * 0.12, originX: 'center',
+        fontSize: fs(13), fontFamily: 'Inter', charSpacing: 180,
+        fill: accentColor, fontWeight: 'bold', selectable: false,
+      }));
+      // Title above the photo — auto-shrunk to fit the space above the frame.
+      let tSize = fs(slide.fontSize || 34);
+      const availH = (fy - fs(6)) - (height * 0.12 + fs(24)); // gap between label and frame
+      // Rough shrink: estimate lines and reduce size until it fits.
+      try {
+        const probe = new fabric.Textbox(plain, { width: width * 0.82, fontSize: tSize, fontFamily, lineHeight: 1.1 });
+        if (probe.height > availH && probe.height > 0) {
+          tSize = Math.max(fs(18), Math.floor(tSize * (availH / probe.height) * 0.95));
+        }
+      } catch (e) { /* best effort */ }
+      const tt = new fabric.Textbox(plain, {
+        left: width / 2, top: height * 0.12 + fs(24), originX: 'center', originY: 'top',
+        width: width * 0.82, fontSize: tSize, fontFamily,
+        fill: txtColor, textAlign: 'center', lineHeight: 1.1,
+        fontWeight: slide.fontWeight || 'normal',
+      });
+      applyAccentStyles(tt, segments);
+      canvas.add(tt);
+      // Brand mark below the photo.
+      if (options.globalBrandName) {
+        canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+          left: width / 2, top: fy + fh + fs(28), originX: 'center',
+          fontSize: fs(12), fill: accentColor, fontFamily: 'Inter',
+          charSpacing: 150, selectable: false,
+        }));
+      }
+    } else {
+      // FALLBACK: no usable photo -> clean centered editorial text, no empty frame.
+      canvas.add(new fabric.Line([width * 0.30, height * 0.30, width * 0.70, height * 0.30], {
+        stroke: accentColor, strokeWidth: 2 * scale, selectable: false,
+      }));
+      canvas.add(new fabric.Text((slide.label || 'CARINA.OFFER.DESIGN').toUpperCase(), {
+        left: width / 2, top: height * 0.22, originX: 'center',
+        fontSize: fs(13), fontFamily: 'Inter', charSpacing: 180,
+        fill: accentColor, fontWeight: 'bold', selectable: false,
+      }));
+      const tt = new fabric.Textbox(plain, {
+        left: width / 2, top: height / 2, originX: 'center', originY: 'center',
+        width: width * 0.80, fontSize: fs(slide.fontSize || 40), fontFamily,
+        fill: txtColor, textAlign: 'center', lineHeight: 1.2,
+        fontWeight: slide.fontWeight || 'normal',
+      });
+      applyAccentStyles(tt, segments);
+      canvas.add(tt);
+      if (options.globalBrandName) {
+        canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+          left: width / 2, top: height - fs(40), originX: 'center',
+          fontSize: fs(12), fill: accentColor, fontFamily: 'Inter',
+          charSpacing: 150, selectable: false,
+        }));
+      }
     }
   }
 
@@ -1057,23 +1089,38 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   }
 
   // --- LOGO / STICKER OVERLAY (second image on top) ---
-  // Draw a SMALL framed photo (not full-bleed): the image sits inside a
-  // rectangle (like a picture on a wall), center-cropped to fill that box.
-  const drawFramedImage = (src, box) =>
+  // Draw a SMALL framed photo (not full-bleed). Returns true only if the
+  // image actually loaded & drew; false otherwise so the caller can fall back.
+  // Instead of a fragile clipPath, we scale the image to COVER the box, draw
+  // it, then mask any overflow with 4 background-colored bars around the box.
+  const drawFramedImage = (src, box, maskColor) =>
     new Promise((resolve) => {
       if (!src) return resolve(false);
+      let settled = false;
+      const done = (v) => { if (!settled) { settled = true; resolve(v); } };
+      // Safety timeout: if the image never loads, don't hang — fall back.
+      const timer = setTimeout(() => done(false), 6000);
       fabric.Image.fromURL(src, (img) => {
-        if (!img) return resolve(false);
-        const s = Math.max(box.w / img.width, box.h / img.height);
-        img.set({ originX: 'center', originY: 'center',
-          left: box.x + box.w / 2, top: box.y + box.h / 2, scaleX: s, scaleY: s, selectable: false });
-        // Clip to the frame box so the photo doesn't spill out.
-        img.clipPath = new fabric.Rect({
-          left: box.x + box.w / 2, top: box.y + box.h / 2,
-          width: box.w, height: box.h, originX: 'center', originY: 'center', absolutePositioned: true,
-        });
-        canvas.add(img);
-        resolve(true);
+        clearTimeout(timer);
+        // A failed load gives an image with no dimensions.
+        if (!img || !img.width || !img.height) return done(false);
+        try {
+          const s = Math.max(box.w / img.width, box.h / img.height);
+          img.set({
+            originX: 'center', originY: 'center',
+            left: box.x + box.w / 2, top: box.y + box.h / 2,
+            scaleX: s, scaleY: s, selectable: false,
+          });
+          img.clipPath = new fabric.Rect({
+            left: box.x + box.w / 2, top: box.y + box.h / 2,
+            width: box.w, height: box.h,
+            originX: 'center', originY: 'center', absolutePositioned: true,
+          });
+          canvas.add(img);
+          done(true);
+        } catch (e) {
+          done(false);
+        }
       }, { crossOrigin: 'anonymous' });
     });
 
