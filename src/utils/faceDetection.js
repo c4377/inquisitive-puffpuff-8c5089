@@ -28,7 +28,9 @@ const loadModels = async () => {
     try {
       // Dynamic import so face-api is only pulled in when needed (keeps the
       // initial app bundle small; the heavy model code loads on first use).
-      const mod = await import('@vladmandic/face-api');
+      // @vite-ignore keeps the bundler from hard-failing the build if the
+      // package can't be resolved at build time; we handle absence at runtime.
+      const mod = await import(/* @vite-ignore */ '@vladmandic/face-api');
       faceApi = mod;
       await faceApi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
       modelsReady = true;
