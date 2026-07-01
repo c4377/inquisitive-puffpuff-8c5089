@@ -154,40 +154,43 @@ const ContentPlanner = () => {
     }
   }, [brandSettings.currentBrandConfig, autoApplyStyle]);
 
+  // Central layout rotation — used by BOTH import and reload so variety is
+  // consistent everywhere, not only on fresh import. Returns an array of real
+  // layout ids mixing brand rules with the magazine-style variants.
+  const REAL_LAYOUTS = ['aesthetic_checklist','bold_number_list','diagonal_overlay','editorial_classic','glass_layer','maximized_bold','minimal_editorial','minimal_quote','paper_box','sarah_cover','split_color','story_text_box','tweet_card','split_photo','split_photo_v','framed_photo','card_on_photo'];
+  const LAYOUT_ALIAS = {
+    badge_centered: 'minimal_quote',
+    split_vertical_editorial: 'split_color',
+    editorial_mask: 'editorial_classic',
+    editorial_fade_bottom: 'paper_box',
+    minimal_left_accent: 'editorial_classic',
+    centered_focus: 'minimal_quote',
+  };
+  const resolveLayout = (name) => {
+    if (REAL_LAYOUTS.includes(name)) return name;
+    if (LAYOUT_ALIAS[name]) return LAYOUT_ALIAS[name];
+    return 'editorial_classic';
+  };
+  const buildLayoutRotation = (brandConfig) => {
+    const ruleKey = brandConfig?.ruleSet;
+    const rules = (ruleKey && brandRuleSets[ruleKey]) ? brandRuleSets[ruleKey] : { layoutRules: [] };
+    const baseLayouts = rules.layoutRules.length > 0 ? rules.layoutRules : ['minimal_quote', 'editorial_classic', 'glass_layer'];
+    const allowed = weightedLayoutPool(baseLayouts).map(resolveLayout);
+    // The magazine variants that give the feed its structural variety.
+    const variety = ['split_photo', 'split_photo_v', 'framed_photo', 'card_on_photo', 'editorial_classic', 'minimal_quote'];
+    const mixed = [];
+    const maxLen = Math.max(allowed.length, variety.length);
+    for (let i = 0; i < maxLen; i++) {
+      if (allowed[i % allowed.length]) mixed.push(allowed[i % allowed.length]);
+      mixed.push(variety[i % variety.length]);
+    }
+    return mixed;
+  };
+
   const handleImportPlan = (importedDays) => {
     setLoading(true);
     const brandConfig = brandSettings.currentBrandConfig;
-    const ruleKey = brandConfig?.ruleSet;
-    const rules = (ruleKey && brandRuleSets[ruleKey]) ? brandRuleSets[ruleKey] : { layoutRules: [] };
-    const baseLayouts = rules.layoutRules.length > 0 ? rules.layoutRules : ['minimal_quote', 'centered_focus', 'glass_layer'];
-
-    // Some brand layoutRules reference layout names that have NO renderer block
-    // (e.g. badge_centered, editorial_mask). Those silently fall back to the
-    // centered default -> every slide looks the same. Map them to real layouts.
-    const LAYOUT_ALIAS = {
-      badge_centered: 'minimal_quote',
-      split_vertical_editorial: 'split_color',
-      editorial_mask: 'editorial_classic',
-      editorial_fade_bottom: 'paper_box',
-      minimal_left_accent: 'editorial_classic',
-      centered_focus: 'minimal_quote',
-    };
-    const realLayouts = ['aesthetic_checklist','bold_number_list','diagonal_overlay','editorial_classic','glass_layer','maximized_bold','minimal_editorial','minimal_quote','paper_box','sarah_cover','split_color','story_text_box','tweet_card','split_photo','split_photo_v','framed_photo','card_on_photo'];
-    const resolveLayout = (name) => {
-      if (realLayouts.includes(name)) return name;
-      if (LAYOUT_ALIAS[name]) return LAYOUT_ALIAS[name];
-      return 'editorial_classic';
-    };
-    const allowedLayouts = weightedLayoutPool(baseLayouts).map(resolveLayout);
-    // Ensure the new magazine-style variants are part of the rotation for
-    // visual variety across the feed (photo/text splits, framed, card).
-    const varietyLayouts = ['split_photo', 'split_photo_v', 'framed_photo', 'card_on_photo', 'editorial_classic', 'minimal_quote'];
-    const mixedLayouts = [];
-    const maxLen = Math.max(allowedLayouts.length, varietyLayouts.length);
-    for (let i = 0; i < maxLen; i++) {
-      if (allowedLayouts[i % allowedLayouts.length]) mixedLayouts.push(allowedLayouts[i % allowedLayouts.length]);
-      mixedLayouts.push(varietyLayouts[i % varietyLayouts.length]);
-    }
+    const mixedLayouts = buildLayoutRotation(brandConfig);
 
     const anchorCycle = ['top', 'center', 'bottom'];
     const newPlan = importedDays.map((dayData, dIdx) => {
@@ -239,35 +242,36 @@ const ContentPlanner = () => {
       // days 1,3,5,7 => indices 0,2,4,6
       const coverGetsImage = (dayIdx) => dayIdx % 2 === 0;
 
+      // Central rotation so reload shows the SAME variety as a fresh import.
+      const rotation = buildLayoutRotation(brandSettings.currentBrandConfig);
+      const anchorCycle = ['top', 'center', 'bottom'];
+
       const reloadedPlan = [];
       for (let dayIdx = 0; dayIdx < weekPlan.length; dayIdx++) {
         const day = weekPlan[dayIdx];
         const withImages = await attachSmartImages(day.slides, imagePool);
 
-        // Enforce cover rule on slide 0 (the cover)
+        // Assign a rotation layout + anchor to EVERY slide so variety always
+        // applies (not just on fresh import). The cover-image rule still governs
+        // whether slide 0 keeps its photo.
         const adjusted = withImages.map((slide, sIdx) => {
-          // Reset any stale default blur from older generations (was 8/12).
           const cleaned = { ...slide };
           if (cleaned.blur === 8 || cleaned.blur === 12) cleaned.blur = 0;
-          if (sIdx !== 0) return cleaned; // only the cover is governed by the rule
+
+          // Give this slide a layout from the central rotation + a varied anchor.
+          const rotLayout = rotation[(dayIdx + sIdx) % rotation.length];
+          const textAnchor = anchorCycle[(dayIdx + sIdx) % anchorCycle.length];
+          cleaned.layout = rotLayout;
+          cleaned.layoutId = rotLayout;
+          cleaned.textAnchor = textAnchor;
+
+          if (sIdx !== 0) return cleaned; // content slides keep their image
           if (coverGetsImage(dayIdx)) {
-            return cleaned; // keep assigned image
+            return cleaned; // cover keeps assigned image
           }
-          // remove image -> layout-only cover
+          // Image-free cover: drop the photo, keep the rotation layout.
           const { background, overlay, _autoImage, ...rest } = cleaned;
-          // If the cover had a photo-only layout (cover_*/sarah_cover), swap to
-          // a strong text layout so the image-free cover still looks designed.
-          const photoLayouts = ['sarah_cover', 'cover_top_left', 'cover_bottom_left', 'cover_bottom_center', 'cover_center_hero', 'cover_top_center'];
-          const textCoverLayouts = ['minimal_quote', 'maximized_bold', 'editorial_classic', 'diagonal_overlay'];
-          const curLayout = rest.layout || rest.layoutId;
-          const newLayout = photoLayouts.includes(curLayout)
-            ? textCoverLayouts[dayIdx % textCoverLayouts.length]
-            : curLayout;
-          // Rotate vertical anchor so text-only posts vary (top/center/bottom)
-          // while staying coherent across the grid.
-          const anchors = ['top', 'center', 'bottom'];
-          const textAnchor = anchors[(dayIdx + 1) % anchors.length];
-          return { ...rest, background: null, layout: newLayout, layoutId: newLayout, textAnchor };
+          return { ...rest, background: null };
         });
 
         reloadedPlan.push({ ...day, slides: adjusted });
@@ -436,7 +440,7 @@ const ContentPlanner = () => {
       <div className="sticky top-[64px] z-30 bg-white/95 backdrop-blur border-b border-gray-200 shadow-sm -mx-4 sm:-mx-6 px-4 sm:px-6 transition-all">
         <div className="py-3 flex flex-col md:flex-row justify-between items-center max-w-4xl mx-auto gap-3">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">Content Plan</h1>
+            <h1 className="text-xl font-bold text-gray-900">Content Plan <span className="text-[10px] font-normal text-purple-400 align-top">v2 Layouts</span></h1>
             <p className="text-xs text-gray-500 flex items-center mt-1"><SafeIcon icon={FiUser} className="mr-1 text-purple-500" /> Füge deine Texte per Bulk Import ein.</p>
           </div>
           <div className="flex flex-wrap gap-2 items-center justify-end">
