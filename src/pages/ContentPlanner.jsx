@@ -14,6 +14,7 @@ import { renderSlide } from '../utils/canvasRenderer';
 import { brandRuleSets } from '../constants/brandData';
 import { createSmartSlide } from '../utils/slideHelpers';
 import { attachSmartImages } from '../utils/smartLayoutGenerator';
+import { decidePostDesign, dayHasImage } from '../utils/postDesignEngine';
 import { weightedLayoutPool, getRating, setRating } from '../utils/layoutRatings';
 
 const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2 } = FiIcons;
@@ -192,49 +193,38 @@ const ContentPlanner = () => {
     const brandConfig = brandSettings.currentBrandConfig;
     const imagePool = brandSettings?.brandImages || [];
 
-    // Fixed 7-day roles (by day index):
-    //   7-day roles: 3 text-only, 4 photo-with-text
-    //   days 1,2,3   -> text-only  (3x)
-    //   days 4,5,6   -> photo-with-text full-bleed (3x)
-    // Roles repeat if there are more than 7 days.
-    const textLayouts = ['editorial_classic', 'minimal_quote', 'maximized_bold', 'paper_box'];
-    const photoLayouts = ['cover_bottom_left', 'cover_bottom_center', 'cover_top_left', 'cover_center_hero'];
-    const anchorCycle = ['top', 'center', 'bottom'];
-
-    const roleForDay = (i) => {
-      const r = i % 7;
-      // 5 of 7 days get a photo, 2 are text-only.
-      if (r === 2 || r === 5) return 'text';
-      return 'photo';
-    };
-
+    // Fully automatic: the engine decides image / text position / bold per post.
+    let globalIndex = 0;
     const newPlan = [];
     for (let dIdx = 0; dIdx < importedDays.length; dIdx++) {
       const dayData = importedDays[dIdx];
-      const role = roleForDay(dIdx);
+      const wantsImage = dayHasImage(dIdx) && imagePool.length > 0;
 
       let slides = dayData.slides.map((text, sIdx) =>
         createSmartSlide(brandConfig, { text }, sIdx, dayData.slides.length)
       );
 
-      // Only attach images for days that should have a photo.
-      if (role === 'photo' && imagePool.length > 0) {
+      if (wantsImage) {
         try { slides = await attachSmartImages(slides, imagePool); } catch (e) { /* keep */ }
       }
 
-      slides = slides.map((slide, sIdx) => {
+      slides = slides.map((slide) => {
         let s2 = { ...slide };
-        let layout;
-        if (role === 'text') {
-          // strip any image, pure text layout
+        const hasImg = wantsImage && typeof s2.background === 'string' && s2.background.length > 5;
+        if (!hasImg) {
           const { background, overlay, _autoImage, ...rest } = s2;
           s2 = { ...rest, background: null };
-          layout = textLayouts[(dIdx + sIdx) % textLayouts.length];
-        } else {
-          layout = photoLayouts[(dIdx + sIdx) % photoLayouts.length];
         }
-        const textAnchor = anchorCycle[(dIdx + sIdx) % anchorCycle.length];
-        return { ...s2, layout, layoutId: layout, textAnchor };
+        const { textAnchor, bold } = decidePostDesign({
+          globalIndex, hasImage: hasImg, autoImage: s2._autoImage,
+        });
+        globalIndex++;
+        return {
+          ...s2,
+          layout: 'auto', layoutId: 'auto',
+          textAnchor,
+          fontWeight: bold ? '700' : 'normal',
+        };
       });
 
       newPlan.push({
@@ -276,42 +266,34 @@ const ContentPlanner = () => {
     setSaveStatus('Lade Posts neu...');
     try {
       const imagePool = brandSettings?.brandImages || [];
-      // Fixed pattern: which day-INDEX (0-based) gets a cover image.
-      // days 1,3,5,7 => indices 0,2,4,6
-      // Same fixed 7-day roles as import.
-      const textLayouts = ['editorial_classic', 'minimal_quote', 'maximized_bold', 'paper_box'];
-      const photoLayouts = ['cover_bottom_left', 'cover_bottom_center', 'cover_top_left', 'cover_center_hero'];
-      const anchorCycle = ['top', 'center', 'bottom'];
-      const roleForDay = (i) => {
-        const r = i % 7;
-        if (r === 2 || r === 5) return 'text';
-        return 'photo';
-      };
 
+      let globalIndex = 0;
       const reloadedPlan = [];
       for (let dayIdx = 0; dayIdx < weekPlan.length; dayIdx++) {
         const day = weekPlan[dayIdx];
-        const role = roleForDay(dayIdx);
+        const wantsImage = dayHasImage(dayIdx) && imagePool.length > 0;
         let daySlides = day.slides;
-        if (role === 'photo' && imagePool.length > 0) {
+        if (wantsImage) {
           daySlides = await attachSmartImages(day.slides, imagePool);
         }
 
-        const adjusted = daySlides.map((slide, sIdx) => {
+        const adjusted = daySlides.map((slide) => {
           const cleaned = { ...slide };
           if (cleaned.blur === 8 || cleaned.blur === 12) cleaned.blur = 0;
 
-          let layout;
-          if (role === 'text') {
+          const hasImg = wantsImage && typeof cleaned.background === 'string' && cleaned.background.length > 5;
+          if (!hasImg) {
             const { background, overlay, _autoImage, ...rest } = cleaned;
             Object.assign(cleaned, rest, { background: null, overlay: undefined, _autoImage: undefined });
-            layout = textLayouts[(dayIdx + sIdx) % textLayouts.length];
-          } else {
-            layout = photoLayouts[(dayIdx + sIdx) % photoLayouts.length];
           }
-          cleaned.layout = layout;
-          cleaned.layoutId = layout;
-          cleaned.textAnchor = anchorCycle[(dayIdx + sIdx) % anchorCycle.length];
+          const { textAnchor, bold } = decidePostDesign({
+            globalIndex, hasImage: hasImg, autoImage: cleaned._autoImage,
+          });
+          globalIndex++;
+          cleaned.layout = 'auto';
+          cleaned.layoutId = 'auto';
+          cleaned.textAnchor = textAnchor;
+          cleaned.fontWeight = bold ? '700' : 'normal';
           return cleaned;
         });
 

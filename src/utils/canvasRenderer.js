@@ -537,6 +537,79 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   }
 
 
+  // === ADAPTIVE AUTO LAYOUT ===
+  // One layout to rule them all. The post design engine decides textAnchor
+  // (row/col) and bold; here we just draw a headline at that position, with a
+  // photo (full-bleed) or on the brand background. Auto-fit keeps text inside.
+  if (layout === 'auto') {
+    const { plain, segments } = parseAccent(slide.text);
+    const anchor = slide.textAnchor && typeof slide.textAnchor === 'object'
+      ? slide.textAnchor : { row: hasBgImage ? 'bottom' : 'mid', col: 'center' };
+    const row = anchor.row || 'mid';
+    const col = anchor.col || 'center';
+
+    // On photos, add a soft readability gradient on the half where the text sits.
+    if (hasBgImage) {
+      const bandTop = row === 'top' ? 0 : row === 'bottom' ? height * 0.5 : height * 0.28;
+      const bandH = row === 'mid' ? height * 0.44 : height * 0.5;
+      canvas.add(new fabric.Rect({
+        left: 0, top: bandTop, width, height: bandH,
+        fill: 'rgba(0,0,0,0.42)', selectable: false,
+      }));
+    }
+
+    // Accent line for text-only posts (adds brand structure).
+    if (!hasBgImage) {
+      const lineY = row === 'top' ? height * 0.14 : row === 'bottom' ? height * 0.60 : height * 0.30;
+      const lx1 = col === 'left' ? width * 0.10 : width * 0.30;
+      const lx2 = col === 'left' ? width * 0.40 : width * 0.70;
+      canvas.add(new fabric.Line([lx1, lineY, lx2, lineY], {
+        stroke: accentColor, strokeWidth: 2 * scale, selectable: false,
+      }));
+    }
+
+    // Position.
+    let left = width / 2, originX = 'center', textAlign = 'center';
+    if (col === 'left') { left = width * 0.10; originX = 'left'; textAlign = 'left'; }
+    else if (col === 'right') { left = width * 0.90; originX = 'right'; textAlign = 'right'; }
+
+    let top = height / 2, originY = 'center';
+    if (row === 'top') { top = height * 0.18; originY = 'top'; }
+    else if (row === 'bottom') { top = height * 0.82; originY = 'bottom'; }
+
+    const titleObj = new fabric.Textbox(plain, {
+      left, top, originX, originY,
+      width: width * 0.82,
+      fontSize: fs(slide.fontSize || 42),
+      fontFamily,
+      fill: hasBgImage ? '#FFFFFF' : contrastColor(slide.backgroundColor || '#fff'),
+      textAlign, lineHeight: 1.2,
+      fontWeight: slide.fontWeight || 'normal',
+      shadow: hasBgImage ? 'rgba(0,0,0,0.5) 0px 2px 10px' : '',
+    });
+    applyAccentStyles(titleObj, segments);
+    canvas.add(titleObj);
+
+    // Brand mark (bottom center), out of the way of the headline.
+    if (options.globalBrandName && row !== 'bottom') {
+      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+        left: width / 2, top: height - fs(30), originX: 'center', originY: 'bottom',
+        fontSize: fs(12), fill: hasBgImage ? 'rgba(255,255,255,0.9)' : accentColor,
+        fontFamily: 'Inter', charSpacing: 150, selectable: false,
+      }));
+    } else if (options.globalBrandName && row === 'bottom') {
+      // headline is at the bottom -> put brand mark at the top
+      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+        left: width / 2, top: fs(30), originX: 'center', originY: 'top',
+        fontSize: fs(12), fill: hasBgImage ? 'rgba(255,255,255,0.9)' : accentColor,
+        fontFamily: 'Inter', charSpacing: 150, selectable: false,
+      }));
+    }
+    canvas.renderAll();
+    return;
+  }
+
+
   // 1. EDITORIAL CLASSIC (Line + Title + Body)
   if (layout === 'editorial_classic' || layout === 'minimal_editorial') {
     // Top Line
