@@ -209,13 +209,24 @@ const ContentPlanner = () => {
       // Attach images (so we know which slides end up WITH a photo).
       try { slides = await attachSmartImages(slides, imagePool); } catch (e) { /* keep slides */ }
 
-      // Now pick the layout based on whether the slide got an image.
+      // Now pick the layout based on whether the slide should keep a photo.
+      // Mix: ~ every 2nd post keeps its image, the rest become text posts.
       slides = slides.map((slide, sIdx) => {
-        const hasImg = typeof slide.background === 'string' && slide.background.length > 5;
+        const globalIdx = dIdx * 10 + sIdx;
+        const keepsImage = imagePool.length > 0 && (globalIdx % 2 === 0);
+        let hasImg;
+        let s2 = { ...slide };
+        if (keepsImage && typeof slide.background === 'string' && slide.background.length > 5) {
+          hasImg = true;
+        } else {
+          const { background, overlay, _autoImage, ...rest } = s2;
+          s2 = { ...rest, background: null };
+          hasImg = false;
+        }
         const pool = hasImg ? imageLayouts : textLayouts;
         const layout = pool[(dIdx + sIdx) % pool.length];
         const textAnchor = anchorCycle[(dIdx + sIdx) % anchorCycle.length];
-        return { ...slide, layout, layoutId: layout, textAnchor };
+        return { ...s2, layout, layoutId: layout, textAnchor };
       });
 
       newPlan.push({
@@ -261,8 +272,10 @@ const ContentPlanner = () => {
       // days 1,3,5,7 => indices 0,2,4,6
       const coverGetsImage = (dayIdx) => dayIdx % 2 === 0;
 
-      // Central rotation so reload shows the SAME variety as a fresh import.
-      const rotation = buildLayoutRotation(brandSettings.currentBrandConfig);
+      // Layout pools split by image presence (same as import) so image layouts
+      // NEVER land on a text-only post and vice versa.
+      const imageLayouts = ['split_photo', 'split_photo_v', 'framed_photo', 'card_on_photo', 'sarah_cover'];
+      const textLayouts = ['editorial_classic', 'minimal_quote', 'maximized_bold', 'paper_box', 'glass_layer', 'diagonal_overlay'];
       const anchorCycle = ['top', 'center', 'bottom'];
 
       const reloadedPlan = [];
@@ -270,36 +283,42 @@ const ContentPlanner = () => {
         const day = weekPlan[dayIdx];
         const withImages = await attachSmartImages(day.slides, imagePool);
 
-        // Assign a rotation layout + anchor to EVERY slide so variety always
-        // applies (not just on fresh import). The cover-image rule still governs
-        // whether slide 0 keeps its photo.
         const adjusted = withImages.map((slide, sIdx) => {
           const cleaned = { ...slide };
           if (cleaned.blur === 8 || cleaned.blur === 12) cleaned.blur = 0;
 
-          // Give this slide a layout from the central rotation + a varied anchor.
-          const rotLayout = rotation[(dayIdx + sIdx) % rotation.length];
-          const textAnchor = anchorCycle[(dayIdx + sIdx) % anchorCycle.length];
-          cleaned.layout = rotLayout;
-          cleaned.layoutId = rotLayout;
-          cleaned.textAnchor = textAnchor;
+          // Decide whether THIS post keeps a photo: mix ~ every 2nd post.
+          const globalIdx = dayIdx * 10 + sIdx;
+          const keepsImage = imagePool.length > 0 && (globalIdx % 2 === 0);
 
-          if (sIdx !== 0) return cleaned; // content slides keep their image
-          if (coverGetsImage(dayIdx)) {
-            return cleaned; // cover keeps assigned image
+          let hasImg;
+          if (keepsImage && cleaned.background) {
+            hasImg = true;
+          } else {
+            // Drop the photo for text posts.
+            const { background, overlay, _autoImage, ...rest } = cleaned;
+            Object.assign(cleaned, rest, { background: null, overlay: undefined, _autoImage: undefined });
+            hasImg = false;
           }
-          // Image-free cover: drop the photo, keep the rotation layout.
-          const { background, overlay, _autoImage, ...rest } = cleaned;
-          return { ...rest, background: null };
+
+          // Pick layout from the pool that MATCHES the image status.
+          const pool = hasImg ? imageLayouts : textLayouts;
+          const layout = pool[(dayIdx + sIdx) % pool.length];
+          cleaned.layout = layout;
+          cleaned.layoutId = layout;
+          cleaned.textAnchor = anchorCycle[(dayIdx + sIdx) % anchorCycle.length];
+          return cleaned;
         });
 
         reloadedPlan.push({ ...day, slides: adjusted });
       }
       updateBrandSettings({ contentPlan: reloadedPlan });
-      const imgCovers = weekPlan.filter((_, i) => coverGetsImage(i)).length;
+      const withPhotos = reloadedPlan.reduce((a, d) =>
+        a + d.slides.filter(s => typeof s.background === 'string' && s.background.length > 5).length, 0);
+      const total = reloadedPlan.reduce((a, d) => a + d.slides.length, 0);
       setSaveStatus(
         imagePool.length > 0
-          ? `Neu generiert – ${imgCovers} Cover mit Bild, Rest mit Layout.`
+          ? `Neu generiert – ${withPhotos}/${total} mit Bild.`
           : 'Neu generiert (keine Bilder im Pool).'
       );
     } catch (e) {

@@ -854,20 +854,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // Draw the photo FIRST (behind text). If it fails to load, we swap to a
     // clean text-only composition instead of leaving an empty frame.
     let photoOk = false;
-    let diagReason = 'no-image';
+    let dbg = hasBgImage ? 'has-bg' : 'NO-bg';
     if (hasBgImage) {
-      diagReason = 'loading';
       try { photoOk = await drawFramedImage(slide.background, { x: fx, y: fy, w: fw, h: fh }); }
-      catch (e) { photoOk = false; diagReason = 'error:' + (e?.message || 'x'); }
-      if (!photoOk && diagReason === 'loading') diagReason = 'load-failed';
-    }
-    // TEMP diagnostic marker (tiny, bottom-left) so we can see WHY a photo is
-    // missing. Remove once framed_photo is confirmed working.
-    if (typeof window !== 'undefined' && window.__FRAMED_DEBUG) {
-      canvas.add(new fabric.Text(`${diagReason} | ${String(slide.background || '').slice(0, 40)}`, {
-        left: fs(8), top: height - fs(14), fontSize: fs(9), fill: '#ff5555',
-        fontFamily: 'Inter', selectable: false,
-      }));
+      catch (e) { photoOk = false; dbg = 'err'; }
+      if (!photoOk && dbg === 'has-bg') dbg = 'load-fail';
     }
 
     if (photoOk) {
@@ -910,6 +901,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       }
     } else {
       // FALLBACK: no usable photo -> clean centered editorial text, no empty frame.
+      // Small diagnostic so we can see WHY (visible on phone). Remove later.
+      canvas.add(new fabric.Text('DEBUG: ' + dbg + ' | ' + String(slide.background || 'null').slice(0, 30), {
+        left: fs(10), top: fs(10), fontSize: fs(11), fill: '#ff6666',
+        fontFamily: 'Inter', selectable: false,
+      }));
       canvas.add(new fabric.Line([width * 0.30, height * 0.30, width * 0.70, height * 0.30], {
         stroke: accentColor, strokeWidth: 2 * scale, selectable: false,
       }));
@@ -1116,6 +1112,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       let settled = false;
       const done = (v) => { if (!settled) { settled = true; resolve(v); } };
       const timer = setTimeout(() => done(false), 8000);
+      // data: and blob: URLs must NOT use crossOrigin (it breaks loading).
+      const isLocal = /^(data:|blob:)/i.test(src);
+      const opts = isLocal ? {} : { crossOrigin: 'anonymous' };
       try {
         fabric.Image.fromURL(src, (img) => {
           clearTimeout(timer);
@@ -1123,7 +1122,6 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           try {
             const iw = img.width || img.naturalWidth || 1;
             const ih = img.height || img.naturalHeight || 1;
-            // Contain-fit inside the box (whole image visible, no crop overflow).
             const s = Math.min(box.w / iw, box.h / ih);
             img.set({
               originX: 'center', originY: 'center',
@@ -1133,7 +1131,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
             canvas.add(img);
             done(true);
           } catch (e) { done(false); }
-        }, { crossOrigin: 'anonymous' });
+        }, opts);
       } catch (e) {
         clearTimeout(timer);
         done(false);
