@@ -17,7 +17,6 @@ import { useBrand } from '../context/BrandContext';
 import { renderSlide } from '../utils/canvasRenderer';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
-import { getBufferChannels, sendToBuffer } from '../utils/bufferClient';
 
 const { FiPlus, FiDownload, FiTrash2, FiFolder, FiSave, FiArrowLeft, FiType, FiLayout, FiDroplet, FiImage, FiMove, FiList, FiZap, FiGrid, FiCheck, FiToggleRight, FiToggleLeft, FiLayers, FiMessageSquare, FiCopy, FiRefreshCw, FiSend } = FiIcons;
 
@@ -59,10 +58,6 @@ const Editor = () => {
   })();
   const [caption, setCaption] = useState(initialCaption);
   const [showCaption, setShowCaption] = useState(false);
-  const [bufferStatus, setBufferStatus] = useState('');
-  const [bufferChannels, setBufferChannels] = useState([]);
-  const [selectedChannel, setSelectedChannel] = useState('');
-  const [isSendingBuffer, setIsSendingBuffer] = useState(false);
 
   const [slides, setSlides] = useState(() => {
     if (location.state && location.state.slides) return location.state.slides;
@@ -254,41 +249,6 @@ const Editor = () => {
     }
   };
 
-  // --- Buffer integration ---
-  const loadBufferChannels = async () => {
-    setBufferStatus('Lade Kanäle…');
-    try {
-      const channels = await getBufferChannels();
-      setBufferChannels(channels);
-      // Prefer an Instagram channel if present.
-      const ig = channels.find(c => (c.service || '').toLowerCase().includes('instagram'));
-      setSelectedChannel(ig?.id || channels[0]?.id || '');
-      setBufferStatus(channels.length ? '' : 'Keine Kanäle gefunden.');
-    } catch (e) {
-      setBufferStatus(e.message || 'Fehler beim Laden der Kanäle.');
-    }
-  };
-
-  const handleSendToBuffer = async (mode) => {
-    const slide = slides[currentSlideIndex];
-    const imageUrl = (typeof slide?.background === 'string' && slide.background.startsWith('http'))
-      ? slide.background : null;
-    if (!selectedChannel) { setBufferStatus('Bitte zuerst einen Kanal wählen.'); return; }
-    if (!imageUrl && !caption) { setBufferStatus('Kein Bild-URL und kein Text vorhanden.'); return; }
-    if (!imageUrl) { setBufferStatus('Hinweis: Dieser Post hat kein öffentliches Bild – es wird nur Text gesendet.'); }
-    setIsSendingBuffer(true);
-    setBufferStatus(mode === 'draft' ? 'Sende als Entwurf…' : 'Sende in die Queue…');
-    try {
-      const chan = bufferChannels.find(c => c.id === selectedChannel);
-      await sendToBuffer({ channelId: selectedChannel, text: caption, imageUrl, mode, service: chan?.service || '' });
-      setBufferStatus(mode === 'draft' ? '✓ Als Entwurf in Buffer gespeichert.' : '✓ In die Buffer-Queue gelegt.');
-    } catch (e) {
-      setBufferStatus('Fehler: ' + (e.message || 'Senden fehlgeschlagen.'));
-    } finally {
-      setIsSendingBuffer(false);
-    }
-  };
-
   const handleExport = async () => {
     if (!canvasRef.current) return;
     setIsExporting(true);
@@ -312,7 +272,7 @@ const Editor = () => {
         </div>
         <div className="flex space-x-2 items-center">
           <button onClick={() => setShowSavedDesigns(!showSavedDesigns)} className={`p-2 rounded-lg font-bold text-xs flex items-center transition-colors ${showSavedDesigns ? 'bg-gray-200 text-gray-900' : 'text-gray-600 hover:bg-gray-100'}`}><SafeIcon icon={FiFolder} className="text-lg mr-1" /><span className="hidden sm:inline">Bibliothek</span></button>
-          <button onClick={() => { setShowCaption(!showCaption); if (!showCaption && bufferChannels.length === 0) loadBufferChannels(); }} className={`p-2 rounded-lg font-bold text-xs flex items-center transition-colors ${showCaption ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}`}><SafeIcon icon={FiMessageSquare} className="text-lg mr-1" /><span className="hidden sm:inline">Caption</span></button>
+          <button onClick={() => setShowCaption(!showCaption)} className={`p-2 rounded-lg font-bold text-xs flex items-center transition-colors ${showCaption ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}`}><SafeIcon icon={FiMessageSquare} className="text-lg mr-1" /><span className="hidden sm:inline">Caption</span></button>
           <button onClick={downloadAllSlides} disabled={isExporting || slides.length === 0} className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold shadow-md hover:bg-blue-700 disabled:opacity-50"><SafeIcon icon={FiDownload} className="mr-1" />{isExporting ? 'Exporting...' : slides.length > 1 ? `Alle (${slides.length})` : 'Export'}</button>
           {(editingDayId || communityTopicId) ? (
              <button onClick={handleSaveToPlan} className={`flex items-center px-4 py-2 rounded-lg font-bold text-white text-xs transition-all shadow-md ${isSaving ? 'bg-green-500' : 'bg-purple-600 hover:bg-purple-700'}`}><SafeIcon icon={isSaving ? FiCheck : FiSave} className="mr-1" />{isSaving ? 'Gespeichert' : (communityTopicId ? 'Deck Speichern' : 'Plan Speichern')}</button>
@@ -349,32 +309,6 @@ const Editor = () => {
                   <button onClick={() => navigator.clipboard?.writeText(caption)} className="text-[11px] text-gray-500 hover:text-purple-600 flex items-center"><SafeIcon icon={FiCopy} className="mr-1" /> Kopieren</button>
                   {editingDayId && <span className="text-[11px] text-gray-400">wird mit „Plan Speichern" gesichert</span>}
                 </div>
-              </div>
-
-              {/* Buffer sender */}
-              <div className="border-t border-gray-100 pt-3">
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-xs font-bold text-gray-700 uppercase tracking-wider">An Buffer senden</label>
-                  <button onClick={loadBufferChannels} className="text-[11px] text-gray-500 hover:text-purple-600 flex items-center"><SafeIcon icon={FiRefreshCw} className="mr-1" /> Kanäle neu laden</button>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <select
-                    value={selectedChannel}
-                    onChange={(e) => setSelectedChannel(e.target.value)}
-                    className="flex-1 border border-gray-200 rounded-lg p-2 text-sm bg-white outline-none focus:border-purple-400"
-                  >
-                    {bufferChannels.length === 0 && <option value="">Keine Kanäle geladen</option>}
-                    {bufferChannels.map(c => (
-                      <option key={c.id} value={c.id}>{(c.displayName || c.name)} ({c.service})</option>
-                    ))}
-                  </select>
-                  <div className="flex gap-2">
-                    <button onClick={() => handleSendToBuffer('draft')} disabled={isSendingBuffer || !selectedChannel} className="px-3 py-2 rounded-lg text-xs font-bold border border-gray-200 text-gray-700 hover:bg-gray-50 disabled:opacity-50">Als Entwurf</button>
-                    <button onClick={() => handleSendToBuffer('addToQueue')} disabled={isSendingBuffer || !selectedChannel} className="px-3 py-2 rounded-lg text-xs font-bold bg-purple-600 text-white hover:bg-purple-700 disabled:opacity-50 flex items-center"><SafeIcon icon={FiSend} className="mr-1" /> In Queue</button>
-                  </div>
-                </div>
-                {bufferStatus && <p className="text-[12px] mt-2 text-gray-600">{bufferStatus}</p>}
-                <p className="text-[11px] text-gray-400 mt-1">Sendet das aktuelle Slide-Bild + Caption. Das Bild muss eine öffentliche URL sein (Cloud-Upload).</p>
               </div>
             </div>
           </motion.div>

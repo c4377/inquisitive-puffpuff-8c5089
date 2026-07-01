@@ -9,11 +9,10 @@ import Canvas from '../components/Canvas';
 import StyleShifter from '../components/StyleShifter'; // IMPORT NEW SHIFTER
 import { useBrand } from '../context/BrandContext';
 import { renderSlide } from '../utils/canvasRenderer';
-import { getBufferChannels, sendToBuffer } from '../utils/bufferClient';
 import { attachSmartImages } from '../utils/smartLayoutGenerator';
 import { decidePostDesign, dayHasImage } from '../utils/postDesignEngine';
 
-const { FiSmartphone, FiDownload, FiRefreshCw, FiLayers, FiFileText, FiX, FiPlay, FiTrash2, FiEdit3, FiPlus, FiSend, FiMessageSquare } = FiIcons;
+const { FiSmartphone, FiDownload, FiRefreshCw, FiLayers, FiFileText, FiX, FiPlay, FiTrash2, FiEdit3, FiPlus } = FiIcons;
 
 const StoryPlanner = () => {
   const { brandSettings, updateBrandSettings, dataLoaded } = useBrand();
@@ -23,63 +22,6 @@ const StoryPlanner = () => {
   const [showBulkInput, setShowBulkInput] = useState(false);
   const [bulkText, setBulkText] = useState('');
   const [showShifter, setShowShifter] = useState(false);
-
-  // --- Buffer (send stories to Buffer as Instagram Stories) ---
-  const [showBuffer, setShowBuffer] = useState(false);
-  const [bufferChannels, setBufferChannels] = useState([]);
-  const [selectedChannel, setSelectedChannel] = useState('');
-  const [bufferStatus, setBufferStatus] = useState('');
-  const [isSending, setIsSending] = useState(false);
-  const [sendIndex, setSendIndex] = useState(null); // which story is being sent
-
-  const loadBufferChannels = async () => {
-    setBufferStatus('Lade Kanäle…');
-    try {
-      const channels = await getBufferChannels();
-      setBufferChannels(channels);
-      const ig = channels.find(c => (c.service || '').toLowerCase().includes('instagram'));
-      setSelectedChannel(ig?.id || channels[0]?.id || '');
-      setBufferStatus(channels.length ? '' : 'Keine Kanäle gefunden.');
-    } catch (e) {
-      setBufferStatus(e.message || 'Fehler beim Laden der Kanäle.');
-    }
-  };
-
-  const sendStoryToBuffer = async (slide, index, mode) => {
-    const imageUrl = (typeof slide?.background === 'string' && slide.background.startsWith('http'))
-      ? slide.background : null;
-    if (!selectedChannel) { setBufferStatus('Bitte zuerst einen Kanal wählen.'); return; }
-    if (!imageUrl) { setBufferStatus(`Story ${index + 1}: braucht ein öffentliches Bild (Cloud-Upload).`); return; }
-    const chan = bufferChannels.find(c => c.id === selectedChannel);
-    setIsSending(true);
-    setSendIndex(index);
-    setBufferStatus(`Story ${index + 1} wird gesendet…`);
-    try {
-      await sendToBuffer({
-        channelId: selectedChannel,
-        text: slide.caption || '',
-        imageUrl,
-        mode,
-        service: chan?.service || '',
-        igType: 'story',
-      });
-      setBufferStatus(`✓ Story ${index + 1} ${mode === 'draft' ? 'als Entwurf gespeichert' : 'in die Queue gelegt'}.`);
-    } catch (e) {
-      setBufferStatus('Fehler: ' + (e.message || 'Senden fehlgeschlagen.'));
-    } finally {
-      setIsSending(false);
-      setSendIndex(null);
-    }
-  };
-
-  const sendAllStories = async (mode) => {
-    if (!selectedChannel) { setBufferStatus('Bitte zuerst einen Kanal wählen.'); return; }
-    for (let i = 0; i < stories.length; i++) {
-      // eslint-disable-next-line no-await-in-loop
-      await sendStoryToBuffer(stories[i], i, mode);
-    }
-    setBufferStatus(`✓ Alle ${stories.length} Stories gesendet.`);
-  };
 
   const brandName = brandSettings.currentBrandConfig?.name || "MUSE MENTORING";
 
@@ -234,9 +176,6 @@ const StoryPlanner = () => {
            <button onClick={() => setShowShifter(!showShifter)} className={`flex items-center px-4 py-2 border rounded-lg text-sm font-bold transition-colors ${showShifter ? 'bg-purple-100 border-purple-300 text-purple-700' : 'bg-white border-gray-200 text-gray-600'}`} >
             <SafeIcon icon={FiRefreshCw} className="mr-2" /> Style Shifter
           </button>
-          <button onClick={() => { setShowBuffer(!showBuffer); if (!showBuffer && bufferChannels.length === 0) loadBufferChannels(); }} className={`flex items-center px-4 py-2 border rounded-lg text-sm font-bold transition-colors ${showBuffer ? 'bg-pink-100 border-pink-300 text-pink-700' : 'bg-white border-gray-200 text-gray-600'}`} >
-            <SafeIcon icon={FiSend} className="mr-2" /> An Buffer
-          </button>
           <div className="bg-white p-2 rounded-xl border border-gray-200 shadow-sm">
             <span className="text-sm font-bold text-pink-600 flex items-center px-2">
               <SafeIcon icon={FiSmartphone} className="mr-2" /> Story Mode (9:16)
@@ -256,37 +195,8 @@ const StoryPlanner = () => {
         )}
       </AnimatePresence>
 
-      {/* BUFFER PANEL (send stories as Instagram Stories) */}
-      <AnimatePresence>
-        {showBuffer && (
-          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="mb-8 overflow-hidden">
-            <div className="bg-white border-2 border-pink-100 rounded-xl p-5 shadow-sm max-w-2xl">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-bold text-gray-900 flex items-center"><SafeIcon icon={FiSend} className="mr-2 text-pink-600" /> Stories an Buffer senden</h3>
-                <button onClick={loadBufferChannels} className="text-[12px] text-gray-500 hover:text-pink-600 flex items-center"><SafeIcon icon={FiRefreshCw} className="mr-1" /> Kanäle neu laden</button>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-2 mb-3">
-                <select
-                  value={selectedChannel}
-                  onChange={(e) => setSelectedChannel(e.target.value)}
-                  className="flex-1 border border-gray-200 rounded-lg p-2 text-sm bg-white outline-none focus:border-pink-400"
-                >
-                  {bufferChannels.length === 0 && <option value="">Keine Kanäle geladen</option>}
-                  {bufferChannels.map(c => (
-                    <option key={c.id} value={c.id}>{(c.displayName || c.name)} ({c.service})</option>
-                  ))}
-                </select>
-                <div className="flex gap-2">
-                  <button onClick={() => sendAllStories('draft')} disabled={isSending || !selectedChannel} className="px-3 py-2 rounded-lg text-xs font-bold border border-gray-200 text-gray-700 hover:bg-gray-50 disabled:opacity-50">Alle als Entwurf</button>
-                  <button onClick={() => sendAllStories('addToQueue')} disabled={isSending || !selectedChannel} className="px-3 py-2 rounded-lg text-xs font-bold bg-pink-600 text-white hover:bg-pink-700 disabled:opacity-50 flex items-center"><SafeIcon icon={FiSend} className="mr-1" /> Alle in Queue</button>
-                </div>
-              </div>
-              {bufferStatus && <p className="text-[12px] text-gray-600">{bufferStatus}</p>}
-              <p className="text-[11px] text-gray-400 mt-1">Sendet als Instagram-Story. Jede Story braucht ein öffentliches Bild (Cloud-Upload). Du kannst unten auch einzelne Stories senden.</p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* BUFFER PANEL removed */}
+
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
         <div className="flex items-center space-x-3">
           <h2 className="text-xl font-bold text-gray-900">Sequenz ({stories.length})</h2>
@@ -378,19 +288,10 @@ const StoryPlanner = () => {
                 {index + 1}
               </div>
               {/* Hover Overlay */}
-              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
+              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <div className="bg-white text-gray-800 px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg flex items-center">
                   <SafeIcon icon={FiEdit3} className="mr-2" /> Edit
                 </div>
-                {showBuffer && selectedChannel && (
-                  <button
-                    onClick={(e) => { e.stopPropagation(); sendStoryToBuffer(slide, index, 'addToQueue'); }}
-                    disabled={isSending}
-                    className="bg-pink-600 text-white px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg flex items-center hover:bg-pink-700 disabled:opacity-50"
-                  >
-                    <SafeIcon icon={FiSend} className="mr-1.5" /> {sendIndex === index ? 'Sende…' : 'Story senden'}
-                  </button>
-                )}
               </div>
             </div>
           </motion.div>
