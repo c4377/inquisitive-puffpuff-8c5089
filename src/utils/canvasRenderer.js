@@ -56,6 +56,50 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   const applyManualOverrides = (obj) => {
     try {
       if (!obj || (obj.type !== 'textbox' && obj.type !== 'text')) return;
+
+      // --- AUTO-FIT: shrink any textbox so it never overflows the slide ---
+      // A textbox has a fixed width and wraps; if the resulting height would
+      // push it past the top or bottom edge, reduce the font size until it fits.
+      if (obj.type === 'textbox' && obj.text) {
+        try {
+          const margin = height * 0.04;           // keep a little breathing room
+          const originY = obj.originY || 'top';
+          // Compute how much vertical space this box has to its nearest edge,
+          // based on where its anchor sits.
+          let avail;
+          if (originY === 'center') {
+            const distTop = obj.top - margin;
+            const distBot = (height - margin) - obj.top;
+            avail = 2 * Math.min(distTop, distBot);
+          } else if (originY === 'bottom') {
+            avail = (obj.top) - margin;
+          } else { // top
+            avail = (height - margin) - obj.top;
+          }
+          if (avail > 0) {
+            let guard = 0;
+            // Shrink until the rendered height fits (or we hit a floor).
+            while (obj.height > avail && obj.fontSize > 10 && guard < 40) {
+              obj.set('fontSize', obj.fontSize - 1);
+              obj.initDimensions && obj.initDimensions();
+              guard++;
+            }
+          }
+          // Also guard horizontal: if a single word is wider than the box,
+          // shrink so it fits the width too.
+          const words = String(obj.text).split(/\s+/);
+          let widthGuard = 0;
+          while (widthGuard < 40 && obj.fontSize > 10) {
+            const longest = words.reduce((a, b) => (a.length >= b.length ? a : b), '');
+            const probe = new fabric.Text(longest, { fontSize: obj.fontSize, fontFamily: obj.fontFamily, fontWeight: obj.fontWeight });
+            if (probe.width <= obj.width) break;
+            obj.set('fontSize', obj.fontSize - 1);
+            obj.initDimensions && obj.initDimensions();
+            widthGuard++;
+          }
+        } catch (e) { /* auto-fit best-effort */ }
+      }
+
       // Identify whether this object is the secondary text (subtext).
       const objText = (obj.text || '').trim();
       const secText = (slide.secondaryText || '').trim();
@@ -183,7 +227,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // photo — half-empty panels, empty frames. If there's no image, fall back
   // to a clean text layout so text-only posts always look intentional.
   let layoutResolved = slide.layout || 'centered_focus';
-  const imageOnlyLayouts = ['split_photo', 'split_photo_v', 'framed_photo', 'card_on_photo'];
+  const imageOnlyLayouts = ['split_photo', 'split_photo_v', 'card_on_photo'];
   if (imageOnlyLayouts.includes(layoutResolved) && !hasBgImage) {
     const textFallbacks = ['editorial_classic', 'minimal_quote', 'paper_box'];
     const pick = (slide.text ? slide.text.length : 0) % textFallbacks.length;
@@ -206,7 +250,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // not full-bleed — so skip the full-bleed draw for it.
   // These layouts place the photo themselves (framed / in one half), so skip
   // the full-bleed draw for them.
-  const selfPlacesImage = ['framed_photo', 'split_photo', 'split_photo_v'];
+  // Splits place the photo themselves (in one half), so skip the full-bleed
+  // draw for them. framed_photo now USES the full-bleed image.
+  const selfPlacesImage = ['split_photo', 'split_photo_v'];
   const isFramedPhoto = selfPlacesImage.includes(layoutResolved);
   if (hasBgImage && !isFramedPhoto) {
     try {
@@ -435,7 +481,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // === SMART IMAGE TEXT: find the best spot in the photo and put text there.
   // Preferred: clean white text + soft shadow (NO box). Only if the best spot
   // is still too bright for readable text do we add a gentle local scrim. ===
-  const specialImageLayouts = ['tweet_card', 'glass_layer', 'aesthetic_checklist', 'diagonal_overlay', 'split_color', 'paper_box', 'story_text_box', 'bold_number_list', 'split_photo', 'split_photo_v', 'framed_photo', 'card_on_photo'];
+  const specialImageLayouts = ['tweet_card', 'glass_layer', 'aesthetic_checklist', 'diagonal_overlay', 'split_color', 'paper_box', 'story_text_box', 'bold_number_list', 'split_photo', 'split_photo_v', 'card_on_photo'];
   if (hasBgImage && !specialImageLayouts.includes(layout)) {
     const { plain, segments } = parseAccent(slide.text);
     const zone = (slide._autoImage && slide._autoImage.quietZone) || 'center';
@@ -846,92 +892,6 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     }
   }
 
-  // === FRAMED PHOTO: the PHOTO itself is small & framed, centered on a
-  // brand-colored background. Label + title above, brand mark below. ===
-  else if (layout === 'framed_photo') {
-    const { plain, segments } = parseAccent(slide.text);
-    const txtColor = slide.color || contrastColor(slide.backgroundColor || '#ffffff');
-
-    // Framed photo box: centered, portrait, in the middle band.
-    const fw = width * 0.54, fh = height * 0.40;
-    const fx = (width - fw) / 2, fy = height * 0.34;
-
-    // Draw the framed photo. If it fails, fall back to clean text.
-    let photoOk = false;
-    if (hasBgImage) {
-      try { photoOk = await drawFramedImage(slide.background, { x: fx, y: fy, w: fw, h: fh }); }
-      catch (e) { photoOk = false; }
-    }
-
-    if (photoOk) {
-      // Frame border around the photo.
-      canvas.add(new fabric.Rect({
-        left: fx - fs(6), top: fy - fs(6), width: fw + fs(12), height: fh + fs(12),
-        fill: 'rgba(0,0,0,0)', stroke: txtColor, strokeWidth: 1.5 * scale, selectable: false,
-      }));
-      // Label chip above the photo.
-      canvas.add(new fabric.Text((slide.label || 'AUS MEINEM ALLTAG').toUpperCase(), {
-        left: width / 2, top: height * 0.12, originX: 'center',
-        fontSize: fs(13), fontFamily: 'Inter', charSpacing: 180,
-        fill: accentColor, fontWeight: 'bold', selectable: false,
-      }));
-      // Title above the photo — auto-shrunk to fit the space above the frame.
-      let tSize = fs(slide.fontSize || 34);
-      const availH = (fy - fs(6)) - (height * 0.12 + fs(24)); // gap between label and frame
-      // Rough shrink: estimate lines and reduce size until it fits.
-      try {
-        const probe = new fabric.Textbox(plain, { width: width * 0.82, fontSize: tSize, fontFamily, lineHeight: 1.1 });
-        if (probe.height > availH && probe.height > 0) {
-          tSize = Math.max(fs(18), Math.floor(tSize * (availH / probe.height) * 0.95));
-        }
-      } catch (e) { /* best effort */ }
-      const tt = new fabric.Textbox(plain, {
-        left: width / 2, top: height * 0.12 + fs(24), originX: 'center', originY: 'top',
-        width: width * 0.82, fontSize: tSize, fontFamily,
-        fill: txtColor, textAlign: 'center', lineHeight: 1.1,
-        fontWeight: slide.fontWeight || 'normal',
-      });
-      applyAccentStyles(tt, segments);
-      canvas.add(tt);
-      // Brand mark below the photo.
-      if (options.globalBrandName) {
-        canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
-          left: width / 2, top: fy + fh + fs(28), originX: 'center',
-          fontSize: fs(12), fill: accentColor, fontFamily: 'Inter',
-          charSpacing: 150, selectable: false,
-        }));
-      }
-    } else {
-      // FALLBACK: no usable photo -> clean centered editorial text, no empty frame.
-      canvas.add(new fabric.Line([width * 0.30, height * 0.30, width * 0.70, height * 0.30], {
-        stroke: accentColor, strokeWidth: 2 * scale, selectable: false,
-      }));
-      // Only show a top label if a real category label exists (not the brand name,
-      // which already appears at the bottom — avoids the duplicate).
-      if (slide.label) {
-        canvas.add(new fabric.Text(String(slide.label).toUpperCase(), {
-          left: width / 2, top: height * 0.22, originX: 'center',
-          fontSize: fs(13), fontFamily: 'Inter', charSpacing: 180,
-          fill: accentColor, fontWeight: 'bold', selectable: false,
-        }));
-      }
-      const tt = new fabric.Textbox(plain, {
-        left: width / 2, top: height / 2, originX: 'center', originY: 'center',
-        width: width * 0.80, fontSize: fs(slide.fontSize || 40), fontFamily,
-        fill: txtColor, textAlign: 'center', lineHeight: 1.2,
-        fontWeight: slide.fontWeight || 'normal',
-      });
-      applyAccentStyles(tt, segments);
-      canvas.add(tt);
-      if (options.globalBrandName) {
-        canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
-          left: width / 2, top: height - fs(40), originX: 'center',
-          fontSize: fs(12), fill: accentColor, fontFamily: 'Inter',
-          charSpacing: 150, selectable: false,
-        }));
-      }
-    }
-  }
 
   // === CARD ON PHOTO: a branded card floating over a photo/tonal bg ===
   else if (layout === 'card_on_photo') {
@@ -1061,7 +1021,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
   // Brand Name — skip for layouts that position their own brand mark, so it
   // doesn't appear twice.
-  const drawsOwnBrandMark = ['split_photo', 'split_photo_v', 'framed_photo', 'card_on_photo'];
+  const drawsOwnBrandMark = ['split_photo', 'split_photo_v', 'card_on_photo'];
   if (options.globalBrandName && !drawsOwnBrandMark.includes(layout)) {
     const brandText = new fabric.Text(options.globalBrandName.toUpperCase(), {
       left: width / 2,
@@ -1103,25 +1063,6 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // image actually loaded & drew; false otherwise so the caller can fall back.
   // No clipPath (which is fragile in fabric v5) — instead we fit the image to
   // the box height/width and rely on the caller drawing a frame over the edges.
-  // Draw a framed photo using the SAME loader path as the working logo/overlay
-  // image (fabric.Image.fromURL). Fits the photo into the given box.
-  const drawFramedImage = (src, box) =>
-    new Promise((resolve) => {
-      if (!src) return resolve(false);
-      fabric.Image.fromURL(src, (img) => {
-        if (!img) return resolve(false);
-        const iw = img.width || 1, ih = img.height || 1;
-        const factor = Math.min(box.w / iw, box.h / ih);
-        img.set({
-          originX: 'center', originY: 'center',
-          left: box.x + box.w / 2, top: box.y + box.h / 2,
-          scaleX: factor, scaleY: factor, selectable: false,
-        });
-        canvas.add(img);
-        resolve(true);
-      }, { crossOrigin: 'anonymous' });
-    });
-
   // Cover-fit version: fills the whole box (center-crop), for split halves.
   const drawFramedImageCover = (src, box) =>
     new Promise((resolve) => {

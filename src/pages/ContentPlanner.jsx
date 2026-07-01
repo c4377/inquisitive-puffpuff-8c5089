@@ -157,7 +157,7 @@ const ContentPlanner = () => {
   // Central layout rotation — used by BOTH import and reload so variety is
   // consistent everywhere, not only on fresh import. Returns an array of real
   // layout ids mixing brand rules with the magazine-style variants.
-  const REAL_LAYOUTS = ['aesthetic_checklist','bold_number_list','diagonal_overlay','editorial_classic','glass_layer','maximized_bold','minimal_editorial','minimal_quote','paper_box','sarah_cover','split_color','story_text_box','tweet_card','split_photo','split_photo_v','framed_photo','card_on_photo'];
+  const REAL_LAYOUTS = ['aesthetic_checklist','bold_number_list','diagonal_overlay','editorial_classic','glass_layer','maximized_bold','minimal_editorial','minimal_quote','paper_box','sarah_cover','split_color','story_text_box','tweet_card','split_photo','split_photo_v','card_on_photo'];
   const LAYOUT_ALIAS = {
     badge_centered: 'minimal_quote',
     split_vertical_editorial: 'split_color',
@@ -177,7 +177,7 @@ const ContentPlanner = () => {
     const baseLayouts = rules.layoutRules.length > 0 ? rules.layoutRules : ['minimal_quote', 'editorial_classic', 'glass_layer'];
     const allowed = weightedLayoutPool(baseLayouts).map(resolveLayout);
     // The magazine variants that give the feed its structural variety.
-    const variety = ['split_photo', 'split_photo_v', 'framed_photo', 'card_on_photo', 'editorial_classic', 'minimal_quote'];
+    const variety = ['split_photo', 'split_photo_v', 'card_on_photo', 'editorial_classic', 'minimal_quote'];
     const mixed = [];
     const maxLen = Math.max(allowed.length, variety.length);
     for (let i = 0; i < maxLen; i++) {
@@ -193,7 +193,7 @@ const ContentPlanner = () => {
     const imagePool = brandSettings?.brandImages || [];
 
     // Fixed 7-day roles (by day index):
-    //   day 0        -> framed_photo (1x): pool image, framed on background
+    //   7-day roles: 3 text-only, 4 photo-with-text
     //   days 1,2,3   -> text-only  (3x)
     //   days 4,5,6   -> photo-with-text full-bleed (3x)
     // Roles repeat if there are more than 7 days.
@@ -203,8 +203,7 @@ const ContentPlanner = () => {
 
     const roleForDay = (i) => {
       const r = i % 7;
-      if (r === 0) return 'framed';
-      if (r <= 3) return 'text';
+      if (r <= 2) return 'text';
       return 'photo';
     };
 
@@ -218,7 +217,7 @@ const ContentPlanner = () => {
       );
 
       // Only attach images for days that should have a photo.
-      if ((role === 'framed' || role === 'photo') && imagePool.length > 0) {
+      if (role === 'photo' && imagePool.length > 0) {
         try { slides = await attachSmartImages(slides, imagePool); } catch (e) { /* keep */ }
       }
 
@@ -230,8 +229,6 @@ const ContentPlanner = () => {
           const { background, overlay, _autoImage, ...rest } = s2;
           s2 = { ...rest, background: null };
           layout = textLayouts[(dIdx + sIdx) % textLayouts.length];
-        } else if (role === 'framed') {
-          layout = 'framed_photo'; // keeps its attached pool image
         } else {
           layout = photoLayouts[(dIdx + sIdx) % photoLayouts.length];
         }
@@ -286,8 +283,7 @@ const ContentPlanner = () => {
       const anchorCycle = ['top', 'center', 'bottom'];
       const roleForDay = (i) => {
         const r = i % 7;
-        if (r === 0) return 'framed';
-        if (r <= 3) return 'text';
+        if (r <= 2) return 'text';
         return 'photo';
       };
 
@@ -296,7 +292,7 @@ const ContentPlanner = () => {
         const day = weekPlan[dayIdx];
         const role = roleForDay(dayIdx);
         let daySlides = day.slides;
-        if ((role === 'framed' || role === 'photo') && imagePool.length > 0) {
+        if (role === 'photo' && imagePool.length > 0) {
           daySlides = await attachSmartImages(day.slides, imagePool);
         }
 
@@ -309,8 +305,6 @@ const ContentPlanner = () => {
             const { background, overlay, _autoImage, ...rest } = cleaned;
             Object.assign(cleaned, rest, { background: null, overlay: undefined, _autoImage: undefined });
             layout = textLayouts[(dayIdx + sIdx) % textLayouts.length];
-          } else if (role === 'framed') {
-            layout = 'framed_photo';
           } else {
             layout = photoLayouts[(dayIdx + sIdx) % photoLayouts.length];
           }
