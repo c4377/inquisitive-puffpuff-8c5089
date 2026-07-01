@@ -543,6 +543,43 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // photo (full-bleed) or on the brand background. Auto-fit keeps text inside.
   if (layout === 'auto') {
     const { plain, segments } = parseAccent(slide.text);
+
+    // === STORY MODE (9:16): fixed, minimal branding ===
+    // Small Montserrat text, always same position (lower third), no bold, so it
+    // reads as a calm base you can just copy the text from and overwrite in IG.
+    const isStory = slide.format === '9:16' || Math.abs((height / width) - (16 / 9)) < 0.1;
+    if (isStory) {
+      // Light readability wash at the bottom if there's a photo.
+      if (hasBgImage) {
+        canvas.add(new fabric.Rect({
+          left: 0, top: height * 0.62, width, height: height * 0.38,
+          fill: 'rgba(0,0,0,0.35)', selectable: false,
+        }));
+      }
+      const storyText = new fabric.Textbox(plain, {
+        left: width / 2, top: height * 0.72, originX: 'center', originY: 'center',
+        width: width * 0.78,
+        fontSize: fs(22),                 // small, calm
+        fontFamily: 'Montserrat',
+        fontWeight: '400',                // never bold
+        fill: hasBgImage ? '#FFFFFF' : contrastColor(slide.backgroundColor || '#fff'),
+        textAlign: 'center', lineHeight: 1.35,
+        shadow: hasBgImage ? 'rgba(0,0,0,0.5) 0px 1px 6px' : '',
+      });
+      applyAccentStyles(storyText, segments);
+      canvas.add(storyText);
+      // Small brand mark at the very bottom.
+      if (options.globalBrandName) {
+        canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+          left: width / 2, top: height * 0.95, originX: 'center', originY: 'bottom',
+          fontSize: fs(11), fill: hasBgImage ? 'rgba(255,255,255,0.85)' : accentColor,
+          fontFamily: 'Montserrat', charSpacing: 150, selectable: false,
+        }));
+      }
+      canvas.renderAll();
+      return;
+    }
+
     const anchor = slide.textAnchor && typeof slide.textAnchor === 'object'
       ? slide.textAnchor : { row: hasBgImage ? 'bottom' : 'mid', col: 'center' };
     const row = anchor.row || 'mid';

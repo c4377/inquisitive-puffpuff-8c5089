@@ -329,11 +329,11 @@ const ContentPlanner = () => {
     if (!weekPlan || weekPlan.length === 0) return;
     setIsExportingAll(true);
     try {
-      const zip = new JSZip();
-      const folder = zip.folder("Content_Plan_Export");
       const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "MUSE MENTORING";
 
-      for (const day of weekPlan) {
+      // Render every slide of every day into image Files.
+      const renderDayFiles = async (day) => {
+        const files = [];
         for (let i = 0; i < day.slides.length; i++) {
           const slide = day.slides[i];
           const canvasWidth = 1080;
@@ -349,18 +349,60 @@ const ContentPlanner = () => {
           });
           const dataUrl = fCanvas.toDataURL({ format: 'png', multiplier: 1 });
           const blob = await (await fetch(dataUrl)).blob();
-          if (blob) {
-            const cleanTitle = day.title.replace(/[^a-z0-9]/gi, '_').substring(0, 20);
-            folder.file(`Tag_${day.day}_${cleanTitle}_Slide_${i + 1}.png`, blob);
-          }
           fCanvas.dispose();
           if (canvasEl.parentNode) canvasEl.parentNode.removeChild(canvasEl);
+          if (blob) files.push(new File([blob], `Tag${day.day}_Slide${i + 1}.png`, { type: 'image/png' }));
+        }
+        return files;
+      };
+
+      // If the device supports sharing files (mobile), save to Photos day by day.
+      // Sharing all ~50 images at once is unreliable, so we go per day and let
+      // the user tap "In Fotos sichern" for each.
+      const canShareFiles = typeof navigator !== 'undefined' && navigator.canShare;
+      let sharedAny = false;
+
+      if (canShareFiles) {
+        for (const day of weekPlan) {
+          const files = await renderDayFiles(day);
+          if (files.length && navigator.canShare({ files })) {
+            try {
+              await navigator.share({ files, title: `Tag ${day.day}` });
+              sharedAny = true;
+              setSaveStatus(`Tag ${day.day} zum Speichern geöffnet…`);
+            } catch (e) {
+              if (e?.name === 'AbortError') {
+                // User cancelled the share sheet -> stop the whole run.
+                setSaveStatus('Export abgebrochen.');
+                setIsExportingAll(false);
+                return;
+              }
+              throw e;
+            }
+          }
         }
       }
-      const content = await zip.generateAsync({ type: "blob" });
-      saveAs(content, `Content_Plan_Flat.zip`);
+
+      // Desktop / no share support -> fall back to a single ZIP download.
+      if (!sharedAny) {
+        const zip = new JSZip();
+        const folder = zip.folder("Content_Plan_Export");
+        for (const day of weekPlan) {
+          const files = await renderDayFiles(day);
+          for (let i = 0; i < files.length; i++) {
+            folder.file(files[i].name, files[i]);
+          }
+        }
+        const content = await zip.generateAsync({ type: "blob" });
+        saveAs(content, `Content_Plan.zip`);
+        setSaveStatus('Als ZIP heruntergeladen (Teilen nicht unterstützt).');
+      } else {
+        setSaveStatus('Alle Tage zum Speichern in Fotos geöffnet.');
+      }
+      setTimeout(() => setSaveStatus(''), 5000);
     } catch (e) {
       console.error("Export Failed", e);
+      setSaveStatus('Export fehlgeschlagen.');
     } finally {
       setIsExportingAll(false);
     }

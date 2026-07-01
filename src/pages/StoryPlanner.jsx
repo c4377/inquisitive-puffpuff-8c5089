@@ -12,7 +12,7 @@ import { renderSlide } from '../utils/canvasRenderer';
 import { attachSmartImages } from '../utils/smartLayoutGenerator';
 import { decidePostDesign, dayHasImage } from '../utils/postDesignEngine';
 
-const { FiSmartphone, FiDownload, FiRefreshCw, FiLayers, FiFileText, FiX, FiPlay, FiTrash2, FiEdit3, FiPlus } = FiIcons;
+const { FiSmartphone, FiDownload, FiRefreshCw, FiLayers, FiFileText, FiX, FiPlay, FiTrash2, FiEdit3, FiPlus, FiCopy, FiCheck } = FiIcons;
 
 const StoryPlanner = () => {
   const { brandSettings, updateBrandSettings, dataLoaded } = useBrand();
@@ -22,6 +22,7 @@ const StoryPlanner = () => {
   const [showBulkInput, setShowBulkInput] = useState(false);
   const [bulkText, setBulkText] = useState('');
   const [showShifter, setShowShifter] = useState(false);
+  const [copiedIndex, setCopiedIndex] = useState(null);
 
   const brandName = brandSettings.currentBrandConfig?.name || "MUSE MENTORING";
 
@@ -304,10 +305,21 @@ const StoryPlanner = () => {
                 {index + 1}
               </div>
               {/* Hover Overlay */}
-              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                 <div className="bg-white text-gray-800 px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg flex items-center">
                   <SafeIcon icon={FiEdit3} className="mr-2" /> Edit
                 </div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigator.clipboard?.writeText(slide.text || '');
+                    setCopiedIndex(index);
+                    setTimeout(() => setCopiedIndex(null), 1500);
+                  }}
+                  className="bg-white text-gray-800 px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg flex items-center hover:text-purple-600"
+                >
+                  <SafeIcon icon={copiedIndex === index ? FiCheck : FiCopy} className="mr-1.5" /> {copiedIndex === index ? 'Kopiert' : 'Text'}
+                </button>
               </div>
             </div>
           </motion.div>
