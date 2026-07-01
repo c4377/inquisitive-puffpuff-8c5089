@@ -227,7 +227,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // photo — half-empty panels, empty frames. If there's no image, fall back
   // to a clean text layout so text-only posts always look intentional.
   let layoutResolved = slide.layout || 'centered_focus';
-  const imageOnlyLayouts = ['card_on_photo'];
+  const imageOnlyLayouts = [];
   if (imageOnlyLayouts.includes(layoutResolved) && !hasBgImage) {
     const textFallbacks = ['editorial_classic', 'minimal_quote', 'paper_box'];
     const pick = (slide.text ? slide.text.length : 0) % textFallbacks.length;
@@ -481,7 +481,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // === SMART IMAGE TEXT: find the best spot in the photo and put text there.
   // Preferred: clean white text + soft shadow (NO box). Only if the best spot
   // is still too bright for readable text do we add a gentle local scrim. ===
-  const specialImageLayouts = ['tweet_card', 'glass_layer', 'aesthetic_checklist', 'diagonal_overlay', 'split_color', 'paper_box', 'story_text_box', 'bold_number_list', 'card_on_photo'];
+  const specialImageLayouts = ['tweet_card', 'glass_layer', 'aesthetic_checklist', 'diagonal_overlay', 'split_color', 'paper_box', 'story_text_box', 'bold_number_list'];
   if (hasBgImage && !specialImageLayouts.includes(layout)) {
     const { plain, segments } = parseAccent(slide.text);
     const zone = (slide._autoImage && slide._autoImage.quietZone) || 'center';
@@ -831,56 +831,6 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
 
   // === CARD ON PHOTO: a branded card floating over a photo/tonal bg ===
-  else if (layout === 'card_on_photo') {
-    const { plain, segments } = parseAccent(slide.text);
-    // Slight dim so the card pops off the background.
-    if (hasBgImage) {
-      canvas.add(new fabric.Rect({ left: 0, top: 0, width, height,
-        fill: 'rgba(0,0,0,0.25)', selectable: false }));
-    }
-    const cardW = width * 0.70, cardH = height * 0.56;
-    const cx = (width - cardW) / 2, cy = (height - cardH) / 2;
-    const cardFill = (slide.backgroundColor && slide.backgroundColor !== '#ffffff')
-      ? slide.backgroundColor : '#F5F1EA';
-    const cardText = contrastColor(cardFill);
-    // The card.
-    canvas.add(new fabric.Rect({
-      left: cx, top: cy, width: cardW, height: cardH,
-      fill: cardFill, rx: fs(3), ry: fs(3),
-      shadow: 'rgba(0,0,0,0.28) 0px 14px 34px', selectable: false,
-    }));
-    // Thin inner accent border inside the card (editorial detail).
-    const cin = fs(14);
-    canvas.add(new fabric.Rect({
-      left: cx + cin, top: cy + cin, width: cardW - cin * 2, height: cardH - cin * 2,
-      fill: 'rgba(0,0,0,0)', stroke: accentColor, strokeWidth: 1 * scale, selectable: false,
-    }));
-    // Small label at the top of the card.
-    if (slide.label) {
-      canvas.add(new fabric.Text(String(slide.label).toUpperCase(), {
-        left: width / 2, top: cy + fs(40), originX: 'center',
-        fontSize: fs(13), fontFamily: 'Inter', charSpacing: 180,
-        fill: accentColor, fontWeight: 'bold', selectable: false,
-      }));
-    }
-    // Headline centered in the card.
-    const tb = new fabric.Textbox(plain, {
-      left: width / 2, top: height / 2, originX: 'center', originY: 'center',
-      width: cardW - fs(72), fontSize: fs(slide.fontSize || 34), fontFamily: fontFamily,
-      fill: slide.color || cardText, textAlign: 'center', lineHeight: 1.3,
-      fontWeight: slide.fontWeight || 'normal',
-    });
-    applyAccentStyles(tb, segments);
-    canvas.add(tb);
-    // Brand mark at the bottom of the card.
-    if (options.globalBrandName) {
-      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
-        left: width / 2, top: cy + cardH - fs(34), originX: 'center',
-        fontSize: fs(11), fill: cardText, opacity: 0.7,
-        fontFamily: 'Inter', charSpacing: 140, selectable: false,
-      }));
-    }
-  }
 
   // 5. MINIMAL QUOTE (Cover / Brand preview) — supports *accent* word
   else if (layout === 'minimal_quote' || layout === 'maximized_bold') {
@@ -958,7 +908,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
   // Brand Name — skip for layouts that position their own brand mark, so it
   // doesn't appear twice.
-  const drawsOwnBrandMark = ['card_on_photo'];
+  const drawsOwnBrandMark = [];
   if (options.globalBrandName && !drawsOwnBrandMark.includes(layout)) {
     const brandText = new fabric.Text(options.globalBrandName.toUpperCase(), {
       left: width / 2,

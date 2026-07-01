@@ -5,39 +5,18 @@ import SafeIcon from '../common/SafeIcon';
 
 const LayoutPicker = ({ currentLayout, onUpdate }) => {
   const layouts = [
-    // --- MAGAZINE-STYLE VARIANTS (photo/text structure) ---
-    { id: 'card_on_photo', name: 'Karte auf Foto', icon: FiCreditCard, description: 'Weiße Karte über Hintergrund' },
+    // --- TEXT LAYOUTS (no photo) ---
+    { id: 'editorial_classic', name: 'Classic Center', icon: FiSquare, description: 'Klarer, zentrierter Text' },
+    { id: 'minimal_quote', name: 'Quote Focus', icon: FiMessageSquare, description: 'Zitat-Stil, ruhig' },
+    { id: 'maximized_bold', name: 'Impact Text', icon: FiMaximize, description: 'Großer Aussage-Text' },
+    { id: 'paper_box', name: 'Paper Box', icon: FiType, description: 'Text auf ruhiger Fläche' },
 
-    // --- COVER LAYOUTS (Photo background, Sarah-Joy style) ---
-    { id: 'sarah_cover', name: 'Editorial Cover', icon: FiImage, description: 'Foto + Label + Script-Akzent' },
-    { id: 'cover_top_left', name: 'Cover Oben Links', icon: FiArrowUpLeft, description: 'Titel oben links auf Foto' },
-    { id: 'cover_bottom_left', name: 'Cover Unten Links', icon: FiArrowDownRight, description: 'Titel unten links auf Foto' },
-    { id: 'cover_bottom_center', name: 'Cover Unten', icon: FiArrowDown, description: 'Titel unten zentriert' },
+    // --- PHOTO LAYOUTS (full-bleed photo + text) ---
+    { id: 'cover_top_center', name: 'Cover Oben', icon: FiAlignLeft, description: 'Titel oben auf Foto' },
     { id: 'cover_center_hero', name: 'Cover Mitte', icon: FiMaximize, description: 'Großer Titel mittig' },
-    { id: 'cover_top_center', name: 'Cover Oben', icon: FiAlignLeft, description: 'Titel oben zentriert' },
-
-    // NEW PREUSS STYLE
-    { id: 'badge_centered', name: 'Badge Focus', icon: FiHexagon, description: 'Preuss Style Header' },
-    
-    // NEW SOCIAL LAYOUTS
-    { id: 'story_text_box', name: 'Story Box', icon: FiType, description: 'Text with background box' },
-    { id: 'glass_layer', name: 'Glass Overlay', icon: FiSquare, description: 'Transparent full overlay' },
-    { id: 'tweet_card', name: 'Tweet Post', icon: FiTwitter, description: 'Social Media Card Style' },
-
-    // EXISTING
-    { id: 'editorial_fade_bottom', name: 'Soft Fade', icon: FiArrowDown, description: 'Image fades to bottom' },
-    { id: 'minimal_quote', name: 'Quote Focus', icon: FiMessageSquare, description: 'Pinterest Style Quote' },
-    { id: 'maximized_bold', name: 'Impact Text', icon: FiMaximize, description: 'Auto-size Huge Text' },
-    { id: 'minimal_left_accent', name: 'Left Accent', icon: FiAlignLeft, description: 'Bar + Left Align' },
-    { id: 'centered_focus', name: 'Classic Center', icon: FiSquare, description: 'Simple & Clean' },
-    { id: 'bold_number_list', name: 'Big Numbers', icon: FiList, description: 'Giant Number List' },
-    { id: 'accent_frame', name: 'Accent Frame', icon: FiBox, description: 'Bordered Box' },
-    { id: 'editorial_mask', name: 'Circle Mask', icon: FiImage, description: 'Photo Focus' },
-    { id: 'split_vertical_editorial', name: 'Split View', icon: FiSidebar, description: 'Half Color/Image' },
-    { id: 'story_top_left', name: 'Story Top', icon: FiArrowUpLeft, description: 'Top Left Align (9:16)' },
-    { id: 'story_bottom_right', name: 'Story Bottom', icon: FiArrowDownRight, description: 'Bottom Right Align (9:16)' },
-    { id: 'diagonal_overlay', name: 'Diagonal', icon: FiLayers, description: 'Modern Split' },
-    { id: 'aesthetic_checklist', name: 'Checklist', icon: FiList, description: 'List with Lines' },
+    { id: 'cover_bottom_center', name: 'Cover Unten', icon: FiArrowDown, description: 'Titel unten zentriert' },
+    { id: 'cover_top_left', name: 'Cover Oben Links', icon: FiArrowUpLeft, description: 'Titel oben links' },
+    { id: 'cover_bottom_left', name: 'Cover Unten Links', icon: FiArrowDownRight, description: 'Titel unten links' },
   ];
 
   return (

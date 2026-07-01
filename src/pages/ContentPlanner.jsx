@@ -157,7 +157,7 @@ const ContentPlanner = () => {
   // Central layout rotation — used by BOTH import and reload so variety is
   // consistent everywhere, not only on fresh import. Returns an array of real
   // layout ids mixing brand rules with the magazine-style variants.
-  const REAL_LAYOUTS = ['aesthetic_checklist','bold_number_list','diagonal_overlay','editorial_classic','glass_layer','maximized_bold','minimal_editorial','minimal_quote','paper_box','sarah_cover','split_color','story_text_box','tweet_card','card_on_photo'];
+  const REAL_LAYOUTS = ['aesthetic_checklist','bold_number_list','diagonal_overlay','editorial_classic','glass_layer','maximized_bold','minimal_editorial','minimal_quote','paper_box','cover_bottom_left','cover_bottom_center','cover_top_left','cover_top_center','cover_center_hero','split_color','story_text_box','tweet_card'];
   const LAYOUT_ALIAS = {
     badge_centered: 'minimal_quote',
     split_vertical_editorial: 'split_color',
@@ -177,7 +177,7 @@ const ContentPlanner = () => {
     const baseLayouts = rules.layoutRules.length > 0 ? rules.layoutRules : ['minimal_quote', 'editorial_classic', 'glass_layer'];
     const allowed = weightedLayoutPool(baseLayouts).map(resolveLayout);
     // The magazine variants that give the feed its structural variety.
-    const variety = ['card_on_photo', 'editorial_classic', 'minimal_quote'];
+    const variety = ['editorial_classic', 'minimal_quote'];
     const mixed = [];
     const maxLen = Math.max(allowed.length, variety.length);
     for (let i = 0; i < maxLen; i++) {
@@ -198,12 +198,13 @@ const ContentPlanner = () => {
     //   days 4,5,6   -> photo-with-text full-bleed (3x)
     // Roles repeat if there are more than 7 days.
     const textLayouts = ['editorial_classic', 'minimal_quote', 'maximized_bold', 'paper_box'];
-    const photoLayouts = ['sarah_cover', 'card_on_photo'];
+    const photoLayouts = ['cover_bottom_left', 'cover_bottom_center', 'cover_top_left', 'cover_center_hero'];
     const anchorCycle = ['top', 'center', 'bottom'];
 
     const roleForDay = (i) => {
       const r = i % 7;
-      if (r <= 2) return 'text';
+      // 5 of 7 days get a photo, 2 are text-only.
+      if (r === 2 || r === 5) return 'text';
       return 'photo';
     };
 
@@ -279,11 +280,11 @@ const ContentPlanner = () => {
       // days 1,3,5,7 => indices 0,2,4,6
       // Same fixed 7-day roles as import.
       const textLayouts = ['editorial_classic', 'minimal_quote', 'maximized_bold', 'paper_box'];
-      const photoLayouts = ['sarah_cover', 'card_on_photo'];
+      const photoLayouts = ['cover_bottom_left', 'cover_bottom_center', 'cover_top_left', 'cover_center_hero'];
       const anchorCycle = ['top', 'center', 'bottom'];
       const roleForDay = (i) => {
         const r = i % 7;
-        if (r <= 2) return 'text';
+        if (r === 2 || r === 5) return 'text';
         return 'photo';
       };
 
