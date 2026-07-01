@@ -40,9 +40,37 @@ exports.handler = async (event) => {
 
   // --- Special action: list channels (so the app can let the user pick one) ---
   if (body.action === 'getChannels') {
-    const q = `query { channels { id name service } }`;
-    const r = await callBuffer(apiKey, q);
-    return resp(r.ok ? 200 : 502, r.data);
+    // Buffer requires an organizationId to list channels. Step 1: get the org
+    // (or use a configured fallback if the account query is unavailable).
+    let organizationId = process.env.BUFFER_ORG_ID || '';
+    if (!organizationId) {
+      const orgQuery = `query { account { organizations { id name } } }`;
+      const orgRes = await callBuffer(apiKey, orgQuery);
+      if (!orgRes.ok) return resp(502, orgRes.data);
+      if (orgRes.data?.errors?.length) {
+        return resp(400, { error: orgRes.data.errors[0].message || 'Organisation konnte nicht geladen werden.' });
+      }
+      const orgs = orgRes.data?.data?.account?.organizations || [];
+      if (!orgs.length) return resp(400, { error: 'Keine Buffer-Organisation gefunden.' });
+      organizationId = orgs[0].id;
+    }
+
+    // Step 2: get channels for that organization.
+    const chQuery = `query GetChannels {
+      channels(input: { organizationId: ${JSON.stringify(organizationId)} }) {
+        id
+        name
+        displayName
+        service
+      }
+    }`;
+    const chRes = await callBuffer(apiKey, chQuery);
+    if (!chRes.ok) return resp(502, chRes.data);
+    if (chRes.data?.errors?.length) {
+      return resp(400, { error: chRes.data.errors[0].message || 'Kanäle konnten nicht geladen werden.' });
+    }
+    // Normalize to { channels: [...] } so the client stays simple.
+    return resp(200, { data: { channels: chRes.data?.data?.channels || [] } });
   }
 
   // --- Default action: create a post ---

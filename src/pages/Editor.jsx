@@ -364,7 +364,7 @@ const Editor = () => {
                   >
                     {bufferChannels.length === 0 && <option value="">Keine Kanäle geladen</option>}
                     {bufferChannels.map(c => (
-                      <option key={c.id} value={c.id}>{c.name} ({c.service})</option>
+                      <option key={c.id} value={c.id}>{(c.displayName || c.name)} ({c.service})</option>
                     ))}
                   </select>
                   <div className="flex gap-2">
