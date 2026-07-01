@@ -6,8 +6,6 @@ import SafeIcon from '../common/SafeIcon';
 const LayoutPicker = ({ currentLayout, onUpdate }) => {
   const layouts = [
     // --- MAGAZINE-STYLE VARIANTS (photo/text structure) ---
-    { id: 'split_photo', name: 'Split Foto', icon: FiColumns, description: 'Foto eine Seite, Text andere' },
-    { id: 'split_photo_v', name: 'Split Vertikal', icon: FiSquare, description: 'Foto oben, Text unten' },
     { id: 'card_on_photo', name: 'Karte auf Foto', icon: FiCreditCard, description: 'Weiße Karte über Hintergrund' },
 
     // --- COVER LAYOUTS (Photo background, Sarah-Joy style) ---

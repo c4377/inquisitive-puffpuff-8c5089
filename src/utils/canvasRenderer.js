@@ -227,7 +227,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // photo — half-empty panels, empty frames. If there's no image, fall back
   // to a clean text layout so text-only posts always look intentional.
   let layoutResolved = slide.layout || 'centered_focus';
-  const imageOnlyLayouts = ['split_photo', 'split_photo_v', 'card_on_photo'];
+  const imageOnlyLayouts = ['card_on_photo'];
   if (imageOnlyLayouts.includes(layoutResolved) && !hasBgImage) {
     const textFallbacks = ['editorial_classic', 'minimal_quote', 'paper_box'];
     const pick = (slide.text ? slide.text.length : 0) % textFallbacks.length;
@@ -252,7 +252,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // the full-bleed draw for them.
   // Splits place the photo themselves (in one half), so skip the full-bleed
   // draw for them. framed_photo now USES the full-bleed image.
-  const selfPlacesImage = ['split_photo', 'split_photo_v'];
+  const selfPlacesImage = [];
   const isFramedPhoto = selfPlacesImage.includes(layoutResolved);
   if (hasBgImage && !isFramedPhoto) {
     try {
@@ -481,7 +481,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // === SMART IMAGE TEXT: find the best spot in the photo and put text there.
   // Preferred: clean white text + soft shadow (NO box). Only if the best spot
   // is still too bright for readable text do we add a gentle local scrim. ===
-  const specialImageLayouts = ['tweet_card', 'glass_layer', 'aesthetic_checklist', 'diagonal_overlay', 'split_color', 'paper_box', 'story_text_box', 'bold_number_list', 'split_photo', 'split_photo_v', 'card_on_photo'];
+  const specialImageLayouts = ['tweet_card', 'glass_layer', 'aesthetic_checklist', 'diagonal_overlay', 'split_color', 'paper_box', 'story_text_box', 'bold_number_list', 'card_on_photo'];
   if (hasBgImage && !specialImageLayouts.includes(layout)) {
     const { plain, segments } = parseAccent(slide.text);
     const zone = (slide._autoImage && slide._autoImage.quietZone) || 'center';
@@ -828,69 +828,6 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // === SPLIT PHOTO: photo fills one half, text sits in the other half ===
   // (Like the reference: foto rechts, text links — or top/bottom.)
   // === SPLIT PHOTO: photo one side, branded text panel on the other ===
-  else if (layout === 'split_photo' || layout === 'split_photo_v') {
-    const vertical = layout === 'split_photo_v';
-    const { plain, segments } = parseAccent(slide.text);
-    const panelColor = slide.secondaryColor || primaryColor;
-    const panelText = contrastColor(panelColor);
-
-    // Photo occupies ONE half; a solid brand panel fills the OTHER half.
-    // (The full-bleed image was skipped for splits — we place it here in a box.)
-    let photoBox, panelRect;
-    if (vertical) {
-      photoBox = { x: 0, y: 0, w: width, h: height * 0.5 };
-      panelRect = { left: 0, top: height * 0.5, width, height: height * 0.5 };
-    } else {
-      photoBox = { x: width * 0.5, y: 0, w: width * 0.5, h: height };
-      panelRect = { left: 0, top: 0, width: width * 0.5, height };
-    }
-
-    // Solid brand panel first.
-    canvas.add(new fabric.Rect({ ...panelRect, fill: panelColor, selectable: false }));
-
-    // Photo in its half (cover-fit, clipped to the box).
-    if (hasBgImage) {
-      try {
-        await drawFramedImageCover(slide.background, photoBox);
-      } catch (e) { /* leave panel color if it fails */ }
-    }
-
-    // Accent bar in the text panel.
-    const barX = vertical ? width * 0.10 : width * 0.10;
-    const barY = vertical ? height * 0.60 : height * 0.24;
-    canvas.add(new fabric.Rect({ left: barX, top: barY, width: fs(48), height: fs(4),
-      fill: accentColor, selectable: false }));
-
-    // Label (optional).
-    if (slide.label) {
-      canvas.add(new fabric.Text(String(slide.label).toUpperCase(), {
-        left: barX, top: barY + fs(14), fontSize: fs(13), fontFamily: 'Inter',
-        fill: panelText, charSpacing: 160, fontWeight: 'bold', selectable: false }));
-    }
-
-    // Headline in the panel.
-    const tb = new fabric.Textbox(plain, {
-      left: vertical ? width / 2 : width * 0.28,
-      top: vertical ? height * 0.75 : height * 0.5,
-      originX: 'center', originY: 'center',
-      width: vertical ? width * 0.82 : width * 0.40,
-      fontSize: fs(slide.fontSize || 34), fontFamily,
-      fill: slide.color || panelText,
-      textAlign: vertical ? 'center' : 'left', lineHeight: 1.24,
-      fontWeight: slide.fontWeight || 'normal',
-    });
-    applyAccentStyles(tb, segments);
-    canvas.add(tb);
-
-    // Brand mark in the panel.
-    if (options.globalBrandName) {
-      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
-        left: vertical ? width / 2 : width * 0.28,
-        top: vertical ? height * 0.94 : height - fs(30),
-        originX: 'center', fontSize: fs(11), fill: panelText, opacity: 0.8,
-        fontFamily: 'Inter', charSpacing: 140, selectable: false }));
-    }
-  }
 
 
   // === CARD ON PHOTO: a branded card floating over a photo/tonal bg ===
@@ -1021,7 +958,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
   // Brand Name — skip for layouts that position their own brand mark, so it
   // doesn't appear twice.
-  const drawsOwnBrandMark = ['split_photo', 'split_photo_v', 'card_on_photo'];
+  const drawsOwnBrandMark = ['card_on_photo'];
   if (options.globalBrandName && !drawsOwnBrandMark.includes(layout)) {
     const brandText = new fabric.Text(options.globalBrandName.toUpperCase(), {
       left: width / 2,
@@ -1063,28 +1000,6 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // image actually loaded & drew; false otherwise so the caller can fall back.
   // No clipPath (which is fragile in fabric v5) — instead we fit the image to
   // the box height/width and rely on the caller drawing a frame over the edges.
-  // Cover-fit version: fills the whole box (center-crop), for split halves.
-  const drawFramedImageCover = (src, box) =>
-    new Promise((resolve) => {
-      if (!src) return resolve(false);
-      fabric.Image.fromURL(src, (img) => {
-        if (!img) return resolve(false);
-        const iw = img.width || 1, ih = img.height || 1;
-        const factor = Math.max(box.w / iw, box.h / ih);
-        img.set({
-          originX: 'center', originY: 'center',
-          left: box.x + box.w / 2, top: box.y + box.h / 2,
-          scaleX: factor, scaleY: factor, selectable: false,
-        });
-        img.clipPath = new fabric.Rect({
-          left: box.x + box.w / 2, top: box.y + box.h / 2,
-          width: box.w, height: box.h,
-          originX: 'center', originY: 'center', absolutePositioned: true,
-        });
-        canvas.add(img);
-        resolve(true);
-      }, { crossOrigin: 'anonymous' });
-    });
 
   const drawOverlayImage = (src) =>
     new Promise((resolve) => {
