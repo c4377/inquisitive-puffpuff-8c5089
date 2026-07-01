@@ -17,7 +17,7 @@ import { attachSmartImages } from '../utils/smartLayoutGenerator';
 import { decidePostDesign, dayHasImage } from '../utils/postDesignEngine';
 import { weightedLayoutPool, getRating, setRating } from '../utils/layoutRatings';
 
-const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2 } = FiIcons;
+const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers } = FiIcons;
 
 const ContentPlanner = () => {
   const { brandSettings, updateBrandSettings } = useBrand();
