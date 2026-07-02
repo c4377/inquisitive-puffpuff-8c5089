@@ -40,6 +40,7 @@ const StoryPlanner = () => {
     const newStory = {
       id: Date.now(),
       format: '9:16',
+      storyMode: true,
       text: "Neue Story",
       fontSize: 36,
       fontFamily: brandConfig?.typography?.fontFamily || 'Inter',
@@ -100,7 +101,7 @@ const StoryPlanner = () => {
   const handleEditSlide = (index) => {
     navigate('/editor', { 
       state: { 
-        slides: stories, 
+        slides: stories.map(s => ({ ...s, storyMode: true })), 
         initialSlideIndex: index,
         dayTitle: `Story Sequence`,
       } 
@@ -139,6 +140,7 @@ const StoryPlanner = () => {
       let slides = slideDefs.map(({ text, noImage }, index) => ({
         id: Date.now() + index,
         format: '9:16',
+        storyMode: true,
         text,
         _noImage: noImage,
         fontSize: 24,
@@ -210,7 +212,7 @@ const StoryPlanner = () => {
       // Scale = 1080 / 400 = 2.7
       const scale = 1080 / 400;
       
-      await renderSlide(ctx, slide, 1080, 1920, { 
+      await renderSlide(ctx, { ...slide, storyMode: true }, 1080, 1920, { 
         slideIndex: i, 
         totalSlides: stories.length,
         scale: scale,
@@ -340,6 +342,7 @@ const StoryPlanner = () => {
                 key={`${brandSettings.currentBrandConfig.colors.primary}-${brandSettings.currentBrandConfig.typography.fontFamily}`}
                 data={{
                   ...slide,
+                  storyMode: true,
                   // Ensure dynamic updates from global config apply if not overridden
                   fontFamily: brandSettings.currentBrandConfig.typography.fontFamily,
                   accentFontFamily: brandSettings.currentBrandConfig.typography.accentFontFamily,

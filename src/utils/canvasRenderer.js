@@ -482,7 +482,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // Preferred: clean white text + soft shadow (NO box). Only if the best spot
   // is still too bright for readable text do we add a gentle local scrim. ===
   const specialImageLayouts = ['tweet_card', 'glass_layer', 'aesthetic_checklist', 'diagonal_overlay', 'split_color', 'paper_box', 'story_text_box', 'bold_number_list'];
-  if (hasBgImage && !specialImageLayouts.includes(layout)) {
+  // Story styling applies ONLY to slides from the StoryPlanner (storyMode
+  // flag) — a 9:16 slide built in the normal editor keeps full styling freedom.
+  const isStoryFormat = slide.storyMode === true;
+  if (hasBgImage && !isStoryFormat && !specialImageLayouts.includes(layout)) {
     const { plain, segments } = parseAccent(slide.text);
     const zone = (slide._autoImage && slide._autoImage.quietZone) || 'center';
     const quietBrightness = (slide._autoImage && typeof slide._autoImage.quietBrightness === 'number')
@@ -537,79 +540,79 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   }
 
 
+  // === STORY MODE (9:16): FIXED styling for ALL story slides ===
+  // Catches every 9:16 slide regardless of its layout, so stories always use
+  // small Montserrat (never the branding font), narrow block, lower third,
+  // never bold — like text typed into the story yourself.
+  if (isStoryFormat) {
+    const { plain } = parseAccent(slide.text);
+    const storyFont = 'Montserrat';
+    const storyColor = '#443027'; // warm espresso, matches the brand
+    const baseSize = fs(18);      // small & calm
+
+    // Measure the natural width so short texts get a block that hugs the
+    // content instead of stretching across the page. Hard cap at 55% width.
+    let boxW = width * 0.55;
+    try {
+      const probe = new fabric.Text(plain, {
+        fontSize: baseSize, fontFamily: storyFont, lineHeight: 1.35,
+      });
+      boxW = Math.min(width * 0.55, probe.width + fs(10));
+    } catch (e) { /* keep cap */ }
+
+    const storyText = new fabric.Textbox(plain, {
+      left: width / 2, top: height * 0.70, originX: 'center', originY: 'center',
+      width: boxW,
+      fontSize: baseSize,
+      fontFamily: storyFont,
+      fontWeight: '400',                // never bold
+      fill: storyColor,
+      textAlign: 'center', lineHeight: 1.35,
+    });
+    // Shrink long texts so the block never grows past ~1/3 of the page.
+    try {
+      let guard = 0;
+      storyText.initDimensions && storyText.initDimensions();
+      while (storyText.height > height * 0.34 && storyText.fontSize > fs(12) && guard < 30) {
+        storyText.set('fontSize', storyText.fontSize - 1);
+        storyText.initDimensions && storyText.initDimensions();
+        guard++;
+      }
+    } catch (e) { /* best effort */ }
+
+    // No panel behind the text: it sits directly on the photo or the brand
+    // background color.
+    if (hasBgImage) {
+      storyText.set({
+        fill: '#FFFFFF',
+        shadow: 'rgba(0,0,0,0.45) 0px 1px 8px',
+      });
+    } else {
+      // On plain brand background just make sure the text is readable.
+      storyText.set('fill', contrastColor(slide.backgroundColor || '#fff') === '#FFFFFF'
+        ? '#FFFFFF' : storyColor);
+    }
+    // Fixed Montserrat throughout — no branding/accent font in stories.
+    canvas.add(storyText);
+    // Small brand mark at the very bottom.
+    if (options.globalBrandName) {
+      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+        left: width / 2, top: height * 0.95, originX: 'center', originY: 'bottom',
+        fontSize: fs(11), fill: hasBgImage ? 'rgba(255,255,255,0.85)' : accentColor,
+        fontFamily: 'Montserrat', charSpacing: 150, selectable: false,
+      }));
+    }
+    canvas.renderAll();
+    return;
+  }
+
+
   // === ADAPTIVE AUTO LAYOUT ===
   // One layout to rule them all. The post design engine decides textAnchor
   // (row/col) and bold; here we just draw a headline at that position, with a
   // photo (full-bleed) or on the brand background. Auto-fit keeps text inside.
   if (layout === 'auto') {
     const { plain, segments } = parseAccent(slide.text);
-
-    // === STORY MODE (9:16): wie selbst in die Story getippt ===
-    // Small Montserrat text in a narrow block (never full page width),
-    // always lower third, never bold. On photos: a small soft white note behind
-    // the text instead of a full-width dark band — like IG's own text background.
-    const isStory = slide.format === '9:16' || Math.abs((height / width) - (16 / 9)) < 0.1;
-    if (isStory) {
-      const storyFont = 'Montserrat';
-      const storyColor = '#443027'; // warm espresso, matches the brand
-      const baseSize = fs(18);      // small & calm
-
-      // Measure the natural width so short texts get a block that hugs the
-      // content instead of stretching across the page. Hard cap at 55% width.
-      let boxW = width * 0.55;
-      try {
-        const probe = new fabric.Text(plain, {
-          fontSize: baseSize, fontFamily: storyFont, lineHeight: 1.35,
-        });
-        boxW = Math.min(width * 0.55, probe.width + fs(10));
-      } catch (e) { /* keep cap */ }
-
-      const storyText = new fabric.Textbox(plain, {
-        left: width / 2, top: height * 0.70, originX: 'center', originY: 'center',
-        width: boxW,
-        fontSize: baseSize,
-        fontFamily: storyFont,
-        fontWeight: '400',                // never bold
-        fill: storyColor,
-        textAlign: 'center', lineHeight: 1.35,
-      });
-      // Shrink long texts so the block never grows past ~1/3 of the page.
-      try {
-        let guard = 0;
-        storyText.initDimensions && storyText.initDimensions();
-        while (storyText.height > height * 0.34 && storyText.fontSize > fs(12) && guard < 30) {
-          storyText.set('fontSize', storyText.fontSize - 1);
-          storyText.initDimensions && storyText.initDimensions();
-          guard++;
-        }
-      } catch (e) { /* best effort */ }
-
-      // No panel behind the text: it sits directly on the photo or the brand
-      // background color.
-      if (hasBgImage) {
-        storyText.set({
-          fill: '#FFFFFF',
-          shadow: 'rgba(0,0,0,0.45) 0px 1px 8px',
-        });
-      } else {
-        // On plain brand background just make sure the text is readable.
-        storyText.set('fill', contrastColor(slide.backgroundColor || '#fff') === '#FFFFFF'
-          ? '#FFFFFF' : storyColor);
-      }
-      // Fixed Montserrat throughout — no branding/accent font in stories.
-      // (parseAccent already stripped the * markers from the text.)
-      canvas.add(storyText);
-      // Small brand mark at the very bottom.
-      if (options.globalBrandName) {
-        canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
-          left: width / 2, top: height * 0.95, originX: 'center', originY: 'bottom',
-          fontSize: fs(11), fill: hasBgImage ? 'rgba(255,255,255,0.85)' : accentColor,
-          fontFamily: 'Montserrat', charSpacing: 150, selectable: false,
-        }));
-      }
-      canvas.renderAll();
-      return;
-    }
 
     const anchor = slide.textAnchor && typeof slide.textAnchor === 'object'
       ? slide.textAnchor : { row: hasBgImage ? 'bottom' : 'mid', col: 'center' };
