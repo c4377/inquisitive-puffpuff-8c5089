@@ -485,7 +485,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // Story styling applies ONLY to slides from the StoryPlanner (storyMode
   // flag) — a 9:16 slide built in the normal editor keeps full styling freedom.
   const isStoryFormat = slide.storyMode === true;
-  if (hasBgImage && !isStoryFormat && !specialImageLayouts.includes(layout)) {
+  if (hasBgImage && !isStoryFormat && slide.reelCoverMode !== true && !specialImageLayouts.includes(layout)) {
     const { plain, segments } = parseAccent(slide.text);
     const zone = (slide._autoImage && slide._autoImage.quietZone) || 'center';
     const quietBrightness = (slide._autoImage && typeof slide._autoImage.quietBrightness === 'number')
@@ -539,6 +539,95 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     return;
   }
 
+
+  // === REEL COVER MODE (9:16 with 3:4 safe zone) ===
+  // Branded cover: brand fonts + colors, big statement text. The canvas is
+  // 9:16 (Reels tab), but Instagram crops covers to the CENTER 3:4 in the
+  // profile grid — so everything important lives inside y 12.5%..87.5% and
+  // is composed to fill that zone well. Centered composition = looks right
+  // in both crops.
+  if (slide.reelCoverMode === true) {
+    const { plain, segments } = parseAccent(slide.text);
+    const safeTop = height * 0.125;          // 3:4 crop starts here
+    const safeBottom = height * 0.875;       // ...and ends here
+    const centerY = height * 0.5;
+
+    // Readability wash over photos: soft dark gradient, strongest in the
+    // middle where the text sits. Fills the full 9:16 so the Reels view
+    // doesn't show a naked edge.
+    if (hasBgImage) {
+      canvas.add(new fabric.Rect({
+        left: 0, top: 0, width, height,
+        fill: 'rgba(0,0,0,0.38)', selectable: false,
+      }));
+    }
+
+    // Big branded statement, centered in the safe zone.
+    const textFill = hasBgImage ? '#FFFFFF' : contrastColor(primaryColor);
+    const coverText = new fabric.Textbox(plain, {
+      left: width / 2, top: centerY, originX: 'center', originY: 'center',
+      width: width * 0.82,
+      fontSize: fs(34),
+      fontFamily,                     // BRAND font (unlike stories)
+      fontWeight: '700',
+      fill: textFill,
+      textAlign: 'center',
+      lineHeight: 1.22,
+      charSpacing: 10,
+    });
+    // Fill the 3:4 zone generously, but never spill out of it: target the
+    // text block at ~55% of the safe-zone height, shrinking if needed.
+    try {
+      const maxH = (safeBottom - safeTop) * 0.62;
+      let guard = 0;
+      coverText.initDimensions && coverText.initDimensions();
+      while (coverText.height > maxH && coverText.fontSize > fs(16) && guard < 40) {
+        coverText.set('fontSize', coverText.fontSize - 1);
+        coverText.initDimensions && coverText.initDimensions();
+        guard++;
+      }
+    } catch (e) { /* best effort */ }
+    // Accent words (*so*) get the brand accent font/color.
+    applyAccentStyles(coverText, segments);
+    canvas.add(coverText);
+
+    // Thin accent line above the text — small branded detail that helps the
+    // composition fill the frame.
+    try {
+      const lineY = centerY - (coverText.height / 2) - fs(22);
+      if (lineY > safeTop + fs(10)) {
+        canvas.add(new fabric.Rect({
+          left: width / 2, top: lineY, originX: 'center', originY: 'center',
+          width: fs(36), height: fs(2.5),
+          fill: hasBgImage ? 'rgba(255,255,255,0.9)' : accentColor,
+          selectable: false,
+        }));
+      }
+    } catch (e) { /* skip detail */ }
+
+    // Brand mark near the bottom of the SAFE zone (visible in the 3:4 grid).
+    if (options.globalBrandName) {
+      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+        left: width / 2, top: safeBottom - fs(18), originX: 'center', originY: 'bottom',
+        fontSize: fs(11),
+        fill: hasBgImage ? 'rgba(255,255,255,0.85)' : accentColor,
+        fontFamily: 'Montserrat', charSpacing: 150, selectable: false,
+      }));
+    }
+
+    // Preview-only: dashed guides where Instagram crops to 3:4.
+    if (slide.showSafeZone) {
+      const guide = (y) => new fabric.Line([0, y, width, y], {
+        stroke: 'rgba(120,120,120,0.55)', strokeWidth: 1,
+        strokeDashArray: [6, 5], selectable: false,
+      });
+      canvas.add(guide(safeTop));
+      canvas.add(guide(safeBottom));
+    }
+
+    canvas.renderAll();
+    return;
+  }
 
   // === STORY MODE (9:16): FIXED styling for ALL story slides ===
   // Catches every 9:16 slide regardless of its layout, so stories always use

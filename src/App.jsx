@@ -12,6 +12,7 @@ import BrandSettings from './pages/BrandSettings';
 import ContentPlanner from './pages/ContentPlanner';
 import CommunityPlanner from './pages/CommunityPlanner';
 import StoryPlanner from './pages/StoryPlanner';
+import ReelCoverPlanner from './pages/ReelCoverPlanner';
 import Editor from './pages/Editor';
 import FeedPreview from './pages/FeedPreview';
 import Login from './pages/Login';
@@ -47,6 +48,7 @@ function App() {
                 <Route path="/content-planner" element={<ContentPlanner />} />
                 <Route path="/community-planner" element={<CommunityPlanner />} />
                 <Route path="/story-planner" element={<StoryPlanner />} />
+                <Route path="/reel-covers" element={<ReelCoverPlanner />} />
                 <Route path="/feed-preview" element={<FeedPreview />} />
                 <Route path="/worksheets" element={<WorksheetGenerator />} /> {/* NEW ROUTE */}
               </Routes>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 // FIX: Named imports to prevent crash
-import { FiHome, FiShuffle, FiPlus, FiSettings, FiZap, FiCalendar, FiEdit3, FiMenu, FiX, FiChevronRight, FiGrid, FiUsers, FiSmartphone, FiLogOut, FiLogIn, FiFileText } from 'react-icons/fi';
+import { FiHome, FiShuffle, FiPlus, FiSettings, FiZap, FiCalendar, FiEdit3, FiMenu, FiX, FiChevronRight, FiGrid, FiUsers, FiSmartphone, FiLogOut, FiLogIn, FiFileText, FiFilm } from 'react-icons/fi';
 import SafeIcon from '../common/SafeIcon';
 import { useBrand } from '../context/BrandContext';
 import { useAuth } from '../context/AuthContext';
@@ -22,6 +22,7 @@ const Header = () => {
     { path: '/brand-randomizer', icon: FiShuffle, label: 'Randomizer' },
     { path: '/content-planner', icon: FiCalendar, label: 'Posts', disabled: !hasActiveBrand },
     { path: '/story-planner', icon: FiSmartphone, label: 'Stories', disabled: !hasActiveBrand },
+    { path: '/reel-covers', icon: FiFilm, label: 'Reel Cover', disabled: !hasActiveBrand },
     // NEW WORKSHEETS LINK
     { path: '/worksheets', icon: FiFileText, label: 'Worksheets', disabled: !hasActiveBrand },
     { path: '/community-planner', icon: FiUsers, label: 'Community', disabled: !hasActiveBrand },

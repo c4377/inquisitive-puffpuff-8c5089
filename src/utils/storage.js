@@ -224,6 +224,41 @@ export const loadStorySetsFromDB = async () => {
   }
 };
 
+// --- SAVED REEL COVER SETS ---
+const REEL_COVER_SETS_KEY = 'saved_reel_cover_sets';
+
+export const saveReelCoverSetsToDB = async (sets) => {
+  try {
+    const db = await initDB();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([STORE_NAME], 'readwrite');
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.put(sets, REEL_COVER_SETS_KEY);
+      request.onsuccess = () => resolve(true);
+      request.onerror = () => reject(request.error);
+    });
+  } catch (e) {
+    console.error("Failed to save reel cover sets to DB", e);
+    return false;
+  }
+};
+
+export const loadReelCoverSetsFromDB = async () => {
+  try {
+    const db = await initDB();
+    return new Promise((resolve) => {
+      const transaction = db.transaction([STORE_NAME], 'readonly');
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.get(REEL_COVER_SETS_KEY);
+      request.onsuccess = () => resolve(request.result || []);
+      request.onerror = () => resolve([]);
+    });
+  } catch (e) {
+    console.warn("Could not init DB for loading reel cover sets", e);
+    return [];
+  }
+};
+
 // --- COMMUNITY DECKS (NEW) ---
 export const saveCommunityDecksToDB = async (decks) => {
   try {
