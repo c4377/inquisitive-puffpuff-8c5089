@@ -12,7 +12,7 @@ import { renderSlide } from '../utils/canvasRenderer';
 import { attachSmartImages } from '../utils/smartLayoutGenerator';
 import { decidePostDesign, dayHasImage } from '../utils/postDesignEngine';
 
-const { FiSmartphone, FiDownload, FiRefreshCw, FiLayers, FiFileText, FiX, FiPlay, FiTrash2, FiEdit3, FiPlus, FiCopy, FiCheck } = FiIcons;
+const { FiSmartphone, FiDownload, FiRefreshCw, FiLayers, FiFileText, FiX, FiPlay, FiTrash2, FiEdit3, FiPlus, FiCopy, FiCheck, FiImage } = FiIcons;
 
 const StoryPlanner = () => {
   const { brandSettings, updateBrandSettings, dataLoaded } = useBrand();
@@ -49,7 +49,8 @@ const StoryPlanner = () => {
       backgroundColor: brandConfig?.colors?.background || '#FFFFFF',
       secondaryColor: brandConfig?.colors?.secondary || '#CCCCCC',
       accentColor: brandConfig?.colors?.accent || '#EA580C',
-      layout: 'story_text_box', // Default story layout
+      layout: 'auto', // story mode styling (handwritten, lower third)
+      layoutId: 'auto',
       textAlign: 'center',
       visualElements: [],
       imageScale: 1,
@@ -57,6 +58,43 @@ const StoryPlanner = () => {
       totalSlides: stories.length + 1
     };
     setStories(prev => [...prev, newStory]);
+  };
+
+  // Cycle a card through: Hintergrundfarbe -> Bild -> Bild im Zoom -> Farbe.
+  const handleToggleImage = async (index) => {
+    const slide = stories[index];
+    const hasImg = typeof slide?.background === 'string' && slide.background.length > 5;
+    const zoomed = hasImg && (slide.imageScale || 1) > 1.05;
+
+    if (hasImg && !zoomed) {
+      // Bild -> Bild im Zoom
+      setStories(prev => prev.map((s, i) => (i === index ? { ...s, imageScale: 1.5 } : s)));
+      return;
+    }
+    if (hasImg && zoomed) {
+      // Bild im Zoom -> nur Farbe
+      setStories(prev => prev.map((s, i) => {
+        if (i !== index) return s;
+        const { background, overlay, _autoImage, ...rest } = s;
+        return { ...rest, background: null, imageScale: 1, _noImage: true };
+      }));
+      return;
+    }
+    // Farbe -> Bild
+    const pool = brandSettings?.brandImages || [];
+    if (pool.length === 0) {
+      alert('Kein Bild im Pool. Lade zuerst Bilder hoch.');
+      return;
+    }
+    try {
+      const offset = Math.floor(Math.random() * pool.length);
+      const [withImg] = await attachSmartImages(
+        [{ ...slide, layout: 'auto', layoutId: 'auto' }], pool, offset
+      );
+      setStories(prev => prev.map((s, i) => (i === index ? { ...withImg, imageScale: 1, _noImage: false } : s)));
+    } catch (e) {
+      console.error('Bild anhängen fehlgeschlagen:', e);
+    }
   };
 
   const handleEditSlide = (index) => {
@@ -86,16 +124,24 @@ const StoryPlanner = () => {
         .filter(t => t.length > 0);
       if (slideTexts.length === 0) slideTexts.push(bulkText.trim());
 
+      // Detect "(ohne Bild)" / "[kein Bild]" markers per story -> text-only page.
+      const noImgRe = /[\(\[]\s*(?:ohne|kein)\s+bild\s*[\)\]]/i;
+      const slideDefs = slideTexts.map(raw => ({
+        noImage: noImgRe.test(raw),
+        text: raw.replace(new RegExp(noImgRe, 'gi'), '').trim(),
+      }));
+
       const brandConfig = brandSettings.currentBrandConfig;
       const imagePool = brandSettings?.brandImages || [];
 
       // Build base story slides (9:16), then run the SAME engine as the feed:
       // auto layout + pool images (variety) + text position/bold decisions.
-      let slides = slideTexts.map((text, index) => ({
+      let slides = slideDefs.map(({ text, noImage }, index) => ({
         id: Date.now() + index,
         format: '9:16',
-        text: text.trim(),
-        fontSize: 40,
+        text,
+        _noImage: noImage,
+        fontSize: 24,
         fontFamily: brandConfig?.typography?.fontFamily || 'Inter',
         accentFontFamily: brandConfig?.typography?.accentFontFamily,
         fontWeight: '400',
@@ -120,6 +166,11 @@ const StoryPlanner = () => {
       // Apply the design engine per slide: position by quiet zone / rotation, bold every 4th.
       slides = slides.map((slide, index) => {
         let s2 = { ...slide };
+        // Explicit "(ohne Bild)" marker beats the auto-attached image.
+        if (s2._noImage) {
+          const { background, overlay, _autoImage, ...rest } = s2;
+          s2 = { ...rest, background: null, _noImage: true };
+        }
         const hasImg = typeof s2.background === 'string' && s2.background.length > 5;
         if (!hasImg) {
           const { background, overlay, _autoImage, ...rest } = s2;
@@ -258,7 +309,7 @@ const StoryPlanner = () => {
                 value={bulkText} 
                 onChange={(e) => setBulkText(e.target.value)}
                 className="w-full h-48 p-4 border border-gray-300 rounded-lg text-sm font-mono mb-4 focus:ring-2 focus:ring-purple-500"
-                placeholder={`Story 1\nHey Leute! Ich habe heute etwas *Verrücktes* erlebt...\n\nStory 2\nHabt ihr das auch schon mal gehabt? (Poll)`}
+                placeholder={`Story 1\nHey! Ich habe heute etwas *Verrücktes* erlebt...\n\nStory 2 (ohne Bild)\nDiese Seite kommt ohne Foto, nur Text.`}
               />
               <div className="flex justify-end">
                 <button 
@@ -319,6 +370,18 @@ const StoryPlanner = () => {
                   className="bg-white text-gray-800 px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg flex items-center hover:text-purple-600"
                 >
                   <SafeIcon icon={copiedIndex === index ? FiCheck : FiCopy} className="mr-1.5" /> {copiedIndex === index ? 'Kopiert' : 'Text'}
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleToggleImage(index);
+                  }}
+                  className="bg-white text-gray-800 px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg flex items-center hover:text-purple-600"
+                >
+                  <SafeIcon icon={FiImage} className="mr-1.5" />
+                  {(typeof slide.background === 'string' && slide.background.length > 5)
+                    ? ((slide.imageScale || 1) > 1.05 ? 'Nur Farbe' : 'Zoom')
+                    : 'Bild rein'}
                 </button>
               </div>
             </div>
