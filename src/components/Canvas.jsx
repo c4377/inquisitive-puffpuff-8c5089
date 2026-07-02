@@ -54,58 +54,71 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "MUSE 
     };
   }, []);
 
-  // Render Content
+  // Render Content — serialized. renderSlide is async (awaits background
+  // images); if data changes while a render is in flight, two renders would
+  // interleave on the same canvas and stack their texts. So: renders run
+  // strictly one after another, and outdated queued renders are skipped.
+  const renderSeq = useRef(0);
+  const renderChain = useRef(Promise.resolve());
+
   useEffect(() => {
-    const canvas = fabricRef.current;
-    if (!canvas || !data) return;
+    if (!fabricRef.current || !data) return;
 
-    // Dimensions (internal render resolution — kept high for crisp scaling)
-    let canvasWidth = 800;
-    let canvasHeight = 1000;
+    const myId = ++renderSeq.current;
 
-    if (data.format === '16:9') {
-      canvasWidth = 960;
-      canvasHeight = 540;
-    } else if (data.format === '9:16') {
-      canvasWidth = 800;
-      canvasHeight = 1422;
-    } else if (data.format === '1:1') {
-        canvasWidth = 800;
-        canvasHeight = 800;
-    } else if (data.format === '4:5') {
-        canvasWidth = 800;
-        canvasHeight = 1000;
-    }
+    renderChain.current = renderChain.current
+      .then(async () => {
+        // A newer render was requested while we waited in the queue -> skip.
+        if (myId !== renderSeq.current) return;
+        const canvas = fabricRef.current;
+        if (!canvas) return;
 
-    // Update Dimensions
-    canvas.setDimensions({ width: canvasWidth, height: canvasHeight });
+        // Dimensions (internal render resolution — kept high for crisp scaling)
+        let canvasWidth = 800;
+        let canvasHeight = 1000;
 
-    // Render — scale fonts/spacing proportionally to the internal width.
-    // Base design width was 400px, so scale = width/400 keeps text proportions.
-    const renderScale = canvasWidth / 400;
-    Promise.resolve(
-      renderSlide(canvas, data, canvasWidth, canvasHeight, { 
-        slideIndex: data.slideNumber ? data.slideNumber - 1 : 0, 
-        totalSlides: data.totalSlides || (data.slideNumber ? 2 : 1), 
-        scale: renderScale, 
-        globalBrandName: brandName 
+        if (data.format === '16:9') {
+          canvasWidth = 960;
+          canvasHeight = 540;
+        } else if (data.format === '9:16') {
+          canvasWidth = 800;
+          canvasHeight = 1422;
+        } else if (data.format === '1:1') {
+          canvasWidth = 800;
+          canvasHeight = 800;
+        } else if (data.format === '4:5') {
+          canvasWidth = 800;
+          canvasHeight = 1000;
+        }
+
+        canvas.setDimensions({ width: canvasWidth, height: canvasHeight });
+
+        // Render — scale fonts/spacing proportionally to the internal width.
+        // Base design width was 400px, so scale = width/400 keeps text proportions.
+        const renderScale = canvasWidth / 400;
+        await renderSlide(canvas, data, canvasWidth, canvasHeight, {
+          slideIndex: data.slideNumber ? data.slideNumber - 1 : 0,
+          totalSlides: data.totalSlides || (data.slideNumber ? 2 : 1),
+          scale: renderScale,
+          globalBrandName: brandName
+        });
+
+        // FIX: Fabric renders at an internal resolution (e.g. 400x500). Scale the
+        // visible <canvas> to the container WIDTH while keeping aspect ratio, so the
+        // content shrinks/grows proportionally instead of being cut off or oversized.
+        const el = canvas.lowerCanvasEl;
+        if (el) {
+          el.style.width = '100%';
+          el.style.height = 'auto';
+          el.style.display = 'block';
+          el.style.maxHeight = '100%';
+          el.style.objectFit = 'contain';
+        }
       })
-    ).catch((err) => {
-      // never let a render error crash the page
-      console.error('renderSlide failed:', err);
-    });
-
-    // FIX: Fabric renders at an internal resolution (e.g. 400x500). Scale the
-    // visible <canvas> to the container WIDTH while keeping aspect ratio, so the
-    // content shrinks/grows proportionally instead of being cut off or oversized.
-    const el = canvas.lowerCanvasEl;
-    if (el) {
-      el.style.width = '100%';
-      el.style.height = 'auto';
-      el.style.display = 'block';
-      el.style.maxHeight = '100%';
-      el.style.objectFit = 'contain';
-    }
+      .catch((err) => {
+        // never let a render error crash the page
+        console.error('renderSlide failed:', err);
+      });
 
   }, [data, fontLoaded, brandName]);
 

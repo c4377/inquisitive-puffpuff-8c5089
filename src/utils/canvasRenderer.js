@@ -596,7 +596,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         storyText.set('fill', contrastColor(slide.backgroundColor || '#fff') === '#FFFFFF'
           ? '#FFFFFF' : storyColor);
       }
-      applyAccentStyles(storyText, segments);
+      // Fixed Montserrat throughout — no branding/accent font in stories.
+      // (parseAccent already stripped the * markers from the text.)
       canvas.add(storyText);
       // Small brand mark at the very bottom.
       if (options.globalBrandName) {
