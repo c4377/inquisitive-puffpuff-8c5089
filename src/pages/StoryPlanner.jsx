@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import * as FiIcons from 'react-icons/fi';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import { fabric } from 'fabric';
 import SafeIcon from '../common/SafeIcon';
 import Canvas from '../components/Canvas';
 import StyleShifter from '../components/StyleShifter'; // IMPORT NEW SHIFTER
@@ -11,6 +12,7 @@ import { useBrand } from '../context/BrandContext';
 import { renderSlide } from '../utils/canvasRenderer';
 import { attachSmartImages } from '../utils/smartLayoutGenerator';
 import { decidePostDesign, dayHasImage } from '../utils/postDesignEngine';
+import { saveStorySetsToDB, loadStorySetsFromDB } from '../utils/storage';
 
 const { FiSmartphone, FiDownload, FiRefreshCw, FiLayers, FiFileText, FiX, FiPlay, FiTrash2, FiEdit3, FiPlus, FiCopy, FiCheck, FiImage, FiShuffle } = FiIcons;
 
@@ -24,6 +26,9 @@ const StoryPlanner = () => {
   const [showShifter, setShowShifter] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState(null);
   const lastOffsetRef = useRef(0);
+  const [storySets, setStorySets] = useState([]);
+  const [showLibrary, setShowLibrary] = useState(false);
+  const [setName, setSetName] = useState('');
 
   // Random image-pool offset that differs from the previous one, so a reload
   // actually shows different images instead of the same ones every time.
@@ -68,6 +73,11 @@ const StoryPlanner = () => {
   const brandName = brandSettings.currentBrandConfig?.name || "MUSE MENTORING";
 
   // Initialize with one empty story if nothing exists
+  // Load saved story sets once.
+  useEffect(() => {
+    loadStorySetsFromDB().then(sets => setStorySets(Array.isArray(sets) ? sets : []));
+  }, []);
+
   useEffect(() => {
     if (dataLoaded && stories.length === 0) {
       // Optional: Load from DB if we save story plans specifically. 
@@ -102,27 +112,50 @@ const StoryPlanner = () => {
     setStories(prev => [...prev, newStory]);
   };
 
-  // Cycle a card through: Hintergrundfarbe -> Bild -> Bild im Zoom -> Farbe.
-  const handleToggleImage = async (index) => {
-    const slide = stories[index];
-    const hasImg = typeof slide?.background === 'string' && slide.background.length > 5;
-    const zoomed = hasImg && (slide.imageScale || 1) > 1.05;
+  // --- STORY LIBRARY: save / load / delete named sequences ---
+  const handleSaveSet = async () => {
+    const name = setName.trim() || `Sequenz ${new Date().toLocaleDateString('de-AT')}`;
+    if (stories.length === 0) return;
+    const newSet = { id: Date.now(), name, createdAt: new Date().toISOString(), stories };
+    const updated = [newSet, ...storySets];
+    setStorySets(updated);
+    setSetName('');
+    await saveStorySetsToDB(updated);
+  };
 
-    if (hasImg && !zoomed) {
-      // Bild -> Bild im Zoom
-      setStories(prev => prev.map((s, i) => (i === index ? { ...s, imageScale: 1.5 } : s)));
-      return;
-    }
-    if (hasImg && zoomed) {
-      // Bild im Zoom -> nur Farbe
-      setStories(prev => prev.map((s, i) => {
-        if (i !== index) return s;
-        const { background, overlay, _autoImage, ...rest } = s;
-        return { ...rest, background: null, imageScale: 1, _noImage: true };
-      }));
-      return;
-    }
-    // Farbe -> Bild
+  const handleLoadSet = (set) => {
+    if (!set?.stories?.length) return;
+    if (stories.length > 1 && !window.confirm(`"${set.name}" laden? Die aktuelle Sequenz wird ersetzt.`)) return;
+    setStories(set.stories);
+    setShowLibrary(false);
+  };
+
+  const handleDeleteSet = async (id) => {
+    if (!window.confirm('Diese gespeicherte Sequenz löschen?')) return;
+    const updated = storySets.filter(s => s.id !== id);
+    setStorySets(updated);
+    await saveStorySetsToDB(updated);
+  };
+
+  // --- CARD IMAGE ACTIONS: separate Zoom / Entfernen / Bild rein ---
+  const handleZoomToggle = (index) => {
+    setStories(prev => prev.map((s, i) => {
+      if (i !== index) return s;
+      const zoomed = (s.imageScale || 1) > 1.05;
+      return { ...s, imageScale: zoomed ? 1 : 1.5 };
+    }));
+  };
+
+  const handleRemoveImage = (index) => {
+    setStories(prev => prev.map((s, i) => {
+      if (i !== index) return s;
+      const { background, overlay, _autoImage, ...rest } = s;
+      return { ...rest, background: null, imageScale: 1, _noImage: true };
+    }));
+  };
+
+  const handleAddImage = async (index) => {
+    const slide = stories[index];
     const pool = brandSettings?.brandImages || [];
     if (pool.length === 0) {
       alert('Kein Bild im Pool. Lade zuerst Bilder hoch.');
@@ -237,35 +270,59 @@ const StoryPlanner = () => {
     }
   };
 
-  const downloadDeck = async () => {
-    const zip = new JSZip();
-    const folder = zip.folder(`Story_Sequence`);
-    
+  // Render all story frames as PNG File objects (1080x1920).
+  const renderStoryFiles = async () => {
     await document.fonts.ready;
-
+    const files = [];
     for (let i = 0; i < stories.length; i++) {
-      const slide = stories[i];
-      const canvas = document.createElement('canvas');
-      canvas.width = 1080;
-      canvas.height = 1920;
-      const ctx = canvas.getContext('2d');
-      // Base width for 9:16 in Canvas.jsx is 400. 
-      // Scale = 1080 / 400 = 2.7
-      const scale = 1080 / 400;
-      
-      await renderSlide(ctx, { ...slide, storyMode: true }, 1080, 1920, { 
-        slideIndex: i, 
+      const canvasEl = document.createElement('canvas');
+      canvasEl.width = 1080;
+      canvasEl.height = 1920;
+      canvasEl.style.position = 'fixed';
+      canvasEl.style.left = '-99999px';
+      document.body.appendChild(canvasEl);
+      const fCanvas = new fabric.StaticCanvas(canvasEl, { width: 1080, height: 1920 });
+      await renderSlide(fCanvas, { ...stories[i], storyMode: true }, 1080, 1920, {
+        slideIndex: i,
         totalSlides: stories.length,
-        scale: scale,
-        globalBrandName: brandName
+        scale: 1080 / 400,
+        globalBrandName: brandName,
       });
-      
-      const blob = await new Promise(r => canvas.toBlob(r));
-      folder.file(`Story_${i + 1}.png`, blob);
+      const dataUrl = fCanvas.toDataURL({ format: 'png', multiplier: 1 });
+      const blob = await (await fetch(dataUrl)).blob();
+      fCanvas.dispose();
+      if (canvasEl.parentNode) canvasEl.parentNode.removeChild(canvasEl);
+      files.push(new File([blob], `Story_${i + 1}.png`, { type: 'image/png' }));
     }
-    
-    const contentZip = await zip.generateAsync({ type: "blob" });
-    saveAs(contentZip, `Story_Sequence.zip`);
+    return files;
+  };
+
+  // iPhone: share sheet -> "Bilder sichern" legt alle Frames in die FOTOS.
+  // Desktop/kein Share: ZIP als Fallback.
+  const downloadDeck = async () => {
+    if (stories.length === 0) return;
+    setLoading(true);
+    try {
+      const files = await renderStoryFiles();
+      if (typeof navigator !== 'undefined' && navigator.canShare && navigator.canShare({ files })) {
+        try {
+          await navigator.share({ files, title: 'Story Sequenz' });
+        } catch (e) {
+          if (e?.name !== 'AbortError') throw e;
+        }
+      } else {
+        const zip = new JSZip();
+        const folder = zip.folder('Story_Sequence');
+        files.forEach(f => folder.file(f.name, f));
+        const contentZip = await zip.generateAsync({ type: 'blob' });
+        saveAs(contentZip, 'Story_Sequence.zip');
+      }
+    } catch (e) {
+      console.error('Story export failed:', e);
+      alert('Export fehlgeschlagen. Bitte erneut versuchen.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!brandSettings.currentBrandConfig) {
@@ -330,6 +387,12 @@ const StoryPlanner = () => {
           >
             <SafeIcon icon={FiShuffle} className="mr-1" /> Bilder neu
           </button>
+          <button 
+            onClick={() => setShowLibrary(!showLibrary)}
+            className={`text-sm px-3 py-1 rounded-lg font-bold transition-colors flex items-center ${showLibrary ? 'bg-purple-100 text-purple-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+          >
+            <SafeIcon icon={FiLayers} className="mr-1" /> Library
+          </button>
         </div>
         <div className="flex space-x-3">
           <button 
@@ -342,7 +405,7 @@ const StoryPlanner = () => {
             onClick={downloadDeck}
             className="bg-gray-900 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:bg-black transition-all flex items-center"
           >
-            <SafeIcon icon={FiDownload} className="mr-2" /> Download All (.zip)
+            <SafeIcon icon={FiDownload} className="mr-2" /> {loading ? 'Rendert...' : 'In Fotos sichern'}
           </button>
         </div>
       </div>
@@ -369,6 +432,66 @@ const StoryPlanner = () => {
                   <SafeIcon icon={FiPlay} className="mr-2" /> Generate Stories
                 </button>
               </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* STORY LIBRARY PANEL */}
+      <AnimatePresence>
+        {showLibrary && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="mb-8 overflow-hidden" >
+            <div className="bg-white border-2 border-purple-100 rounded-xl p-6 shadow-sm">
+              <div className="flex justify-between mb-4">
+                <h3 className="text-sm font-bold text-gray-700">Story Library</h3>
+                <button onClick={() => setShowLibrary(false)}><SafeIcon icon={FiX} className="text-gray-400" /></button>
+              </div>
+              <div className="flex gap-2 mb-4">
+                <input
+                  type="text"
+                  value={setName}
+                  onChange={(e) => setSetName(e.target.value)}
+                  placeholder="Name der Sequenz..."
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500"
+                />
+                <button
+                  onClick={handleSaveSet}
+                  disabled={stories.length === 0}
+                  className="px-4 py-2 bg-purple-600 text-white text-sm font-bold rounded-lg hover:bg-purple-700 disabled:opacity-50"
+                >
+                  Speichern
+                </button>
+              </div>
+              {storySets.length === 0 ? (
+                <p className="text-sm text-gray-400">Noch keine gespeicherten Sequenzen.</p>
+              ) : (
+                <div className="space-y-2">
+                  {storySets.map(set => (
+                    <div key={set.id} className="flex items-center justify-between bg-gray-50 rounded-lg px-3 py-2">
+                      <div>
+                        <span className="text-sm font-bold text-gray-800">{set.name}</span>
+                        <span className="text-xs text-gray-400 ml-2">
+                          {set.stories?.length || 0} Slides · {new Date(set.createdAt).toLocaleDateString('de-AT')}
+                        </span>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleLoadSet(set)}
+                          className="text-xs bg-white border border-gray-300 px-3 py-1 rounded-lg font-bold text-gray-700 hover:bg-gray-100"
+                        >
+                          Laden
+                        </button>
+                        <button
+                          onClick={() => handleDeleteSet(set.id)}
+                          className="text-xs text-red-500 px-2 py-1 rounded-lg hover:bg-red-50"
+                        >
+                          <SafeIcon icon={FiTrash2} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </motion.div>
         )}
@@ -422,18 +545,30 @@ const StoryPlanner = () => {
                 >
                   <SafeIcon icon={copiedIndex === index ? FiCheck : FiCopy} className="mr-1.5" /> {copiedIndex === index ? 'Kopiert' : 'Text'}
                 </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleToggleImage(index);
-                  }}
-                  className="bg-white text-gray-800 px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg flex items-center hover:text-purple-600"
-                >
-                  <SafeIcon icon={FiImage} className="mr-1.5" />
-                  {(typeof slide.background === 'string' && slide.background.length > 5)
-                    ? ((slide.imageScale || 1) > 1.05 ? 'Nur Farbe' : 'Zoom')
-                    : 'Bild rein'}
-                </button>
+                {(typeof slide.background === 'string' && slide.background.length > 5) ? (
+                  <>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleZoomToggle(index); }}
+                      className="bg-white text-gray-800 px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg flex items-center hover:text-purple-600"
+                    >
+                      <SafeIcon icon={FiImage} className="mr-1.5" />
+                      {(slide.imageScale || 1) > 1.05 ? 'Zoom aus' : 'Zoom'}
+                    </button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleRemoveImage(index); }}
+                      className="bg-white text-red-600 px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg flex items-center hover:bg-red-50"
+                    >
+                      <SafeIcon icon={FiX} className="mr-1.5" /> Bild weg
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleAddImage(index); }}
+                    className="bg-white text-gray-800 px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg flex items-center hover:text-purple-600"
+                  >
+                    <SafeIcon icon={FiImage} className="mr-1.5" /> Bild rein
+                  </button>
+                )}
               </div>
             </div>
           </motion.div>

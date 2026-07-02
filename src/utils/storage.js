@@ -188,6 +188,42 @@ export const loadSetsFromDB = async () => {
   }
 };
 
+// --- SAVED STORY SETS (named snapshots of a story sequence) ---
+// A story set = { id, name, createdAt, stories: [...slides] }. Stored as an array.
+const STORY_SETS_KEY = 'saved_story_sets';
+
+export const saveStorySetsToDB = async (sets) => {
+  try {
+    const db = await initDB();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction([STORE_NAME], 'readwrite');
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.put(sets, STORY_SETS_KEY);
+      request.onsuccess = () => resolve(true);
+      request.onerror = () => reject(request.error);
+    });
+  } catch (e) {
+    console.error("Failed to save story sets to DB", e);
+    return false;
+  }
+};
+
+export const loadStorySetsFromDB = async () => {
+  try {
+    const db = await initDB();
+    return new Promise((resolve) => {
+      const transaction = db.transaction([STORE_NAME], 'readonly');
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.get(STORY_SETS_KEY);
+      request.onsuccess = () => resolve(request.result || []);
+      request.onerror = () => resolve([]);
+    });
+  } catch (e) {
+    console.warn("Could not init DB for loading story sets", e);
+    return [];
+  }
+};
+
 // --- COMMUNITY DECKS (NEW) ---
 export const saveCommunityDecksToDB = async (decks) => {
   try {
