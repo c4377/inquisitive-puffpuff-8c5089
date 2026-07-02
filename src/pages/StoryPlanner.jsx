@@ -14,7 +14,7 @@ import { attachSmartImages } from '../utils/smartLayoutGenerator';
 import { decidePostDesign, dayHasImage } from '../utils/postDesignEngine';
 import { saveStorySetsToDB, loadStorySetsFromDB } from '../utils/storage';
 
-const { FiSmartphone, FiDownload, FiRefreshCw, FiLayers, FiFileText, FiX, FiPlay, FiTrash2, FiEdit3, FiPlus, FiCopy, FiCheck, FiImage, FiShuffle } = FiIcons;
+const { FiSmartphone, FiDownload, FiRefreshCw, FiLayers, FiFileText, FiX, FiPlay, FiTrash2, FiEdit3, FiPlus, FiCopy, FiCheck, FiImage, FiShuffle, FiZoomIn, FiZoomOut } = FiIcons;
 
 const StoryPlanner = () => {
   const { brandSettings, updateBrandSettings, dataLoaded } = useBrand();
@@ -529,10 +529,10 @@ const StoryPlanner = () => {
               <div className="absolute top-2 left-2 bg-black/50 text-white text-[10px] px-2 py-0.5 rounded font-bold">
                 {index + 1}
               </div>
-              {/* Hover Overlay */}
-              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                <div className="bg-white text-gray-800 px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg flex items-center">
-                  <SafeIcon icon={FiEdit3} className="mr-2" /> Edit
+              {/* Hover Overlay — compact icon buttons */}
+              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5">
+                <div className="bg-white text-gray-800 p-2 rounded-full shadow-lg flex items-center justify-center" title="Bearbeiten">
+                  <SafeIcon icon={FiEdit3} className="text-sm" />
                 </div>
                 <button
                   onClick={(e) => {
@@ -541,32 +541,35 @@ const StoryPlanner = () => {
                     setCopiedIndex(index);
                     setTimeout(() => setCopiedIndex(null), 1500);
                   }}
-                  className="bg-white text-gray-800 px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg flex items-center hover:text-purple-600"
+                  title="Text kopieren"
+                  className={`p-2 rounded-full shadow-lg flex items-center justify-center bg-white hover:text-purple-600 ${copiedIndex === index ? 'text-green-600' : 'text-gray-800'}`}
                 >
-                  <SafeIcon icon={copiedIndex === index ? FiCheck : FiCopy} className="mr-1.5" /> {copiedIndex === index ? 'Kopiert' : 'Text'}
+                  <SafeIcon icon={copiedIndex === index ? FiCheck : FiCopy} className="text-sm" />
                 </button>
                 {(typeof slide.background === 'string' && slide.background.length > 5) ? (
                   <>
                     <button
                       onClick={(e) => { e.stopPropagation(); handleZoomToggle(index); }}
-                      className="bg-white text-gray-800 px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg flex items-center hover:text-purple-600"
+                      title={(slide.imageScale || 1) > 1.05 ? 'Zoom aus' : 'Zoom'}
+                      className={`p-2 rounded-full shadow-lg flex items-center justify-center bg-white hover:text-purple-600 ${(slide.imageScale || 1) > 1.05 ? 'text-purple-600' : 'text-gray-800'}`}
                     >
-                      <SafeIcon icon={FiImage} className="mr-1.5" />
-                      {(slide.imageScale || 1) > 1.05 ? 'Zoom aus' : 'Zoom'}
+                      <SafeIcon icon={(slide.imageScale || 1) > 1.05 ? FiZoomOut : FiZoomIn} className="text-sm" />
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); handleRemoveImage(index); }}
-                      className="bg-white text-red-600 px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg flex items-center hover:bg-red-50"
+                      title="Bild entfernen"
+                      className="bg-white text-red-500 p-2 rounded-full shadow-lg flex items-center justify-center hover:bg-red-50"
                     >
-                      <SafeIcon icon={FiX} className="mr-1.5" /> Bild weg
+                      <SafeIcon icon={FiX} className="text-sm" />
                     </button>
                   </>
                 ) : (
                   <button
                     onClick={(e) => { e.stopPropagation(); handleAddImage(index); }}
-                    className="bg-white text-gray-800 px-3 py-1.5 rounded-lg font-bold text-xs shadow-lg flex items-center hover:text-purple-600"
+                    title="Bild einfügen"
+                    className="bg-white text-gray-800 p-2 rounded-full shadow-lg flex items-center justify-center hover:text-purple-600"
                   >
-                    <SafeIcon icon={FiImage} className="mr-1.5" /> Bild rein
+                    <SafeIcon icon={FiImage} className="text-sm" />
                   </button>
                 )}
               </div>
