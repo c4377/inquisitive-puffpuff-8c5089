@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import * as FiIcons from 'react-icons/fi';
@@ -12,7 +12,7 @@ import { renderSlide } from '../utils/canvasRenderer';
 import { attachSmartImages } from '../utils/smartLayoutGenerator';
 import { decidePostDesign, dayHasImage } from '../utils/postDesignEngine';
 
-const { FiSmartphone, FiDownload, FiRefreshCw, FiLayers, FiFileText, FiX, FiPlay, FiTrash2, FiEdit3, FiPlus, FiCopy, FiCheck, FiImage } = FiIcons;
+const { FiSmartphone, FiDownload, FiRefreshCw, FiLayers, FiFileText, FiX, FiPlay, FiTrash2, FiEdit3, FiPlus, FiCopy, FiCheck, FiImage, FiShuffle } = FiIcons;
 
 const StoryPlanner = () => {
   const { brandSettings, updateBrandSettings, dataLoaded } = useBrand();
@@ -23,6 +23,47 @@ const StoryPlanner = () => {
   const [bulkText, setBulkText] = useState('');
   const [showShifter, setShowShifter] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState(null);
+  const lastOffsetRef = useRef(0);
+
+  // Random image-pool offset that differs from the previous one, so a reload
+  // actually shows different images instead of the same ones every time.
+  const nextOffset = (poolLen) => {
+    if (poolLen <= 1) return 0;
+    let off = Math.floor(Math.random() * poolLen);
+    if (off === lastOffsetRef.current) off = (off + 1 + Math.floor(Math.random() * (poolLen - 1))) % poolLen;
+    lastOffsetRef.current = off;
+    return off;
+  };
+
+  // Re-attach fresh pool images to all existing stories (texts stay).
+  // Cards that are deliberately image-free (_noImage) stay image-free.
+  const handleReshuffleImages = async () => {
+    const pool = brandSettings?.brandImages || [];
+    if (pool.length === 0) {
+      alert('Kein Bild im Pool. Lade zuerst Bilder hoch.');
+      return;
+    }
+    if (stories.length === 0) return;
+    setLoading(true);
+    try {
+      const offset = nextOffset(pool.length);
+      let slides = await attachSmartImages(
+        stories.map(s => ({ ...s, layout: 'auto', layoutId: 'auto' })), pool, offset
+      );
+      slides = slides.map((slide) => {
+        if (slide._noImage) {
+          const { background, overlay, _autoImage, ...rest } = slide;
+          return { ...rest, background: null, _noImage: true };
+        }
+        return slide;
+      });
+      setStories(slides);
+    } catch (e) {
+      console.error('Bilder neu laden fehlgeschlagen:', e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const brandName = brandSettings.currentBrandConfig?.name || "MUSE MENTORING";
 
@@ -162,7 +203,7 @@ const StoryPlanner = () => {
 
       // Attach pool images across the whole sequence (global offset = unique images).
       if (imagePool.length > 0) {
-        try { slides = await attachSmartImages(slides, imagePool, 0); } catch (e) { /* keep text-only */ }
+        try { slides = await attachSmartImages(slides, imagePool, nextOffset(imagePool.length)); } catch (e) { /* keep text-only */ }
       }
 
       // Apply the design engine per slide: position by quiet zone / rotation, bold every 4th.
@@ -239,7 +280,7 @@ const StoryPlanner = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-32">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Story Planner</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Story Planner <span className="text-xs font-normal text-gray-400 align-middle">v2</span></h1>
           <p className="text-gray-600">Erstelle vertikale Sequenzen (9:16) für Instagram & TikTok.</p>
         </div>
         <div className="flex space-x-2">
@@ -281,6 +322,13 @@ const StoryPlanner = () => {
             className="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-lg font-bold hover:bg-gray-200 transition-colors flex items-center"
           >
             <SafeIcon icon={FiPlus} className="mr-1" /> + Slide
+          </button>
+          <button 
+            onClick={handleReshuffleImages}
+            disabled={loading}
+            className="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-lg font-bold hover:bg-gray-200 transition-colors flex items-center disabled:opacity-50"
+          >
+            <SafeIcon icon={FiShuffle} className="mr-1" /> Bilder neu
           </button>
         </div>
         <div className="flex space-x-3">
