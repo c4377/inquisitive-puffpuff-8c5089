@@ -187,7 +187,7 @@ export const assignSmartLayouts = (rawSlides, brandConfig) => {
 
 // Helper: mark specific parts of the text as *accent* (single asterisks,
 // matching the renderer's accent parser).
-const applyEditorialHighlighting = (text) => {
+export const applyEditorialHighlighting = (text) => {
   // Bold ONE key phrase (1-4 words) per line. German stopwords are skipped
   // so the emphasis lands on the words that actually carry the meaning.
   const STOP = new Set(['der','die','das','ein','eine','einen','einem','einer','und','oder','aber','ich','du','er','sie','es','wir','ihr','man','mich','dich','sich','uns','euch','mein','dein','sein','ihre','ihren','nicht','kein','keine','so','wie','was','wer','wo','wann','warum','dass','weil','wenn','dann','doch','noch','nur','auch','schon','mal','sehr','mehr','als','am','im','in','an','auf','zu','zum','zur','mit','von','vom','für','bei','aus','um','über','unter','nach','vor','durch','ist','sind','war','waren','bin','bist','hat','habe','haben','hatte','wird','werden','kann','können','muss','müssen','will','wollen','soll','sollen','es','the','a','an','and','or','is','are','to','of']);

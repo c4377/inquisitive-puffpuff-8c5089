@@ -13,7 +13,7 @@ import BulkImportModal from '../components/BulkImportModal';
 import { renderSlide } from '../utils/canvasRenderer';
 import { brandRuleSets } from '../constants/brandData';
 import { createSmartSlide } from '../utils/slideHelpers';
-import { attachSmartImages } from '../utils/smartLayoutGenerator';
+import { attachSmartImages, applyEditorialHighlighting } from '../utils/smartLayoutGenerator';
 import { decidePostDesign, dayHasImage } from '../utils/postDesignEngine';
 import { saveSetsToDB, loadSetsFromDB } from '../utils/storage';
 import { analyzePlanRoles, roleFeedback, ROLE_META } from '../utils/postRole';
@@ -202,6 +202,9 @@ const ContentPlanner = () => {
 
           return {
             ...slide,
+            // Bold ONE key phrase (1-4 words) per line; lines already
+            // containing * markers are left untouched.
+            text: applyEditorialHighlighting(slide.text || ''),
             color: text,
             backgroundColor: bg,
             secondaryColor: sec,
