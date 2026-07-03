@@ -425,12 +425,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       row = zone.includes('top') ? 'top' : zone.includes('bottom') ? 'bottom' : 'mid';
     }
 
-    const boxWidth = width * 0.68;   // narrower block = more breathing room
+    const boxWidth = width * 0.60;   // narrower block = more breathing room
     let left = width / 2;
     let originX = 'center';
     let textAlign = 'center';
-    if (col === 'left') { left = width * 0.14; originX = 'left'; textAlign = 'left'; }
-    else if (col === 'right') { left = width * 0.86; originX = 'right'; textAlign = 'right'; }
+    if (col === 'left') { left = width * 0.16; originX = 'left'; textAlign = 'left'; }
+    else if (col === 'right') { left = width * 0.84; originX = 'right'; textAlign = 'right'; }
 
     let top = height / 2;
     let originY = 'center';
@@ -498,7 +498,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     const rowY = isTop ? height * 0.22 : isBottom ? height * 0.80 : height * 0.5;
     const align = isLeft ? 'left' : isRight ? 'right' : 'center';
-    const boxW = width * 0.72;   // more whitespace around post text
+    const boxW = width * 0.62;   // more whitespace around post text
     const originX = align === 'center' ? 'center' : (align === 'right' ? 'right' : 'left');
     const textLeft = align === 'center' ? width / 2 : (align === 'right' ? width - padding : padding);
 
@@ -773,8 +773,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     // Position.
     let left = width / 2, originX = 'center', textAlign = 'center';
-    if (col === 'left') { left = width * 0.14; originX = 'left'; textAlign = 'left'; }
-    else if (col === 'right') { left = width * 0.86; originX = 'right'; textAlign = 'right'; }
+    if (col === 'left') { left = width * 0.16; originX = 'left'; textAlign = 'left'; }
+    else if (col === 'right') { left = width * 0.84; originX = 'right'; textAlign = 'right'; }
 
     let top = height / 2, originY = 'center';
     if (row === 'top') { top = height * 0.18; originY = 'top'; }
@@ -782,7 +782,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     const titleObj = new fabric.Textbox(plain, {
       left, top, originX, originY,
-      width: width * 0.70,   // more whitespace around post text
+      width: width * 0.62,   // more whitespace around post text
       fontSize: fs(slide.fontSize || 42),
       fontFamily,
       fill: hasBgImage ? '#FFFFFF' : contrastColor(slide.backgroundColor || '#fff'),

@@ -19,12 +19,13 @@ import { saveSetsToDB, loadSetsFromDB } from '../utils/storage';
 import { analyzePlanRoles, roleFeedback, ROLE_META } from '../utils/postRole';
 import { weightedLayoutPool, getRating, setRating } from '../utils/layoutRatings';
 
-const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus } = FiIcons;
+const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus, FiCheck, FiGrid, FiImage, FiX, FiZoomIn, FiZoomOut } = FiIcons;
 
 const ContentPlanner = () => {
   const { brandSettings, updateBrandSettings } = useBrand();
   const navigate = useNavigate();
   const weekPlan = brandSettings.contentPlan || [];
+  const [copiedKey, setCopiedKey] = useState(null);
   const [loading, setLoading] = useState(false);
   const [activeIndices, setActiveIndices] = useState({});
   const [expandedCaptionId, setExpandedCaptionId] = useState(null);
@@ -45,6 +46,57 @@ const ContentPlanner = () => {
 
   // Live analysis of the feed's red thread (Frage → Beweis → Angebot).
   const roleAnalysis = React.useMemo(() => analyzePlanRoles(weekPlan), [weekPlan]);
+
+  // --- PER-CARD QUICK EDIT (same buttons as Stories & Reel Covers) ---
+  const updateSlideInPlan = (dayIndex, slideIndex, updater) => {
+    const plan = JSON.parse(JSON.stringify(weekPlan));
+    const slide = plan[dayIndex]?.slides?.[slideIndex];
+    if (!slide) return;
+    plan[dayIndex].slides[slideIndex] = updater(slide);
+    updateBrandSettings({ contentPlan: plan });
+  };
+
+  const handleZoomToggleDay = (dayIndex, slideIndex) => {
+    updateSlideInPlan(dayIndex, slideIndex, (s) => ({
+      ...s, imageScale: (s.imageScale || 1) > 1.05 ? 1 : 1.5,
+    }));
+  };
+
+  const handleRemoveImageDay = (dayIndex, slideIndex) => {
+    updateSlideInPlan(dayIndex, slideIndex, (s) => {
+      const { background, overlay, _autoImage, ...rest } = s;
+      return { ...rest, background: null, imageScale: 1 };
+    });
+  };
+
+  const handleAddImageDay = async (dayIndex, slideIndex) => {
+    const pool = brandSettings?.brandImages || [];
+    if (pool.length === 0) { alert('Kein Bild im Pool. Lade zuerst Bilder hoch.'); return; }
+    const slide = weekPlan[dayIndex]?.slides?.[slideIndex];
+    if (!slide) return;
+    try {
+      const [withImg] = await attachSmartImages([{ ...slide }], pool, Math.floor(Math.random() * pool.length));
+      updateSlideInPlan(dayIndex, slideIndex, () => ({ ...withImg, imageScale: 1 }));
+    } catch (e) { console.error('Bild anhängen fehlgeschlagen:', e); }
+  };
+
+  // Re-roll the design decision (text position + bold) for this post.
+  const handleCycleLayoutDay = (dayIndex, slideIndex) => {
+    updateSlideInPlan(dayIndex, slideIndex, (s) => {
+      const seed = (Number.isInteger(s.designSeed) ? s.designSeed : 0) + 1;
+      const hasImg = typeof s.background === 'string' && s.background.length > 5;
+      const { textAnchor, bold } = decidePostDesign({
+        globalIndex: dayIndex * 11 + seed * 3, hasImage: hasImg, autoImage: s._autoImage,
+      });
+      return { ...s, designSeed: seed, layout: 'auto', layoutId: 'auto', textAnchor, fontWeight: bold ? '700' : 'normal' };
+    });
+  };
+
+  const handleCopyText = (text, key) => {
+    navigator.clipboard?.writeText(text || '');
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 1500);
+  };
 
   const currentBrand = brandSettings.currentBrandConfig;
   const hasActiveBrand = !!currentBrand;
@@ -773,6 +825,48 @@ const ContentPlanner = () => {
                         >
                           {isExportingThisDay ? <span className="animate-spin"><SafeIcon icon={FiRefreshCw} /></span> : <><SafeIcon icon={FiDownload} className="mr-0.5" /> Export</>}
                         </button>
+                      </div>
+                      <div className="flex gap-1.5 mt-0.5">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleCopyText(activeSlide?.text, `${day.day}-${activeIndex}`); }}
+                          title="Text kopieren"
+                          className={`p-1.5 rounded-full shadow bg-white/95 hover:text-purple-600 flex items-center justify-center ${copiedKey === `${day.day}-${activeIndex}` ? 'text-green-600' : 'text-gray-800'}`}
+                        >
+                          <SafeIcon icon={copiedKey === `${day.day}-${activeIndex}` ? FiCheck : FiCopy} className="text-xs" />
+                        </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleCycleLayoutDay(dayIndex, activeIndex); }}
+                          title="Layout wechseln"
+                          className="p-1.5 rounded-full shadow bg-white/95 text-gray-800 hover:text-purple-600 flex items-center justify-center"
+                        >
+                          <SafeIcon icon={FiGrid} className="text-xs" />
+                        </button>
+                        {(typeof activeSlide?.background === 'string' && activeSlide.background.length > 5) ? (
+                          <>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handleZoomToggleDay(dayIndex, activeIndex); }}
+                              title={(activeSlide.imageScale || 1) > 1.05 ? 'Zoom aus' : 'Zoom'}
+                              className={`p-1.5 rounded-full shadow bg-white/95 hover:text-purple-600 flex items-center justify-center ${(activeSlide.imageScale || 1) > 1.05 ? 'text-purple-600' : 'text-gray-800'}`}
+                            >
+                              <SafeIcon icon={(activeSlide.imageScale || 1) > 1.05 ? FiZoomOut : FiZoomIn} className="text-xs" />
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handleRemoveImageDay(dayIndex, activeIndex); }}
+                              title="Bild entfernen"
+                              className="p-1.5 rounded-full shadow bg-white/95 text-red-500 hover:bg-red-50 flex items-center justify-center"
+                            >
+                              <SafeIcon icon={FiX} className="text-xs" />
+                            </button>
+                          </>
+                        ) : (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleAddImageDay(dayIndex, activeIndex); }}
+                            title="Bild einfügen"
+                            className="p-1.5 rounded-full shadow bg-white/95 text-gray-800 hover:text-purple-600 flex items-center justify-center"
+                          >
+                            <SafeIcon icon={FiImage} className="text-xs" />
+                          </button>
+                        )}
                       </div>
                     </div>
                   </motion.div>
