@@ -403,7 +403,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     return;
   }
 
-  const coverLayouts = ['cover_top_left', 'cover_bottom_left', 'cover_bottom_center', 'cover_center_hero', 'cover_top_center'];
+  const coverLayouts = ['cover_top_left', 'cover_bottom_left', 'cover_bottom_center', 'cover_center_hero', 'cover_top_center', 'cover_mid_left', 'cover_mid_right'];
   if (hasBgImage && coverLayouts.includes(layout)) {
     const { plain, segments } = parseAccent(slide.text);
 
@@ -414,6 +414,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       cover_bottom_center: { col: 'center', row: 'bottom' },
       cover_center_hero:   { col: 'center', row: 'mid' },
       cover_top_center:    { col: 'center', row: 'top' },
+      cover_mid_left:      { col: 'left',   row: 'mid' },
+      cover_mid_right:     { col: 'right',  row: 'mid' },
     };
 
     let col, row;

@@ -65,7 +65,14 @@ const ContentPlanner = () => {
   const handleRemoveImageDay = (dayIndex, slideIndex) => {
     updateSlideInPlan(dayIndex, slideIndex, (s) => {
       const { background, overlay, _autoImage, ...rest } = s;
-      return { ...rest, background: null, imageScale: 1 };
+      // cover_* layouts only render on photos -> fall back to auto without one.
+      const isCover = typeof rest.layout === 'string' && rest.layout.startsWith('cover_');
+      return {
+        ...rest,
+        background: null,
+        imageScale: 1,
+        ...(isCover ? { layout: 'auto', layoutId: 'auto' } : {}),
+      };
     });
   };
 
@@ -80,15 +87,29 @@ const ContentPlanner = () => {
     } catch (e) { console.error('Bild anhängen fehlgeschlagen:', e); }
   };
 
-  // Re-roll the design decision (text position + bold) for this post.
+  // Explicit, always-visible layout cycle:
+  // Tweet -> Postcard -> Cover links -> rechts -> oben -> unten -> von vorn.
   const handleCycleLayoutDay = (dayIndex, slideIndex) => {
     updateSlideInPlan(dayIndex, slideIndex, (s) => {
-      const seed = (Number.isInteger(s.designSeed) ? s.designSeed : 0) + 1;
+      const v = ((Number.isInteger(s.postLayoutVariant) ? s.postLayoutVariant : -1) + 1) % 6;
       const hasImg = typeof s.background === 'string' && s.background.length > 5;
-      const { textAnchor, bold } = decidePostDesign({
-        globalIndex: dayIndex * 11 + seed * 3, hasImage: hasImg, autoImage: s._autoImage,
-      });
-      return { ...s, designSeed: seed, layout: 'auto', layoutId: 'auto', textAnchor, fontWeight: bold ? '700' : 'normal' };
+      if (v === 0) {
+        return { ...s, postLayoutVariant: v, layout: 'tweet_card', layoutId: 'tweet_card' };
+      }
+      if (v === 1) {
+        return { ...s, postLayoutVariant: v, layout: 'paper_box', layoutId: 'paper_box' };
+      }
+      if (hasImg) {
+        const coverByVariant = { 2: 'cover_mid_left', 3: 'cover_mid_right', 4: 'cover_top_center', 5: 'cover_bottom_center' };
+        return { ...s, postLayoutVariant: v, layout: coverByVariant[v], layoutId: coverByVariant[v] };
+      }
+      const anchorByVariant = {
+        2: { col: 'left', row: 'mid' },
+        3: { col: 'right', row: 'mid' },
+        4: { col: 'center', row: 'top' },
+        5: { col: 'center', row: 'bottom' },
+      };
+      return { ...s, postLayoutVariant: v, layout: 'auto', layoutId: 'auto', textAnchor: anchorByVariant[v] };
     });
   };
 
