@@ -191,7 +191,7 @@ const ContentPlanner = () => {
           const accentFont = fonts.accentFontFamily || (font.includes('Playfair') ? 'Montserrat' : 'Playfair Display');
           const isPlayfair = font.includes('Playfair');
           let weight = '400';
-          if (sIdx === 0 && !isPlayfair) weight = fonts.fontWeight || '700';
+          // Covers: big but NOT fully bold — emphasis only via **key phrases**.
           
           let finalLayout = slide.layout;
           if (sIdx === 0) {
@@ -226,10 +226,15 @@ const ContentPlanner = () => {
     if (!config.colors || !config.typography) return;
 
     const styledPlan = applyBrandStyling(weekPlan, config);
-    const oldSample = JSON.stringify({ c: weekPlan[0]?.slides[0]?.color, f: weekPlan[0]?.slides[0]?.fontFamily });
-    const newSample = JSON.stringify({ c: styledPlan[0]?.slides[0]?.color, f: styledPlan[0]?.slides[0]?.fontFamily });
-    
-    if (oldSample !== newSample) {
+    // Compare font/color AND weight/text so bold-cleanup + key-phrase
+    // highlighting migrate existing plans automatically on open.
+    const sample = (p) => JSON.stringify({
+      c: p[0]?.slides[0]?.color,
+      f: p[0]?.slides[0]?.fontFamily,
+      w: p[0]?.slides[0]?.fontWeight,
+      t: p[0]?.slides[0]?.text,
+    });
+    if (sample(weekPlan) !== sample(styledPlan)) {
         updateBrandSettings({ contentPlan: styledPlan });
     }
   };
@@ -355,7 +360,7 @@ const ContentPlanner = () => {
           ...s2,
           layout: 'auto', layoutId: 'auto',
           textAnchor,
-          fontWeight: bold ? '700' : 'normal',
+          fontWeight: 'normal', // bold lives in **key phrases**, never whole slides
         };
       });
 
@@ -438,7 +443,7 @@ const ContentPlanner = () => {
           cleaned.layout = 'auto';
           cleaned.layoutId = 'auto';
           cleaned.textAnchor = textAnchor;
-          cleaned.fontWeight = bold ? '700' : 'normal';
+          cleaned.fontWeight = 'normal'; // bold only via **key phrases**
           return cleaned;
         });
 
