@@ -263,7 +263,7 @@ const TextEditor = ({ currentSlide, onUpdate, onGlobalUpdate, onBatchUpdate, tot
               min="10" 
               max="200" 
               value={parseInt(getValue(keys.size)) || 32} 
-              onChange={(e) => updateValue(keys.size, parseInt(e.target.value))} 
+              onChange={(e) => { updateValue(keys.size, parseInt(e.target.value)); if (keys.size === 'fontSize') updateValue('fontSizeManual', true); }} 
               className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-600" 
             />
             <button onClick={() => adjustFontSize(4)} className="p-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-100"><SafeIcon icon={FiPlus} className="text-xs" /></button>

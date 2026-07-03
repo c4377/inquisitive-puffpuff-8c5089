@@ -1038,7 +1038,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const bodyText = new fabric.Textbox(plain, {
       left: width * 0.12, top: height * 0.14, originX: 'left', originY: 'top',
       width: width * 0.76,
-      fontSize: fs((slide.fontSize === 42 || slide.fontSize === 21) ? 16 : (slide.fontSize || 16)),
+      fontSize: fs(slide.fontSizeManual ? (slide.fontSize || 16) : 16),
       fontFamily: bodyFont,
       fontWeight: slide.fontWeight || '400',
       fill: hasBgImage ? '#FFFFFF' : (slide.color || contrastColor(slide.backgroundColor || '#fff')),
