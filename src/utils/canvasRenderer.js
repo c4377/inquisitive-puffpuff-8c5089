@@ -425,12 +425,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       row = zone.includes('top') ? 'top' : zone.includes('bottom') ? 'bottom' : 'mid';
     }
 
-    const boxWidth = width * 0.60;   // narrower block = more breathing room
+    const boxWidth = width * 0.70;
     let left = width / 2;
     let originX = 'center';
     let textAlign = 'center';
-    if (col === 'left') { left = width * 0.16; originX = 'left'; textAlign = 'left'; }
-    else if (col === 'right') { left = width * 0.84; originX = 'right'; textAlign = 'right'; }
+    if (col === 'left') { left = width * 0.12; originX = 'left'; textAlign = 'left'; }
+    else if (col === 'right') { left = width * 0.88; originX = 'right'; textAlign = 'right'; }
 
     let top = height / 2;
     let originY = 'center';
@@ -443,7 +443,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       originX,
       originY,
       width: boxWidth,
-      fontSize: fs(slide.fontSize || 46),
+      fontSize: fs(slide.fontSize === 42 ? 34 : (slide.fontSize || 36)),
       fontFamily: fontFamily,
       fill: '#FFFFFF',
       textAlign,
@@ -498,13 +498,13 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     const rowY = isTop ? height * 0.22 : isBottom ? height * 0.80 : height * 0.5;
     const align = isLeft ? 'left' : isRight ? 'right' : 'center';
-    const boxW = width * 0.62;   // more whitespace around post text
+    const boxW = width * 0.70;
     const originX = align === 'center' ? 'center' : (align === 'right' ? 'right' : 'left');
     const textLeft = align === 'center' ? width / 2 : (align === 'right' ? width - padding : padding);
 
     const tObj = new fabric.Textbox(plain, {
       left: textLeft, top: rowY, originX, originY: 'center',
-      width: boxW, fontSize: fs(slide.fontSize || 42), fontFamily: fontFamily,
+      width: boxW, fontSize: fs(slide.fontSize === 42 ? 34 : (slide.fontSize || 34)), fontFamily: fontFamily,
       fill: slide.color || '#FFFFFF', textAlign: slide.textAlign || align, lineHeight: 1.28,
       fontWeight: slide.fontWeight || 'normal',
       fontStyle: slide.fontStyle || 'normal',
@@ -773,8 +773,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     // Position.
     let left = width / 2, originX = 'center', textAlign = 'center';
-    if (col === 'left') { left = width * 0.16; originX = 'left'; textAlign = 'left'; }
-    else if (col === 'right') { left = width * 0.84; originX = 'right'; textAlign = 'right'; }
+    if (col === 'left') { left = width * 0.12; originX = 'left'; textAlign = 'left'; }
+    else if (col === 'right') { left = width * 0.88; originX = 'right'; textAlign = 'right'; }
 
     let top = height / 2, originY = 'center';
     if (row === 'top') { top = height * 0.18; originY = 'top'; }
@@ -782,8 +782,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     const titleObj = new fabric.Textbox(plain, {
       left, top, originX, originY,
-      width: width * 0.62,   // more whitespace around post text
-      fontSize: fs(slide.fontSize || 42),
+      width: width * 0.68,
+      fontSize: fs(slide.fontSize === 42 ? 34 : (slide.fontSize || 34)),
       fontFamily,
       fill: hasBgImage ? '#FFFFFF' : contrastColor(slide.backgroundColor || '#fff'),
       textAlign, lineHeight: 1.2,

@@ -188,7 +188,7 @@ export const assignSmartLayouts = (rawSlides, brandConfig) => {
       fontWeight: t.fontWeight || 'normal',
       // Default styles based on layout vibe
       textAlign: layoutId === 'editorial_classic' ? 'left' : 'center',
-      fontSize: layoutId === 'paper_box' ? 36 : 42,
+      fontSize: layoutId === 'paper_box' ? 32 : 34,
     };
   });
 };
