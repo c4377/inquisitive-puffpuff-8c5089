@@ -19,7 +19,7 @@ import { renderSlide } from '../utils/canvasRenderer';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
-const { FiPlus, FiDownload, FiTrash2, FiFolder, FiSave, FiArrowLeft, FiType, FiLayout, FiDroplet, FiImage, FiMove, FiList, FiZap, FiGrid, FiCheck, FiToggleRight, FiToggleLeft, FiLayers, FiMessageSquare, FiCopy, FiRefreshCw, FiSend } = FiIcons;
+const { FiPlus, FiDownload, FiTrash2, FiFolder, FiSave, FiArrowLeft, FiType, FiLayout, FiDroplet, FiImage, FiMove, FiList, FiZap, FiGrid, FiCheck, FiToggleRight, FiToggleLeft, FiLayers, FiMessageSquare, FiCopy, FiRefreshCw, FiSend, FiChevronDown, FiEdit3 } = FiIcons;
 
 const ToolTab = ({ id, label, icon, isActive, onClick }) => (
   <button onClick={() => onClick(id)} className={`w-full flex flex-col items-center justify-center py-4 px-1 transition-all border-l-4 ${isActive ? 'bg-purple-50 border-purple-600 text-purple-700' : 'bg-white border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-900'}`}>
@@ -42,6 +42,7 @@ const Editor = () => {
   
   const initialIndex = location.state?.initialSlideIndex || 0;
   const [currentSlideIndex, setCurrentSlideIndex] = useState(initialIndex);
+  const [panelOpen, setPanelOpen] = useState(true);
   const [applyToAll, setApplyToAll] = useState(false);
   const [showSavedDesigns, setShowSavedDesigns] = useState(false);
 
@@ -321,7 +322,7 @@ const Editor = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="flex-1 overflow-hidden grid grid-cols-1 md:grid-cols-[1fr_420px]">
+      <div className={`flex-1 overflow-hidden grid grid-cols-1 ${panelOpen ? 'md:grid-cols-[1fr_420px]' : 'md:grid-cols-1'}`}>
         <div className="relative bg-gray-100 flex flex-col items-center justify-center p-4 md:p-8 overflow-y-auto">
           <div {...(slides.length > 1 ? slideSwipe : {})} className={`shadow-2xl rounded-sm overflow-hidden bg-white w-full transition-all duration-300 relative shrink-0 ${currentSlide.format === '9:16' ? 'max-w-[280px] aspect-[9/16]' : (currentSlide.format === '16:9' ? 'max-w-[800px] aspect-video' : 'max-w-[400px] aspect-[4/5]')}`}>
             <Canvas ref={canvasRef} data={{ ...currentSlide, slideNumber: slides.length > 1 ? currentSlideIndex + 1 : undefined, totalSlides: slides.length }} brandName={brandName} />
@@ -352,8 +353,17 @@ const Editor = () => {
             <button onClick={addSlide} className="flex-shrink-0 w-16 h-20 border-2 border-dashed border-gray-300 rounded flex items-center justify-center text-gray-400 hover:text-purple-600 hover:border-purple-600 hover:bg-purple-50 transition-colors"><SafeIcon icon={FiPlus} className="text-xl" /></button>
           </div>
         </div>
+        {panelOpen && (
         <div className="flex h-full border-l border-gray-200 bg-white overflow-hidden">
           <div className="w-20 bg-white border-r border-gray-100 flex flex-col items-center py-2 overflow-y-auto no-scrollbar z-10 shadow-[4px_0_10px_rgba(0,0,0,0.02)]">
+            <button
+              onClick={() => setPanelOpen(false)}
+              title="Bearbeitung einklappen"
+              className="mb-2 p-2 rounded-lg text-gray-400 hover:text-purple-600 hover:bg-purple-50 transition-colors"
+            >
+              <SafeIcon icon={FiChevronDown} className="text-lg" />
+            </button>
+            <div className="w-8 h-px bg-gray-200 mb-2"></div>
             <ToolTab id="text" label="Text" icon={FiType} isActive={activeTab === 'text'} onClick={setActiveTab} />
             <ToolTab id="layout" label="Layout" icon={FiLayout} isActive={activeTab === 'layout'} onClick={setActiveTab} />
             <ToolTab id="colors" label="Farben" icon={FiDroplet} isActive={activeTab === 'colors'} onClick={setActiveTab} />
@@ -391,6 +401,18 @@ const Editor = () => {
             </div>
           </div>
         </div>
+        )}
+
+        {/* Floating reopen button when the edit panel is collapsed */}
+        {!panelOpen && (
+          <button
+            onClick={() => setPanelOpen(true)}
+            className="fixed bottom-5 right-5 z-40 bg-purple-600 text-white p-3.5 rounded-full shadow-xl hover:bg-purple-700 transition-colors flex items-center justify-center"
+            title="Bearbeitung öffnen"
+          >
+            <SafeIcon icon={FiEdit3} className="text-lg" />
+          </button>
+        )}
       </div>
     </div>
   );

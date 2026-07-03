@@ -14,7 +14,7 @@ import { attachSmartImages } from '../utils/smartLayoutGenerator';
 import { decidePostDesign, dayHasImage } from '../utils/postDesignEngine';
 import { saveReelCoverSetsToDB, loadReelCoverSetsFromDB } from '../utils/storage';
 
-const { FiSmartphone, FiDownload, FiRefreshCw, FiLayers, FiFileText, FiX, FiPlay, FiTrash2, FiEdit3, FiPlus, FiCopy, FiCheck, FiImage, FiShuffle, FiZoomIn, FiZoomOut } = FiIcons;
+const { FiSmartphone, FiDownload, FiRefreshCw, FiLayers, FiFileText, FiX, FiPlay, FiTrash2, FiEdit3, FiPlus, FiCopy, FiCheck, FiImage, FiShuffle, FiZoomIn, FiZoomOut, FiGrid } = FiIcons;
 
 const ReelCoverPlanner = () => {
   const { brandSettings, updateBrandSettings, dataLoaded } = useBrand();
@@ -138,6 +138,14 @@ const ReelCoverPlanner = () => {
   };
 
   // --- CARD IMAGE ACTIONS: separate Zoom / Entfernen / Bild rein ---
+  const handleCycleLayout = (index) => {
+    setStories(prev => prev.map((s, i) => {
+      if (i !== index) return s;
+      const current = Number.isInteger(s.coverVariant) ? s.coverVariant : (i % 4);
+      return { ...s, coverVariant: (current + 1) % 4 };
+    }));
+  };
+
   const handleZoomToggle = (index) => {
     setStories(prev => prev.map((s, i) => {
       if (i !== index) return s;
@@ -546,6 +554,13 @@ const ReelCoverPlanner = () => {
                   className={`p-2 rounded-full shadow-lg flex items-center justify-center bg-white hover:text-purple-600 ${copiedIndex === index ? 'text-green-600' : 'text-gray-800'}`}
                 >
                   <SafeIcon icon={copiedIndex === index ? FiCheck : FiCopy} className="text-sm" />
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleCycleLayout(index); }}
+                  title="Layout wechseln"
+                  className="bg-white text-gray-800 p-2 rounded-full shadow-lg flex items-center justify-center hover:text-purple-600"
+                >
+                  <SafeIcon icon={FiGrid} className="text-sm" />
                 </button>
                 {(typeof slide.background === 'string' && slide.background.length > 5) ? (
                   <>

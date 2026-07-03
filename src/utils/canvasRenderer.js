@@ -425,12 +425,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       row = zone.includes('top') ? 'top' : zone.includes('bottom') ? 'bottom' : 'mid';
     }
 
-    const boxWidth = width * 0.8;
+    const boxWidth = width * 0.68;   // narrower block = more breathing room
     let left = width / 2;
     let originX = 'center';
     let textAlign = 'center';
-    if (col === 'left') { left = width * 0.08; originX = 'left'; textAlign = 'left'; }
-    else if (col === 'right') { left = width * 0.92; originX = 'right'; textAlign = 'right'; }
+    if (col === 'left') { left = width * 0.14; originX = 'left'; textAlign = 'left'; }
+    else if (col === 'right') { left = width * 0.86; originX = 'right'; textAlign = 'right'; }
 
     let top = height / 2;
     let originY = 'center';
@@ -498,7 +498,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     const rowY = isTop ? height * 0.22 : isBottom ? height * 0.80 : height * 0.5;
     const align = isLeft ? 'left' : isRight ? 'right' : 'center';
-    const boxW = width * 0.84;
+    const boxW = width * 0.72;   // more whitespace around post text
     const originX = align === 'center' ? 'center' : (align === 'right' ? 'right' : 'left');
     const textLeft = align === 'center' ? width / 2 : (align === 'right' ? width - padding : padding);
 
@@ -562,23 +562,34 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       }));
     }
 
-    // Big branded statement, centered in the safe zone.
+    // --- LAYOUT VARIANTS (all composed inside the 3:4 safe zone) ---
+    // 0 = centered statement, 1 = lower-left block, 2 = upper-left block,
+    // 3 = brand-color panel behind centered text.
+    const variant = Number.isInteger(slide.coverVariant)
+      ? ((slide.coverVariant % 4) + 4) % 4
+      : ((options.slideIndex || 0) % 4);
+
+    const zoneH = safeBottom - safeTop;
     const textFill = hasBgImage ? '#FFFFFF' : contrastColor(primaryColor);
+    const isSide = variant === 1 || variant === 2;
+
     const coverText = new fabric.Textbox(plain, {
-      left: width / 2, top: centerY, originX: 'center', originY: 'center',
-      width: width * 0.82,
+      left: isSide ? width * 0.12 : width / 2,
+      top: centerY,
+      originX: isSide ? 'left' : 'center',
+      originY: 'center',
+      width: isSide ? width * 0.72 : width * 0.78,
       fontSize: fs(34),
       fontFamily,                     // BRAND font (unlike stories)
       fontWeight: '700',
       fill: textFill,
-      textAlign: 'center',
+      textAlign: isSide ? 'left' : 'center',
       lineHeight: 1.22,
       charSpacing: 10,
     });
-    // Fill the 3:4 zone generously, but never spill out of it: target the
-    // text block at ~55% of the safe-zone height, shrinking if needed.
+    // Fill the zone generously, but never spill out of it.
     try {
-      const maxH = (safeBottom - safeTop) * 0.62;
+      const maxH = zoneH * (variant === 0 ? 0.62 : variant === 3 ? 0.5 : 0.55);
       let guard = 0;
       coverText.initDimensions && coverText.initDimensions();
       while (coverText.height > maxH && coverText.fontSize > fs(16) && guard < 40) {
@@ -587,17 +598,57 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         guard++;
       }
     } catch (e) { /* best effort */ }
+
+    // Vertical placement per variant (after fitting, so heights are known).
+    if (variant === 1) {
+      // Lower block: sits above the brand mark, whitespace on top.
+      coverText.set({ originY: 'bottom', top: safeBottom - fs(48) });
+    } else if (variant === 2) {
+      // Upper block: starts just below the crop line, whitespace below.
+      coverText.set({ originY: 'top', top: safeTop + fs(34) });
+    }
+
+    // Variant 3: soft brand-color panel behind the text.
+    if (variant === 3) {
+      try {
+        coverText.initDimensions && coverText.initDimensions();
+        const padX = fs(26), padY = fs(24);
+        canvas.add(new fabric.Rect({
+          left: width / 2, top: centerY, originX: 'center', originY: 'center',
+          width: Math.min(width * 0.9, coverText.width + padX * 2),
+          height: coverText.height + padY * 2,
+          rx: fs(6), ry: fs(6),
+          fill: slide.backgroundColor || '#FFFFFF',
+          opacity: hasBgImage ? 0.94 : 1,
+          selectable: false,
+          shadow: hasBgImage ? 'rgba(0,0,0,0.25) 0px 3px 14px' : '',
+        }));
+        coverText.set('fill', contrastColor(primaryColor) === '#FFFFFF' && hexLuminance(slide.backgroundColor || '#fff') > 140
+          ? '#111111'
+          : contrastColor(primaryColor));
+        if (hasBgImage) coverText.set('fill', hexLuminance(slide.backgroundColor || '#fff') > 140 ? (primaryColor || '#111111') : '#FFFFFF');
+      } catch (e) { /* keep plain text */ }
+    }
     // Accent words (*so*) get the brand accent font/color.
     applyAccentStyles(coverText, segments);
     canvas.add(coverText);
 
-    // Thin accent line above the text — small branded detail that helps the
-    // composition fill the frame.
+    // Thin accent line — a small branded detail. Position depends on variant.
     try {
-      const lineY = centerY - (coverText.height / 2) - fs(22);
-      if (lineY > safeTop + fs(10)) {
+      coverText.initDimensions && coverText.initDimensions();
+      let lineX = width / 2, lineOriginX = 'center', lineY = null;
+      if (variant === 0) {
+        lineY = centerY - (coverText.height / 2) - fs(22);
+      } else if (variant === 1) {
+        lineX = width * 0.12; lineOriginX = 'left';
+        lineY = (safeBottom - fs(48)) - coverText.height - fs(20);
+      } else if (variant === 2) {
+        lineX = width * 0.12; lineOriginX = 'left';
+        lineY = safeTop + fs(34) + coverText.height + fs(20);
+      }
+      if (lineY !== null && lineY > safeTop + fs(8) && lineY < safeBottom - fs(8)) {
         canvas.add(new fabric.Rect({
-          left: width / 2, top: lineY, originX: 'center', originY: 'center',
+          left: lineX, top: lineY, originX: lineOriginX, originY: 'center',
           width: fs(36), height: fs(2.5),
           fill: hasBgImage ? 'rgba(255,255,255,0.9)' : accentColor,
           selectable: false,
@@ -722,8 +773,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     // Position.
     let left = width / 2, originX = 'center', textAlign = 'center';
-    if (col === 'left') { left = width * 0.10; originX = 'left'; textAlign = 'left'; }
-    else if (col === 'right') { left = width * 0.90; originX = 'right'; textAlign = 'right'; }
+    if (col === 'left') { left = width * 0.14; originX = 'left'; textAlign = 'left'; }
+    else if (col === 'right') { left = width * 0.86; originX = 'right'; textAlign = 'right'; }
 
     let top = height / 2, originY = 'center';
     if (row === 'top') { top = height * 0.18; originY = 'top'; }
@@ -731,7 +782,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     const titleObj = new fabric.Textbox(plain, {
       left, top, originX, originY,
-      width: width * 0.82,
+      width: width * 0.70,   // more whitespace around post text
       fontSize: fs(slide.fontSize || 42),
       fontFamily,
       fill: hasBgImage ? '#FFFFFF' : contrastColor(slide.backgroundColor || '#fff'),
