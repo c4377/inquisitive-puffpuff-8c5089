@@ -1053,7 +1053,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       bOriginY = 'center';
     }
 
-    const autoSize = hasBgImage ? 16 : 32;
+    const autoSize = hasBgImage ? 24 : 32;
     const bodyText = new fabric.Textbox(plain, {
       left: bLeft, top: bTop, originX: bOriginX, originY: bOriginY,
       width: width * (hasBgImage ? 0.68 : 0.76),
@@ -1078,16 +1078,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     } catch (e) { /* best effort */ }
     applyAccentStyles(bodyText, segments);
     canvas.add(bodyText);
-    // Small @handle, bottom center — like the reference look.
-    if (options.globalBrandName) {
-      canvas.add(new fabric.Text(`@${String(options.globalBrandName).toLowerCase().replace(/\s+/g, '')}`, {
-        left: width / 2, top: height * 0.955, originX: 'center', originY: 'bottom',
-        fontSize: fs(11),
-        fill: hasBgImage ? 'rgba(255,255,255,0.85)' : accentColor,
-        fontFamily: bodyFont, charSpacing: 60, selectable: false,
-        shadow: hasBgImage ? 'rgba(0,0,0,0.3) 0px 1px 4px' : '',
-      }));
-    }
+    // (Brand footer comes from the standard footer at the end of renderSlide —
+    // no extra @handle here, otherwise the brand appears twice.)
   }
 
   else if (layout === 'tweet_card') {
