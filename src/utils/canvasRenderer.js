@@ -286,10 +286,14 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // Returns { plain, segments: [{text, accent}] } for per-character styling.
   const parseAccent = (text) => {
     const raw = text || '';
-    const parts = raw.split(/(\*[^*]+\*)/g).filter((s) => s !== '');
+    // **bold** first, then *accent* — like a tiny markdown subset.
+    const parts = raw.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g).filter((s) => s !== '');
     const segments = parts.map((seg) => {
+      if (seg.startsWith('**') && seg.endsWith('**') && seg.length > 4) {
+        return { text: seg.slice(2, -2), accent: false, bold: true };
+      }
       const isAccent = seg.startsWith('*') && seg.endsWith('*') && seg.length > 2;
-      return { text: isAccent ? seg.slice(1, -1) : seg, accent: isAccent };
+      return { text: isAccent ? seg.slice(1, -1) : seg, accent: isAccent, bold: false };
     });
     return { plain: segments.map((s) => s.text).join(''), segments };
   };
@@ -306,6 +310,13 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
             idx + s.text.length
           );
         }
+        if (s.bold && s.text.length) {
+          textObj.setSelectionStyles(
+            { fontWeight: '700' },
+            idx,
+            idx + s.text.length
+          );
+        }
         idx += s.text.length;
       });
     } catch (e) {
@@ -315,6 +326,18 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
   // === STRATEGY: LAYOUT ENGINE ===
   let layout = layoutResolved;
+  // Carousels: only the COVER (slide 1) carries a layout. All following
+  // slides render as clean brand body typography — unless the user explicitly
+  // cycled a layout onto that slide (postLayoutVariant set).
+  if (
+    (options.slideIndex || 0) > 0 &&
+    (options.totalSlides || 1) > 1 &&
+    slide.storyMode !== true &&
+    slide.reelCoverMode !== true &&
+    !Number.isInteger(slide.postLayoutVariant)
+  ) {
+    layout = 'body';
+  }
   // Strong text shadow whenever text sits on a photo, for readability.
   const textShadow = hasBgImage ? 'rgba(0,0,0,0.7) 0px 2px 12px' : '';
 
@@ -1007,6 +1030,46 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   }
 
   // === TWEET CARD: white rounded card like a tweet/post ===
+  else if (layout === 'body') {
+    // Clean carousel body slide, styled like a natural text-on-photo post:
+    // modest size, upper-left block, brand BODY font. Only the cover is big.
+    const { plain, segments } = parseAccent(slide.text);
+    const bodyFont = slide.bodyFontFamily || slide.fontFamily || 'Montserrat';
+    const bodyText = new fabric.Textbox(plain, {
+      left: width * 0.12, top: height * 0.14, originX: 'left', originY: 'top',
+      width: width * 0.76,
+      fontSize: fs(slide.fontSize === 42 ? 21 : (slide.fontSize || 21)),
+      fontFamily: bodyFont,
+      fontWeight: slide.fontWeight || '400',
+      fill: hasBgImage ? '#FFFFFF' : (slide.color || contrastColor(slide.backgroundColor || '#fff')),
+      textAlign: slide.textAlign || 'left',
+      lineHeight: 1.45,
+      shadow: hasBgImage ? 'rgba(0,0,0,0.35) 0px 1px 6px' : '',
+    });
+    // Never let a long text run into the bottom area.
+    try {
+      let guard = 0;
+      bodyText.initDimensions && bodyText.initDimensions();
+      while (bodyText.height > height * 0.62 && bodyText.fontSize > fs(12) && guard < 40) {
+        bodyText.set('fontSize', bodyText.fontSize - 1);
+        bodyText.initDimensions && bodyText.initDimensions();
+        guard++;
+      }
+    } catch (e) { /* best effort */ }
+    applyAccentStyles(bodyText, segments);
+    canvas.add(bodyText);
+    // Small @handle, bottom center — like the reference look.
+    if (options.globalBrandName) {
+      canvas.add(new fabric.Text(`@${String(options.globalBrandName).toLowerCase().replace(/\s+/g, '')}`, {
+        left: width / 2, top: height * 0.955, originX: 'center', originY: 'bottom',
+        fontSize: fs(11),
+        fill: hasBgImage ? 'rgba(255,255,255,0.85)' : accentColor,
+        fontFamily: bodyFont, charSpacing: 60, selectable: false,
+        shadow: hasBgImage ? 'rgba(0,0,0,0.3) 0px 1px 4px' : '',
+      }));
+    }
+  }
+
   else if (layout === 'tweet_card') {
     const cardMargin = width * 0.08;
     const cardTop = height * 0.18;

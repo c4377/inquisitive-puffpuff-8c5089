@@ -146,17 +146,9 @@ export const assignSmartLayouts = (rawSlides, brandConfig) => {
         secondaryText = paragraphs[0]; // Hook/Top text
         primaryText = paragraphs.slice(1).join('\n'); // Main Title
       }
-    } else if (lineCount >= 4 && textLength > 150) {
-      // Dense text -> Boxed layout for readability (Like Image 3/4)
-      layoutId = 'paper_box';
-    } else if (lineCount === 2 || lineCount === 3) {
-      // Comparison or Punchy text -> Split layout (Like Image 5)
-      layoutId = 'split_color';
-      secondaryText = paragraphs[0]; // Top part
-      primaryText = paragraphs.slice(1).join('\n'); // Bottom part
     } else {
-      // Standard Storytelling
-      layoutId = 'editorial_classic';
+      // Carousel body slides: NO layout — clean brand body typography only.
+      layoutId = 'body';
     }
 
     // 2. Auto-Highlighting (Bolding) Strategy
@@ -196,19 +188,53 @@ export const assignSmartLayouts = (rawSlides, brandConfig) => {
 // Helper: mark specific parts of the text as *accent* (single asterisks,
 // matching the renderer's accent parser).
 const applyEditorialHighlighting = (text) => {
-  const lines = text.split('\n');
-  return lines.map(line => {
-    const words = line.split(' ');
-    // Heuristic: If line is short (< 8 words), accent the whole line (Impact statement)
-    if (words.length < 8 && words.length > 2) {
-      return `*${line}*`;
+  // Bold ONE key phrase (1-4 words) per line. German stopwords are skipped
+  // so the emphasis lands on the words that actually carry the meaning.
+  const STOP = new Set(['der','die','das','ein','eine','einen','einem','einer','und','oder','aber','ich','du','er','sie','es','wir','ihr','man','mich','dich','sich','uns','euch','mein','dein','sein','ihre','ihren','nicht','kein','keine','so','wie','was','wer','wo','wann','warum','dass','weil','wenn','dann','doch','noch','nur','auch','schon','mal','sehr','mehr','als','am','im','in','an','auf','zu','zum','zur','mit','von','vom','für','bei','aus','um','über','unter','nach','vor','durch','ist','sind','war','waren','bin','bist','hat','habe','haben','hatte','wird','werden','kann','können','muss','müssen','will','wollen','soll','sollen','es','the','a','an','and','or','is','are','to','of']);
+
+  const boldPhraseInLine = (line) => {
+    if (line.includes('*')) return line; // already manually marked
+    const words = line.split(' ').filter(w => w !== '');
+    if (words.length < 3) return line;   // too short to need emphasis
+
+    const clean = (w) => w.replace(/[.,!?:;"'()\u2026]+$/g, '').replace(/^[.,!?:;"'(\u2026]+/g, '');
+    const isContentWord = (w, i) => {
+      const c = clean(w);
+      if (c.length < 3) return false;
+      if (STOP.has(c.toLowerCase())) return false;
+      // German nouns are capitalized — mid-sentence capitals are strong signals.
+      if (i > 0 && /^[A-ZÄÖÜ]/.test(c)) return true;
+      return c.length >= 6; // long content words count too
+    };
+
+    // Find the best content word (prefer later in the line = punchline).
+    let anchor = -1;
+    for (let i = words.length - 1; i >= 0; i--) {
+      if (isContentWord(words[i], i)) { anchor = i; break; }
     }
-    // Heuristic: bold the first few words of long paragraphs as a lead-in
-    if (words.length > 15) {
-      const leadIn = words.slice(0, 4).join(' ');
-      const rest = words.slice(4).join(' ');
-      return `*${leadIn}* ${rest}`;
+    if (anchor === -1) return line;
+
+    // Expand the phrase around the anchor up to 4 words, absorbing direct
+    // neighbours that are content words — and bridging ONE connector word
+    // ("im", "das", ...) if a content word sits right behind it.
+    let from = anchor, to = anchor;
+    let guard = 0;
+    while (guard++ < 6 && (to - from) < 3) {
+      if (from - 1 > 0 && isContentWord(words[from - 1], from - 1)) { from--; continue; }
+      if (from - 2 > 0 && (to - from) < 2 && !isContentWord(words[from - 1], from - 1) && isContentWord(words[from - 2], from - 2)) { from -= 2; continue; }
+      break;
     }
-    return line;
-  }).join('\n');
+    if ((to - from) < 3 && to + 1 < words.length && isContentWord(words[to + 1], to + 1)) to++;
+
+    const before = words.slice(0, from).join(' ');
+    const phrase = words.slice(from, to + 1).join(' ');
+    const after = words.slice(to + 1).join(' ');
+    // Keep trailing punctuation outside the markers.
+    const m = phrase.match(/^(.*?)([.,!?:;\u2026]*)$/);
+    const core = m ? m[1] : phrase;
+    const punct = m ? m[2] : '';
+    return [before, `**${core}**${punct}`, after].filter(p => p !== '').join(' ');
+  };
+
+  return text.split('\n').map(boldPhraseInLine).join('\n');
 };
