@@ -510,7 +510,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // Story styling applies ONLY to slides from the StoryPlanner (storyMode
   // flag) — a 9:16 slide built in the normal editor keeps full styling freedom.
   const isStoryFormat = slide.storyMode === true;
-  if (hasBgImage && !isStoryFormat && slide.reelCoverMode !== true && !specialImageLayouts.includes(layout)) {
+  if (hasBgImage && !isStoryFormat && slide.reelCoverMode !== true && layout !== 'body' && !specialImageLayouts.includes(layout)) {
     const { plain, segments } = parseAccent(slide.text);
     const zone = (slide._autoImage && slide._autoImage.quietZone) || 'center';
     const quietBrightness = (slide._autoImage && typeof slide._autoImage.quietBrightness === 'number')
@@ -1031,26 +1031,46 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
   // === TWEET CARD: white rounded card like a tweet/post ===
   else if (layout === 'body') {
-    // Clean carousel body slide, styled like a natural text-on-photo post:
-    // modest size, upper-left block, brand BODY font. Only the cover is big.
+    // Carousel body slide.
+    // WITH photo: small 16pt caption placed AROUND the subject — in the
+    //   image's quiet zone (same detection as the feed covers).
+    // WITHOUT photo: 32pt, fully centered, so the slide doesn't feel empty.
     const { plain, segments } = parseAccent(slide.text);
     const bodyFont = slide.bodyFontFamily || slide.fontFamily || 'Montserrat';
+
+    let bLeft = width / 2, bTop = height / 2, bOriginX = 'center', bOriginY = 'center';
+    let bAlign = 'center';
+    if (hasBgImage) {
+      const zone = (slide._autoImage && slide._autoImage.quietZone) || 'center';
+      const isTop = zone.includes('top');
+      const isBottom = zone.includes('bottom');
+      const isLeft = zone.includes('left');
+      const isRight = zone.includes('right');
+      bTop = isTop ? height * 0.18 : isBottom ? height * 0.80 : height * 0.5;
+      bAlign = isLeft ? 'left' : isRight ? 'right' : 'center';
+      bOriginX = bAlign === 'center' ? 'center' : (bAlign === 'right' ? 'right' : 'left');
+      bLeft = bAlign === 'center' ? width / 2 : (bAlign === 'right' ? width * 0.88 : width * 0.12);
+      bOriginY = 'center';
+    }
+
+    const autoSize = hasBgImage ? 16 : 32;
     const bodyText = new fabric.Textbox(plain, {
-      left: width * 0.12, top: height * 0.14, originX: 'left', originY: 'top',
-      width: width * 0.76,
-      fontSize: fs(slide.fontSizeManual ? (slide.fontSize || 16) : 16),
+      left: bLeft, top: bTop, originX: bOriginX, originY: bOriginY,
+      width: width * (hasBgImage ? 0.68 : 0.76),
+      fontSize: fs(slide.fontSizeManual ? (slide.fontSize || autoSize) : autoSize),
       fontFamily: bodyFont,
       fontWeight: slide.fontWeight || '400',
       fill: hasBgImage ? '#FFFFFF' : (slide.color || contrastColor(slide.backgroundColor || '#fff')),
-      textAlign: slide.textAlign || 'left',
-      lineHeight: 1.4,
+      textAlign: slide.textAlign || bAlign,
+      lineHeight: hasBgImage ? 1.4 : 1.4,
       shadow: hasBgImage ? 'rgba(0,0,0,0.35) 0px 1px 6px' : '',
     });
-    // Never let a long text run into the bottom area.
+    // Never let a long text run out of its area.
     try {
       let guard = 0;
+      const maxH = hasBgImage ? height * 0.5 : height * 0.72;
       bodyText.initDimensions && bodyText.initDimensions();
-      while (bodyText.height > height * 0.62 && bodyText.fontSize > fs(12) && guard < 40) {
+      while (bodyText.height > maxH && bodyText.fontSize > fs(12) && guard < 40) {
         bodyText.set('fontSize', bodyText.fontSize - 1);
         bodyText.initDimensions && bodyText.initDimensions();
         guard++;
