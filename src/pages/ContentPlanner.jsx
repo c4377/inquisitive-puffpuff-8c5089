@@ -806,7 +806,7 @@ const ContentPlanner = () => {
                     title={`Tag ${day.day} – ${day.title} · tippen zum Bearbeiten`}
                   >
                     <div className="absolute inset-0 pointer-events-none">
-                      <Canvas key={`${day.day}-${activeIndex}-${dynamicActiveSlide.color}-${dynamicActiveSlide.secondaryColor}-${dynamicActiveSlide.fontFamily}-${dynamicActiveSlide.backgroundColor}`} data={{...dynamicActiveSlide, slideNumber: undefined}} brandName={brandName} />
+                      <Canvas key={`${day.day}-${activeIndex}-${dynamicActiveSlide.color}-${dynamicActiveSlide.secondaryColor}-${dynamicActiveSlide.fontFamily}-${dynamicActiveSlide.backgroundColor}`} data={{...dynamicActiveSlide, slideNumber: activeIndex + 1, totalSlides: day.slides.length}} brandName={brandName} />
                     </div>
 
                     {/* Day badge */}
