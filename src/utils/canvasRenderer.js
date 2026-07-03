@@ -1038,12 +1038,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const bodyText = new fabric.Textbox(plain, {
       left: width * 0.12, top: height * 0.14, originX: 'left', originY: 'top',
       width: width * 0.76,
-      fontSize: fs(slide.fontSize === 42 ? 21 : (slide.fontSize || 21)),
+      fontSize: fs((slide.fontSize === 42 || slide.fontSize === 21) ? 16 : (slide.fontSize || 16)),
       fontFamily: bodyFont,
       fontWeight: slide.fontWeight || '400',
       fill: hasBgImage ? '#FFFFFF' : (slide.color || contrastColor(slide.backgroundColor || '#fff')),
       textAlign: slide.textAlign || 'left',
-      lineHeight: 1.45,
+      lineHeight: 1.4,
       shadow: hasBgImage ? 'rgba(0,0,0,0.35) 0px 1px 6px' : '',
     });
     // Never let a long text run into the bottom area.
