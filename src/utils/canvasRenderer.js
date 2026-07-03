@@ -1025,14 +1025,29 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       left: cardMargin + fs(64), top: cardTop + fs(34), fontSize: fs(18),
       fontFamily: 'Inter', fill: '#657786', selectable: false,
     }));
-    const { plain, segments } = parseAccent(slide.text);
+    const { plain } = parseAccent(slide.text);
+    // Twitter look: always a neutral system-style sans (like Twitter's Chirp),
+    // regardless of the chosen branding.
+    const twFont = 'Inter';
+    const twMaxW = width - cardMargin * 2 - fs(56);
+    const twTop = cardTop + fs(90);
+    const twMaxH = cardH - fs(90) - fs(28); // space below handle, minus padding
     const tw = new fabric.Textbox(plain, {
-      left: cardMargin + fs(28), top: cardTop + fs(90),
-      width: width - cardMargin * 2 - fs(56),
-      fontSize: fs(slide.fontSize || 34), fontFamily: fontFamily,
+      left: cardMargin + fs(28), top: twTop,
+      width: twMaxW,
+      fontSize: fs(26), fontFamily: twFont, fontWeight: '400',
       fill: '#15202B', lineHeight: 1.35, textAlign: 'left',
     });
-    applyAccentStyles(tw, segments);
+    // Shrink until the text fits inside the card, no matter how long it is.
+    try {
+      let guard = 0;
+      tw.initDimensions && tw.initDimensions();
+      while (tw.height > twMaxH && tw.fontSize > fs(10) && guard < 60) {
+        tw.set('fontSize', tw.fontSize - 1);
+        tw.initDimensions && tw.initDimensions();
+        guard++;
+      }
+    } catch (e) { /* best effort */ }
     canvas.add(tw);
   }
 
