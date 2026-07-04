@@ -143,10 +143,11 @@ export const BrandProvider = ({ children }) => {
         const cloudState = await CloudService.loadUserState(user.id);
         
         if (cloudState) {
-          // Merge Cloud Data with Local State
+          // Merge Cloud Data with Local State — but always keep the fixed
+          // curated brands present (cloud data predates them).
           setBrandSettings(prev => ({
             ...prev,
-            brandConfigurations: cloudState.brand_configurations || prev.brandConfigurations,
+            brandConfigurations: withCuratedBrands(cloudState.brand_configurations || prev.brandConfigurations),
             contentPlan: cloudState.content_plan || prev.contentPlan,
             savedDesigns: cloudState.saved_designs || prev.savedDesigns,
             communityDecks: cloudState.community_decks || prev.communityDecks,
