@@ -159,11 +159,19 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           canvas.add(img);
           canvas.sendToBack(img);
 
-          // Readability overlay — kept light so the photo stays vibrant.
+          // Readability overlay. Bright photos get a WHITE wash (lifts the
+          // photo, keeps the person visible, pairs with dark text). Dark
+          // photos keep the classic dark overlay for white text.
           const ov = typeof slide.overlay === 'number' ? slide.overlay : 0.28;
+          const isBrightImg = slide._autoImage &&
+            (slide._autoImage.textColorHint === 'dark' ||
+             (typeof slide._autoImage.quietBrightness === 'number' && slide._autoImage.quietBrightness > 135));
           const overlayRect = new fabric.Rect({
             left: 0, top: 0, width, height,
-            fill: `rgba(0,0,0,${ov})`, selectable: false,
+            fill: isBrightImg
+              ? `rgba(255,255,255,${Math.min(ov + 0.06, 0.36)})`
+              : `rgba(0,0,0,${ov})`,
+            selectable: false,
           });
           canvas.add(overlayRect);
 
@@ -527,18 +535,23 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const originX = align === 'center' ? 'center' : (align === 'right' ? 'right' : 'left');
     const textLeft = align === 'center' ? width / 2 : (align === 'right' ? width - padding : padding);
 
+    // Bright zone -> DARK text on the (white-washed) photo.
+    // Dark zone -> white text with shadow, as before.
+    const brightMode = quietBrightness > 135;
+    const darkInk = (slide.color && hexLuminance(slide.color) < 110) ? slide.color : '#2b2118';
     const tObj = new fabric.Textbox(plain, {
       left: textLeft, top: rowY, originX, originY: 'center',
       width: boxW, fontSize: fs(slide.fontSize === 42 ? 34 : (slide.fontSize || 34)), fontFamily: fontFamily,
-      fill: slide.color || '#FFFFFF', textAlign: slide.textAlign || align, lineHeight: 1.28,
+      fill: brightMode ? darkInk : (slide.color && hexLuminance(slide.color) > 160 ? slide.color : '#FFFFFF'),
+      textAlign: slide.textAlign || align, lineHeight: 1.28,
       fontWeight: slide.fontWeight || 'normal',
       fontStyle: slide.fontStyle || 'normal',
-      shadow: slide.noShadow ? '' : 'rgba(0,0,0,0.85) 0px 2px 16px',
+      shadow: slide.noShadow ? '' : (brightMode ? 'rgba(255,255,255,0.5) 0px 1px 8px' : 'rgba(0,0,0,0.85) 0px 2px 16px'),
     });
 
-    // NOTFALL only: quiet zone is too bright (>135) -> add a soft local scrim
-    // so white text stays legible. Otherwise: shadow alone, no box.
-    if (quietBrightness > 135) {
+    // Dark scrim only for the old white-text path; bright mode uses the
+    // white wash + dark text instead.
+    if (false && quietBrightness > 135) {
       const padX = fs(30), padY = fs(24);
       const scrim = new fabric.Rect({
         left: textLeft, top: rowY, originX, originY: 'center',
@@ -1060,10 +1073,18 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       fontSize: fs(slide.fontSizeManual ? (slide.fontSize || autoSize) : autoSize),
       fontFamily: bodyFont,
       fontWeight: slide.fontWeight || '400',
-      fill: hasBgImage ? '#FFFFFF' : (slide.color || contrastColor(slide.backgroundColor || '#fff')),
+      fill: hasBgImage
+        ? (((slide._autoImage && (slide._autoImage.textColorHint === 'dark' || slide._autoImage.quietBrightness > 135)))
+            ? ((slide.color && hexLuminance(slide.color) < 110) ? slide.color : '#2b2118')
+            : '#FFFFFF')
+        : (slide.color || contrastColor(slide.backgroundColor || '#fff')),
       textAlign: slide.textAlign || bAlign,
-      lineHeight: hasBgImage ? 1.4 : 1.4,
-      shadow: hasBgImage ? 'rgba(0,0,0,0.35) 0px 1px 6px' : '',
+      lineHeight: 1.4,
+      shadow: hasBgImage
+        ? (((slide._autoImage && (slide._autoImage.textColorHint === 'dark' || slide._autoImage.quietBrightness > 135)))
+            ? 'rgba(255,255,255,0.5) 0px 1px 6px'
+            : 'rgba(0,0,0,0.35) 0px 1px 6px')
+        : '',
     });
     // Never let a long text run out of its area.
     try {
