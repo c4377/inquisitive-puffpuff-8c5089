@@ -119,15 +119,6 @@ const StyleShifter = ({ compact = false, mode = 'default' }) => {
             
             <span className="text-[10px] font-bold text-gray-400 uppercase mr-1 hidden sm:block">Style:</span>
 
-            <button onClick={() => applyEditorialDark(true)} className="flex-shrink-0 flex items-center px-3 py-1.5 rounded-lg text-xs font-bold text-white shadow-sm transition-all whitespace-nowrap" style={{ background: '#151009' }}>
-                <SafeIcon icon={FiZap} className="mr-1.5" /> Editorial Dark
-            </button>
-            <button onClick={() => applyEditorialDark(false)} className="flex-shrink-0 flex items-center px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all whitespace-nowrap border" style={{ background: '#EFE7DA', color: '#2A211C', borderColor: '#D9C4A9' }}>
-                <SafeIcon icon={FiZap} className="mr-1.5" /> Editorial Hell
-            </button>
-
-            <div className="w-px h-5 bg-gray-300 mx-1 flex-shrink-0"></div>
-
             <button onClick={swapFonts} className="flex-shrink-0 flex items-center px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-xs font-bold text-gray-700 hover:text-purple-600 hover:border-purple-300 shadow-sm transition-all whitespace-nowrap">
                 <SafeIcon icon={FiType} className="mr-1.5" /> Fonts
             </button>

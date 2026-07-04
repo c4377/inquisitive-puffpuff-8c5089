@@ -8,6 +8,7 @@ import ColorPalette from '../components/ColorPalette';
 import FontSelector from '../components/FontSelector';
 import BrandRandomizer from '../components/BrandRandomizer';
 import { uploadImageToCloud, listCloudImages, deleteCloudImage } from '../supabase';
+import { CURATED_BRANDS } from '../constants/brandData';
 
 const { FiShuffle, FiDroplet, FiType, FiImage, FiSettings, FiSave, FiUpload, FiEdit3, FiTrash2, FiCheckCircle, FiEye, FiTag, FiX, FiAlertCircle, FiUsers, FiCheck, FiRefreshCw } = FiIcons;
 
@@ -313,6 +314,39 @@ const BrandSettings = () => {
           <div className="space-y-8">
             <div className="flex items-center justify-between">
               <h3 className="text-xl font-bold text-gray-900">Meine Gespeicherten Brands</h3>
+            </div>
+
+            {/* Fixed curated brands — always available */}
+            <div className="mb-4">
+              <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Kuratierte Brands</div>
+              <div className="grid gap-3">
+                {CURATED_BRANDS.map(config => {
+                  const isActive = brandSettings.currentBrandConfig?.id === config.id;
+                  return (
+                    <div key={config.id} className={`border rounded-xl p-4 flex items-center justify-between transition-all ${isActive ? 'border-purple-500 bg-purple-50 ring-1 ring-purple-200' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}`}>
+                      <div className="flex items-center space-x-4">
+                        <div className="flex -space-x-2">
+                          {Object.values(config.colors || {}).slice(0, 3).map((c, i) => (
+                            <div key={i} className="w-8 h-8 rounded-full border-2 border-white shadow-sm" style={{ backgroundColor: c }} />
+                          ))}
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-gray-900">{config.name}</h4>
+                          <p className="text-xs text-gray-500">Playfair + Handschrift • {config.darkPhoto ? 'dunkle Fotos' : 'helle Fotos'}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        {!isActive && (
+                          <button onClick={() => updateBrandSettings({ currentBrandConfig: { ...config, id: config.id } })} className="px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-xs font-bold text-gray-700 hover:bg-gray-100">
+                            Laden
+                          </button>
+                        )}
+                        {isActive && <span className="text-xs font-bold text-purple-600 px-2">Aktiv</span>}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             {/* List of Saved Brands */}
