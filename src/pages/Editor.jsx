@@ -322,8 +322,13 @@ const Editor = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="flex-1 overflow-hidden grid grid-cols-1 md:grid-cols-[1fr_420px]">
+      <div className={`flex-1 overflow-hidden grid ${panelCollapsed ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-[1fr_420px]'}`}>
         <div className="relative bg-gray-100 flex flex-col items-center justify-center p-4 md:p-8 overflow-y-auto">
+          {panelCollapsed && (
+            <button onClick={() => setPanelCollapsed(false)} className="fixed bottom-5 right-5 z-40 bg-purple-600 text-white px-4 py-2.5 rounded-full shadow-xl font-bold text-sm flex items-center hover:bg-purple-700">
+              <SafeIcon icon={FiEdit3} className="mr-1.5" /> Bearbeiten
+            </button>
+          )}
           <div {...(slides.length > 1 ? slideSwipe : {})} className={`shadow-2xl rounded-sm overflow-hidden bg-white w-full transition-all duration-300 relative shrink-0 ${currentSlide.format === '9:16' ? 'max-w-[280px] aspect-[9/16]' : (currentSlide.format === '16:9' ? 'max-w-[800px] aspect-video' : 'max-w-[400px] aspect-[4/5]')}`}>
             <Canvas ref={canvasRef} data={{ ...currentSlide, slideNumber: slides.length > 1 ? currentSlideIndex + 1 : undefined, totalSlides: slides.length }} brandName={brandName} />
             <button id="save-lib-btn" onClick={handleSaveToLibrary} className="absolute bottom-4 right-4 bg-white/90 backdrop-blur border border-gray-200 shadow-lg text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center hover:bg-white hover:text-purple-600 transition-colors"><SafeIcon icon={FiSave} className="mr-1" /> Save to Lib</button>
@@ -353,7 +358,7 @@ const Editor = () => {
             <button onClick={addSlide} className="flex-shrink-0 w-16 h-20 border-2 border-dashed border-gray-300 rounded flex items-center justify-center text-gray-400 hover:text-purple-600 hover:border-purple-600 hover:bg-purple-50 transition-colors"><SafeIcon icon={FiPlus} className="text-xl" /></button>
           </div>
         </div>
-        <div className="flex h-full border-l border-gray-200 bg-white overflow-hidden">
+        <div className={`${panelCollapsed ? 'hidden' : 'flex'} h-full border-l border-gray-200 bg-white overflow-hidden`}>
           <div className="w-20 bg-white border-r border-gray-100 flex flex-col items-center py-2 overflow-y-auto no-scrollbar z-10 shadow-[4px_0_10px_rgba(0,0,0,0.02)]">
             <ToolTab id="text" label="Text" icon={FiType} isActive={activeTab === 'text'} onClick={(id) => { setActiveTab(id); setPanelCollapsed(false); }} />
             <ToolTab id="layout" label="Layout" icon={FiLayout} isActive={activeTab === 'layout'} onClick={(id) => { setActiveTab(id); setPanelCollapsed(false); }} />

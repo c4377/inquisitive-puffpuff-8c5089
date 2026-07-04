@@ -775,6 +775,13 @@ const ContentPlanner = () => {
                       </div>
                       <div className="flex gap-1.5">
                         <button
+                          onClick={(e) => { e.stopPropagation(); setExpandedCaptionId(expandedCaptionId === day.day ? null : day.day); }}
+                          className="bg-white/95 text-gray-800 text-[9px] font-bold px-2 py-1 rounded-full flex items-center hover:bg-white"
+                          title="Caption ein-/ausklappen"
+                        >
+                          <SafeIcon icon={FiMessageSquare} className="mr-0.5" /> Caption
+                        </button>
+                        <button
                           onClick={(e) => { e.stopPropagation(); handleShareDay(day); }}
                           disabled={isExportingThisDay}
                           className="bg-purple-600 text-white text-[9px] font-bold px-2 py-1 rounded-full flex items-center hover:bg-purple-700 disabled:opacity-50"
@@ -792,6 +799,19 @@ const ContentPlanner = () => {
                         </button>
                       </div>
                     </div>
+
+                    {/* Collapsible caption panel (restored from the old day view) */}
+                    {expandedCaptionId === day.day && (
+                      <div className="absolute inset-x-0 bottom-0 z-30 bg-white/95 backdrop-blur-sm border-t border-gray-200 p-2.5 max-h-[70%] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-start justify-between gap-2">
+                          <p className="text-[11px] leading-relaxed text-gray-800 whitespace-pre-wrap flex-1">{day.caption || 'Keine Caption verfügbar.'}</p>
+                          <div className="flex flex-col gap-1 shrink-0">
+                            <button onClick={() => navigator.clipboard?.writeText(day.caption || '')} className="p-1.5 rounded-md bg-gray-100 text-gray-600 hover:text-purple-600" title="Caption kopieren"><SafeIcon icon={FiCopy} className="text-xs" /></button>
+                            <button onClick={() => setExpandedCaptionId(null)} className="p-1.5 rounded-md bg-gray-100 text-gray-600 hover:text-red-500" title="Einklappen"><span className="text-[10px] font-bold leading-none">✕</span></button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </motion.div>
                 );
               })}
