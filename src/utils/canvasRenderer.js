@@ -635,9 +635,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const row = anchor.row || 'mid';
     const col = anchor.col || 'center';
 
-    // Editorial Dark: an extra dark/desaturated wash over the whole photo so
-    // any image takes on the moody editorial tone (Eva-Siebenhaar look).
-    if (hasBgImage && slide.darkPhoto) {
+    // Editorial Dark: heavy washes are handled INSIDE the editorial branch
+    // (light global tone + local scrim only), so the subject stays visible.
+    if (hasBgImage && slide.darkPhoto && !slide.editorialDark) {
       canvas.add(new fabric.Rect({
         left: 0, top: 0, width, height,
         fill: 'rgba(20,14,9,0.45)', selectable: false,
@@ -645,7 +645,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     }
 
     // On photos, add a soft readability gradient on the half where the text sits.
-    if (hasBgImage) {
+    if (hasBgImage && !slide.editorialDark) {
       const bandTop = row === 'top' ? 0 : row === 'bottom' ? height * 0.5 : height * 0.28;
       const bandH = row === 'mid' ? height * 0.44 : height * 0.5;
       canvas.add(new fabric.Rect({
@@ -673,11 +673,35 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     if (slide.editorialDark || slide.editorialAuto) {
       const { kicker: kickTxt, headline, footer } = splitEditorial(slide.text);
       const centerX = width / 2;
-      // Vertical stack, centered as a group around the anchor row.
-      let stackTop = row === 'top' ? height * 0.14 : row === 'bottom' ? height * 0.42 : height * 0.30;
       const lightText = hasBgImage ? '#FFFFFF' : contrastColor(slide.backgroundColor || '#fff');
       const dimText = hasBgImage ? 'rgba(255,255,255,0.9)' : accentColor;
       const sh = hasBgImage ? 'rgba(0,0,0,0.55) 0px 2px 12px' : '';
+
+      // Place the text stack in the photo's QUIET zone (from image analysis)
+      // so it never covers the subject/face. Fall back to the anchor row.
+      let stackTop;
+      let bandTop, bandH;
+      if (hasBgImage) {
+        const zone = (slide._autoImage && slide._autoImage.quietZone) || '';
+        if (zone.includes('top')) { stackTop = height * 0.10; bandTop = 0; bandH = height * 0.46; }
+        else if (zone.includes('bottom')) { stackTop = height * 0.56; bandTop = height * 0.52; bandH = height * 0.48; }
+        else if (zone) { stackTop = height * 0.32; bandTop = height * 0.26; bandH = height * 0.48; }
+        else { stackTop = height * 0.56; bandTop = height * 0.52; bandH = height * 0.48; } // default: lower area, faces are usually upper
+        // 1) Only a LIGHT global tone so the whole photo (incl. face) stays visible.
+        if (slide.darkPhoto) {
+          canvas.add(new fabric.Rect({
+            left: 0, top: 0, width, height,
+            fill: 'rgba(20,14,9,0.18)', selectable: false,
+          }));
+        }
+        // 2) Local scrim ONLY behind the text area for readability.
+        canvas.add(new fabric.Rect({
+          left: 0, top: bandTop, width, height: bandH,
+          fill: 'rgba(8,6,4,0.42)', selectable: false,
+        }));
+      } else {
+        stackTop = row === 'top' ? height * 0.14 : row === 'bottom' ? height * 0.42 : height * 0.30;
+      }
 
       // Kicker (small, spaced, uppercase — sans)
       if (kickTxt) {
