@@ -371,23 +371,21 @@ export const buildEditorialDark = (darkPhoto = true) => ({
     : { primary: '#2A211C', secondary: '#8A6A4B', tertiary: '#B79B7C', accent: '#9A3B2E', neutral: '#F1E9DD', background: '#EFE7DA' },
   typography: {
     fontFamily: 'Playfair Display',   // big serif headline
-    accentFontFamily: 'Caveat',       // script sub-line (the signature curl)
-    bodyFontFamily: 'Montserrat',      // clean body / kicker
+    accentFontFamily: 'Montserrat',   // small spaced UPPERCASE sans (frame lines)
+    bodyFontFamily: 'Montserrat',
     fontWeight: '500',
     fontSize: 52,
     lineHeight: 1.12,
     letterSpacing: '-0.02em',
     fontStyle: 'normal',
-    italicEmphasis: true,              // key words render italic
-    kicker: true,                      // small uppercase letter-spaced label on top
   },
-  layout: 'cover_bottom_center',
+  layout: 'auto',
   visualElements: [],
   timestamp: new Date().toISOString(),
-  generatedDetails: { colorName: darkPhoto ? 'editorial_dark' : 'editorial_warm', typoName: 'editorial_pairing' },
+  generatedDetails: { colorName: darkPhoto ? 'editorial_dark' : 'editorial_warm', typoName: 'serif_caps_pairing' },
   darkPhoto,
-  sampleText: "Du bist Fotografin, aber du *verkaufst keine Fotos*",
-  tags: ['editorial', 'dark', 'serif', 'script'],
+  sampleText: "WENN DIR JEMAND SAGT\nDu bist Fotografin, aber du verkaufst keine Fotos",
+  tags: ['editorial', 'dark', 'serif', 'caps'],
 });
 
 export const generateMixedBrand = () => {
