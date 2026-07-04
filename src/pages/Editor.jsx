@@ -19,7 +19,7 @@ import { renderSlide } from '../utils/canvasRenderer';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
-const { FiPlus, FiDownload, FiTrash2, FiFolder, FiSave, FiArrowLeft, FiType, FiLayout, FiDroplet, FiImage, FiMove, FiList, FiZap, FiGrid, FiCheck, FiToggleRight, FiToggleLeft, FiLayers, FiMessageSquare, FiCopy, FiRefreshCw, FiSend } = FiIcons;
+const { FiPlus, FiDownload, FiTrash2, FiFolder, FiSave, FiArrowLeft, FiType, FiLayout, FiDroplet, FiImage, FiMove, FiList, FiZap, FiGrid, FiCheck, FiToggleRight, FiToggleLeft, FiLayers, FiMessageSquare, FiCopy, FiRefreshCw, FiSend, FiChevronDown, FiChevronUp } = FiIcons;
 
 const ToolTab = ({ id, label, icon, isActive, onClick }) => (
   <button onClick={() => onClick(id)} className={`w-full flex flex-col items-center justify-center py-4 px-1 transition-all border-l-4 ${isActive ? 'bg-purple-50 border-purple-600 text-purple-700' : 'bg-white border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-900'}`}>
@@ -37,6 +37,7 @@ const Editor = () => {
   const thumbnailsRef = useRef(null);
 
   const [activeTab, setActiveTab] = useState('text');
+  const [panelCollapsed, setPanelCollapsed] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   
@@ -354,19 +355,19 @@ const Editor = () => {
         </div>
         <div className="flex h-full border-l border-gray-200 bg-white overflow-hidden">
           <div className="w-20 bg-white border-r border-gray-100 flex flex-col items-center py-2 overflow-y-auto no-scrollbar z-10 shadow-[4px_0_10px_rgba(0,0,0,0.02)]">
-            <ToolTab id="text" label="Text" icon={FiType} isActive={activeTab === 'text'} onClick={setActiveTab} />
-            <ToolTab id="layout" label="Layout" icon={FiLayout} isActive={activeTab === 'layout'} onClick={setActiveTab} />
-            <ToolTab id="colors" label="Farben" icon={FiDroplet} isActive={activeTab === 'colors'} onClick={setActiveTab} />
-            <ToolTab id="images" label="Bilder" icon={FiImage} isActive={activeTab === 'images'} onClick={setActiveTab} />
-            <ToolTab id="effects" label="Effekte" icon={FiMove} isActive={activeTab === 'effects'} onClick={setActiveTab} />
-            <ToolTab id="format" label="Format" icon={FiGrid} isActive={activeTab === 'format'} onClick={setActiveTab} />
+            <ToolTab id="text" label="Text" icon={FiType} isActive={activeTab === 'text'} onClick={(id) => { setActiveTab(id); setPanelCollapsed(false); }} />
+            <ToolTab id="layout" label="Layout" icon={FiLayout} isActive={activeTab === 'layout'} onClick={(id) => { setActiveTab(id); setPanelCollapsed(false); }} />
+            <ToolTab id="colors" label="Farben" icon={FiDroplet} isActive={activeTab === 'colors'} onClick={(id) => { setActiveTab(id); setPanelCollapsed(false); }} />
+            <ToolTab id="images" label="Bilder" icon={FiImage} isActive={activeTab === 'images'} onClick={(id) => { setActiveTab(id); setPanelCollapsed(false); }} />
+            <ToolTab id="effects" label="Effekte" icon={FiMove} isActive={activeTab === 'effects'} onClick={(id) => { setActiveTab(id); setPanelCollapsed(false); }} />
+            <ToolTab id="format" label="Format" icon={FiGrid} isActive={activeTab === 'format'} onClick={(id) => { setActiveTab(id); setPanelCollapsed(false); }} />
             <div className="w-8 h-px bg-gray-200 my-2"></div>
-            <ToolTab id="brand" label="Magic" icon={FiZap} isActive={activeTab === 'brand'} onClick={setActiveTab} />
-            <ToolTab id="bulk" label="Bulk" icon={FiList} isActive={activeTab === 'bulk'} onClick={setActiveTab} />
+            <ToolTab id="brand" label="Magic" icon={FiZap} isActive={activeTab === 'brand'} onClick={(id) => { setActiveTab(id); setPanelCollapsed(false); }} />
+            <ToolTab id="bulk" label="Bulk" icon={FiList} isActive={activeTab === 'bulk'} onClick={(id) => { setActiveTab(id); setPanelCollapsed(false); }} />
           </div>
           <div className="flex-1 overflow-y-auto bg-gray-50/50 relative">
             <div className="p-5 min-h-full pb-20">
-              <div className="mb-6 flex items-center justify-between border-b border-gray-100 pb-4">
+              <button onClick={() => setPanelCollapsed(!panelCollapsed)} className="mb-6 w-full flex items-center justify-between border-b border-gray-100 pb-4 text-left">
                 <h3 className="text-lg font-bold text-gray-900 capitalize flex items-center">
                   {activeTab === 'text' && <><SafeIcon icon={FiType} className="mr-2 text-purple-600"/> Text & Inhalt</>}
                   {activeTab === 'layout' && <><SafeIcon icon={FiLayout} className="mr-2 text-purple-600"/> Design Style</>}
@@ -377,7 +378,9 @@ const Editor = () => {
                   {activeTab === 'brand' && <><SafeIcon icon={FiZap} className="mr-2 text-purple-600"/> Brand Generator</>}
                   {activeTab === 'bulk' && <><SafeIcon icon={FiList} className="mr-2 text-purple-600"/> Massen-Editor</>}
                 </h3>
-              </div>
+                <SafeIcon icon={panelCollapsed ? FiChevronDown : FiChevronUp} className="text-gray-400 text-xl shrink-0" />
+              </button>
+              {!panelCollapsed && (
               <div className="animate-fade-in">
                 {activeTab === 'text' && (<TextEditor currentSlide={currentSlide} onUpdate={handleSlideUpdate} onGlobalUpdate={handleGlobalUpdate} onBatchUpdate={handleBatchUpdate} totalSlides={slides.length} />)}
                 {activeTab === 'layout' && (<><div className="mb-4 flex items-center justify-between bg-purple-50 p-3 rounded-lg border border-purple-100"><span className="text-xs font-bold text-purple-900 flex items-center">{applyToAll ? 'Gilt für ALLE Slides' : 'Nur aktueller Slide'}</span><button onClick={() => setApplyToAll(!applyToAll)} className={`text-[10px] px-2 py-1 rounded font-bold transition-colors ${applyToAll ? 'bg-purple-600 text-white' : 'bg-white border border-gray-300 text-gray-600'}`} ><SafeIcon icon={applyToAll ? FiToggleRight : FiToggleLeft} className="mr-1 inline text-sm"/> Wechseln</button></div><LayoutPicker currentLayout={currentSlide.layout} onUpdate={(updates) => handleSmartUpdate(updates)} /></>)}
@@ -388,6 +391,7 @@ const Editor = () => {
                 {activeTab === 'bulk' && (<BulkTextEditor onUpdateSlides={handleBulkUpdate} currentSlides={slides} onGlobalUpdate={handleGlobalUpdate} />)}
                 {activeTab === 'brand' && (<GenerativeBrandSystem compact={true} onGenerate={handleBrandConfigUpdate} />)}
               </div>
+              )}
             </div>
           </div>
         </div>

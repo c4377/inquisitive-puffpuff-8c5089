@@ -599,11 +599,19 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // reads as a calm base you can just copy the text from and overwrite in IG.
     const isStory = slide.format === '9:16' || Math.abs((height / width) - (16 / 9)) < 0.1;
     if (isStory) {
-      // Light readability wash at the bottom if there's a photo.
+      // Light readability wash at the bottom if there's a photo — soft fade.
       if (hasBgImage) {
+        const swTop = height * 0.58; const swH = height * 0.42;
         canvas.add(new fabric.Rect({
-          left: 0, top: height * 0.62, width, height: height * 0.38,
-          fill: 'rgba(0,0,0,0.35)', selectable: false,
+          left: 0, top: swTop, width, height: swH,
+          fill: new fabric.Gradient({
+            type: 'linear', coords: { x1: 0, y1: 0, x2: 0, y2: swH },
+            colorStops: [
+              { offset: 0, color: 'rgba(0,0,0,0)' },
+              { offset: 1, color: 'rgba(0,0,0,0.45)' },
+            ],
+          }),
+          selectable: false,
         }));
       }
       const storyText = new fabric.Textbox(plain, {
@@ -648,9 +656,15 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     if (hasBgImage && !slide.editorialDark) {
       const bandTop = row === 'top' ? 0 : row === 'bottom' ? height * 0.5 : height * 0.28;
       const bandH = row === 'mid' ? height * 0.44 : height * 0.5;
+      const stops = row === 'top'
+        ? [{ offset: 0, color: 'rgba(0,0,0,0.48)' }, { offset: 1, color: 'rgba(0,0,0,0)' }]
+        : row === 'bottom'
+          ? [{ offset: 0, color: 'rgba(0,0,0,0)' }, { offset: 1, color: 'rgba(0,0,0,0.48)' }]
+          : [{ offset: 0, color: 'rgba(0,0,0,0)' }, { offset: 0.5, color: 'rgba(0,0,0,0.44)' }, { offset: 1, color: 'rgba(0,0,0,0)' }];
       canvas.add(new fabric.Rect({
         left: 0, top: bandTop, width, height: bandH,
-        fill: 'rgba(0,0,0,0.42)', selectable: false,
+        fill: new fabric.Gradient({ type: 'linear', coords: { x1: 0, y1: 0, x2: 0, y2: bandH }, colorStops: stops }),
+        selectable: false,
       }));
     }
 
@@ -694,10 +708,20 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
             fill: 'rgba(20,14,9,0.18)', selectable: false,
           }));
         }
-        // 2) Local scrim ONLY behind the text area for readability.
+        // 2) Local scrim ONLY behind the text area — soft gradient, no hard edges.
+        const fadeStops = zone.includes('top')
+          ? [{ offset: 0, color: 'rgba(8,6,4,0.50)' }, { offset: 0.7, color: 'rgba(8,6,4,0.28)' }, { offset: 1, color: 'rgba(8,6,4,0)' }]
+          : (zone.includes('bottom') || !zone)
+            ? [{ offset: 0, color: 'rgba(8,6,4,0)' }, { offset: 0.3, color: 'rgba(8,6,4,0.28)' }, { offset: 1, color: 'rgba(8,6,4,0.50)' }]
+            : [{ offset: 0, color: 'rgba(8,6,4,0)' }, { offset: 0.5, color: 'rgba(8,6,4,0.45)' }, { offset: 1, color: 'rgba(8,6,4,0)' }];
         canvas.add(new fabric.Rect({
           left: 0, top: bandTop, width, height: bandH,
-          fill: 'rgba(8,6,4,0.42)', selectable: false,
+          fill: new fabric.Gradient({
+            type: 'linear',
+            coords: { x1: 0, y1: 0, x2: 0, y2: bandH },
+            colorStops: fadeStops,
+          }),
+          selectable: false,
         }));
       } else {
         stackTop = row === 'top' ? height * 0.14 : row === 'bottom' ? height * 0.42 : height * 0.30;
