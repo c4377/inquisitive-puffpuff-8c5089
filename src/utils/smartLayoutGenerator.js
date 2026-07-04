@@ -133,19 +133,15 @@ export const assignSmartLayouts = (rawSlides, brandConfig) => {
     const paragraphs = slide.text.split('\n').filter(p => p.trim() !== '');
     const lineCount = paragraphs.length;
     
-    let layoutId = 'editorial_classic'; // Default
+    let layoutId = 'auto';
     let secondaryText = '';
     let primaryText = slide.text;
     
     // 1. Layout Selection Heuristics
     if (index === 0) {
-      // Title Slide Strategy
-      layoutId = 'editorial_classic'; 
-      // Try to split title if multiple lines
-      if (lineCount > 1) {
-        secondaryText = paragraphs[0]; // Hook/Top text
-        primaryText = paragraphs.slice(1).join('\n'); // Main Title
-      }
+      // Cover: same 'auto' path as the day planner, so bulk covers from the
+      // Editor render exactly like bulk covers from the planner (same size).
+      layoutId = 'auto';
     } else {
       // Carousel body slides: NO layout — clean brand body typography only.
       layoutId = 'body';
@@ -180,7 +176,6 @@ export const assignSmartLayouts = (rawSlides, brandConfig) => {
       fontWeight: t.fontWeight || 'normal',
       // Default styles based on layout vibe
       textAlign: layoutId === 'editorial_classic' ? 'left' : 'center',
-      fontSize: layoutId === 'paper_box' ? 32 : 34,
     };
   });
 };
