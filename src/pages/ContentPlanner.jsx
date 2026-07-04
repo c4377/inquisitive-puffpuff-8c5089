@@ -153,10 +153,15 @@ const ContentPlanner = () => {
     if (!config.colors || !config.typography) return;
 
     const styledPlan = applyBrandStyling(weekPlan, config);
-    const oldSample = JSON.stringify({ c: weekPlan[0]?.slides[0]?.color, f: weekPlan[0]?.slides[0]?.fontFamily });
-    const newSample = JSON.stringify({ c: styledPlan[0]?.slides[0]?.color, f: styledPlan[0]?.slides[0]?.fontFamily });
-    
-    if (oldSample !== newSample) {
+    // Compare color, font AND the editorial flags — otherwise activating the
+    // Editorial brand on an already same-colored plan is wrongly skipped.
+    const sampleOf = (p) => JSON.stringify({
+      c: p[0]?.slides[0]?.color,
+      f: p[0]?.slides[0]?.fontFamily,
+      e: p[0]?.slides[0]?.editorialDark === true,
+      d: p[0]?.slides[0]?.darkPhoto === true,
+    });
+    if (sampleOf(weekPlan) !== sampleOf(styledPlan)) {
         updateBrandSettings({ contentPlan: styledPlan });
     }
   };
@@ -364,6 +369,10 @@ const ContentPlanner = () => {
           globalIndex++;
           cleaned.layout = 'auto';
           cleaned.layoutId = 'auto';
+          // Keep the Editorial preset flags in sync with the active brand.
+          const cfg = brandSettings.currentBrandConfig || {};
+          cleaned.editorialDark = cfg.editorialDark === true || cfg.ruleSet === 'editorial_dark';
+          cleaned.darkPhoto = cfg.darkPhoto === true;
           cleaned.textAnchor = textAnchor;
           cleaned.fontWeight = bold ? '700' : 'normal';
           return cleaned;
