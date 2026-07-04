@@ -299,7 +299,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // big serif headline. Mirrors the Eva-Siebenhaar look where the user just
   // types normally. Returns { kicker, headline, footer }.
   const splitEditorial = (text) => {
-    const lines = (text || '').split('\n').map((l) => l.trim()).filter(Boolean);
+    // Editorial mode needs NO markup — remove any leftover *stars* from older
+    // texts so they can never appear in the output.
+    const lines = (text || '').replace(/\*/g, '').split('\n').map((l) => l.trim()).filter(Boolean);
     if (lines.length === 0) return { kicker: '', headline: '', footer: '' };
 
     // Any straight or typographic quote mark signals a quoted core statement.

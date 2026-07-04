@@ -3,7 +3,7 @@ import { FiCheck, FiZap, FiRefreshCw } from 'react-icons/fi';
 import SafeIcon from '../common/SafeIcon';
 import Canvas from './Canvas';
 import { useBrand } from '../context/BrandContext';
-import { generateTrulyRandomBrand, brandRuleSets } from '../constants/brandData';
+import { generateTrulyRandomBrand, brandRuleSets, CURATED_BRANDS } from '../constants/brandData';
 import GenerativeBrandSystem from './GenerativeBrandSystem';
 import StyleShifter from './StyleShifter';
 
@@ -57,9 +57,51 @@ const BrandRandomizer = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Apply a FIXED curated brand (Editorial Dark/Hell): take its full config
+  // (incl. editorialDark + darkPhoto flags), keep the user's identity fields.
+  const applyCuratedBrand = (brand) => {
+    const existingBrand = brandSettings.currentBrandConfig || {};
+    const mergedBrand = {
+      ...brand,
+      brandText: existingBrand.brandText,
+      website: existingBrand.website,
+      strategy: existingBrand.strategy || {},
+    };
+    updateBrandSettings({ currentBrandConfig: mergedBrand });
+    setSelectedKey(brand.id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   // Prepare Template Previews - Force Refresh
   const templatePreviews = useMemo(() => {
-    return Object.entries(brandRuleSets).map(([key, ruleSet]) => {
+    // Fixed curated brands FIRST (Editorial Dark/Hell) — always identical,
+    // full config incl. editorialDark flag for the auto two-font rendering.
+    const curatedCards = CURATED_BRANDS.map((brand) => ({
+      key: brand.id,
+      curatedBrand: brand,
+      ruleSet: { name: brand.name, description: 'Playfair + Handschrift, automatisch.' },
+      canvasData: {
+        text: brand.sampleText || 'Du bist Fotografin, aber du verkaufst keine Fotos',
+        backgroundColor: brand.colors.background,
+        color: brand.colors.primary,
+        secondaryColor: brand.colors.secondary,
+        accentColor: brand.colors.accent,
+        fontFamily: brand.typography.fontFamily,
+        accentFontFamily: brand.typography.accentFontFamily,
+        fontWeight: brand.typography.fontWeight,
+        fontSize: 30,
+        visualElements: [],
+        layout: 'auto',
+        editorialDark: true,
+        darkPhoto: brand.darkPhoto,
+        textAlign: 'center',
+        format: '4:5',
+        isPreview: true,
+      },
+      tags: brand.tags,
+    }));
+
+    const ruleCards = Object.entries(brandRuleSets).map(([key, ruleSet]) => {
       const brand = generateTrulyRandomBrand(key);
       const canvasData = {
         // USE SAMPLE TEXT WITH ACCENTS TO SHOW MIXED FONTS
@@ -80,6 +122,8 @@ const BrandRandomizer = () => {
       };
       return { key, ruleSet, canvasData, tags: brand.tags };
     });
+
+    return [...curatedCards, ...ruleCards];
   }, []); // Empty dependency ensures it runs once on mount, but hot reload will refresh it
 
   return (
@@ -140,12 +184,12 @@ const BrandRandomizer = () => {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        {templatePreviews.map(({ key, ruleSet, canvasData, tags }) => {
+        {templatePreviews.map(({ key, ruleSet, canvasData, tags, curatedBrand }) => {
           const isSelected = selectedKey === key;
           return (
             <button
               key={key}
-              onClick={() => applyTemplate(key)}
+              onClick={() => curatedBrand ? applyCuratedBrand(curatedBrand) : applyTemplate(key)}
               className={`group relative flex flex-col items-center text-left transition-all duration-300 rounded-xl ${isSelected ? 'ring-4 ring-purple-600 ring-offset-4 scale-105 z-10 shadow-2xl' : 'hover:scale-105 hover:shadow-xl hover:z-10 opacity-90 hover:opacity-100'}`}
             >
               <div className="w-full aspect-[4/5] rounded-xl overflow-hidden shadow-sm border border-gray-200 bg-white relative">
