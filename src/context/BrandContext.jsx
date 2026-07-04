@@ -7,6 +7,7 @@ import {
   saveCommunityDecksToDB, loadCommunityDecksFromDB
 } from '../utils/storage';
 import { useAuth } from './AuthContext';
+import { CURATED_BRANDS } from '../constants/brandData';
 import { CloudService } from '../services/cloudService';
 
 const BrandContext = createContext();
@@ -49,6 +50,14 @@ const DEFAULT_FEED_PROFILE = {
 
 export const BrandProvider = ({ children }) => {
   const { user } = useAuth();
+
+  // Ensure the fixed curated brands are always present (and up to date) in the
+  // brand list, without duplicating them.
+  const withCuratedBrands = (list = []) => {
+    const others = list.filter(b => !String(b?.id || '').startsWith('curated_'));
+    return [...CURATED_BRANDS, ...others];
+  };
+
   const [brandSettings, setBrandSettings] = useState(() => {
     try {
       const savedSettings = localStorage.getItem('brandSettings');
@@ -56,7 +65,7 @@ export const BrandProvider = ({ children }) => {
       
       return {
         brandImages: [],
-        brandConfigurations: [],
+        brandConfigurations: withCuratedBrands([]),
         savedDesigns: [],
         customFonts: [],
         currentBrandConfig: null,
@@ -64,13 +73,14 @@ export const BrandProvider = ({ children }) => {
         communityDecks: {},
         feedProfile: { ...DEFAULT_FEED_PROFILE, ...(parsedSettings.feedProfile || {}) },
         ...parsedSettings,
+        brandConfigurations: withCuratedBrands(parsedSettings.brandConfigurations || []),
         strategy: { ...DEFAULT_STRATEGY, ...(parsedSettings.strategy || {}) }
       };
     } catch (e) {
       console.error("Error loading settings:", e);
       return {
         brandImages: [],
-        brandConfigurations: [],
+        brandConfigurations: withCuratedBrands([]),
         savedDesigns: [],
         customFonts: [],
         contentPlan: [],
@@ -276,6 +286,8 @@ export const BrandProvider = ({ children }) => {
   };
 
   const deleteBrandProfile = (profileId) => {
+    // Curated brands are fixed and cannot be deleted.
+    if (String(profileId).startsWith('curated_')) return;
     setBrandSettings(prev => ({
       ...prev,
       brandConfigurations: prev.brandConfigurations.filter(b => b.id !== profileId),

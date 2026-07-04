@@ -417,6 +417,26 @@ export const generateMixedBrand = () => {
   };
 };
 
+// --- FIXED CURATED BRANDS ---
+// Always present in "Meine Brands", stable IDs, never randomly generated.
+// buildEditorialDark(true/false) provides the two-font signature look.
+export const CURATED_BRANDS = [
+  {
+    ...buildEditorialDark(true),
+    id: 'curated_editorial_dark',
+    name: 'Editorial Dark',
+    curated: true,
+    tags: ['editorial', 'dark', 'kuratiert'],
+  },
+  {
+    ...buildEditorialDark(false),
+    id: 'curated_editorial_hell',
+    name: 'Editorial Hell',
+    curated: true,
+    tags: ['editorial', 'hell', 'kuratiert'],
+  },
+];
+
 export const generateTrulyRandomBrand = (specificRuleSetKey = null) => {
   const keys = Object.keys(brandRuleSets);
   const ruleSetKey = specificRuleSetKey && brandRuleSets[specificRuleSetKey] ? specificRuleSetKey : (keys.includes('cleanCreator') ? 'cleanCreator' : keys[0]);
