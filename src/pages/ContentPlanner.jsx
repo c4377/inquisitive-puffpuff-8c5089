@@ -141,6 +141,9 @@ const ContentPlanner = () => {
             // Editorial Dark preset flags — drive the photo wash and kicker.
             darkPhoto: config.darkPhoto === true,
             editorialDark: config.editorialDark === true || config.ruleSet === 'editorial_dark',
+            // Clear legacy kicker fields stored by older builds.
+            kicker: false,
+            kickerText: undefined,
           };
         })
       };
@@ -373,6 +376,8 @@ const ContentPlanner = () => {
           const cfg = brandSettings.currentBrandConfig || {};
           cleaned.editorialDark = cfg.editorialDark === true || cfg.ruleSet === 'editorial_dark';
           cleaned.darkPhoto = cfg.darkPhoto === true;
+          cleaned.kicker = false;
+          cleaned.kickerText = undefined;
           cleaned.textAnchor = textAnchor;
           cleaned.fontWeight = bold ? '700' : 'normal';
           return cleaned;

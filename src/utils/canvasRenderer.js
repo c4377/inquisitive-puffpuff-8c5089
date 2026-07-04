@@ -283,13 +283,15 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   const processText = (text) => (text || '').replace(/\*([^*]+)\*/g, '$1');
 
   // Helper: parse *accent* segments out of a string.
-  // Returns { plain, segments: [{text, accent}] } for per-character styling.
+  // Robust against **double stars** (markdown paste) and stray unpaired stars:
+  // no '*' can ever reach the rendered output.
   const parseAccent = (text) => {
-    const raw = text || '';
+    const raw = (text || '').replace(/\*{2,}/g, '*');
     const parts = raw.split(/(\*[^*]+\*)/g).filter((s) => s !== '');
     const segments = parts.map((seg) => {
       const isAccent = seg.startsWith('*') && seg.endsWith('*') && seg.length > 2;
-      return { text: isAccent ? seg.slice(1, -1) : seg, accent: isAccent };
+      // Strip any leftover stray stars from non-accent segments too.
+      return { text: (isAccent ? seg.slice(1, -1) : seg).replace(/\*/g, ''), accent: isAccent };
     });
     return { plain: segments.map((s) => s.text).join(''), segments };
   };
@@ -530,7 +532,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // Preferred: clean white text + soft shadow (NO box). Only if the best spot
   // is still too bright for readable text do we add a gentle local scrim. ===
   const specialImageLayouts = ['tweet_card', 'glass_layer', 'aesthetic_checklist', 'diagonal_overlay', 'split_color', 'paper_box', 'story_text_box', 'bold_number_list'];
-  if (hasBgImage && !specialImageLayouts.includes(layout)) {
+  if (hasBgImage && !specialImageLayouts.includes(layout) && !slide.editorialDark) {
     const { plain, segments } = parseAccent(slide.text);
     const zone = (slide._autoImage && slide._autoImage.quietZone) || 'center';
     const quietBrightness = (slide._autoImage && typeof slide._autoImage.quietBrightness === 'number')
@@ -652,15 +654,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       }));
     }
 
-    // KICKER: small letter-spaced uppercase label at the very top
-    // ("SELL IT WITH A STORY"). Only when the preset asks for it.
-    if (slide.kicker && (slide.kickerText || options.kickerText)) {
-      canvas.add(new fabric.Text((slide.kickerText || options.kickerText).toUpperCase(), {
-        left: width / 2, top: height * 0.08, originX: 'center', originY: 'top',
-        fontSize: fs(13), fill: hasBgImage ? 'rgba(255,255,255,0.9)' : accentColor,
-        fontFamily: 'Montserrat', charSpacing: 300, fontWeight: '500', selectable: false,
-      }));
-    }
+    // (Kicker label removed — frame lines come from the user's own text.)
 
     // (Accent line removed — the brand mark near the text carries the brand.)
 
