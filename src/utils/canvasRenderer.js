@@ -294,6 +294,52 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     return { plain: segments.map((s) => s.text).join(''), segments };
   };
 
+  // Split text into an editorial structure WITHOUT any markup: short framing
+  // lines become small spaced uppercase (sans), the main statement becomes the
+  // big serif headline. Mirrors the Eva-Siebenhaar look where the user just
+  // types normally. Returns { kicker, headline, footer }.
+  const splitEditorial = (text) => {
+    const lines = (text || '').split('\n').map((l) => l.trim()).filter(Boolean);
+    if (lines.length === 0) return { kicker: '', headline: '', footer: '' };
+
+    // Any straight or typographic quote mark signals a quoted core statement.
+    const hasQuote = (s) => /["'\u201C\u201D\u201E\u2033\u00BB\u00AB]/.test(s);
+    // A line is "framing" if it's short OR all-caps (kicker/footer style).
+    const isFrame = (s) => s.length < 28 || (s === s.toUpperCase() && s.length < 45);
+
+    if (lines.length === 1) {
+      const m = lines[0].match(/["'\u201C\u201E\u00BB].+?["'\u201D\u2033\u00AB]/);
+      if (m) {
+        const headline = m[0];
+        const rest = lines[0].replace(m[0], '').trim();
+        return { kicker: rest.length && rest.length < 45 ? rest : '', headline, footer: '' };
+      }
+      return { kicker: '', headline: lines[0], footer: '' };
+    }
+
+    // Prefer a quoted line that is NOT all-caps (the real spoken statement);
+    // otherwise the longest non-frame line; otherwise the longest line.
+    let headlineIdx = -1;
+    lines.forEach((l, i) => {
+      const quotedStatement = hasQuote(l) && l !== l.toUpperCase();
+      if (quotedStatement) { if (headlineIdx === -1 || l.length > lines[headlineIdx].length) headlineIdx = i; }
+    });
+    if (headlineIdx === -1) {
+      let best = -1;
+      lines.forEach((l, i) => {
+        if (!isFrame(l) && l.length > best) { best = l.length; headlineIdx = i; }
+      });
+    }
+    if (headlineIdx === -1) {
+      let best = -1;
+      lines.forEach((l, i) => { if (l.length > best) { best = l.length; headlineIdx = i; } });
+    }
+
+    const kicker = lines.slice(0, headlineIdx).join(' ');
+    const footer = lines.slice(headlineIdx + 1).join(' ');
+    return { kicker, headline: lines[headlineIdx], footer };
+  };
+
   // Helper: apply accent color + accent font to *..* parts of a Textbox
   const applyAccentStyles = (textObj, segments) => {
     try {
@@ -624,6 +670,62 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     let top = height / 2, originY = 'center';
     if (row === 'top') { top = height * 0.18; originY = 'top'; }
     else if (row === 'bottom') { top = height * 0.82; originY = 'bottom'; }
+
+    // === EDITORIAL AUTO TWO-FONT MODE ===
+    // No markup needed: split into small uppercase frame lines (sans) + big
+    // serif headline. Only when the Editorial preset is active.
+    if (slide.editorialDark || slide.editorialAuto) {
+      const { kicker: kickTxt, headline, footer } = splitEditorial(slide.text);
+      const centerX = width / 2;
+      // Vertical stack, centered as a group around the anchor row.
+      let stackTop = row === 'top' ? height * 0.14 : row === 'bottom' ? height * 0.42 : height * 0.30;
+      const lightText = hasBgImage ? '#FFFFFF' : contrastColor(slide.backgroundColor || '#fff');
+      const dimText = hasBgImage ? 'rgba(255,255,255,0.9)' : accentColor;
+      const sh = hasBgImage ? 'rgba(0,0,0,0.55) 0px 2px 12px' : '';
+
+      // Kicker (small, spaced, uppercase — sans)
+      if (kickTxt) {
+        const k = new fabric.Textbox(kickTxt.toUpperCase(), {
+          left: centerX, top: stackTop, originX: 'center', originY: 'top',
+          width: width * 0.8, fontSize: fs(15), fill: dimText,
+          fontFamily: 'Montserrat', fontWeight: '500', charSpacing: 200,
+          textAlign: 'center', lineHeight: 1.3, shadow: sh,
+        });
+        canvas.add(k);
+        stackTop += k.height + height * 0.02;
+      }
+
+      // Headline (big serif, italic-friendly)
+      const h = new fabric.Textbox(headline, {
+        left: centerX, top: stackTop, originX: 'center', originY: 'top',
+        width: width * 0.86, fontSize: fs(slide.fontSize || 54),
+        fill: lightText, fontFamily: 'Playfair Display', fontWeight: '500',
+        textAlign: 'center', lineHeight: 1.08, shadow: sh,
+      });
+      canvas.add(h);
+      stackTop += h.height + height * 0.02;
+
+      // Footer (small, spaced, uppercase — sans)
+      if (footer) {
+        canvas.add(new fabric.Textbox(footer.toUpperCase(), {
+          left: centerX, top: stackTop, originX: 'center', originY: 'top',
+          width: width * 0.8, fontSize: fs(15), fill: dimText,
+          fontFamily: 'Montserrat', fontWeight: '500', charSpacing: 150,
+          textAlign: 'center', lineHeight: 1.3, shadow: sh,
+        }));
+      }
+
+      // Brand mark near bottom.
+      if (options.globalBrandName) {
+        canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+          left: centerX, top: height * 0.93, originX: 'center', originY: 'bottom',
+          fontSize: fs(12), fill: dimText, fontFamily: 'Montserrat',
+          charSpacing: 200, selectable: false,
+        }));
+      }
+      canvas.renderAll();
+      return;
+    }
 
     const titleObj = new fabric.Textbox(plain, {
       left, top, originX, originY,

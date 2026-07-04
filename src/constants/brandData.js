@@ -426,6 +426,7 @@ export const CURATED_BRANDS = [
     id: 'curated_editorial_dark',
     name: 'Editorial Dark',
     curated: true,
+    editorialDark: true,
     tags: ['editorial', 'dark', 'kuratiert'],
   },
   {
@@ -433,6 +434,7 @@ export const CURATED_BRANDS = [
     id: 'curated_editorial_hell',
     name: 'Editorial Hell',
     curated: true,
+    editorialDark: true,
     tags: ['editorial', 'hell', 'kuratiert'],
   },
 ];

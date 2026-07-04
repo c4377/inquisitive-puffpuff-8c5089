@@ -140,6 +140,7 @@ const ContentPlanner = () => {
             layout: finalLayout,
             // Editorial Dark preset flags — drive the photo wash and kicker.
             darkPhoto: config.darkPhoto === true,
+            editorialDark: config.editorialDark === true || config.ruleSet === 'editorial_dark',
             kicker: config.typography?.kicker === true,
             kickerText: slide.kickerText || (config.typography?.kicker ? 'SELL IT WITH A STORY' : undefined),
           };
