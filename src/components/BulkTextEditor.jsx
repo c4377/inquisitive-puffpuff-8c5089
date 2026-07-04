@@ -4,16 +4,13 @@ import SafeIcon from '../common/SafeIcon';
 import { useBrand } from '../context/BrandContext';
 import { assignSmartLayouts, attachSmartImages } from '../utils/smartLayoutGenerator';
 
-const BulkTextEditor = ({ slides, setSlides, onClose, currentSlides, onUpdateSlides }) => {
+const BulkTextEditor = ({ slides, setSlides, onClose }) => {
   const { brandSettings } = useBrand();
   const brand = brandSettings?.currentBrandConfig || {};
-  // The Editor passes currentSlides/onUpdateSlides — support both prop shapes.
-  const slideList = slides || currentSlides || [];
-  const commitSlides = setSlides || onUpdateSlides || (() => {});
   // Initialize with current slides content joined by "Slide X" markers or new empty string
   const [inputText, setInputText] = useState(
-    slideList.length > 0 
-      ? slideList.map((s, i) => `Slide ${i + 1}:\n${s.text}`).join('\n\n') 
+    slides.length > 0 
+      ? slides.map((s, i) => `Slide ${i + 1}:\n${s.text}`).join('\n\n') 
       : ''
   );
 
@@ -37,7 +34,7 @@ const BulkTextEditor = ({ slides, setSlides, onClose, currentSlides, onUpdateSli
     const imagePool = brandSettings?.brandImages || [];
     const withImages = await attachSmartImages(smartSlides, imagePool);
 
-    commitSlides(withImages);
+    setSlides(withImages);
     if (onClose) onClose();
   };
 

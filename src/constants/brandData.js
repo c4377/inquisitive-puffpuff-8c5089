@@ -356,6 +356,40 @@ const generateRandomName = () => {
   return `${p} ${s}`;
 };
 
+// --- CURATED PRESET: Editorial Dark (Eva-Siebenhaar-inspired) ---
+// The signature is the TWO-FONT pairing, applied automatically:
+//   headline  = Playfair Display (large serif, italic emphasis on key words)
+//   accent    = a script for the sub-line ("Lauras Erfolgsstory", "Wie ging das?")
+//   kicker    = small letter-spaced uppercase Montserrat ("SELL IT WITH A STORY")
+// darkPhoto controls whether photos get the dark/desaturated editorial wash.
+export const buildEditorialDark = (darkPhoto = true) => ({
+  id: Date.now(),
+  name: 'Editorial Dark',
+  ruleSet: 'editorial_dark',
+  colors: darkPhoto
+    ? { primary: '#FBF7F1', secondary: '#2A211C', tertiary: '#4E3F36', accent: '#D9C4A9', neutral: '#1A1310', background: '#151009' }
+    : { primary: '#2A211C', secondary: '#8A6A4B', tertiary: '#B79B7C', accent: '#9A3B2E', neutral: '#F1E9DD', background: '#EFE7DA' },
+  typography: {
+    fontFamily: 'Playfair Display',   // big serif headline
+    accentFontFamily: 'Caveat',       // script sub-line (the signature curl)
+    bodyFontFamily: 'Montserrat',      // clean body / kicker
+    fontWeight: '500',
+    fontSize: 52,
+    lineHeight: 1.12,
+    letterSpacing: '-0.02em',
+    fontStyle: 'normal',
+    italicEmphasis: true,              // key words render italic
+    kicker: true,                      // small uppercase letter-spaced label on top
+  },
+  layout: 'cover_bottom_center',
+  visualElements: [],
+  timestamp: new Date().toISOString(),
+  generatedDetails: { colorName: darkPhoto ? 'editorial_dark' : 'editorial_warm', typoName: 'editorial_pairing' },
+  darkPhoto,
+  sampleText: "Du bist Fotografin, aber du *verkaufst keine Fotos*",
+  tags: ['editorial', 'dark', 'serif', 'script'],
+});
+
 export const generateMixedBrand = () => {
   const randomColorKey = getRandomKey(colorGenerators);
   const randomTypoKey = getRandomKey(typographyGenerators);

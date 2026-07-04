@@ -159,19 +159,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           canvas.add(img);
           canvas.sendToBack(img);
 
-          // Readability overlay. Bright photos get a WHITE wash (lifts the
-          // photo, keeps the person visible, pairs with dark text). Dark
-          // photos keep the classic dark overlay for white text.
+          // Readability overlay — kept light so the photo stays vibrant.
           const ov = typeof slide.overlay === 'number' ? slide.overlay : 0.28;
-          const isBrightImg = slide._autoImage &&
-            (slide._autoImage.textColorHint === 'dark' ||
-             (typeof slide._autoImage.quietBrightness === 'number' && slide._autoImage.quietBrightness > 135));
           const overlayRect = new fabric.Rect({
             left: 0, top: 0, width, height,
-            fill: isBrightImg
-              ? `rgba(255,255,255,${Math.min(ov + 0.06, 0.36)})`
-              : `rgba(0,0,0,${ov})`,
-            selectable: false,
+            fill: `rgba(0,0,0,${ov})`, selectable: false,
           });
           canvas.add(overlayRect);
 
@@ -294,14 +286,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // Returns { plain, segments: [{text, accent}] } for per-character styling.
   const parseAccent = (text) => {
     const raw = text || '';
-    // **bold** first, then *accent* — like a tiny markdown subset.
-    const parts = raw.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g).filter((s) => s !== '');
+    const parts = raw.split(/(\*[^*]+\*)/g).filter((s) => s !== '');
     const segments = parts.map((seg) => {
-      if (seg.startsWith('**') && seg.endsWith('**') && seg.length > 4) {
-        return { text: seg.slice(2, -2), accent: false, bold: true };
-      }
       const isAccent = seg.startsWith('*') && seg.endsWith('*') && seg.length > 2;
-      return { text: isAccent ? seg.slice(1, -1) : seg, accent: isAccent, bold: false };
+      return { text: isAccent ? seg.slice(1, -1) : seg, accent: isAccent };
     });
     return { plain: segments.map((s) => s.text).join(''), segments };
   };
@@ -318,13 +306,6 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
             idx + s.text.length
           );
         }
-        if (s.bold && s.text.length) {
-          textObj.setSelectionStyles(
-            { fontWeight: '700' },
-            idx,
-            idx + s.text.length
-          );
-        }
         idx += s.text.length;
       });
     } catch (e) {
@@ -334,18 +315,6 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
   // === STRATEGY: LAYOUT ENGINE ===
   let layout = layoutResolved;
-  // Carousels: only the COVER (slide 1) carries a layout. All following
-  // slides render as clean brand body typography — unless the user explicitly
-  // cycled a layout onto that slide (postLayoutVariant set).
-  if (
-    (options.slideIndex || 0) > 0 &&
-    (options.totalSlides || 1) > 1 &&
-    slide.storyMode !== true &&
-    slide.reelCoverMode !== true &&
-    !Number.isInteger(slide.postLayoutVariant)
-  ) {
-    layout = 'body';
-  }
   // Strong text shadow whenever text sits on a photo, for readability.
   const textShadow = hasBgImage ? 'rgba(0,0,0,0.7) 0px 2px 12px' : '';
 
@@ -434,7 +403,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     return;
   }
 
-  const coverLayouts = ['cover_top_left', 'cover_bottom_left', 'cover_bottom_center', 'cover_center_hero', 'cover_top_center', 'cover_mid_left', 'cover_mid_right'];
+  const coverLayouts = ['cover_top_left', 'cover_bottom_left', 'cover_bottom_center', 'cover_center_hero', 'cover_top_center'];
   if (hasBgImage && coverLayouts.includes(layout)) {
     const { plain, segments } = parseAccent(slide.text);
 
@@ -445,8 +414,6 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       cover_bottom_center: { col: 'center', row: 'bottom' },
       cover_center_hero:   { col: 'center', row: 'mid' },
       cover_top_center:    { col: 'center', row: 'top' },
-      cover_mid_left:      { col: 'left',   row: 'mid' },
-      cover_mid_right:     { col: 'right',  row: 'mid' },
     };
 
     let col, row;
@@ -458,12 +425,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       row = zone.includes('top') ? 'top' : zone.includes('bottom') ? 'bottom' : 'mid';
     }
 
-    const boxWidth = width * 0.70;
+    const boxWidth = width * 0.8;
     let left = width / 2;
     let originX = 'center';
     let textAlign = 'center';
-    if (col === 'left') { left = width * 0.12; originX = 'left'; textAlign = 'left'; }
-    else if (col === 'right') { left = width * 0.88; originX = 'right'; textAlign = 'right'; }
+    if (col === 'left') { left = width * 0.08; originX = 'left'; textAlign = 'left'; }
+    else if (col === 'right') { left = width * 0.92; originX = 'right'; textAlign = 'right'; }
 
     let top = height / 2;
     let originY = 'center';
@@ -476,7 +443,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       originX,
       originY,
       width: boxWidth,
-      fontSize: fs(slide.fontSize === 42 ? 34 : (slide.fontSize || 36)),
+      fontSize: fs(slide.fontSize || 46),
       fontFamily: fontFamily,
       fill: '#FFFFFF',
       textAlign,
@@ -515,10 +482,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // Preferred: clean white text + soft shadow (NO box). Only if the best spot
   // is still too bright for readable text do we add a gentle local scrim. ===
   const specialImageLayouts = ['tweet_card', 'glass_layer', 'aesthetic_checklist', 'diagonal_overlay', 'split_color', 'paper_box', 'story_text_box', 'bold_number_list'];
-  // Story styling applies ONLY to slides from the StoryPlanner (storyMode
-  // flag) — a 9:16 slide built in the normal editor keeps full styling freedom.
-  const isStoryFormat = slide.storyMode === true;
-  if (hasBgImage && !isStoryFormat && slide.reelCoverMode !== true && layout !== 'body' && !specialImageLayouts.includes(layout)) {
+  if (hasBgImage && !specialImageLayouts.includes(layout)) {
     const { plain, segments } = parseAccent(slide.text);
     const zone = (slide._autoImage && slide._autoImage.quietZone) || 'center';
     const quietBrightness = (slide._autoImage && typeof slide._autoImage.quietBrightness === 'number')
@@ -531,27 +495,22 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     const rowY = isTop ? height * 0.22 : isBottom ? height * 0.80 : height * 0.5;
     const align = isLeft ? 'left' : isRight ? 'right' : 'center';
-    const boxW = width * 0.70;
+    const boxW = width * 0.84;
     const originX = align === 'center' ? 'center' : (align === 'right' ? 'right' : 'left');
     const textLeft = align === 'center' ? width / 2 : (align === 'right' ? width - padding : padding);
 
-    // Bright zone -> DARK text on the (white-washed) photo.
-    // Dark zone -> white text with shadow, as before.
-    const brightMode = quietBrightness > 135;
-    const darkInk = (slide.color && hexLuminance(slide.color) < 110) ? slide.color : '#2b2118';
     const tObj = new fabric.Textbox(plain, {
       left: textLeft, top: rowY, originX, originY: 'center',
-      width: boxW, fontSize: fs(slide.fontSize === 42 ? 34 : (slide.fontSize || 34)), fontFamily: fontFamily,
-      fill: brightMode ? darkInk : (slide.color && hexLuminance(slide.color) > 160 ? slide.color : '#FFFFFF'),
-      textAlign: slide.textAlign || align, lineHeight: 1.28,
+      width: boxW, fontSize: fs(slide.fontSize || 42), fontFamily: fontFamily,
+      fill: slide.color || '#FFFFFF', textAlign: slide.textAlign || align, lineHeight: 1.28,
       fontWeight: slide.fontWeight || 'normal',
       fontStyle: slide.fontStyle || 'normal',
-      shadow: slide.noShadow ? '' : (brightMode ? 'rgba(255,255,255,0.5) 0px 1px 8px' : 'rgba(0,0,0,0.85) 0px 2px 16px'),
+      shadow: slide.noShadow ? '' : 'rgba(0,0,0,0.85) 0px 2px 16px',
     });
 
-    // Dark scrim only for the old white-text path; bright mode uses the
-    // white wash + dark text instead.
-    if (false && quietBrightness > 135) {
+    // NOTFALL only: quiet zone is too bright (>135) -> add a soft local scrim
+    // so white text stays legible. Otherwise: shadow alone, no box.
+    if (quietBrightness > 135) {
       const padX = fs(30), padY = fs(24);
       const scrim = new fabric.Rect({
         left: textLeft, top: rowY, originX, originY: 'center',
@@ -578,213 +537,6 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   }
 
 
-  // === REEL COVER MODE (9:16 with 3:4 safe zone) ===
-  // Branded cover: brand fonts + colors, big statement text. The canvas is
-  // 9:16 (Reels tab), but Instagram crops covers to the CENTER 3:4 in the
-  // profile grid — so everything important lives inside y 12.5%..87.5% and
-  // is composed to fill that zone well. Centered composition = looks right
-  // in both crops.
-  if (slide.reelCoverMode === true) {
-    const { plain, segments } = parseAccent(slide.text);
-    const safeTop = height * 0.125;          // 3:4 crop starts here
-    const safeBottom = height * 0.875;       // ...and ends here
-    const centerY = height * 0.5;
-
-    // Readability wash over photos: soft dark gradient, strongest in the
-    // middle where the text sits. Fills the full 9:16 so the Reels view
-    // doesn't show a naked edge.
-    if (hasBgImage) {
-      canvas.add(new fabric.Rect({
-        left: 0, top: 0, width, height,
-        fill: 'rgba(0,0,0,0.38)', selectable: false,
-      }));
-    }
-
-    // --- LAYOUT VARIANTS (all composed inside the 3:4 safe zone) ---
-    // 0 = centered statement, 1 = lower-left block, 2 = upper-left block,
-    // 3 = brand-color panel behind centered text.
-    const variant = Number.isInteger(slide.coverVariant)
-      ? ((slide.coverVariant % 4) + 4) % 4
-      : ((options.slideIndex || 0) % 4);
-
-    const zoneH = safeBottom - safeTop;
-    const textFill = hasBgImage ? '#FFFFFF' : contrastColor(primaryColor);
-    const isSide = variant === 1 || variant === 2;
-
-    const coverText = new fabric.Textbox(plain, {
-      left: isSide ? width * 0.12 : width / 2,
-      top: centerY,
-      originX: isSide ? 'left' : 'center',
-      originY: 'center',
-      width: isSide ? width * 0.72 : width * 0.78,
-      fontSize: fs(34),
-      fontFamily,                     // BRAND font (unlike stories)
-      fontWeight: '700',
-      fill: textFill,
-      textAlign: isSide ? 'left' : 'center',
-      lineHeight: 1.22,
-      charSpacing: 10,
-    });
-    // Fill the zone generously, but never spill out of it.
-    try {
-      const maxH = zoneH * (variant === 0 ? 0.62 : variant === 3 ? 0.5 : 0.55);
-      let guard = 0;
-      coverText.initDimensions && coverText.initDimensions();
-      while (coverText.height > maxH && coverText.fontSize > fs(16) && guard < 40) {
-        coverText.set('fontSize', coverText.fontSize - 1);
-        coverText.initDimensions && coverText.initDimensions();
-        guard++;
-      }
-    } catch (e) { /* best effort */ }
-
-    // Vertical placement per variant (after fitting, so heights are known).
-    if (variant === 1) {
-      // Lower block: sits above the brand mark, whitespace on top.
-      coverText.set({ originY: 'bottom', top: safeBottom - fs(48) });
-    } else if (variant === 2) {
-      // Upper block: starts just below the crop line, whitespace below.
-      coverText.set({ originY: 'top', top: safeTop + fs(34) });
-    }
-
-    // Variant 3: soft brand-color panel behind the text.
-    if (variant === 3) {
-      try {
-        coverText.initDimensions && coverText.initDimensions();
-        const padX = fs(26), padY = fs(24);
-        canvas.add(new fabric.Rect({
-          left: width / 2, top: centerY, originX: 'center', originY: 'center',
-          width: Math.min(width * 0.9, coverText.width + padX * 2),
-          height: coverText.height + padY * 2,
-          rx: fs(6), ry: fs(6),
-          fill: slide.backgroundColor || '#FFFFFF',
-          opacity: hasBgImage ? 0.94 : 1,
-          selectable: false,
-          shadow: hasBgImage ? 'rgba(0,0,0,0.25) 0px 3px 14px' : '',
-        }));
-        coverText.set('fill', contrastColor(primaryColor) === '#FFFFFF' && hexLuminance(slide.backgroundColor || '#fff') > 140
-          ? '#111111'
-          : contrastColor(primaryColor));
-        if (hasBgImage) coverText.set('fill', hexLuminance(slide.backgroundColor || '#fff') > 140 ? (primaryColor || '#111111') : '#FFFFFF');
-      } catch (e) { /* keep plain text */ }
-    }
-    // Accent words (*so*) get the brand accent font/color.
-    applyAccentStyles(coverText, segments);
-    canvas.add(coverText);
-
-    // Thin accent line — a small branded detail. Position depends on variant.
-    try {
-      coverText.initDimensions && coverText.initDimensions();
-      let lineX = width / 2, lineOriginX = 'center', lineY = null;
-      if (variant === 0) {
-        lineY = centerY - (coverText.height / 2) - fs(22);
-      } else if (variant === 1) {
-        lineX = width * 0.12; lineOriginX = 'left';
-        lineY = (safeBottom - fs(48)) - coverText.height - fs(20);
-      } else if (variant === 2) {
-        lineX = width * 0.12; lineOriginX = 'left';
-        lineY = safeTop + fs(34) + coverText.height + fs(20);
-      }
-      if (lineY !== null && lineY > safeTop + fs(8) && lineY < safeBottom - fs(8)) {
-        canvas.add(new fabric.Rect({
-          left: lineX, top: lineY, originX: lineOriginX, originY: 'center',
-          width: fs(36), height: fs(2.5),
-          fill: hasBgImage ? 'rgba(255,255,255,0.9)' : accentColor,
-          selectable: false,
-        }));
-      }
-    } catch (e) { /* skip detail */ }
-
-    // Brand mark near the bottom of the SAFE zone (visible in the 3:4 grid).
-    if (options.globalBrandName) {
-      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
-        left: width / 2, top: safeBottom - fs(18), originX: 'center', originY: 'bottom',
-        fontSize: fs(11),
-        fill: hasBgImage ? 'rgba(255,255,255,0.85)' : accentColor,
-        fontFamily: 'Montserrat', charSpacing: 150, selectable: false,
-      }));
-    }
-
-    // Preview-only: dashed guides where Instagram crops to 3:4.
-    if (slide.showSafeZone) {
-      const guide = (y) => new fabric.Line([0, y, width, y], {
-        stroke: 'rgba(120,120,120,0.55)', strokeWidth: 1,
-        strokeDashArray: [6, 5], selectable: false,
-      });
-      canvas.add(guide(safeTop));
-      canvas.add(guide(safeBottom));
-    }
-
-    canvas.renderAll();
-    return;
-  }
-
-  // === STORY MODE (9:16): FIXED styling for ALL story slides ===
-  // Catches every 9:16 slide regardless of its layout, so stories always use
-  // small Montserrat (never the branding font), narrow block, lower third,
-  // never bold — like text typed into the story yourself.
-  if (isStoryFormat) {
-    const { plain } = parseAccent(slide.text);
-    const storyFont = 'Montserrat';
-    const storyColor = '#443027'; // warm espresso, matches the brand
-    const baseSize = fs(18);      // small & calm
-
-    // Measure the natural width so short texts get a block that hugs the
-    // content instead of stretching across the page. Hard cap at 55% width.
-    let boxW = width * 0.55;
-    try {
-      const probe = new fabric.Text(plain, {
-        fontSize: baseSize, fontFamily: storyFont, lineHeight: 1.35,
-      });
-      boxW = Math.min(width * 0.55, probe.width + fs(10));
-    } catch (e) { /* keep cap */ }
-
-    const storyText = new fabric.Textbox(plain, {
-      left: width / 2, top: height * 0.70, originX: 'center', originY: 'center',
-      width: boxW,
-      fontSize: baseSize,
-      fontFamily: storyFont,
-      fontWeight: '400',                // never bold
-      fill: storyColor,
-      textAlign: 'center', lineHeight: 1.35,
-    });
-    // Shrink long texts so the block never grows past ~1/3 of the page.
-    try {
-      let guard = 0;
-      storyText.initDimensions && storyText.initDimensions();
-      while (storyText.height > height * 0.34 && storyText.fontSize > fs(12) && guard < 30) {
-        storyText.set('fontSize', storyText.fontSize - 1);
-        storyText.initDimensions && storyText.initDimensions();
-        guard++;
-      }
-    } catch (e) { /* best effort */ }
-
-    // No panel behind the text: it sits directly on the photo or the brand
-    // background color.
-    if (hasBgImage) {
-      storyText.set({
-        fill: '#FFFFFF',
-        shadow: 'rgba(0,0,0,0.45) 0px 1px 8px',
-      });
-    } else {
-      // On plain brand background just make sure the text is readable.
-      storyText.set('fill', contrastColor(slide.backgroundColor || '#fff') === '#FFFFFF'
-        ? '#FFFFFF' : storyColor);
-    }
-    // Fixed Montserrat throughout — no branding/accent font in stories.
-    canvas.add(storyText);
-    // Small brand mark at the very bottom.
-    if (options.globalBrandName) {
-      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
-        left: width / 2, top: height * 0.95, originX: 'center', originY: 'bottom',
-        fontSize: fs(11), fill: hasBgImage ? 'rgba(255,255,255,0.85)' : accentColor,
-        fontFamily: 'Montserrat', charSpacing: 150, selectable: false,
-      }));
-    }
-    canvas.renderAll();
-    return;
-  }
-
-
   // === ADAPTIVE AUTO LAYOUT ===
   // One layout to rule them all. The post design engine decides textAnchor
   // (row/col) and bold; here we just draw a headline at that position, with a
@@ -792,10 +544,55 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   if (layout === 'auto') {
     const { plain, segments } = parseAccent(slide.text);
 
+    // === STORY MODE (9:16): fixed, minimal branding ===
+    // Small Montserrat text, always same position (lower third), no bold, so it
+    // reads as a calm base you can just copy the text from and overwrite in IG.
+    const isStory = slide.format === '9:16' || Math.abs((height / width) - (16 / 9)) < 0.1;
+    if (isStory) {
+      // Light readability wash at the bottom if there's a photo.
+      if (hasBgImage) {
+        canvas.add(new fabric.Rect({
+          left: 0, top: height * 0.62, width, height: height * 0.38,
+          fill: 'rgba(0,0,0,0.35)', selectable: false,
+        }));
+      }
+      const storyText = new fabric.Textbox(plain, {
+        left: width / 2, top: height * 0.72, originX: 'center', originY: 'center',
+        width: width * 0.78,
+        fontSize: fs(22),                 // small, calm
+        fontFamily: 'Montserrat',
+        fontWeight: '400',                // never bold
+        fill: hasBgImage ? '#FFFFFF' : contrastColor(slide.backgroundColor || '#fff'),
+        textAlign: 'center', lineHeight: 1.35,
+        shadow: hasBgImage ? 'rgba(0,0,0,0.5) 0px 1px 6px' : '',
+      });
+      applyAccentStyles(storyText, segments);
+      canvas.add(storyText);
+      // Small brand mark at the very bottom.
+      if (options.globalBrandName) {
+        canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+          left: width / 2, top: height * 0.95, originX: 'center', originY: 'bottom',
+          fontSize: fs(11), fill: hasBgImage ? 'rgba(255,255,255,0.85)' : accentColor,
+          fontFamily: 'Montserrat', charSpacing: 150, selectable: false,
+        }));
+      }
+      canvas.renderAll();
+      return;
+    }
+
     const anchor = slide.textAnchor && typeof slide.textAnchor === 'object'
       ? slide.textAnchor : { row: hasBgImage ? 'bottom' : 'mid', col: 'center' };
     const row = anchor.row || 'mid';
     const col = anchor.col || 'center';
+
+    // Editorial Dark: an extra dark/desaturated wash over the whole photo so
+    // any image takes on the moody editorial tone (Eva-Siebenhaar look).
+    if (hasBgImage && slide.darkPhoto) {
+      canvas.add(new fabric.Rect({
+        left: 0, top: 0, width, height,
+        fill: 'rgba(20,14,9,0.45)', selectable: false,
+      }));
+    }
 
     // On photos, add a soft readability gradient on the half where the text sits.
     if (hasBgImage) {
@@ -807,12 +604,22 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       }));
     }
 
+    // KICKER: small letter-spaced uppercase label at the very top
+    // ("SELL IT WITH A STORY"). Only when the preset asks for it.
+    if (slide.kicker && (slide.kickerText || options.kickerText)) {
+      canvas.add(new fabric.Text((slide.kickerText || options.kickerText).toUpperCase(), {
+        left: width / 2, top: height * 0.08, originX: 'center', originY: 'top',
+        fontSize: fs(13), fill: hasBgImage ? 'rgba(255,255,255,0.9)' : accentColor,
+        fontFamily: 'Montserrat', charSpacing: 300, fontWeight: '500', selectable: false,
+      }));
+    }
+
     // (Accent line removed — the brand mark near the text carries the brand.)
 
     // Position.
     let left = width / 2, originX = 'center', textAlign = 'center';
-    if (col === 'left') { left = width * 0.12; originX = 'left'; textAlign = 'left'; }
-    else if (col === 'right') { left = width * 0.88; originX = 'right'; textAlign = 'right'; }
+    if (col === 'left') { left = width * 0.10; originX = 'left'; textAlign = 'left'; }
+    else if (col === 'right') { left = width * 0.90; originX = 'right'; textAlign = 'right'; }
 
     let top = height / 2, originY = 'center';
     if (row === 'top') { top = height * 0.18; originY = 'top'; }
@@ -820,8 +627,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     const titleObj = new fabric.Textbox(plain, {
       left, top, originX, originY,
-      width: width * 0.68,
-      fontSize: fs(slide.fontSize === 42 ? 34 : (slide.fontSize || 34)),
+      width: width * 0.82,
+      fontSize: fs(slide.fontSize || 42),
       fontFamily,
       fill: hasBgImage ? '#FFFFFF' : contrastColor(slide.backgroundColor || '#fff'),
       textAlign, lineHeight: 1.2,
@@ -1043,66 +850,6 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   }
 
   // === TWEET CARD: white rounded card like a tweet/post ===
-  else if (layout === 'body') {
-    // Carousel body slide.
-    // WITH photo: small 16pt caption placed AROUND the subject — in the
-    //   image's quiet zone (same detection as the feed covers).
-    // WITHOUT photo: 32pt, fully centered, so the slide doesn't feel empty.
-    const { plain, segments } = parseAccent(slide.text);
-    const bodyFont = slide.bodyFontFamily || slide.fontFamily || 'Montserrat';
-
-    let bLeft = width / 2, bTop = height / 2, bOriginX = 'center', bOriginY = 'center';
-    let bAlign = 'center';
-    if (hasBgImage) {
-      const zone = (slide._autoImage && slide._autoImage.quietZone) || 'center';
-      const isTop = zone.includes('top');
-      const isBottom = zone.includes('bottom');
-      const isLeft = zone.includes('left');
-      const isRight = zone.includes('right');
-      bTop = isTop ? height * 0.18 : isBottom ? height * 0.80 : height * 0.5;
-      bAlign = isLeft ? 'left' : isRight ? 'right' : 'center';
-      bOriginX = bAlign === 'center' ? 'center' : (bAlign === 'right' ? 'right' : 'left');
-      bLeft = bAlign === 'center' ? width / 2 : (bAlign === 'right' ? width * 0.88 : width * 0.12);
-      bOriginY = 'center';
-    }
-
-    const autoSize = hasBgImage ? 24 : 32;
-    const bodyText = new fabric.Textbox(plain, {
-      left: bLeft, top: bTop, originX: bOriginX, originY: bOriginY,
-      width: width * (hasBgImage ? 0.68 : 0.76),
-      fontSize: fs(slide.fontSizeManual ? (slide.fontSize || autoSize) : autoSize),
-      fontFamily: bodyFont,
-      fontWeight: slide.fontWeight || '400',
-      fill: hasBgImage
-        ? (((slide._autoImage && (slide._autoImage.textColorHint === 'dark' || slide._autoImage.quietBrightness > 135)))
-            ? ((slide.color && hexLuminance(slide.color) < 110) ? slide.color : '#2b2118')
-            : '#FFFFFF')
-        : (slide.color || contrastColor(slide.backgroundColor || '#fff')),
-      textAlign: slide.textAlign || bAlign,
-      lineHeight: 1.4,
-      shadow: hasBgImage
-        ? (((slide._autoImage && (slide._autoImage.textColorHint === 'dark' || slide._autoImage.quietBrightness > 135)))
-            ? 'rgba(255,255,255,0.5) 0px 1px 6px'
-            : 'rgba(0,0,0,0.35) 0px 1px 6px')
-        : '',
-    });
-    // Never let a long text run out of its area.
-    try {
-      let guard = 0;
-      const maxH = hasBgImage ? height * 0.5 : height * 0.72;
-      bodyText.initDimensions && bodyText.initDimensions();
-      while (bodyText.height > maxH && bodyText.fontSize > fs(12) && guard < 40) {
-        bodyText.set('fontSize', bodyText.fontSize - 1);
-        bodyText.initDimensions && bodyText.initDimensions();
-        guard++;
-      }
-    } catch (e) { /* best effort */ }
-    applyAccentStyles(bodyText, segments);
-    canvas.add(bodyText);
-    // (Brand footer comes from the standard footer at the end of renderSlide —
-    // no extra @handle here, otherwise the brand appears twice.)
-  }
-
   else if (layout === 'tweet_card') {
     const cardMargin = width * 0.08;
     const cardTop = height * 0.18;
@@ -1121,29 +868,14 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       left: cardMargin + fs(64), top: cardTop + fs(34), fontSize: fs(18),
       fontFamily: 'Inter', fill: '#657786', selectable: false,
     }));
-    const { plain } = parseAccent(slide.text);
-    // Twitter look: always a neutral system-style sans (like Twitter's Chirp),
-    // regardless of the chosen branding.
-    const twFont = 'Inter';
-    const twMaxW = width - cardMargin * 2 - fs(56);
-    const twTop = cardTop + fs(90);
-    const twMaxH = cardH - fs(90) - fs(28); // space below handle, minus padding
+    const { plain, segments } = parseAccent(slide.text);
     const tw = new fabric.Textbox(plain, {
-      left: cardMargin + fs(28), top: twTop,
-      width: twMaxW,
-      fontSize: fs(26), fontFamily: twFont, fontWeight: '400',
+      left: cardMargin + fs(28), top: cardTop + fs(90),
+      width: width - cardMargin * 2 - fs(56),
+      fontSize: fs(slide.fontSize || 34), fontFamily: fontFamily,
       fill: '#15202B', lineHeight: 1.35, textAlign: 'left',
     });
-    // Shrink until the text fits inside the card, no matter how long it is.
-    try {
-      let guard = 0;
-      tw.initDimensions && tw.initDimensions();
-      while (tw.height > twMaxH && tw.fontSize > fs(10) && guard < 60) {
-        tw.set('fontSize', tw.fontSize - 1);
-        tw.initDimensions && tw.initDimensions();
-        guard++;
-      }
-    } catch (e) { /* best effort */ }
+    applyAccentStyles(tw, segments);
     canvas.add(tw);
   }
 

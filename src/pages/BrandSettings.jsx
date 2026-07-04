@@ -59,7 +59,7 @@ const BrandSettings = () => {
     if (field === 'colors' || field === 'typography') {
       const c = updatedConfig.colors || {};
       const t = updatedConfig.typography || {};
-      const applyToSlide = (s, idx) => ({
+      const applyToSlide = (s) => ({
         ...s,
         ...(field === 'colors' ? {
           color: c.primary,
@@ -69,16 +69,14 @@ const BrandSettings = () => {
           neutralColor: c.neutral,
           accentColor: c.accent,
         } : {
-          // Cover keeps the heading font, body slides keep the BODY font.
-          fontFamily: idx === 0 ? t.fontFamily : (t.bodyFontFamily || 'Montserrat'),
-          bodyFontFamily: t.bodyFontFamily || 'Montserrat',
+          fontFamily: t.fontFamily,
           accentFontFamily: t.accentFontFamily,
         }),
       });
       if (Array.isArray(brandSettings.contentPlan)) {
         patch.contentPlan = brandSettings.contentPlan.map((day) => ({
           ...day,
-          slides: (day.slides || []).map((s2, idx) => applyToSlide(s2, idx)),
+          slides: (day.slides || []).map(applyToSlide),
         }));
       }
     }

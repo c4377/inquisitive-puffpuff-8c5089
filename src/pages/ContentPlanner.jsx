@@ -13,19 +13,18 @@ import BulkImportModal from '../components/BulkImportModal';
 import { renderSlide } from '../utils/canvasRenderer';
 import { brandRuleSets } from '../constants/brandData';
 import { createSmartSlide } from '../utils/slideHelpers';
-import { attachSmartImages, applyEditorialHighlighting } from '../utils/smartLayoutGenerator';
+import { attachSmartImages } from '../utils/smartLayoutGenerator';
 import { decidePostDesign, dayHasImage } from '../utils/postDesignEngine';
 import { saveSetsToDB, loadSetsFromDB } from '../utils/storage';
 import { analyzePlanRoles, roleFeedback, ROLE_META } from '../utils/postRole';
 import { weightedLayoutPool, getRating, setRating } from '../utils/layoutRatings';
 
-const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus, FiCheck, FiGrid, FiImage, FiX, FiZoomIn, FiZoomOut } = FiIcons;
+const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus } = FiIcons;
 
 const ContentPlanner = () => {
   const { brandSettings, updateBrandSettings } = useBrand();
   const navigate = useNavigate();
   const weekPlan = brandSettings.contentPlan || [];
-  const [copiedKey, setCopiedKey] = useState(null);
   const [loading, setLoading] = useState(false);
   const [activeIndices, setActiveIndices] = useState({});
   const [expandedCaptionId, setExpandedCaptionId] = useState(null);
@@ -46,78 +45,6 @@ const ContentPlanner = () => {
 
   // Live analysis of the feed's red thread (Frage → Beweis → Angebot).
   const roleAnalysis = React.useMemo(() => analyzePlanRoles(weekPlan), [weekPlan]);
-
-  // --- PER-CARD QUICK EDIT (same buttons as Stories & Reel Covers) ---
-  const updateSlideInPlan = (dayIndex, slideIndex, updater) => {
-    const plan = JSON.parse(JSON.stringify(weekPlan));
-    const slide = plan[dayIndex]?.slides?.[slideIndex];
-    if (!slide) return;
-    plan[dayIndex].slides[slideIndex] = updater(slide);
-    updateBrandSettings({ contentPlan: plan });
-  };
-
-  const handleZoomToggleDay = (dayIndex, slideIndex) => {
-    updateSlideInPlan(dayIndex, slideIndex, (s) => ({
-      ...s, imageScale: (s.imageScale || 1) > 1.05 ? 1 : 1.5,
-    }));
-  };
-
-  const handleRemoveImageDay = (dayIndex, slideIndex) => {
-    updateSlideInPlan(dayIndex, slideIndex, (s) => {
-      const { background, overlay, _autoImage, ...rest } = s;
-      // cover_* layouts only render on photos -> fall back to auto without one.
-      const isCover = typeof rest.layout === 'string' && rest.layout.startsWith('cover_');
-      return {
-        ...rest,
-        background: null,
-        imageScale: 1,
-        ...(isCover ? { layout: 'auto', layoutId: 'auto' } : {}),
-      };
-    });
-  };
-
-  const handleAddImageDay = async (dayIndex, slideIndex) => {
-    const pool = brandSettings?.brandImages || [];
-    if (pool.length === 0) { alert('Kein Bild im Pool. Lade zuerst Bilder hoch.'); return; }
-    const slide = weekPlan[dayIndex]?.slides?.[slideIndex];
-    if (!slide) return;
-    try {
-      const [withImg] = await attachSmartImages([{ ...slide }], pool, Math.floor(Math.random() * pool.length));
-      updateSlideInPlan(dayIndex, slideIndex, () => ({ ...withImg, imageScale: 1 }));
-    } catch (e) { console.error('Bild anhängen fehlgeschlagen:', e); }
-  };
-
-  // Explicit, always-visible layout cycle:
-  // Tweet -> Postcard -> Cover links -> rechts -> oben -> unten -> von vorn.
-  const handleCycleLayoutDay = (dayIndex, slideIndex) => {
-    updateSlideInPlan(dayIndex, slideIndex, (s) => {
-      const v = ((Number.isInteger(s.postLayoutVariant) ? s.postLayoutVariant : -1) + 1) % 6;
-      const hasImg = typeof s.background === 'string' && s.background.length > 5;
-      if (v === 0) {
-        return { ...s, postLayoutVariant: v, layout: 'tweet_card', layoutId: 'tweet_card' };
-      }
-      if (v === 1) {
-        return { ...s, postLayoutVariant: v, layout: 'paper_box', layoutId: 'paper_box' };
-      }
-      if (hasImg) {
-        const coverByVariant = { 2: 'cover_mid_left', 3: 'cover_mid_right', 4: 'cover_top_center', 5: 'cover_bottom_center' };
-        return { ...s, postLayoutVariant: v, layout: coverByVariant[v], layoutId: coverByVariant[v] };
-      }
-      const anchorByVariant = {
-        2: { col: 'left', row: 'mid' },
-        3: { col: 'right', row: 'mid' },
-        4: { col: 'center', row: 'top' },
-        5: { col: 'center', row: 'bottom' },
-      };
-      return { ...s, postLayoutVariant: v, layout: 'auto', layoutId: 'auto', textAnchor: anchorByVariant[v] };
-    });
-  };
-
-  const handleCopyText = (text, key) => {
-    navigator.clipboard?.writeText(text || '');
-    setCopiedKey(key);
-    setTimeout(() => setCopiedKey(null), 1500);
-  };
 
   const currentBrand = brandSettings.currentBrandConfig;
   const hasActiveBrand = !!currentBrand;
@@ -191,7 +118,7 @@ const ContentPlanner = () => {
           const accentFont = fonts.accentFontFamily || (font.includes('Playfair') ? 'Montserrat' : 'Playfair Display');
           const isPlayfair = font.includes('Playfair');
           let weight = '400';
-          // Covers: big but NOT fully bold — emphasis only via **key phrases**.
+          if (sIdx === 0 && !isPlayfair) weight = fonts.fontWeight || '700';
           
           let finalLayout = slide.layout;
           if (sIdx === 0) {
@@ -202,9 +129,6 @@ const ContentPlanner = () => {
 
           return {
             ...slide,
-            // Bold ONE key phrase (1-4 words) per line; lines already
-            // containing * markers are left untouched.
-            text: applyEditorialHighlighting(slide.text || ''),
             color: text,
             backgroundColor: bg,
             secondaryColor: sec,
@@ -213,7 +137,11 @@ const ContentPlanner = () => {
             accentFontFamily: accentFont,
             fontWeight: weight,
             visualElements: config.visualElements || [],
-            layout: finalLayout
+            layout: finalLayout,
+            // Editorial Dark preset flags — drive the photo wash and kicker.
+            darkPhoto: config.darkPhoto === true,
+            kicker: config.typography?.kicker === true,
+            kickerText: slide.kickerText || (config.typography?.kicker ? 'SELL IT WITH A STORY' : undefined),
           };
         })
       };
@@ -226,15 +154,10 @@ const ContentPlanner = () => {
     if (!config.colors || !config.typography) return;
 
     const styledPlan = applyBrandStyling(weekPlan, config);
-    // Compare font/color AND weight/text so bold-cleanup + key-phrase
-    // highlighting migrate existing plans automatically on open.
-    const sample = (p) => JSON.stringify({
-      c: p[0]?.slides[0]?.color,
-      f: p[0]?.slides[0]?.fontFamily,
-      w: p[0]?.slides[0]?.fontWeight,
-      t: p[0]?.slides[0]?.text,
-    });
-    if (sample(weekPlan) !== sample(styledPlan)) {
+    const oldSample = JSON.stringify({ c: weekPlan[0]?.slides[0]?.color, f: weekPlan[0]?.slides[0]?.fontFamily });
+    const newSample = JSON.stringify({ c: styledPlan[0]?.slides[0]?.color, f: styledPlan[0]?.slides[0]?.fontFamily });
+    
+    if (oldSample !== newSample) {
         updateBrandSettings({ contentPlan: styledPlan });
     }
   };
@@ -360,7 +283,7 @@ const ContentPlanner = () => {
           ...s2,
           layout: 'auto', layoutId: 'auto',
           textAnchor,
-          fontWeight: 'normal', // bold lives in **key phrases**, never whole slides
+          fontWeight: bold ? '700' : 'normal',
         };
       });
 
@@ -443,7 +366,7 @@ const ContentPlanner = () => {
           cleaned.layout = 'auto';
           cleaned.layoutId = 'auto';
           cleaned.textAnchor = textAnchor;
-          cleaned.fontWeight = 'normal'; // bold only via **key phrases**
+          cleaned.fontWeight = bold ? '700' : 'normal';
           return cleaned;
         });
 
@@ -806,7 +729,7 @@ const ContentPlanner = () => {
                     title={`Tag ${day.day} – ${day.title} · tippen zum Bearbeiten`}
                   >
                     <div className="absolute inset-0 pointer-events-none">
-                      <Canvas key={`${day.day}-${activeIndex}-${dynamicActiveSlide.color}-${dynamicActiveSlide.secondaryColor}-${dynamicActiveSlide.fontFamily}-${dynamicActiveSlide.backgroundColor}`} data={{...dynamicActiveSlide, slideNumber: activeIndex + 1, totalSlides: day.slides.length}} brandName={brandName} />
+                      <Canvas key={`${day.day}-${activeIndex}-${dynamicActiveSlide.color}-${dynamicActiveSlide.secondaryColor}-${dynamicActiveSlide.fontFamily}-${dynamicActiveSlide.backgroundColor}`} data={{...dynamicActiveSlide, slideNumber: undefined}} brandName={brandName} />
                     </div>
 
                     {/* Day badge */}
@@ -854,48 +777,6 @@ const ContentPlanner = () => {
                         >
                           {isExportingThisDay ? <span className="animate-spin"><SafeIcon icon={FiRefreshCw} /></span> : <><SafeIcon icon={FiDownload} className="mr-0.5" /> Export</>}
                         </button>
-                      </div>
-                      <div className="flex gap-1.5 mt-0.5">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); handleCopyText(activeSlide?.text, `${day.day}-${activeIndex}`); }}
-                          title="Text kopieren"
-                          className={`p-1.5 rounded-full shadow bg-white/95 hover:text-purple-600 flex items-center justify-center ${copiedKey === `${day.day}-${activeIndex}` ? 'text-green-600' : 'text-gray-800'}`}
-                        >
-                          <SafeIcon icon={copiedKey === `${day.day}-${activeIndex}` ? FiCheck : FiCopy} className="text-xs" />
-                        </button>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); handleCycleLayoutDay(dayIndex, activeIndex); }}
-                          title="Layout wechseln"
-                          className="p-1.5 rounded-full shadow bg-white/95 text-gray-800 hover:text-purple-600 flex items-center justify-center"
-                        >
-                          <SafeIcon icon={FiGrid} className="text-xs" />
-                        </button>
-                        {(typeof activeSlide?.background === 'string' && activeSlide.background.length > 5) ? (
-                          <>
-                            <button
-                              onClick={(e) => { e.stopPropagation(); handleZoomToggleDay(dayIndex, activeIndex); }}
-                              title={(activeSlide.imageScale || 1) > 1.05 ? 'Zoom aus' : 'Zoom'}
-                              className={`p-1.5 rounded-full shadow bg-white/95 hover:text-purple-600 flex items-center justify-center ${(activeSlide.imageScale || 1) > 1.05 ? 'text-purple-600' : 'text-gray-800'}`}
-                            >
-                              <SafeIcon icon={(activeSlide.imageScale || 1) > 1.05 ? FiZoomOut : FiZoomIn} className="text-xs" />
-                            </button>
-                            <button
-                              onClick={(e) => { e.stopPropagation(); handleRemoveImageDay(dayIndex, activeIndex); }}
-                              title="Bild entfernen"
-                              className="p-1.5 rounded-full shadow bg-white/95 text-red-500 hover:bg-red-50 flex items-center justify-center"
-                            >
-                              <SafeIcon icon={FiX} className="text-xs" />
-                            </button>
-                          </>
-                        ) : (
-                          <button
-                            onClick={(e) => { e.stopPropagation(); handleAddImageDay(dayIndex, activeIndex); }}
-                            title="Bild einfügen"
-                            className="p-1.5 rounded-full shadow bg-white/95 text-gray-800 hover:text-purple-600 flex items-center justify-center"
-                          >
-                            <SafeIcon icon={FiImage} className="text-xs" />
-                          </button>
-                        )}
                       </div>
                     </div>
                   </motion.div>
