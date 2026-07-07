@@ -687,9 +687,16 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     if (slide.editorialDark || slide.editorialAuto) {
       const { kicker: kickTxt, headline, footer } = splitEditorial(slide.text);
       const centerX = width / 2;
-      const lightText = hasBgImage ? '#FFFFFF' : contrastColor(slide.backgroundColor || '#fff');
-      const dimText = hasBgImage ? 'rgba(255,255,255,0.9)' : accentColor;
-      const sh = hasBgImage ? 'rgba(0,0,0,0.55) 0px 2px 12px' : '';
+      // Brightness-aware: if the text zone is BRIGHT, use dark text on a light
+      // scrim (dunkel auf hell); if dark, white text on a dark scrim.
+      const zb = typeof slide.smartTextBright === 'number'
+        ? slide.smartTextBright
+        : (slide._autoImage?.zoneBrightness?.[slide._autoImage?.quietZone]);
+      const brightZone = hasBgImage && typeof zb === 'number' && zb > 150;
+      const lightText = hasBgImage ? (brightZone ? '#1A1310' : '#FFFFFF') : contrastColor(slide.backgroundColor || '#fff');
+      const dimText = hasBgImage ? (brightZone ? 'rgba(26,19,16,0.85)' : 'rgba(255,255,255,0.9)') : accentColor;
+      const sh = hasBgImage && !brightZone ? 'rgba(0,0,0,0.55) 0px 2px 12px' : '';
+      const scrimRGB = brightZone ? '245,240,232' : '8,6,4';
 
       // Place the text stack in the photo's QUIET zone (from image analysis)
       // so it never covers the subject/face. Fall back to the anchor row.
@@ -710,10 +717,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         }
         // 2) Local scrim ONLY behind the text area — soft gradient, no hard edges.
         const fadeStops = zone.includes('top')
-          ? [{ offset: 0, color: 'rgba(8,6,4,0.50)' }, { offset: 0.7, color: 'rgba(8,6,4,0.28)' }, { offset: 1, color: 'rgba(8,6,4,0)' }]
+          ? [{ offset: 0, color: `rgba(${scrimRGB},0.50)` }, { offset: 0.7, color: `rgba(${scrimRGB},0.28)` }, { offset: 1, color: `rgba(${scrimRGB},0)` }]
           : (zone.includes('bottom') || !zone)
-            ? [{ offset: 0, color: 'rgba(8,6,4,0)' }, { offset: 0.3, color: 'rgba(8,6,4,0.28)' }, { offset: 1, color: 'rgba(8,6,4,0.50)' }]
-            : [{ offset: 0, color: 'rgba(8,6,4,0)' }, { offset: 0.5, color: 'rgba(8,6,4,0.45)' }, { offset: 1, color: 'rgba(8,6,4,0)' }];
+            ? [{ offset: 0, color: `rgba(${scrimRGB},0)` }, { offset: 0.3, color: `rgba(${scrimRGB},0.28)` }, { offset: 1, color: `rgba(${scrimRGB},0.50)` }]
+            : [{ offset: 0, color: `rgba(${scrimRGB},0)` }, { offset: 0.5, color: `rgba(${scrimRGB},0.45)` }, { offset: 1, color: `rgba(${scrimRGB},0)` }];
         canvas.add(new fabric.Rect({
           left: 0, top: bandTop, width, height: bandH,
           fill: new fabric.Gradient({
@@ -771,15 +778,19 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       return;
     }
 
+    const zbStd = typeof slide.smartTextBright === 'number'
+      ? slide.smartTextBright
+      : (slide._autoImage?.zoneBrightness?.[slide._autoImage?.quietZone]);
+    const brightStd = hasBgImage && typeof zbStd === 'number' && zbStd > 150;
     const titleObj = new fabric.Textbox(plain, {
       left, top, originX, originY,
       width: width * 0.82,
       fontSize: fs(slide.fontSize || 42),
       fontFamily,
-      fill: hasBgImage ? '#FFFFFF' : contrastColor(slide.backgroundColor || '#fff'),
+      fill: hasBgImage ? (brightStd ? '#1A1310' : '#FFFFFF') : contrastColor(slide.backgroundColor || '#fff'),
       textAlign, lineHeight: 1.2,
       fontWeight: slide.fontWeight || 'normal',
-      shadow: hasBgImage ? 'rgba(0,0,0,0.5) 0px 2px 10px' : '',
+      shadow: hasBgImage && !brightStd ? 'rgba(0,0,0,0.5) 0px 2px 10px' : '',
     });
     applyAccentStyles(titleObj, segments);
     canvas.add(titleObj);

@@ -19,7 +19,7 @@ import { renderSlide } from '../utils/canvasRenderer';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
-const { FiPlus, FiDownload, FiTrash2, FiFolder, FiSave, FiArrowLeft, FiType, FiLayout, FiDroplet, FiImage, FiMove, FiList, FiZap, FiGrid, FiCheck, FiToggleRight, FiToggleLeft, FiLayers, FiMessageSquare, FiCopy, FiRefreshCw, FiSend, FiChevronDown, FiChevronUp } = FiIcons;
+const { FiPlus, FiDownload, FiTrash2, FiFolder, FiSave, FiArrowLeft, FiType, FiLayout, FiDroplet, FiImage, FiMove, FiList, FiZap, FiGrid, FiCheck, FiToggleRight, FiToggleLeft, FiLayers, FiMessageSquare, FiCopy, FiRefreshCw, FiSend, FiChevronDown, FiChevronUp, FiEdit3, FiSun } = FiIcons;
 
 const ToolTab = ({ id, label, icon, isActive, onClick }) => (
   <button onClick={() => onClick(id)} className={`w-full flex flex-col items-center justify-center py-4 px-1 transition-all border-l-4 ${isActive ? 'bg-purple-50 border-purple-600 text-purple-700' : 'bg-white border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-900'}`}>
@@ -89,6 +89,31 @@ const Editor = () => {
   });
 
   const currentSlide = slides[currentSlideIndex] || slides[0];
+
+  // Smart Text: analyze the current photo, place text in the quiet zone and
+  // pick text color by that zone's brightness (light-on-dark / dark-on-light).
+  const [isSmartAnalyzing, setIsSmartAnalyzing] = useState(false);
+  const handleSmartText = async () => {
+    const bg = currentSlide?.background;
+    if (typeof bg !== 'string' || bg.length < 5) return;
+    setIsSmartAnalyzing(true);
+    try {
+      const { analyzeImage } = await import('../utils/imageAnalysis');
+      const a = await analyzeImage(bg);
+      if (a?.ok) {
+        const zoneBright = a.zoneBrightness?.[a.quietZone] ?? 100;
+        const label = a.quietLabel || 'center';
+        const row = label.includes('top') ? 'top' : label.includes('bottom') ? 'bottom' : 'mid';
+        const col = label.includes('left') ? 'left' : label.includes('right') ? 'right' : 'center';
+        handleSlideUpdate({
+          _autoImage: a,
+          textAnchor: { row, col },
+          smartTextBright: zoneBright, // renderer picks white vs dark text
+        });
+      }
+    } catch (e) { console.warn('Smart text analysis failed', e); }
+    finally { setIsSmartAnalyzing(false); }
+  };
 
   // Swipe between slides (mobile-friendly). Clamped to valid range.
   const slideSwipe = useSwipe({
@@ -332,6 +357,11 @@ const Editor = () => {
           <div {...(slides.length > 1 ? slideSwipe : {})} className={`shadow-2xl rounded-sm overflow-hidden bg-white w-full transition-all duration-300 relative shrink-0 ${currentSlide.format === '9:16' ? 'max-w-[280px] aspect-[9/16]' : (currentSlide.format === '16:9' ? 'max-w-[800px] aspect-video' : 'max-w-[400px] aspect-[4/5]')}`}>
             <Canvas ref={canvasRef} data={{ ...currentSlide, slideNumber: slides.length > 1 ? currentSlideIndex + 1 : undefined, totalSlides: slides.length }} brandName={brandName} />
             <button id="save-lib-btn" onClick={handleSaveToLibrary} className="absolute bottom-4 right-4 bg-white/90 backdrop-blur border border-gray-200 shadow-lg text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center hover:bg-white hover:text-purple-600 transition-colors"><SafeIcon icon={FiSave} className="mr-1" /> Save to Lib</button>
+            {typeof currentSlide.background === 'string' && currentSlide.background.length > 5 && (
+              <button onClick={handleSmartText} disabled={isSmartAnalyzing} className="absolute bottom-4 left-4 bg-white/90 backdrop-blur border border-gray-200 shadow-lg text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center hover:bg-white hover:text-amber-600 transition-colors disabled:opacity-50" title="Text intelligent platzieren: ruhige Zone + Farbe nach Helligkeit">
+                <SafeIcon icon={FiSun} className={`mr-1 ${isSmartAnalyzing ? 'animate-spin' : ''}`} /> Smart Text
+              </button>
+            )}
           </div>
           {slides.length > 1 && (
             <div className="mt-4 flex items-center justify-center gap-2">
@@ -360,6 +390,9 @@ const Editor = () => {
         </div>
         <div className={`${panelCollapsed ? 'hidden' : 'flex'} h-full border-l border-gray-200 bg-white overflow-hidden`}>
           <div className="w-20 bg-white border-r border-gray-100 flex flex-col items-center py-2 overflow-y-auto no-scrollbar z-10 shadow-[4px_0_10px_rgba(0,0,0,0.02)]">
+            <button onClick={() => setPanelCollapsed(true)} className="w-full flex flex-col items-center justify-center py-3 text-gray-400 hover:text-purple-600 hover:bg-purple-50 transition-colors border-b border-gray-100 mb-1" title="Bearbeitungsbereich einklappen">
+              <SafeIcon icon={FiChevronDown} className="text-xl" />
+            </button>
             <ToolTab id="text" label="Text" icon={FiType} isActive={activeTab === 'text'} onClick={(id) => { setActiveTab(id); setPanelCollapsed(false); }} />
             <ToolTab id="layout" label="Layout" icon={FiLayout} isActive={activeTab === 'layout'} onClick={(id) => { setActiveTab(id); setPanelCollapsed(false); }} />
             <ToolTab id="colors" label="Farben" icon={FiDroplet} isActive={activeTab === 'colors'} onClick={(id) => { setActiveTab(id); setPanelCollapsed(false); }} />
@@ -372,7 +405,7 @@ const Editor = () => {
           </div>
           <div className="flex-1 overflow-y-auto bg-gray-50/50 relative">
             <div className="p-5 min-h-full pb-20">
-              <button onClick={() => setPanelCollapsed(!panelCollapsed)} className="mb-6 w-full flex items-center justify-between border-b border-gray-100 pb-4 text-left">
+              <div className="mb-6 flex items-center justify-between border-b border-gray-100 pb-4">
                 <h3 className="text-lg font-bold text-gray-900 capitalize flex items-center">
                   {activeTab === 'text' && <><SafeIcon icon={FiType} className="mr-2 text-purple-600"/> Text & Inhalt</>}
                   {activeTab === 'layout' && <><SafeIcon icon={FiLayout} className="mr-2 text-purple-600"/> Design Style</>}
@@ -383,9 +416,7 @@ const Editor = () => {
                   {activeTab === 'brand' && <><SafeIcon icon={FiZap} className="mr-2 text-purple-600"/> Brand Generator</>}
                   {activeTab === 'bulk' && <><SafeIcon icon={FiList} className="mr-2 text-purple-600"/> Massen-Editor</>}
                 </h3>
-                <SafeIcon icon={panelCollapsed ? FiChevronDown : FiChevronUp} className="text-gray-400 text-xl shrink-0" />
-              </button>
-              {!panelCollapsed && (
+              </div>
               <div className="animate-fade-in">
                 {activeTab === 'text' && (<TextEditor currentSlide={currentSlide} onUpdate={handleSlideUpdate} onGlobalUpdate={handleGlobalUpdate} onBatchUpdate={handleBatchUpdate} totalSlides={slides.length} />)}
                 {activeTab === 'layout' && (<><div className="mb-4 flex items-center justify-between bg-purple-50 p-3 rounded-lg border border-purple-100"><span className="text-xs font-bold text-purple-900 flex items-center">{applyToAll ? 'Gilt für ALLE Slides' : 'Nur aktueller Slide'}</span><button onClick={() => setApplyToAll(!applyToAll)} className={`text-[10px] px-2 py-1 rounded font-bold transition-colors ${applyToAll ? 'bg-purple-600 text-white' : 'bg-white border border-gray-300 text-gray-600'}`} ><SafeIcon icon={applyToAll ? FiToggleRight : FiToggleLeft} className="mr-1 inline text-sm"/> Wechseln</button></div><LayoutPicker currentLayout={currentSlide.layout} onUpdate={(updates) => handleSmartUpdate(updates)} /></>)}
@@ -396,7 +427,6 @@ const Editor = () => {
                 {activeTab === 'bulk' && (<BulkTextEditor onUpdateSlides={handleBulkUpdate} currentSlides={slides} onGlobalUpdate={handleGlobalUpdate} />)}
                 {activeTab === 'brand' && (<GenerativeBrandSystem compact={true} onGenerate={handleBrandConfigUpdate} />)}
               </div>
-              )}
             </div>
           </div>
         </div>
