@@ -13,7 +13,7 @@ import BulkImportModal from '../components/BulkImportModal';
 import { renderSlide } from '../utils/canvasRenderer';
 import { brandRuleSets } from '../constants/brandData';
 import { createSmartSlide } from '../utils/slideHelpers';
-import { attachSmartImages } from '../utils/smartLayoutGenerator';
+import { attachSmartImages, getActiveImagePool } from '../utils/smartLayoutGenerator';
 import { decidePostDesign, dayHasImage } from '../utils/postDesignEngine';
 import { saveSetsToDB, loadSetsFromDB } from '../utils/storage';
 import { analyzePlanRoles, roleFeedback, ROLE_META } from '../utils/postRole';
@@ -254,7 +254,7 @@ const ContentPlanner = () => {
   const handleImportPlan = async (importedDays) => {
     setLoading(true);
     const brandConfig = brandSettings.currentBrandConfig;
-    const imagePool = brandSettings?.brandImages || [];
+    const imagePool = getActiveImagePool(brandSettings);
 
     // Fully automatic: the engine decides image / text position / bold per post.
     let globalIndex = 0;
@@ -334,7 +334,7 @@ const ContentPlanner = () => {
     setLoading(true);
     setSaveStatus('Lade Posts neu...');
     try {
-      const imagePool = brandSettings?.brandImages || [];
+      const imagePool = getActiveImagePool(brandSettings);
 
       let globalIndex = 0;
       // Start at a RANDOM point in the pool so every reload shifts which photo

@@ -1,6 +1,16 @@
 import { brandRuleSets } from '../constants/brandData';
 import { analyzeImagePool, ZONE_LABELS } from './imageAnalysis';
 
+// Central pool filter: excludes deactivated photos and sorts by priority
+// (Hoch=2 first, Normal=1, Niedrig=0 last). Meta lives in brandSettings.imageMeta
+// keyed by image URL: { disabled?: bool, priority?: 0|1|2 }.
+export const getActiveImagePool = (brandSettings) => {
+  const meta = brandSettings?.imageMeta || {};
+  const pool = (brandSettings?.brandImages || []).filter((u) => !meta[u]?.disabled);
+  const prio = (u) => (typeof meta[u]?.priority === 'number' ? meta[u].priority : 1);
+  return [...pool].sort((a, b) => prio(b) - prio(a));
+};
+
 /**
  * Maps a layoutId to the GRID zone (0..8) where the TEXT sits.
  * The image's "quiet zone" should be OPPOSITE this so text never covers the subject.

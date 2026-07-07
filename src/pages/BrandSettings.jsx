@@ -585,16 +585,42 @@ const BrandSettings = () => {
                 <input type="file" accept="image/*" multiple onChange={handleImageUpload} disabled={isUploading} className="hidden" />
               </label>
 
-              {brandSettings.brandImages && brandSettings.brandImages.map((img, index) => (
-                <div key={index} className="relative group rounded-xl overflow-hidden shadow-sm border border-gray-200 bg-white">
-                    <div className="aspect-square w-full">
-                        <img src={img} alt="Asset" className="w-full h-full object-cover" />
+              {brandSettings.brandImages && brandSettings.brandImages.map((img, index) => {
+                const meta = (brandSettings.imageMeta || {})[img] || {};
+                const isOff = meta.disabled === true;
+                const prio = typeof meta.priority === 'number' ? meta.priority : 1;
+                const setMeta = (patch) => {
+                  const next = { ...(brandSettings.imageMeta || {}), [img]: { ...meta, ...patch } };
+                  updateBrandSettings({ imageMeta: next });
+                };
+                const prioLabel = prio === 2 ? 'Hoch' : prio === 0 ? 'Niedrig' : 'Normal';
+                const prioClass = prio === 2 ? 'bg-amber-500 text-white' : prio === 0 ? 'bg-gray-300 text-gray-600' : 'bg-white/90 text-gray-700';
+                return (
+                <div key={index} className={`relative group rounded-xl overflow-hidden shadow-sm border bg-white ${isOff ? 'border-gray-300 opacity-60' : 'border-gray-200'}`}>
+                    <div className="aspect-square w-full relative">
+                        <img src={img} alt="Asset" className={`w-full h-full object-cover ${isOff ? 'grayscale' : ''}`} />
+                        {/* Priority badge (tap to cycle Hoch -> Niedrig -> Normal) */}
+                        <button
+                          onClick={(e) => { e.preventDefault(); setMeta({ priority: prio === 2 ? 0 : prio === 0 ? 1 : 2 }); }}
+                          className={`absolute top-1.5 left-1.5 text-[10px] font-bold px-2 py-0.5 rounded-full shadow ${prioClass}`}
+                          title="Priorität ändern"
+                        >{prioLabel}</button>
+                        {isOff && (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="bg-black/60 text-white text-[10px] font-bold px-2 py-1 rounded">Inaktiv</span>
+                          </div>
+                        )}
                     </div>
-                    <button onClick={(e) => {e.preventDefault(); removeImage(index)}} className="w-full py-2 bg-red-50 text-red-600 text-xs font-bold hover:bg-red-100 flex items-center justify-center border-t border-red-100 transition-colors">
+                    <div className="flex border-t border-gray-100">
+                      <button onClick={(e) => { e.preventDefault(); setMeta({ disabled: !isOff }); }} className={`flex-1 py-2 text-xs font-bold flex items-center justify-center transition-colors ${isOff ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'}`}>
+                        {isOff ? 'Aktivieren' : 'Deaktivieren'}
+                      </button>
+                      <button onClick={(e) => {e.preventDefault(); removeImage(index)}} className="flex-1 py-2 bg-red-50 text-red-600 text-xs font-bold hover:bg-red-100 flex items-center justify-center border-l border-red-100 transition-colors">
                         <SafeIcon icon={FiTrash2} className="mr-1" /> Löschen
-                    </button>
+                      </button>
+                    </div>
                 </div>
-              ))}
+              );})}
             </div>
           </div>
         )}

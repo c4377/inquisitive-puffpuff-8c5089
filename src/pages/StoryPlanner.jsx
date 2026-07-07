@@ -9,7 +9,7 @@ import Canvas from '../components/Canvas';
 import StyleShifter from '../components/StyleShifter'; // IMPORT NEW SHIFTER
 import { useBrand } from '../context/BrandContext';
 import { renderSlide } from '../utils/canvasRenderer';
-import { attachSmartImages } from '../utils/smartLayoutGenerator';
+import { attachSmartImages, getActiveImagePool } from '../utils/smartLayoutGenerator';
 import { decidePostDesign, dayHasImage } from '../utils/postDesignEngine';
 
 const { FiSmartphone, FiDownload, FiRefreshCw, FiLayers, FiFileText, FiX, FiPlay, FiTrash2, FiEdit3, FiPlus, FiCopy, FiCheck } = FiIcons;
@@ -87,7 +87,7 @@ const StoryPlanner = () => {
       if (slideTexts.length === 0) slideTexts.push(bulkText.trim());
 
       const brandConfig = brandSettings.currentBrandConfig;
-      const imagePool = brandSettings?.brandImages || [];
+      const imagePool = getActiveImagePool(brandSettings);
 
       // Build base story slides (9:16), then run the SAME engine as the feed:
       // auto layout + pool images (variety) + text position/bold decisions.
