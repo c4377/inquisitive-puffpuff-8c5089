@@ -312,15 +312,30 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const isFrame = (s) => s.length < 28 || (s === s.toUpperCase() && s.length < 45);
 
     if (lines.length === 1) {
-      const m = lines[0].match(/["'\u201C\u201E\u00BB].+?["'\u201D\u2033\u00AB]/);
-      // Only treat the quote as the core statement if it's substantial —
-      // a short quoted word mid-sentence ("steht") must not split the line.
-      if (m && m[0].length >= 14) {
-        const headline = m[0];
-        const rest = lines[0].replace(m[0], '').trim();
-        return { kicker: rest.length && rest.length < 45 ? rest : '', headline, footer: '' };
+      // No manual line breaks: structure the paragraph AUTOMATICALLY by
+      // sentences, so generated content needs no special formatting.
+      const parts = (lines[0].match(/[^.!?…]+[.!?…]+["'\u201D\u2033\u00AB]?|\S[^.!?…]*$/g) || [lines[0]])
+        .map((t) => t.trim()).filter(Boolean);
+      if (parts.length === 1) return { kicker: '', headline: parts[0], footer: '' };
+
+      // Headline: a substantial quoted sentence wins; otherwise the longest.
+      let hi = -1;
+      parts.forEach((p, i) => {
+        if (/["\u201C\u201E\u00BB].{10,}["\u201D\u2033\u00AB]/.test(p) && (hi === -1 || p.length > parts[hi].length)) hi = i;
+      });
+      if (hi === -1) {
+        let best = -1;
+        parts.forEach((p, i) => { if (p.length > best) { best = p.length; hi = i; } });
       }
-      return { kicker: '', headline: lines[0], footer: '' };
+      let headline = parts[hi];
+      const before = parts.slice(0, hi).join(' ');
+      const after = parts.slice(hi + 1).join(' ');
+      let kicker = '', footer = '';
+      // Short surroundings become CAPS frame lines; long ones stay in the
+      // serif headline so nothing ever gets lost.
+      if (before) { if (before.length <= 40) kicker = before; else headline = `${before} ${headline}`; }
+      if (after) { if (after.length <= 60) footer = after; else headline = `${headline} ${after}`; }
+      return { kicker, headline, footer };
     }
 
     // Prefer a quoted line that is NOT all-caps (the real spoken statement);
