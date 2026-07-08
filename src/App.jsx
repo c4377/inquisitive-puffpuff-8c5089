@@ -3,6 +3,7 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 import Header from './components/Header';
+import ErrorBoundary from './common/ErrorBoundary';
 import Dashboard from './pages/Dashboard';
 import BrandRandomizer from './components/BrandRandomizer';
 import LayoutSelector from './components/LayoutSelector';
@@ -25,6 +26,7 @@ function App() {
   return (
     <AuthProvider>
       <BrandProvider>
+        <ErrorBoundary>
         <Router>
           <ScrollToTop />
           <div className="min-h-screen bg-gray-50">
@@ -53,6 +55,7 @@ function App() {
             </motion.main>
           </div>
         </Router>
+        </ErrorBoundary>
       </BrandProvider>
     </AuthProvider>
   );

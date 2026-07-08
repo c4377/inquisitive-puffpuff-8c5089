@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import * as FiIcons from 'react-icons/fi';
 import SafeIcon from '../common/SafeIcon';
 import { useBrand } from '../context/BrandContext';
-import { buildEditorialDark } from '../constants/brandData';
 
 const { FiRefreshCw, FiType, FiDroplet, FiRotateCw, FiSave, FiCornerUpLeft, FiCheck, FiZap, FiAlertCircle } = FiIcons;
 
@@ -35,24 +34,6 @@ const StyleShifter = ({ compact = false, mode = 'default' }) => {
     updateBrandSettings({ currentBrandConfig: previous });
     setHistory(prev => prev.slice(0, -1));
     flashMessage("Wiederhergestellt!");
-  };
-
-  // Apply the Editorial Dark look (two-font signature) to the current brand,
-  // keeping the user's own brand name/id. darkPhoto toggles the photo wash.
-  const applyEditorialDark = (darkPhoto) => {
-    if (history.length === 0 || true) saveCheckpoint();
-    const preset = buildEditorialDark(darkPhoto);
-    updateBrandSettings({
-      currentBrandConfig: {
-        ...config,
-        colors: preset.colors,
-        typography: preset.typography,
-        layout: preset.layout,
-        darkPhoto: preset.darkPhoto,
-        editorialDark: true,
-      },
-    });
-    flashMessage(darkPhoto ? 'Editorial Dark aktiv' : 'Editorial Hell aktiv');
   };
 
   const swapFonts = () => {

@@ -107,6 +107,7 @@ export const layoutGenerators = {
   keyword_highlight: (w, h) => ({ textPosition: { x: w / 2, y: h / 2 }, textAlign: 'center', maxTextWidth: w * 0.85, id: 'keyword_highlight' }),
   editorial_fade_bottom: (w, h) => ({ textPosition: { x: w / 2, y: h * 0.82 }, textAlign: 'center', maxTextWidth: w * 0.85, id: 'editorial_fade_bottom' }),
   minimal_quote: (w, h) => ({ textPosition: { x: w / 2, y: h / 2 }, textAlign: 'center', maxTextWidth: w * 0.65, id: 'minimal_quote' }),
+  editorial_classic: (w, h) => ({ textPosition: { x: w / 2, y: h / 2 }, textAlign: 'center', maxTextWidth: w * 0.72, id: 'editorial_classic' }),
   maximized_bold: (w, h) => ({ textPosition: { x: w / 2, y: h / 2 }, textAlign: 'center', maxTextWidth: w * 0.85, id: 'maximized_bold' }),
   minimal_left_accent: (w, h) => ({ textPosition: { x: w * 0.15, y: h * 0.6 }, textAlign: 'left', maxTextWidth: w * 0.70, id: 'minimal_left_accent' }),
   split_vertical_editorial: (w, h) => ({ textPosition: { x: w * 0.5, y: h * 0.75 }, textAlign: 'center', maxTextWidth: w * 0.80, id: 'split_vertical_editorial' }),
