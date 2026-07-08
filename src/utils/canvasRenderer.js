@@ -743,7 +743,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           textAlign: 'center', lineHeight: 1.3, shadow: sh,
         });
         canvas.add(k);
-        stackTop += k.height + height * 0.02;
+        // Robust height: fabric sometimes reports 0 before layout — use a
+        // fallback so the serif headline can NEVER sit on top of the CAPS line.
+        const kH = (typeof k.getScaledHeight === 'function' ? k.getScaledHeight() : k.height) || fs(15) * 1.8;
+        stackTop += kH + height * 0.045;
       }
 
       // Headline (big serif, italic-friendly)
@@ -754,7 +757,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         textAlign: 'center', lineHeight: 1.08, shadow: sh,
       });
       canvas.add(h);
-      stackTop += h.height + height * 0.02;
+      const hH = (typeof h.getScaledHeight === 'function' ? h.getScaledHeight() : h.height) || fs(slide.fontSize || 54) * 2.4;
+      stackTop += hH + height * 0.04;
 
       // Footer (small, spaced, uppercase — sans)
       if (footer) {
