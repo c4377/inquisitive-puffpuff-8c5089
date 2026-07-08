@@ -298,7 +298,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
   // Split text into an editorial structure WITHOUT any markup: short framing
   // lines become small spaced uppercase (sans), the main statement becomes the
-  // big serif headline. Mirrors the Eva-Siebenhaar look where the user just
+  // big serif headline. Mirrors the magazine editorial look where the user just
   // types normally. Returns { kicker, headline, footer }.
   const splitEditorial = (text) => {
     // Editorial mode needs NO markup — remove any leftover *stars* from older
@@ -371,10 +371,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // === COVER WITH PHOTO: auto-place title in the image's quiet zone ===
   // When a background photo is present, ignore the abstract layout and place
   // the title where the image has free/quiet space (from image analysis).
-  // === SARAH-JOY STYLE COVER (editorial photo cover) ===
+  // === MAGAZINE STYLE COVER (editorial photo cover) ===
   // Rich cover: photo bg + small label chip (top) + serif title with one
   // italic/script accent word + subtitle + small brand mark (bottom).
-  if (hasBgImage && (layout === 'sarah_cover' || slide.coverStyle === 'sarah')) {
+  if (hasBgImage && (layout === 'magazine_cover' || layout === 'sarah_cover' || slide.coverStyle === 'sarah')) {
     const { plain, segments } = parseAccent(slide.text);
 
     // Extra readability: dark gradient-ish band at the bottom third.

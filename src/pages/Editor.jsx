@@ -179,7 +179,7 @@ const Editor = () => {
     try {
       const zip = new JSZip();
       const slidesFolder = zip.folder("slides");
-      const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "MUSE MENTORING";
+      const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "";
 
       for (let i = 0; i < slides.length; i++) {
         const slide = slides[i];
@@ -294,7 +294,7 @@ const Editor = () => {
     setIsExporting(false);
   };
 
-  const brandName = brandSettings.currentBrandConfig?.name || "MUSE MENTORING";
+  const brandName = brandSettings.currentBrandConfig?.name || "";
 
   return (
     <div className="flex flex-col bg-gray-50 h-[calc(100vh-64px)] overflow-hidden">

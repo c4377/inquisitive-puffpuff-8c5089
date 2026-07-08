@@ -16,7 +16,7 @@ const WorksheetGenerator = () => {
   const defaultConfig = {
     colors: { primary: '#000000', secondary: '#CCCCCC', accent: '#EA580C', background: '#FFFFFF' },
     typography: { fontFamily: 'Inter', bodyFontFamily: 'Inter', accentFontFamily: 'Inter' },
-    name: 'MUSE MENTORING'
+    name: ''
   };
 
   const activeConfig = brandSettings.currentBrandConfig || {};

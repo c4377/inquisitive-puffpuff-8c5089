@@ -24,7 +24,7 @@ const StoryPlanner = () => {
   const [showShifter, setShowShifter] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState(null);
 
-  const brandName = brandSettings.currentBrandConfig?.name || "MUSE MENTORING";
+  const brandName = brandSettings.currentBrandConfig?.name || "";
 
   // Initialize with one empty story if nothing exists
   useEffect(() => {

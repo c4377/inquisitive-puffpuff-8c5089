@@ -41,7 +41,7 @@ export const generatePresentationDeck = (topic, brandConfig) => {
   // Slide 1: Title (Centered) - WITH ACCENT HIGHLIGHTS
   slides.push(createSlide(brandConfig, {
     text: topic === 'mindset' ? "IDENTITY\n*SHIFT*" : "BUSINESS\n*MASTERY*",
-    secondaryText: "MASTERCLASS WITH " + (brandConfig.name || "MUSE MENTORING"),
+    secondaryText: "MASTERCLASS WITH " + (brandConfig.name || ""),
     layout: 'centered_focus',
     fontSize: 80,
     textAlign: 'center'

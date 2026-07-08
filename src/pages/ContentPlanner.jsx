@@ -48,7 +48,7 @@ const ContentPlanner = () => {
 
   const currentBrand = brandSettings.currentBrandConfig;
   const hasActiveBrand = !!currentBrand;
-  const brandName = currentBrand?.name || "MUSE MENTORING";
+  const brandName = currentBrand?.name || "";
 
   // --- HELPER: COLOR CONTRAST ---
   const getBrightness = (hex) => {
@@ -407,7 +407,7 @@ const ContentPlanner = () => {
     if (!weekPlan || weekPlan.length === 0) return;
     setIsExportingAll(true);
     try {
-      const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "MUSE MENTORING";
+      const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "";
 
       const renderDayFiles = async (day) => {
         const files = [];
@@ -493,7 +493,7 @@ const ContentPlanner = () => {
     setExportingDayId(day.day);
     try {
       const zip = new JSZip();
-      const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "MUSE MENTORING";
+      const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "";
       for (let i = 0; i < day.slides.length; i++) {
         const slide = day.slides[i];
         const canvasWidth = 1080;
@@ -529,7 +529,7 @@ const ContentPlanner = () => {
     if (!day || !day.slides?.length) return;
     setExportingDayId(day.day);
     try {
-      const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "MUSE MENTORING";
+      const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "";
       const files = [];
       for (let i = 0; i < day.slides.length; i++) {
         const slide = day.slides[i];

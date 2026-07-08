@@ -9,12 +9,15 @@ import FontSelector from '../components/FontSelector';
 import BrandRandomizer from '../components/BrandRandomizer';
 import { uploadImageToCloud, listCloudImages, deleteCloudImage } from '../supabase';
 import { CURATED_BRANDS } from '../constants/brandData';
+import { parseBrandsheet } from '../utils/brandsheetParser';
 
 const { FiShuffle, FiDroplet, FiType, FiImage, FiSettings, FiSave, FiUpload, FiEdit3, FiTrash2, FiCheckCircle, FiEye, FiTag, FiX, FiAlertCircle, FiUsers, FiCheck, FiRefreshCw } = FiIcons;
 
 const BrandSettings = () => {
   const { brandSettings, updateBrandSettings, addCustomFont, removeCustomFont, loadBrandProfile, deleteBrandProfile } = useBrand();
   const [activeSection, setActiveSection] = useState('identity');
+  const [sheetText, setSheetText] = useState('');
+  const [sheetStatus, setSheetStatus] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState({ done: 0, total: 0, failed: 0 });
@@ -314,6 +317,43 @@ const BrandSettings = () => {
           <div className="space-y-8">
             <div className="flex items-center justify-between">
               <h3 className="text-xl font-bold text-gray-900">Meine Gespeicherten Brands</h3>
+            </div>
+
+            {/* Brandsheet Import: paste a brand sheet, get a full brand */}
+            <div className="mb-6 border border-dashed border-gray-300 rounded-xl p-4 bg-gray-50/50">
+              <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Brandsheet Import</div>
+              <textarea
+                value={sheetText}
+                onChange={(e) => setSheetText(e.target.value)}
+                placeholder={"BRANDSHEET — Name\n\nFARBEN\n#F4F2EF Hintergrund\n#3D3D3B Text\n...\n\nTYPOGRAFIE\nHeadline: Schriftname ...\nFließtext: Schriftname ...\nAkzent: Schriftname ..."}
+                className="w-full h-32 border border-gray-200 rounded-lg p-3 text-xs font-mono bg-white outline-none focus:border-purple-400 resize-y"
+              />
+              <div className="flex items-center justify-between mt-2">
+                <p className="text-[11px] text-gray-400">Fügt dein Brandsheet ein — Farben (Hex + Rolle), Schriften und Name werden automatisch erkannt.</p>
+                <button
+                  onClick={async () => {
+                    const r = parseBrandsheet(sheetText);
+                    if (!r.ok) { setSheetStatus(r.error); return; }
+                    setSheetStatus('Lade Schriften…');
+                    const { loadGoogleFonts } = await import('../utils/fontLoader');
+                    await loadGoogleFonts([
+                      r.config.typography.fontFamily,
+                      r.config.typography.bodyFontFamily,
+                      r.config.typography.accentFontFamily,
+                    ]);
+                    updateBrandSettings({
+                      currentBrandConfig: r.config,
+                      brandConfigurations: [r.config, ...(brandSettings.brandConfigurations || [])],
+                    });
+                    setSheetStatus(`✓ „${r.config.name}" erstellt und aktiviert (Schriften live geladen).`);
+                    setSheetText('');
+                    setTimeout(() => setSheetStatus(''), 5000);
+                  }}
+                  disabled={!sheetText.trim()}
+                  className="px-4 py-2 rounded-lg bg-purple-600 text-white text-xs font-bold hover:bg-purple-700 disabled:opacity-40 shrink-0 ml-3"
+                >Brand erstellen</button>
+              </div>
+              {sheetStatus && <p className="text-xs mt-2 font-bold text-gray-700">{sheetStatus}</p>}
             </div>
 
             {/* Fixed curated brands — always available */}

@@ -8,6 +8,7 @@ import {
 } from '../utils/storage';
 import { useAuth } from './AuthContext';
 import { CURATED_BRANDS } from '../constants/brandData';
+import { loadGoogleFonts } from '../utils/fontLoader';
 import { CloudService } from '../services/cloudService';
 
 const BrandContext = createContext();
@@ -95,6 +96,16 @@ export const BrandProvider = ({ children }) => {
   const syncTimeoutRef = useRef(null);
 
   // 1. LOAD LOCAL DATA ON MOUNT
+  // Live-load the active brand's fonts (Brandsheet brands may use any Google
+  // Font). Deduped internally, so this is free when fonts are already present.
+  useEffect(() => {
+    const t = brandSettings?.currentBrandConfig?.typography;
+    if (!t) return;
+    loadGoogleFonts([t.fontFamily, t.bodyFontFamily, t.accentFontFamily]);
+  }, [brandSettings?.currentBrandConfig?.typography?.fontFamily,
+      brandSettings?.currentBrandConfig?.typography?.bodyFontFamily,
+      brandSettings?.currentBrandConfig?.typography?.accentFontFamily]);
+
   useEffect(() => {
     const loadLocalData = async () => {
       try {
@@ -257,7 +268,7 @@ export const BrandProvider = ({ children }) => {
     const profileToSave = {
       ...brandSettings.currentBrandConfig,
       id: brandSettings.currentBrandConfig.id || Date.now(),
-      name: nameOverride || brandSettings.currentBrandConfig.name || 'MUSE MENTORING',
+      name: nameOverride || brandSettings.currentBrandConfig.name || 'Mein Brand',
       lastModified: new Date().toISOString(),
       strategy: brandSettings.currentBrandConfig.strategy || brandSettings.strategy || DEFAULT_STRATEGY
     };

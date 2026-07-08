@@ -23,7 +23,7 @@ const CommunityPlanner = () => {
   const [bulkText, setBulkText] = useState('');
   const [showShifter, setShowShifter] = useState(false);
 
-  const brandName = brandSettings.currentBrandConfig?.name || "MUSE MENTORING";
+  const brandName = brandSettings.currentBrandConfig?.name || "";
 
   useEffect(() => {
     if (dataLoaded && brandSettings.currentBrandConfig) {

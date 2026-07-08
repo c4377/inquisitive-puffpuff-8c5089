@@ -2,7 +2,7 @@ import React, { useRef, useEffect, forwardRef, useImperativeHandle, useState } f
 import { fabric } from 'fabric';
 import { renderSlide } from '../utils/canvasRenderer';
 
-const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "MUSE MENTORING" }, ref) => {
+const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "" }, ref) => {
   const canvasRef = useRef(null);
   const fabricRef = useRef(null);
   const [fontLoaded, setFontLoaded] = useState(false);

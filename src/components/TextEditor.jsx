@@ -153,7 +153,7 @@ const TextEditor = ({ currentSlide, onUpdate, onGlobalUpdate, onBatchUpdate, tot
   const customFonts = (brandSettings.customFonts || []).map(f => ({ name: `${f.name} (Custom)`, value: f.name }));
   const allFonts = [...customFonts, ...standardFonts];
 
-  const globalBrandName = brandSettings.currentBrandConfig?.name || "Muse Mentoring";
+  const globalBrandName = brandSettings.currentBrandConfig?.name || "";
 
   return (
     <div className="space-y-6">

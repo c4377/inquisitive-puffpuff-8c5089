@@ -1,7 +1,7 @@
 // PREMIUM BRAND DEFINITIONS & LAYOUTS
 
 export const colorGenerators = {
-  muse_original: () => ({ primary: '#000000', secondary: '#57534E', tertiary: '#D6D1CC', accent: '#a8a29e', neutral: '#EBE9E6', background: '#FFFFFF' }),
+  mono_classic: () => ({ primary: '#000000', secondary: '#57534E', tertiary: '#D6D1CC', accent: '#a8a29e', neutral: '#EBE9E6', background: '#FFFFFF' }),
   pure_noir: () => ({ primary: '#000000', secondary: '#F3F4F6', tertiary: '#1A1A1A', accent: '#000000', neutral: '#E5E5E5', background: '#FFFFFF' }),
   clean_yellow_grey: () => ({ primary: '#1F2937', secondary: '#F3F4F6', tertiary: '#9CA3AF', accent: '#FDE047', neutral: '#FAFAFA', background: '#FFFFFF' }),
   dark_matter: () => ({ primary: '#FFFFFF', secondary: '#1F2937', tertiary: '#374151', accent: '#3B82F6', neutral: '#111827', background: '#030712' }),
@@ -10,9 +10,9 @@ export const colorGenerators = {
   stone_concrete: () => ({ primary: '#1C1917', secondary: '#D6D3CD', tertiary: '#A8A29E', accent: '#57534E', neutral: '#F5F5F4', background: '#E7E5E4' }),
   coffee_noir: () => ({ primary: '#FFF8E1', secondary: '#3E2723', tertiary: '#4E342E', accent: '#A1887F', neutral: '#261917', background: '#150F0D' }),
   cherry_bomb: () => ({ primary: '#FFFFFF', secondary: '#7f1d1d', tertiary: '#991b1b', accent: '#EF4444', neutral: '#450a0a', background: '#450a0a' }),
-  jennifer_red: () => ({ primary: '#FFFFFF', secondary: '#000000', tertiary: '#1A1A1A', accent: '#D32F2F', neutral: '#333333', background: '#050505' }),
-  eva_warmth: () => ({ primary: '#FFFFFF', secondary: '#D4C4B7', tertiary: '#A89F91', accent: '#FCD34D', neutral: '#F5F5DC', background: '#EAE0D5' }),
-  jenni_luxury: () => ({ primary: '#000000', secondary: '#FFFFFF', tertiary: '#3E2723', accent: '#C0A062', neutral: '#F3E5AB', background: '#1C1917' }),
+  bold_red: () => ({ primary: '#FFFFFF', secondary: '#000000', tertiary: '#1A1A1A', accent: '#D32F2F', neutral: '#333333', background: '#050505' }),
+  warm_beige: () => ({ primary: '#FFFFFF', secondary: '#D4C4B7', tertiary: '#A89F91', accent: '#FCD34D', neutral: '#F5F5DC', background: '#EAE0D5' }),
+  dark_luxury: () => ({ primary: '#000000', secondary: '#FFFFFF', tertiary: '#3E2723', accent: '#C0A062', neutral: '#F3E5AB', background: '#1C1917' }),
   cool_spring: () => ({ primary: '#647D82', secondary: '#8D9F79', tertiary: '#B6B4B6', accent: '#D0B400', neutral: '#F5F5F5', background: '#FFFFFF' }),
   sporty_petrol: () => ({ primary: '#FFFFFF', secondary: '#CBD5E1', tertiary: '#000000', accent: '#38BDF8', neutral: '#334155', background: '#0F4C5C' }),
   story_contrast: () => ({ primary: '#FFFFFF', secondary: '#000000', tertiary: '#1A1A1A', accent: '#FF0066', neutral: '#333333', background: '#000000' }),
@@ -21,8 +21,8 @@ export const colorGenerators = {
   desert_sun: () => ({ primary: '#431407', secondary: '#F97316', tertiary: '#FECA9A', accent: '#EA580C', neutral: '#FFF7ED', background: '#FFF7ED' }),
   petrol_editorial: () => ({ primary: '#FFFFFF', secondary: '#003D4C', tertiary: '#002935', accent: '#66D2EA', neutral: '#F1F5F9', background: '#004E64' }),
   warm_business: () => ({ primary: '#2F2F2F', secondary: '#B7A89A', tertiary: '#CFC9C3', accent: '#9FAE9C', neutral: '#CFC9C3', background: '#F6F4F1' }),
-  preuss_yellow: () => ({ primary: '#1a1a1a', secondary: '#1a1a1a', tertiary: '#ffffff', accent: '#ffffff', neutral: '#fef3c7', background: '#FDE047' }),
-  // --- Sarah-Joy inspired warm bordeaux / cognac world ---
+  growth_yellow: () => ({ primary: '#1a1a1a', secondary: '#1a1a1a', tertiary: '#ffffff', accent: '#ffffff', neutral: '#fef3c7', background: '#FDE047' }),
+  // --- Warm bordeaux / cognac world ---
   bordeaux_luxe: () => ({ primary: '#FBF6EF', secondary: '#7B2D2D', tertiary: '#5A1E1E', accent: '#E8C9A0', neutral: '#3A1414', background: '#5C1F1F' }),
   cognac_editorial: () => ({ primary: '#FBF6EF', secondary: '#8A5A2B', tertiary: '#6B4422', accent: '#D9A86C', neutral: '#3A2817', background: '#6F4A28' }),
   warm_cream_serif: () => ({ primary: '#3A2817', secondary: '#8A5A2B', tertiary: '#B08D5B', accent: '#9A3B2E', neutral: '#F0E6D8', background: '#EFE5D6' }),
@@ -120,8 +120,8 @@ export const layoutGenerators = {
   story_bottom_right: (w, h) => ({ textPosition: { x: w * 0.9, y: h * 0.85 }, textAlign: 'right', maxTextWidth: w * 0.75, id: 'story_bottom_right' }),
   story_text_box: (w, h) => ({ textPosition: { x: w / 2, y: h / 2 }, textAlign: 'center', maxTextWidth: w * 0.80, id: 'story_text_box' }),
   badge_centered: (w, h) => ({ textPosition: { x: w / 2, y: h / 2 + (h * 0.05) }, textAlign: 'center', maxTextWidth: w * 0.85, id: 'badge_centered' }),
-  // --- Cover layouts (photo background, Sarah-Joy style) ---
-  sarah_cover: (w, h) => ({ textPosition: { x: w * 0.08, y: h * 0.72 }, textAlign: 'left', maxTextWidth: w * 0.84, id: 'sarah_cover' }),
+  // --- Cover layouts (photo background, magazine style) ---
+  magazine_cover: (w, h) => ({ textPosition: { x: w * 0.08, y: h * 0.72 }, textAlign: 'left', maxTextWidth: w * 0.84, id: 'magazine_cover' }),
   cover_top_left: (w, h) => ({ textPosition: { x: w * 0.08, y: h * 0.12 }, textAlign: 'left', maxTextWidth: w * 0.78, id: 'cover_top_left' }),
   cover_bottom_left: (w, h) => ({ textPosition: { x: w * 0.08, y: h * 0.88 }, textAlign: 'left', maxTextWidth: w * 0.78, id: 'cover_bottom_left' }),
   cover_bottom_center: (w, h) => ({ textPosition: { x: w / 2, y: h * 0.85 }, textAlign: 'center', maxTextWidth: w * 0.82, id: 'cover_bottom_center' }),
@@ -142,43 +142,43 @@ export const brandRuleSets = {
   yellowCreator: {
     name: "Yellow Creator",
     description: 'Vibrant Yellow & Black. The Growth Strategy Look.',
-    colorStrategy: 'preuss_yellow',
+    colorStrategy: 'growth_yellow',
     vibe: 'bold_pop',
     layoutRules: ['badge_centered', 'maximized_bold', 'centered_focus'],
     typographyRules: ['modern_clean'],
-    tags: ['yellow', 'growth', 'bold', 'preuss']
+    tags: ['yellow', 'growth', 'bold']
   },
   warmBusiness: {
     name: "Warm Business",
-    description: 'Preuss-Style Clarity. Warm, Feminine & Professional.',
+    description: 'Clear, Warm, Feminine & Professional.',
     colorStrategy: 'warm_business',
     vibe: 'soft_warm',
     layoutRules: ['minimal_quote', 'aesthetic_checklist', 'centered_focus', 'editorial_mask'],
     typographyRules: ['modern_clean'],
-    tags: ['warm', 'business', 'feminine', 'preuss']
+    tags: ['warm', 'business', 'feminine']
   },
-  jenniferAlthoff: {
+  boldRedCreator: {
     name: "High Ticket Editorial",
     description: 'Vogue Style. Black, White & Red Accent.',
-    colorStrategy: 'jennifer_red',
+    colorStrategy: 'bold_red',
     vibe: 'luxury_dark',
     layoutRules: ['maximized_bold', 'editorial_mask', 'minimal_quote'],
     typographyRules: ['editorial_serif'],
     tags: ['bold', 'red', 'editorial']
   },
-  evaSiebenhaar: {
+  warmAuthentic: {
     name: "Authentic Warmth",
     description: 'Warm Beige & Gold. Playful & Personal.',
-    colorStrategy: 'eva_warmth',
+    colorStrategy: 'warm_beige',
     vibe: 'soft_warm',
     layoutRules: ['story_text_box', 'glass_layer', 'tweet_card'],
     typographyRules: ['modern_clean'],
     tags: ['warm', 'authentic', 'beige']
   },
-  jenniOstrovski: {
+  luxuryDark: {
     name: "Luxury Matchmaker",
     description: 'Elegant Dark & Cream. White Text Boxes.',
-    colorStrategy: 'jenni_luxury',
+    colorStrategy: 'dark_luxury',
     vibe: 'luxury_dark',
     layoutRules: ['minimal_quote', 'story_text_box', 'editorial_fade_bottom'],
     typographyRules: ['editorial_serif'],
@@ -211,14 +211,14 @@ export const brandRuleSets = {
     typographyRules: ['modern_clean'],
     tags: ['sport', 'health', 'business']
   },
-  museMentoring: {
-    name: "MUSE MENTORING",
-    description: 'The Original Zinzino Aesthetic. Clean & Authoritative.',
-    colorStrategy: 'muse_original',
+  monoEditorial: {
+    name: "Mono Editorial",
+    description: 'Clean & Authoritative Monochrome.',
+    colorStrategy: 'mono_classic',
     vibe: 'minimal_editorial',
     layoutRules: ['minimal_quote', 'split_vertical_editorial', 'editorial_mask'],
     typographyRules: ['editorial_serif'],
-    tags: ['leadership', 'zinzino', 'muse']
+    tags: ['leadership', 'mono', 'clean']
   },
   storyFocus: {
     name: "Story Focus",
@@ -315,7 +315,7 @@ export const brandRuleSets = {
     description: 'Editorial Bordeaux with cream serif & cognac accent.',
     colorStrategy: 'bordeaux_luxe',
     vibe: 'luxury_warm',
-    layoutRules: ['sarah_cover', 'cover_top_left', 'cover_bottom_left', 'cover_center_hero', 'minimal_quote'],
+    layoutRules: ['magazine_cover', 'cover_top_left', 'cover_bottom_left', 'cover_center_hero', 'minimal_quote'],
     typographyRules: ['editorial_serif'],
     tags: ['bordeaux', 'editorial', 'luxury', 'warm']
   },
@@ -356,7 +356,7 @@ const generateRandomName = () => {
   return `${p} ${s}`;
 };
 
-// --- CURATED PRESET: Editorial Dark (Eva-Siebenhaar-inspired) ---
+// --- CURATED PRESET: Editorial Dark (magazine-editorial inspired) ---
 // The signature is the TWO-FONT pairing, applied automatically:
 //   headline  = Playfair Display (large serif, italic emphasis on key words)
 //   accent    = a script for the sub-line ("Lauras Erfolgsstory", "Wie ging das?")
@@ -442,7 +442,7 @@ export const generateTrulyRandomBrand = (specificRuleSetKey = null) => {
   const ruleSetKey = specificRuleSetKey && brandRuleSets[specificRuleSetKey] ? specificRuleSetKey : (keys.includes('cleanCreator') ? 'cleanCreator' : keys[0]);
   const ruleSet = brandRuleSets[ruleSetKey];
   
-  const colors = colorGenerators[ruleSet.colorStrategy] ? colorGenerators[ruleSet.colorStrategy]() : colorGenerators.muse_original();
+  const colors = colorGenerators[ruleSet.colorStrategy] ? colorGenerators[ruleSet.colorStrategy]() : colorGenerators.mono_classic();
   const typoKey = ruleSet.typographyRules[0];
   const typography = typographyGenerators[typoKey] ? typographyGenerators[typoKey]() : typographyGenerators.editorial_serif();
   
