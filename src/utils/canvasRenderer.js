@@ -640,8 +640,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     const anchor = slide.textAnchor && typeof slide.textAnchor === 'object'
       ? slide.textAnchor : { row: hasBgImage ? 'bottom' : 'mid', col: 'center' };
-    const row = anchor.row || 'mid';
-    const col = anchor.col || 'center';
+    // Text-only posts: ALWAYS the same centered level (no jumping between
+    // posts). Position rotation only applies when there's a photo to respect.
+    const row = hasBgImage ? (anchor.row || 'mid') : 'mid';
+    const col = hasBgImage ? (anchor.col || 'center') : 'center';
 
     // Editorial Dark: heavy washes are handled INSIDE the editorial branch
     // (light global tone + local scrim only), so the subject stays visible.
@@ -730,45 +732,50 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           }),
           selectable: false,
         }));
-      } else {
-        stackTop = row === 'top' ? height * 0.14 : row === 'bottom' ? height * 0.42 : height * 0.30;
       }
 
-      // Kicker (small, spaced, uppercase — sans)
+      // Build all three layers FIRST (unpositioned), measure them, then place
+      // the whole group. Text-only posts are ALWAYS vertically centered at the
+      // same level — no jumping between posts. Photo posts keep the quiet zone.
+      const GAP_K = height * 0.045;
+      const GAP_H = height * 0.04;
+      let kObj = null, fObj = null;
       if (kickTxt) {
-        const k = new fabric.Textbox(kickTxt.toUpperCase(), {
-          left: centerX, top: stackTop, originX: 'center', originY: 'top',
+        kObj = new fabric.Textbox(kickTxt.toUpperCase(), {
+          left: centerX, top: 0, originX: 'center', originY: 'top',
           width: width * 0.8, fontSize: fs(15), fill: dimText,
           fontFamily: 'Montserrat', fontWeight: '500', charSpacing: 200,
           textAlign: 'center', lineHeight: 1.3, shadow: sh,
         });
-        canvas.add(k);
-        // Robust height: fabric sometimes reports 0 before layout — use a
-        // fallback so the serif headline can NEVER sit on top of the CAPS line.
-        const kH = (typeof k.getScaledHeight === 'function' ? k.getScaledHeight() : k.height) || fs(15) * 1.8;
-        stackTop += kH + height * 0.045;
       }
-
-      // Headline (big serif, italic-friendly)
       const h = new fabric.Textbox(headline, {
-        left: centerX, top: stackTop, originX: 'center', originY: 'top',
+        left: centerX, top: 0, originX: 'center', originY: 'top',
         width: width * 0.86, fontSize: fs(slide.fontSize || 54),
         fill: lightText, fontFamily: 'Playfair Display', fontWeight: '500',
         textAlign: 'center', lineHeight: 1.08, shadow: sh,
       });
-      canvas.add(h);
-      const hH = (typeof h.getScaledHeight === 'function' ? h.getScaledHeight() : h.height) || fs(slide.fontSize || 54) * 2.4;
-      stackTop += hH + height * 0.04;
-
-      // Footer (small, spaced, uppercase — sans)
       if (footer) {
-        canvas.add(new fabric.Textbox(footer.toUpperCase(), {
-          left: centerX, top: stackTop, originX: 'center', originY: 'top',
+        fObj = new fabric.Textbox(footer.toUpperCase(), {
+          left: centerX, top: 0, originX: 'center', originY: 'top',
           width: width * 0.8, fontSize: fs(15), fill: dimText,
           fontFamily: 'Montserrat', fontWeight: '500', charSpacing: 150,
           textAlign: 'center', lineHeight: 1.3, shadow: sh,
-        }));
+        });
       }
+      const mh = (o, fallback) => (o ? ((typeof o.getScaledHeight === 'function' ? o.getScaledHeight() : o.height) || fallback) : 0);
+      const kH = mh(kObj, fs(15) * 1.8);
+      const hH = mh(h, fs(slide.fontSize || 54) * 2.4);
+      const fH = mh(fObj, fs(15) * 1.8);
+      const totalH = kH + (kObj ? GAP_K : 0) + hH + (fObj ? GAP_H : 0) + fH;
+
+      // Text-only: fixed centered level. Photo: quiet-zone stackTop from above.
+      let cursor = hasBgImage
+        ? stackTop
+        : Math.max(height * 0.10, (height - totalH) / 2);
+
+      if (kObj) { kObj.set({ top: cursor }); canvas.add(kObj); cursor += kH + GAP_K; }
+      h.set({ top: cursor }); canvas.add(h); cursor += hH + GAP_H;
+      if (fObj) { fObj.set({ top: cursor }); canvas.add(fObj); }
 
       // Brand mark near bottom.
       if (options.globalBrandName) {
