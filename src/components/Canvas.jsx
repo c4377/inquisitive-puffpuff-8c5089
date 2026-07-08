@@ -2,10 +2,14 @@ import React, { useRef, useEffect, forwardRef, useImperativeHandle, useState } f
 import { fabric } from 'fabric';
 import { renderSlide } from '../utils/canvasRenderer';
 
-const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "" }, ref) => {
+const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "", asImage = false }, ref) => {
   const canvasRef = useRef(null);
   const fabricRef = useRef(null);
   const [fontLoaded, setFontLoaded] = useState(false);
+  // asImage: render once, export as JPEG, dispose the fabric canvas. Live
+  // canvases cost ~10-30MB each on iOS (retina backing store); many at once
+  // exceed Safari's canvas memory limit and white-screen the page.
+  const [imgUrl, setImgUrl] = useState(null);
 
   // Initialize Fonts
   useEffect(() => {
@@ -43,7 +47,7 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "" }, 
 
     // Create Fabric instance
     const canvas = new fabric.StaticCanvas(canvasRef.current, {
-      enableRetinaScaling: true,
+      enableRetinaScaling: !asImage,
       renderOnAddRemove: false,
     });
     fabricRef.current = canvas;
@@ -52,7 +56,7 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "" }, 
       canvas.dispose();
       fabricRef.current = null;
     };
-  }, []);
+  }, [imgUrl]);
 
   // Render Content
   useEffect(() => {
@@ -90,7 +94,14 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "" }, 
         scale: renderScale, 
         globalBrandName: brandName 
       })
-    ).catch((err) => {
+    ).then(() => {
+      if (asImage && fabricRef.current) {
+        try {
+          const url = fabricRef.current.toDataURL({ format: 'jpeg', quality: 0.85, multiplier: 0.6 });
+          if (url && url.length > 50) setImgUrl(url);
+        } catch (e) { /* keep live canvas as fallback */ }
+      }
+    }).catch((err) => {
       // never let a render error crash the page
       console.error('renderSlide failed:', err);
     });
@@ -111,7 +122,11 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "" }, 
 
   return (
     <div className="w-full h-full bg-white overflow-hidden shadow-sm relative flex items-center justify-center">
-      <canvas ref={canvasRef} />
+      {asImage && imgUrl ? (
+        <img src={imgUrl} alt="" className="w-full h-auto block max-h-full object-contain" />
+      ) : (
+        <canvas ref={canvasRef} />
+      )}
     </div>
   );
 });

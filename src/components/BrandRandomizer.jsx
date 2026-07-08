@@ -195,7 +195,7 @@ const BrandRandomizer = () => {
               <div className="w-full aspect-[4/5] rounded-xl overflow-hidden shadow-sm border border-gray-200 bg-white relative">
                 <div className="w-full h-full pointer-events-none">
                   {/* Static Brand Name to verify preview */}
-                  <Canvas data={canvasData} brandName={ruleSet.name} />
+                  <Canvas data={canvasData} brandName={ruleSet.name} asImage />
                 </div>
                 {/* Hover Overlay */}
                 <div className={`absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 flex items-center justify-center`}>
