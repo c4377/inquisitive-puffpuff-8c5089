@@ -313,7 +313,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     if (lines.length === 1) {
       const m = lines[0].match(/["'\u201C\u201E\u00BB].+?["'\u201D\u2033\u00AB]/);
-      if (m) {
+      // Only treat the quote as the core statement if it's substantial —
+      // a short quoted word mid-sentence ("steht") must not split the line.
+      if (m && m[0].length >= 14) {
         const headline = m[0];
         const rest = lines[0].replace(m[0], '').trim();
         return { kicker: rest.length && rest.length < 45 ? rest : '', headline, footer: '' };
@@ -696,7 +698,17 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         : (slide._autoImage?.zoneBrightness?.[slide._autoImage?.quietZone]);
       const brightZone = hasBgImage && typeof zb === 'number' && zb > 150;
       const lightText = hasBgImage ? (brightZone ? '#1A1310' : '#FFFFFF') : contrastColor(slide.backgroundColor || '#fff');
-      const dimText = hasBgImage ? (brightZone ? 'rgba(26,19,16,0.85)' : 'rgba(255,255,255,0.9)') : accentColor;
+      // Frame lines + brand mark: never trust the slide's accent blindly — if
+      // it has too little contrast to the background (beige on beige), fall
+      // back to the guaranteed-readable text color.
+      let dimBase = accentColor;
+      if (!hasBgImage) {
+        const bgLum = hexLuminance(slide.backgroundColor || '#FFFFFF');
+        if (Math.abs(hexLuminance(accentColor) - bgLum) < 60) {
+          dimBase = contrastColor(slide.backgroundColor || '#fff');
+        }
+      }
+      const dimText = hasBgImage ? (brightZone ? 'rgba(26,19,16,0.85)' : 'rgba(255,255,255,0.9)') : dimBase;
       const sh = hasBgImage && !brightZone ? 'rgba(0,0,0,0.55) 0px 2px 12px' : '';
       const scrimRGB = brightZone ? '245,240,232' : '8,6,4';
 

@@ -294,7 +294,7 @@ const Editor = () => {
     setIsExporting(false);
   };
 
-  const brandName = brandSettings.currentBrandConfig?.name || "";
+  const brandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "";
 
   return (
     <div className="flex flex-col bg-gray-50 h-[calc(100vh-64px)] overflow-hidden">

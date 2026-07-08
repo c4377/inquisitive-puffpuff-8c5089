@@ -48,7 +48,7 @@ const ContentPlanner = () => {
 
   const currentBrand = brandSettings.currentBrandConfig;
   const hasActiveBrand = !!currentBrand;
-  const brandName = currentBrand?.name || "";
+  const brandName = currentBrand?.brandText || currentBrand?.name || "";
 
   // --- HELPER: COLOR CONTRAST ---
   const getBrightness = (hex) => {
