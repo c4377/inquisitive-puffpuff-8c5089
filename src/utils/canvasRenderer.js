@@ -310,9 +310,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // big serif headline. Mirrors the magazine editorial look where the user just
   // types normally. Returns { kicker, headline, footer }.
   const splitEditorial = (text) => {
-    // Editorial mode needs NO markup — remove any leftover *stars* from older
-    // texts so they can never appear in the output.
-    const lines = (text || '').replace(/\*/g, '').split('\n').map((l) => l.trim()).filter(Boolean);
+    // Always returns three STRINGS — never undefined, so downstream Textbox
+    // calls can't crash on .length.
+    const safe = (v) => (typeof v === 'string' ? v : '');
+    const lines = safe(text).replace(/\*/g, '').split('\n').map((l) => l.trim()).filter(Boolean);
     if (lines.length === 0) return { kicker: '', headline: '', footer: '' };
 
     // Any straight or typographic quote mark signals a quoted core statement.
@@ -716,7 +717,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // No markup needed: split into small uppercase frame lines (sans) + big
     // serif headline. Only when the Editorial preset is active.
     if (slide.editorialDark || slide.editorialAuto) {
-      const { kicker: kickTxt, headline, footer } = splitEditorial(slide.text);
+      const _split = splitEditorial(slide.text);
+      const kickTxt = typeof _split.kicker === 'string' ? _split.kicker : '';
+      const headline = typeof _split.headline === 'string' ? _split.headline : '';
+      const footer = typeof _split.footer === 'string' ? _split.footer : '';
+      // Nothing to draw — bail out instead of feeding undefined into fabric.
+      if (!kickTxt && !headline && !footer) { canvas.renderAll(); return; }
       const centerX = width / 2;
       // Per-slide switch: ON (default) = first sentence as serif headline.
       // OFF = the whole text renders as small spaced CAPS, no serif headline.

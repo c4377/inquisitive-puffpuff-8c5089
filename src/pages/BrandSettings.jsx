@@ -16,6 +16,8 @@ const { FiShuffle, FiDroplet, FiType, FiImage, FiSettings, FiSave, FiUpload, FiE
 const BrandSettings = () => {
   const { brandSettings, updateBrandSettings, addCustomFont, removeCustomFont, loadBrandProfile, deleteBrandProfile } = useBrand();
   const [activeSection, setActiveSection] = useState('identity');
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
   const [sheetText, setSheetText] = useState('');
   const [sheetStatus, setSheetStatus] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -174,6 +176,35 @@ const BrandSettings = () => {
       setIsUploading(false);
       event.target.value = '';
     }
+  };
+
+  // Delete several images at once (selection mode) or the whole pool.
+  const removeImages = async (urls) => {
+    if (!urls.length) return;
+    const question = urls.length === 1
+      ? 'Bild wirklich löschen?'
+      : `${urls.length} Bilder wirklich löschen?`;
+    if (!window.confirm(question)) return;
+
+    const current = brandSettings.brandImages || [];
+    const remaining = current.filter((u) => !urls.includes(u));
+    // Clean up the meta and the CTA choice for deleted images.
+    const meta = { ...(brandSettings.imageMeta || {}) };
+    urls.forEach((u) => delete meta[u]);
+    const cfg = brandSettings.currentBrandConfig || {};
+    const ctaCleared = urls.includes(cfg.ctaImage) ? { ...cfg, ctaImage: null } : cfg;
+
+    updateBrandSettings({ brandImages: remaining, imageMeta: meta, currentBrandConfig: ctaCleared });
+    setSelectedImages([]);
+    setSelectMode(false);
+    setSuccessMessage(urls.length === 1 ? 'Bild gelöscht.' : `${urls.length} Bilder gelöscht.`);
+
+    let failed = 0;
+    for (const u of urls) {
+      try { const ok = await deleteCloudImage(u); if (!ok) failed++; }
+      catch (e) { failed++; console.error(e); }
+    }
+    if (failed) setUploadError(`${failed} Bild(er) lokal entfernt, aber Cloud-Löschen fehlgeschlagen.`);
   };
 
   const removeImage = async (indexToRemove) => {
@@ -639,6 +670,46 @@ const BrandSettings = () => {
                 </span>
               </div>
             </div>
+            {(brandSettings.brandImages || []).length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 mb-3">
+                <button
+                  onClick={() => { setSelectMode(!selectMode); setSelectedImages([]); }}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors ${selectMode ? 'bg-purple-600 text-white border-purple-600' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'}`}
+                >
+                  {selectMode ? 'Auswahl beenden' : 'Auswählen'}
+                </button>
+
+                {selectMode && (
+                  <>
+                    <button
+                      onClick={() => {
+                        const all = brandSettings.brandImages || [];
+                        setSelectedImages(selectedImages.length === all.length ? [] : [...all]);
+                      }}
+                      className="px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-gray-700 border border-gray-200 hover:bg-gray-50"
+                    >
+                      {selectedImages.length === (brandSettings.brandImages || []).length ? 'Keine' : 'Alle'}
+                    </button>
+                    <button
+                      onClick={() => removeImages(selectedImages)}
+                      disabled={selectedImages.length === 0}
+                      className="px-3 py-1.5 rounded-lg text-xs font-bold bg-red-600 text-white hover:bg-red-700 disabled:opacity-40"
+                    >
+                      {selectedImages.length > 0 ? `${selectedImages.length} löschen` : 'Löschen'}
+                    </button>
+                  </>
+                )}
+
+                {!selectMode && (
+                  <button
+                    onClick={() => removeImages([...(brandSettings.brandImages || [])])}
+                    className="px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-red-600 border border-red-200 hover:bg-red-50 ml-auto"
+                  >
+                    Alle löschen
+                  </button>
+                )}
+              </div>
+            )}
             <div className="grid grid-cols-2 gap-4">
               <label className={`aspect-square border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors ${isUploading ? 'opacity-50' : ''}`}>
                 {isUploading ? <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div> : <SafeIcon icon={FiUpload} className="text-2xl text-purple-500 mb-2" />}
@@ -656,10 +727,26 @@ const BrandSettings = () => {
                 };
                 const prioLabel = prio === 2 ? 'Hoch' : prio === 0 ? 'Niedrig' : 'Normal';
                 const prioClass = prio === 2 ? 'bg-amber-500 text-white' : prio === 0 ? 'bg-gray-300 text-gray-600' : 'bg-white/90 text-gray-700';
+                const isSelected = selectedImages.includes(img);
+                const toggleSelect = () => setSelectedImages(isSelected ? selectedImages.filter((u) => u !== img) : [...selectedImages, img]);
                 return (
-                <div key={index} className={`relative group rounded-xl overflow-hidden shadow-sm border bg-white ${isOff ? 'border-gray-300 opacity-60' : 'border-gray-200'}`}>
+                <div key={index} className={`relative group rounded-xl overflow-hidden shadow-sm border bg-white ${isSelected ? 'border-purple-600 ring-2 ring-purple-300' : isOff ? 'border-gray-300 opacity-60' : 'border-gray-200'}`}>
                     <div className="aspect-square w-full relative">
                         <img src={img} alt="Asset" className={`w-full h-full object-cover ${isOff ? 'grayscale' : ''}`} />
+
+                        {/* Selection mode: whole tile toggles selection */}
+                        {selectMode && (
+                          <button
+                            onClick={(e) => { e.preventDefault(); toggleSelect(); }}
+                            className={`absolute inset-0 z-20 flex items-start justify-end p-2 transition-colors ${isSelected ? 'bg-purple-600/25' : 'bg-black/0 hover:bg-black/10'}`}
+                            aria-label={isSelected ? 'Abwählen' : 'Auswählen'}
+                          >
+                            <span className={`w-6 h-6 rounded-full flex items-center justify-center border-2 shadow ${isSelected ? 'bg-purple-600 border-white' : 'bg-white/80 border-white'}`}>
+                              {isSelected && <SafeIcon icon={FiCheck} className="text-white text-xs" />}
+                            </span>
+                          </button>
+                        )}
+
                         {/* Priority badge (tap to cycle Hoch -> Niedrig -> Normal) */}
                         <button
                           onClick={(e) => { e.preventDefault(); setMeta({ priority: prio === 2 ? 0 : prio === 0 ? 1 : 2 }); }}

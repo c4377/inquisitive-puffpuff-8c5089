@@ -41,6 +41,8 @@ const ContentPlanner = () => {
   const [savedSets, setSavedSets] = useState([]);
   const [showSets, setShowSets] = useState(false);
   const lastImageOffsetRef = useRef(-1); // avoid repeating the same reload shuffle
+  const lastDayOffsetRef = useRef({});   // per-day offset so each day reshuffles
+  const [reloadingDay, setReloadingDay] = useState(null);
   const [showStructure, setShowStructure] = useState(false);
 
   // Live analysis of the feed's red thread (Frage → Beweis → Angebot).
@@ -113,7 +115,7 @@ const ContentPlanner = () => {
 
       return {
         ...day,
-        slides: day.slides.map((slide, sIdx, allSlides) => {
+        slides: (Array.isArray(day.slides) ? day.slides : []).map((slide, sIdx, allSlides) => {
           const font = sIdx === 0 ? fonts.fontFamily : (fonts.bodyFontFamily || 'Montserrat');
           const accentFont = fonts.accentFontFamily || (font.includes('Playfair') ? 'Montserrat' : 'Playfair Display');
           const isPlayfair = font.includes('Playfair');
@@ -183,12 +185,15 @@ const ContentPlanner = () => {
     // Compare across ALL days and a follow-up slide too — the cover slide never
     // changes when cover-blur or the CTA photo is toggled, so a narrow sample
     // would wrongly skip the update.
-    const sampleOf = (p) => JSON.stringify(p.map((d) => ({
-      cb: d.coverBlurMode === true,
-      s0: { c: d.slides?.[0]?.color, f: d.slides?.[0]?.fontFamily, e: d.slides?.[0]?.editorialDark === true, d: d.slides?.[0]?.darkPhoto === true },
-      s1: { b: d.slides?.[1]?.background, cb: d.slides?.[1]?.coverBlurMode === true },
-      last: d.slides?.[d.slides.length - 1]?.background,
-    })));
+    const sampleOf = (p) => JSON.stringify((p || []).map((d) => {
+      const sl = Array.isArray(d?.slides) ? d.slides : [];
+      return {
+        cb: d?.coverBlurMode === true,
+        s0: { c: sl[0]?.color, f: sl[0]?.fontFamily, e: sl[0]?.editorialDark === true, d: sl[0]?.darkPhoto === true },
+        s1: { b: sl[1]?.background, cb: sl[1]?.coverBlurMode === true },
+        last: sl.length ? sl[sl.length - 1]?.background : undefined,
+      };
+    }));
     if (sampleOf(weekPlan) !== sampleOf(styledPlan)) {
         updateBrandSettings({ contentPlan: styledPlan });
     }
@@ -359,6 +364,58 @@ const ContentPlanner = () => {
   };
 
   // RELOAD: re-initialize the ALREADY GENERATED posts (not the import text).
+  // Reload ONE day: give this post fresh photos without touching the others.
+  const handleReloadDay = async (dayNum) => {
+    const dayIdx = weekPlan.findIndex((d) => d.day === dayNum);
+    if (dayIdx === -1) return;
+    setReloadingDay(dayNum);
+    try {
+      const imagePool = getActiveImagePool(brandSettings);
+      const day = weekPlan[dayIdx];
+      const wantsImage = dayHasImage(dayIdx) && imagePool.length > 0;
+
+      let imageOffset = 0;
+      if (imagePool.length > 1) {
+        const prev = lastDayOffsetRef.current[dayNum];
+        do { imageOffset = Math.floor(Math.random() * imagePool.length); }
+        while (imagePool.length > 1 && imageOffset === prev);
+        lastDayOffsetRef.current[dayNum] = imageOffset;
+      }
+
+      let daySlides = day.slides || [];
+      if (wantsImage) daySlides = await attachSmartImages(daySlides, imagePool, imageOffset);
+
+      const adjusted = daySlides.map((slide) => {
+        const cleaned = { ...slide };
+        const hasImg = wantsImage && typeof cleaned.background === 'string' && cleaned.background.length > 5;
+        if (!hasImg) {
+          const { background, overlay, _autoImage, ...rest } = cleaned;
+          Object.assign(cleaned, rest, { background: null, overlay: undefined, _autoImage: undefined });
+        }
+        const { textAnchor, bold } = decidePostDesign({
+          globalIndex: dayIdx, hasImage: hasImg, autoImage: cleaned._autoImage,
+        });
+        cleaned.layout = 'auto';
+        cleaned.layoutId = 'auto';
+        cleaned.textAnchor = textAnchor;
+        cleaned.fontWeight = bold ? '700' : 'normal';
+        // Keep the per-slide serif/caps switch.
+        if (slide.serifHeadline === false) cleaned.serifHeadline = false;
+        return cleaned;
+      });
+
+      const updated = weekPlan.map((d, i) => (i === dayIdx ? { ...d, slides: adjusted } : d));
+      updateBrandSettings({ contentPlan: applyBrandStyling(updated, currentBrand) });
+      setSaveStatus(`Tag ${dayNum} neu geladen.`);
+      setTimeout(() => setSaveStatus(''), 2500);
+    } catch (e) {
+      console.error('single day reload failed', e);
+      setSaveStatus('Neu laden fehlgeschlagen.');
+    } finally {
+      setReloadingDay(null);
+    }
+  };
+
   // Cover rule: of the 7 day-covers, days 1,3,5,7 get a background image,
   // days 2,4,6 stay image-free (layout only). Content slides keep images.
   const handleReloadPlan = async () => {
@@ -412,8 +469,6 @@ const ContentPlanner = () => {
           cleaned.kickerText = undefined;
           cleaned.coverBlurMode = day.coverBlurMode === true;
           // Preserve the per-slide serif/caps switch across reloads.
-          if (slide.serifHeadline === false) cleaned.serifHeadline = false;
-          // Preserve the per-slide serif/caps switch.
           if (slide.serifHeadline === false) cleaned.serifHeadline = false;
           cleaned.textAnchor = textAnchor;
           cleaned.fontWeight = bold ? '700' : 'normal';
@@ -813,6 +868,15 @@ const ContentPlanner = () => {
                         <SafeIcon icon={FiEdit3} className="text-sm" />
                       </div>
                       <div className="flex gap-1.5">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleReloadDay(day.day); }}
+                          disabled={reloadingDay === day.day}
+                          className="w-8 h-8 rounded-full bg-white/95 text-gray-700 flex items-center justify-center shadow hover:bg-white disabled:opacity-50"
+                          title="Diesen Tag neu laden (neue Fotos)"
+                          aria-label="Tag neu laden"
+                        >
+                          <SafeIcon icon={FiRefreshCw} className={`text-sm ${reloadingDay === day.day ? 'animate-spin' : ''}`} />
+                        </button>
                         <button
                           onClick={(e) => { e.stopPropagation(); toggleCoverBlur(day.day); }}
                           className={`w-8 h-8 rounded-full flex items-center justify-center shadow transition-colors ${day.coverBlurMode ? 'bg-amber-500 text-white' : 'bg-white/95 text-gray-700 hover:bg-white'}`}
