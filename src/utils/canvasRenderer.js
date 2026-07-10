@@ -907,6 +907,28 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         safety++;
       }
 
+      // Timing-safe height estimate: measured metrics can be wrong before the
+      // font loads, which used to push the text off the bottom. Estimate the
+      // wrapped line count from text length so positioning never depends on a
+      // possibly-too-small first-paint measurement. Use the LARGER of measured
+      // and estimated, so we always reserve enough space.
+      const estWrapLines = (txt, fSize, boxW) => {
+        if (!txt) return 0;
+        const words = String(txt).split(/\s+/);
+        const cw = fSize * 0.58; // pessimistic for Playfair
+        let lines = 1, cur = 0;
+        for (const w of words) {
+          const wW = (w.length + 1) * cw;
+          if (cur + wW > boxW && cur > 0) { lines++; cur = wW; } else cur += wW;
+        }
+        return lines;
+      };
+      const estHeadH = estWrapLines(headline, h.fontSize, width * 0.86) * h.fontSize * 1.08;
+      const estKickH = kObj ? estWrapLines(kickTxt, kObj.fontSize, width * 0.8) * kObj.fontSize * 1.3 * 1.4 : 0;
+      const estFootH = fObj ? estWrapLines(footer, fObj.fontSize, width * 0.8) * fObj.fontSize * 1.3 * 1.4 : 0;
+      const estTotal = estKickH + (kObj ? GAP_K : 0) + estHeadH + (fObj ? GAP_H : 0) + estFootH;
+      totalH = Math.max(totalH, estTotal);
+
       // Place the stack: photos follow the quiet zone, but the stack is always
       // clamped inside the safe area (never under the brand mark, never off
       // the top). Text-only posts sit centered at the same level every time.
@@ -920,10 +942,14 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       }
 
       // Local scrim exactly behind the FINAL text block — soft fades, no edges.
+      // On cover-blur follow-up slides the photo is ALREADY blurred + darkened,
+      // so an additional full-strength scrim reads as an ugly dark block. Use a
+      // much lighter scrim there; full strength only on sharp photos.
       if (hasBgImage) {
         const pad = height * 0.06;
         const sTop = Math.max(0, cursor - pad);
         const sH = Math.min(height - sTop, totalH + pad * 2);
+        const peak = coverBlurActive ? 0.18 : 0.42;
         canvas.add(new fabric.Rect({
           left: 0, top: sTop, width, height: sH,
           fill: new fabric.Gradient({
@@ -931,8 +957,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
             coords: { x1: 0, y1: 0, x2: 0, y2: sH },
             colorStops: [
               { offset: 0, color: `rgba(${scrimRGB},0)` },
-              { offset: 0.18, color: `rgba(${scrimRGB},0.42)` },
-              { offset: 0.82, color: `rgba(${scrimRGB},0.42)` },
+              { offset: 0.18, color: `rgba(${scrimRGB},${peak})` },
+              { offset: 0.82, color: `rgba(${scrimRGB},${peak})` },
               { offset: 1, color: `rgba(${scrimRGB},0)` },
             ],
           }),
