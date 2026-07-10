@@ -51,7 +51,14 @@ const ContentPlanner = () => {
 
   const currentBrand = brandSettings.currentBrandConfig;
   const hasActiveBrand = !!currentBrand;
-  const brandName = currentBrand?.brandText || "";
+  const brandName = (() => {
+    const t = currentBrand?.brandText;
+    if (typeof t === 'string' && t.trim() && t !== 'www.deine-website.de') return t.trim();
+    // Fall back to the handle (ignore the placeholder default).
+    const u = brandSettings?.username;
+    if (typeof u === 'string' && u.trim() && u !== 'dein.business') return u.trim();
+    return '';
+  })();
 
   // --- HELPER: COLOR CONTRAST ---
   const getBrightness = (hex) => {

@@ -786,7 +786,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           textAlign: 'center', lineHeight: 1.55, shadow: sh,
         });
         const SAFE_TOP_C = height * 0.07;
-        const SAFE_BOTTOM_C = height * (options.globalBrandName ? 0.88 : 0.93);
+        const SAFE_BOTTOM_C = height * 0.86;
         const availC = SAFE_BOTTOM_C - SAFE_TOP_C;
         let g2 = 0;
         while (g2 < 60 && (capsOnly.height || 0) > availC && capsOnly.fontSize > 10) {
@@ -872,7 +872,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       // The safe area ends above the brand mark (~93% height), and on photos
       // the stack may move UP rather than shrink to nothing.
       const SAFE_TOP = height * 0.07;
-      const SAFE_BOTTOM = height * (options.globalBrandName ? 0.88 : 0.93);
+      // Safe bottom is FIXED regardless of the brand line, so text is never
+      // clipped at the tile edge. The brand line (if any) sits below this.
+      const SAFE_BOTTOM = height * 0.86;
       const availH = SAFE_BOTTOM - SAFE_TOP;
       const stackH = () => mh(kObj, fs(15) * 1.8) + (kObj ? GAP_K : 0)
               + mh(h, fs(slide.fontSize || 54) * 2.4) + (fObj ? GAP_H : 0)
