@@ -321,29 +321,32 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const isFrame = (s) => s.length < 28 || (s === s.toUpperCase() && s.length < 45);
 
     if (lines.length === 1) {
-      // No manual line breaks: structure the paragraph AUTOMATICALLY by
-      // sentences, so generated content needs no special formatting.
+      // No manual line breaks: structure the paragraph AUTOMATICALLY.
+      // The FIRST sentence is the hook and becomes the serif headline; the
+      // rest follows below as small CAPS. That matches how hooks are written:
+      // the point comes first, the elaboration after.
       const parts = (lines[0].match(/[^.!?…]+[.!?…]+["'\u201D\u2033\u00AB]?|\S[^.!?…]*$/g) || [lines[0]])
         .map((t) => t.trim()).filter(Boolean);
       if (parts.length === 1) return { kicker: '', headline: parts[0], footer: '' };
 
-      // Headline: a substantial quoted sentence wins; otherwise the longest.
-      let hi = -1;
-      parts.forEach((p, i) => {
-        if (/["\u201C\u201E\u00BB].{10,}["\u201D\u2033\u00AB]/.test(p) && (hi === -1 || p.length > parts[hi].length)) hi = i;
-      });
-      if (hi === -1) {
-        let best = -1;
-        parts.forEach((p, i) => { if (p.length > best) { best = p.length; hi = i; } });
-      }
+      // A short opener ("Kennst du das?") is a lead-in, not the hook: in that
+      // case it becomes the CAPS line above and the next sentence the headline.
+      let hi = 0;
+      if (parts[0].length < 18 && parts.length > 1) hi = 1;
+
+      // Hooks are often two short sentences ("Über dreißig Angebote. Fast immer
+      // derselbe Fehler."). Keep them together in the headline while it stays
+      // comfortably short.
       let headline = parts[hi];
-      const before = parts.slice(0, hi).join(' ');
-      const after = parts.slice(hi + 1).join(' ');
-      let kicker = '', footer = '';
-      // Short surroundings become CAPS frame lines; long ones stay in the
-      // serif headline so nothing ever gets lost.
-      if (before) { if (before.length <= 40) kicker = before; else headline = `${before} ${headline}`; }
-      if (after) { if (after.length <= 60) footer = after; else headline = `${headline} ${after}`; }
+      let next = hi + 1;
+      while (next < parts.length && headline.length < 45 && parts[next].length < 40) {
+        headline = `${headline} ${parts[next]}`;
+        next++;
+        if (headline.length >= 60) break;
+      }
+
+      const kicker = parts.slice(0, hi).join(' ');
+      const footer = parts.slice(next).join(' ');
       return { kicker, headline, footer };
     }
 
@@ -715,6 +718,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     if (slide.editorialDark || slide.editorialAuto) {
       const { kicker: kickTxt, headline, footer } = splitEditorial(slide.text);
       const centerX = width / 2;
+      // Per-slide switch: ON (default) = first sentence as serif headline.
+      // OFF = the whole text renders as small spaced CAPS, no serif headline.
+      const serifOn = slide.serifHeadline !== false;
       // Brightness-aware: if the text zone is BRIGHT, use dark text on a light
       // scrim (dunkel auf hell); if dark, white text on a dark scrim.
       const zb = typeof slide.smartTextBright === 'number'
@@ -763,6 +769,60 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       const GAP_K = height * 0.045;
       const GAP_H = height * 0.04;
       let kObj = null, fObj = null;
+
+      // CAPS-ONLY MODE: one calm block of spaced uppercase, no serif headline.
+      if (!serifOn) {
+        const all = [kickTxt, headline, footer].filter(Boolean).join(' ');
+        const capsOnly = new fabric.Textbox(all.toUpperCase(), {
+          left: centerX, top: 0, originX: 'center', originY: 'top',
+          width: width * 0.82, fontSize: fs(20), fill: lightText,
+          fontFamily: 'Montserrat', fontWeight: '500', charSpacing: 160,
+          textAlign: 'center', lineHeight: 1.55, shadow: sh,
+        });
+        const SAFE_TOP_C = height * 0.07;
+        const SAFE_BOTTOM_C = height * (options.globalBrandName ? 0.88 : 0.93);
+        const availC = SAFE_BOTTOM_C - SAFE_TOP_C;
+        let g2 = 0;
+        while (g2 < 60 && (capsOnly.height || 0) > availC && capsOnly.fontSize > 10) {
+          capsOnly.set('fontSize', capsOnly.fontSize - 1);
+          if (capsOnly.initDimensions) capsOnly.initDimensions();
+          g2++;
+        }
+        const cH = capsOnly.height || fs(20) * 3;
+        const cTop = hasBgImage
+          ? Math.max(SAFE_TOP_C, Math.min(stackTop, SAFE_BOTTOM_C - cH))
+          : SAFE_TOP_C + (availC - cH) / 2;
+        if (hasBgImage) {
+          const padC = height * 0.06;
+          const sT = Math.max(0, cTop - padC);
+          const sHgt = Math.min(height - sT, cH + padC * 2);
+          canvas.add(new fabric.Rect({
+            left: 0, top: sT, width, height: sHgt,
+            fill: new fabric.Gradient({
+              type: 'linear', coords: { x1: 0, y1: 0, x2: 0, y2: sHgt },
+              colorStops: [
+                { offset: 0, color: `rgba(${scrimRGB},0)` },
+                { offset: 0.18, color: `rgba(${scrimRGB},0.42)` },
+                { offset: 0.82, color: `rgba(${scrimRGB},0.42)` },
+                { offset: 1, color: `rgba(${scrimRGB},0)` },
+              ],
+            }),
+            selectable: false,
+          }));
+        }
+        capsOnly.set({ top: cTop });
+        canvas.add(capsOnly);
+        if (options.globalBrandName) {
+          canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+            left: centerX, top: height * 0.93, originX: 'center', originY: 'bottom',
+            fontSize: fs(12), fill: dimText, fontFamily: 'Montserrat',
+            charSpacing: 200, selectable: false,
+          }));
+        }
+        canvas.renderAll();
+        return;
+      }
+
       if (kickTxt) {
         kObj = new fabric.Textbox(kickTxt.toUpperCase(), {
           left: centerX, top: 0, originX: 'center', originY: 'top',

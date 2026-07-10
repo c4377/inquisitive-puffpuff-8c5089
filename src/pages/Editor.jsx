@@ -362,6 +362,13 @@ const Editor = () => {
                 <SafeIcon icon={FiSun} className={`mr-1 ${isSmartAnalyzing ? 'animate-spin' : ''}`} /> Smart Text
               </button>
             )}
+            <button
+              onClick={() => handleSlideUpdate({ serifHeadline: currentSlide.serifHeadline === false })}
+              className={`absolute top-4 left-4 backdrop-blur border shadow-lg px-3 py-1.5 rounded-lg text-xs font-bold flex items-center transition-colors ${currentSlide.serifHeadline === false ? 'bg-gray-800 text-white border-gray-800' : 'bg-white/90 text-gray-700 border-gray-200 hover:bg-white'}`}
+              title={currentSlide.serifHeadline === false ? 'Alles in Versalien – tippen für Serifen-Headline' : 'Erster Satz als Serifen-Headline – tippen für alles in Versalien'}
+            >
+              <SafeIcon icon={FiType} className="mr-1" /> {currentSlide.serifHeadline === false ? 'Nur CAPS' : 'Headline'}
+            </button>
           </div>
           {slides.length > 1 && (
             <div className="mt-4 flex items-center justify-center gap-2">

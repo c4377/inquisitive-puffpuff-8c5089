@@ -411,6 +411,10 @@ const ContentPlanner = () => {
           cleaned.kicker = false;
           cleaned.kickerText = undefined;
           cleaned.coverBlurMode = day.coverBlurMode === true;
+          // Preserve the per-slide serif/caps switch across reloads.
+          if (slide.serifHeadline === false) cleaned.serifHeadline = false;
+          // Preserve the per-slide serif/caps switch.
+          if (slide.serifHeadline === false) cleaned.serifHeadline = false;
           cleaned.textAnchor = textAnchor;
           cleaned.fontWeight = bold ? '700' : 'normal';
           return cleaned;
