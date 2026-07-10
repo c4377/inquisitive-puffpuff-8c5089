@@ -943,10 +943,22 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       // by a full-frame overlay, so ANY extra scrim stacks into a dark block.
       // Skip it there entirely; draw it only on sharp photos.
       const isBlurFollowUp = coverBlurActive && (options.slideIndex || 0) > 0;
+
+      // Use the REAL measured heights of each object to compute where the top
+      // must be so the block ends exactly at SAFE_BOTTOM. This is the reliable
+      // fix: whatever the actual wrapped height turns out to be (font finally
+      // loaded), the bottom is pinned and the text can't be clipped.
+      const realK = kObj ? mh(kObj, fs(15) * 1.8) : 0;
+      const realH = mh(h, fs(slide.fontSize || 54) * 2.4);
+      const realF = fObj ? mh(fObj, fs(15) * 1.8) : 0;
+      const realTotal = realK + (kObj ? GAP_K : 0) + realH + (fObj ? GAP_H : 0) + realF;
+      cursor = Math.max(SAFE_TOP, SAFE_BOTTOM - realTotal);
+
+      // Scrim behind the ACTUAL text block (uses the real cursor + height).
       if (hasBgImage && !isBlurFollowUp) {
         const pad = height * 0.06;
         const sTop = Math.max(0, cursor - pad);
-        const sH = Math.min(height - sTop, totalH + pad * 2);
+        const sH = Math.min(height - sTop, realTotal + pad * 2);
         canvas.add(new fabric.Rect({
           left: 0, top: sTop, width, height: sH,
           fill: new fabric.Gradient({
@@ -963,8 +975,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         }));
       }
 
-      if (kObj) { kObj.set({ top: cursor }); canvas.add(kObj); cursor += kH + GAP_K; }
-      h.set({ top: cursor }); canvas.add(h); cursor += hH + GAP_H;
+      if (kObj) { kObj.set({ top: cursor }); canvas.add(kObj); cursor += realK + GAP_K; }
+      h.set({ top: cursor }); canvas.add(h); cursor += realH + GAP_H;
       if (fObj) { fObj.set({ top: cursor }); canvas.add(fObj); }
 
       // Brand mark near bottom.

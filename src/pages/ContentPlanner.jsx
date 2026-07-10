@@ -52,11 +52,14 @@ const ContentPlanner = () => {
   const currentBrand = brandSettings.currentBrandConfig;
   const hasActiveBrand = !!currentBrand;
   const brandName = (() => {
-    const t = currentBrand?.brandText;
-    if (typeof t === 'string' && t.trim() && t !== 'www.deine-website.de') return t.trim();
-    // Fall back to the handle (ignore the placeholder default).
-    const u = brandSettings?.username;
-    if (typeof u === 'string' && u.trim() && u !== 'dein.business') return u.trim();
+    const isReal = (v) => typeof v === 'string' && v.trim()
+      && !['www.deine-website.de', 'dein.business', 'Dein Name | Expertin'].includes(v.trim());
+    const cfg = currentBrand || {};
+    // Priority: explicit brand line → website → handle → brand name.
+    if (isReal(cfg.brandText)) return cfg.brandText.trim();
+    if (isReal(brandSettings?.website)) return brandSettings.website.trim().replace(/^www\./, '');
+    if (isReal(brandSettings?.username)) return brandSettings.username.trim();
+    if (isReal(cfg.name)) return cfg.name.trim();
     return '';
   })();
 
