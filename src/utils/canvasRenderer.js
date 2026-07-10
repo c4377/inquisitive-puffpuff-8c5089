@@ -868,16 +868,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       }
       const mh = (o, fallback) => (o ? ((typeof o.getScaledHeight === 'function' ? o.getScaledHeight() : o.height) || fallback) : 0);
 
-      // SIMPLE FIXED PLACEMENT — like every other brand: one fixed anchor,
-      // the text block is bottom-aligned there. No height guessing, no shrink
-      // loops. A long block simply grows upward from the anchor. This is the
-      // robust approach that never clips.
-      const ANCHOR_Y = height * 0.80; // bottom of the text block sits here
+      // FIXED POSITION. The text simply starts at a fixed Y. No height math,
+      // no growing, no anchoring — exactly like a normal brand layout: the top
+      // of the text block sits at this Y and the text flows down from there.
+      const TEXT_Y = height * 0.58; // fixed start position (lower-middle third)
 
-      // Only guard the HEADLINE font by text length so a very long line stays
-      // readable; everything else keeps its size. No measurement dependency.
-      // (charCount / capBase are already computed above where the headline was
-      // created; the headline font is already capped there.)
       const GAP_K2 = height * 0.03;
       const GAP_H2 = height * 0.025;
       const hK = kObj ? mh(kObj, fs(15) * 1.8) : 0;
@@ -885,8 +880,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       const hF = fObj ? mh(fObj, fs(15) * 1.8) : 0;
       const blockH = hK + (kObj ? GAP_K2 : 0) + hH2 + (fObj ? GAP_H2 : 0) + hF;
 
-      // Bottom-align the block at the anchor; never let its top go above 5%.
-      let cursor = Math.max(height * 0.05, ANCHOR_Y - blockH);
+      let cursor = TEXT_Y;
 
       // Soft scrim behind the block for readability (skip on already-dark blur).
       const isBlurFollowUp = coverBlurActive && (options.slideIndex || 0) > 0;
