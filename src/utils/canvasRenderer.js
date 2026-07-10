@@ -742,32 +742,19 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       let bandTop, bandH;
       if (hasBgImage) {
         const zone = (slide._autoImage && slide._autoImage.quietZone) || '';
-        if (zone.includes('top')) { stackTop = height * 0.10; bandTop = 0; bandH = height * 0.46; }
-        else if (zone.includes('bottom')) { stackTop = height * 0.56; bandTop = height * 0.52; bandH = height * 0.48; }
-        else if (zone) { stackTop = height * 0.32; bandTop = height * 0.26; bandH = height * 0.48; }
-        else { stackTop = height * 0.56; bandTop = height * 0.52; bandH = height * 0.48; } // default: lower area, faces are usually upper
-        // 1) Only a LIGHT global tone so the whole photo (incl. face) stays visible.
+        if (zone.includes('top')) { stackTop = height * 0.10; }
+        else if (zone.includes('bottom')) { stackTop = height * 0.56; }
+        else if (zone) { stackTop = height * 0.32; }
+        else { stackTop = height * 0.56; } // default: lower area, faces are usually upper
+        // Only a LIGHT global tone so the whole photo (incl. face) stays visible.
+        // The local scrim is drawn AFTER the text is positioned, so it always
+        // sits exactly behind the text — never where the text used to be.
         if (slide.darkPhoto) {
           canvas.add(new fabric.Rect({
             left: 0, top: 0, width, height,
             fill: 'rgba(20,14,9,0.18)', selectable: false,
           }));
         }
-        // 2) Local scrim ONLY behind the text area — soft gradient, no hard edges.
-        const fadeStops = zone.includes('top')
-          ? [{ offset: 0, color: `rgba(${scrimRGB},0.50)` }, { offset: 0.7, color: `rgba(${scrimRGB},0.28)` }, { offset: 1, color: `rgba(${scrimRGB},0)` }]
-          : (zone.includes('bottom') || !zone)
-            ? [{ offset: 0, color: `rgba(${scrimRGB},0)` }, { offset: 0.3, color: `rgba(${scrimRGB},0.28)` }, { offset: 1, color: `rgba(${scrimRGB},0.50)` }]
-            : [{ offset: 0, color: `rgba(${scrimRGB},0)` }, { offset: 0.5, color: `rgba(${scrimRGB},0.45)` }, { offset: 1, color: `rgba(${scrimRGB},0)` }];
-        canvas.add(new fabric.Rect({
-          left: 0, top: bandTop, width, height: bandH,
-          fill: new fabric.Gradient({
-            type: 'linear',
-            coords: { x1: 0, y1: 0, x2: 0, y2: bandH },
-            colorStops: fadeStops,
-          }),
-          selectable: false,
-        }));
       }
 
       // Build all three layers FIRST (unpositioned), measure them, then place
@@ -800,23 +787,23 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       }
       const mh = (o, fallback) => (o ? ((typeof o.getScaledHeight === 'function' ? o.getScaledHeight() : o.height) || fallback) : 0);
 
-      // Fit the WHOLE stack (kicker + headline + footer) into the available
-      // area. The per-object auto-fit only knows one box at a time, so a long
-      // headline used to push the frame lines off the slide.
-      const availTop = hasBgImage ? stackTop : height * 0.08;
-      const availH = (height * (hasBgImage ? 0.94 : 0.92)) - availTop;
+      // Fit the WHOLE stack (kicker + headline + footer) into the SAFE AREA.
+      // The safe area ends above the brand mark (~93% height), and on photos
+      // the stack may move UP rather than shrink to nothing.
+      const SAFE_TOP = height * 0.07;
+      const SAFE_BOTTOM = height * (options.globalBrandName ? 0.88 : 0.93);
+      const availH = SAFE_BOTTOM - SAFE_TOP;
+      const stackH = () => mh(kObj, fs(15) * 1.8) + (kObj ? GAP_K : 0)
+              + mh(h, fs(slide.fontSize || 54) * 2.4) + (fObj ? GAP_H : 0)
+              + mh(fObj, fs(15) * 1.8);
       let guard = 0;
-      while (guard < 60) {
-        const t = mh(kObj, fs(15) * 1.8) + (kObj ? GAP_K : 0)
-                + mh(h, fs(slide.fontSize || 54) * 2.4) + (fObj ? GAP_H : 0)
-                + mh(fObj, fs(15) * 1.8);
-        if (t <= availH || h.fontSize <= 12) break;
+      while (guard < 80 && stackH() > availH && h.fontSize > 14) {
         h.set('fontSize', h.fontSize - 2);
-        h.initDimensions && h.initDimensions();
+        if (h.initDimensions) h.initDimensions();
         // Very long texts: also ease the frame lines down a touch.
         if (h.fontSize < fs(28)) {
           [kObj, fObj].forEach((o) => {
-            if (o && o.fontSize > 10) { o.set('fontSize', o.fontSize - 1); o.initDimensions && o.initDimensions(); }
+            if (o && o.fontSize > 11) { o.set('fontSize', o.fontSize - 1); if (o.initDimensions) o.initDimensions(); }
           });
         }
         guard++;
@@ -827,11 +814,38 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       const fH = mh(fObj, fs(15) * 1.8);
       const totalH = kH + (kObj ? GAP_K : 0) + hH + (fObj ? GAP_H : 0) + fH;
 
-      // Text-only: fixed centered level. Photo: quiet-zone stackTop, but
-      // clamped so the stack can never run off the bottom edge.
-      let cursor = hasBgImage
-        ? Math.min(stackTop, Math.max(height * 0.06, height * 0.94 - totalH))
-        : Math.max(height * 0.10, (height - totalH) / 2);
+      // Place the stack: photos follow the quiet zone, but the stack is always
+      // clamped inside the safe area (never under the brand mark, never off
+      // the top). Text-only posts sit centered at the same level every time.
+      let cursor;
+      if (hasBgImage) {
+        const wanted = stackTop;
+        const maxTop = SAFE_BOTTOM - totalH;
+        cursor = Math.max(SAFE_TOP, Math.min(wanted, maxTop));
+      } else {
+        cursor = Math.max(SAFE_TOP, SAFE_TOP + (availH - totalH) / 2);
+      }
+
+      // Local scrim exactly behind the FINAL text block — soft fades, no edges.
+      if (hasBgImage) {
+        const pad = height * 0.06;
+        const sTop = Math.max(0, cursor - pad);
+        const sH = Math.min(height - sTop, totalH + pad * 2);
+        canvas.add(new fabric.Rect({
+          left: 0, top: sTop, width, height: sH,
+          fill: new fabric.Gradient({
+            type: 'linear',
+            coords: { x1: 0, y1: 0, x2: 0, y2: sH },
+            colorStops: [
+              { offset: 0, color: `rgba(${scrimRGB},0)` },
+              { offset: 0.18, color: `rgba(${scrimRGB},0.42)` },
+              { offset: 0.82, color: `rgba(${scrimRGB},0.42)` },
+              { offset: 1, color: `rgba(${scrimRGB},0)` },
+            ],
+          }),
+          selectable: false,
+        }));
+      }
 
       if (kObj) { kObj.set({ top: cursor }); canvas.add(kObj); cursor += kH + GAP_K; }
       h.set({ top: cursor }); canvas.add(h); cursor += hH + GAP_H;
