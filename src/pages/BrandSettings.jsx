@@ -319,22 +319,11 @@ const BrandSettings = () => {
               <h3 className="text-xl font-bold text-gray-900">Meine Gespeicherten Brands</h3>
             </div>
 
-            {/* Carousel settings: cover blur + fixed CTA photo */}
+            {/* Carousel settings: fixed CTA photo */}
             <div className="mb-6 border border-gray-200 rounded-xl p-4 bg-white">
               <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Karussell</div>
 
-              <button
-                onClick={() => updateBrandSettings({ currentBrandConfig: { ...(brandSettings.currentBrandConfig || {}), coverBlurMode: !(brandSettings.currentBrandConfig?.coverBlurMode) } })}
-                className="w-full flex items-center justify-between py-2 text-left"
-              >
-                <div>
-                  <div className="text-sm font-bold text-gray-900">Folgeseiten aus Coverfoto</div>
-                  <div className="text-[11px] text-gray-500">Slide 2+ nutzen das Coverfoto, unscharf und leicht dunkler.</div>
-                </div>
-                <SafeIcon icon={brandSettings.currentBrandConfig?.coverBlurMode ? FiToggleRight : FiToggleLeft} className={`text-3xl shrink-0 ml-3 ${brandSettings.currentBrandConfig?.coverBlurMode ? 'text-purple-600' : 'text-gray-300'}`} />
-              </button>
-
-              <div className="border-t border-gray-100 mt-3 pt-3">
+              <div>
                 <div className="text-sm font-bold text-gray-900 mb-1">Foto für den Call-to-Action</div>
                 <div className="text-[11px] text-gray-500 mb-2">Wird immer auf der letzten Slide verwendet.</div>
                 {brandSettings.currentBrandConfig?.ctaImage ? (
@@ -346,6 +335,9 @@ const BrandSettings = () => {
                   <p className="text-[11px] text-gray-400">Kein Foto gewählt — unten in der Galerie auf „Als CTA-Foto" tippen.</p>
                 )}
               </div>
+              <p className="text-[11px] text-gray-400 mt-3 pt-3 border-t border-gray-100">
+                Den Unschärfe-Modus für Folgeseiten stellst du pro Post ein — im Content Plan auf der jeweiligen Kachel.
+              </p>
             </div>
 
             {/* Brandsheet Import: paste a brand sheet, get a full brand */}

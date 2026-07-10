@@ -228,7 +228,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // When a photo background is present, always use white (photo is darkened).
   const hasBgImage = typeof slide.background === 'string' && slide.background.length > 5;
   // Cover-blur mode: follow-up slides show the cover photo blurred + darkened.
-  const coverBlurActive = slide.coverBlurMode === true || options.coverBlurMode === true;
+  // A CTA slide is exempt — its photo is a deliberate choice and stays sharp.
+  const coverBlurActive = (slide.coverBlurMode === true || options.coverBlurMode === true) && slide.isCtaSlide !== true;
 
   // Resolve the layout up-front (it's used below for the framed-photo check).
   // Image-only magazine layouts (split/framed/card) look broken without a

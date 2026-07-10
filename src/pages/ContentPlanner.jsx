@@ -127,26 +127,32 @@ const ContentPlanner = () => {
              }
           }
 
-          // --- Cover-Blur & CTA-Foto ---
-          const coverBlurMode = config.coverBlurMode === true;
+          // --- Cover-Blur (pro Post) & CTA-Foto ---
+          // coverBlurMode liegt am TAG (day), nicht an der Brand: jeder Post
+          // kann eigenständig entscheiden, ob Folgeseiten das Coverfoto nutzen.
+          const coverBlurMode = day.coverBlurMode === true;
           const ctaImage = config.ctaImage || null;
           const isLast = sIdx === allSlides.length - 1;
           const coverBg = allSlides[0]?.background;
           let bgOverride = slide.background;
+          let isCtaSlide = false;
           // Follow-up slides reuse the cover photo (blur/darkening happens in
           // the renderer). Only when the mode is on and a cover photo exists.
           if (coverBlurMode && sIdx > 0 && typeof coverBg === 'string' && coverBg.length > 5) {
             bgOverride = coverBg;
           }
-          // The last slide is the call-to-action: use the fixed CTA photo.
+          // The last slide is the call-to-action: use the fixed CTA photo and
+          // keep it SHARP — it's a deliberate choice, not a background.
           if (ctaImage && isLast && allSlides.length > 1) {
             bgOverride = ctaImage;
+            isCtaSlide = true;
           }
 
           return {
             ...slide,
             background: bgOverride,
-            coverBlurMode,
+            coverBlurMode: coverBlurMode && !isCtaSlide,
+            isCtaSlide,
             color: text,
             backgroundColor: bg,
             secondaryColor: sec,
@@ -174,14 +180,15 @@ const ContentPlanner = () => {
     if (!config.colors || !config.typography) return;
 
     const styledPlan = applyBrandStyling(weekPlan, config);
-    // Compare color, font AND the editorial flags — otherwise activating the
-    // Editorial brand on an already same-colored plan is wrongly skipped.
-    const sampleOf = (p) => JSON.stringify({
-      c: p[0]?.slides[0]?.color,
-      f: p[0]?.slides[0]?.fontFamily,
-      e: p[0]?.slides[0]?.editorialDark === true,
-      d: p[0]?.slides[0]?.darkPhoto === true,
-    });
+    // Compare across ALL days and a follow-up slide too — the cover slide never
+    // changes when cover-blur or the CTA photo is toggled, so a narrow sample
+    // would wrongly skip the update.
+    const sampleOf = (p) => JSON.stringify(p.map((d) => ({
+      cb: d.coverBlurMode === true,
+      s0: { c: d.slides?.[0]?.color, f: d.slides?.[0]?.fontFamily, e: d.slides?.[0]?.editorialDark === true, d: d.slides?.[0]?.darkPhoto === true },
+      s1: { b: d.slides?.[1]?.background, cb: d.slides?.[1]?.coverBlurMode === true },
+      last: d.slides?.[d.slides.length - 1]?.background,
+    })));
     if (sampleOf(weekPlan) !== sampleOf(styledPlan)) {
         updateBrandSettings({ contentPlan: styledPlan });
     }
@@ -200,6 +207,13 @@ const ContentPlanner = () => {
   useEffect(() => {
     loadSetsFromDB().then((sets) => setSavedSets(Array.isArray(sets) ? sets : []));
   }, []);
+
+  // Toggle cover-blur for ONE post (day): follow-up slides reuse the cover
+  // photo, blurred and slightly darkened.
+  const toggleCoverBlur = (dayNum) => {
+    const updated = weekPlan.map((d) => (d.day === dayNum ? { ...d, coverBlurMode: !d.coverBlurMode } : d));
+    updateBrandSettings({ contentPlan: applyBrandStyling(updated, currentBrand) });
+  };
 
   // Save the CURRENT plan as a named set.
   const handleSaveSet = async () => {
@@ -396,6 +410,7 @@ const ContentPlanner = () => {
           cleaned.darkPhoto = cfg.darkPhoto === true;
           cleaned.kicker = false;
           cleaned.kickerText = undefined;
+          cleaned.coverBlurMode = day.coverBlurMode === true;
           cleaned.textAnchor = textAnchor;
           cleaned.fontWeight = bold ? '700' : 'normal';
           return cleaned;
@@ -403,7 +418,9 @@ const ContentPlanner = () => {
 
         reloadedPlan.push({ ...day, slides: adjusted });
       }
-      updateBrandSettings({ contentPlan: reloadedPlan });
+      // Run brand styling so the CTA photo and per-post cover-blur are applied
+      // to the freshly assigned images.
+      updateBrandSettings({ contentPlan: applyBrandStyling(reloadedPlan, currentBrand) });
       const withPhotos = reloadedPlan.reduce((a, d) =>
         a + d.slides.filter(s => typeof s.background === 'string' && s.background.length > 5).length, 0);
       const total = reloadedPlan.reduce((a, d) => a + d.slides.length, 0);
@@ -792,6 +809,13 @@ const ContentPlanner = () => {
                         <SafeIcon icon={FiEdit3} className="mr-1" /> Bearbeiten
                       </div>
                       <div className="flex gap-1.5">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); toggleCoverBlur(day.day); }}
+                          className={`text-[9px] font-bold px-2 py-1 rounded-full flex items-center ${day.coverBlurMode ? 'bg-amber-500 text-white' : 'bg-white/95 text-gray-800 hover:bg-white'}`}
+                          title="Folgeseiten aus Coverfoto (unscharf)"
+                        >
+                          <SafeIcon icon={FiLayers} className="mr-0.5" /> {day.coverBlurMode ? 'Blur an' : 'Blur'}
+                        </button>
                         <button
                           onClick={(e) => { e.stopPropagation(); setExpandedCaptionId(expandedCaptionId === day.day ? null : day.day); }}
                           className="bg-white/95 text-gray-800 text-[9px] font-bold px-2 py-1 rounded-full flex items-center hover:bg-white"
