@@ -1,18 +1,20 @@
 import { createClient } from '@supabase/supabase-js';
 
-// --- PRODUCTION CONFIGURATION ---
-// Diese Werte werden für die Ausrollung genutzt, wenn keine lokalen Einstellungen vorhanden sind.
-const DEFAULT_URL = 'https://kfrdrcrgbkjuusrhftlg.supabase.co';
-const DEFAULT_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtmcmRyY3JnYmtqdXVzcmhmdGxnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4MzMzMDgsImV4cCI6MjA5ODQwOTMwOH0.IvIEPallRrka5sWZrREumo0U3jGWQMAXEshyGSLyRic';
-
-// Helper to get config from Env OR Default.
-// (localStorage override removed so stale keys from the old Greta project
-//  can never take precedence over this project's credentials.)
-const getUrl = () => import.meta.env.VITE_SUPABASE_URL || DEFAULT_URL;
-const getKey = () => import.meta.env.VITE_SUPABASE_ANON_KEY || DEFAULT_KEY;
+// --- CONFIGURATION ---
+// Credentials MUST come from environment variables (Netlify → Environment
+// variables). No hardcoded fallback: every instance uses its own Supabase
+// project, so no customer can ever write into someone else's bucket.
+//   VITE_SUPABASE_URL       = https://<project>.supabase.co
+//   VITE_SUPABASE_ANON_KEY  = <anon public key>
+const getUrl = () => import.meta.env.VITE_SUPABASE_URL || '';
+const getKey = () => import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
 // Only create the client if the keys are available
 export const supabase = (getUrl() && getKey()) ? createClient(getUrl(), getKey()) : null;
+
+if (!supabase && typeof console !== 'undefined') {
+  console.warn('[Supabase] Keine Zugangsdaten gefunden. Bitte VITE_SUPABASE_URL und VITE_SUPABASE_ANON_KEY in Netlify setzen. Cloud-Upload ist deaktiviert.');
+}
 
 // Helper to save config dynamically (Admin Panel Override)
 export const setupSupabase = (url, key) => {

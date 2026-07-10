@@ -11,7 +11,7 @@ import { uploadImageToCloud, listCloudImages, deleteCloudImage } from '../supaba
 import { CURATED_BRANDS } from '../constants/brandData';
 import { parseBrandsheet } from '../utils/brandsheetParser';
 
-const { FiShuffle, FiDroplet, FiType, FiImage, FiSettings, FiSave, FiUpload, FiEdit3, FiTrash2, FiCheckCircle, FiEye, FiTag, FiX, FiAlertCircle, FiUsers, FiCheck, FiRefreshCw } = FiIcons;
+const { FiShuffle, FiDroplet, FiType, FiImage, FiSettings, FiSave, FiUpload, FiEdit3, FiTrash2, FiCheckCircle, FiEye, FiTag, FiX, FiAlertCircle, FiUsers, FiCheck, FiRefreshCw, FiToggleRight, FiToggleLeft } = FiIcons;
 
 const BrandSettings = () => {
   const { brandSettings, updateBrandSettings, addCustomFont, removeCustomFont, loadBrandProfile, deleteBrandProfile } = useBrand();
@@ -317,6 +317,35 @@ const BrandSettings = () => {
           <div className="space-y-8">
             <div className="flex items-center justify-between">
               <h3 className="text-xl font-bold text-gray-900">Meine Gespeicherten Brands</h3>
+            </div>
+
+            {/* Carousel settings: cover blur + fixed CTA photo */}
+            <div className="mb-6 border border-gray-200 rounded-xl p-4 bg-white">
+              <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Karussell</div>
+
+              <button
+                onClick={() => updateBrandSettings({ currentBrandConfig: { ...(brandSettings.currentBrandConfig || {}), coverBlurMode: !(brandSettings.currentBrandConfig?.coverBlurMode) } })}
+                className="w-full flex items-center justify-between py-2 text-left"
+              >
+                <div>
+                  <div className="text-sm font-bold text-gray-900">Folgeseiten aus Coverfoto</div>
+                  <div className="text-[11px] text-gray-500">Slide 2+ nutzen das Coverfoto, unscharf und leicht dunkler.</div>
+                </div>
+                <SafeIcon icon={brandSettings.currentBrandConfig?.coverBlurMode ? FiToggleRight : FiToggleLeft} className={`text-3xl shrink-0 ml-3 ${brandSettings.currentBrandConfig?.coverBlurMode ? 'text-purple-600' : 'text-gray-300'}`} />
+              </button>
+
+              <div className="border-t border-gray-100 mt-3 pt-3">
+                <div className="text-sm font-bold text-gray-900 mb-1">Foto für den Call-to-Action</div>
+                <div className="text-[11px] text-gray-500 mb-2">Wird immer auf der letzten Slide verwendet.</div>
+                {brandSettings.currentBrandConfig?.ctaImage ? (
+                  <div className="flex items-center gap-3">
+                    <img src={brandSettings.currentBrandConfig.ctaImage} alt="CTA" className="w-16 h-20 object-cover rounded-lg border border-gray-200" />
+                    <button onClick={() => updateBrandSettings({ currentBrandConfig: { ...brandSettings.currentBrandConfig, ctaImage: null } })} className="text-xs font-bold text-red-600 hover:underline">Entfernen</button>
+                  </div>
+                ) : (
+                  <p className="text-[11px] text-gray-400">Kein Foto gewählt — unten in der Galerie auf „Als CTA-Foto" tippen.</p>
+                )}
+              </div>
             </div>
 
             {/* Brandsheet Import: paste a brand sheet, get a full brand */}
@@ -650,7 +679,16 @@ const BrandSettings = () => {
                             <span className="bg-black/60 text-white text-[10px] font-bold px-2 py-1 rounded">Inaktiv</span>
                           </div>
                         )}
+                        {brandSettings.currentBrandConfig?.ctaImage === img && (
+                          <span className="absolute top-1.5 right-1.5 bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow">CTA</span>
+                        )}
                     </div>
+                    <button
+                      onClick={(e) => { e.preventDefault(); updateBrandSettings({ currentBrandConfig: { ...(brandSettings.currentBrandConfig || {}), ctaImage: brandSettings.currentBrandConfig?.ctaImage === img ? null : img } }); }}
+                      className={`w-full py-1.5 text-[10px] font-bold border-t border-gray-100 transition-colors ${brandSettings.currentBrandConfig?.ctaImage === img ? 'bg-emerald-50 text-emerald-700' : 'bg-white text-gray-500 hover:bg-gray-50'}`}
+                    >
+                      {brandSettings.currentBrandConfig?.ctaImage === img ? 'CTA-Foto ✓' : 'Als CTA-Foto'}
+                    </button>
                     <div className="flex border-t border-gray-100">
                       <button onClick={(e) => { e.preventDefault(); setMeta({ disabled: !isOff }); }} className={`flex-1 py-2 text-xs font-bold flex items-center justify-center transition-colors ${isOff ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'}`}>
                         {isOff ? 'Aktivieren' : 'Deaktivieren'}

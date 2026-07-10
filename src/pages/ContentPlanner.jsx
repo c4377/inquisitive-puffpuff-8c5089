@@ -113,7 +113,7 @@ const ContentPlanner = () => {
 
       return {
         ...day,
-        slides: day.slides.map((slide, sIdx) => {
+        slides: day.slides.map((slide, sIdx, allSlides) => {
           const font = sIdx === 0 ? fonts.fontFamily : (fonts.bodyFontFamily || 'Montserrat');
           const accentFont = fonts.accentFontFamily || (font.includes('Playfair') ? 'Montserrat' : 'Playfair Display');
           const isPlayfair = font.includes('Playfair');
@@ -127,8 +127,26 @@ const ContentPlanner = () => {
              }
           }
 
+          // --- Cover-Blur & CTA-Foto ---
+          const coverBlurMode = config.coverBlurMode === true;
+          const ctaImage = config.ctaImage || null;
+          const isLast = sIdx === allSlides.length - 1;
+          const coverBg = allSlides[0]?.background;
+          let bgOverride = slide.background;
+          // Follow-up slides reuse the cover photo (blur/darkening happens in
+          // the renderer). Only when the mode is on and a cover photo exists.
+          if (coverBlurMode && sIdx > 0 && typeof coverBg === 'string' && coverBg.length > 5) {
+            bgOverride = coverBg;
+          }
+          // The last slide is the call-to-action: use the fixed CTA photo.
+          if (ctaImage && isLast && allSlides.length > 1) {
+            bgOverride = ctaImage;
+          }
+
           return {
             ...slide,
+            background: bgOverride,
+            coverBlurMode,
             color: text,
             backgroundColor: bg,
             secondaryColor: sec,

@@ -150,9 +150,13 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           });
           // Optional blur via fabric filter (only when explicitly set > 0).
           // Slider range is 0..20; map to fabric's 0..1 blur amount.
-          if (typeof slide.blur === 'number' && slide.blur >= 1 && fabric.Image.filters?.Blur) {
+          // coverBlurMode: follow-up slides (index > 0) reuse the cover photo
+          // blurred + darkened, so carousels stay calm and readable.
+          const isFollowUp = coverBlurActive && (options.slideIndex || 0) > 0;
+          const effBlur = isFollowUp ? Math.max(slide.blur || 0, 12) : slide.blur;
+          if (typeof effBlur === 'number' && effBlur >= 1 && fabric.Image.filters?.Blur) {
             try {
-              img.filters = [new fabric.Image.filters.Blur({ blur: Math.min(slide.blur / 40, 0.5) })];
+              img.filters = [new fabric.Image.filters.Blur({ blur: Math.min(effBlur / 40, 0.5) })];
               img.applyFilters();
             } catch (e) { /* blur optional */ }
           }
@@ -160,7 +164,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           canvas.sendToBack(img);
 
           // Readability overlay — kept light so the photo stays vibrant.
-          const ov = typeof slide.overlay === 'number' ? slide.overlay : 0.28;
+          // Follow-up slides in cover-blur mode get a touch more darkening.
+          let ov = typeof slide.overlay === 'number' ? slide.overlay : 0.28;
+          if (isFollowUp) ov = Math.max(ov, 0.42);
           const overlayRect = new fabric.Rect({
             left: 0, top: 0, width, height,
             fill: `rgba(0,0,0,${ov})`, selectable: false,
@@ -221,6 +227,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // flip to white/black so text never disappears on same-tone backgrounds.
   // When a photo background is present, always use white (photo is darkened).
   const hasBgImage = typeof slide.background === 'string' && slide.background.length > 5;
+  // Cover-blur mode: follow-up slides show the cover photo blurred + darkened.
+  const coverBlurActive = slide.coverBlurMode === true || options.coverBlurMode === true;
 
   // Resolve the layout up-front (it's used below for the framed-photo check).
   // Image-only magazine layouts (split/framed/card) look broken without a
@@ -790,14 +798,38 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         });
       }
       const mh = (o, fallback) => (o ? ((typeof o.getScaledHeight === 'function' ? o.getScaledHeight() : o.height) || fallback) : 0);
+
+      // Fit the WHOLE stack (kicker + headline + footer) into the available
+      // area. The per-object auto-fit only knows one box at a time, so a long
+      // headline used to push the frame lines off the slide.
+      const availTop = hasBgImage ? stackTop : height * 0.08;
+      const availH = (height * (hasBgImage ? 0.94 : 0.92)) - availTop;
+      let guard = 0;
+      while (guard < 60) {
+        const t = mh(kObj, fs(15) * 1.8) + (kObj ? GAP_K : 0)
+                + mh(h, fs(slide.fontSize || 54) * 2.4) + (fObj ? GAP_H : 0)
+                + mh(fObj, fs(15) * 1.8);
+        if (t <= availH || h.fontSize <= 12) break;
+        h.set('fontSize', h.fontSize - 2);
+        h.initDimensions && h.initDimensions();
+        // Very long texts: also ease the frame lines down a touch.
+        if (h.fontSize < fs(28)) {
+          [kObj, fObj].forEach((o) => {
+            if (o && o.fontSize > 10) { o.set('fontSize', o.fontSize - 1); o.initDimensions && o.initDimensions(); }
+          });
+        }
+        guard++;
+      }
+
       const kH = mh(kObj, fs(15) * 1.8);
       const hH = mh(h, fs(slide.fontSize || 54) * 2.4);
       const fH = mh(fObj, fs(15) * 1.8);
       const totalH = kH + (kObj ? GAP_K : 0) + hH + (fObj ? GAP_H : 0) + fH;
 
-      // Text-only: fixed centered level. Photo: quiet-zone stackTop from above.
+      // Text-only: fixed centered level. Photo: quiet-zone stackTop, but
+      // clamped so the stack can never run off the bottom edge.
       let cursor = hasBgImage
-        ? stackTop
+        ? Math.min(stackTop, Math.max(height * 0.06, height * 0.94 - totalH))
         : Math.max(height * 0.10, (height - totalH) / 2);
 
       if (kObj) { kObj.set({ top: cursor }); canvas.add(kObj); cursor += kH + GAP_K; }
