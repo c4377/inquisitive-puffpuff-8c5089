@@ -1,13 +1,14 @@
 import { createClient } from '@supabase/supabase-js';
 
 // --- CONFIGURATION ---
-// Credentials MUST come from environment variables (Netlify → Environment
-// variables). No hardcoded fallback: every instance uses its own Supabase
-// project, so no customer can ever write into someone else's bucket.
+// Credentials come from environment variables (Netlify → Environment
+// variables), with a localStorage fallback so they can also be entered
+// directly in the app (Admin panel) — useful when env vars aren't set yet.
 //   VITE_SUPABASE_URL       = https://<project>.supabase.co
 //   VITE_SUPABASE_ANON_KEY  = <anon public key>
-const getUrl = () => import.meta.env.VITE_SUPABASE_URL || '';
-const getKey = () => import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const ls = (k) => { try { return localStorage.getItem(k) || ''; } catch { return ''; } };
+const getUrl = () => import.meta.env.VITE_SUPABASE_URL || ls('vite_supabase_url') || '';
+const getKey = () => import.meta.env.VITE_SUPABASE_ANON_KEY || ls('vite_supabase_key') || '';
 
 // Only create the client if the keys are available
 export const supabase = (getUrl() && getKey()) ? createClient(getUrl(), getKey()) : null;
