@@ -929,11 +929,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       const estTotal = estKickH + (kObj ? GAP_K : 0) + estHeadH + (fObj ? GAP_H : 0) + estFootH;
       totalH = Math.max(totalH, estTotal);
 
-      // Place the stack ALWAYS vertically centered in the safe area — whether
-      // there's a photo or not. Centering makes overflow impossible as long as
-      // the block fits at all, and removes the dependency on a possibly-wrong
-      // first-paint height measurement (the cause of the bottom-overflow bug).
-      let cursor = Math.max(SAFE_TOP, SAFE_TOP + (availH - totalH) / 2);
+      // Place the text in the LOWER third of the slide (the Tag-9 look), using
+      // the estimated (font-timing-independent) height. The block is bottom-
+      // aligned within the safe area, so a long block grows UPWARD and can
+      // never run past the safe bottom — lower placement, no overflow bug.
+      // Applies to photo AND text-only slides for one consistent feed rhythm.
+      let cursor = Math.max(SAFE_TOP, SAFE_BOTTOM - totalH);
 
       // Local scrim exactly behind the FINAL text block — soft fades, no edges.
       // On cover-blur follow-up slides the photo is ALREADY blurred + darkened
