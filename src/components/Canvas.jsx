@@ -11,10 +11,27 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "", as
   // exceed Safari's canvas memory limit and white-screen the page.
   const [imgUrl, setImgUrl] = useState(null);
 
-  // Initialize Fonts
+  // Initialize Fonts — load the specific families this slide uses (Playfair
+  // for editorial headlines, Montserrat for CAPS, plus any brand fonts), THEN
+  // mark ready. Measuring before the real font loads makes the fit loop
+  // under-shrink and the text overflows (was visible only on first render in
+  // the Editor). Re-runs when the slide's fonts change.
   useEffect(() => {
-    document.fonts.ready.then(() => setFontLoaded(true));
-  }, []);
+    const fams = ['Playfair Display', 'Montserrat', 'Inter'];
+    if (data?.fontFamily) fams.push(data.fontFamily);
+    if (data?.accentFontFamily) fams.push(data.accentFontFamily);
+    if (data?.bodyFontFamily) fams.push(data.bodyFontFamily);
+    let cancelled = false;
+    const loads = fams.filter(Boolean).flatMap((f) => [
+      document.fonts.load(`16px "${f}"`),
+      document.fonts.load(`600 16px "${f}"`),
+    ]);
+    Promise.race([
+      Promise.all(loads).then(() => document.fonts.ready),
+      new Promise((res) => setTimeout(res, 3000)),
+    ]).then(() => { if (!cancelled) setFontLoaded(true); });
+    return () => { cancelled = true; };
+  }, [data?.fontFamily, data?.accentFontFamily, data?.bodyFontFamily]);
 
   // Expose API
   useImperativeHandle(ref, () => ({

@@ -878,7 +878,19 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       const kH = mh(kObj, fs(15) * 1.8);
       const hH = mh(h, fs(slide.fontSize || 54) * 2.4);
       const fH = mh(fObj, fs(15) * 1.8);
-      const totalH = kH + (kObj ? GAP_K : 0) + hH + (fObj ? GAP_H : 0) + fH;
+      let totalH = kH + (kObj ? GAP_K : 0) + hH + (fObj ? GAP_H : 0) + fH;
+
+      // Safety clamp: if the measured stack (real font metrics now available)
+      // still exceeds the safe area, shrink the headline further until it fits.
+      let safety = 0;
+      while (totalH > availH && h.fontSize > 12 && safety < 60) {
+        h.set('fontSize', h.fontSize - 2);
+        if (h.initDimensions) h.initDimensions();
+        totalH = mh(kObj, fs(15) * 1.8) + (kObj ? GAP_K : 0)
+               + mh(h, fs(slide.fontSize || 54) * 2.4) + (fObj ? GAP_H : 0)
+               + mh(fObj, fs(15) * 1.8);
+        safety++;
+      }
 
       // Place the stack: photos follow the quiet zone, but the stack is always
       // clamped inside the safe area (never under the brand mark, never off
