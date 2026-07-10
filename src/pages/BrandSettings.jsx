@@ -350,9 +350,21 @@ const BrandSettings = () => {
               <h3 className="text-xl font-bold text-gray-900">Meine Gespeicherten Brands</h3>
             </div>
 
-            {/* Carousel settings: fixed CTA photo */}
+            {/* Carousel settings: brand mark + fixed CTA photo */}
             <div className="mb-6 border border-gray-200 rounded-xl p-4 bg-white">
               <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Karussell</div>
+
+              <div className="mb-4 pb-4 border-b border-gray-100">
+                <div className="text-sm font-bold text-gray-900 mb-1">Brand-Zeile</div>
+                <div className="text-[11px] text-gray-500 mb-2">Erscheint klein am unteren Rand jedes Posts. Leer lassen für keine Zeile.</div>
+                <input
+                  type="text"
+                  value={brandSettings.currentBrandConfig?.brandText ?? ''}
+                  onChange={(e) => updateBrandSettings({ currentBrandConfig: { ...(brandSettings.currentBrandConfig || {}), brandText: e.target.value } })}
+                  placeholder="z. B. deinname.at"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-purple-400"
+                />
+              </div>
 
               <div>
                 <div className="text-sm font-bold text-gray-900 mb-1">Foto für den Call-to-Action</div>

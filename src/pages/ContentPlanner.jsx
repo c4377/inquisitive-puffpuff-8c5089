@@ -19,7 +19,7 @@ import { saveSetsToDB, loadSetsFromDB } from '../utils/storage';
 import { analyzePlanRoles, roleFeedback, ROLE_META } from '../utils/postRole';
 import { weightedLayoutPool, getRating, setRating } from '../utils/layoutRatings';
 
-const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus } = FiIcons;
+const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus , FiMoreVertical } = FiIcons;
 
 const ContentPlanner = () => {
   const { brandSettings, updateBrandSettings } = useBrand();
@@ -28,6 +28,7 @@ const ContentPlanner = () => {
   const [loading, setLoading] = useState(false);
   const [activeIndices, setActiveIndices] = useState({});
   const [expandedCaptionId, setExpandedCaptionId] = useState(null);
+  const [menuDayId, setMenuDayId] = useState(null); // tile context menu (mobile-friendly)
   const [showStyleShifter, setShowStyleShifter] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [isExportingAll, setIsExportingAll] = useState(false);
@@ -50,7 +51,7 @@ const ContentPlanner = () => {
 
   const currentBrand = brandSettings.currentBrandConfig;
   const hasActiveBrand = !!currentBrand;
-  const brandName = currentBrand?.brandText || currentBrand?.name || "";
+  const brandName = currentBrand?.brandText || "";
 
   // --- HELPER: COLOR CONTRAST ---
   const getBrightness = (hex) => {
@@ -501,7 +502,7 @@ const ContentPlanner = () => {
     if (!weekPlan || weekPlan.length === 0) return;
     setIsExportingAll(true);
     try {
-      const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "";
+      const globalBrandName = brandSettings.currentBrandConfig?.brandText || "";
 
       const renderDayFiles = async (day) => {
         const files = [];
@@ -587,7 +588,7 @@ const ContentPlanner = () => {
     setExportingDayId(day.day);
     try {
       const zip = new JSZip();
-      const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "";
+      const globalBrandName = brandSettings.currentBrandConfig?.brandText || "";
       for (let i = 0; i < day.slides.length; i++) {
         const slide = day.slides[i];
         const canvasWidth = 1080;
@@ -623,7 +624,7 @@ const ContentPlanner = () => {
     if (!day || !day.slides?.length) return;
     setExportingDayId(day.day);
     try {
-      const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "";
+      const globalBrandName = brandSettings.currentBrandConfig?.brandText || "";
       const files = [];
       for (let i = 0; i < day.slides.length; i++) {
         const slide = day.slides[i];
@@ -862,57 +863,71 @@ const ContentPlanner = () => {
                       </div>
                     )}
 
-                    {/* Hover overlay with quick actions — icon only, kept compact */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 z-20">
-                      <div className="bg-white/95 text-gray-800 w-9 h-9 rounded-full flex items-center justify-center shadow" title="Bearbeiten">
-                        <SafeIcon icon={FiEdit3} className="text-sm" />
-                      </div>
-                      <div className="flex gap-1.5">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); handleReloadDay(day.day); }}
-                          disabled={reloadingDay === day.day}
-                          className="w-8 h-8 rounded-full bg-white/95 text-gray-700 flex items-center justify-center shadow hover:bg-white disabled:opacity-50"
-                          title="Diesen Tag neu laden (neue Fotos)"
-                          aria-label="Tag neu laden"
-                        >
-                          <SafeIcon icon={FiRefreshCw} className={`text-sm ${reloadingDay === day.day ? 'animate-spin' : ''}`} />
-                        </button>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); toggleCoverBlur(day.day); }}
-                          className={`w-8 h-8 rounded-full flex items-center justify-center shadow transition-colors ${day.coverBlurMode ? 'bg-amber-500 text-white' : 'bg-white/95 text-gray-700 hover:bg-white'}`}
-                          title={day.coverBlurMode ? 'Unschärfe aktiv – Folgeseiten aus Coverfoto' : 'Folgeseiten aus Coverfoto (unscharf)'}
-                          aria-label="Unschärfe für Folgeseiten"
-                        >
-                          <SafeIcon icon={FiLayers} className="text-sm" />
-                        </button>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setExpandedCaptionId(expandedCaptionId === day.day ? null : day.day); }}
-                          className="w-8 h-8 rounded-full bg-white/95 text-gray-700 flex items-center justify-center shadow hover:bg-white"
-                          title="Caption ein-/ausklappen"
-                          aria-label="Caption"
-                        >
-                          <SafeIcon icon={FiMessageSquare} className="text-sm" />
-                        </button>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); handleShareDay(day); }}
-                          disabled={isExportingThisDay}
-                          className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center shadow hover:bg-purple-700 disabled:opacity-50"
-                          title="In Fotos speichern"
-                          aria-label="In Fotos speichern"
-                        >
-                          <SafeIcon icon={FiShare2} className="text-sm" />
-                        </button>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); handleExportDay(day); }}
-                          disabled={isExportingThisDay}
-                          className="w-8 h-8 rounded-full bg-white/90 text-gray-700 flex items-center justify-center shadow hover:bg-white disabled:opacity-50"
-                          title="Exportieren"
-                          aria-label="Exportieren"
-                        >
-                          {isExportingThisDay ? <span className="animate-spin"><SafeIcon icon={FiRefreshCw} className="text-sm" /></span> : <SafeIcon icon={FiDownload} className="text-sm" />}
-                        </button>
-                      </div>
-                    </div>
+
+                    {/* Menu button — always visible (no hover on mobile) */}
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setMenuDayId(menuDayId === day.day ? null : day.day); }}
+                      className="absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-black/55 backdrop-blur text-white flex items-center justify-center shadow-lg active:scale-95 transition-transform"
+                      title="Aktionen"
+                      aria-label="Aktionen"
+                    >
+                      <SafeIcon icon={FiMoreVertical} className="text-sm" />
+                    </button>
+
+                    {/* Floating context menu above the tile */}
+                    {menuDayId === day.day && (
+                      <>
+                        <div className="fixed inset-0 z-40" onClick={(e) => { e.stopPropagation(); setMenuDayId(null); }} />
+                        <div className="absolute top-11 right-2 z-50 w-44 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden" onClick={(e) => e.stopPropagation()}>
+                          <button
+                            onClick={() => { setMenuDayId(null); handleEditDay(day); }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold text-gray-800 hover:bg-gray-50"
+                          >
+                            <SafeIcon icon={FiEdit3} className="text-sm text-gray-500" /> Bearbeiten
+                          </button>
+                          <button
+                            onClick={() => { setMenuDayId(null); handleReloadDay(day.day); }}
+                            disabled={reloadingDay === day.day}
+                            className="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold text-gray-800 hover:bg-gray-50 disabled:opacity-50"
+                          >
+                            <SafeIcon icon={FiRefreshCw} className={`text-sm text-gray-500 ${reloadingDay === day.day ? 'animate-spin' : ''}`} /> Neu laden
+                          </button>
+                          <button
+                            onClick={() => { setMenuDayId(null); toggleCoverBlur(day.day); }}
+                            className="w-full flex items-center justify-between px-3 py-2.5 text-xs font-bold text-gray-800 hover:bg-gray-50"
+                          >
+                            <span className="flex items-center gap-2.5">
+                              <SafeIcon icon={FiLayers} className={`text-sm ${day.coverBlurMode ? 'text-amber-500' : 'text-gray-500'}`} /> Unschärfe
+                            </span>
+                            <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${day.coverBlurMode ? 'bg-amber-500 text-white' : 'bg-gray-200 text-gray-500'}`}>
+                              {day.coverBlurMode ? 'An' : 'Aus'}
+                            </span>
+                          </button>
+                          <button
+                            onClick={() => { setMenuDayId(null); setExpandedCaptionId(expandedCaptionId === day.day ? null : day.day); }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold text-gray-800 hover:bg-gray-50"
+                          >
+                            <SafeIcon icon={FiMessageSquare} className="text-sm text-gray-500" /> Caption
+                          </button>
+                          <div className="h-px bg-gray-100" />
+                          <button
+                            onClick={() => { setMenuDayId(null); handleShareDay(day); }}
+                            disabled={isExportingThisDay}
+                            className="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold text-purple-700 hover:bg-purple-50 disabled:opacity-50"
+                          >
+                            <SafeIcon icon={FiShare2} className="text-sm" /> In Fotos
+                          </button>
+                          <button
+                            onClick={() => { setMenuDayId(null); handleExportDay(day); }}
+                            disabled={isExportingThisDay}
+                            className="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold text-gray-800 hover:bg-gray-50 disabled:opacity-50"
+                          >
+                            <SafeIcon icon={FiDownload} className="text-sm text-gray-500" /> Export
+                          </button>
+                        </div>
+                      </>
+                    )}
+
 
                     {/* Collapsible caption panel (restored from the old day view) */}
                     {expandedCaptionId === day.day && (

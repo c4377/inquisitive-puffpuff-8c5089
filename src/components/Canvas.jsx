@@ -92,7 +92,10 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "", as
         slideIndex: data.slideNumber ? data.slideNumber - 1 : 0, 
         totalSlides: data.totalSlides || (data.slideNumber ? 2 : 1), 
         scale: renderScale, 
-        globalBrandName: brandName 
+        // A per-slide brandText (Footer Text) overrides the global brand mark.
+        globalBrandName: (typeof data.brandText === 'string' && data.brandText.trim())
+          ? data.brandText
+          : brandName
       })
     ).then(() => {
       if (asImage && fabricRef.current) {

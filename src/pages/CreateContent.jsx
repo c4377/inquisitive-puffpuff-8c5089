@@ -139,7 +139,7 @@ const CreateContent = () => {
     try {
       const zip = new JSZip();
       const slidesFolder = zip.folder("slides");
-      const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "";
+      const globalBrandName = brandSettings.currentBrandConfig?.brandText || "";
 
       for (let i = 0; i < slides.length; i++) {
         const slide = slides[i];

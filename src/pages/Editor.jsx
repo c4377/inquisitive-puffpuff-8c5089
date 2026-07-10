@@ -12,14 +12,13 @@ import ImageUpload from '../components/ImageUpload';
 import FormatSelector from '../components/FormatSelector';
 import LayoutPicker from '../components/LayoutPicker';
 import ColorEditor from '../components/ColorEditor';
-import GenerativeBrandSystem from '../components/GenerativeBrandSystem';
 import ImageEffects from '../components/ImageEffects';
 import { useBrand } from '../context/BrandContext';
 import { renderSlide } from '../utils/canvasRenderer';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
-const { FiPlus, FiDownload, FiTrash2, FiFolder, FiSave, FiArrowLeft, FiType, FiLayout, FiDroplet, FiImage, FiMove, FiList, FiZap, FiGrid, FiCheck, FiToggleRight, FiToggleLeft, FiLayers, FiMessageSquare, FiCopy, FiRefreshCw, FiSend, FiChevronDown, FiChevronUp, FiEdit3, FiSun } = FiIcons;
+const { FiPlus, FiDownload, FiTrash2, FiFolder, FiSave, FiArrowLeft, FiType, FiLayout, FiDroplet, FiImage, FiMove, FiList, FiGrid, FiCheck, FiToggleRight, FiToggleLeft, FiLayers, FiMessageSquare, FiCopy, FiRefreshCw, FiSend, FiChevronDown, FiChevronUp, FiEdit3, FiSun } = FiIcons;
 
 const ToolTab = ({ id, label, icon, isActive, onClick }) => (
   <button onClick={() => onClick(id)} className={`w-full flex flex-col items-center justify-center py-4 px-1 transition-all border-l-4 ${isActive ? 'bg-purple-50 border-purple-600 text-purple-700' : 'bg-white border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-900'}`}>
@@ -138,22 +137,6 @@ const Editor = () => {
   }));
   const handleSmartUpdate = (updates) => applyToAll ? handleGlobalUpdate(updates) : handleSlideUpdate(updates);
 
-  const handleBrandConfigUpdate = (newConfig) => {
-    const isPlayfair = newConfig.typography.fontFamily.includes('Playfair');
-    const safeWeight = isPlayfair ? '400' : newConfig.typography.fontWeight;
-    const safeAccent = newConfig.typography.accentFontFamily || newConfig.typography.fontFamily;
-    handleGlobalUpdate({
-      fontFamily: newConfig.typography.fontFamily,
-      accentFontFamily: safeAccent,
-      fontSize: newConfig.typography.fontSize,
-      fontWeight: safeWeight,
-      color: newConfig.colors.primary,
-      backgroundColor: newConfig.colors.background,
-      secondaryColor: newConfig.colors.secondary,
-      accentColor: newConfig.colors.accent,
-      visualElements: newConfig.visualElements,
-    });
-  };
 
   const addSlide = () => {
     const lastSlide = slides[slides.length - 1];
@@ -179,7 +162,7 @@ const Editor = () => {
     try {
       const zip = new JSZip();
       const slidesFolder = zip.folder("slides");
-      const globalBrandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "";
+      const globalBrandName = brandSettings.currentBrandConfig?.brandText || "";
 
       for (let i = 0; i < slides.length; i++) {
         const slide = slides[i];
@@ -294,7 +277,7 @@ const Editor = () => {
     setIsExporting(false);
   };
 
-  const brandName = brandSettings.currentBrandConfig?.brandText || brandSettings.currentBrandConfig?.name || "";
+  const brandName = brandSettings.currentBrandConfig?.brandText || "";
 
   return (
     <div className="flex flex-col bg-gray-50 h-[calc(100vh-64px)] overflow-hidden">
@@ -407,7 +390,6 @@ const Editor = () => {
             <ToolTab id="effects" label="Effekte" icon={FiMove} isActive={activeTab === 'effects'} onClick={(id) => { setActiveTab(id); setPanelCollapsed(false); }} />
             <ToolTab id="format" label="Format" icon={FiGrid} isActive={activeTab === 'format'} onClick={(id) => { setActiveTab(id); setPanelCollapsed(false); }} />
             <div className="w-8 h-px bg-gray-200 my-2"></div>
-            <ToolTab id="brand" label="Magic" icon={FiZap} isActive={activeTab === 'brand'} onClick={(id) => { setActiveTab(id); setPanelCollapsed(false); }} />
             <ToolTab id="bulk" label="Bulk" icon={FiList} isActive={activeTab === 'bulk'} onClick={(id) => { setActiveTab(id); setPanelCollapsed(false); }} />
           </div>
           <div className="flex-1 overflow-y-auto bg-gray-50/50 relative">
@@ -420,7 +402,6 @@ const Editor = () => {
                   {activeTab === 'images' && <><SafeIcon icon={FiImage} className="mr-2 text-purple-600"/> Uploads & Assets</>}
                   {activeTab === 'effects' && <><SafeIcon icon={FiMove} className="mr-2 text-purple-600"/> Position & Filter</>}
                   {activeTab === 'format' && <><SafeIcon icon={FiGrid} className="mr-2 text-purple-600"/> Bildformat</>}
-                  {activeTab === 'brand' && <><SafeIcon icon={FiZap} className="mr-2 text-purple-600"/> Brand Generator</>}
                   {activeTab === 'bulk' && <><SafeIcon icon={FiList} className="mr-2 text-purple-600"/> Massen-Editor</>}
                 </h3>
               </div>
@@ -432,7 +413,6 @@ const Editor = () => {
                 {activeTab === 'effects' && (<ImageEffects overlay={currentSlide.overlay} blur={currentSlide.blur} grain={currentSlide.grain} imageScale={currentSlide.imageScale} imageX={currentSlide.imageX} imageY={currentSlide.imageY} overlayImageScale={currentSlide.overlayImageScale} overlayImageX={currentSlide.overlayImageX} overlayImageY={currentSlide.overlayImageY} overlayImageRounded={currentSlide.overlayImageRounded} onUpdate={(updates) => { if (applyToAll) { handleGlobalUpdate(updates); } else { handleSlideUpdate(updates); } }} />)}
                 {activeTab === 'format' && (<FormatSelector format={currentSlide.format} onUpdate={handleGlobalUpdate} />)}
                 {activeTab === 'bulk' && (<BulkTextEditor onUpdateSlides={handleBulkUpdate} currentSlides={slides} onGlobalUpdate={handleGlobalUpdate} />)}
-                {activeTab === 'brand' && (<GenerativeBrandSystem compact={true} onGenerate={handleBrandConfigUpdate} />)}
               </div>
             </div>
           </div>
