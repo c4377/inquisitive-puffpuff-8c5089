@@ -868,106 +868,40 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       }
       const mh = (o, fallback) => (o ? ((typeof o.getScaledHeight === 'function' ? o.getScaledHeight() : o.height) || fallback) : 0);
 
-      // Fit the WHOLE stack (kicker + headline + footer) into the SAFE AREA.
-      // The safe area ends above the brand mark (~93% height), and on photos
-      // the stack may move UP rather than shrink to nothing.
-      const SAFE_TOP = height * 0.07;
-      // Safe bottom is FIXED regardless of the brand line, so text is never
-      // clipped at the tile edge. The brand line (if any) sits below this.
-      const SAFE_BOTTOM = height * 0.80;
-      const availH = SAFE_BOTTOM - SAFE_TOP;
-      const stackH = () => mh(kObj, fs(15) * 1.8) + (kObj ? GAP_K : 0)
-              + mh(h, fs(slide.fontSize || 54) * 2.4) + (fObj ? GAP_H : 0)
-              + mh(fObj, fs(15) * 1.8);
-      let guard = 0;
-      while (guard < 80 && stackH() > availH && h.fontSize > 14) {
-        h.set('fontSize', h.fontSize - 2);
-        if (h.initDimensions) h.initDimensions();
-        // Very long texts: also ease the frame lines down a touch.
-        if (h.fontSize < fs(28)) {
-          [kObj, fObj].forEach((o) => {
-            if (o && o.fontSize > 11) { o.set('fontSize', o.fontSize - 1); if (o.initDimensions) o.initDimensions(); }
-          });
-        }
-        guard++;
-      }
+      // SIMPLE FIXED PLACEMENT — like every other brand: one fixed anchor,
+      // the text block is bottom-aligned there. No height guessing, no shrink
+      // loops. A long block simply grows upward from the anchor. This is the
+      // robust approach that never clips.
+      const ANCHOR_Y = height * 0.80; // bottom of the text block sits here
 
-      const kH = mh(kObj, fs(15) * 1.8);
-      const hH = mh(h, fs(slide.fontSize || 54) * 2.4);
-      const fH = mh(fObj, fs(15) * 1.8);
-      let totalH = kH + (kObj ? GAP_K : 0) + hH + (fObj ? GAP_H : 0) + fH;
+      // Only guard the HEADLINE font by text length so a very long line stays
+      // readable; everything else keeps its size. No measurement dependency.
+      // (charCount / capBase are already computed above where the headline was
+      // created; the headline font is already capped there.)
+      const GAP_K2 = height * 0.03;
+      const GAP_H2 = height * 0.025;
+      const hK = kObj ? mh(kObj, fs(15) * 1.8) : 0;
+      const hH2 = mh(h, fs(capBase) * 2.4);
+      const hF = fObj ? mh(fObj, fs(15) * 1.8) : 0;
+      const blockH = hK + (kObj ? GAP_K2 : 0) + hH2 + (fObj ? GAP_H2 : 0) + hF;
 
-      // Safety clamp: if the measured stack (real font metrics now available)
-      // still exceeds the safe area, shrink the headline further until it fits.
-      let safety = 0;
-      while (totalH > availH && h.fontSize > 12 && safety < 60) {
-        h.set('fontSize', h.fontSize - 2);
-        if (h.initDimensions) h.initDimensions();
-        totalH = mh(kObj, fs(15) * 1.8) + (kObj ? GAP_K : 0)
-               + mh(h, fs(slide.fontSize || 54) * 2.4) + (fObj ? GAP_H : 0)
-               + mh(fObj, fs(15) * 1.8);
-        safety++;
-      }
+      // Bottom-align the block at the anchor; never let its top go above 5%.
+      let cursor = Math.max(height * 0.05, ANCHOR_Y - blockH);
 
-      // Timing-safe height estimate: measured metrics can be wrong before the
-      // font loads, which used to push the text off the bottom. Estimate the
-      // wrapped line count from text length so positioning never depends on a
-      // possibly-too-small first-paint measurement. Use the LARGER of measured
-      // and estimated, so we always reserve enough space.
-      const estWrapLines = (txt, fSize, boxW) => {
-        if (!txt) return 0;
-        const words = String(txt).split(/\s+/);
-        const cw = fSize * 0.58; // pessimistic for Playfair
-        let lines = 1, cur = 0;
-        for (const w of words) {
-          const wW = (w.length + 1) * cw;
-          if (cur + wW > boxW && cur > 0) { lines++; cur = wW; } else cur += wW;
-        }
-        return lines;
-      };
-      const estHeadH = estWrapLines(headline, h.fontSize, width * 0.86) * h.fontSize * 1.08;
-      const estKickH = kObj ? estWrapLines(kickTxt, kObj.fontSize, width * 0.8) * kObj.fontSize * 1.3 * 1.4 : 0;
-      const estFootH = fObj ? estWrapLines(footer, fObj.fontSize, width * 0.8) * fObj.fontSize * 1.3 * 1.4 : 0;
-      const estTotal = estKickH + (kObj ? GAP_K : 0) + estHeadH + (fObj ? GAP_H : 0) + estFootH;
-      totalH = Math.max(totalH, estTotal);
-
-      // Place the text in the LOWER third of the slide (the Tag-9 look), using
-      // the estimated (font-timing-independent) height. The block is bottom-
-      // aligned within the safe area, so a long block grows UPWARD and can
-      // never run past the safe bottom — lower placement, no overflow bug.
-      // Applies to photo AND text-only slides for one consistent feed rhythm.
-      let cursor = Math.max(SAFE_TOP, SAFE_BOTTOM - totalH);
-
-      // Local scrim exactly behind the FINAL text block — soft fades, no edges.
-      // On cover-blur follow-up slides the photo is ALREADY blurred + darkened
-      // by a full-frame overlay, so ANY extra scrim stacks into a dark block.
-      // Skip it there entirely; draw it only on sharp photos.
+      // Soft scrim behind the block for readability (skip on already-dark blur).
       const isBlurFollowUp = coverBlurActive && (options.slideIndex || 0) > 0;
-
-      // Use the REAL measured heights of each object to compute where the top
-      // must be so the block ends exactly at SAFE_BOTTOM. This is the reliable
-      // fix: whatever the actual wrapped height turns out to be (font finally
-      // loaded), the bottom is pinned and the text can't be clipped.
-      const realK = kObj ? mh(kObj, fs(15) * 1.8) : 0;
-      const realH = mh(h, fs(slide.fontSize || 54) * 2.4);
-      const realF = fObj ? mh(fObj, fs(15) * 1.8) : 0;
-      const realTotal = realK + (kObj ? GAP_K : 0) + realH + (fObj ? GAP_H : 0) + realF;
-      cursor = Math.max(SAFE_TOP, SAFE_BOTTOM - realTotal);
-
-      // Scrim behind the ACTUAL text block (uses the real cursor + height).
       if (hasBgImage && !isBlurFollowUp) {
-        const pad = height * 0.06;
+        const pad = height * 0.05;
         const sTop = Math.max(0, cursor - pad);
-        const sH = Math.min(height - sTop, realTotal + pad * 2);
+        const sH = Math.min(height - sTop, blockH + pad * 2);
         canvas.add(new fabric.Rect({
           left: 0, top: sTop, width, height: sH,
           fill: new fabric.Gradient({
-            type: 'linear',
-            coords: { x1: 0, y1: 0, x2: 0, y2: sH },
+            type: 'linear', coords: { x1: 0, y1: 0, x2: 0, y2: sH },
             colorStops: [
               { offset: 0, color: `rgba(${scrimRGB},0)` },
-              { offset: 0.18, color: `rgba(${scrimRGB},0.42)` },
-              { offset: 0.82, color: `rgba(${scrimRGB},0.42)` },
+              { offset: 0.2, color: `rgba(${scrimRGB},0.42)` },
+              { offset: 0.8, color: `rgba(${scrimRGB},0.42)` },
               { offset: 1, color: `rgba(${scrimRGB},0)` },
             ],
           }),
@@ -975,8 +909,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         }));
       }
 
-      if (kObj) { kObj.set({ top: cursor }); canvas.add(kObj); cursor += realK + GAP_K; }
-      h.set({ top: cursor }); canvas.add(h); cursor += realH + GAP_H;
+      if (kObj) { kObj.set({ top: cursor }); canvas.add(kObj); cursor += hK + GAP_K2; }
+      h.set({ top: cursor }); canvas.add(h); cursor += hH2 + GAP_H2;
       if (fObj) { fObj.set({ top: cursor }); canvas.add(fObj); }
 
       // Brand mark near bottom.
