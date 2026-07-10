@@ -867,65 +867,45 @@ const ContentPlanner = () => {
                     {/* Menu button — always visible (no hover on mobile) */}
                     <button
                       onClick={(e) => { e.stopPropagation(); setMenuDayId(menuDayId === day.day ? null : day.day); }}
-                      className="absolute top-2 right-2 z-30 w-8 h-8 rounded-full bg-black/55 backdrop-blur text-white flex items-center justify-center shadow-lg active:scale-95 transition-transform"
+                      className="absolute top-1.5 right-1.5 z-30 w-7 h-7 rounded-full bg-black/40 backdrop-blur text-white flex items-center justify-center shadow active:scale-90 transition-transform"
                       title="Aktionen"
                       aria-label="Aktionen"
                     >
-                      <SafeIcon icon={FiMoreVertical} className="text-sm" />
+                      <SafeIcon icon={FiMoreVertical} className="text-xs" />
                     </button>
 
-                    {/* Floating context menu above the tile */}
+                    {/* Action sheet — fixed & centered so it's never clipped */}
                     {menuDayId === day.day && (
-                      <>
-                        <div className="fixed inset-0 z-40" onClick={(e) => { e.stopPropagation(); setMenuDayId(null); }} />
-                        <div className="absolute top-11 right-2 z-50 w-44 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden" onClick={(e) => e.stopPropagation()}>
-                          <button
-                            onClick={() => { setMenuDayId(null); handleEditDay(day); }}
-                            className="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold text-gray-800 hover:bg-gray-50"
-                          >
-                            <SafeIcon icon={FiEdit3} className="text-sm text-gray-500" /> Bearbeiten
+                      <div className="fixed inset-0 z-[60] flex items-end justify-center" onClick={(e) => { e.stopPropagation(); setMenuDayId(null); }}>
+                        <div className="absolute inset-0 bg-black/40" />
+                        <div className="relative w-full max-w-sm bg-white rounded-t-2xl shadow-2xl pb-[env(safe-area-inset-bottom)] animate-slide-up" onClick={(e) => e.stopPropagation()}>
+                          <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-gray-100">
+                            <span className="text-sm font-bold text-gray-900">Tag {day.day}</span>
+                            <button onClick={() => setMenuDayId(null)} className="w-7 h-7 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center"><span className="text-sm font-bold leading-none">✕</span></button>
+                          </div>
+                          <button onClick={() => { setMenuDayId(null); handleEditDay(day); }} className="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50">
+                            <SafeIcon icon={FiEdit3} className="text-base text-gray-500" /> Bearbeiten
                           </button>
-                          <button
-                            onClick={() => { setMenuDayId(null); handleReloadDay(day.day); }}
-                            disabled={reloadingDay === day.day}
-                            className="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold text-gray-800 hover:bg-gray-50 disabled:opacity-50"
-                          >
-                            <SafeIcon icon={FiRefreshCw} className={`text-sm text-gray-500 ${reloadingDay === day.day ? 'animate-spin' : ''}`} /> Neu laden
+                          <button onClick={() => { setMenuDayId(null); handleReloadDay(day.day); }} disabled={reloadingDay === day.day} className="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50 disabled:opacity-50">
+                            <SafeIcon icon={FiRefreshCw} className={`text-base text-gray-500 ${reloadingDay === day.day ? 'animate-spin' : ''}`} /> Neu laden
                           </button>
-                          <button
-                            onClick={() => { setMenuDayId(null); toggleCoverBlur(day.day); }}
-                            className="w-full flex items-center justify-between px-3 py-2.5 text-xs font-bold text-gray-800 hover:bg-gray-50"
-                          >
-                            <span className="flex items-center gap-2.5">
-                              <SafeIcon icon={FiLayers} className={`text-sm ${day.coverBlurMode ? 'text-amber-500' : 'text-gray-500'}`} /> Unschärfe
+                          <button onClick={() => { setMenuDayId(null); toggleCoverBlur(day.day); }} className="w-full flex items-center justify-between px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50">
+                            <span className="flex items-center gap-3">
+                              <SafeIcon icon={FiLayers} className={`text-base ${day.coverBlurMode ? 'text-amber-500' : 'text-gray-500'}`} /> Unschärfe Folgeseiten
                             </span>
-                            <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${day.coverBlurMode ? 'bg-amber-500 text-white' : 'bg-gray-200 text-gray-500'}`}>
-                              {day.coverBlurMode ? 'An' : 'Aus'}
-                            </span>
+                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${day.coverBlurMode ? 'bg-amber-500 text-white' : 'bg-gray-200 text-gray-500'}`}>{day.coverBlurMode ? 'An' : 'Aus'}</span>
                           </button>
-                          <button
-                            onClick={() => { setMenuDayId(null); setExpandedCaptionId(expandedCaptionId === day.day ? null : day.day); }}
-                            className="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold text-gray-800 hover:bg-gray-50"
-                          >
-                            <SafeIcon icon={FiMessageSquare} className="text-sm text-gray-500" /> Caption
+                          <button onClick={() => { setMenuDayId(null); setExpandedCaptionId(expandedCaptionId === day.day ? null : day.day); }} className="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50">
+                            <SafeIcon icon={FiMessageSquare} className="text-base text-gray-500" /> Caption
                           </button>
-                          <div className="h-px bg-gray-100" />
-                          <button
-                            onClick={() => { setMenuDayId(null); handleShareDay(day); }}
-                            disabled={isExportingThisDay}
-                            className="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold text-purple-700 hover:bg-purple-50 disabled:opacity-50"
-                          >
-                            <SafeIcon icon={FiShare2} className="text-sm" /> In Fotos
+                          <button onClick={() => { setMenuDayId(null); handleShareDay(day); }} disabled={isExportingThisDay} className="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-purple-700 hover:bg-purple-50 border-b border-gray-50 disabled:opacity-50">
+                            <SafeIcon icon={FiShare2} className="text-base" /> In Fotos speichern
                           </button>
-                          <button
-                            onClick={() => { setMenuDayId(null); handleExportDay(day); }}
-                            disabled={isExportingThisDay}
-                            className="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs font-bold text-gray-800 hover:bg-gray-50 disabled:opacity-50"
-                          >
-                            <SafeIcon icon={FiDownload} className="text-sm text-gray-500" /> Export
+                          <button onClick={() => { setMenuDayId(null); handleExportDay(day); }} disabled={isExportingThisDay} className="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 disabled:opacity-50">
+                            <SafeIcon icon={FiDownload} className="text-base text-gray-500" /> Export
                           </button>
                         </div>
-                      </>
+                      </div>
                     )}
 
 
