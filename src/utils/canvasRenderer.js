@@ -843,6 +843,21 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         fill: lightText, fontFamily: 'Playfair Display', fontWeight: '500',
         textAlign: 'center', lineHeight: 1.08, shadow: sh,
       });
+      // Hard cap by text length BEFORE measuring — this is the reliable guard.
+      // Font metrics can be wrong on first paint (font still loading), so we
+      // never rely on measurement alone. These caps are tuned so the worst-case
+      // wrap always fits the 4:5 safe area with the CAPS frame lines present.
+      const charCount = headline.length + (kickTxt ? kickTxt.length * 0.5 : 0) + (footer ? footer.length * 0.5 : 0);
+      const capBase = charCount > 140 ? 26
+        : charCount > 110 ? 30
+        : charCount > 85 ? 36
+        : charCount > 60 ? 42
+        : charCount > 40 ? 48
+        : 54;
+      if (h.fontSize > fs(capBase)) {
+        h.set('fontSize', fs(capBase));
+        if (h.initDimensions) h.initDimensions();
+      }
       if (footer) {
         fObj = new fabric.Textbox(footer.toUpperCase(), {
           left: centerX, top: 0, originX: 'center', originY: 'top',
