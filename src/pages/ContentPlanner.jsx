@@ -803,41 +803,45 @@ const ContentPlanner = () => {
                       </div>
                     )}
 
-                    {/* Hover overlay with quick actions */}
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex flex-col items-center justify-center gap-1.5 opacity-0 group-hover:opacity-100 z-20">
-                      <div className="bg-white/95 text-gray-800 text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center">
-                        <SafeIcon icon={FiEdit3} className="mr-1" /> Bearbeiten
+                    {/* Hover overlay with quick actions — icon only, kept compact */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 z-20">
+                      <div className="bg-white/95 text-gray-800 w-9 h-9 rounded-full flex items-center justify-center shadow" title="Bearbeiten">
+                        <SafeIcon icon={FiEdit3} className="text-sm" />
                       </div>
                       <div className="flex gap-1.5">
                         <button
                           onClick={(e) => { e.stopPropagation(); toggleCoverBlur(day.day); }}
-                          className={`text-[9px] font-bold px-2 py-1 rounded-full flex items-center ${day.coverBlurMode ? 'bg-amber-500 text-white' : 'bg-white/95 text-gray-800 hover:bg-white'}`}
-                          title="Folgeseiten aus Coverfoto (unscharf)"
+                          className={`w-8 h-8 rounded-full flex items-center justify-center shadow transition-colors ${day.coverBlurMode ? 'bg-amber-500 text-white' : 'bg-white/95 text-gray-700 hover:bg-white'}`}
+                          title={day.coverBlurMode ? 'Unschärfe aktiv – Folgeseiten aus Coverfoto' : 'Folgeseiten aus Coverfoto (unscharf)'}
+                          aria-label="Unschärfe für Folgeseiten"
                         >
-                          <SafeIcon icon={FiLayers} className="mr-0.5" /> {day.coverBlurMode ? 'Blur an' : 'Blur'}
+                          <SafeIcon icon={FiLayers} className="text-sm" />
                         </button>
                         <button
                           onClick={(e) => { e.stopPropagation(); setExpandedCaptionId(expandedCaptionId === day.day ? null : day.day); }}
-                          className="bg-white/95 text-gray-800 text-[9px] font-bold px-2 py-1 rounded-full flex items-center hover:bg-white"
+                          className="w-8 h-8 rounded-full bg-white/95 text-gray-700 flex items-center justify-center shadow hover:bg-white"
                           title="Caption ein-/ausklappen"
+                          aria-label="Caption"
                         >
-                          <SafeIcon icon={FiMessageSquare} className="mr-0.5" /> Caption
+                          <SafeIcon icon={FiMessageSquare} className="text-sm" />
                         </button>
                         <button
                           onClick={(e) => { e.stopPropagation(); handleShareDay(day); }}
                           disabled={isExportingThisDay}
-                          className="bg-purple-600 text-white text-[9px] font-bold px-2 py-1 rounded-full flex items-center hover:bg-purple-700 disabled:opacity-50"
+                          className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center shadow hover:bg-purple-700 disabled:opacity-50"
                           title="In Fotos speichern"
+                          aria-label="In Fotos speichern"
                         >
-                          <SafeIcon icon={FiShare2} className="mr-0.5" /> Fotos
+                          <SafeIcon icon={FiShare2} className="text-sm" />
                         </button>
                         <button
                           onClick={(e) => { e.stopPropagation(); handleExportDay(day); }}
                           disabled={isExportingThisDay}
-                          className="bg-white/90 text-gray-700 text-[9px] font-bold px-2 py-1 rounded-full flex items-center hover:bg-white disabled:opacity-50"
+                          className="w-8 h-8 rounded-full bg-white/90 text-gray-700 flex items-center justify-center shadow hover:bg-white disabled:opacity-50"
                           title="Exportieren"
+                          aria-label="Exportieren"
                         >
-                          {isExportingThisDay ? <span className="animate-spin"><SafeIcon icon={FiRefreshCw} /></span> : <><SafeIcon icon={FiDownload} className="mr-0.5" /> Export</>}
+                          {isExportingThisDay ? <span className="animate-spin"><SafeIcon icon={FiRefreshCw} className="text-sm" /></span> : <SafeIcon icon={FiDownload} className="text-sm" />}
                         </button>
                       </div>
                     </div>
