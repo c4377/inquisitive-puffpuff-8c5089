@@ -139,6 +139,12 @@ const ContentPlanner = () => {
                  finalLayout = 'maximized_bold';
              }
           }
+          // Editorial preset: EVERY slide goes through the adaptive auto layout.
+          // Legacy layouts stored on individual slides (from older imports or
+          // added days) made single posts render completely differently — wrong
+          // position, no CAPS lines, no brand mark. Normalize them away.
+          const editorialActive = config.editorialDark === true || config.ruleSet === 'editorial_dark';
+          if (editorialActive) finalLayout = 'auto';
 
           // --- Cover-Blur (pro Post) & CTA-Foto ---
           // coverBlurMode liegt am TAG (day), nicht an der Brand: jeder Post
@@ -175,6 +181,7 @@ const ContentPlanner = () => {
             fontWeight: weight,
             visualElements: config.visualElements || [],
             layout: finalLayout,
+            layoutId: editorialActive ? 'auto' : (slide.layoutId || finalLayout),
             // Editorial Dark preset flags — drive the photo wash and kicker.
             darkPhoto: config.darkPhoto === true,
             editorialDark: config.editorialDark === true || config.ruleSet === 'editorial_dark',
