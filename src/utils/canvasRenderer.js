@@ -929,27 +929,21 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       const estTotal = estKickH + (kObj ? GAP_K : 0) + estHeadH + (fObj ? GAP_H : 0) + estFootH;
       totalH = Math.max(totalH, estTotal);
 
-      // Place the stack: photos follow the quiet zone, but the stack is always
-      // clamped inside the safe area (never under the brand mark, never off
-      // the top). Text-only posts sit centered at the same level every time.
-      let cursor;
-      if (hasBgImage) {
-        const wanted = stackTop;
-        const maxTop = SAFE_BOTTOM - totalH;
-        cursor = Math.max(SAFE_TOP, Math.min(wanted, maxTop));
-      } else {
-        cursor = Math.max(SAFE_TOP, SAFE_TOP + (availH - totalH) / 2);
-      }
+      // Place the stack ALWAYS vertically centered in the safe area — whether
+      // there's a photo or not. Centering makes overflow impossible as long as
+      // the block fits at all, and removes the dependency on a possibly-wrong
+      // first-paint height measurement (the cause of the bottom-overflow bug).
+      let cursor = Math.max(SAFE_TOP, SAFE_TOP + (availH - totalH) / 2);
 
       // Local scrim exactly behind the FINAL text block — soft fades, no edges.
-      // On cover-blur follow-up slides the photo is ALREADY blurred + darkened,
-      // so an additional full-strength scrim reads as an ugly dark block. Use a
-      // much lighter scrim there; full strength only on sharp photos.
-      if (hasBgImage) {
+      // On cover-blur follow-up slides the photo is ALREADY blurred + darkened
+      // by a full-frame overlay, so ANY extra scrim stacks into a dark block.
+      // Skip it there entirely; draw it only on sharp photos.
+      const isBlurFollowUp = coverBlurActive && (options.slideIndex || 0) > 0;
+      if (hasBgImage && !isBlurFollowUp) {
         const pad = height * 0.06;
         const sTop = Math.max(0, cursor - pad);
         const sH = Math.min(height - sTop, totalH + pad * 2);
-        const peak = coverBlurActive ? 0.18 : 0.42;
         canvas.add(new fabric.Rect({
           left: 0, top: sTop, width, height: sH,
           fill: new fabric.Gradient({
@@ -957,8 +951,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
             coords: { x1: 0, y1: 0, x2: 0, y2: sH },
             colorStops: [
               { offset: 0, color: `rgba(${scrimRGB},0)` },
-              { offset: 0.18, color: `rgba(${scrimRGB},${peak})` },
-              { offset: 0.82, color: `rgba(${scrimRGB},${peak})` },
+              { offset: 0.18, color: `rgba(${scrimRGB},0.42)` },
+              { offset: 0.82, color: `rgba(${scrimRGB},0.42)` },
               { offset: 1, color: `rgba(${scrimRGB},0)` },
             ],
           }),
