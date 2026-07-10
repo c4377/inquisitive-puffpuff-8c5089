@@ -7,8 +7,15 @@ import { createClient } from '@supabase/supabase-js';
 //   VITE_SUPABASE_URL       = https://<project>.supabase.co
 //   VITE_SUPABASE_ANON_KEY  = <anon public key>
 const ls = (k) => { try { return localStorage.getItem(k) || ''; } catch { return ''; } };
-const getUrl = () => import.meta.env.VITE_SUPABASE_URL || ls('vite_supabase_url') || '';
-const getKey = () => import.meta.env.VITE_SUPABASE_ANON_KEY || ls('vite_supabase_key') || '';
+// Accept the URL in any pasted form ("https://x.supabase.co/rest/v1", trailing
+// slash, etc.) and reduce it to the plain origin the client needs. A pasted
+// REST endpoint otherwise breaks ALL storage calls with "Invalid path".
+const cleanUrl = (u) => {
+  if (!u) return '';
+  try { return new URL(u).origin; } catch { return String(u).replace(/\/+$/, ''); }
+};
+const getUrl = () => cleanUrl(import.meta.env.VITE_SUPABASE_URL || ls('vite_supabase_url') || '');
+const getKey = () => (import.meta.env.VITE_SUPABASE_ANON_KEY || ls('vite_supabase_key') || '').trim();
 
 // Only create the client if the keys are available
 export const supabase = (getUrl() && getKey()) ? createClient(getUrl(), getKey()) : null;
