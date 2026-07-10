@@ -795,9 +795,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           g2++;
         }
         const cH = capsOnly.height || fs(20) * 3;
-        const cTop = hasBgImage
-          ? Math.max(SAFE_TOP_C, Math.min(stackTop, SAFE_BOTTOM_C - cH))
-          : SAFE_TOP_C + (availC - cH) / 2;
+        // Same fixed centered position as the serif mode: block midpoint at 55%.
+        let cTop = height * 0.55 - cH / 2;
+        cTop = Math.min(Math.max(cTop, height * 0.06), height * 0.90 - cH);
         if (hasBgImage) {
           const padC = height * 0.06;
           const sT = Math.max(0, cTop - padC);
@@ -868,10 +868,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       }
       const mh = (o, fallback) => (o ? ((typeof o.getScaledHeight === 'function' ? o.getScaledHeight() : o.height) || fallback) : 0);
 
-      // FIXED POSITION. The text simply starts at a fixed Y. No height math,
-      // no growing, no anchoring — exactly like a normal brand layout: the top
-      // of the text block sits at this Y and the text flows down from there.
-      const TEXT_Y = height * 0.58; // fixed start position (lower-middle third)
+      // FIXED POSITION, centered: the block's MIDPOINT sits at a fixed height
+      // (slightly below the geometric middle for an editorial feel). Same
+      // position on every slide; short and long texts share the same center.
+      const CENTER_Y = height * 0.55;
 
       const GAP_K2 = height * 0.03;
       const GAP_H2 = height * 0.025;
@@ -880,7 +880,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       const hF = fObj ? mh(fObj, fs(15) * 1.8) : 0;
       const blockH = hK + (kObj ? GAP_K2 : 0) + hH2 + (fObj ? GAP_H2 : 0) + hF;
 
-      let cursor = TEXT_Y;
+      let cursor = CENTER_Y - blockH / 2;
+      // Keep the block clear of the very top and of the brand line at 93%.
+      cursor = Math.min(Math.max(cursor, height * 0.06), height * 0.90 - blockH);
 
       // Soft scrim behind the block for readability (skip on already-dark blur).
       const isBlurFollowUp = coverBlurActive && (options.slideIndex || 0) > 0;
