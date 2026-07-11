@@ -164,14 +164,19 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           canvas.sendToBack(img);
 
           // Readability overlay — kept light so the photo stays vibrant.
-          // Follow-up slides in cover-blur mode get a touch more darkening.
+          // EDITORIAL slides skip this entirely: they apply their own light
+          // tone + a local text scrim. Stacking all three made photos muddy.
+          // Follow-up slides in cover-blur mode get darkening (their scrim is
+          // skipped), everything else editorial stays bright.
+          const isEditorialSlide = slide.editorialDark === true || slide.editorialAuto === true;
           let ov = typeof slide.overlay === 'number' ? slide.overlay : 0.28;
-          if (isFollowUp) ov = Math.max(ov, 0.42);
+          if (isEditorialSlide) ov = isFollowUp ? 0.42 : 0;
+          else if (isFollowUp) ov = Math.max(ov, 0.42);
           const overlayRect = new fabric.Rect({
             left: 0, top: 0, width, height,
             fill: `rgba(0,0,0,${ov})`, selectable: false,
           });
-          canvas.add(overlayRect);
+          if (ov > 0) canvas.add(overlayRect);
 
           // Gentle gradient only at the very top & bottom edges (where brand
           // mark / slide number sit). Middle stays clear so the image shows.
@@ -808,8 +813,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
               type: 'linear', coords: { x1: 0, y1: 0, x2: 0, y2: sHgt },
               colorStops: [
                 { offset: 0, color: `rgba(${scrimRGB},0)` },
-                { offset: 0.18, color: `rgba(${scrimRGB},0.42)` },
-                { offset: 0.82, color: `rgba(${scrimRGB},0.42)` },
+                { offset: 0.18, color: `rgba(${scrimRGB},0.32)` },
+                { offset: 0.82, color: `rgba(${scrimRGB},0.32)` },
                 { offset: 1, color: `rgba(${scrimRGB},0)` },
               ],
             }),
@@ -896,8 +901,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
             type: 'linear', coords: { x1: 0, y1: 0, x2: 0, y2: sH },
             colorStops: [
               { offset: 0, color: `rgba(${scrimRGB},0)` },
-              { offset: 0.2, color: `rgba(${scrimRGB},0.42)` },
-              { offset: 0.8, color: `rgba(${scrimRGB},0.42)` },
+              { offset: 0.2, color: `rgba(${scrimRGB},0.32)` },
+              { offset: 0.8, color: `rgba(${scrimRGB},0.32)` },
               { offset: 1, color: `rgba(${scrimRGB},0)` },
             ],
           }),
