@@ -19,7 +19,7 @@ import { saveSetsToDB, loadSetsFromDB } from '../utils/storage';
 import { analyzePlanRoles, roleFeedback, ROLE_META } from '../utils/postRole';
 import { weightedLayoutPool, getRating, setRating } from '../utils/layoutRatings';
 
-const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus , FiMoreVertical } = FiIcons;
+const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus , FiMoreVertical, FiMaximize2 } = FiIcons;
 
 const ContentPlanner = () => {
   const { brandSettings, updateBrandSettings } = useBrand();
@@ -230,6 +230,17 @@ const ContentPlanner = () => {
   useEffect(() => {
     loadSetsFromDB().then((sets) => setSavedSets(Array.isArray(sets) ? sets : []));
   }, []);
+
+  // Toggle the BIG headline on the cover slide (slide 1) of one day — the
+  // same per-slide switch as in the Editor, reachable from the feed.
+  const toggleBigHeadline = (dayNum) => {
+    const updated = weekPlan.map((d) => {
+      if (d.day !== dayNum) return d;
+      const slides = (d.slides || []).map((s, i) => (i === 0 ? { ...s, bigHeadline: s.bigHeadline !== true } : s));
+      return { ...d, slides };
+    });
+    updateBrandSettings({ contentPlan: applyBrandStyling(updated, currentBrand) });
+  };
 
   // Toggle cover-blur for ONE post (day): follow-up slides reuse the cover
   // photo, blurred and slightly darkened.
@@ -911,6 +922,12 @@ const ContentPlanner = () => {
                               <SafeIcon icon={FiLayers} className={`text-base ${day.coverBlurMode ? 'text-amber-500' : 'text-gray-500'}`} /> Unschärfe Folgeseiten
                             </span>
                             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${day.coverBlurMode ? 'bg-amber-500 text-white' : 'bg-gray-200 text-gray-500'}`}>{day.coverBlurMode ? 'An' : 'Aus'}</span>
+                          </button>
+                          <button onClick={() => { setMenuDayId(null); toggleBigHeadline(day.day); }} className="w-full flex items-center justify-between px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50">
+                            <span className="flex items-center gap-3">
+                              <SafeIcon icon={FiMaximize2} className={`text-base ${day.slides?.[0]?.bigHeadline ? 'text-purple-600' : 'text-gray-500'}`} /> Große Headline
+                            </span>
+                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${day.slides?.[0]?.bigHeadline ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-500'}`}>{day.slides?.[0]?.bigHeadline ? 'An' : 'Aus'}</span>
                           </button>
                           <button onClick={() => { setMenuDayId(null); setExpandedCaptionId(expandedCaptionId === day.day ? null : day.day); }} className="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50">
                             <SafeIcon icon={FiMessageSquare} className="text-base text-gray-500" /> Caption
