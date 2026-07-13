@@ -18,7 +18,7 @@ import { renderSlide } from '../utils/canvasRenderer';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 
-const { FiPlus, FiDownload, FiTrash2, FiFolder, FiSave, FiArrowLeft, FiType, FiLayout, FiDroplet, FiImage, FiMove, FiList, FiGrid, FiCheck, FiToggleRight, FiToggleLeft, FiLayers, FiMessageSquare, FiCopy, FiRefreshCw, FiSend, FiChevronDown, FiChevronUp, FiEdit3, FiSun } = FiIcons;
+const { FiPlus, FiDownload, FiTrash2, FiFolder, FiSave, FiArrowLeft, FiType, FiLayout, FiDroplet, FiImage, FiMove, FiList, FiGrid, FiCheck, FiToggleRight, FiToggleLeft, FiLayers, FiMessageSquare, FiCopy, FiRefreshCw, FiSend, FiChevronDown, FiChevronUp, FiEdit3, FiSun, FiMaximize2 } = FiIcons;
 
 const ToolTab = ({ id, label, icon, isActive, onClick }) => (
   <button onClick={() => onClick(id)} className={`w-full flex flex-col items-center justify-center py-4 px-1 transition-all border-l-4 ${isActive ? 'bg-purple-50 border-purple-600 text-purple-700' : 'bg-white border-transparent text-gray-500 hover:bg-gray-50 hover:text-gray-900'}`}>
@@ -340,17 +340,19 @@ const Editor = () => {
           <div {...(slides.length > 1 ? slideSwipe : {})} className={`shadow-2xl rounded-sm overflow-hidden bg-white w-full transition-all duration-300 relative shrink-0 ${currentSlide.format === '9:16' ? 'max-w-[280px] aspect-[9/16]' : (currentSlide.format === '16:9' ? 'max-w-[800px] aspect-video' : 'max-w-[400px] aspect-[4/5]')}`}>
             <Canvas ref={canvasRef} data={{ ...currentSlide, slideNumber: slides.length > 1 ? currentSlideIndex + 1 : undefined, totalSlides: slides.length }} brandName={brandName} />
             <button id="save-lib-btn" onClick={handleSaveToLibrary} className="absolute bottom-4 right-4 bg-white/90 backdrop-blur border border-gray-200 shadow-lg text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center hover:bg-white hover:text-purple-600 transition-colors"><SafeIcon icon={FiSave} className="mr-1" /> Save to Lib</button>
-            {typeof currentSlide.background === 'string' && currentSlide.background.length > 5 && (
-              <button onClick={handleSmartText} disabled={isSmartAnalyzing} className="absolute bottom-4 left-4 bg-white/90 backdrop-blur border border-gray-200 shadow-lg text-gray-700 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center hover:bg-white hover:text-amber-600 transition-colors disabled:opacity-50" title="Text intelligent platzieren: ruhige Zone + Farbe nach Helligkeit">
-                <SafeIcon icon={FiSun} className={`mr-1 ${isSmartAnalyzing ? 'animate-spin' : ''}`} /> Smart Text
-              </button>
-            )}
             <button
               onClick={() => handleSlideUpdate({ serifHeadline: currentSlide.serifHeadline === false })}
               className={`absolute top-4 left-4 backdrop-blur border shadow-lg px-3 py-1.5 rounded-lg text-xs font-bold flex items-center transition-colors ${currentSlide.serifHeadline === false ? 'bg-gray-800 text-white border-gray-800' : 'bg-white/90 text-gray-700 border-gray-200 hover:bg-white'}`}
               title={currentSlide.serifHeadline === false ? 'Alles in Versalien – tippen für Serifen-Headline' : 'Erster Satz als Serifen-Headline – tippen für alles in Versalien'}
             >
               <SafeIcon icon={FiType} className="mr-1" /> {currentSlide.serifHeadline === false ? 'Nur CAPS' : 'Headline'}
+            </button>
+            <button
+              onClick={() => handleSlideUpdate({ bigHeadline: currentSlide.bigHeadline !== true })}
+              className={`absolute top-14 left-4 backdrop-blur border shadow-lg px-3 py-1.5 rounded-lg text-xs font-bold flex items-center transition-colors ${currentSlide.bigHeadline ? 'bg-purple-600 text-white border-purple-600' : 'bg-white/90 text-gray-700 border-gray-200 hover:bg-white'}`}
+              title={currentSlide.bigHeadline ? 'Große Headline aktiv – tippen für normale Größe' : 'Headline größer machen (Cover-Look)'}
+            >
+              <SafeIcon icon={FiMaximize2} className="mr-1" /> {currentSlide.bigHeadline ? 'Groß' : 'Normal'}
             </button>
           </div>
           {slides.length > 1 && (

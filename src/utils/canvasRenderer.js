@@ -853,16 +853,18 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       // never rely on measurement alone. These caps are tuned so the worst-case
       // wrap always fits the 4:5 safe area with the CAPS frame lines present.
       const charCount = headline.length + (kickTxt ? kickTxt.length * 0.5 : 0) + (footer ? footer.length * 0.5 : 0);
-      const capBase = charCount > 140 ? 26
+      const capRaw = charCount > 140 ? 26
         : charCount > 110 ? 30
         : charCount > 85 ? 36
         : charCount > 60 ? 42
         : charCount > 40 ? 48
         : 54;
-      if (h.fontSize > fs(capBase)) {
-        h.set('fontSize', fs(capBase));
-        if (h.initDimensions) h.initDimensions();
-      }
+      // Per-slide switch: bigHeadline scales the serif headline up ~35% for
+      // the large magazine-cover look. The length tiers scale with it, so
+      // long texts grow controlled rather than exploding.
+      const capBase = slide.bigHeadline === true ? Math.round(capRaw * 1.35) : capRaw;
+      h.set('fontSize', fs(capBase));
+      if (h.initDimensions) h.initDimensions();
       if (footer) {
         fObj = new fabric.Textbox(footer.toUpperCase(), {
           left: centerX, top: 0, originX: 'center', originY: 'top',
