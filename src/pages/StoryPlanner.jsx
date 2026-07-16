@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { storyStrategyIntro, storyStrategySets } from '../constants/storyStrategy';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import * as FiIcons from 'react-icons/fi';
@@ -23,6 +24,17 @@ const StoryPlanner = () => {
   const [bulkText, setBulkText] = useState('');
   const [showShifter, setShowShifter] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState(null);
+  const [showStrategy, setShowStrategy] = useState(false);
+  const [copiedSet, setCopiedSet] = useState(null);
+  const loadStrategySet = (set) => {
+    const text = set.slides.map((t, i) => `Slide ${i + 1}: ${t}`).join('\n');
+    handleBulkGenerate(text);
+    setShowStrategy(false);
+  };
+  const copyStrategySet = async (set, idx) => {
+    const text = `${set.title}\n\n${set.slides.map((t, i) => `${i + 1}. ${t}`).join('\n')}${set.sticker ? `\n→ ${set.sticker}` : ''}`;
+    try { await navigator.clipboard.writeText(text); setCopiedSet(idx); setTimeout(() => setCopiedSet(null), 1800); } catch {}
+  };
 
   const brandName = brandSettings.currentBrandConfig?.name || "";
 
@@ -69,12 +81,13 @@ const StoryPlanner = () => {
     });
   };
 
-  const handleBulkGenerate = async () => {
-    if (!bulkText.trim()) return;
+  const handleBulkGenerate = async (textOverride) => {
+    const source = typeof textOverride === 'string' ? textOverride : bulkText;
+    if (!source.trim()) return;
     setLoading(true);
     try {
       // Split by "Story 1" / "Slide 1" / "Sequenz 1" markers.
-      let slideTexts = bulkText
+      let slideTexts = source
         .split(/(?:Story|Slide|Sequenz)\s*\d+\s*[:.-]?/i)
         .map(t => t
           // remove divider lines (⸻, ---, ___) and BLOCK section headers
@@ -84,7 +97,7 @@ const StoryPlanner = () => {
           .trim()
         )
         .filter(t => t.length > 0);
-      if (slideTexts.length === 0) slideTexts.push(bulkText.trim());
+      if (slideTexts.length === 0) slideTexts.push(source.trim());
 
       const brandConfig = brandSettings.currentBrandConfig;
       const imagePool = getActiveImagePool(brandSettings);
@@ -224,6 +237,12 @@ const StoryPlanner = () => {
             <SafeIcon icon={FiFileText} className="mr-1" /> Bulk Text Input
           </button>
           <button 
+            onClick={() => setShowStrategy(!showStrategy)}
+            className={`text-sm px-3 py-1 rounded-lg font-bold transition-colors flex items-center ${showStrategy ? 'bg-amber-500 text-white' : 'bg-amber-50 text-amber-700 hover:bg-amber-100'}`}
+          >
+            <SafeIcon icon={FiLayers} className="mr-1" /> Strategie
+          </button>
+          <button 
             onClick={handleAddStory}
             className="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-lg font-bold hover:bg-gray-200 transition-colors flex items-center"
           >
@@ -245,6 +264,40 @@ const StoryPlanner = () => {
           </button>
         </div>
       </div>
+
+      {showStrategy && (
+        <div className="mb-6 border border-amber-200 bg-amber-50/50 rounded-2xl p-4">
+          <div className="text-sm font-black text-gray-900 mb-1">{storyStrategyIntro.title}</div>
+          <p className="text-xs text-gray-600 whitespace-pre-line mb-4">{storyStrategyIntro.text}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {storyStrategySets.map((set, idx) => (
+              <div key={set.title} className="bg-white border border-gray-200 rounded-xl p-3">
+                <div className="text-xs font-black text-gray-900">{set.title}</div>
+                <p className="text-[11px] text-gray-500 mb-2">{set.zweck}</p>
+                <ol className="text-[11px] text-gray-700 space-y-0.5 mb-2 list-decimal list-inside">
+                  {set.slides.map((t, i) => <li key={i}>{t}</li>)}
+                </ol>
+                {set.sticker && <p className="text-[10px] text-amber-700 font-bold mb-2">→ {set.sticker}</p>}
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => loadStrategySet(set)}
+                    disabled={loading}
+                    className="flex-1 bg-gray-900 text-white rounded-lg py-1.5 text-[11px] font-bold disabled:opacity-50"
+                  >
+                    Als Stories laden
+                  </button>
+                  <button
+                    onClick={() => copyStrategySet(set, idx)}
+                    className="px-3 bg-gray-100 text-gray-700 rounded-lg py-1.5 text-[11px] font-bold"
+                  >
+                    {copiedSet === idx ? '✓ Kopiert' : 'Kopieren'}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <AnimatePresence>
         {showBulkInput && (
