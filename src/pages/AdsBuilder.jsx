@@ -4,8 +4,10 @@ import Canvas from '../components/Canvas';
 import SafeIcon from '../common/SafeIcon';
 import * as FiIcons from 'react-icons/fi';
 import { getActiveImagePool } from '../utils/smartLayoutGenerator';
+import { fabric } from 'fabric';
+import { renderSlide } from '../utils/canvasRenderer';
 
-const { FiDownload, FiRefreshCw, FiImage, FiTarget, FiList } = FiIcons;
+const { FiDownload, FiRefreshCw, FiImage, FiTarget, FiList, FiShare2 } = FiIcons;
 
 // Builds prefilled ad texts from the strategy stored in brand settings.
 // Several hook formulas so "Neu kombinieren" gives fresh variants.
@@ -151,6 +153,39 @@ const AdsBuilder = () => {
 
   const strategyEmpty = !strategy.problem && !strategy.versprechen && !strategy.cta;
 
+  // High-res render (1080px) → native share sheet → "Bild sichern" on iOS.
+  const [sharing, setSharing] = useState(false);
+  const shareToPhotos = async () => {
+    setSharing(true);
+    let canvasEl = null, fCanvas = null;
+    try {
+      const canvasWidth = 1080, canvasHeight = 1350, scale = canvasWidth / 400;
+      canvasEl = document.createElement('canvas');
+      canvasEl.width = canvasWidth; canvasEl.height = canvasHeight;
+      canvasEl.style.display = 'none';
+      document.body.appendChild(canvasEl);
+      fCanvas = new fabric.StaticCanvas(canvasEl, { width: canvasWidth, height: canvasHeight });
+      await renderSlide(fCanvas, { ...slide, visualElements: [] }, canvasWidth, canvasHeight, {
+        slideIndex: 0, totalSlides: 1, scale, globalBrandName: brandName,
+      });
+      const dataUrl = fCanvas.toDataURL({ format: 'png', multiplier: 1 });
+      const blob = await (await fetch(dataUrl)).blob();
+      const file = new File([blob], `ad-${template}.png`, { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: 'Anzeige' });
+      } else {
+        const a = document.createElement('a');
+        a.href = dataUrl; a.download = `ad-${template}.png`; a.click();
+      }
+    } catch (e) {
+      if (e && e.name !== 'AbortError') console.error('share failed', e);
+    } finally {
+      try { fCanvas?.dispose(); } catch {}
+      if (canvasEl?.parentNode) canvasEl.parentNode.removeChild(canvasEl);
+      setSharing(false);
+    }
+  };
+
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
       <h1 className="text-2xl font-black text-gray-900 mb-1">Ads-Builder</h1>
@@ -255,8 +290,15 @@ const AdsBuilder = () => {
           )}
 
           <button
+            onClick={shareToPhotos}
+            disabled={sharing}
+            className="mt-4 w-full bg-purple-600 text-white rounded-xl py-3 text-sm font-bold flex items-center justify-center gap-2 hover:bg-purple-700 disabled:opacity-50"
+          >
+            <SafeIcon icon={sharing ? FiRefreshCw : FiShare2} className={sharing ? 'animate-spin' : ''} /> {sharing ? 'Wird vorbereitet…' : 'In Fotos speichern'}
+          </button>
+          <button
             onClick={() => canvasRef.current?.downloadImage?.(`ad-${template}.png`)}
-            className="mt-4 w-full bg-purple-600 text-white rounded-xl py-3 text-sm font-bold flex items-center justify-center gap-2 hover:bg-purple-700"
+            className="mt-2 w-full bg-white border border-gray-200 text-gray-700 rounded-xl py-3 text-sm font-bold flex items-center justify-center gap-2 hover:bg-gray-50"
           >
             <SafeIcon icon={FiDownload} /> Als PNG exportieren
           </button>
