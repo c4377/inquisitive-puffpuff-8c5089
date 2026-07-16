@@ -702,6 +702,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     if (row === 'top') { top = height * 0.12; originY = 'top'; }
     else if (row === 'bottom') { top = height * 0.88; originY = 'bottom'; }
 
+    // Ad-style paper strips: dark ink on cream line-backgrounds, no shadow.
+    // Reads on ANY photo without darkening it.
     const titleObj = new fabric.Textbox(plain, {
       left,
       top,
@@ -710,11 +712,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       width: boxWidth,
       fontSize: fs(slide.fontSize || 46),
       fontFamily: fontFamily,
-      fill: '#FFFFFF',
+      fill: hasBgImage ? '#1F1B16' : (slide.color || '#1F1B16'),
       textAlign,
-      lineHeight: 1.2,
+      lineHeight: hasBgImage ? 1.45 : 1.2,
       fontWeight: slide.fontWeight || 'bold',
-      shadow: 'rgba(0,0,0,0.3) 0px 1px 5px',
+      shadow: '',
+      textBackgroundColor: hasBgImage ? 'rgba(255,252,248,0.96)' : '',
     });
     // accent word keeps accent color even on photo
     try {
@@ -767,33 +770,14 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const tObj = new fabric.Textbox(plain, {
       left: textLeft, top: rowY, originX, originY: 'center',
       width: boxW, fontSize: fs(slide.fontSize || 42), fontFamily: fontFamily,
-      fill: slide.color || '#FFFFFF', textAlign: slide.textAlign || align, lineHeight: 1.28,
+      fill: hasBgImage ? '#1F1B16' : (slide.color || '#1F1B16'),
+      textAlign: slide.textAlign || align,
+      lineHeight: hasBgImage ? 1.5 : 1.28,
       fontWeight: slide.fontWeight || 'normal',
       fontStyle: slide.fontStyle || 'normal',
-      shadow: slide.noShadow ? '' : 'rgba(0,0,0,0.3) 0px 1px 5px',
+      shadow: '',
+      textBackgroundColor: hasBgImage ? 'rgba(255,252,248,0.96)' : '',
     });
-
-    // NOTFALL only: quiet zone is too bright (>135) -> add a soft local scrim
-    // so white text stays legible. Otherwise: shadow alone, no box.
-    if (quietBrightness > 135) {
-      const padX = fs(30), padY = fs(24);
-      const scrim = new fabric.Rect({
-        left: textLeft, top: rowY, originX, originY: 'center',
-        width: Math.min(tObj.width + padX * 2, width - padding * 0.5),
-        height: tObj.height + padY * 2,
-        rx: fs(18), ry: fs(18),
-        fill: new fabric.Gradient({
-          type: 'radial',
-          coords: { x1: (tObj.width) / 2, y1: (tObj.height) / 2, r1: 0, x2: (tObj.width) / 2, y2: (tObj.height) / 2, r2: tObj.width * 0.7 },
-          colorStops: [
-            { offset: 0, color: 'rgba(0,0,0,0.42)' },
-            { offset: 1, color: 'rgba(0,0,0,0.0)' },
-          ],
-        }),
-        selectable: false,
-      });
-      canvas.add(scrim);
-    }
 
     applyAccentStyles(tObj, segments);
     canvas.add(tObj);
