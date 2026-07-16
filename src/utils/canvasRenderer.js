@@ -714,7 +714,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       textAlign,
       lineHeight: 1.2,
       fontWeight: slide.fontWeight || 'bold',
-      shadow: 'rgba(0,0,0,0.45) 0px 2px 8px',
+      shadow: 'rgba(0,0,0,0.3) 0px 1px 5px',
     });
     // accent word keeps accent color even on photo
     try {
@@ -770,7 +770,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       fill: slide.color || '#FFFFFF', textAlign: slide.textAlign || align, lineHeight: 1.28,
       fontWeight: slide.fontWeight || 'normal',
       fontStyle: slide.fontStyle || 'normal',
-      shadow: slide.noShadow ? '' : 'rgba(0,0,0,0.85) 0px 2px 16px',
+      shadow: slide.noShadow ? '' : 'rgba(0,0,0,0.3) 0px 1px 5px',
     });
 
     // NOTFALL only: quiet zone is too bright (>135) -> add a soft local scrim
@@ -837,7 +837,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         fontWeight: '400',                // never bold
         fill: hasBgImage ? '#FFFFFF' : contrastColor(slide.backgroundColor || '#fff'),
         textAlign: 'center', lineHeight: 1.35,
-        shadow: hasBgImage ? 'rgba(0,0,0,0.5) 0px 1px 6px' : '',
+        shadow: hasBgImage ? 'rgba(0,0,0,0.3) 0px 1px 5px' : '',
       });
       applyAccentStyles(storyText, segments);
       canvas.add(storyText);
@@ -1120,7 +1120,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       fill: hasBgImage ? (brightStd ? '#1A1310' : '#FFFFFF') : contrastColor(slide.backgroundColor || '#fff'),
       textAlign, lineHeight: 1.2,
       fontWeight: slide.fontWeight || 'normal',
-      shadow: hasBgImage && !brightStd ? 'rgba(0,0,0,0.5) 0px 2px 10px' : '',
+      shadow: hasBgImage && !brightStd ? 'rgba(0,0,0,0.3) 0px 1px 5px' : '',
     });
     applyAccentStyles(titleObj, segments);
     canvas.add(titleObj);
