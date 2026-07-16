@@ -129,6 +129,9 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "", as
     // FIX: Fabric renders at an internal resolution (e.g. 400x500). Scale the
     // visible <canvas> to the container WIDTH while keeping aspect ratio, so the
     // content shrinks/grows proportionally instead of being cut off or oversized.
+    // Fabric also wraps the canvas in a .canvas-container div with a FIXED pixel
+    // size — scale that wrapper (and the interaction layer) as well, otherwise
+    // the right side gets clipped in smaller containers.
     const el = canvas.lowerCanvasEl;
     if (el) {
       el.style.width = '100%';
@@ -136,6 +139,18 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "", as
       el.style.display = 'block';
       el.style.maxHeight = '100%';
       el.style.objectFit = 'contain';
+    }
+    const wrap = canvas.wrapperEl;
+    if (wrap) {
+      wrap.style.width = '100%';
+      wrap.style.height = '100%';
+      wrap.style.maxWidth = '100%';
+    }
+    const upper = canvas.upperCanvasEl;
+    if (upper) {
+      upper.style.width = '100%';
+      upper.style.height = 'auto';
+      upper.style.maxHeight = '100%';
     }
 
   }, [data, fontLoaded, brandName]);
