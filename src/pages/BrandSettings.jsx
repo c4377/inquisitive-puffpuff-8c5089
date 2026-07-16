@@ -7,7 +7,7 @@ import { useBrand } from '../context/BrandContext';
 import ColorPalette from '../components/ColorPalette';
 import FontSelector from '../components/FontSelector';
 import BrandRandomizer from '../components/BrandRandomizer';
-import { uploadImageToCloud, listCloudImages, deleteCloudImage } from '../supabase';
+import { uploadImageToCloud, listCloudImages, deleteCloudImage, setupSupabase, isSupabaseConfigured } from '../supabase';
 import { CURATED_BRANDS } from '../constants/brandData';
 import { parseBrandsheet } from '../utils/brandsheetParser';
 
@@ -17,6 +17,8 @@ const BrandSettings = () => {
   const { brandSettings, updateBrandSettings, addCustomFont, removeCustomFont, loadBrandProfile, deleteBrandProfile } = useBrand();
   const [activeSection, setActiveSection] = useState('identity');
   const [selectMode, setSelectMode] = useState(false);
+  const [sbUrl, setSbUrl] = useState(() => { try { return localStorage.getItem('vite_supabase_url') || ''; } catch { return ''; } });
+  const [sbKey, setSbKey] = useState(() => { try { return localStorage.getItem('vite_supabase_key') || ''; } catch { return ''; } });
   const [selectedImages, setSelectedImages] = useState([]);
   const [sheetText, setSheetText] = useState('');
   const [sheetStatus, setSheetStatus] = useState('');
@@ -381,6 +383,57 @@ const BrandSettings = () => {
               <p className="text-[11px] text-gray-400 mt-3 pt-3 border-t border-gray-100">
                 Den Unschärfe-Modus für Folgeseiten stellst du pro Post ein — im Content Plan auf der jeweiligen Kachel.
               </p>
+            </div>
+
+            {/* Cloud storage: Supabase connection, discoverable here */}
+            <div className="mb-6 border border-gray-200 rounded-xl p-4 bg-white">
+              <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Cloud-Speicher</div>
+              <p className="text-[11px] text-gray-500 mb-2">
+                Verbindung für den Bild-Upload (Supabase). Status:{' '}
+                {isSupabaseConfigured()
+                  ? <span className="text-green-600 font-bold">verbunden ✓</span>
+                  : <span className="text-red-600 font-bold">nicht verbunden</span>}
+              </p>
+              <div className="mb-2">
+                <div className="text-[11px] font-bold text-gray-500 mb-1">Project URL</div>
+                <input type="text" value={sbUrl} onChange={(e) => setSbUrl(e.target.value)} placeholder="https://xxxx.supabase.co" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-purple-400" />
+              </div>
+              <div className="mb-3">
+                <div className="text-[11px] font-bold text-gray-500 mb-1">Anon Public Key</div>
+                <input type="password" value={sbKey} onChange={(e) => setSbKey(e.target.value)} placeholder="eyJhbGciOi…" className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-purple-400" />
+              </div>
+              <button
+                onClick={() => { if (!setupSupabase(sbUrl.trim(), sbKey.trim())) setUploadError('Bitte URL und Key prüfen.'); }}
+                disabled={!sbUrl.trim() || !sbKey.trim()}
+                className="px-4 py-2 rounded-lg text-sm font-bold bg-gray-900 text-white disabled:opacity-40"
+              >
+                Verbinden & neu laden
+              </button>
+              <p className="text-[11px] text-gray-400 mt-2">Findest du in Supabase unter Project Settings → API. Nach dem Verbinden lädt die Seite einmal neu.</p>
+            </div>
+
+            {/* Ads strategy: feeds the Ads Builder */}
+            <div className="mb-6 border border-gray-200 rounded-xl p-4 bg-white">
+              <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Ads-Strategie</div>
+              <p className="text-[11px] text-gray-500 mb-3">Diese Angaben nutzt der Ads-Builder, um Anzeigen automatisch vorzubefüllen.</p>
+              {[
+                ['zielgruppe', 'Zielgruppe', 'z. B. Coaches & Beraterinnen mit bestehendem Angebot'],
+                ['problem', 'Problem / Schmerz', 'z. B. Dein Angebot wirkt hochwertig, aber niemand kauft.'],
+                ['versprechen', 'Versprechen / Ergebnis', 'z. B. Ein Angebot, das sich in 5 Minuten versteht und verkauft.'],
+                ['angebot', 'Angebot / Leadmagnet', 'z. B. Angebotsdesign-Check'],
+                ['cta', 'Call-to-Action', 'z. B. Trag dich für 0 € ein'],
+              ].map(([key, label, ph]) => (
+                <div key={key} className="mb-2.5">
+                  <div className="text-[11px] font-bold text-gray-500 mb-1">{label}</div>
+                  <input
+                    type="text"
+                    value={brandSettings.currentBrandConfig?.adsStrategy?.[key] ?? ''}
+                    onChange={(e) => updateBrandSettings({ currentBrandConfig: { ...(brandSettings.currentBrandConfig || {}), adsStrategy: { ...(brandSettings.currentBrandConfig?.adsStrategy || {}), [key]: e.target.value } } })}
+                    placeholder={ph}
+                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm outline-none focus:border-purple-400"
+                  />
+                </div>
+              ))}
             </div>
 
             {/* Brandsheet Import: paste a brand sheet, get a full brand */}

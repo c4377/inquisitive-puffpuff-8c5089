@@ -11,6 +11,7 @@ import CreateContent from './pages/CreateContent';
 import Templates from './pages/Templates';
 import BrandSettings from './pages/BrandSettings';
 import ContentPlanner from './pages/ContentPlanner';
+import AdsBuilder from './pages/AdsBuilder';
 import CommunityPlanner from './pages/CommunityPlanner';
 import StoryPlanner from './pages/StoryPlanner';
 import Editor from './pages/Editor';
@@ -47,6 +48,7 @@ function App() {
                 <Route path="/templates" element={<Templates />} />
                 <Route path="/brand-settings" element={<BrandSettings />} />
                 <Route path="/content-planner" element={<ContentPlanner />} />
+                <Route path="/ads-builder" element={<AdsBuilder />} />
                 <Route path="/community-planner" element={<CommunityPlanner />} />
                 <Route path="/story-planner" element={<StoryPlanner />} />
                 <Route path="/feed-preview" element={<FeedPreview />} />

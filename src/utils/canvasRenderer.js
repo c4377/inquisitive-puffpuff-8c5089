@@ -403,6 +403,128 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // Strong text shadow whenever text sits on a photo, for readability.
   const textShadow = hasBgImage ? 'rgba(0,0,0,0.7) 0px 2px 12px' : '';
 
+  // === ADS: PIN LIST (photo + hook pill + checkmark bullets + CTA button) ===
+  if (layout === 'ad_pins') {
+    const accent = slide.accentColor || '#7C2D2D';
+    const dark = '#1F1B16';
+    const pillBg = 'rgba(255,252,248,0.96)';
+
+    // --- COHERENT FLOW: bottom zone first (CTA + promise), then hook from the
+    // top, then bullets ONLY into the space that remains. Nothing can overlap.
+
+    // 1) CTA button, anchored at the bottom.
+    let bottomLimit = height * 0.94;
+    if (slide.cta) {
+      const ctaText = new fabric.Text(String(slide.cta), {
+        left: width / 2, top: height * 0.885, originX: 'center', originY: 'center',
+        fontSize: fs(15), fill: hexLuminance(accent) < 140 ? '#FFFFFF' : '#1F1B16',
+        fontFamily: 'Montserrat', fontWeight: '700',
+      });
+      const padX = fs(16), padY = fs(9);
+      const btn = new fabric.Rect({
+        left: width / 2, top: height * 0.885, originX: 'center', originY: 'center',
+        width: (ctaText.width || fs(120)) + padX * 2, height: (ctaText.height || fs(18)) + padY * 2,
+        rx: fs(7), ry: fs(7), fill: accent, selectable: false,
+      });
+      canvas.add(btn); canvas.add(ctaText);
+      bottomLimit = height * 0.885 - (btn.height / 2) - height * 0.025;
+    }
+
+    // 2) Promise line sits directly above the CTA.
+    if (slide.promise) {
+      const pr = new fabric.Textbox(String(slide.promise), {
+        left: width / 2, top: bottomLimit, originX: 'center', originY: 'bottom',
+        width: width * 0.82, fontSize: fs(15), fill: dark,
+        fontFamily: 'Montserrat', fontWeight: '700', lineHeight: 1.4,
+        textAlign: 'center', textBackgroundColor: pillBg,
+      });
+      canvas.add(pr);
+      bottomLimit -= (pr.getScaledHeight?.() || fs(15) * 2) + height * 0.03;
+    }
+
+    // 3) Hook from the top — font adapts to length so it stays a hook,
+    // not a novel.
+    let y = height * 0.07;
+    if (slide.hook) {
+      const hookLen = String(slide.hook).length;
+      const hookFs = hookLen > 150 ? 15 : hookLen > 100 ? 17 : 19;
+      const hookBox = new fabric.Textbox(String(slide.hook), {
+        left: width * 0.06, top: y, originX: 'left', originY: 'top',
+        width: width * 0.64, fontSize: fs(hookFs), fill: dark,
+        fontFamily: 'Montserrat', fontWeight: '700', lineHeight: 1.45,
+        textAlign: 'left', textBackgroundColor: pillBg,
+      });
+      canvas.add(hookBox);
+      y += (hookBox.getScaledHeight?.() || fs(hookFs) * 3) + height * 0.05;
+    }
+
+    // 4) Bullets fill ONLY the space between hook and promise. Anything that
+    // would collide is skipped instead of drawn over other elements.
+    const bullets = Array.isArray(slide.bullets) ? slide.bullets.filter(Boolean).slice(0, 3) : [];
+    y = Math.max(y, height * 0.42);
+    for (const b of bullets) {
+      const bx = new fabric.Textbox(`✅ ${b}`, {
+        left: width * 0.06, top: y, originX: 'left', originY: 'top',
+        width: width * 0.58, fontSize: fs(15), fill: dark,
+        fontFamily: 'Montserrat', fontWeight: '600', lineHeight: 1.4,
+        textAlign: 'left', textBackgroundColor: pillBg,
+      });
+      const bh = bx.getScaledHeight?.() || fs(15) * 2;
+      if (y + bh > bottomLimit - height * 0.02) break; // no space left — skip, never overlap
+      canvas.add(bx);
+      y += bh + height * 0.03;
+    }
+
+    canvas.renderAll();
+    return;
+  }
+
+  // === ADS: STATEMENT (paper-strip statement + circled handwriting CTA) ===
+  if (layout === 'ad_statement') {
+    const accent = slide.accentColor || '#B0402F';
+    const bgFill = slide.backgroundColor || accent;
+    canvas.add(new fabric.Rect({ left: 0, top: 0, width, height, fill: bgFill, selectable: false }));
+    // Contrast-aware ink for the circled line + brand mark on light backgrounds.
+    const inkLight = hexLuminance(bgFill) < 140;
+    const ink = inkLight ? '#FFFFFF' : '#2A2118';
+    const inkDim = inkLight ? 'rgba(255,255,255,0.85)' : 'rgba(42,33,24,0.75)';
+
+    if (slide.statement) {
+      const st = new fabric.Textbox(String(slide.statement), {
+        left: width / 2, top: height * 0.40, originX: 'center', originY: 'center',
+        width: width * 0.78, fontSize: fs(26), fill: '#1F1B16',
+        fontFamily: 'Montserrat', fontWeight: '700', lineHeight: 1.5,
+        textAlign: 'center', textBackgroundColor: 'rgba(247,241,230,0.96)',
+      });
+      canvas.add(st);
+    }
+
+    if (slide.ctaLine) {
+      const ct = new fabric.Text(String(slide.ctaLine), {
+        left: width / 2, top: height * 0.74, originX: 'center', originY: 'center',
+        fontSize: fs(24), fill: ink, fontFamily: 'Playfair Display',
+        fontStyle: 'italic', fontWeight: '500',
+      });
+      const ell = new fabric.Ellipse({
+        left: width / 2, top: height * 0.74, originX: 'center', originY: 'center',
+        rx: (ct.width || fs(180)) / 2 + fs(18), ry: (ct.height || fs(28)) / 2 + fs(14),
+        fill: '', stroke: ink, strokeWidth: 2.5 * scale, selectable: false,
+      });
+      canvas.add(ell); canvas.add(ct);
+    }
+
+    if (options.globalBrandName) {
+      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+        left: width / 2, top: height * 0.94, originX: 'center', originY: 'bottom',
+        fontSize: fs(11), fill: inkDim, fontFamily: 'Montserrat',
+        charSpacing: 200, selectable: false,
+      }));
+    }
+    canvas.renderAll();
+    return;
+  }
+
+
   // === COVER WITH PHOTO: auto-place title in the image's quiet zone ===
   // When a background photo is present, ignore the abstract layout and place
   // the title where the image has free/quiet space (from image analysis).
