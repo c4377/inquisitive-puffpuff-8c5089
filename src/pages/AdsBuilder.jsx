@@ -56,8 +56,18 @@ const AdsBuilder = () => {
   const [aiBusy, setAiBusy] = useState(false);
   const [aiError, setAiError] = useState('');
   const [aiImages, setAiImages] = useState([]);
+  const collageBackdrops = ['energetic red', 'warm mustard yellow', 'deep cobalt blue', 'sage green', 'off-black charcoal', 'dusty pink'];
+  const collageMotifs = [
+    'halftone black-and-white mouths and fists, vintage clocks',
+    'torn magazine photo cutouts, coffee cups, hands pointing',
+    'retro telephones, stars, lightning bolt doodles',
+    'scissors, paper planes, exclamation marks, halftone eyes',
+  ];
+  const rnd = (arr) => arr[Math.floor(Math.random() * arr.length)];
   const aiStyles = {
-    collage: 'Bold punk collage advertising background, torn paper scraps, tape strips, halftone black-and-white photo cutouts, hand-drawn scribbles and arrows, energetic red backdrop, gritty texture, no text, square format',
+    get collage() {
+      return `Bold punk collage advertising background, torn paper scraps, tape strips, ${rnd(collageMotifs)}, hand-drawn scribbles and arrows, ${rnd(collageBackdrops)} backdrop, gritty texture, no text, square format`;
+    },
     studio: 'Minimal bright studio backdrop for an elegant female coach brand, soft beige tones, clean light, subtle shadows, editorial photography style, no people, no text, square format',
     editorial: 'Moody editorial magazine background, warm dark tones, soft window light, elegant interior blur, cinematic, no text, square format',
   };
@@ -114,7 +124,12 @@ const AdsBuilder = () => {
   const accent = (darkest && lum(darkest) < 140) ? darkest : '#5C2A2A';
   const brandName = cfg.brandText || brandSettings.website || '';
 
-  const slide = template === 'pins'
+  const collageSlide = {
+    layout: 'ad_collage', layoutId: 'ad_collage', format: '4:5',
+    background, overlay: 0.12,
+    statement, ctaLine, text: statement,
+  };
+  const slide = template === 'collage' ? collageSlide : template === 'pins'
     ? {
         layout: 'ad_pins', layoutId: 'ad_pins', format: '4:5',
         background, overlay: 0.15,
@@ -155,6 +170,9 @@ const AdsBuilder = () => {
         <button onClick={() => setTemplate('statement')} className={`px-3 py-2 rounded-lg text-xs font-bold border flex items-center gap-1.5 ${template === 'statement' ? 'bg-purple-600 text-white border-purple-600' : 'bg-white text-gray-700 border-gray-200'}`}>
           <SafeIcon icon={FiTarget} /> Statement
         </button>
+        <button onClick={() => setTemplate('collage')} className={`px-3 py-2 rounded-lg text-xs font-bold border flex items-center gap-1.5 ${template === 'collage' ? 'bg-purple-600 text-white border-purple-600' : 'bg-white text-gray-700 border-gray-200'}`}>
+          <SafeIcon icon={FiImage} /> Collage
+        </button>
         <button onClick={reshuffle} className="ml-auto px-3 py-2 rounded-lg text-xs font-bold border bg-white text-gray-700 border-gray-200 flex items-center gap-1.5" title="Texte neu aus der Strategie kombinieren">
           <SafeIcon icon={FiRefreshCw} /> Neu kombinieren
         </button>
@@ -178,6 +196,30 @@ const AdsBuilder = () => {
               <label className="block text-[11px] font-bold text-gray-500 mb-1">CTA-Button</label>
               <input value={cta} onChange={(e) => setCta(e.target.value)} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mb-3 outline-none focus:border-purple-400" />
 
+            </>
+          )}
+
+          {template === 'statement' && (
+            <>
+              <label className="block text-[11px] font-bold text-gray-500 mb-1">Statement</label>
+              <textarea value={statement} onChange={(e) => setStatement(e.target.value)} rows={4} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mb-3 outline-none focus:border-purple-400" />
+              <label className="block text-[11px] font-bold text-gray-500 mb-1">Handschrift-Zeile (eingekreist)</label>
+              <input value={ctaLine} onChange={(e) => setCtaLine(e.target.value)} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mb-3 outline-none focus:border-purple-400" />
+              <p className="text-[11px] text-gray-400">Hintergrundfarbe kommt aus deiner Brand (Primärfarbe).</p>
+            </>
+          )}
+
+          {template === 'collage' && (
+            <>
+              <label className="block text-[11px] font-bold text-gray-500 mb-1">Statement (Wort-Schnipsel)</label>
+              <textarea value={statement} onChange={(e) => setStatement(e.target.value)} rows={3} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mb-3 outline-none focus:border-purple-400" />
+              <label className="block text-[11px] font-bold text-gray-500 mb-1">Handschrift-Zeile (eingekreist)</label>
+              <input value={ctaLine} onChange={(e) => setCtaLine(e.target.value)} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mb-3 outline-none focus:border-purple-400" />
+            </>
+          )}
+
+          {template !== 'statement' && (
+            <>
               <div className="mb-3 border border-gray-200 rounded-xl p-3 bg-gray-50/60">
                 <div className="text-[11px] font-bold text-gray-500 mb-2">KI-Hintergrund erstellen</div>
                 <div className="flex gap-1.5 mb-2">
@@ -209,16 +251,6 @@ const AdsBuilder = () => {
                   </button>
                 ))}
               </div>
-            </>
-          )}
-
-          {template === 'statement' && (
-            <>
-              <label className="block text-[11px] font-bold text-gray-500 mb-1">Statement</label>
-              <textarea value={statement} onChange={(e) => setStatement(e.target.value)} rows={4} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mb-3 outline-none focus:border-purple-400" />
-              <label className="block text-[11px] font-bold text-gray-500 mb-1">Handschrift-Zeile (eingekreist)</label>
-              <input value={ctaLine} onChange={(e) => setCtaLine(e.target.value)} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm mb-3 outline-none focus:border-purple-400" />
-              <p className="text-[11px] text-gray-400">Hintergrundfarbe kommt aus deiner Brand (Primärfarbe).</p>
             </>
           )}
 

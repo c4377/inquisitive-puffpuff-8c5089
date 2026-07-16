@@ -479,6 +479,64 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     return;
   }
 
+  // === ADS: COLLAGE (ransom-note words on paper strips + handwritten circle) ===
+  if (layout === 'ad_collage') {
+    const ink = '#1F1B16';
+    const tones = ['rgba(247,241,230,0.97)', 'rgba(246,229,178,0.97)', 'rgba(255,255,255,0.97)'];
+    const words = String(slide.statement || '').split(/\s+/).filter(Boolean);
+
+    if (words.length) {
+      const fSize = fs(words.length > 24 ? 19 : words.length > 15 ? 23 : 27);
+      const spaceW = fSize * 0.35;
+      const maxW = width * 0.82;
+      // Build word objects (each its own paper strip, deterministic tilt).
+      const objs = words.map((w, i) => new fabric.Text(` ${w} `, {
+        fontSize: fSize, fontFamily: 'Montserrat', fontWeight: '800',
+        fill: ink, textBackgroundColor: tones[i % tones.length],
+        angle: ((i * 37) % 5) - 2, // -2..+2 degrees, stable per word
+        originX: 'left', originY: 'top', selectable: false,
+      }));
+      // Wrap into lines by measured widths.
+      const lines = [[]];
+      let lw = 0;
+      for (const o of objs) {
+        const w0 = o.width || fSize * 3;
+        if (lw + w0 > maxW && lines[lines.length - 1].length) { lines.push([]); lw = 0; }
+        lines[lines.length - 1].push(o); lw += w0 + spaceW;
+      }
+      const lineH = fSize * 1.65;
+      const blockH = lines.length * lineH;
+      let ly = Math.max(height * 0.10, height * 0.42 - blockH / 2);
+      for (const line of lines) {
+        const lineW = line.reduce((a, o) => a + (o.width || 0), 0) + spaceW * (line.length - 1);
+        let lx = (width - lineW) / 2;
+        for (const o of line) {
+          o.set({ left: lx, top: ly });
+          canvas.add(o);
+          lx += (o.width || 0) + spaceW;
+        }
+        ly += lineH;
+      }
+    }
+
+    if (slide.ctaLine) {
+      const ct = new fabric.Text(String(slide.ctaLine), {
+        left: width / 2, top: height * 0.80, originX: 'center', originY: 'center',
+        fontSize: fs(30), fill: '#FFFFFF', fontFamily: 'Caveat', fontWeight: '600',
+        shadow: 'rgba(0,0,0,0.55) 0px 2px 10px', selectable: false,
+      });
+      const ell = new fabric.Ellipse({
+        left: width / 2, top: height * 0.80, originX: 'center', originY: 'center',
+        rx: (ct.width || fs(180)) / 2 + fs(16), ry: (ct.height || fs(30)) / 2 + fs(12),
+        fill: '', stroke: '#FFFFFF', strokeWidth: 2.5 * scale,
+        shadow: 'rgba(0,0,0,0.4) 0px 1px 6px', selectable: false,
+      });
+      canvas.add(ell); canvas.add(ct);
+    }
+    canvas.renderAll();
+    return;
+  }
+
   // === ADS: STATEMENT (paper-strip statement + circled handwriting CTA) ===
   if (layout === 'ad_statement') {
     const accent = slide.accentColor || '#B0402F';
