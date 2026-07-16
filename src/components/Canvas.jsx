@@ -10,6 +10,11 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "", as
   // canvases cost ~10-30MB each on iOS (retina backing store); many at once
   // exceed Safari's canvas memory limit and white-screen the page.
   const [imgUrl, setImgUrl] = useState(null);
+  // Serialize async renders: only the LATEST request may draw. Without this,
+  // two overlapping renderSlide runs (data change + font load) interleave and
+  // paint two texts on top of each other.
+  const renderSeqRef = useRef(0);
+  const renderLockRef = useRef(Promise.resolve());
 
   // Initialize Fonts — load the specific families this slide uses (Playfair
   // for editorial headlines, Montserrat for CAPS, plus any brand fonts), THEN
@@ -104,8 +109,12 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "", as
     // Render — scale fonts/spacing proportionally to the internal width.
     // Base design width was 400px, so scale = width/400 keeps text proportions.
     const renderScale = canvasWidth / 400;
-    Promise.resolve(
-      renderSlide(canvas, data, canvasWidth, canvasHeight, { 
+    const mySeq = ++renderSeqRef.current;
+    renderLockRef.current = renderLockRef.current.then(async () => {
+      // A newer render was requested while we waited — skip this stale one.
+      if (mySeq !== renderSeqRef.current) return;
+      if (!fabricRef.current) return;
+      return renderSlide(canvas, data, canvasWidth, canvasHeight, { 
         slideIndex: data.slideNumber ? data.slideNumber - 1 : 0, 
         totalSlides: data.totalSlides || (data.slideNumber ? 2 : 1), 
         scale: renderScale, 
@@ -113,8 +122,9 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "", as
         globalBrandName: (typeof data.brandText === 'string' && data.brandText.trim())
           ? data.brandText
           : brandName
-      })
-    ).then(() => {
+      });
+    });
+    Promise.resolve(renderLockRef.current).then(() => {
       if (asImage && fabricRef.current) {
         try {
           const url = fabricRef.current.toDataURL({ format: 'jpeg', quality: 0.85, multiplier: 0.6 });

@@ -401,7 +401,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // === STRATEGY: LAYOUT ENGINE ===
   let layout = layoutResolved;
   // Strong text shadow whenever text sits on a photo, for readability.
-  const textShadow = hasBgImage ? 'rgba(0,0,0,0.7) 0px 2px 12px' : '';
+  const textShadow = hasBgImage ? 'rgba(0,0,0,0.35) 0px 1px 6px' : '';
 
   // === ADS: PIN LIST (photo + hook pill + checkmark bullets + CTA button) ===
   if (layout === 'ad_pins') {
