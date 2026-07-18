@@ -12,6 +12,7 @@ const ColorEditor = ({ currentSlide, onUpdate, onGlobalUpdate }) => {
     if (activeSlot === 'secondary') field = 'secondaryColor';
     if (activeSlot === 'accent') field = 'accentColor';
     if (activeSlot === 'background') field = 'backgroundColor';
+    if (activeSlot === 'overlay') field = 'overlayColor';
 
     const updates = { [field]: color };
     if (applyToAll) {
@@ -38,6 +39,7 @@ const ColorEditor = ({ currentSlide, onUpdate, onGlobalUpdate }) => {
       case 'secondary': return currentSlide.secondaryColor || '#D6D3CD';
       case 'accent': return currentSlide.accentColor || '#EA580C';
       case 'background': return currentSlide.backgroundColor || '#FFFFFF';
+      case 'overlay': return currentSlide.overlayColor || '#1A1512';
       default: return '#000000';
     }
   };
@@ -67,7 +69,7 @@ const ColorEditor = ({ currentSlide, onUpdate, onGlobalUpdate }) => {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        {['primary', 'secondary', 'accent', 'background'].map(slot => (
+        {['primary', 'secondary', 'accent', 'background', 'overlay'].map(slot => (
           <button
             key={slot}
             onClick={() => setActiveSlot(slot)}
@@ -75,7 +77,7 @@ const ColorEditor = ({ currentSlide, onUpdate, onGlobalUpdate }) => {
           >
             <div className="w-8 h-8 rounded-full border border-gray-300 shadow-sm" style={{ backgroundColor: getColorValue(slot) }} />
             <div className="text-left">
-              <span className="block text-xs font-bold text-gray-900 capitalize">{slot === 'primary' ? 'Text / Primär' : slot}</span>
+              <span className="block text-xs font-bold text-gray-900 capitalize">{slot === 'primary' ? 'Text' : slot === 'secondary' ? 'Zweittext' : slot === 'accent' ? 'Akzent' : slot === 'background' ? 'Fläche' : 'Verlauf'}</span>
             </div>
           </button>
         ))}

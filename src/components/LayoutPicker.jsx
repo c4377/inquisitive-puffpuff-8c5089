@@ -5,7 +5,33 @@ import SafeIcon from '../common/SafeIcon';
 
 const LayoutPicker = ({ currentLayout, onUpdate }) => {
   const layouts = [
-    // --- TEXT LAYOUTS (no photo) ---
+    // --- TEXT AUF FOTO (Verlauf) ---
+    { id: 'brand_photo_gradient', name: 'Foto Verlauf', icon: FiImage, description: 'Text unten auf Foto' },
+    { id: 'brand_photo_bottom_left', name: 'Foto unten links', icon: FiAlignLeft, description: 'Text unten links' },
+    { id: 'brand_photo_top', name: 'Foto oben', icon: FiAlignLeft, description: 'Text oben auf Foto' },
+    { id: 'brand_photo_center', name: 'Foto Mitte', icon: FiMaximize, description: 'Text mittig auf Foto' },
+    { id: 'brand_photo_bigword', name: 'Foto Big-Word', icon: FiMaximize, description: 'Riesenwort auf Foto' },
+    { id: 'brand_photo_quote', name: 'Foto Zitat', icon: FiMessageSquare, description: 'Kicker + Zitat' },
+    { id: 'brand_photo_bottom_serif', name: 'Foto Serif', icon: FiType, description: 'Serif unten + Fuß' },
+
+    // --- FOTO GERAHMT ---
+    { id: 'brand_photo_frame', name: 'Foto gerahmt', icon: FiCreditCard, description: 'Foto im Rahmen' },
+    { id: 'brand_frame_top_text', name: 'Rahmen Text oben', icon: FiCreditCard, description: 'Text über Rahmen' },
+    { id: 'brand_frame_left', name: 'Rahmen links', icon: FiColumns, description: 'Rahmen versetzt' },
+    { id: 'brand_frame_polaroid', name: 'Polaroid', icon: FiSquare, description: 'Foto wie Polaroid' },
+
+    // --- TEXT-FLÄCHE ---
+    { id: 'brand_text_plate', name: 'Text-Fläche', icon: FiSquare, description: 'Text mittig, Rahmen' },
+    { id: 'brand_text_plate_top', name: 'Fläche oben', icon: FiAlignLeft, description: 'Text oben' },
+    { id: 'brand_text_left', name: 'Fläche links', icon: FiAlignLeft, description: 'Text linksbündig' },
+    { id: 'brand_text_bigword', name: 'Big-Word', icon: FiMaximize, description: 'Riesenwort-Statement' },
+    { id: 'brand_text_quote', name: 'Zitat-Fläche', icon: FiMessageSquare, description: 'Kicker + Zitat' },
+    { id: 'brand_text_statement', name: 'Statement', icon: FiType, description: 'Aussage + Fußzeile' },
+    { id: 'brand_text_kicker_lead', name: 'Kicker-Lead', icon: FiType, description: 'Kicker führt ein' },
+    { id: 'brand_text_minimal', name: 'Minimal', icon: FiSquare, description: 'Nur Text, ruhig' },
+    { id: 'brand_text_bold_top', name: 'Bold oben links', icon: FiMaximize, description: 'Großer Text oben links' },
+
+    // --- TEXT LAYOUTS (klassisch, ohne Foto) ---
     { id: 'editorial_classic', name: 'Classic Center', icon: FiSquare, description: 'Klarer, zentrierter Text' },
     { id: 'minimal_quote', name: 'Quote Focus', icon: FiMessageSquare, description: 'Zitat-Stil, ruhig' },
     { id: 'maximized_bold', name: 'Impact Text', icon: FiMaximize, description: 'Großer Aussage-Text' },

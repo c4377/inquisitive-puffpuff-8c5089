@@ -19,7 +19,7 @@ import { saveSetsToDB, loadSetsFromDB } from '../utils/storage';
 import { analyzePlanRoles, roleFeedback, ROLE_META } from '../utils/postRole';
 import { weightedLayoutPool, getRating, setRating } from '../utils/layoutRatings';
 
-const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus , FiMoreVertical, FiMaximize2 } = FiIcons;
+const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus , FiMoreVertical, FiMaximize2, FiGrid } = FiIcons;
 
 const ContentPlanner = () => {
   const { brandSettings, updateBrandSettings } = useBrand();
@@ -134,7 +134,11 @@ const ContentPlanner = () => {
           if (sIdx === 0 && !isPlayfair) weight = fonts.fontWeight || '700';
           
           let finalLayout = slide.layout;
-          if (sIdx === 0) {
+          // Brand layouts (brand_*) are self-contained and colour-adjustable.
+          // They must survive brand styling untouched — never normalized to the
+          // Editorial 'auto' path, or the 20 layouts would collapse to one look.
+          const isBrandLayout = typeof finalLayout === 'string' && finalLayout.startsWith('brand_');
+          if (sIdx === 0 && !isBrandLayout) {
              if (finalLayout === 'minimal_quote' && rules.vibe === 'bold_pop') {
                  finalLayout = 'maximized_bold';
              }
@@ -142,9 +146,14 @@ const ContentPlanner = () => {
           // Editorial preset: EVERY slide goes through the adaptive auto layout.
           // Legacy layouts stored on individual slides (from older imports or
           // added days) made single posts render completely differently — wrong
-          // position, no CAPS lines, no brand mark. Normalize them away.
-          const editorialActive = config.editorialDark === true || config.ruleSet === 'editorial_dark';
-          if (editorialActive) finalLayout = 'auto';
+          // position, no CAPS lines, no brand mark. Normalize them away — EXCEPT
+          // brand layouts, which render themselves.
+          // Per-day override: a day set to 'editorial' forces the editorial look;
+          // a day set to 'brand' keeps its brand layout regardless of the global.
+          const dayMode = day.dayLayoutMode;
+          const editorialActive = dayMode === 'editorial'
+            || (dayMode !== 'brand' && (config.editorialDark === true || config.ruleSet === 'editorial_dark'));
+          if (editorialActive && !isBrandLayout) finalLayout = 'auto';
 
           // --- Cover-Blur (pro Post) & CTA-Foto ---
           // coverBlurMode liegt am TAG (day), nicht an der Brand: jeder Post
@@ -181,10 +190,11 @@ const ContentPlanner = () => {
             fontWeight: weight,
             visualElements: config.visualElements || [],
             layout: finalLayout,
-            layoutId: editorialActive ? 'auto' : (slide.layoutId || finalLayout),
+            layoutId: isBrandLayout ? finalLayout : (editorialActive ? 'auto' : (slide.layoutId || finalLayout)),
             // Editorial Dark preset flags — drive the photo wash and kicker.
-            darkPhoto: config.darkPhoto === true,
-            editorialDark: config.editorialDark === true || config.ruleSet === 'editorial_dark',
+            // Disabled for brand layouts so they keep full colour control.
+            darkPhoto: isBrandLayout ? false : (config.darkPhoto === true),
+            editorialDark: isBrandLayout ? false : (config.editorialDark === true || config.ruleSet === 'editorial_dark'),
             // Clear legacy kicker fields stored by older builds.
             kicker: false,
             kickerText: undefined,
@@ -249,6 +259,36 @@ const ContentPlanner = () => {
     updateBrandSettings({ contentPlan: applyBrandStyling(updated, currentBrand) });
   };
 
+  // Toggle a single day between the default brand layouts and Dark Editorial,
+  // reassigning each slide's layout so the switch is visible immediately.
+  const toggleDayLayoutMode = (dayNum) => {
+    const rotation = buildLayoutRotation();
+    let idx = 0;
+    const updated = weekPlan.map((d) => {
+      if (d.day !== dayNum) {
+        // keep global index advancing so the rotation stays stable elsewhere
+        idx += (d.slides || []).length;
+        return d;
+      }
+      const nextMode = d.dayLayoutMode === 'editorial' ? 'brand' : 'editorial';
+      const slides = (d.slides || []).map((slide) => {
+        const s = { ...slide };
+        if (nextMode === 'editorial') {
+          s.layout = 'auto'; s.layoutId = 'auto';
+          s.editorialDark = true;
+        } else {
+          const picked = rotation[idx % rotation.length];
+          s.layout = picked; s.layoutId = picked;
+          s.editorialDark = false; s.darkPhoto = false;
+        }
+        idx++;
+        return s;
+      });
+      return { ...d, dayLayoutMode: nextMode, slides };
+    });
+    updateBrandSettings({ contentPlan: applyBrandStyling(updated, currentBrand) });
+  };
+
   // Save the CURRENT plan as a named set.
   const handleSaveSet = async () => {
     if (!weekPlan.length) { setSaveStatus('Kein Plan zum Speichern vorhanden.'); return; }
@@ -302,19 +342,31 @@ const ContentPlanner = () => {
     return 'editorial_classic';
   };
   const buildLayoutRotation = (brandConfig) => {
-    const ruleKey = brandConfig?.ruleSet;
-    const rules = (ruleKey && brandRuleSets[ruleKey]) ? brandRuleSets[ruleKey] : { layoutRules: [] };
-    const baseLayouts = rules.layoutRules.length > 0 ? rules.layoutRules : ['minimal_quote', 'editorial_classic', 'glass_layer'];
-    const allowed = weightedLayoutPool(baseLayouts).map(resolveLayout);
-    // The magazine variants that give the feed its structural variety.
-    const variety = ['editorial_classic', 'minimal_quote'];
-    const mixed = [];
-    const maxLen = Math.max(allowed.length, variety.length);
-    for (let i = 0; i < maxLen; i++) {
-      if (allowed[i % allowed.length]) mixed.push(allowed[i % allowed.length]);
-      mixed.push(variety[i % variety.length]);
-    }
-    return mixed;
+    // Fixed feed-style pattern using the 20 brand layouts. The order mimics a
+    // real personal-brand grid: photo hooks, text plates, framed/quote posts,
+    // big-word statements — repeating so every reload keeps the same rhythm.
+    return [
+      'brand_photo_gradient',
+      'brand_text_plate',
+      'brand_photo_center',
+      'brand_frame_polaroid',
+      'brand_text_bigword',
+      'brand_photo_bottom_left',
+      'brand_text_quote',
+      'brand_photo_top',
+      'brand_text_statement',
+      'brand_photo_frame',
+      'brand_text_left',
+      'brand_photo_bigword',
+      'brand_text_plate_top',
+      'brand_frame_top_text',
+      'brand_photo_quote',
+      'brand_text_kicker_lead',
+      'brand_photo_bottom_serif',
+      'brand_text_minimal',
+      'brand_frame_left',
+      'brand_text_bold_top',
+    ];
   };
 
   const handleImportPlan = async (importedDays) => {
@@ -341,6 +393,7 @@ const ContentPlanner = () => {
         } catch (e) { /* keep */ }
       }
 
+      const rotation = buildLayoutRotation(brandConfig);
       slides = slides.map((slide) => {
         let s2 = { ...slide };
         const hasImg = wantsImage && typeof s2.background === 'string' && s2.background.length > 5;
@@ -351,10 +404,12 @@ const ContentPlanner = () => {
         const { textAnchor, bold } = decidePostDesign({
           globalIndex, hasImage: hasImg, autoImage: s2._autoImage,
         });
+        // Assign a brand layout from the fixed feed pattern by position.
+        const picked = rotation[globalIndex % rotation.length];
         globalIndex++;
         return {
           ...s2,
-          layout: 'auto', layoutId: 'auto',
+          layout: picked, layoutId: picked,
           textAnchor,
           fontWeight: bold ? '700' : 'normal',
         };
@@ -424,8 +479,10 @@ const ContentPlanner = () => {
         const { textAnchor, bold } = decidePostDesign({
           globalIndex: dayIdx, hasImage: hasImg, autoImage: cleaned._autoImage,
         });
-        cleaned.layout = 'auto';
-        cleaned.layoutId = 'auto';
+        const _rot = buildLayoutRotation();
+        const _picked = _rot[dayIdx % _rot.length];
+        cleaned.layout = _picked;
+        cleaned.layoutId = _picked;
         cleaned.textAnchor = textAnchor;
         cleaned.fontWeight = bold ? '700' : 'normal';
         // Keep the per-slide serif/caps switch.
@@ -468,6 +525,9 @@ const ContentPlanner = () => {
       const reloadedPlan = [];
       for (let dayIdx = 0; dayIdx < weekPlan.length; dayIdx++) {
         const day = weekPlan[dayIdx];
+        // Per-day layout mode: 'editorial' forces the Dark Editorial look for
+        // that day; anything else (default) uses the 20 brand layouts.
+        const dayIsEditorial = day.dayLayoutMode === 'editorial';
         const wantsImage = dayHasImage(dayIdx) && imagePool.length > 0;
         let daySlides = day.slides;
         if (wantsImage) {
@@ -487,13 +547,23 @@ const ContentPlanner = () => {
           const { textAnchor, bold } = decidePostDesign({
             globalIndex, hasImage: hasImg, autoImage: cleaned._autoImage,
           });
+          const _rot2 = buildLayoutRotation();
+          const _picked2 = _rot2[globalIndex % _rot2.length];
           globalIndex++;
-          cleaned.layout = 'auto';
-          cleaned.layoutId = 'auto';
-          // Keep the Editorial preset flags in sync with the active brand.
-          const cfg = brandSettings.currentBrandConfig || {};
-          cleaned.editorialDark = cfg.editorialDark === true || cfg.ruleSet === 'editorial_dark';
-          cleaned.darkPhoto = cfg.darkPhoto === true;
+          if (dayIsEditorial) {
+            // Dark Editorial for this day.
+            cleaned.layout = 'auto';
+            cleaned.layoutId = 'auto';
+            const cfg = brandSettings.currentBrandConfig || {};
+            cleaned.editorialDark = true;
+            cleaned.darkPhoto = cfg.darkPhoto === true;
+          } else {
+            // Default: brand layout from the fixed rotation.
+            cleaned.layout = _picked2;
+            cleaned.layoutId = _picked2;
+            cleaned.editorialDark = false;
+            cleaned.darkPhoto = false;
+          }
           cleaned.kicker = false;
           cleaned.kickerText = undefined;
           cleaned.coverBlurMode = day.coverBlurMode === true;
@@ -916,6 +986,12 @@ const ContentPlanner = () => {
                           </button>
                           <button onClick={() => { setMenuDayId(null); handleReloadDay(day.day); }} disabled={reloadingDay === day.day} className="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50 disabled:opacity-50">
                             <SafeIcon icon={FiRefreshCw} className={`text-base text-gray-500 ${reloadingDay === day.day ? 'animate-spin' : ''}`} /> Neu laden
+                          </button>
+                          <button onClick={() => { setMenuDayId(null); toggleDayLayoutMode(day.day); }} className="w-full flex items-center justify-between px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50">
+                            <span className="flex items-center gap-3">
+                              <SafeIcon icon={FiGrid} className={`text-base ${day.dayLayoutMode === 'editorial' ? 'text-gray-900' : 'text-purple-500'}`} /> Layout-Stil
+                            </span>
+                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${day.dayLayoutMode === 'editorial' ? 'bg-gray-900 text-white' : 'bg-purple-500 text-white'}`}>{day.dayLayoutMode === 'editorial' ? 'Dark Editorial' : 'Default'}</span>
                           </button>
                           <button onClick={() => { setMenuDayId(null); toggleCoverBlur(day.day); }} className="w-full flex items-center justify-between px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50">
                             <span className="flex items-center gap-3">

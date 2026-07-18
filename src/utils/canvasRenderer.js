@@ -169,9 +169,14 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           // Follow-up slides in cover-blur mode get darkening (their scrim is
           // skipped), everything else editorial stays bright.
           const isEditorialSlide = slide.editorialDark === true || slide.editorialAuto === true;
-          let ov = typeof slide.overlay === 'number' ? slide.overlay : 0.28;
-          if (isEditorialSlide) ov = isFollowUp ? 0.42 : 0;
-          else if (isFollowUp) ov = Math.max(ov, 0.42);
+          // A user-set overlay ALWAYS wins (Editor slider). Only the DEFAULT
+          // differs: editorial slides start at 0 (they tone themselves),
+          // others at 0.28. Blur follow-ups keep their darkening default.
+          const userOv = typeof slide.overlay === 'number' ? slide.overlay : null;
+          let ov;
+          if (userOv !== null) ov = isFollowUp ? Math.max(userOv, 0.42) : userOv;
+          else if (isEditorialSlide) ov = isFollowUp ? 0.42 : 0;
+          else ov = isFollowUp ? 0.42 : 0.28;
           const overlayRect = new fabric.Rect({
             left: 0, top: 0, width, height,
             fill: `rgba(0,0,0,${ov})`, selectable: false,
@@ -228,6 +233,40 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
   };
 
+  // --- LOGO / STICKER OVERLAY (second image on top) ---
+  // Draw a SMALL framed photo (not full-bleed). Returns true only if the
+  // image actually loaded & drew; false otherwise so the caller can fall back.
+  // No clipPath (which is fragile in fabric v5) — instead we fit the image to
+  // the box height/width and rely on the caller drawing a frame over the edges.
+
+  const drawOverlayImage = (src) =>
+    new Promise((resolve) => {
+      if (!src) return resolve(false);
+      fabric.Image.fromURL(src, (img) => {
+        if (!img) return resolve(false);
+        const sc = (typeof slide.overlayImageScale === 'number' ? slide.overlayImageScale : 0.3);
+        // scale so the overlay image's width = sc * canvas width
+        const targetW = width * sc;
+        const factor = targetW / img.width;
+        const ox = (typeof slide.overlayImageX === 'number' ? slide.overlayImageX : 0) * scale;
+        const oy = (typeof slide.overlayImageY === 'number' ? slide.overlayImageY : 0) * scale;
+        img.set({
+          originX: 'center', originY: 'center',
+          left: width / 2 + ox, top: height / 2 + oy,
+          scaleX: factor, scaleY: factor, selectable: false,
+        });
+        if (slide.overlayImageRounded) {
+          img.clipPath = new fabric.Circle({
+            radius: Math.min(img.width, img.height) / 2,
+            originX: 'center', originY: 'center',
+          });
+        }
+        canvas.add(img);
+        resolve(true);
+      }, { crossOrigin: 'anonymous' });
+    });
+
+
   // Contrast-safe text color: if chosen color is too close to the background,
   // flip to white/black so text never disappears on same-tone backgrounds.
   // When a photo background is present, always use white (photo is darkened).
@@ -266,7 +305,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // the full-bleed draw for them.
   // Splits place the photo themselves (in one half), so skip the full-bleed
   // draw for them. framed_photo now USES the full-bleed image.
-  const selfPlacesImage = [];
+  const selfPlacesImage = ['brand_photo_frame', 'brand_frame_top_text', 'brand_frame_left', 'brand_frame_polaroid'];
   const isFramedPhoto = selfPlacesImage.includes(layoutResolved);
   if (hasBgImage && !isFramedPhoto) {
     try {
@@ -275,6 +314,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       // image failed — fall back to solid background, keep rendering
     }
   }
+
   
   // Helper: Arrow
   const drawArrow = (fromX, fromY, toX, toY, color) => {
@@ -403,6 +443,397 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // Strong text shadow whenever text sits on a photo, for readability.
   const textShadow = hasBgImage ? 'rgba(0,0,0,0.35) 0px 1px 6px' : '';
 
+  // === NEW BRAND LAYOUTS (fully colour-adjustable) =========================
+  // Three editorial layouts inspired by a clean personal-brand feed. Every
+  // colour is independent: slide.color (text), slide.accentColor (italic accent
+  // word via *word*), slide.backgroundColor (plate), slide.overlayColor (photo
+  // scrim). They render self-contained and return early, bypassing the generic
+  // cover/photo text engines below.
+  const hexToRgba = (hex, a) => {
+    try {
+      let h = (hex || '#000000').replace('#', '');
+      if (h.length === 3) h = h.split('').map((c) => c + c).join('');
+      const r = parseInt(h.slice(0, 2), 16);
+      const g = parseInt(h.slice(2, 4), 16);
+      const b = parseInt(h.slice(4, 6), 16);
+      return `rgba(${r},${g},${b},${a})`;
+    } catch (e) { return `rgba(0,0,0,${a})`; }
+  };
+
+  // Readable text colour for the brand layouts. On a photo, a dark slide.color
+  // (e.g. left over from Editorial Dark) would vanish against the image, so we
+  // fall back to white unless the user's colour is already light enough. On a
+  // plain plate we keep the user's colour and only guard against no-contrast.
+  const brandTextColor = (userCol, onPhoto, plateCol) => {
+    if (onPhoto) {
+      if (!userCol) return '#FFFFFF';
+      return hexLuminance(userCol) < 110 ? '#FFFFFF' : userCol;
+    }
+    if (!userCol) return contrastColor(plateCol || '#EDE9E3');
+    return userCol;
+  };
+
+  // User-controlled text shadow (per slide, 0–100%). No automatic shadow — the
+  // strength comes only from slide.textShadowStrength, default 0 (off).
+  const brandTextShadow = () => {
+    const s = (typeof slide.textShadowStrength === 'number') ? slide.textShadowStrength : 0;
+    if (s <= 0) return '';
+    const alpha = Math.min(s, 1) * 0.8;
+    const blur = (6 + s * 14) * scale;
+    const dy = (1 + s * 2) * scale;
+    return `rgba(0,0,0,${alpha.toFixed(2)}) 0px ${dy}px ${blur}px`;
+  };
+
+  // Small caps kicker helper (letter-spaced label like "SAGTE SIE…").
+  const drawKicker = (text, cx, cy, color, originY) => {
+    if (!text) return 0;
+    const k = new fabric.Text(String(text).toUpperCase(), {
+      left: cx, top: cy, originX: 'center', originY: originY || 'top',
+      fontSize: fs(15), fontFamily: 'Montserrat', fontWeight: '600',
+      fill: color, charSpacing: 400, selectable: false,
+    });
+    canvas.add(k);
+    return k.height;
+  };
+
+  // Kicker with explicit originX (for left-aligned variants).
+  const drawKickerAt = (text, x, y, color, originX, originY) => {
+    if (!text) return 0;
+    const k = new fabric.Text(String(text).toUpperCase(), {
+      left: x, top: y, originX: originX || 'center', originY: originY || 'top',
+      fontSize: fs(15), fontFamily: 'Montserrat', fontWeight: '600',
+      fill: color, charSpacing: 400, selectable: false,
+    });
+    canvas.add(k);
+    return k.height;
+  };
+
+  // Accent-styled headline helper (applies italic accent colour to *words*).
+  const makeHeadline = (segments, plain, opts) => {
+    // Auto-fit: shrink the font until the widest word AND the longest line fit
+    // inside the box, so long words like "Erstberatung" never bleed off-canvas.
+    let fontSize = opts.fontSize;
+    const boxW = opts.width;
+    try {
+      const words = String(plain).split(/\s+/).filter(Boolean);
+      const longestWord = words.sort((a, b) => b.length - a.length)[0] || plain;
+      const fits = (fsz) => {
+        const probe = new fabric.Text(longestWord, {
+          fontSize: fsz, fontFamily: fontFamily, fontWeight: opts.fontWeight || '600',
+        });
+        return probe.width <= boxW * 0.98;
+      };
+      let guard = 0;
+      while (fontSize > 14 && !fits(fontSize) && guard < 40) {
+        fontSize -= 2; guard++;
+      }
+    } catch (e) { /* measuring is best-effort */ }
+
+    const t = new fabric.Textbox(plain, {
+      left: opts.originX === 'center' ? (width - boxW) / 2 : opts.left,
+      top: opts.top,
+      originX: opts.originX === 'center' ? 'left' : (opts.originX || 'left'),
+      originY: opts.originY || 'center', width: boxW,
+      fontSize, fontFamily: fontFamily,
+      fill: opts.fill, textAlign: opts.textAlign || 'center',
+      lineHeight: opts.lineHeight || 1.15, fontWeight: opts.fontWeight || '600',
+      shadow: opts.shadow || '',
+      splitByGrapheme: false,
+    });
+    try {
+      let idx = 0;
+      segments.forEach((s) => {
+        if (s.accent && s.text.length) {
+          t.setSelectionStyles(
+            { fill: opts.accentFill, fontStyle: 'italic', fontFamily: accentFont },
+            idx, idx + s.text.length
+          );
+        }
+        idx += s.text.length;
+      });
+    } catch (e) { /* best-effort */ }
+    canvas.add(t);
+    return t;
+  };
+
+  // === 20 BRAND LAYOUT VARIANTS =========================================
+  // Each id maps to a base engine (gradient photo / framed photo / text plate)
+  // plus parameters (text vertical position, alignment, big-word mode, kicker
+  // position). This gives 20 distinct feed looks from 3 well-tested renderers.
+  const BRAND_VARIANTS = {
+    // -- TEXT ON PHOTO (gradient scrim) --
+    brand_photo_gradient:      { base: 'gradient', textPos: 'bottom', align: 'center' },
+    brand_photo_bottom_left:   { base: 'gradient', textPos: 'bottom', align: 'left' },
+    brand_photo_top:           { base: 'gradient', textPos: 'top',    align: 'center' },
+    brand_photo_center:        { base: 'gradient', textPos: 'center', align: 'center' },
+    brand_photo_bigword:       { base: 'gradient', textPos: 'center', align: 'center', bigWord: true },
+    brand_photo_quote:         { base: 'gradient', textPos: 'center', align: 'center', kicker: 'top' },
+    brand_photo_bottom_serif:  { base: 'gradient', textPos: 'bottom', align: 'center', kicker: 'bottom' },
+    // -- FRAMED PHOTO on a plate --
+    brand_photo_frame:         { base: 'frame', textPos: 'below', align: 'center' },
+    brand_frame_top_text:      { base: 'frame', textPos: 'above', align: 'center' },
+    brand_frame_left:          { base: 'frame', framePos: 'left', textPos: 'below', align: 'center' },
+    brand_frame_polaroid:      { base: 'frame', polaroid: true, textPos: 'below', align: 'center' },
+    // -- TEXT PLATE (no photo) --
+    brand_text_plate:          { base: 'plate', textPos: 'center', align: 'center', rule: true },
+    brand_text_plate_top:      { base: 'plate', textPos: 'top',    align: 'center', rule: true },
+    brand_text_left:           { base: 'plate', textPos: 'center', align: 'left',   rule: false },
+    brand_text_bigword:        { base: 'plate', textPos: 'center', align: 'center', bigWord: true },
+    brand_text_quote:          { base: 'plate', textPos: 'center', align: 'center', kicker: 'top', rule: true },
+    brand_text_statement:      { base: 'plate', textPos: 'center', align: 'center', kicker: 'bottom' },
+    brand_text_kicker_lead:    { base: 'plate', textPos: 'center', align: 'center', kicker: 'top' },
+    brand_text_minimal:        { base: 'plate', textPos: 'center', align: 'center' },
+    brand_text_bold_top:       { base: 'plate', textPos: 'top',    align: 'left', bigWord: true },
+  };
+  const brandVariant = BRAND_VARIANTS[layoutResolved];
+
+  // --- ENGINE 1: gradient (photo + scrim) — handles all base:'gradient' ids -
+  if (brandVariant && brandVariant.base === 'gradient') {
+    const V = brandVariant;
+    const scrim = slide.overlayColor || '#1A1512';
+    const textCol = brandTextColor(slide.color, hasBgImage, scrim);
+    const accentCol = slide.accentColor || textCol;
+    const strength = (typeof slide.overlayStrength === 'number') ? slide.overlayStrength : 0.55;
+
+    // Gradient direction depends on where the text sits.
+    const stopsFor = (pos) => {
+      if (pos === 'top') return [
+        { offset: 0, color: hexToRgba(scrim, Math.min(strength + 0.25, 0.95)) },
+        { offset: 0.28, color: hexToRgba(scrim, strength * 0.7) },
+        { offset: 0.55, color: hexToRgba(scrim, 0) },
+        { offset: 1, color: hexToRgba(scrim, strength * 0.3) },
+      ];
+      if (pos === 'center') return [
+        { offset: 0, color: hexToRgba(scrim, strength * 0.5) },
+        { offset: 0.5, color: hexToRgba(scrim, Math.min(strength + 0.15, 0.9)) },
+        { offset: 1, color: hexToRgba(scrim, strength * 0.5) },
+      ];
+      return [ // bottom
+        { offset: 0, color: hexToRgba(scrim, strength * 0.35) },
+        { offset: 0.45, color: hexToRgba(scrim, 0) },
+        { offset: 0.72, color: hexToRgba(scrim, strength * 0.7) },
+        { offset: 1, color: hexToRgba(scrim, Math.min(strength + 0.25, 0.95)) },
+      ];
+    };
+
+    if (hasBgImage) {
+      canvas.add(new fabric.Rect({
+        left: 0, top: 0, width, height, selectable: false,
+        fill: new fabric.Gradient({
+          type: 'linear', coords: { x1: 0, y1: 0, x2: 0, y2: height },
+          colorStops: stopsFor(V.textPos),
+        }),
+      }));
+    } else {
+      canvas.add(new fabric.Rect({ left: 0, top: 0, width, height, fill: scrim, selectable: false }));
+    }
+
+    const { plain, segments } = parseAccent(slide.text);
+
+    // Vertical anchor from variant.
+    const anchorY = V.textPos === 'top' ? height * 0.14
+      : V.textPos === 'center' ? height * 0.42
+      : height * 0.72; // bottom
+    const alignLeft = V.align === 'left';
+    const cx = alignLeft ? width * 0.09 : width / 2;
+    const originX = alignLeft ? 'left' : 'center';
+    const tAlign = alignLeft ? 'left' : 'center';
+
+    let y = anchorY;
+    // Kicker above (from secondaryText or variant flag).
+    if (V.kicker === 'top' && slide.secondaryText) {
+      drawKickerAt(slide.secondaryText, cx, y, hexToRgba(textCol, 0.85), originX, 'bottom');
+      y += 34 * scale;
+    } else if (slide.secondaryText && V.textPos === 'bottom') {
+      drawKickerAt(slide.secondaryText, cx, y, hexToRgba(textCol, 0.85), originX, 'bottom');
+      y += 34 * scale;
+    }
+
+    const baseFont = V.bigWord ? (slide.fontSize || 120) : (slide.fontSize || 66);
+    makeHeadline(segments, plain, {
+      left: cx, top: y, originX, originY: V.textPos === 'center' ? 'center' : 'top',
+      width: width * (alignLeft ? 0.82 : 0.86), fontSize: fs(baseFont),
+      fill: textCol, accentFill: accentCol, textAlign: tAlign,
+      lineHeight: V.bigWord ? 0.98 : 1.12, fontWeight: slide.fontWeight || (V.bigWord ? '700' : '600'),
+      shadow: brandTextShadow(),
+    });
+
+    // Kicker below (footer style).
+    if (V.kicker === 'bottom' && (slide.footerText || slide.secondaryText)) {
+      drawKickerAt(slide.footerText || slide.secondaryText, cx, height * 0.86, hexToRgba(textCol, 0.7), originX, 'center');
+    }
+
+    if (options.globalBrandName) {
+      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+        left: width / 2, top: height - (padding / 2), fontSize: fs(13),
+        fill: hexToRgba(textCol, 0.8), fontFamily: 'Montserrat', charSpacing: 300,
+        originX: 'center', originY: 'bottom', selectable: false,
+      }));
+    }
+    if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) {} }
+    canvas.renderAll();
+    return;
+  }
+
+  // --- ENGINE 2: frame (framed photo on a plate) — base:'frame' -------------
+  if (brandVariant && brandVariant.base === 'frame') {
+    const V = brandVariant;
+    const plate = slide.backgroundColor || '#EDE9E3';
+    const textCol = brandTextColor(slide.color, false, plate);
+    const accentCol = slide.accentColor || textCol;
+
+    canvas.add(new fabric.Rect({ left: 0, top: 0, width, height, fill: plate, selectable: false }));
+
+    const { plain, segments } = parseAccent(slide.text);
+    const textAbove = V.textPos === 'above';
+
+    // Frame geometry: text below (default) -> frame in upper area; text above ->
+    // frame in lower area. polaroid adds a white mat + caption space.
+    const frameW = V.polaroid ? width * 0.56 : width * 0.62;
+    const frameH = frameW * (V.polaroid ? 1.0 : 1.18);
+    const frameX = (width - frameW) / 2;
+    const frameY = textAbove ? height * 0.42 : height * 0.18;
+
+    // Kicker at very top (unless text is above the frame).
+    if (slide.secondaryText && !textAbove) {
+      drawKicker(slide.secondaryText, width / 2, height * 0.1, hexToRgba(textCol, 0.7), 'top');
+    }
+
+    // Headline above the frame (if variant) — drawn first so photo sits under.
+    if (textAbove) {
+      makeHeadline(segments, plain, {
+        left: width / 2, top: height * 0.2, originX: 'center', originY: 'center',
+        width: width * 0.84, fontSize: fs(slide.fontSize || 56),
+        fill: textCol, accentFill: accentCol, textAlign: 'center', lineHeight: 1.12,
+        shadow: brandTextShadow(),
+      });
+    }
+
+    if (hasBgImage) {
+      await new Promise((res) => {
+        fabric.Image.fromURL(slide.background, (img) => {
+          if (!img) return res();
+          // Polaroid: white mat behind the photo.
+          if (V.polaroid) {
+            const mat = width * 0.03;
+            canvas.add(new fabric.Rect({
+              left: frameX - mat, top: frameY - mat,
+              width: frameW + mat * 2, height: frameH + mat * 3.5,
+              fill: '#FFFFFF', selectable: false,
+              shadow: 'rgba(0,0,0,0.18) 0px 8px 24px',
+            }));
+          }
+          const f = Math.max(frameW / img.width, frameH / img.height);
+          img.set({
+            originX: 'center', originY: 'center',
+            left: frameX + frameW / 2, top: frameY + frameH / 2,
+            scaleX: f, scaleY: f, selectable: false,
+            clipPath: new fabric.Rect({
+              width: frameW / f, height: frameH / f,
+              originX: 'center', originY: 'center',
+            }),
+          });
+          canvas.add(img);
+          if (!V.polaroid) {
+            canvas.add(new fabric.Rect({
+              left: frameX, top: frameY, width: frameW, height: frameH,
+              fill: 'transparent', stroke: hexToRgba(textCol, 0.25),
+              strokeWidth: 1.5 * scale, selectable: false,
+            }));
+          }
+          res();
+        }, { crossOrigin: 'anonymous' });
+      });
+    }
+
+    // Headline below the frame (default).
+    if (!textAbove) {
+      makeHeadline(segments, plain, {
+        left: width / 2, top: height * 0.76, originX: 'center', originY: 'center',
+        width: width * 0.84, fontSize: fs(slide.fontSize || 56),
+        fill: textCol, accentFill: accentCol, textAlign: 'center', lineHeight: 1.12,
+        shadow: brandTextShadow(),
+      });
+    }
+
+    if (options.globalBrandName) {
+      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+        left: width / 2, top: height - (padding / 2), fontSize: fs(12),
+        fill: hexToRgba(textCol, 0.6), fontFamily: 'Montserrat', charSpacing: 300,
+        originX: 'center', originY: 'bottom', selectable: false,
+      }));
+    }
+    if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) {} }
+    canvas.renderAll();
+    return;
+  }
+
+  // --- ENGINE 3: plate (text only) — base:'plate' ---------------------------
+  if (brandVariant && brandVariant.base === 'plate') {
+    const V = brandVariant;
+    const plate = slide.backgroundColor || '#EDE9E3';
+    const textCol = brandTextColor(slide.color, false, plate);
+    const accentCol = slide.accentColor || textCol;
+
+    canvas.add(new fabric.Rect({ left: 0, top: 0, width, height, fill: plate, selectable: false }));
+
+    // Optional thin inner rule frame.
+    if (V.rule) {
+      const m = width * 0.08;
+      canvas.add(new fabric.Rect({
+        left: m, top: m, width: width - m * 2, height: height - m * 2,
+        fill: 'transparent', stroke: hexToRgba(textCol, 0.35),
+        strokeWidth: 1.5 * scale, selectable: false,
+      }));
+    }
+
+    const { plain, segments } = parseAccent(slide.text);
+    const alignLeft = V.align === 'left';
+    const cx = alignLeft ? width * 0.1 : width / 2;
+    const originX = alignLeft ? 'left' : 'center';
+    const tAlign = alignLeft ? 'left' : 'center';
+
+    // Vertical anchor.
+    let cy = V.textPos === 'top' ? height * 0.24 : height * 0.5;
+
+    // Kicker lead (top).
+    if (V.kicker === 'top' && slide.secondaryText) {
+      drawKickerAt(slide.secondaryText, cx, cy - height * 0.14, hexToRgba(textCol, 0.7), originX, 'center');
+    } else if (slide.secondaryText && V.textPos !== 'top') {
+      drawKickerAt(slide.secondaryText, cx, height * 0.3, hexToRgba(textCol, 0.7), originX, 'center');
+    }
+
+    const baseFont = V.bigWord ? (slide.fontSize || 110) : (slide.fontSize || 58);
+    makeHeadline(segments, plain, {
+      left: cx, top: cy, originX, originY: V.textPos === 'top' ? 'top' : 'center',
+      width: width * (alignLeft ? 0.8 : 0.74), fontSize: fs(baseFont),
+      fill: textCol, accentFill: accentCol, textAlign: tAlign,
+      lineHeight: V.bigWord ? 0.98 : 1.14,
+      fontWeight: slide.fontWeight || (V.bigWord ? '700' : '600'),
+      shadow: brandTextShadow(),
+    });
+
+    // Footer kicker (statement style).
+    if ((V.kicker === 'bottom') && (slide.footerText || slide.secondaryText)) {
+      drawKickerAt(slide.footerText || slide.secondaryText, cx, height * 0.72, hexToRgba(textCol, 0.6), originX, 'center');
+    } else if (slide.footerText) {
+      drawKickerAt(slide.footerText, cx, height * 0.72, hexToRgba(textCol, 0.6), originX, 'center');
+    }
+
+    if (options.globalBrandName) {
+      canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+        left: width / 2, top: height - (padding / 1.6), fontSize: fs(12),
+        fill: hexToRgba(textCol, 0.6), fontFamily: 'Montserrat', charSpacing: 300,
+        originX: 'center', originY: 'bottom', selectable: false,
+      }));
+    }
+    if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) {} }
+    canvas.renderAll();
+    return;
+  }
+  // === END NEW BRAND LAYOUTS ==============================================
+
+
   // === ADS: PIN LIST (photo + hook pill + checkmark bullets + CTA button) ===
   if (layout === 'ad_pins') {
     const accent = slide.accentColor || '#7C2D2D';
@@ -475,6 +906,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       y += bh + height * 0.03;
     }
 
+    if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) { /* optional */ } }
     canvas.renderAll();
     return;
   }
@@ -533,6 +965,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       });
       canvas.add(ell); canvas.add(ct);
     }
+    if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) { /* optional */ } }
     canvas.renderAll();
     return;
   }
@@ -578,6 +1011,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         charSpacing: 200, selectable: false,
       }));
     }
+    if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) { /* optional */ } }
     canvas.renderAll();
     return;
   }
@@ -664,6 +1098,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       }));
     }
 
+    if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) { /* optional */ } }
     canvas.renderAll();
     return;
   }
@@ -742,6 +1177,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         originX: 'center', originY: 'bottom',
       }));
     }
+    if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) { /* optional */ } }
     canvas.renderAll();
     return; // cover is complete — skip the abstract layout engine
   }
@@ -781,6 +1217,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     applyAccentStyles(tObj, segments);
     canvas.add(tObj);
+    if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) { /* optional */ } }
     canvas.renderAll();
     return;
   }
@@ -833,6 +1270,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           fontFamily: 'Montserrat', charSpacing: 150, selectable: false,
         }));
       }
+      if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) { /* optional */ } }
       canvas.renderAll();
       return;
     }
@@ -994,6 +1432,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
             charSpacing: 200, selectable: false,
           }));
         }
+        if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) { /* optional */ } }
         canvas.renderAll();
         return;
       }
@@ -1088,6 +1527,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           charSpacing: 200, selectable: false,
         }));
       }
+      if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) { /* optional */ } }
       canvas.renderAll();
       return;
     }
@@ -1131,6 +1571,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         fontFamily: 'Inter', charSpacing: 150, selectable: false,
       }));
     }
+    if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) { /* optional */ } }
     canvas.renderAll();
     return;
   }
@@ -1543,39 +1984,6 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       }));
     } catch (e) { /* grain optional */ }
   }
-
-  // --- LOGO / STICKER OVERLAY (second image on top) ---
-  // Draw a SMALL framed photo (not full-bleed). Returns true only if the
-  // image actually loaded & drew; false otherwise so the caller can fall back.
-  // No clipPath (which is fragile in fabric v5) — instead we fit the image to
-  // the box height/width and rely on the caller drawing a frame over the edges.
-
-  const drawOverlayImage = (src) =>
-    new Promise((resolve) => {
-      if (!src) return resolve(false);
-      fabric.Image.fromURL(src, (img) => {
-        if (!img) return resolve(false);
-        const sc = (typeof slide.overlayImageScale === 'number' ? slide.overlayImageScale : 0.3);
-        // scale so the overlay image's width = sc * canvas width
-        const targetW = width * sc;
-        const factor = targetW / img.width;
-        const ox = (typeof slide.overlayImageX === 'number' ? slide.overlayImageX : 0) * scale;
-        const oy = (typeof slide.overlayImageY === 'number' ? slide.overlayImageY : 0) * scale;
-        img.set({
-          originX: 'center', originY: 'center',
-          left: width / 2 + ox, top: height / 2 + oy,
-          scaleX: factor, scaleY: factor, selectable: false,
-        });
-        if (slide.overlayImageRounded) {
-          img.clipPath = new fabric.Circle({
-            radius: Math.min(img.width, img.height) / 2,
-            originX: 'center', originY: 'center',
-          });
-        }
-        canvas.add(img);
-        resolve(true);
-      }, { crossOrigin: 'anonymous' });
-    });
 
   if (slide.overlayImage) {
     try { await drawOverlayImage(slide.overlayImage); } catch (e) { /* optional */ }

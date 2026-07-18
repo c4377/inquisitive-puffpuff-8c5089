@@ -44,6 +44,12 @@ const CreateContent = () => {
 
   const selectedLayout = searchParams.get('layout');
 
+  // If the ACTIVE brand is an editorial preset, new slides must carry its
+  // flags and the adaptive 'auto' layout — otherwise they render through a
+  // generic layout and look like a different brand.
+  const _cfg = brandSettings.currentBrandConfig || {};
+  const _editorialActive = _cfg.editorialDark === true || _cfg.ruleSet === 'editorial_dark';
+
   const [slides, setSlides] = useState([{
       id: 1,
       format: '4:5',
@@ -56,8 +62,11 @@ const CreateContent = () => {
       backgroundColor: brandSettings.currentBrandConfig?.colors?.background || '#FFFFFF',
       secondaryColor: brandSettings.currentBrandConfig?.colors?.secondary || '#D6D3CD',
       accentColor: brandSettings.currentBrandConfig?.colors?.accent || '#EA580C',
-      overlay: 0.2, blur: 0, grain: 0,
-      layout: selectedLayout || brandSettings.currentBrandConfig?.layout || 'minimal-center',
+      overlay: _editorialActive ? undefined : 0.2, blur: 0, grain: 0,
+      layout: _editorialActive ? 'auto' : (selectedLayout || brandSettings.currentBrandConfig?.layout || 'minimal-center'),
+      layoutId: _editorialActive ? 'auto' : undefined,
+      editorialDark: _editorialActive || undefined,
+      darkPhoto: _editorialActive ? (_cfg.darkPhoto === true || undefined) : undefined,
       visualElements: brandSettings.currentBrandConfig?.visualElements || [],
       imageScale: 1, imageX: 0, imageY: 0,
       overlayImage: null, overlayImageScale: 0.3, overlayImageX: 0, overlayImageY: 0, overlayImageRounded: false
