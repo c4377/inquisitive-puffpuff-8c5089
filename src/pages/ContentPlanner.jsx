@@ -176,13 +176,33 @@ const ContentPlanner = () => {
             isCtaSlide = true;
           }
 
+          // For brand layouts, drive their colour slots from the palette so the
+          // feed uses the brand's colours (not the dark Editorial defaults).
+          // Photo layouts -> overlayColor is the scrim; plate layouts -> the
+          // backgroundColor is the plate. Text stays high-contrast.
+          let brandBg = bg, brandText = text, brandOverlay = slide.overlayColor;
+          if (isBrandLayout) {
+            const isPhotoLayout = finalLayout.includes('photo') || finalLayout.includes('frame');
+            if (isPhotoLayout) {
+              // Scrim/veil in the brand's primary (dark) colour; text light.
+              brandOverlay = slide.overlayColor || colors.primary || '#1A1512';
+              brandText = colors.background && !isDark(colors.background) ? colors.background : '#FFFFFF';
+              brandBg = colors.background; // plate behind, if no photo
+            } else {
+              // Text plate: use the brand background as the plate, primary as text.
+              brandBg = colors.background || '#EDE9E3';
+              brandText = colors.primary || '#1A1512';
+            }
+          }
+
           return {
             ...slide,
             background: bgOverride,
             coverBlurMode: coverBlurMode && !isCtaSlide,
             isCtaSlide,
-            color: text,
-            backgroundColor: bg,
+            color: isBrandLayout ? brandText : text,
+            backgroundColor: isBrandLayout ? brandBg : bg,
+            overlayColor: isBrandLayout ? brandOverlay : slide.overlayColor,
             secondaryColor: sec,
             accentColor: acc,
             fontFamily: font,
@@ -523,23 +543,38 @@ const ContentPlanner = () => {
         lastImageOffsetRef.current = imageOffset;
       }
       const reloadedPlan = [];
+      let layoutCursor = 0; // tracks rotation position across days
+      const rotationAll = buildLayoutRotation();
       for (let dayIdx = 0; dayIdx < weekPlan.length; dayIdx++) {
         const day = weekPlan[dayIdx];
-        // Per-day layout mode: 'editorial' forces the Dark Editorial look for
-        // that day; anything else (default) uses the 20 brand layouts.
         const dayIsEditorial = day.dayLayoutMode === 'editorial';
-        const wantsImage = dayHasImage(dayIdx) && imagePool.length > 0;
+        const nSlides = (day.slides || []).length || 1;
+        // Determine the layouts this day will get, so we know whether it needs
+        // photos. A day needs images if it's Editorial, or if ANY of its slides
+        // lands on a photo/frame layout.
+        const dayLayouts = [];
+        for (let k = 0; k < nSlides; k++) {
+          dayLayouts.push(rotationAll[(layoutCursor + k) % rotationAll.length]);
+        }
+        const dayNeedsPhoto = dayIsEditorial || dayLayouts.some(
+          (l) => typeof l === 'string' && (l.includes('photo') || l.includes('frame'))
+        );
+        const wantsImage = dayNeedsPhoto && imagePool.length > 0;
         let daySlides = day.slides;
         if (wantsImage) {
           daySlides = await attachSmartImages(day.slides, imagePool, imageOffset);
-          imageOffset += daySlides.length; // advance so next day gets new images
+          imageOffset += daySlides.length;
         }
 
-        const adjusted = daySlides.map((slide) => {
+        const adjusted = daySlides.map((slide, slideIdx) => {
           const cleaned = { ...slide };
           if (cleaned.blur === 8 || cleaned.blur === 12) cleaned.blur = 0;
 
-          const hasImg = wantsImage && typeof cleaned.background === 'string' && cleaned.background.length > 5;
+          const _picked2 = rotationAll[layoutCursor % rotationAll.length];
+          const pickedIsPhoto = typeof _picked2 === 'string' && (_picked2.includes('photo') || _picked2.includes('frame'));
+          // Only keep a background if this specific slide's layout uses one.
+          const hasImg = wantsImage && (pickedIsPhoto || dayIsEditorial)
+            && typeof cleaned.background === 'string' && cleaned.background.length > 5;
           if (!hasImg) {
             const { background, overlay, _autoImage, ...rest } = cleaned;
             Object.assign(cleaned, rest, { background: null, overlay: undefined, _autoImage: undefined });
@@ -547,8 +582,7 @@ const ContentPlanner = () => {
           const { textAnchor, bold } = decidePostDesign({
             globalIndex, hasImage: hasImg, autoImage: cleaned._autoImage,
           });
-          const _rot2 = buildLayoutRotation();
-          const _picked2 = _rot2[globalIndex % _rot2.length];
+          layoutCursor++;
           globalIndex++;
           if (dayIsEditorial) {
             // Dark Editorial for this day.
