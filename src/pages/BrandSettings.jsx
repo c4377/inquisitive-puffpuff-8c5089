@@ -674,28 +674,6 @@ const BrandSettings = () => {
               />
             </div>
 
-            {/* HEADLINE LETTER SPACING */}
-            <div className="mt-6 bg-white border border-gray-200 rounded-xl p-5">
-              <div className="flex items-center justify-between mb-2">
-                <div>
-                  <h4 className="font-bold text-gray-900 text-sm">Buchstabenabstand (Headline)</h4>
-                  <p className="text-xs text-gray-500">Enger oder weiter für die Überschriften</p>
-                </div>
-                <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded border border-gray-200">
-                  {(((typeof brandSettings.currentBrandConfig.headlineTracking === 'number' ? brandSettings.currentBrandConfig.headlineTracking : -30) / 1000)).toFixed(3)}em
-                </span>
-              </div>
-              <input
-                type="range" min="-80" max="40" step="5"
-                value={typeof brandSettings.currentBrandConfig.headlineTracking === 'number' ? brandSettings.currentBrandConfig.headlineTracking : -30}
-                onChange={(e) => updateCurrentBrand('headlineTracking', parseInt(e.target.value))}
-                className="w-full accent-purple-600"
-              />
-              <div className="flex justify-between text-[10px] text-gray-400 mt-1">
-                <span>Enger</span><span>Normal</span><span>Weiter</span>
-              </div>
-            </div>
-
             {/* CUSTOM FONT UPLOAD */}
             <div className="mt-8 bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:bg-gray-100 hover:border-purple-300 transition-all">
               <SafeIcon icon={FiUpload} className="text-3xl text-purple-600 mx-auto mb-2"/>

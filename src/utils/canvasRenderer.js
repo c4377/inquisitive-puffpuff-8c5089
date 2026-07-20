@@ -27,6 +27,28 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   };
   if (!hasContext(canvas)) return;
 
+  // Wait for the fonts this slide needs before drawing. Fabric renders text
+  // immediately; if a webfont (e.g. Anton, Playfair) isn't loaded yet the
+  // browser substitutes a fallback with different metrics, which breaks letter
+  // spacing (glyphs tear apart mid-word). document.fonts.load resolves once the
+  // face is ready. Best-effort with a short timeout so it never hangs a render.
+  try {
+    if (typeof document !== 'undefined' && document.fonts && document.fonts.load) {
+      const needed = new Set(['Anton', 'Montserrat', 'Playfair Display']);
+      if (slide.fontFamily) needed.add(slide.fontFamily);
+      if (slide.accentFontFamily) needed.add(slide.accentFontFamily);
+      const loads = [];
+      needed.forEach((f) => {
+        loads.push(document.fonts.load(`700 40px "${f}"`).catch(() => {}));
+        loads.push(document.fonts.load(`400 40px "${f}"`).catch(() => {}));
+      });
+      await Promise.race([
+        Promise.all(loads),
+        new Promise((res) => setTimeout(res, 1200)),
+      ]);
+    }
+  } catch (e) { /* fonts are best-effort */ }
+
   // Clear and setup
   try {
     canvas.clear();
@@ -578,18 +600,31 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     //  - serifHeadline === false  -> ALL CAPS, sans font, letter-spaced
     //  - bigHeadline === true     -> ~35% larger base size (cover look)
     const boldMode = slide.boldMode === true;
-    const capsMode = slide.serifHeadline === false || boldMode;
+    const boldStyle = (typeof slide.boldStyle === 'number') ? slide.boldStyle : -1;
+    // Bold Statement rotates the headline treatment across the feed:
+    //   0 -> Anton display CAPS (loud)   1 -> Playfair italic serif (elegant)
+    //   2 -> Montserrat black CAPS (clean bold).  A plain serifHeadline===false
+    //   still forces Montserrat caps as before.
+    const boldSerif = boldMode && boldStyle === 1;                 // elegant serif
+    const capsMode = (slide.serifHeadline === false) || (boldMode && boldStyle !== 1);
     const bigMode = slide.bigHeadline === true;
-    // Bold Statement mode: heavy Anton display caps (the "loud editorial" look).
-    const headFont = boldMode ? 'Anton' : (capsMode ? 'Montserrat' : fontFamily);
+    let headFont;
+    if (boldMode && boldStyle === 0) headFont = 'Anton';
+    else if (boldSerif) headFont = 'Playfair Display';
+    else if (boldMode && boldStyle === 2) headFont = 'Montserrat';
+    else headFont = capsMode ? 'Montserrat' : fontFamily;
     const headText = capsMode ? String(plain).toUpperCase() : plain;
-    const headWeight = boldMode ? '400' : (capsMode ? '700' : (opts.fontWeight || '600'));
-    // Letter spacing (charSpacing is in 1/1000 em). Default headlines sit
-    // slightly tight for an editorial look; the brand can override via
-    // slide.headlineTracking. Anton looks best nearly flush; Montserrat caps
-    // stay wide for legibility.
-    const brandTracking = (typeof slide.headlineTracking === 'number') ? slide.headlineTracking : -30;
-    const headSpacing = boldMode ? 5 : (capsMode ? 120 : brandTracking);
+    const headWeight = boldMode
+      ? (boldStyle === 0 ? '400' : boldStyle === 2 ? '900' : '700')
+      : (capsMode ? '700' : (opts.fontWeight || '600'));
+    const headItalic = boldSerif;
+    // Fixed, clean letter spacing per style (no user-adjustable tracking — it
+    // caused torn glyphs when it clashed with a font's own metrics). Values are
+    // in 1/1000 em.
+    const headSpacing = (boldMode && boldStyle === 0) ? 5      // Anton: nearly flush
+      : (boldMode && boldStyle === 2) ? 40                     // Montserrat black caps
+      : boldSerif ? 0                                          // Playfair italic
+      : (capsMode ? 80 : 0);                                   // caps wider, serif normal
     // Auto-fit in TWO dimensions:
     //  (1) width — the widest word must fit the box (no right-edge bleed)
     //  (2) height — if opts.maxBottom is given, the whole wrapped block must end
@@ -637,6 +672,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       fontSize, fontFamily: headFont,
       fill: opts.fill, textAlign: opts.textAlign || 'center',
       lineHeight: opts.lineHeight || 1.15, fontWeight: headWeight,
+      fontStyle: headItalic ? 'italic' : 'normal',
       charSpacing: headSpacing,
       shadow: opts.shadow || '',
       splitByGrapheme: false,

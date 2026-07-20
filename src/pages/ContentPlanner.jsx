@@ -263,6 +263,12 @@ const ContentPlanner = () => {
             // Headline letter spacing from the brand (default slightly tight).
             headlineTracking: (typeof config.headlineTracking === 'number') ? config.headlineTracking : -30,
             boldMode: config.boldMode === true,
+            // In Bold Statement mode the feed VARIES like the reference (not one
+            // loud font on every tile): rotate the headline treatment per slide.
+            //  0 -> Anton display caps (loud)
+            //  1 -> Playfair italic serif (elegant statement)
+            //  2 -> Montserrat black caps (clean bold)
+            boldStyle: config.boldMode === true ? (index % 3) : undefined,
             accentFontFamily: accentFont,
             fontWeight: weight,
             visualElements: config.visualElements || [],
