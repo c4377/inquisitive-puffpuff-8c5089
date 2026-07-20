@@ -603,10 +603,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const boldStyle = (typeof slide.boldStyle === 'number') ? slide.boldStyle : -1;
     // Bold Statement rotates the headline treatment across the feed:
     //   0 -> Anton display CAPS (loud)   1 -> Playfair italic serif (elegant)
-    //   2 -> Montserrat black CAPS (clean bold).  A plain serifHeadline===false
-    //   still forces Montserrat caps as before.
+    //   2 -> Montserrat regular, mixed case (calm, quiet counterpoint).
     const boldSerif = boldMode && boldStyle === 1;                 // elegant serif
-    const capsMode = (slide.serifHeadline === false) || (boldMode && boldStyle !== 1);
+    // Only the Anton style (0) uses ALL CAPS in bold mode now. Style 2 is calm
+    // mixed-case Montserrat.
+    const capsMode = (slide.serifHeadline === false) || (boldMode && boldStyle === 0);
     const bigMode = slide.bigHeadline === true;
     let headFont;
     if (boldMode && boldStyle === 0) headFont = 'Anton';
@@ -615,14 +616,14 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     else headFont = capsMode ? 'Montserrat' : fontFamily;
     const headText = capsMode ? String(plain).toUpperCase() : plain;
     const headWeight = boldMode
-      ? (boldStyle === 0 ? '400' : boldStyle === 2 ? '900' : '700')
+      ? (boldStyle === 0 ? '400' : boldStyle === 2 ? '400' : '700')
       : (capsMode ? '700' : (opts.fontWeight || '600'));
     const headItalic = boldSerif;
     // Fixed, clean letter spacing per style (no user-adjustable tracking — it
     // caused torn glyphs when it clashed with a font's own metrics). Values are
     // in 1/1000 em.
     const headSpacing = (boldMode && boldStyle === 0) ? 5      // Anton: nearly flush
-      : (boldMode && boldStyle === 2) ? 40                     // Montserrat black caps
+      : (boldMode && boldStyle === 2) ? 0                      // Montserrat regular
       : boldSerif ? 0                                          // Playfair italic
       : (capsMode ? 80 : 0);                                   // caps wider, serif normal
     // Auto-fit in TWO dimensions:
