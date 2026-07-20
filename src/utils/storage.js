@@ -123,10 +123,22 @@ export const loadFontsFromDB = async () => {
 export const savePlanToDB = async (plan) => {
   try {
     const db = await initDB();
+    // Sanitise to a plain, structured-cloneable snapshot. If any slide picked
+    // up a non-cloneable value (a function, a DOM node, an Image element via
+    // _autoImage, etc.), IndexedDB's put() throws a DataCloneError and the whole
+    // save silently fails. A JSON round-trip strips those and guarantees a
+    // plain object tree.
+    let safePlan;
+    try {
+      safePlan = JSON.parse(JSON.stringify(plan));
+    } catch (jsonErr) {
+      console.error('Plan not serialisable, saving best-effort copy', jsonErr);
+      safePlan = plan;
+    }
     return new Promise((resolve, reject) => {
       const transaction = db.transaction([STORE_NAME], 'readwrite');
       const store = transaction.objectStore(STORE_NAME);
-      const request = store.put(plan, PLAN_KEY);
+      const request = store.put(safePlan, PLAN_KEY);
       request.onsuccess = () => resolve(true);
       request.onerror = () => reject(request.error);
     });

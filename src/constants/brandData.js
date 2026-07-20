@@ -419,6 +419,47 @@ export const generateMixedBrand = () => {
 // --- FIXED CURATED BRANDS ---
 // Always present in "Meine Brands", stable IDs, never randomly generated.
 // buildEditorialDark(true/false) provides the two-font signature look.
+// Reference-look presets. Each bundles a palette + serif typography and runs in
+// the brand-layout mode (not editorial), so the 20 colour-adjustable layouts
+// with photo tinting and plate rotation produce the magazine feed look.
+const buildBrandPreset = ({ id, name, colorKey, colors, tags, typography, extra }) => ({
+  id,
+  name,
+  curated: true,
+  editorialDark: false,          // use the brand layouts, not editorial
+  ruleSet: 'brand_layouts',
+  colors: colors || (colorGenerators[colorKey] ? colorGenerators[colorKey]() : colorGenerators.mono_classic()),
+  typography: typography || (typographyGenerators.editorial_serif
+    ? typographyGenerators.editorial_serif()
+    : { fontFamily: 'Playfair Display', accentFontFamily: 'Playfair Display', bodyFontFamily: 'Montserrat' }),
+  headlineTracking: (extra && typeof extra.headlineTracking === 'number') ? extra.headlineTracking : -30,
+  layout: 'brand_photo_gradient',
+  visualElements: [],
+  tags: tags || ['kuratiert'],
+  ...(extra || {}),
+});
+
+// Reference-look presets — shown ONLY in the Brand Randomizer, not in the
+// Brand Settings curated list.
+export const REFERENCE_PRESETS = [
+  buildBrandPreset({ id: 'preset_petrol',   name: 'Petrol Editorial', colorKey: 'petrol_editorial', tags: ['petrol', 'ruhig', 'kuratiert'] }),
+  buildBrandPreset({ id: 'preset_bordeaux', name: 'Bordeaux Luxe',    colorKey: 'cherry_bomb',      tags: ['bordeaux', 'edel', 'kuratiert'] }),
+  buildBrandPreset({ id: 'preset_beere',    name: 'Beere Soft',       tags: ['beere', 'warm', 'kuratiert'],
+    colors: { primary: '#FBF7F4', secondary: '#6E2A45', tertiary: '#8B3A5A', accent: '#C98BA5', neutral: '#F0E6E9', background: '#5A2138' } }),
+  buildBrandPreset({ id: 'preset_mokka',    name: 'Mokka Warm',       colorKey: 'coffee_noir',      tags: ['mokka', 'warm', 'kuratiert'] }),
+  // "Bold Statement" — loud editorial in the social._verena vein: heavy Anton
+  // caps headlines, dramatic black / off-white, a carmine-red accent word, and
+  // a small kicker label. Deliberately louder than the calm presets.
+  buildBrandPreset({
+    id: 'preset_bold_statement',
+    name: 'Bold Statement',
+    colors: { primary: '#F7F4EF', secondary: '#E4002B', tertiary: '#B8001F', accent: '#E4002B', neutral: '#141414', background: '#0A0A0A' },
+    typography: { fontFamily: 'Anton', accentFontFamily: 'Playfair Display', bodyFontFamily: 'Montserrat' },
+    tags: ['laut', 'statement', 'kuratiert'],
+    extra: { boldMode: true, headlineTracking: 0, layout: 'brand_photo_bigword' },
+  }),
+];
+
 export const CURATED_BRANDS = [
   {
     ...buildEditorialDark(true),

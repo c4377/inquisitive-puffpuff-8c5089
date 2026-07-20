@@ -9,6 +9,9 @@ import SafeIcon from '../common/SafeIcon';
 import { useBrand } from '../context/BrandContext';
 import Canvas from '../components/Canvas';
 import StyleShifter from '../components/StyleShifter';
+import FeedStyleBar from '../components/FeedStyleBar';
+import ScreenshotMatchModal from '../components/ScreenshotMatchModal';
+import { parseScreenshotPlaceholder } from '../utils/screenshotMatcher';
 import BulkImportModal from '../components/BulkImportModal';
 import { renderSlide } from '../utils/canvasRenderer';
 import { brandRuleSets } from '../constants/brandData';
@@ -19,7 +22,7 @@ import { saveSetsToDB, loadSetsFromDB } from '../utils/storage';
 import { analyzePlanRoles, roleFeedback, ROLE_META } from '../utils/postRole';
 import { weightedLayoutPool, getRating, setRating } from '../utils/layoutRatings';
 
-const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus , FiMoreVertical, FiMaximize2, FiGrid } = FiIcons;
+const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus , FiMoreVertical, FiMaximize2, FiGrid, FiImage } = FiIcons;
 
 const ContentPlanner = () => {
   const { brandSettings, updateBrandSettings } = useBrand();
@@ -31,6 +34,7 @@ const ContentPlanner = () => {
   const [menuDayId, setMenuDayId] = useState(null); // tile context menu (mobile-friendly)
   const [showStyleShifter, setShowStyleShifter] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
+  const [showScreenshotModal, setShowScreenshotModal] = useState(false);
   const [isExportingAll, setIsExportingAll] = useState(false);
   const [exportDayCursor, setExportDayCursor] = useState(0); // next day index to save
   const [exportingDayId, setExportingDayId] = useState(null);
@@ -181,18 +185,68 @@ const ContentPlanner = () => {
           // Photo layouts -> overlayColor is the scrim; plate layouts -> the
           // backgroundColor is the plate. Text stays high-contrast.
           let brandBg = bg, brandText = text, brandOverlay = slide.overlayColor;
+          const isPhotoLayout = isBrandLayout && (finalLayout.includes('photo') || finalLayout.includes('frame'));
           if (isBrandLayout) {
-            const isPhotoLayout = finalLayout.includes('photo') || finalLayout.includes('frame');
             if (isPhotoLayout) {
-              // Scrim/veil in the brand's primary (dark) colour; text light.
-              brandOverlay = slide.overlayColor || colors.primary || '#1A1512';
-              brandText = colors.background && !isDark(colors.background) ? colors.background : '#FFFFFF';
+              // The scrim/gradient over a photo must be DARK so white text always
+              // reads. Prefer the brand BACKGROUND colour (that's the swatch the
+              // user edits in the feed bar, so the gradient visibly follows it);
+              // if the background is light, fall back to the darkest palette tone,
+              // then to near-black.
+              let ov = colors.background;
+              if (!ov || !isDark(ov)) {
+                const darkCandidates = [colors.primary, colors.tertiary, colors.secondary, colors.neutral, colors.background]
+                  .filter((c) => c && isDark(c));
+                ov = darkCandidates[0] || '#1A1512';
+              }
+              brandOverlay = ov;
+              // White text on the dark scrim — guaranteed readable.
+              brandText = '#FFFFFF';
               brandBg = colors.background; // plate behind, if no photo
             } else {
-              // Text plate: use the brand background as the plate, primary as text.
-              brandBg = colors.background || '#EDE9E3';
-              brandText = colors.primary || '#1A1512';
+              // Text plate — rotate the plate colour across the feed so tiles
+              // alternate dark / light / accent (like the reference feeds),
+              // instead of every text tile being the same colour. The rotation
+              // is keyed on the day index so each day differs from its neighbours.
+              const isDarkBg = isDark(colors.background);
+              // Build a small palette of plate options from the brand colours.
+              const darkPlate = isDarkBg ? colors.background : (colors.neutral && isDark(colors.neutral) ? colors.neutral : colors.primary);
+              const lightPlate = isDarkBg ? (colors.neutral && !isDark(colors.neutral) ? colors.neutral : '#F2EEE9') : colors.background;
+              const accentPlate = colors.secondary || colors.accent;
+              const plateCycle = [
+                { bg: darkPlate,   tx: '#FFFFFF' },
+                { bg: lightPlate,  tx: isDark(lightPlate) ? '#FFFFFF' : (colors.primary && isDark(colors.primary) ? colors.primary : '#1A1512') },
+                { bg: accentPlate, tx: isDark(accentPlate) ? '#FFFFFF' : '#1A1512' },
+              ];
+              const pick = plateCycle[index % plateCycle.length];
+              brandBg = pick.bg || '#EDE9E3';
+              brandText = pick.tx;
             }
+          }
+
+          // Auto contrast text: on plate layouts, always pick a readable colour
+          // for the chosen plate (white on dark, near-black on light), unless the
+          // user overrode it per slide.
+          if (isBrandLayout && !isPhotoLayout) {
+            brandText = isDark(brandBg) ? '#FFFFFF' : '#1A1512';
+          }
+
+          // Per-slide manual override wins: if the user set colours in the editor
+          // for THIS slide, keep them untouched (brand/feed styling doesn't stomp
+          // on a deliberate choice).
+          if (slide._colorOverride) {
+            return {
+              ...slide,
+              background: bgOverride,
+              coverBlurMode: coverBlurMode && !isCtaSlide,
+              isCtaSlide,
+              // keep the slide's own colours
+              layout: finalLayout,
+              layoutId: isBrandLayout ? finalLayout : (editorialActive ? 'auto' : (slide.layoutId || finalLayout)),
+              fontFamily: font,
+              headlineTracking: (typeof config.headlineTracking === 'number') ? config.headlineTracking : -30,
+              editorialDark: isBrandLayout ? false : (config.editorialDark === true || config.ruleSet === 'editorial_dark'),
+            };
           }
 
           return {
@@ -206,6 +260,9 @@ const ContentPlanner = () => {
             secondaryColor: sec,
             accentColor: acc,
             fontFamily: font,
+            // Headline letter spacing from the brand (default slightly tight).
+            headlineTracking: (typeof config.headlineTracking === 'number') ? config.headlineTracking : -30,
+            boldMode: config.boldMode === true,
             accentFontFamily: accentFont,
             fontWeight: weight,
             visualElements: config.visualElements || [],
@@ -274,6 +331,61 @@ const ContentPlanner = () => {
 
   // Toggle cover-blur for ONE post (day): follow-up slides reuse the cover
   // photo, blurred and slightly darkened.
+  // Feed-level colour/font editing — updates the brand config and re-applies
+  // styling to every slide so the whole feed changes instantly.
+  const handleFeedColors = (newColors) => {
+    if (!currentBrand) return;
+    const updatedConfig = { ...currentBrand, colors: newColors };
+    const restyled = applyBrandStyling(brandSettings.contentPlan || [], updatedConfig);
+    updateBrandSettings({ currentBrandConfig: updatedConfig, contentPlan: restyled });
+  };
+  const handleFeedFont = (font) => {
+    if (!currentBrand) return;
+    const updatedConfig = {
+      ...currentBrand,
+      typography: { ...(currentBrand.typography || {}), fontFamily: font },
+    };
+    const restyled = applyBrandStyling(brandSettings.contentPlan || [], updatedConfig);
+    updateBrandSettings({ currentBrandConfig: updatedConfig, contentPlan: restyled });
+  };
+
+  // Collect all slides whose text is a [SCREENSHOT — …] placeholder, with a
+  // stable key (day.day + slide index) so we can write the overlay back.
+  const collectScreenshotPlaceholders = () => {
+    const out = [];
+    (brandSettings.contentPlan || []).forEach((day) => {
+      (day.slides || []).forEach((slide, sIdx) => {
+        const matchText = parseScreenshotPlaceholder(slide.text);
+        if (matchText) out.push({ id: `${day.day}_${sIdx}`, matchText });
+      });
+    });
+    return out;
+  };
+
+  // Apply the OCR mapping: place each matched screenshot as an overlay image on
+  // its slide and clear the placeholder text so only the screenshot shows.
+  const applyScreenshots = (mapping) => {
+    const updated = (brandSettings.contentPlan || []).map((day) => ({
+      ...day,
+      slides: (day.slides || []).map((slide, sIdx) => {
+        const key = `${day.day}_${sIdx}`;
+        if (!mapping[key]) return slide;
+        return {
+          ...slide,
+          overlayImage: mapping[key],
+          overlayIsScreenshot: true,     // rectangular card, large + readable
+          overlayImageScale: 0.8,        // ~80% of the tile width
+          overlayImageRounded: false,
+          overlayImageX: 0,
+          overlayImageY: 0,
+          text: '',                      // remove the placeholder text
+          _wasScreenshot: true,
+        };
+      }),
+    }));
+    updateBrandSettings({ contentPlan: updated });
+  };
+
   const toggleCoverBlur = (dayNum) => {
     const updated = weekPlan.map((d) => (d.day === dayNum ? { ...d, coverBlurMode: !d.coverBlurMode } : d));
     updateBrandSettings({ contentPlan: applyBrandStyling(updated, currentBrand) });
@@ -818,6 +930,12 @@ const ContentPlanner = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 pb-32">
       <BulkImportModal isOpen={showImportModal} onClose={() => setShowImportModal(false)} onImportPlan={handleImportPlan} />
+      <ScreenshotMatchModal
+        isOpen={showScreenshotModal}
+        onClose={() => setShowScreenshotModal(false)}
+        placeholders={collectScreenshotPlaceholders()}
+        onApply={applyScreenshots}
+      />
       <div className="sticky top-[64px] z-30 bg-white/95 backdrop-blur border-b border-gray-200 shadow-sm -mx-4 sm:-mx-6 px-4 sm:px-6 transition-all">
         <div className="py-3 flex flex-col md:flex-row justify-between items-center max-w-4xl mx-auto gap-3">
           <div>
@@ -826,6 +944,7 @@ const ContentPlanner = () => {
           </div>
           <div className="flex flex-wrap gap-2 items-center justify-end">
             <button onClick={() => setShowImportModal(true)} className="px-3 py-2 bg-purple-600 text-white rounded-lg font-bold hover:bg-purple-700 transition-colors flex items-center shadow-md whitespace-nowrap text-xs"><SafeIcon icon={FiFileText} className="mr-2" /> Bulk Import</button>
+            <button onClick={() => setShowScreenshotModal(true)} className="px-3 py-2 bg-white border border-purple-200 text-purple-700 rounded-lg font-bold hover:bg-purple-50 transition-colors flex items-center shadow-sm whitespace-nowrap text-xs"><SafeIcon icon={FiImage} className="mr-2" /> Screenshots</button>
             {hasActiveBrand && (
               <>
               <button onClick={() => setShowStyleShifter(!showStyleShifter)} className={`flex items-center px-4 py-2 rounded-lg border transition-all text-xs font-bold ${showStyleShifter ? 'bg-purple-600 text-white border-purple-600 shadow-inner' : 'bg-white border-purple-200 text-purple-700 hover:bg-purple-50 hover:border-purple-300 shadow-sm'}`} title="Style Shifter (Fonts/Colors)"><SafeIcon icon={FiRefreshCw} className="mr-2 text-sm" /> Shifter</button>
@@ -940,6 +1059,14 @@ const ContentPlanner = () => {
         {saveStatus && (<div className="absolute top-16 left-0 right-0 text-center pointer-events-none"><span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold border border-green-200 shadow-sm animate-fade-in-down">{saveStatus}</span></div>)}
       </div>
       <div className="mb-6 mt-6"></div>
+      {hasActiveBrand && weekPlan.length > 0 && (
+        <FeedStyleBar
+          colors={currentBrand?.colors}
+          typography={currentBrand?.typography}
+          onColors={handleFeedColors}
+          onFont={handleFeedFont}
+        />
+      )}
       {loading ? (
         <div className="space-y-6 pt-4">{[1, 2, 3].map(i => <div key={i} className="h-64 bg-gray-100 rounded-xl animate-pulse"></div>)}</div>
       ) : (

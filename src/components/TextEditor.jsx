@@ -143,12 +143,14 @@ const TextEditor = ({ currentSlide, onUpdate, onGlobalUpdate, onBatchUpdate, tot
   // --- FONT LIST ---
   const standardFonts = [
     { name: 'Playfair Display', value: 'Playfair Display' },
+    { name: 'Cormorant Garamond', value: 'Cormorant Garamond' },
     { name: 'Montserrat', value: 'Montserrat' },
     { name: 'Inter', value: 'Inter' },
-    { name: 'Cormorant Garamond', value: 'Cormorant Garamond' },
-    { name: 'Caveat', value: 'Caveat' },
-    { name: 'Courier Prime', value: 'Courier Prime' },
     { name: 'Outfit', value: 'Outfit' },
+    { name: 'Poppins', value: 'Poppins' },
+    { name: 'Caveat', value: 'Caveat' },
+    { name: 'La Belle Aurore', value: 'La Belle Aurore' },
+    { name: 'Courier Prime', value: 'Courier Prime' },
   ];
   const customFonts = (brandSettings.customFonts || []).map(f => ({ name: `${f.name} (Custom)`, value: f.name }));
   const allFonts = [...customFonts, ...standardFonts];

@@ -3,7 +3,7 @@ import { FiCheck, FiZap, FiRefreshCw } from 'react-icons/fi';
 import SafeIcon from '../common/SafeIcon';
 import Canvas from './Canvas';
 import { useBrand } from '../context/BrandContext';
-import { generateTrulyRandomBrand, brandRuleSets, CURATED_BRANDS } from '../constants/brandData';
+import { generateTrulyRandomBrand, brandRuleSets, CURATED_BRANDS, REFERENCE_PRESETS } from '../constants/brandData';
 import GenerativeBrandSystem from './GenerativeBrandSystem';
 import StyleShifter from './StyleShifter';
 
@@ -74,7 +74,36 @@ const BrandRandomizer = () => {
 
   // Prepare Template Previews - Force Refresh
   const templatePreviews = useMemo(() => {
-    // Fixed curated brands FIRST (Editorial Dark/Hell) — always identical,
+    // Reference-look presets FIRST. These run in brand-layout mode (photo
+    // tinting + plate rotation), so the preview must NOT force editorialDark.
+    const presetCards = REFERENCE_PRESETS.map((brand) => ({
+      key: brand.id,
+      curatedBrand: brand,
+      ruleSet: { name: brand.name, description: 'Fototönung + Flächen-Wechsel' },
+      canvasData: {
+        text: brand.sampleText || (brand.boldMode ? 'An der *Spitze* ist es einsam' : 'Dein Angebot ist für *dich* gebaut. Nicht für sie.'),
+        secondaryText: brand.boldMode ? 'Truthbomb' : undefined,
+        boldMode: brand.boldMode === true,
+        backgroundColor: brand.colors.background,
+        color: '#FFFFFF',
+        secondaryColor: brand.colors.secondary,
+        accentColor: brand.colors.accent,
+        fontFamily: brand.typography.fontFamily,
+        accentFontFamily: brand.typography.accentFontFamily,
+        fontSize: 30,
+        visualElements: [],
+        layout: brand.layout || 'brand_photo_gradient',
+        editorialDark: false,
+        overlayColor: brand.colors.background,
+        headlineTracking: (typeof brand.headlineTracking === 'number') ? brand.headlineTracking : -30,
+        textAlign: 'center',
+        format: '4:5',
+        isPreview: true,
+      },
+      tags: brand.tags,
+    }));
+
+    // Fixed curated brands (Editorial Dark/Hell) — always identical,
     // full config incl. editorialDark flag for the auto two-font rendering.
     const curatedCards = CURATED_BRANDS.map((brand) => ({
       key: brand.id,
@@ -123,7 +152,7 @@ const BrandRandomizer = () => {
       return { key, ruleSet, canvasData, tags: brand.tags };
     });
 
-    return [...curatedCards, ...ruleCards];
+    return [...presetCards, ...curatedCards, ...ruleCards];
   }, []); // Empty dependency ensures it runs once on mount, but hot reload will refresh it
 
   return (

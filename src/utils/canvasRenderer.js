@@ -1,4 +1,5 @@
 import { fabric } from 'fabric';
+import { detectFaceZones } from './faceDetection';
 
 /**
  * Renders the slide content onto a Fabric.js canvas.
@@ -244,6 +245,39 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       if (!src) return resolve(false);
       fabric.Image.fromURL(src, (img) => {
         if (!img) return resolve(false);
+
+        // SCREENSHOT MODE: a screenshot is a rectangular text image that must be
+        // large and readable — drawn like an inset "card" (white mat + shadow),
+        // not a small round logo.
+        if (slide.overlayIsScreenshot) {
+          const targetW = width * (typeof slide.overlayImageScale === 'number' ? slide.overlayImageScale : 0.8);
+          const factor = targetW / img.width;
+          const drawnW = img.width * factor;
+          const drawnH = img.height * factor;
+          const cx = width / 2 + (typeof slide.overlayImageX === 'number' ? slide.overlayImageX : 0) * scale;
+          const cy = height / 2 + (typeof slide.overlayImageY === 'number' ? slide.overlayImageY : 0) * scale;
+          const mat = 10 * scale;
+          // White mat behind the screenshot.
+          canvas.add(new fabric.Rect({
+            left: cx, top: cy, originX: 'center', originY: 'center',
+            width: drawnW + mat * 2, height: drawnH + mat * 2,
+            rx: 12 * scale, ry: 12 * scale,
+            fill: '#FFFFFF', selectable: false,
+            shadow: 'rgba(0,0,0,0.22) 0px 10px 30px',
+          }));
+          img.set({
+            originX: 'center', originY: 'center', left: cx, top: cy,
+            scaleX: factor, scaleY: factor, selectable: false,
+            clipPath: new fabric.Rect({
+              width: img.width, height: img.height, rx: 6 / factor, ry: 6 / factor,
+              originX: 'center', originY: 'center',
+            }),
+          });
+          canvas.add(img);
+          resolve(true);
+          return;
+        }
+
         const sc = (typeof slide.overlayImageScale === 'number' ? slide.overlayImageScale : 0.3);
         // scale so the overlay image's width = sc * canvas width
         const targetW = width * sc;
@@ -509,48 +543,118 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   };
 
   // Accent-styled headline helper (applies italic accent colour to *words*).
-  const makeHeadline = (segments, plain, opts) => {
-    // Auto-fit: shrink the font until the widest word AND the longest line fit
-    // inside the box, so long words like "Erstberatung" never bleed off-canvas.
-    let fontSize = opts.fontSize;
-    const boxW = opts.width;
+  // Grain overlay usable inside brand engines (they return early and never
+  // reach the global grain block at the end of renderSlide).
+  const applyBrandGrain = () => {
+    if (!(typeof slide.grain === 'number' && slide.grain > 0)) return;
     try {
-      const words = String(plain).split(/\s+/).filter(Boolean);
-      const longestWord = words.sort((a, b) => b.length - a.length)[0] || plain;
-      const fits = (fsz) => {
+      const gCan = document.createElement('canvas');
+      gCan.width = 120; gCan.height = 120;
+      const gctx = gCan.getContext('2d');
+      const imgData = gctx.createImageData(120, 120);
+      for (let i = 0; i < imgData.data.length; i += 4) {
+        const v = Math.random() * 255;
+        imgData.data[i] = v; imgData.data[i + 1] = v; imgData.data[i + 2] = v;
+        imgData.data[i + 3] = 255;
+      }
+      gctx.putImageData(imgData, 0, 0);
+      const grainImg = new fabric.Pattern({ source: gCan, repeat: 'repeat' });
+      canvas.add(new fabric.Rect({
+        left: 0, top: 0, width, height,
+        fill: grainImg, opacity: Math.min(slide.grain, 0.5), selectable: false,
+      }));
+    } catch (e) { /* grain optional */ }
+  };
+
+  // Reserved footer band for the brand signature. Text must never enter it.
+  // FOOTER_TOP is the y where the footer space begins; TEXT_MAX_BOTTOM is the
+  // lowest a headline may reach.
+  const FOOTER_SPACE = height * 0.12;            // ~12% of the slide, bottom
+  const FOOTER_TOP = height - FOOTER_SPACE;      // signature lives below this
+  const TEXT_MAX_BOTTOM = FOOTER_TOP - height * 0.03; // small gap above footer
+
+  const makeHeadline = (segments, plain, opts) => {
+    // Per-slide switches (shared with the editorial engine):
+    //  - serifHeadline === false  -> ALL CAPS, sans font, letter-spaced
+    //  - bigHeadline === true     -> ~35% larger base size (cover look)
+    const boldMode = slide.boldMode === true;
+    const capsMode = slide.serifHeadline === false || boldMode;
+    const bigMode = slide.bigHeadline === true;
+    // Bold Statement mode: heavy Anton display caps (the "loud editorial" look).
+    const headFont = boldMode ? 'Anton' : (capsMode ? 'Montserrat' : fontFamily);
+    const headText = capsMode ? String(plain).toUpperCase() : plain;
+    const headWeight = boldMode ? '400' : (capsMode ? '700' : (opts.fontWeight || '600'));
+    // Letter spacing (charSpacing is in 1/1000 em). Default headlines sit
+    // slightly tight for an editorial look; the brand can override via
+    // slide.headlineTracking. Anton looks best nearly flush; Montserrat caps
+    // stay wide for legibility.
+    const brandTracking = (typeof slide.headlineTracking === 'number') ? slide.headlineTracking : -30;
+    const headSpacing = boldMode ? 5 : (capsMode ? 120 : brandTracking);
+    // Auto-fit in TWO dimensions:
+    //  (1) width — the widest word must fit the box (no right-edge bleed)
+    //  (2) height — if opts.maxBottom is given, the whole wrapped block must end
+    //      above it, so text never runs into the reserved footer space.
+    let fontSize = bigMode ? Math.round(opts.fontSize * 1.35) : opts.fontSize;
+    const boxW = opts.width;
+    const measureBox = (fsz) => new fabric.Textbox(headText, {
+      width: boxW, fontSize: fsz, fontFamily: headFont,
+      fontWeight: headWeight, lineHeight: opts.lineHeight || 1.15,
+      textAlign: opts.textAlign || 'center', charSpacing: headSpacing,
+    });
+    try {
+      const words = String(headText).split(/\s+/).filter(Boolean);
+      const longestWord = words.sort((a, b) => b.length - a.length)[0] || headText;
+      const widthFits = (fsz) => {
         const probe = new fabric.Text(longestWord, {
-          fontSize: fsz, fontFamily: fontFamily, fontWeight: opts.fontWeight || '600',
+          fontSize: fsz, fontFamily: headFont, fontWeight: headWeight, charSpacing: headSpacing,
         });
         return probe.width <= boxW * 0.98;
       };
+      // Available vertical space for the text block (top of text -> footer top).
+      const topY = opts.originY === 'center' ? null : opts.top;
+      const heightFits = (fsz) => {
+        if (!opts.maxBottom) return true;
+        const probe = measureBox(fsz);
+        const h = probe.height || 0;
+        if (opts.originY === 'center') {
+          // centered: half the block sits below opts.top
+          return (opts.top + h / 2) <= opts.maxBottom;
+        }
+        // top-anchored: block grows down from opts.top
+        return (topY + h) <= opts.maxBottom;
+      };
       let guard = 0;
-      while (fontSize > 14 && !fits(fontSize) && guard < 40) {
+      while (fontSize > 14 && (!widthFits(fontSize) || !heightFits(fontSize)) && guard < 60) {
         fontSize -= 2; guard++;
       }
     } catch (e) { /* measuring is best-effort */ }
 
-    const t = new fabric.Textbox(plain, {
+    const t = new fabric.Textbox(headText, {
       left: opts.originX === 'center' ? (width - boxW) / 2 : opts.left,
       top: opts.top,
       originX: opts.originX === 'center' ? 'left' : (opts.originX || 'left'),
       originY: opts.originY || 'center', width: boxW,
-      fontSize, fontFamily: fontFamily,
+      fontSize, fontFamily: headFont,
       fill: opts.fill, textAlign: opts.textAlign || 'center',
-      lineHeight: opts.lineHeight || 1.15, fontWeight: opts.fontWeight || '600',
+      lineHeight: opts.lineHeight || 1.15, fontWeight: headWeight,
+      charSpacing: headSpacing,
       shadow: opts.shadow || '',
       splitByGrapheme: false,
     });
     try {
-      let idx = 0;
-      segments.forEach((s) => {
-        if (s.accent && s.text.length) {
-          t.setSelectionStyles(
-            { fill: opts.accentFill, fontStyle: 'italic', fontFamily: accentFont },
-            idx, idx + s.text.length
-          );
-        }
-        idx += s.text.length;
-      });
+      // Accent italics only make sense for the serif headline, not in CAPS mode.
+      if (!capsMode) {
+        let idx = 0;
+        segments.forEach((s) => {
+          if (s.accent && s.text.length) {
+            t.setSelectionStyles(
+              { fill: opts.accentFill, fontStyle: 'italic', fontFamily: accentFont },
+              idx, idx + s.text.length
+            );
+          }
+          idx += s.text.length;
+        });
+      }
     } catch (e) { /* best-effort */ }
     canvas.add(t);
     return t;
@@ -564,10 +668,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // -- TEXT ON PHOTO (gradient scrim) --
     brand_photo_gradient:      { base: 'gradient', textPos: 'bottom', align: 'center' },
     brand_photo_bottom_left:   { base: 'gradient', textPos: 'bottom', align: 'left' },
-    brand_photo_top:           { base: 'gradient', textPos: 'top',    align: 'center' },
-    brand_photo_center:        { base: 'gradient', textPos: 'center', align: 'center' },
+    brand_photo_top:           { base: 'gradient', textPos: 'top',    align: 'center', tint: true },
+    brand_photo_center:        { base: 'gradient', textPos: 'center', align: 'center', tint: true },
     brand_photo_bigword:       { base: 'gradient', textPos: 'center', align: 'center', bigWord: true },
-    brand_photo_quote:         { base: 'gradient', textPos: 'center', align: 'center', kicker: 'top' },
+    brand_photo_quote:         { base: 'gradient', textPos: 'center', align: 'center', kicker: 'top', tint: true },
     brand_photo_bottom_serif:  { base: 'gradient', textPos: 'bottom', align: 'center', kicker: 'bottom' },
     // -- FRAMED PHOTO on a plate --
     brand_photo_frame:         { base: 'frame', textPos: 'below', align: 'center' },
@@ -585,7 +689,22 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     brand_text_minimal:        { base: 'plate', textPos: 'center', align: 'center' },
     brand_text_bold_top:       { base: 'plate', textPos: 'top',    align: 'left', bigWord: true },
   };
-  const brandVariant = BRAND_VARIANTS[layoutResolved];
+  let brandVariant = BRAND_VARIANTS[layoutResolved];
+
+  // FOLLOW-UP PAGES (slideIndex > 0): make every follow-up calm and uniform so
+  // the carousel reads cleanly when swiping — one font, LEFT aligned, always
+  // vertically CENTERED, same position on every page. Photos are still allowed
+  // (they keep the gradient engine); text-only pages use the plate engine.
+  // The first page (the hook, slideIndex 0) keeps its designed layout.
+  if (brandVariant && typeof options.slideIndex === 'number' && options.slideIndex > 0) {
+    const keepPhoto = brandVariant.base === 'gradient' || brandVariant.base === 'frame';
+    brandVariant = {
+      base: keepPhoto && hasBgImage ? 'gradient' : 'plate',
+      textPos: 'center',
+      align: 'left',
+      followUp: true,
+    };
+  }
 
   // --- ENGINE 1: gradient (photo + scrim) — handles all base:'gradient' ids -
   if (brandVariant && brandVariant.base === 'gradient') {
@@ -593,30 +712,52 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const scrim = slide.overlayColor || '#1A1512';
     const textCol = brandTextColor(slide.color, hasBgImage, scrim);
     const accentCol = slide.accentColor || textCol;
-    const strength = (typeof slide.overlayStrength === 'number') ? slide.overlayStrength : 0.55;
+    // Stronger default so light text stays legible on bright photos.
+    const strength = (typeof slide.overlayStrength === 'number') ? slide.overlayStrength : 0.78;
 
-    // Gradient direction depends on where the text sits.
+    // Gradient shape. Key idea: keep the TOP of the photo perfectly clear (0
+    // opacity) so the face/subject stays clean, and only darken the band right
+    // behind the text. No flat wash over the whole image.
     const stopsFor = (pos) => {
       if (pos === 'top') return [
-        { offset: 0, color: hexToRgba(scrim, Math.min(strength + 0.25, 0.95)) },
-        { offset: 0.28, color: hexToRgba(scrim, strength * 0.7) },
-        { offset: 0.55, color: hexToRgba(scrim, 0) },
-        { offset: 1, color: hexToRgba(scrim, strength * 0.3) },
+        { offset: 0,    color: hexToRgba(scrim, Math.min(strength + 0.15, 0.95)) },
+        { offset: 0.22, color: hexToRgba(scrim, strength * 0.7) },
+        { offset: 0.45, color: hexToRgba(scrim, 0) },
+        { offset: 1,    color: hexToRgba(scrim, 0) },
       ];
       if (pos === 'center') return [
-        { offset: 0, color: hexToRgba(scrim, strength * 0.5) },
-        { offset: 0.5, color: hexToRgba(scrim, Math.min(strength + 0.15, 0.9)) },
-        { offset: 1, color: hexToRgba(scrim, strength * 0.5) },
+        { offset: 0,    color: hexToRgba(scrim, 0) },
+        { offset: 0.32, color: hexToRgba(scrim, 0) },
+        { offset: 0.52, color: hexToRgba(scrim, strength * 0.75) },
+        { offset: 0.72, color: hexToRgba(scrim, Math.min(strength + 0.1, 0.92)) },
+        { offset: 1,    color: hexToRgba(scrim, strength * 0.55) },
       ];
       return [ // bottom
-        { offset: 0, color: hexToRgba(scrim, strength * 0.35) },
-        { offset: 0.45, color: hexToRgba(scrim, 0) },
-        { offset: 0.72, color: hexToRgba(scrim, strength * 0.7) },
-        { offset: 1, color: hexToRgba(scrim, Math.min(strength + 0.25, 0.95)) },
+        { offset: 0,    color: hexToRgba(scrim, 0) },
+        { offset: 0.4,  color: hexToRgba(scrim, 0) },
+        { offset: 0.6,  color: hexToRgba(scrim, strength * 0.45) },
+        { offset: 0.8,  color: hexToRgba(scrim, strength * 0.82) },
+        { offset: 1,    color: hexToRgba(scrim, Math.min(strength + 0.15, 0.95)) },
       ];
     };
 
     if (hasBgImage) {
+      // Ton-in-Ton: on tinted variants, add a SOFT brand-colour wash — stronger
+      // at the bottom, fading to clear at the top so the subject stays crisp
+      // (not a flat muddy veil over the whole photo).
+      if (V.tint) {
+        canvas.add(new fabric.Rect({
+          left: 0, top: 0, width, height, selectable: false,
+          fill: new fabric.Gradient({
+            type: 'linear', coords: { x1: 0, y1: 0, x2: 0, y2: height },
+            colorStops: [
+              { offset: 0,   color: hexToRgba(scrim, 0.12) },
+              { offset: 0.5, color: hexToRgba(scrim, 0.28) },
+              { offset: 1,   color: hexToRgba(scrim, 0.42) },
+            ],
+          }),
+        }));
+      }
       canvas.add(new fabric.Rect({
         left: 0, top: 0, width, height, selectable: false,
         fill: new fabric.Gradient({
@@ -630,18 +771,81 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     const { plain, segments } = parseAccent(slide.text);
 
-    // Vertical anchor from variant.
-    const anchorY = V.textPos === 'top' ? height * 0.14
-      : V.textPos === 'center' ? height * 0.42
-      : height * 0.72; // bottom
+    // Vertical anchor from variant. 'bottom' is kept high enough that the text
+    // block ends well above the brand signature.
+    const followUp = V.followUp === true;
+    // React to the photo: place text so it never covers a face. If face zones
+    // were detected, decide from the AVERAGE face row whether the face sits in
+    // the upper or lower half, and push the text to the opposite side — this
+    // wins over the layout's default text position, on every slide including
+    // the first. Falls back to the variance-based quiet zone, then defaults.
+    const quiet = (slide._autoImage && slide._autoImage.quietZone) || '';
+    const faceZones = (slide._autoImage && slide._autoImage.faceZones) || [];
+    let photoAnchorY;
+    if (followUp && hasBgImage) {
+      // Follow-up photo: keep text consistently in the LOWER band (like a clean
+      // photo post with a caption) so every photo follow-up looks the same and
+      // dark photos don't leave a big empty gap. Only lift it if a face is
+      // clearly detected in the LOWER half.
+      const faceLow = faceZones.length > 0
+        && (faceZones.map((z) => Math.floor(z / 3)).reduce((a, b) => a + b, 0) / faceZones.length) > 1.4;
+      photoAnchorY = faceLow ? height * 0.16 : height * 0.6;
+    } else if (hasBgImage && faceZones.length > 0) {
+      // 3x3 grid: rows 0(top),1(mid),2(bottom). Zone z -> row = floor(z/3).
+      const rows = faceZones.map((z) => Math.floor(z / 3));
+      const avgRow = rows.reduce((a, b) => a + b, 0) / rows.length;
+      // Face in upper half -> text low; face in lower half -> text high.
+      photoAnchorY = avgRow <= 1.1 ? height * 0.64 : height * 0.14;
+    } else if (hasBgImage && quiet) {
+      if (quiet.includes('top')) photoAnchorY = height * 0.16;
+      else if (quiet.includes('bottom')) photoAnchorY = height * 0.6;
+      else photoAnchorY = height * 0.54; // middle band
+    }
+    const anchorY = followUp
+      // Follow-up on a PHOTO: same face-safe rule as the hero — detected
+      // placement wins, otherwise default LOW so text never lands on the face.
+      ? (photoAnchorY != null ? photoAnchorY : (hasBgImage ? height * 0.64 : height * 0.54))
+      : (photoAnchorY != null ? photoAnchorY
+        // No reliable face/quiet data: on a PHOTO, default the text LOW (0.64),
+        // because portrait subjects almost always sit in the upper/middle band —
+        // putting text on top would land on the face. Text-only layouts keep
+        // their designed position.
+        : hasBgImage ? height * 0.64
+        : V.textPos === 'top' ? height * 0.14
+        : V.textPos === 'center' ? height * 0.4
+        : height * 0.64);
     const alignLeft = V.align === 'left';
     const cx = alignLeft ? width * 0.09 : width / 2;
     const originX = alignLeft ? 'left' : 'center';
     const tAlign = alignLeft ? 'left' : 'center';
 
     let y = anchorY;
-    // Kicker above (from secondaryText or variant flag).
-    if (V.kicker === 'top' && slide.secondaryText) {
+    // Bold Statement: a small filled accent LABEL box (like "Truthbomb" /
+    // "Realtalk") above the headline. Uses secondaryText if present, else a
+    // subtle default so the style still reads.
+    if (slide.boldMode) {
+      const labelText = (slide.secondaryText || slide.kickerText || '').trim();
+      if (labelText) {
+        const lt = labelText.toUpperCase();
+        const padX = 14 * scale, padY = 7 * scale;
+        const labelFontSize = fs(15);
+        const measure = new fabric.Text(lt, { fontSize: labelFontSize, fontFamily: 'Montserrat', fontWeight: '800', charSpacing: 120 });
+        const lw = (measure.width || lt.length * 9) + padX * 2;
+        const lh = (measure.height || labelFontSize) + padY * 2;
+        const boxLeft = alignLeft ? cx : cx - lw / 2;
+        canvas.add(new fabric.Rect({
+          left: boxLeft, top: y - lh - 12 * scale, width: lw, height: lh,
+          fill: accentCol || '#E4002B', rx: 3 * scale, ry: 3 * scale,
+          originX: 'left', originY: 'top', selectable: false,
+          shadow: brandTextShadow(),
+        }));
+        canvas.add(new fabric.Text(lt, {
+          left: boxLeft + lw / 2, top: y - lh / 2 - 12 * scale, fontSize: labelFontSize,
+          fill: '#FFFFFF', fontFamily: 'Montserrat', fontWeight: '800', charSpacing: 120,
+          originX: 'center', originY: 'center', selectable: false,
+        }));
+      }
+    } else if (V.kicker === 'top' && slide.secondaryText) {
       drawKickerAt(slide.secondaryText, cx, y, hexToRgba(textCol, 0.85), originX, 'bottom');
       y += 34 * scale;
     } else if (slide.secondaryText && V.textPos === 'bottom') {
@@ -650,27 +854,62 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     }
 
     const baseFont = V.bigWord ? (slide.fontSize || 120) : (slide.fontSize || 66);
+    // Follow-ups: 15% smaller, then another 5% (~0.8075 of base).
+    const finalFont = followUp ? Math.round(baseFont * 0.8) : baseFont;
+    // Anchoring: follow-ups and detected face/quiet placement grow downward from
+    // the anchor (top). A photo with no detection uses its low default anchor
+    // CENTERED, so the block sits neatly in the lower band above the signature.
+    const faceOrQuiet = quiet || faceZones.length > 0;
+    const headOriginY = followUp ? 'top'
+      : (hasBgImage && faceOrQuiet) ? 'top'
+      : (hasBgImage && photoAnchorY == null) ? 'center'
+      : (V.textPos === 'center' ? 'center' : 'top');
+    // FOLLOW-UP photo pages: keep it clean over the photo — NO big ghost numeral
+    // (it collides with the face/text on a busy photo). Just a small index label
+    // top-left and a short accent rule directly above the face-aware headline.
+    if (followUp) {
+      const marginX = width * 0.09;
+      const idx = (options.slideIndex || 0) + 1;
+      const total = options.totalSlides || 0;
+      if (total) {
+        canvas.add(new fabric.Text(`${String(idx).padStart(2, '0')} / ${String(total).padStart(2, '0')}`, {
+          left: marginX, top: height * 0.11, fontSize: fs(14),
+          fill: hexToRgba(textCol, 0.9), fontFamily: 'Montserrat', charSpacing: 300,
+          originX: 'left', originY: 'top', selectable: false,
+          shadow: brandTextShadow(),
+        }));
+      }
+      // Short accent rule just above the headline (which sits low, off the face).
+      const ruleColor = (accentCol && accentCol !== textCol) ? accentCol : hexToRgba(textCol, 0.8);
+      canvas.add(new fabric.Rect({
+        left: marginX, top: y - height * 0.04, width: width * 0.12, height: Math.max(3 * scale, 3),
+        fill: ruleColor, selectable: false, shadow: brandTextShadow(),
+      }));
+    }
+
     makeHeadline(segments, plain, {
-      left: cx, top: y, originX, originY: V.textPos === 'center' ? 'center' : 'top',
-      width: width * (alignLeft ? 0.82 : 0.86), fontSize: fs(baseFont),
+      left: cx, top: y, originX, originY: headOriginY,
+      width: width * (alignLeft ? 0.82 : 0.86), fontSize: fs(finalFont),
       fill: textCol, accentFill: accentCol, textAlign: tAlign,
       lineHeight: V.bigWord ? 0.98 : 1.12, fontWeight: slide.fontWeight || (V.bigWord ? '700' : '600'),
       shadow: brandTextShadow(),
+      maxBottom: TEXT_MAX_BOTTOM,
     });
 
-    // Kicker below (footer style).
+    // Kicker below (footer style) — kept above the signature band.
     if (V.kicker === 'bottom' && (slide.footerText || slide.secondaryText)) {
-      drawKickerAt(slide.footerText || slide.secondaryText, cx, height * 0.86, hexToRgba(textCol, 0.7), originX, 'center');
+      drawKickerAt(slide.footerText || slide.secondaryText, cx, height * 0.8, hexToRgba(textCol, 0.7), originX, 'center');
     }
 
     if (options.globalBrandName) {
       canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
-        left: width / 2, top: height - (padding / 2), fontSize: fs(13),
+        left: width / 2, top: FOOTER_TOP + FOOTER_SPACE / 2, fontSize: fs(12),
         fill: hexToRgba(textCol, 0.8), fontFamily: 'Montserrat', charSpacing: 300,
         originX: 'center', originY: 'bottom', selectable: false,
       }));
     }
     if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) {} }
+    applyBrandGrain();
     canvas.renderAll();
     return;
   }
@@ -687,25 +926,33 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const { plain, segments } = parseAccent(slide.text);
     const textAbove = V.textPos === 'above';
 
-    // Frame geometry: text below (default) -> frame in upper area; text above ->
-    // frame in lower area. polaroid adds a white mat + caption space.
-    const frameW = V.polaroid ? width * 0.56 : width * 0.62;
-    const frameH = frameW * (V.polaroid ? 1.0 : 1.18);
+    // Frame sits in the UPPER area; text goes clearly BELOW it (or above if the
+    // variant asks). Sizes are kept compact so the headline never collides with
+    // the photo. Polaroid adds a white mat with extra space at the bottom.
+    const frameW = V.polaroid ? width * 0.5 : width * 0.58;
+    const frameH = frameW * (V.polaroid ? 1.0 : 1.12);
     const frameX = (width - frameW) / 2;
-    const frameY = textAbove ? height * 0.42 : height * 0.18;
+    const mat = V.polaroid ? width * 0.028 : 0;
+    const matBottom = V.polaroid ? mat * 4 : 0; // caption space under polaroid
+    // When text is above, push the frame into the lower-middle; else keep it
+    // high so the headline has room underneath.
+    const frameY = textAbove ? height * 0.46 : height * 0.13;
+    // The real bottom edge of the framed unit (incl. polaroid mat).
+    const frameBottom = frameY + frameH + matBottom;
 
     // Kicker at very top (unless text is above the frame).
     if (slide.secondaryText && !textAbove) {
-      drawKicker(slide.secondaryText, width / 2, height * 0.1, hexToRgba(textCol, 0.7), 'top');
+      drawKicker(slide.secondaryText, width / 2, height * 0.07, hexToRgba(textCol, 0.7), 'top');
     }
 
     // Headline above the frame (if variant) — drawn first so photo sits under.
     if (textAbove) {
       makeHeadline(segments, plain, {
-        left: width / 2, top: height * 0.2, originX: 'center', originY: 'center',
-        width: width * 0.84, fontSize: fs(slide.fontSize || 56),
+        left: width / 2, top: height * 0.22, originX: 'center', originY: 'center',
+        width: width * 0.82, fontSize: fs(slide.fontSize || 46),
         fill: textCol, accentFill: accentCol, textAlign: 'center', lineHeight: 1.12,
         shadow: brandTextShadow(),
+      maxBottom: TEXT_MAX_BOTTOM,
       });
     }
 
@@ -713,12 +960,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       await new Promise((res) => {
         fabric.Image.fromURL(slide.background, (img) => {
           if (!img) return res();
-          // Polaroid: white mat behind the photo.
           if (V.polaroid) {
-            const mat = width * 0.03;
             canvas.add(new fabric.Rect({
               left: frameX - mat, top: frameY - mat,
-              width: frameW + mat * 2, height: frameH + mat * 3.5,
+              width: frameW + mat * 2, height: frameH + matBottom,
               fill: '#FFFFFF', selectable: false,
               shadow: 'rgba(0,0,0,0.18) 0px 8px 24px',
             }));
@@ -746,24 +991,29 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       });
     }
 
-    // Headline below the frame (default).
+    // Headline BELOW the frame (default) — anchored to the real frame bottom
+    // with a gap, top-aligned, and a smaller font so it fits the lower band.
     if (!textAbove) {
+      const gap = height * 0.05;
       makeHeadline(segments, plain, {
-        left: width / 2, top: height * 0.76, originX: 'center', originY: 'center',
-        width: width * 0.84, fontSize: fs(slide.fontSize || 56),
+        left: width / 2, top: hasBgImage ? frameBottom + gap : height * 0.42,
+        originX: 'center', originY: 'top',
+        width: width * 0.84, fontSize: fs(slide.fontSize || 44),
         fill: textCol, accentFill: accentCol, textAlign: 'center', lineHeight: 1.12,
         shadow: brandTextShadow(),
+      maxBottom: TEXT_MAX_BOTTOM,
       });
     }
 
     if (options.globalBrandName) {
       canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
-        left: width / 2, top: height - (padding / 2), fontSize: fs(12),
+        left: width / 2, top: FOOTER_TOP + FOOTER_SPACE / 2, fontSize: fs(12),
         fill: hexToRgba(textCol, 0.6), fontFamily: 'Montserrat', charSpacing: 300,
         originX: 'center', originY: 'bottom', selectable: false,
       }));
     }
     if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) {} }
+    applyBrandGrain();
     canvas.renderAll();
     return;
   }
@@ -793,8 +1043,77 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const originX = alignLeft ? 'left' : 'center';
     const tAlign = alignLeft ? 'left' : 'center';
 
-    // Vertical anchor.
+    const followUp = V.followUp === true;
+
+    // ---- FOLLOW-UP PAGE DESIGN (slideIndex > 0) --------------------------
+    // Calm but intentional editorial layout, repeated on every follow-up so the
+    // carousel has rhythm and identity (not flat body text): a large muted page
+    // numeral top-left as a recurring anchor, a thin accent rule beside the
+    // text, generous left margin, left-aligned headline with the accent word
+    // emphasised. Uniform position = clean swiping; the numeral + rule give it
+    // character.
+    if (followUp) {
+      const marginX = width * 0.1;
+      const idx = (options.slideIndex || 0) + 1;
+      const total = options.totalSlides || 0;
+
+      // Big ghost numeral — the recurring design anchor.
+      canvas.add(new fabric.Text(String(idx).padStart(2, '0'), {
+        left: marginX, top: height * 0.13, fontSize: fs(112),
+        fill: hexToRgba(textCol, 0.1), fontFamily: fontFamily,
+        fontWeight: '700', originX: 'left', originY: 'top', selectable: false,
+      }));
+      // Small index label next to it (e.g. "03 / 08") for a designed touch.
+      if (total) {
+        canvas.add(new fabric.Text(`${String(idx).padStart(2, '0')} / ${String(total).padStart(2, '0')}`, {
+          left: marginX + 2, top: height * 0.115, fontSize: fs(13),
+          fill: hexToRgba(textCol, 0.55), fontFamily: 'Montserrat', charSpacing: 300,
+          originX: 'left', originY: 'bottom', selectable: false,
+        }));
+      }
+
+      // Thin accent rule to the left of the headline — vertical anchor line.
+      const textTop = height * 0.42;
+      const ruleColor = (accentCol && accentCol !== textCol) ? accentCol : hexToRgba(textCol, 0.5);
+      canvas.add(new fabric.Rect({
+        left: marginX, top: textTop, width: Math.max(3 * scale, 3), height: height * 0.16,
+        fill: ruleColor, selectable: false,
+      }));
+
+      // Headline: left aligned, indented past the rule, accent word highlighted.
+      // FIXED start line and FIXED size (no per-slide auto-shrink) so the text
+      // sits at exactly the same spot with the same size on every follow-up —
+      // that's what stops the "jumping" when swiping. Long text wraps downward
+      // with a slightly tighter leading instead of moving the block.
+      const fUpFont = V.bigWord ? 62 : 46;
+      makeHeadline(segments, plain, {
+        left: marginX + width * 0.05, top: textTop - height * 0.005,
+        originX: 'left', originY: 'top',
+        width: width * 0.8, fontSize: fs(fUpFont),
+        fill: textCol, accentFill: ruleColor, textAlign: 'left', lineHeight: 1.2,
+        fontWeight: slide.fontWeight || '600',
+        shadow: brandTextShadow(),
+        // Generous bottom bound: only shrink if the text would truly hit the
+        // footer, so normal-length lines keep the exact same size.
+        maxBottom: FOOTER_TOP - height * 0.01,
+      });
+
+      if (options.globalBrandName) {
+        canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+          left: marginX, top: FOOTER_TOP + FOOTER_SPACE / 2, fontSize: fs(12),
+          fill: hexToRgba(textCol, 0.6), fontFamily: 'Montserrat', charSpacing: 300,
+          originX: 'left', originY: 'bottom', selectable: false,
+        }));
+      }
+      if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) {} }
+      applyBrandGrain();
+      canvas.renderAll();
+      return;
+    }
+
+    // Vertical anchor for first/hero plate pages.
     let cy = V.textPos === 'top' ? height * 0.24 : height * 0.5;
+    const anchorY = V.textPos === 'top' ? 'top' : 'center';
 
     // Kicker lead (top).
     if (V.kicker === 'top' && slide.secondaryText) {
@@ -804,13 +1123,15 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     }
 
     const baseFont = V.bigWord ? (slide.fontSize || 110) : (slide.fontSize || 58);
+    const finalFont = baseFont;
     makeHeadline(segments, plain, {
-      left: cx, top: cy, originX, originY: V.textPos === 'top' ? 'top' : 'center',
-      width: width * (alignLeft ? 0.8 : 0.74), fontSize: fs(baseFont),
+      left: cx, top: cy, originX, originY: anchorY,
+      width: width * (alignLeft ? 0.8 : 0.74), fontSize: fs(finalFont),
       fill: textCol, accentFill: accentCol, textAlign: tAlign,
       lineHeight: V.bigWord ? 0.98 : 1.14,
       fontWeight: slide.fontWeight || (V.bigWord ? '700' : '600'),
       shadow: brandTextShadow(),
+      maxBottom: TEXT_MAX_BOTTOM,
     });
 
     // Footer kicker (statement style).
@@ -822,12 +1143,13 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     if (options.globalBrandName) {
       canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
-        left: width / 2, top: height - (padding / 1.6), fontSize: fs(12),
+        left: width / 2, top: FOOTER_TOP + FOOTER_SPACE / 2, fontSize: fs(12),
         fill: hexToRgba(textCol, 0.6), fontFamily: 'Montserrat', charSpacing: 300,
         originX: 'center', originY: 'bottom', selectable: false,
       }));
     }
     if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) {} }
+    applyBrandGrain();
     canvas.renderAll();
     return;
   }

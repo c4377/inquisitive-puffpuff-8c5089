@@ -16,9 +16,10 @@ const ColorEditor = ({ currentSlide, onUpdate, onGlobalUpdate }) => {
 
     const updates = { [field]: color };
     if (applyToAll) {
-      onGlobalUpdate(updates);
+      // Global manual colour: mark every slide as overridden so styling keeps it.
+      onGlobalUpdate({ ...updates, _colorOverride: true });
     } else {
-      onUpdate(updates);
+      onUpdate({ ...updates, _colorOverride: true });
     }
   };
 

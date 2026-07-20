@@ -243,25 +243,31 @@ const Editor = () => {
   };
 
   const handleSaveToPlan = () => {
-    if (editingDayId) {
-      setIsSaving(true);
-      const currentPlan = brandSettings.contentPlan || [];
-      const updatedPlan = currentPlan.map(day => {
-        if (day.day === editingDayId) {
-          const newType = slides.length > 1 ? 'carousel' : 'hook';
-          return { ...day, slides: slides, type: newType, caption: caption };
-        }
-        return day;
-      });
-      updateBrandSettings({ contentPlan: updatedPlan });
-      setTimeout(() => setIsSaving(false), 800);
-      return;
-    }
-    if (communityTopicId) {
-      setIsSaving(true);
-      updateCommunityDeck(communityTopicId, slides);
-      setTimeout(() => setIsSaving(false), 800);
-      return;
+    try {
+      if (editingDayId) {
+        setIsSaving(true);
+        const currentPlan = brandSettings.contentPlan || [];
+        const updatedPlan = currentPlan.map(day => {
+          if (day.day === editingDayId) {
+            const newType = slides.length > 1 ? 'carousel' : 'hook';
+            return { ...day, slides: slides, type: newType, caption: caption };
+          }
+          return day;
+        });
+        updateBrandSettings({ contentPlan: updatedPlan });
+        setTimeout(() => setIsSaving(false), 800);
+        return;
+      }
+      if (communityTopicId) {
+        setIsSaving(true);
+        updateCommunityDeck(communityTopicId, slides);
+        setTimeout(() => setIsSaving(false), 800);
+        return;
+      }
+    } catch (e) {
+      console.error('Speichern fehlgeschlagen', e);
+      setIsSaving(false);
+      alert('Speichern fehlgeschlagen. Bitte erneut versuchen.');
     }
   };
 

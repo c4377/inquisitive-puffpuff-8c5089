@@ -64,7 +64,7 @@ const BrandSettings = () => {
     // Cascade color/typography changes onto ALL existing posts so the
     // settings always win and Feed + Posts stay identical.
     const patch = { currentBrandConfig: updatedConfig };
-    if (field === 'colors' || field === 'typography') {
+    if (field === 'colors' || field === 'typography' || field === 'headlineTracking') {
       const c = updatedConfig.colors || {};
       const t = updatedConfig.typography || {};
       const applyToSlide = (s) => ({
@@ -76,6 +76,8 @@ const BrandSettings = () => {
           tertiaryColor: c.tertiary,
           neutralColor: c.neutral,
           accentColor: c.accent,
+        } : field === 'headlineTracking' ? {
+          headlineTracking: value,
         } : {
           fontFamily: t.fontFamily,
           accentFontFamily: t.accentFontFamily,
@@ -489,7 +491,7 @@ const BrandSettings = () => {
                         </div>
                         <div>
                           <h4 className="font-bold text-gray-900">{config.name}</h4>
-                          <p className="text-xs text-gray-500">Playfair + Handschrift • {config.darkPhoto ? 'dunkle Fotos' : 'helle Fotos'}</p>
+                          <p className="text-xs text-gray-500">{config.ruleSet === 'brand_layouts' ? 'Playfair • Fototönung + Flächen-Wechsel' : `Playfair + Handschrift • ${config.darkPhoto ? 'dunkle Fotos' : 'helle Fotos'}`}</p>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -670,6 +672,28 @@ const BrandSettings = () => {
                   updateCurrentBrand('typography', { ...brandSettings.currentBrandConfig.typography, bodyFontFamily: f });
                 }}
               />
+            </div>
+
+            {/* HEADLINE LETTER SPACING */}
+            <div className="mt-6 bg-white border border-gray-200 rounded-xl p-5">
+              <div className="flex items-center justify-between mb-2">
+                <div>
+                  <h4 className="font-bold text-gray-900 text-sm">Buchstabenabstand (Headline)</h4>
+                  <p className="text-xs text-gray-500">Enger oder weiter für die Überschriften</p>
+                </div>
+                <span className="text-xs font-mono bg-gray-100 px-2 py-1 rounded border border-gray-200">
+                  {(((typeof brandSettings.currentBrandConfig.headlineTracking === 'number' ? brandSettings.currentBrandConfig.headlineTracking : -30) / 1000)).toFixed(3)}em
+                </span>
+              </div>
+              <input
+                type="range" min="-80" max="40" step="5"
+                value={typeof brandSettings.currentBrandConfig.headlineTracking === 'number' ? brandSettings.currentBrandConfig.headlineTracking : -30}
+                onChange={(e) => updateCurrentBrand('headlineTracking', parseInt(e.target.value))}
+                className="w-full accent-purple-600"
+              />
+              <div className="flex justify-between text-[10px] text-gray-400 mt-1">
+                <span>Enger</span><span>Normal</span><span>Weiter</span>
+              </div>
             </div>
 
             {/* CUSTOM FONT UPLOAD */}

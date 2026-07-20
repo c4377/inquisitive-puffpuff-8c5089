@@ -128,6 +128,10 @@ export const attachSmartImages = async (slides, imagePool = [], startOffset = 0)
         fitScore: 0,
         textColorHint,
         ok: best.ok,
+        // Raw face info so the renderer can push text clear of the face even on
+        // the first slide, regardless of the layout's default text position.
+        faceZones: best.faceZones || [],
+        hasFace: best.hasFace === true,
       },
     };
   });
