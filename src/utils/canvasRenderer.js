@@ -857,35 +857,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const tAlign = alignLeft ? 'left' : 'center';
 
     let y = anchorY;
-    // Bold Statement: a small filled accent LABEL box (like "Truthbomb" /
-    // "Realtalk") above the headline. Uses secondaryText if present, else a
-    // subtle default so the style still reads.
-    if (slide.boldMode) {
-      const labelText = (slide.secondaryText || slide.kickerText || '').trim();
-      if (labelText) {
-        const lt = labelText.toUpperCase();
-        const padX = 14 * scale, padY = 7 * scale;
-        const labelFontSize = fs(15);
-        const measure = new fabric.Text(lt, { fontSize: labelFontSize, fontFamily: 'Montserrat', fontWeight: '800', charSpacing: 120 });
-        const lw = (measure.width || lt.length * 9) + padX * 2;
-        const lh = (measure.height || labelFontSize) + padY * 2;
-        const boxLeft = alignLeft ? cx : cx - lw / 2;
-        canvas.add(new fabric.Rect({
-          left: boxLeft, top: y - lh - 12 * scale, width: lw, height: lh,
-          fill: accentCol || '#E4002B', rx: 3 * scale, ry: 3 * scale,
-          originX: 'left', originY: 'top', selectable: false,
-          shadow: brandTextShadow(),
-        }));
-        canvas.add(new fabric.Text(lt, {
-          left: boxLeft + lw / 2, top: y - lh / 2 - 12 * scale, fontSize: labelFontSize,
-          fill: '#FFFFFF', fontFamily: 'Montserrat', fontWeight: '800', charSpacing: 120,
-          originX: 'center', originY: 'center', selectable: false,
-        }));
-      }
-    } else if (V.kicker === 'top' && slide.secondaryText) {
+    // Clean: no kicker label box. Only the optional inline kicker for non-bold
+    // layouts that explicitly place one.
+    if (!slide.boldMode && V.kicker === 'top' && slide.secondaryText) {
       drawKickerAt(slide.secondaryText, cx, y, hexToRgba(textCol, 0.85), originX, 'bottom');
       y += 34 * scale;
-    } else if (slide.secondaryText && V.textPos === 'bottom') {
+    } else if (!slide.boldMode && slide.secondaryText && V.textPos === 'bottom') {
       drawKickerAt(slide.secondaryText, cx, y, hexToRgba(textCol, 0.85), originX, 'bottom');
       y += 34 * scale;
     }
@@ -901,28 +878,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       : (hasBgImage && faceOrQuiet) ? 'top'
       : (hasBgImage && photoAnchorY == null) ? 'center'
       : (V.textPos === 'center' ? 'center' : 'top');
-    // FOLLOW-UP photo pages: keep it clean over the photo — NO big ghost numeral
-    // (it collides with the face/text on a busy photo). Just a small index label
-    // top-left and a short accent rule directly above the face-aware headline.
-    if (followUp) {
-      const marginX = width * 0.09;
-      const idx = (options.slideIndex || 0) + 1;
-      const total = options.totalSlides || 0;
-      if (total) {
-        canvas.add(new fabric.Text(`${String(idx).padStart(2, '0')} / ${String(total).padStart(2, '0')}`, {
-          left: marginX, top: height * 0.11, fontSize: fs(14),
-          fill: hexToRgba(textCol, 0.9), fontFamily: 'Montserrat', charSpacing: 300,
-          originX: 'left', originY: 'top', selectable: false,
-          shadow: brandTextShadow(),
-        }));
-      }
-      // Short accent rule just above the headline (which sits low, off the face).
-      const ruleColor = (accentCol && accentCol !== textCol) ? accentCol : hexToRgba(textCol, 0.8);
-      canvas.add(new fabric.Rect({
-        left: marginX, top: y - height * 0.04, width: width * 0.12, height: Math.max(3 * scale, 3),
-        fill: ruleColor, selectable: false, shadow: brandTextShadow(),
-      }));
-    }
+    // FOLLOW-UP photo pages: clean — text only, no label or rule.
 
     makeHeadline(segments, plain, {
       left: cx, top: y, originX, originY: headOriginY,
@@ -1091,47 +1047,19 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // character.
     if (followUp) {
       const marginX = width * 0.1;
-      const idx = (options.slideIndex || 0) + 1;
-      const total = options.totalSlides || 0;
 
-      // Big ghost numeral — the recurring design anchor.
-      canvas.add(new fabric.Text(String(idx).padStart(2, '0'), {
-        left: marginX, top: height * 0.13, fontSize: fs(112),
-        fill: hexToRgba(textCol, 0.1), fontFamily: fontFamily,
-        fontWeight: '700', originX: 'left', originY: 'top', selectable: false,
-      }));
-      // Small index label next to it (e.g. "03 / 08") for a designed touch.
-      if (total) {
-        canvas.add(new fabric.Text(`${String(idx).padStart(2, '0')} / ${String(total).padStart(2, '0')}`, {
-          left: marginX + 2, top: height * 0.115, fontSize: fs(13),
-          fill: hexToRgba(textCol, 0.55), fontFamily: 'Montserrat', charSpacing: 300,
-          originX: 'left', originY: 'bottom', selectable: false,
-        }));
-      }
-
-      // Thin accent rule to the left of the headline — vertical anchor line.
+      // Headline only — clean, no numeral / label / rule. Left aligned, fixed
+      // start line and fixed size so the text sits at the same spot on every
+      // follow-up (calm swiping).
       const textTop = height * 0.42;
-      const ruleColor = (accentCol && accentCol !== textCol) ? accentCol : hexToRgba(textCol, 0.5);
-      canvas.add(new fabric.Rect({
-        left: marginX, top: textTop, width: Math.max(3 * scale, 3), height: height * 0.16,
-        fill: ruleColor, selectable: false,
-      }));
-
-      // Headline: left aligned, indented past the rule, accent word highlighted.
-      // FIXED start line and FIXED size (no per-slide auto-shrink) so the text
-      // sits at exactly the same spot with the same size on every follow-up —
-      // that's what stops the "jumping" when swiping. Long text wraps downward
-      // with a slightly tighter leading instead of moving the block.
       const fUpFont = V.bigWord ? 62 : 46;
       makeHeadline(segments, plain, {
-        left: marginX + width * 0.05, top: textTop - height * 0.005,
+        left: marginX, top: textTop,
         originX: 'left', originY: 'top',
-        width: width * 0.8, fontSize: fs(fUpFont),
-        fill: textCol, accentFill: ruleColor, textAlign: 'left', lineHeight: 1.2,
+        width: width * 0.82, fontSize: fs(fUpFont),
+        fill: textCol, accentFill: accentCol, textAlign: 'left', lineHeight: 1.2,
         fontWeight: slide.fontWeight || '600',
         shadow: brandTextShadow(),
-        // Generous bottom bound: only shrink if the text would truly hit the
-        // footer, so normal-length lines keep the exact same size.
         maxBottom: FOOTER_TOP - height * 0.01,
       });
 
