@@ -616,7 +616,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     else headFont = capsMode ? 'Montserrat' : fontFamily;
     const headText = capsMode ? String(plain).toUpperCase() : plain;
     const headWeight = boldMode
-      ? (boldStyle === 0 ? '400' : boldStyle === 2 ? '400' : '700')
+      ? (boldStyle === 0 ? '400' : boldStyle === 2 ? '600' : '700')
       : (capsMode ? '700' : (opts.fontWeight || '600'));
     const headItalic = boldSerif;
     // Fixed, clean letter spacing per style (no user-adjustable tracking — it
