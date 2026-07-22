@@ -24,7 +24,7 @@ import { saveSetsToDB, loadSetsFromDB } from '../utils/storage';
 import { analyzePlanRoles, roleFeedback, ROLE_META } from '../utils/postRole';
 import { weightedLayoutPool, getRating, setRating } from '../utils/layoutRatings';
 
-const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus , FiMoreVertical, FiMaximize2, FiGrid, FiImage } = FiIcons;
+const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus , FiMoreVertical, FiMaximize2, FiGrid, FiImage, FiLock } = FiIcons;
 
 const ContentPlanner = () => {
   const { brandSettings, updateBrandSettings } = useBrand();
@@ -118,6 +118,8 @@ const ContentPlanner = () => {
     }
 
     return plan.map((day, index) => {
+      // Locked (already posted) days are frozen — never restyle them.
+      if (day.locked) return day;
       let bg, text, sec, acc;
       
       // Smart Color Rotation Logic
@@ -433,6 +435,13 @@ const ContentPlanner = () => {
     setTimeout(() => setSaveStatus && setSaveStatus(''), 1500);
   };
 
+  // Lock / unlock a single post (mark as already posted). Locked posts are shown
+  // with a badge and are skipped by "Neu laden" / restyling so they never change.
+  const toggleDayLock = (dayNum) => {
+    const updated = weekPlan.map((d) => (d.day === dayNum ? { ...d, locked: !d.locked } : d));
+    updateBrandSettings({ contentPlan: updated });
+  };
+
   const toggleCoverBlur = (dayNum) => {
     const updated = weekPlan.map((d) => (d.day === dayNum ? { ...d, coverBlurMode: !d.coverBlurMode } : d));
     updateBrandSettings({ contentPlan: applyBrandStyling(updated, currentBrand) });
@@ -605,20 +614,33 @@ const ContentPlanner = () => {
       });
     }
 
-    const finalPlan = applyBrandStyling(newPlan, brandConfig);
+    const styledNew = applyBrandStyling(newPlan, brandConfig);
+
+    // CONTINUE THE FEED: if posts already exist, APPEND the new ones (with
+    // continuing day numbers) so the feed grows. New posts get higher day
+    // numbers and, because the grid is shown reversed, appear top-left as the
+    // newest. If the plan is empty, this is just the initial import.
+    const existing = brandSettings.contentPlan || [];
+    let finalPlan;
+    if (existing.length > 0) {
+      const maxDay = existing.reduce((m, d) => Math.max(m, d.day || 0), 0);
+      const renumbered = styledNew.map((d, i) => ({ ...d, day: maxDay + 1 + i }));
+      finalPlan = [...existing, ...renumbered];
+    } else {
+      finalPlan = styledNew;
+    }
     updateBrandSettings({ contentPlan: finalPlan });
 
     // Count how many slides actually received a photo, so the user sees
     // immediately whether the image pool was found and attached.
-    const withPhotos = finalPlan.reduce((acc, day) =>
+    const withPhotos = styledNew.reduce((acc, day) =>
       acc + day.slides.filter(s => typeof s.background === 'string' && s.background.length > 5).length, 0);
-    const totalSlides = finalPlan.reduce((acc, day) => acc + day.slides.length, 0);
+    const totalSlides = styledNew.reduce((acc, day) => acc + day.slides.length, 0);
 
     setLoading(false);
-    setSaveStatus(`Plan importiert – ${withPhotos}/${totalSlides} mit Bild (Pool: ${imagePool.length}).`);
+    const appended = existing.length > 0;
+    setSaveStatus(`${appended ? 'Feed erweitert' : 'Plan importiert'} – ${withPhotos}/${totalSlides} mit Bild (Pool: ${imagePool.length}).`);
     setTimeout(() => setSaveStatus(''), 5000);
-    // The planner view itself is now the grid feed, so we stay here and the
-    // covers appear immediately.
   };
 
   const handleManualSave = () => {
@@ -710,6 +732,12 @@ const ContentPlanner = () => {
       const rotationAll = buildLayoutRotation();
       for (let dayIdx = 0; dayIdx < weekPlan.length; dayIdx++) {
         const day = weekPlan[dayIdx];
+        // Locked (already posted) days are never regenerated — keep as-is.
+        if (day.locked) {
+          reloadedPlan.push(day);
+          layoutCursor += (day.slides || []).length || 1;
+          continue;
+        }
         const dayIsEditorial = day.dayLayoutMode === 'editorial';
         const nSlides = (day.slides || []).length || 1;
         // Determine the layouts this day will get, so we know whether it needs
@@ -1136,9 +1164,11 @@ const ContentPlanner = () => {
               <div className="flex justify-center gap-4"><button onClick={() => setShowImportModal(true)} className="bg-purple-600 text-white px-6 py-3 rounded-lg font-bold shadow-md hover:bg-purple-700 transition-colors">Bulk Import Starten</button></div>
             </div>
           ) : (
-            // GRID FEED: one cover per day. Tap a cover to edit that day.
+            // GRID FEED: one cover per day, in Instagram order — the NEWEST day
+            // sits top-left, the oldest bottom-right. We reverse a shallow copy
+            // for display only; the underlying plan/day numbers are unchanged.
             <div className="grid grid-cols-3 gap-1">
-              {weekPlan.map((day, dayIndex) => {
+              {[...weekPlan].reverse().map((day, dayIndex) => {
                 const activeIndex = activeIndices[day.day] || 0;
                 const activeSlide = day.slides[activeIndex] || day.slides[0];
                 const dynamicActiveSlide = { ...activeSlide, visualElements: activeSlide.visualElements || [], format: activeSlide.format || '4:5' };
@@ -1161,6 +1191,16 @@ const ContentPlanner = () => {
                     <div className="absolute top-1 left-1 bg-black/55 text-white text-[9px] font-bold px-1.5 py-0.5 rounded z-10">
                       Tag {day.day}
                     </div>
+
+                    {/* Locked (already posted) overlay + badge */}
+                    {day.locked && (
+                      <>
+                        <div className="absolute inset-0 bg-black/35 z-[15] pointer-events-none" />
+                        <div className="absolute bottom-1 right-1 z-20 bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center">
+                          <SafeIcon icon={FiLock} className="mr-0.5 text-[9px]" /> Gepostet
+                        </div>
+                      </>
+                    )}
 
                     {/* Role badge (only when structure view is on) */}
                     {showStructure && (() => {
@@ -1200,6 +1240,12 @@ const ContentPlanner = () => {
                             <span className="text-sm font-bold text-gray-900">Tag {day.day}</span>
                             <button onClick={() => setMenuDayId(null)} className="w-7 h-7 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center"><span className="text-sm font-bold leading-none">✕</span></button>
                           </div>
+                          <button onClick={() => { setMenuDayId(null); toggleDayLock(day.day); }} className="w-full flex items-center justify-between px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50">
+                            <span className="flex items-center gap-3">
+                              <SafeIcon icon={FiLock} className={`text-base ${day.locked ? 'text-emerald-600' : 'text-gray-500'}`} /> Als gepostet sperren
+                            </span>
+                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${day.locked ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-gray-500'}`}>{day.locked ? 'Gesperrt' : 'Offen'}</span>
+                          </button>
                           <button onClick={() => { setMenuDayId(null); handleEditDay(day); }} className="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50">
                             <SafeIcon icon={FiEdit3} className="text-base text-gray-500" /> Bearbeiten
                           </button>
