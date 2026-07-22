@@ -616,9 +616,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     else headFont = capsMode ? 'Montserrat' : fontFamily;
     const headText = capsMode ? String(plain).toUpperCase() : plain;
     const headWeight = boldMode
-      ? (boldStyle === 0 ? '400' : boldStyle === 2 ? '600' : '700')
+      ? (boldStyle === 0 ? '400' : boldStyle === 2 ? '600' : '400')
       : (capsMode ? '700' : (opts.fontWeight || '600'));
-    const headItalic = boldSerif;
+    const headItalic = boldSerif;                                 // Playfair italic
     // Fixed, clean letter spacing per style (no user-adjustable tracking — it
     // caused torn glyphs when it clashed with a font's own metrics). Values are
     // in 1/1000 em.
