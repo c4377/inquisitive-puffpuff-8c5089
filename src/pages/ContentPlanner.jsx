@@ -35,6 +35,11 @@ const ContentPlanner = () => {
   const [activeIndices, setActiveIndices] = useState({});
   const [expandedCaptionId, setExpandedCaptionId] = useState(null);
   const [menuDayId, setMenuDayId] = useState(null); // tile context menu (mobile-friendly)
+  // Multi-select: long-press a tile to enter selection mode; then tap tiles to
+  // toggle. selectedDays holds the day numbers currently selected.
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedDays, setSelectedDays] = useState([]);
+  const longPressTimer = useRef(null);
   const [showStyleShifter, setShowStyleShifter] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [showScreenshotModal, setShowScreenshotModal] = useState(false);
@@ -436,11 +441,41 @@ const ContentPlanner = () => {
   };
 
   // Lock / unlock a single post (mark as already posted). Locked posts are shown
-  // with a badge and are skipped by "Neu laden" / restyling so they never change.
+  // with a small lock icon and are skipped by "Neu laden" / restyling.
   const toggleDayLock = (dayNum) => {
     const updated = weekPlan.map((d) => (d.day === dayNum ? { ...d, locked: !d.locked } : d));
     updateBrandSettings({ contentPlan: updated });
   };
+
+  // --- Multi-select ---------------------------------------------------------
+  const startLongPress = (dayNum) => {
+    if (longPressTimer.current) clearTimeout(longPressTimer.current);
+    longPressTimer.current = setTimeout(() => {
+      setSelectMode(true);
+      setSelectedDays([dayNum]);
+    }, 450);
+  };
+  const cancelLongPress = () => {
+    if (longPressTimer.current) { clearTimeout(longPressTimer.current); longPressTimer.current = null; }
+  };
+  const toggleSelected = (dayNum) => {
+    setSelectedDays((prev) => prev.includes(dayNum) ? prev.filter((d) => d !== dayNum) : [...prev, dayNum]);
+  };
+  const selectAll = () => setSelectedDays(weekPlan.map((d) => d.day));
+  const clearSelection = () => { setSelectMode(false); setSelectedDays([]); };
+
+  // Bulk actions over the current selection.
+  const bulkApply = (mutator) => {
+    const set = new Set(selectedDays);
+    const updated = weekPlan.map((d) => set.has(d.day) ? mutator(d) : d);
+    updateBrandSettings({ contentPlan: updated });
+  };
+  const bulkLock = (lock) => bulkApply((d) => ({ ...d, locked: lock }));
+  const bulkCoverBlur = (on) => bulkApply((d) => ({ ...d, coverBlurMode: on }));
+  const bulkBigHeadline = (on) => bulkApply((d) => ({
+    ...d,
+    slides: (d.slides || []).map((s) => ({ ...s, bigHeadline: on })),
+  }));
 
   const toggleCoverBlur = (dayNum) => {
     const updated = weekPlan.map((d) => (d.day === dayNum ? { ...d, coverBlurMode: !d.coverBlurMode } : d));
@@ -1179,10 +1214,22 @@ const ContentPlanner = () => {
                     initial={{ opacity: 0, scale: 0.96 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: dayIndex * 0.04 }}
-                    className="relative group aspect-[4/5] bg-gray-100 overflow-hidden cursor-pointer"
-                    onClick={() => handleEditDay(day)}
-                    title={`Tag ${day.day} – ${day.title} · tippen zum Bearbeiten`}
+                    className={`relative group aspect-[4/5] bg-gray-100 overflow-hidden cursor-pointer ${selectMode && selectedDays.includes(day.day) ? 'ring-2 ring-purple-600' : ''}`}
+                    onClick={() => { if (selectMode) { toggleSelected(day.day); } else { handleEditDay(day); } }}
+                    onTouchStart={() => { if (!selectMode) startLongPress(day.day); }}
+                    onTouchEnd={cancelLongPress}
+                    onTouchMove={cancelLongPress}
+                    onMouseDown={() => { if (!selectMode) startLongPress(day.day); }}
+                    onMouseUp={cancelLongPress}
+                    onMouseLeave={cancelLongPress}
+                    title={selectMode ? 'Antippen zum Auswählen' : `Tag ${day.day} – ${day.title} · tippen zum Bearbeiten`}
                   >
+                    {/* Selection check */}
+                    {selectMode && (
+                      <div className={`absolute top-1.5 left-1.5 z-30 w-6 h-6 rounded-full flex items-center justify-center border-2 ${selectedDays.includes(day.day) ? 'bg-purple-600 border-purple-600 text-white' : 'bg-black/30 border-white/80 text-transparent'}`}>
+                        <span className="text-[11px] font-bold leading-none">✓</span>
+                      </div>
+                    )}
                     <div className="absolute inset-0 pointer-events-none">
                       <Canvas key={`${day.day}-${activeIndex}-${dynamicActiveSlide.color}-${dynamicActiveSlide.secondaryColor}-${dynamicActiveSlide.fontFamily}-${dynamicActiveSlide.backgroundColor}`} data={{...dynamicActiveSlide, slideNumber: undefined}} brandName={brandName} />
                     </div>
@@ -1192,14 +1239,12 @@ const ContentPlanner = () => {
                       Tag {day.day}
                     </div>
 
-                    {/* Locked (already posted) overlay + badge */}
+                    {/* Locked (already posted): a small, unobtrusive lock icon
+                        only — no dimming overlay. */}
                     {day.locked && (
-                      <>
-                        <div className="absolute inset-0 bg-black/35 z-[15] pointer-events-none" />
-                        <div className="absolute bottom-1 right-1 z-20 bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center">
-                          <SafeIcon icon={FiLock} className="mr-0.5 text-[9px]" /> Gepostet
-                        </div>
-                      </>
+                      <div className="absolute bottom-1 right-1 z-20 w-5 h-5 rounded-full bg-black/55 text-white flex items-center justify-center">
+                        <SafeIcon icon={FiLock} className="text-[10px]" />
+                      </div>
                     )}
 
                     {/* Role badge (only when structure view is on) */}
@@ -1221,7 +1266,9 @@ const ContentPlanner = () => {
                     )}
 
 
-                    {/* Menu button — always visible (no hover on mobile) */}
+                    {/* Menu button — always visible (no hover on mobile). Hidden
+                        while multi-selecting. */}
+                    {!selectMode && (
                     <button
                       onClick={(e) => { e.stopPropagation(); setMenuDayId(menuDayId === day.day ? null : day.day); }}
                       className="absolute top-1.5 right-1.5 z-30 w-7 h-7 rounded-full bg-black/40 backdrop-blur text-white flex items-center justify-center shadow active:scale-90 transition-transform"
@@ -1230,6 +1277,7 @@ const ContentPlanner = () => {
                     >
                       <SafeIcon icon={FiMoreVertical} className="text-xs" />
                     </button>
+                    )}
 
                     {/* Action sheet — fixed & centered so it's never clipped */}
                     {menuDayId === day.day && (
@@ -1299,6 +1347,29 @@ const ContentPlanner = () => {
                   </motion.div>
                 );
               })}
+            </div>
+          )}
+
+          {/* Multi-select action bar */}
+          {selectMode && (
+            <div className="fixed inset-x-0 bottom-0 z-[70] bg-white border-t border-gray-200 shadow-2xl pb-[env(safe-area-inset-bottom)]">
+              <div className="max-w-3xl mx-auto px-3 py-2.5">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-bold text-gray-800">{selectedDays.length} ausgewählt</span>
+                  <div className="flex items-center gap-2">
+                    <button onClick={selectAll} className="text-xs font-bold text-purple-700 px-2 py-1 rounded hover:bg-purple-50">Alle</button>
+                    <button onClick={clearSelection} className="text-xs font-bold text-gray-500 px-2 py-1 rounded hover:bg-gray-100">Fertig</button>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  <button onClick={() => bulkLock(true)} disabled={selectedDays.length === 0} className="flex items-center justify-center gap-1.5 py-2 rounded-lg bg-emerald-600 text-white text-xs font-bold disabled:opacity-40"><SafeIcon icon={FiLock} className="text-sm" /> Sperren</button>
+                  <button onClick={() => bulkLock(false)} disabled={selectedDays.length === 0} className="flex items-center justify-center gap-1.5 py-2 rounded-lg bg-gray-100 text-gray-700 text-xs font-bold disabled:opacity-40"><SafeIcon icon={FiLock} className="text-sm" /> Entsperren</button>
+                  <button onClick={() => bulkCoverBlur(true)} disabled={selectedDays.length === 0} className="flex items-center justify-center gap-1.5 py-2 rounded-lg bg-amber-500 text-white text-xs font-bold disabled:opacity-40"><SafeIcon icon={FiLayers} className="text-sm" /> Unschärfe an</button>
+                  <button onClick={() => bulkCoverBlur(false)} disabled={selectedDays.length === 0} className="flex items-center justify-center gap-1.5 py-2 rounded-lg bg-gray-100 text-gray-700 text-xs font-bold disabled:opacity-40"><SafeIcon icon={FiLayers} className="text-sm" /> Unschärfe aus</button>
+                  <button onClick={() => bulkBigHeadline(true)} disabled={selectedDays.length === 0} className="flex items-center justify-center gap-1.5 py-2 rounded-lg bg-purple-600 text-white text-xs font-bold disabled:opacity-40"><SafeIcon icon={FiMaximize2} className="text-sm" /> Große H. an</button>
+                  <button onClick={() => bulkBigHeadline(false)} disabled={selectedDays.length === 0} className="flex items-center justify-center gap-1.5 py-2 rounded-lg bg-gray-100 text-gray-700 text-xs font-bold disabled:opacity-40"><SafeIcon icon={FiMaximize2} className="text-sm" /> Große H. aus</button>
+                </div>
+              </div>
             </div>
           )}
         </div>
