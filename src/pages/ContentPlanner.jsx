@@ -12,6 +12,8 @@ import StyleShifter from '../components/StyleShifter';
 import FeedStyleBar from '../components/FeedStyleBar';
 import ScreenshotMatchModal from '../components/ScreenshotMatchModal';
 import { parseScreenshotPlaceholder } from '../utils/screenshotMatcher';
+import { CloudService } from '../services/cloudService';
+import { useAuth } from '../context/AuthContext';
 import BulkImportModal from '../components/BulkImportModal';
 import { renderSlide } from '../utils/canvasRenderer';
 import { brandRuleSets } from '../constants/brandData';
@@ -26,6 +28,7 @@ const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy
 
 const ContentPlanner = () => {
   const { brandSettings, updateBrandSettings } = useBrand();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const weekPlan = brandSettings.contentPlan || [];
   const [loading, setLoading] = useState(false);
@@ -78,6 +81,26 @@ const ContentPlanner = () => {
   const isDark = (hex) => getBrightness(hex || '#ffffff') < 128;
 
   // --- CORE: ADVANCED BRAND STYLING ENGINE ---
+  // Map a photo/frame layout to a matching TEXT layout, used when the rotation
+  // assigns a photo layout but no image is available for that slide. Keeps a
+  // similar character (big word -> big word, quote -> quote, etc.).
+  const photoToTextLayout = (layoutId) => {
+    const map = {
+      brand_photo_gradient: 'brand_text_plate',
+      brand_photo_bottom_left: 'brand_text_left',
+      brand_photo_top: 'brand_text_plate_top',
+      brand_photo_center: 'brand_text_plate',
+      brand_photo_bigword: 'brand_text_bigword',
+      brand_photo_quote: 'brand_text_quote',
+      brand_photo_bottom_serif: 'brand_text_statement',
+      brand_photo_frame: 'brand_text_plate',
+      brand_frame_top_text: 'brand_text_plate_top',
+      brand_frame_left: 'brand_text_left',
+      brand_frame_polaroid: 'brand_text_minimal',
+    };
+    return map[layoutId] || 'brand_text_plate';
+  };
+
   const applyBrandStyling = (plan, config) => {
     if (!config || !plan) return [];
     
@@ -368,17 +391,33 @@ const ContentPlanner = () => {
     return out;
   };
 
-  // Apply the OCR mapping: place each matched screenshot as an overlay image on
-  // its slide and clear the placeholder text so only the screenshot shows.
-  const applyScreenshots = (mapping) => {
+  // Apply the OCR mapping: upload each matched screenshot to Supabase Storage
+  // (so it persists and doesn't bloat the plan as base64), then place the
+  // returned URL as an overlay image on its slide and clear the placeholder.
+  const applyScreenshots = async (mapping) => {
+    // Upload each unique screenshot once; map placeholder key -> stored URL.
+    const urlByKey = {};
+    const entries = Object.entries(mapping);
+    setSaveStatus && setSaveStatus('Screenshots werden gespeichert…');
+    for (const [key, dataUrl] of entries) {
+      // If already an http(s) URL (re-applied), keep it; else upload the base64.
+      if (typeof dataUrl === 'string' && /^https?:\/\//.test(dataUrl)) {
+        urlByKey[key] = dataUrl;
+      } else {
+        urlByKey[key] = user
+          ? await CloudService.uploadScreenshot(user.id, dataUrl)
+          : dataUrl; // not logged in -> keep inline base64
+      }
+    }
+
     const updated = (brandSettings.contentPlan || []).map((day) => ({
       ...day,
       slides: (day.slides || []).map((slide, sIdx) => {
         const key = `${day.day}_${sIdx}`;
-        if (!mapping[key]) return slide;
+        if (!urlByKey[key]) return slide;
         return {
           ...slide,
-          overlayImage: mapping[key],
+          overlayImage: urlByKey[key],   // stored URL (or base64 fallback)
           overlayIsScreenshot: true,     // rectangular card, large + readable
           overlayImageScale: 0.8,        // ~80% of the tile width
           overlayImageRounded: false,
@@ -390,6 +429,8 @@ const ContentPlanner = () => {
       }),
     }));
     updateBrandSettings({ contentPlan: updated });
+    setSaveStatus && setSaveStatus('Screenshots gespeichert');
+    setTimeout(() => setSaveStatus && setSaveStatus(''), 1500);
   };
 
   const toggleCoverBlur = (dayNum) => {
@@ -543,7 +584,9 @@ const ContentPlanner = () => {
           globalIndex, hasImage: hasImg, autoImage: s2._autoImage,
         });
         // Assign a brand layout from the fixed feed pattern by position.
-        const picked = rotation[globalIndex % rotation.length];
+        let picked = rotation[globalIndex % rotation.length];
+        const pickedIsPhoto = typeof picked === 'string' && (picked.includes('photo') || picked.includes('frame'));
+        if (pickedIsPhoto && !hasImg) picked = photoToTextLayout(picked);
         globalIndex++;
         return {
           ...s2,
@@ -618,7 +661,9 @@ const ContentPlanner = () => {
           globalIndex: dayIdx, hasImage: hasImg, autoImage: cleaned._autoImage,
         });
         const _rot = buildLayoutRotation();
-        const _picked = _rot[dayIdx % _rot.length];
+        let _picked = _rot[dayIdx % _rot.length];
+        const _pickedIsPhoto = typeof _picked === 'string' && (_picked.includes('photo') || _picked.includes('frame'));
+        if (_pickedIsPhoto && !hasImg) _picked = photoToTextLayout(_picked);
         cleaned.layout = _picked;
         cleaned.layoutId = _picked;
         cleaned.textAnchor = textAnchor;
@@ -710,9 +755,16 @@ const ContentPlanner = () => {
             cleaned.editorialDark = true;
             cleaned.darkPhoto = cfg.darkPhoto === true;
           } else {
-            // Default: brand layout from the fixed rotation.
-            cleaned.layout = _picked2;
-            cleaned.layoutId = _picked2;
+            // Default: brand layout from the fixed rotation. If the rotation
+            // handed this slide a PHOTO layout but there's no image for it,
+            // swap to a matching TEXT layout so it never renders as an empty
+            // dark plate.
+            let chosen = _picked2;
+            if (pickedIsPhoto && !hasImg) {
+              chosen = photoToTextLayout(_picked2);
+            }
+            cleaned.layout = chosen;
+            cleaned.layoutId = chosen;
             cleaned.editorialDark = false;
             cleaned.darkPhoto = false;
           }

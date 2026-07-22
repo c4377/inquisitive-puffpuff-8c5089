@@ -47,7 +47,7 @@ const ScreenshotMatchModal = ({ isOpen, onClose, placeholders, onApply }) => {
     setBusy(false);
   };
 
-  const apply = () => {
+  const apply = async () => {
     if (!result) return;
     // Convert to placeholderId -> dataUrl for the caller.
     const out = {};
@@ -55,7 +55,11 @@ const ScreenshotMatchModal = ({ isOpen, onClose, placeholders, onApply }) => {
       const shot = screenshots.find((s) => s.id === v.screenshotId);
       if (shot) out[pid] = shot.dataUrl;
     });
-    onApply(out);
+    setBusy(true);
+    try {
+      await onApply(out); // uploads to storage; may be async
+    } catch (e) { /* handled upstream */ }
+    setBusy(false);
     onClose();
   };
 
