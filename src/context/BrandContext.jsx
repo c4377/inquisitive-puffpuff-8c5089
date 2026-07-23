@@ -74,6 +74,11 @@ export const BrandProvider = ({ children }) => {
         communityDecks: {},
         feedProfile: { ...DEFAULT_FEED_PROFILE, ...(parsedSettings.feedProfile || {}) },
         ...parsedSettings,
+        // Hard guarantee: the plan must always be an array of days that each
+        // have a slides array. Anything else would crash the feed grid.
+        contentPlan: (Array.isArray(parsedSettings.contentPlan) ? parsedSettings.contentPlan : [])
+          .filter((d) => d && typeof d === 'object')
+          .map((d) => ({ ...d, slides: Array.isArray(d.slides) ? d.slides.filter(Boolean) : [] })),
         brandConfigurations: withCuratedBrands(parsedSettings.brandConfigurations || []),
         strategy: { ...DEFAULT_STRATEGY, ...(parsedSettings.strategy || {}) }
       };
@@ -129,12 +134,20 @@ export const BrandProvider = ({ children }) => {
           });
         }
 
+        // Normalise the plan coming from IndexedDB: it must be an array of day
+        // objects that each carry a slides array. A malformed entry here would
+        // crash the feed grid on render (white screen).
+        const safePlan = (Array.isArray(plan) ? plan : [])
+          .filter((d) => d && typeof d === 'object')
+          .map((d) => ({ ...d, slides: Array.isArray(d.slides) ? d.slides.filter(Boolean) : [] }))
+          .filter((d) => d.slides.length > 0);
+
         setBrandSettings(prev => ({
           ...prev,
           brandImages: images || [],
           savedDesigns: designs || [],
           customFonts: fonts || [],
-          contentPlan: plan || [],
+          contentPlan: safePlan,
           communityDecks: decks || {}
         }));
       } catch (error) {

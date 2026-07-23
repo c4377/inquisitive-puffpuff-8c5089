@@ -75,7 +75,12 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "", as
     fabricRef.current = canvas;
 
     return () => {
-      canvas.dispose();
+      // Guard: fabric's dispose() throws if the canvas element is already gone
+      // (can happen when React unmounts and re-runs this effect in quick
+      // succession). A throw here would take down the whole page.
+      try {
+        if (canvas && canvas.lowerCanvasEl) canvas.dispose();
+      } catch (e) { /* already disposed */ }
       fabricRef.current = null;
     };
   }, [imgUrl]);
@@ -127,8 +132,14 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "", as
     Promise.resolve(renderLockRef.current).then(() => {
       if (asImage && fabricRef.current) {
         try {
-          const url = fabricRef.current.toDataURL({ format: 'jpeg', quality: 0.85, multiplier: 0.6 });
-          if (url && url.length > 50) setImgUrl(url);
+          const url = fabricRef.current.toDataURL({ format: 'jpeg', quality: 0.85, multiplier: 0.5 });
+          if (url && url.length > 50) {
+            // Setting imgUrl swaps the live <canvas> for a plain <img> AND
+            // re-runs the init effect, whose cleanup disposes the fabric canvas
+            // for us. Don't dispose here as well — a second dispose() on the
+            // same instance throws ("lowerCanvasEl.classList" of undefined).
+            setImgUrl(url);
+          }
         } catch (e) { /* keep live canvas as fallback */ }
       }
     }).catch((err) => {
@@ -142,26 +153,28 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "", as
     // Fabric also wraps the canvas in a .canvas-container div with a FIXED pixel
     // size — scale that wrapper (and the interaction layer) as well, otherwise
     // the right side gets clipped in smaller containers.
-    const el = canvas.lowerCanvasEl;
-    if (el) {
-      el.style.width = '100%';
-      el.style.height = 'auto';
-      el.style.display = 'block';
-      el.style.maxHeight = '100%';
-      el.style.objectFit = 'contain';
-    }
-    const wrap = canvas.wrapperEl;
-    if (wrap) {
-      wrap.style.width = '100%';
-      wrap.style.height = '100%';
-      wrap.style.maxWidth = '100%';
-    }
-    const upper = canvas.upperCanvasEl;
-    if (upper) {
-      upper.style.width = '100%';
-      upper.style.height = 'auto';
-      upper.style.maxHeight = '100%';
-    }
+    try {
+      const el = canvas.lowerCanvasEl;
+      if (el) {
+        el.style.width = '100%';
+        el.style.height = 'auto';
+        el.style.display = 'block';
+        el.style.maxHeight = '100%';
+        el.style.objectFit = 'contain';
+      }
+      const wrap = canvas.wrapperEl;
+      if (wrap) {
+        wrap.style.width = '100%';
+        wrap.style.height = '100%';
+        wrap.style.maxWidth = '100%';
+      }
+      const upper = canvas.upperCanvasEl;
+      if (upper) {
+        upper.style.width = '100%';
+        upper.style.height = 'auto';
+        upper.style.maxHeight = '100%';
+      }
+    } catch (e) { /* canvas may already be disposed */ }
 
   }, [data, fontLoaded, brandName]);
 

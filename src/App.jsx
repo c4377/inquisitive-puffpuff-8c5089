@@ -25,9 +25,9 @@ import './App.css';
 
 function App() {
   return (
-    <AuthProvider>
-      <BrandProvider>
-        <ErrorBoundary>
+    <ErrorBoundary>
+      <AuthProvider>
+        <BrandProvider>
         <Router>
           <ScrollToTop />
           <div className="min-h-screen bg-gray-50">
@@ -57,9 +57,9 @@ function App() {
             </motion.main>
           </div>
         </Router>
-        </ErrorBoundary>
-      </BrandProvider>
-    </AuthProvider>
+        </BrandProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import * as FiIcons from 'react-icons/fi';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
+import { fabric } from 'fabric';
 import SafeIcon from '../common/SafeIcon';
 import Canvas from '../components/Canvas';
 import StyleShifter from '../components/StyleShifter'; // IMPORT NEW SHIFTER
@@ -156,35 +157,62 @@ const StoryPlanner = () => {
     }
   };
 
+  // Export every story slide as a 1080x1920 PNG. On mobile we hand them to the
+  // native share sheet so they land in Fotos; on desktop we fall back to a ZIP.
   const downloadDeck = async () => {
-    const zip = new JSZip();
-    const folder = zip.folder(`Story_Sequence`);
-    
-    await document.fonts.ready;
+    if (!stories || stories.length === 0) return;
+    setLoading(true);
+    try {
+      await document.fonts.ready;
+      const globalBrandName = brandName;
 
-    for (let i = 0; i < stories.length; i++) {
-      const slide = stories[i];
-      const canvas = document.createElement('canvas');
-      canvas.width = 1080;
-      canvas.height = 1920;
-      const ctx = canvas.getContext('2d');
-      // Base width for 9:16 in Canvas.jsx is 400. 
-      // Scale = 1080 / 400 = 2.7
-      const scale = 1080 / 400;
-      
-      await renderSlide(ctx, slide, 1080, 1920, { 
-        slideIndex: i, 
-        totalSlides: stories.length,
-        scale: scale,
-        globalBrandName: brandName
-      });
-      
-      const blob = await new Promise(r => canvas.toBlob(r));
-      folder.file(`Story_${i + 1}.png`, blob);
+      const files = [];
+      for (let i = 0; i < stories.length; i++) {
+        const slide = stories[i];
+        const canvasWidth = 1080;
+        const canvasHeight = 1920;
+        const scale = canvasWidth / 400;
+        const canvasEl = document.createElement('canvas');
+        canvasEl.width = canvasWidth;
+        canvasEl.height = canvasHeight;
+        canvasEl.style.display = 'none';
+        document.body.appendChild(canvasEl);
+        const fCanvas = new fabric.StaticCanvas(canvasEl, { width: canvasWidth, height: canvasHeight });
+        await renderSlide(fCanvas, { ...slide, visualElements: slide.visualElements || [] }, canvasWidth, canvasHeight, {
+          slideIndex: i, totalSlides: stories.length, scale, globalBrandName,
+        });
+        const dataUrl = fCanvas.toDataURL({ format: 'png', multiplier: 1 });
+        const blob = await (await fetch(dataUrl)).blob();
+        fCanvas.dispose();
+        if (canvasEl.parentNode) canvasEl.parentNode.removeChild(canvasEl);
+        if (blob) files.push(new File([blob], `Story_${i + 1}.png`, { type: 'image/png' }));
+      }
+
+      // MOBILE: share sheet -> "Bilder sichern" puts them straight into Fotos.
+      if (typeof navigator !== 'undefined' && navigator.canShare && files.length
+          && navigator.canShare({ files })) {
+        try {
+          await navigator.share({ files, title: 'Story Sequenz' });
+          setLoading(false);
+          return;
+        } catch (e) {
+          if (e?.name === 'AbortError') { setLoading(false); return; }
+          // fall through to ZIP
+        }
+      }
+
+      // DESKTOP / no share support -> ZIP download.
+      const zip = new JSZip();
+      const folder = zip.folder('Story_Sequence');
+      files.forEach((f) => folder.file(f.name, f));
+      const contentZip = await zip.generateAsync({ type: 'blob' });
+      saveAs(contentZip, 'Story_Sequence.zip');
+    } catch (e) {
+      console.error('Story export failed:', e);
+      alert('Export fehlgeschlagen. Bitte erneut versuchen.');
+    } finally {
+      setLoading(false);
     }
-    
-    const contentZip = await zip.generateAsync({ type: "blob" });
-    saveAs(contentZip, `Story_Sequence.zip`);
   };
 
   if (!brandSettings.currentBrandConfig) {
@@ -258,9 +286,10 @@ const StoryPlanner = () => {
           </button>
           <button 
             onClick={downloadDeck}
-            className="bg-gray-900 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:bg-black transition-all flex items-center"
+            disabled={loading || stories.length === 0}
+            className="bg-gray-900 text-white px-6 py-3 rounded-xl font-bold shadow-lg hover:bg-black transition-all flex items-center disabled:opacity-50"
           >
-            <SafeIcon icon={FiDownload} className="mr-2" /> Download All (.zip)
+            <SafeIcon icon={FiDownload} className={`mr-2 ${loading ? 'animate-bounce' : ''}`} /> Alle in Fotos
           </button>
         </div>
       </div>

@@ -30,16 +30,47 @@ const norm = (s) => (s || '')
   .replace(/\s+/g, ' ')
   .trim();
 
-// Token-overlap similarity (0..1). Robust to OCR noise and word order — we only
-// need to know which screenshot is the *best* match for a given placeholder.
-export const similarity = (a, b) => {
-  const A = new Set(norm(a).split(' ').filter((w) => w.length > 2));
-  const B = new Set(norm(b).split(' ').filter((w) => w.length > 2));
-  if (A.size === 0 || B.size === 0) return 0;
+// Common German filler words carry no identifying signal — two unrelated texts
+// both contain "für", "den", "und". Ignoring them prevents false matches.
+const STOPWORDS = new Set([
+  'der','die','das','den','dem','des','ein','eine','einen','einem','einer','eines',
+  'und','oder','aber','doch','denn','weil','dass','ist','sind','war','waren','hat',
+  'habe','haben','wird','werden','wurde','für','mit','von','vom','zum','zur','auf',
+  'aus','bei','nach','über','unter','vor','durch','nicht','auch','noch','schon',
+  'wie','was','wer','wenn','dann','sich','sie','ihr','ihre','ich','due','ganz','sehr',
+]);
+
+// Do two words match despite OCR noise? Exact or one-character-off, but only for
+// reasonably long words — allowing edits on short words made unrelated texts
+// look similar.
+const wordsMatch = (a, b) => {
+  if (a === b) return true;
+  if (a.length < 5 || b.length < 5) return false;      // short words: exact only
+  if (Math.abs(a.length - b.length) > 1) return false;
+  // Levenshtein distance <= 1
+  let i = 0, j = 0, edits = 0;
+  while (i < a.length && j < b.length) {
+    if (a[i] === b[j]) { i++; j++; continue; }
+    if (++edits > 1) return false;
+    if (a.length === b.length) { i++; j++; }
+    else if (a.length > b.length) i++;
+    else j++;
+  }
+  return edits + (a.length - i) + (b.length - j) <= 1;
+};
+
+// How much of the PLACEHOLDER text appears in the screenshot text (0..1).
+// Coverage, not symmetry: a short placeholder ("30 Anmeldungen für den
+// Workshop") should score high against a screenshot full of other text, which a
+// symmetric measure would punish.
+export const similarity = (placeholderText, ocrText) => {
+  const keep = (w) => w.length > 3 && !STOPWORDS.has(w);
+  const want = norm(placeholderText).split(' ').filter(keep);
+  const have = norm(ocrText).split(' ').filter((w) => w.length > 2);
+  if (want.length === 0 || have.length === 0) return 0;
   let hit = 0;
-  A.forEach((w) => { if (B.has(w)) hit++; });
-  // Dice coefficient.
-  return (2 * hit) / (A.size + B.size);
+  want.forEach((w) => { if (have.some((h) => wordsMatch(w, h))) hit++; });
+  return hit / want.length;
 };
 
 // Run OCR on one image (dataURL or File). Returns recognised text.
@@ -60,24 +91,22 @@ export const ocrImage = async (imageSource, onProgress) => {
 // [{ id, dataUrl, ocrText }], return a mapping placeholderId -> screenshotId.
 // Greedy best-first: strongest matches are assigned first, each screenshot used
 // at most once.
-export const matchScreenshots = (placeholders, screenshots) => {
-  const pairs = [];
-  placeholders.forEach((p) => {
-    screenshots.forEach((s) => {
-      pairs.push({ pid: p.id, sid: s.id, score: similarity(p.matchText, s.ocrText) });
-    });
-  });
-  pairs.sort((a, b) => b.score - a.score);
+// For EVERY placeholder pick the screenshot whose OCR text covers it best.
+// A screenshot may be used for several placeholders (the same proof image can
+// legitimately appear twice), and a minimum score avoids random pairings.
+export const MATCH_THRESHOLD = 0.45;
 
-  const usedP = new Set();
-  const usedS = new Set();
+export const matchScreenshots = (placeholders, screenshots) => {
   const mapping = {};
-  pairs.forEach(({ pid, sid, score }) => {
-    if (score <= 0) return;
-    if (usedP.has(pid) || usedS.has(sid)) return;
-    mapping[pid] = { screenshotId: sid, score };
-    usedP.add(pid);
-    usedS.add(sid);
+  placeholders.forEach((p) => {
+    let best = null;
+    screenshots.forEach((s) => {
+      const score = similarity(p.matchText, s.ocrText);
+      if (!best || score > best.score) best = { screenshotId: s.id, score };
+    });
+    if (best && best.score >= MATCH_THRESHOLD) {
+      mapping[p.id] = best;
+    }
   });
   return mapping;
 };

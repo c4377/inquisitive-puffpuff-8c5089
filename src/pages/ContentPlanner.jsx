@@ -123,8 +123,19 @@ const ContentPlanner = () => {
     }
 
     return plan.map((day, index) => {
-      // Locked (already posted) days are frozen — never restyle them.
-      if (day.locked) return day;
+      // Locked (already posted) days are frozen — never restyle them. We still
+      // normalise the shape (slides array + required fields) so a locked day can
+      // never render as a broken tile.
+      if (day.locked) {
+        const safeSlides = (Array.isArray(day.slides) ? day.slides : []).map((s) => ({
+          ...s,
+          text: typeof s?.text === 'string' ? s.text : '',
+          visualElements: Array.isArray(s?.visualElements) ? s.visualElements : [],
+          format: s?.format || '4:5',
+          layout: s?.layout || s?.layoutId || 'brand_text_plate',
+        }));
+        return { ...day, slides: safeSlides.length ? safeSlides : [{ text: '', visualElements: [], format: '4:5', layout: 'brand_text_plate' }] };
+      }
       let bg, text, sec, acc;
       
       // Smart Color Rotation Logic
@@ -411,9 +422,8 @@ const ContentPlanner = () => {
       if (typeof dataUrl === 'string' && /^https?:\/\//.test(dataUrl)) {
         urlByKey[key] = dataUrl;
       } else {
-        urlByKey[key] = user
-          ? await CloudService.uploadScreenshot(user.id, dataUrl)
-          : dataUrl; // not logged in -> keep inline base64
+        // No login needed — uploads go to a shared folder in the bucket.
+        urlByKey[key] = await CloudService.uploadScreenshot(dataUrl);
       }
     }
 
@@ -436,8 +446,14 @@ const ContentPlanner = () => {
       }),
     }));
     updateBrandSettings({ contentPlan: updated });
-    setSaveStatus && setSaveStatus('Screenshots gespeichert');
-    setTimeout(() => setSaveStatus && setSaveStatus(''), 1500);
+    // Tell the user whether the screenshots actually landed in the bucket
+    // (URL) or fell back to being stored inline (base64).
+    const stored = Object.values(urlByKey).filter((v) => /^https?:\/\//.test(v)).length;
+    const total = Object.keys(urlByKey).length;
+    setSaveStatus(stored === total
+      ? `${stored} Screenshots dauerhaft gespeichert`
+      : `${stored}/${total} in der Cloud – Rest lokal (Bucket prüfen)`);
+    setTimeout(() => setSaveStatus && setSaveStatus(''), 4000);
   };
 
   // Lock / unlock a single post (mark as already posted). Locked posts are shown
@@ -1257,7 +1273,7 @@ const ContentPlanner = () => {
                       </div>
                     )}
                     <div className="absolute inset-0 pointer-events-none">
-                      <Canvas key={`${day.day}-${activeIndex}-${dynamicActiveSlide.color}-${dynamicActiveSlide.secondaryColor}-${dynamicActiveSlide.fontFamily}-${dynamicActiveSlide.backgroundColor}`} data={{...dynamicActiveSlide, slideNumber: undefined}} brandName={brandName} />
+                      <Canvas asImage key={`${day.day}-${activeIndex}-${dynamicActiveSlide.color}-${dynamicActiveSlide.secondaryColor}-${dynamicActiveSlide.fontFamily}-${dynamicActiveSlide.backgroundColor}`} data={{...dynamicActiveSlide, slideNumber: undefined}} brandName={brandName} />
                     </div>
 
                     {/* Day badge */}

@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import * as FiIcons from 'react-icons/fi';
 import SafeIcon from '../common/SafeIcon';
 import { parseScreenshotPlaceholder, ocrImage, matchScreenshots } from '../utils/screenshotMatcher';
+import { CloudService } from '../services/cloudService';
 
 const { FiX, FiUploadCloud, FiCheckCircle, FiLoader, FiImage } = FiIcons;
 
@@ -18,7 +19,34 @@ const ScreenshotMatchModal = ({ isOpen, onClose, placeholders, onApply }) => {
   const [screenshots, setScreenshots] = useState([]); // {id, dataUrl, ocrText, progress}
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState(null); // mapping placeholderId -> {screenshotId, score}
+  const [libraryCount, setLibraryCount] = useState(null); // null = loading
   const inputRef = useRef(null);
+
+  // On open: pull the stored screenshot library (uploaded once, kept forever)
+  // and immediately try to fill every placeholder from it. Only what's still
+  // missing needs a fresh upload.
+  useEffect(() => {
+    if (!isOpen) return;
+    let cancelled = false;
+    (async () => {
+      setLibraryCount(null);
+      const lib = await CloudService.loadScreenshotLibrary();
+      if (cancelled) return;
+      const asShots = lib.map((entry, i) => ({
+        id: `lib_${i}`,
+        dataUrl: entry.url,
+        ocrText: entry.ocrText,
+        progress: 1,
+        fromLibrary: true,
+      }));
+      setScreenshots(asShots);
+      setLibraryCount(asShots.length);
+      if (asShots.length > 0 && placeholders.length > 0) {
+        setResult(matchScreenshots(placeholders, asShots));
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [isOpen, placeholders.length]);
 
   if (!isOpen) return null;
 
@@ -26,13 +54,12 @@ const ScreenshotMatchModal = ({ isOpen, onClose, placeholders, onApply }) => {
     const list = Array.from(files || []);
     if (list.length === 0) return;
     setBusy(true);
-    setResult(null);
-    const next = [];
+    const added = [];
     for (let i = 0; i < list.length; i++) {
       const dataUrl = await fileToDataUrl(list[i]);
       const id = `s_${Date.now()}_${i}`;
       const entry = { id, dataUrl, ocrText: '', progress: 0 };
-      next.push(entry);
+      added.push(entry);
       setScreenshots((prev) => [...prev, entry]);
       // OCR this screenshot.
       const text = await ocrImage(dataUrl, (p) => {
@@ -40,10 +67,21 @@ const ScreenshotMatchModal = ({ isOpen, onClose, placeholders, onApply }) => {
       });
       entry.ocrText = text;
       setScreenshots((prev) => prev.map((s) => (s.id === id ? { ...s, ocrText: text, progress: 1 } : s)));
+
+      // Store it permanently: upload once, remember the OCR text alongside, so
+      // future imports can match against it without re-uploading.
+      const url = await CloudService.uploadScreenshot(dataUrl);
+      if (/^https?:\/\//.test(url)) {
+        await CloudService.addToScreenshotLibrary({ url, ocrText: text });
+        entry.dataUrl = url;
+        setScreenshots((prev) => prev.map((s) => (s.id === id ? { ...s, dataUrl: url } : s)));
+      }
     }
-    // Match once all are read.
-    const mapping = matchScreenshots(placeholders, next);
-    setResult(mapping);
+    // Re-match against the full set (library + newly added).
+    setScreenshots((prev) => {
+      setResult(matchScreenshots(placeholders, prev));
+      return prev;
+    });
     setBusy(false);
   };
 
@@ -84,6 +122,12 @@ const ScreenshotMatchModal = ({ isOpen, onClose, placeholders, onApply }) => {
             </p>
           ) : (
             <>
+              {libraryCount !== null && libraryCount > 0 && (
+                <div className="bg-purple-50 border border-purple-200 rounded-xl p-3 text-sm text-purple-800">
+                  {libraryCount} Screenshots in deiner Bibliothek – automatisch abgeglichen.
+                </div>
+              )}
+
               <button
                 onClick={() => inputRef.current?.click()}
                 disabled={busy}
@@ -91,7 +135,7 @@ const ScreenshotMatchModal = ({ isOpen, onClose, placeholders, onApply }) => {
               >
                 <SafeIcon icon={FiUploadCloud} className="text-2xl" />
                 <span className="text-sm font-bold">Screenshots hochladen</span>
-                <span className="text-xs text-gray-400">Mehrere auf einmal möglich</span>
+                <span className="text-xs text-gray-400">Einmal hochladen – bleibt dauerhaft gespeichert</span>
               </button>
               <input ref={inputRef} type="file" accept="image/*" multiple className="hidden"
                 onChange={(e) => handleFiles(e.target.files)} />
