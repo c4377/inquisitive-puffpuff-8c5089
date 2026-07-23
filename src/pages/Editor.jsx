@@ -160,9 +160,8 @@ const Editor = () => {
   const downloadAllSlides = async () => {
     setIsExporting(true);
     try {
-      const zip = new JSZip();
-      const slidesFolder = zip.folder("slides");
       const globalBrandName = brandSettings.currentBrandConfig?.brandText || "";
+      const files = [];
 
       for (let i = 0; i < slides.length; i++) {
         const slide = slides[i];
@@ -189,10 +188,28 @@ const Editor = () => {
         
         const dataUrl = fCanvas.toDataURL({ format: 'png', multiplier: 1 });
         const blob = await (await fetch(dataUrl)).blob();
-        slidesFolder.file(`slide-${String(i + 1).padStart(3, '0')}.png`, blob);
         fCanvas.dispose();
+        if (blob) files.push(new File([blob], `slide-${String(i + 1).padStart(3, '0')}.png`, { type: 'image/png' }));
       }
-      
+
+      // MOBILE: hand the images to the native share sheet — "Bilder sichern"
+      // puts them straight into Fotos. A ZIP would only land in Dateien.
+      if (typeof navigator !== 'undefined' && navigator.canShare && files.length
+          && navigator.canShare({ files })) {
+        try {
+          await navigator.share({ files, title: editingDayTitle || 'Slides' });
+          setIsExporting(false);
+          return;
+        } catch (e) {
+          if (e?.name === 'AbortError') { setIsExporting(false); return; }
+          // otherwise fall through to the ZIP download
+        }
+      }
+
+      // DESKTOP / no share support -> ZIP.
+      const zip = new JSZip();
+      const slidesFolder = zip.folder("slides");
+      files.forEach((f) => slidesFolder.file(f.name, f));
       const content = await zip.generateAsync({ type: 'blob' });
       saveAs(content, `slides-export-${new Date().toISOString().slice(0, 10)}.zip`);
     } catch (error) {
@@ -295,7 +312,7 @@ const Editor = () => {
         <div className="flex space-x-2 items-center">
           <button onClick={() => setShowSavedDesigns(!showSavedDesigns)} className={`p-2 rounded-lg font-bold text-xs flex items-center transition-colors ${showSavedDesigns ? 'bg-gray-200 text-gray-900' : 'text-gray-600 hover:bg-gray-100'}`}><SafeIcon icon={FiFolder} className="text-lg mr-1" /><span className="hidden sm:inline">Bibliothek</span></button>
           <button onClick={() => setShowCaption(!showCaption)} className={`p-2 rounded-lg font-bold text-xs flex items-center transition-colors ${showCaption ? 'bg-purple-100 text-purple-700' : 'text-gray-600 hover:bg-gray-100'}`}><SafeIcon icon={FiMessageSquare} className="text-lg mr-1" /><span className="hidden sm:inline">Caption</span></button>
-          <button onClick={downloadAllSlides} disabled={isExporting || slides.length === 0} className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold shadow-md hover:bg-blue-700 disabled:opacity-50"><SafeIcon icon={FiDownload} className="mr-1" />{isExporting ? 'Exporting...' : slides.length > 1 ? `Alle (${slides.length})` : 'Export'}</button>
+          <button onClick={downloadAllSlides} disabled={isExporting || slides.length === 0} className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold shadow-md hover:bg-blue-700 disabled:opacity-50"><SafeIcon icon={FiDownload} className="mr-1" />{isExporting ? 'Exportiere…' : slides.length > 1 ? `Alle (${slides.length}) in Fotos` : 'In Fotos'}</button>
           {(editingDayId || communityTopicId) ? (
              <button onClick={handleSaveToPlan} className={`flex items-center px-4 py-2 rounded-lg font-bold text-white text-xs transition-all shadow-md ${isSaving ? 'bg-green-500' : 'bg-purple-600 hover:bg-purple-700'}`}><SafeIcon icon={isSaving ? FiCheck : FiSave} className="mr-1" />{isSaving ? 'Gespeichert' : (communityTopicId ? 'Deck Speichern' : 'Plan Speichern')}</button>
           ) : (
