@@ -24,7 +24,7 @@ import { saveSetsToDB, loadSetsFromDB } from '../utils/storage';
 import { analyzePlanRoles, roleFeedback, ROLE_META } from '../utils/postRole';
 import { weightedLayoutPool, getRating, setRating } from '../utils/layoutRatings';
 
-const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus , FiMoreVertical, FiMaximize2, FiGrid, FiImage, FiLock } = FiIcons;
+const { FiEdit3, FiDownload, FiRefreshCw, FiZap, FiType, FiMessageSquare, FiCopy, FiExternalLink, FiUser, FiSave, FiFileText, FiThumbsUp, FiThumbsDown, FiShare2, FiLayers, FiPlus , FiMoreVertical, FiMaximize2, FiGrid, FiImage, FiLock, FiTrash2 } = FiIcons;
 
 const ContentPlanner = () => {
   const { brandSettings, updateBrandSettings } = useBrand();
@@ -447,6 +447,25 @@ const ContentPlanner = () => {
     updateBrandSettings({ contentPlan: updated });
   };
 
+  // Delete a single post from the feed (with confirmation).
+  const handleDeleteDay = (dayNum) => {
+    const day = weekPlan.find((d) => d.day === dayNum);
+    const label = day ? `Tag ${day.day}` : 'diesen Post';
+    if (!window.confirm(`${label} wirklich löschen?`)) return;
+    const updated = weekPlan.filter((d) => d.day !== dayNum);
+    updateBrandSettings({ contentPlan: updated });
+    setMenuDayId(null);
+  };
+
+  // Bulk delete for the multi-select.
+  const bulkDelete = () => {
+    if (selectedDays.length === 0) return;
+    if (!window.confirm(`${selectedDays.length} Posts wirklich löschen?`)) return;
+    const set = new Set(selectedDays);
+    updateBrandSettings({ contentPlan: weekPlan.filter((d) => !set.has(d.day)) });
+    clearSelection();
+  };
+
   // --- Multi-select ---------------------------------------------------------
   const startLongPress = (dayNum) => {
     if (longPressTimer.current) clearTimeout(longPressTimer.current);
@@ -639,6 +658,9 @@ const ContentPlanner = () => {
           fontWeight: bold ? '700' : 'normal',
         };
       });
+
+      // Skip days that produced no slides — an empty day would break the feed.
+      if (!slides || slides.length === 0) continue;
 
       newPlan.push({
         day: dayData.day,
@@ -1204,13 +1226,17 @@ const ContentPlanner = () => {
             // for display only; the underlying plan/day numbers are unchanged.
             <div className="grid grid-cols-3 gap-1">
               {[...weekPlan].reverse().map((day, dayIndex) => {
+                // Guard: a day with missing/empty slides must not crash the whole
+                // feed (that produced a white screen after importing).
+                const daySlides = Array.isArray(day.slides) ? day.slides : [];
+                if (daySlides.length === 0) return null;
                 const activeIndex = activeIndices[day.day] || 0;
-                const activeSlide = day.slides[activeIndex] || day.slides[0];
+                const activeSlide = daySlides[activeIndex] || daySlides[0] || {};
                 const dynamicActiveSlide = { ...activeSlide, visualElements: activeSlide.visualElements || [], format: activeSlide.format || '4:5' };
                 const isExportingThisDay = exportingDayId === day.day;
                 return (
                   <motion.div
-                    key={`${day.day}-${day.title}`}
+                    key={`day-${day.day}-${dayIndex}`}
                     initial={{ opacity: 0, scale: 0.96 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: dayIndex * 0.04 }}
@@ -1324,8 +1350,11 @@ const ContentPlanner = () => {
                           <button onClick={() => { setMenuDayId(null); handleShareDay(day); }} disabled={isExportingThisDay} className="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-purple-700 hover:bg-purple-50 border-b border-gray-50 disabled:opacity-50">
                             <SafeIcon icon={FiShare2} className="text-base" /> In Fotos speichern
                           </button>
-                          <button onClick={() => { setMenuDayId(null); handleExportDay(day); }} disabled={isExportingThisDay} className="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 disabled:opacity-50">
+                          <button onClick={() => { setMenuDayId(null); handleExportDay(day); }} disabled={isExportingThisDay} className="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50 disabled:opacity-50">
                             <SafeIcon icon={FiDownload} className="text-base text-gray-500" /> Export
+                          </button>
+                          <button onClick={() => handleDeleteDay(day.day)} className="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-red-600 hover:bg-red-50">
+                            <SafeIcon icon={FiTrash2} className="text-base" /> Post löschen
                           </button>
                         </div>
                       </div>
@@ -1368,6 +1397,7 @@ const ContentPlanner = () => {
                   <button onClick={() => bulkCoverBlur(false)} disabled={selectedDays.length === 0} className="flex items-center justify-center gap-1.5 py-2 rounded-lg bg-gray-100 text-gray-700 text-xs font-bold disabled:opacity-40"><SafeIcon icon={FiLayers} className="text-sm" /> Unschärfe aus</button>
                   <button onClick={() => bulkBigHeadline(true)} disabled={selectedDays.length === 0} className="flex items-center justify-center gap-1.5 py-2 rounded-lg bg-purple-600 text-white text-xs font-bold disabled:opacity-40"><SafeIcon icon={FiMaximize2} className="text-sm" /> Große H. an</button>
                   <button onClick={() => bulkBigHeadline(false)} disabled={selectedDays.length === 0} className="flex items-center justify-center gap-1.5 py-2 rounded-lg bg-gray-100 text-gray-700 text-xs font-bold disabled:opacity-40"><SafeIcon icon={FiMaximize2} className="text-sm" /> Große H. aus</button>
+                  <button onClick={bulkDelete} disabled={selectedDays.length === 0} className="col-span-2 sm:col-span-3 flex items-center justify-center gap-1.5 py-2 rounded-lg bg-red-600 text-white text-xs font-bold disabled:opacity-40"><SafeIcon icon={FiTrash2} className="text-sm" /> {selectedDays.length} löschen</button>
                 </div>
               </div>
             </div>
