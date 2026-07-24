@@ -116,7 +116,15 @@ export const CloudService = {
       const path = `shared/${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`;
       const { error } = await supabase.storage
         .from(SCREENSHOT_BUCKET)
-        .upload(path, blob, { contentType: blob.type, upsert: true });
+        .upload(path, blob, {
+          contentType: blob.type,
+          // Every upload gets a unique filename, so a URL always returns the
+          // same image and the browser can keep it for a long time. Without a
+          // cache header the image is re-downloaded on every page view, which
+          // is what drives Supabase egress up.
+          cacheControl: '31536000', // 1 year
+          upsert: true,
+        });
       if (error) {
         console.error('Screenshot upload failed:', error);
         return dataUrl; // fall back to inline base64

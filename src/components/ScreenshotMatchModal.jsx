@@ -13,6 +13,33 @@ const fileToDataUrl = (file) => new Promise((res, rej) => {
   r.readAsDataURL(file);
 });
 
+// Shrink a screenshot before uploading. Phone screenshots are 3–4 MB, but the
+// app never displays them larger than a tile — and every view re-downloads the
+// full file, which is what runs up Supabase egress. Max 1400px wide keeps it
+// crisp even when a tile is opened large. OCR still runs on the ORIGINAL, so
+// matching quality is unaffected.
+const shrinkDataUrl = (dataUrl, maxWidth = 1080, quality = 0.85) =>
+  new Promise((resolve) => {
+    try {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const scale = img.width > maxWidth ? maxWidth / img.width : 1;
+          const c = document.createElement('canvas');
+          c.width = Math.round(img.width * scale);
+          c.height = Math.round(img.height * scale);
+          const ctx = c.getContext('2d');
+          ctx.drawImage(img, 0, 0, c.width, c.height);
+          // Always re-encode as JPEG: a 4 MB PNG screenshot becomes a few
+          // hundred KB, which is the bulk of the egress saving.
+          resolve(c.toDataURL('image/jpeg', quality));
+        } catch (e) { resolve(dataUrl); }
+      };
+      img.onerror = () => resolve(dataUrl);
+      img.src = dataUrl;
+    } catch (e) { resolve(dataUrl); }
+  });
+
 // Modal: upload screenshots, OCR them, auto-match to [SCREENSHOT — …] slides.
 // onApply(mapping) receives { placeholderSlideKey: screenshotDataUrl }.
 const ScreenshotMatchModal = ({ isOpen, onClose, placeholders, onApply }) => {
@@ -74,8 +101,10 @@ const ScreenshotMatchModal = ({ isOpen, onClose, placeholders, onApply }) => {
       setScreenshots((prev) => prev.map((s) => (s.id === id ? { ...s, ocrText: text, progress: 1 } : s)));
 
       // Store it permanently: upload once, remember the OCR text alongside, so
-      // future imports can match against it without re-uploading.
-      const url = await CloudService.uploadScreenshot(dataUrl);
+      // future imports can match against it without re-uploading. The uploaded
+      // copy is resized (OCR above already ran on the full-size original).
+      const uploadUrl = await shrinkDataUrl(dataUrl);
+      const url = await CloudService.uploadScreenshot(uploadUrl);
       if (/^https?:\/\//.test(url)) {
         const res = await CloudService.addToScreenshotLibrary({ url, ocrText: text });
         if (!res.ok) setSaveError(res.error);
