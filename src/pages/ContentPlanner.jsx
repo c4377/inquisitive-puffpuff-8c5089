@@ -600,30 +600,21 @@ const ContentPlanner = () => {
     return 'editorial_classic';
   };
   const buildLayoutRotation = (brandConfig) => {
-    // Fixed feed-style pattern using the 20 brand layouts. The order mimics a
-    // real personal-brand grid: photo hooks, text plates, framed/quote posts,
-    // big-word statements — repeating so every reload keeps the same rhythm.
+    // Feed rhythm in blocks of TEN: 8 photo posts, 2 text-only posts. The
+    // text slots (index 4 and 9) match dayHasImage(), so a post that gets no
+    // photo also gets a text layout — and the pattern simply repeats for any
+    // number of posts (14 imported = same 8:2 rhythm, not a different tail).
     return [
-      'brand_photo_gradient',
-      'brand_text_plate',
-      'brand_photo_center',
-      'brand_frame_polaroid',
-      'brand_text_bigword',
-      'brand_photo_bottom_left',
-      'brand_text_quote',
-      'brand_photo_top',
-      'brand_text_statement',
-      'brand_photo_frame',
-      'brand_text_left',
-      'brand_photo_bigword',
-      'brand_text_plate_top',
-      'brand_frame_top_text',
-      'brand_photo_quote',
-      'brand_text_kicker_lead',
-      'brand_photo_bottom_serif',
-      'brand_text_minimal',
-      'brand_frame_left',
-      'brand_text_bold_top',
+      'brand_photo_gradient',      // 0  photo
+      'brand_photo_center',        // 1  photo
+      'brand_frame_polaroid',      // 2  photo
+      'brand_photo_bottom_left',   // 3  photo
+      'brand_text_bigword',        // 4  TEXT
+      'brand_photo_top',           // 5  photo
+      'brand_photo_frame',         // 6  photo
+      'brand_photo_bigword',       // 7  photo
+      'brand_photo_quote',         // 8  photo
+      'brand_text_statement',      // 9  TEXT
     ];
   };
 

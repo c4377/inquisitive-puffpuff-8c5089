@@ -20,6 +20,8 @@ const ScreenshotMatchModal = ({ isOpen, onClose, placeholders, onApply }) => {
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState(null); // mapping placeholderId -> {screenshotId, score}
   const [libraryCount, setLibraryCount] = useState(null); // null = loading
+  const [libraryError, setLibraryError] = useState(null);
+  const [saveError, setSaveError] = useState(null);
   const inputRef = useRef(null);
 
   // On open: pull the stored screenshot library (uploaded once, kept forever)
@@ -30,9 +32,12 @@ const ScreenshotMatchModal = ({ isOpen, onClose, placeholders, onApply }) => {
     let cancelled = false;
     (async () => {
       setLibraryCount(null);
-      const lib = await CloudService.loadScreenshotLibrary();
+      setLibraryError(null);
+      setSaveError(null);
+      const { items, error } = await CloudService.loadScreenshotLibrary();
       if (cancelled) return;
-      const asShots = lib.map((entry, i) => ({
+      if (error) setLibraryError(error);
+      const asShots = items.map((entry, i) => ({
         id: `lib_${i}`,
         dataUrl: entry.url,
         ocrText: entry.ocrText,
@@ -72,9 +77,12 @@ const ScreenshotMatchModal = ({ isOpen, onClose, placeholders, onApply }) => {
       // future imports can match against it without re-uploading.
       const url = await CloudService.uploadScreenshot(dataUrl);
       if (/^https?:\/\//.test(url)) {
-        await CloudService.addToScreenshotLibrary({ url, ocrText: text });
+        const res = await CloudService.addToScreenshotLibrary({ url, ocrText: text });
+        if (!res.ok) setSaveError(res.error);
         entry.dataUrl = url;
         setScreenshots((prev) => prev.map((s) => (s.id === id ? { ...s, dataUrl: url } : s)));
+      } else {
+        setSaveError('Upload in den Bucket fehlgeschlagen – Screenshot bleibt nur lokal.');
       }
     }
     // Re-match against the full set (library + newly added).
@@ -122,9 +130,26 @@ const ScreenshotMatchModal = ({ isOpen, onClose, placeholders, onApply }) => {
             </p>
           ) : (
             <>
-              {libraryCount !== null && libraryCount > 0 && (
+              {libraryError && (
+                <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-800">
+                  <p className="font-bold mb-1">Bibliothek nicht verfügbar</p>
+                  <p className="text-xs">{libraryError}</p>
+                  <p className="text-xs mt-1 text-red-600">Screenshots müssen deshalb jedes Mal neu geladen werden.</p>
+                </div>
+              )}
+              {saveError && (
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800">
+                  Nicht dauerhaft gespeichert: {saveError}
+                </div>
+              )}
+              {!libraryError && libraryCount !== null && libraryCount > 0 && (
                 <div className="bg-purple-50 border border-purple-200 rounded-xl p-3 text-sm text-purple-800">
                   {libraryCount} Screenshots in deiner Bibliothek – automatisch abgeglichen.
+                </div>
+              )}
+              {!libraryError && libraryCount === 0 && (
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 text-xs text-gray-600">
+                  Bibliothek ist noch leer. Was du jetzt hochlädst, bleibt dauerhaft gespeichert.
                 </div>
               )}
 

@@ -60,7 +60,12 @@ export const decidePostDesign = ({ globalIndex, hasImage, autoImage }) => {
  * Decide whether a given day-index should carry a photo.
  * Default pattern: 5 of every 7 days have a photo (indices 2 and 5 are text).
  */
+// Photo/text rhythm of the feed: in every block of TEN posts, 8 get a photo and
+// 2 are text-only. The pattern repeats regardless of how many posts exist, so
+// importing 14 posts gives 8 photo / 2 text, then 4 more that continue the same
+// rhythm — never a different mix at the end.
 export const dayHasImage = (dayIndex) => {
-  const r = dayIndex % 7;
-  return !(r === 2 || r === 5);
+  const r = ((dayIndex % 10) + 10) % 10;
+  // Text-only slots spread through the block so they don't clump together.
+  return !(r === 4 || r === 9);
 };

@@ -59,37 +59,47 @@ export const CloudService = {
   // Load the whole library: [{ url, ocrText, path }]
   async loadScreenshotLibrary() {
     try {
-      if (!supabase) return [];
+      if (!supabase) return { items: [], error: 'Keine Supabase-Verbindung' };
       const { data, error } = await supabase
         .from('screenshot_library')
         .select('*')
         .order('created_at', { ascending: false });
       if (error) {
         console.error('Screenshot library load failed:', error);
-        return [];
+        // Most common cause: the table doesn't exist yet, or RLS blocks reading.
+        const missingTable = /does not exist|schema cache|relation/i.test(error.message || '');
+        return {
+          items: [],
+          error: missingTable
+            ? 'Tabelle "screenshot_library" fehlt in Supabase (SQL aus der Anleitung ausführen)'
+            : `Bibliothek nicht lesbar: ${error.message || 'unbekannter Fehler'}`,
+        };
       }
-      return (data || []).map((r) => ({ url: r.url, ocrText: r.ocr_text || '', path: r.path }));
+      return {
+        items: (data || []).map((r) => ({ url: r.url, ocrText: r.ocr_text || '', path: r.path })),
+        error: null,
+      };
     } catch (e) {
       console.error('Screenshot library error:', e);
-      return [];
+      return { items: [], error: e?.message || 'Unbekannter Fehler' };
     }
   },
 
   // Remember one uploaded screenshot together with its OCR text.
   async addToScreenshotLibrary({ url, ocrText, path }) {
     try {
-      if (!supabase || !url) return false;
+      if (!supabase || !url) return { ok: false, error: 'Keine Supabase-Verbindung' };
       const { error } = await supabase
         .from('screenshot_library')
         .insert({ url, ocr_text: ocrText || '', path: path || '' });
       if (error) {
         console.error('Screenshot library save failed:', error);
-        return false;
+        return { ok: false, error: error.message || 'Speichern fehlgeschlagen' };
       }
-      return true;
+      return { ok: true, error: null };
     } catch (e) {
       console.error('Screenshot library save error:', e);
-      return false;
+      return { ok: false, error: e?.message || 'Unbekannter Fehler' };
     }
   },
 
