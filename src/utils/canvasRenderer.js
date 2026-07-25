@@ -542,12 +542,6 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // User-controlled text shadow (per slide, 0–100%). No automatic shadow — the
   // strength comes only from slide.textShadowStrength, default 0 (off).
   const brandTextShadow = () => {
-    // Warm Editorial always gets a soft dark shadow so the (bold) text stays
-    // legible and never looks washed-out grey on a light photo area — this is
-    // what the reference does.
-    if (slide.warmEditorial && hasBgImage) {
-      return 'rgba(0,0,0,0.55) 0px 2px 18px';
-    }
     const s = (typeof slide.textShadowStrength === 'number') ? slide.textShadowStrength : 0;
     if (s <= 0) return '';
     const alpha = Math.min(s, 1) * 0.8;
@@ -633,7 +627,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const headText = capsMode ? String(plain).toUpperCase() : plain;
     const headWeight = boldMode
       ? (boldStyle === 0 ? '400' : boldStyle === 2 ? '600' : '400')
-      : (capsMode ? '700' : (opts.fontWeight || '700'));
+      : (capsMode ? '700' : (opts.fontWeight || '600'));
     const headItalic = boldSerif;                                 // Playfair italic
     // Fixed, clean letter spacing per style (no user-adjustable tracking — it
     // caused torn glyphs when it clashed with a font's own metrics). Values are
@@ -902,7 +896,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       left: cx, top: y, originX, originY: headOriginY,
       width: width * (alignLeft ? 0.82 : 0.86), fontSize: fs(finalFont),
       fill: textCol, accentFill: accentCol, textAlign: tAlign,
-      lineHeight: V.bigWord ? 0.98 : 1.12, fontWeight: slide.fontWeight || (V.bigWord ? '800' : '700'),
+      lineHeight: V.bigWord ? 0.98 : 1.12, fontWeight: slide.fontWeight || (V.bigWord ? '700' : '600'),
       shadow: brandTextShadow(),
       maxBottom: TEXT_MAX_BOTTOM,
     });
@@ -1076,7 +1070,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         originX: 'left', originY: 'top',
         width: width * 0.82, fontSize: fs(fUpFont),
         fill: textCol, accentFill: accentCol, textAlign: 'left', lineHeight: 1.2,
-        fontWeight: slide.fontWeight || '700',
+        fontWeight: slide.fontWeight || '600',
         shadow: brandTextShadow(),
         maxBottom: FOOTER_TOP - height * 0.01,
       });
@@ -1112,7 +1106,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       width: width * (alignLeft ? 0.8 : 0.74), fontSize: fs(finalFont),
       fill: textCol, accentFill: accentCol, textAlign: tAlign,
       lineHeight: V.bigWord ? 0.98 : 1.14,
-      fontWeight: slide.fontWeight || (V.bigWord ? '800' : '700'),
+      fontWeight: slide.fontWeight || (V.bigWord ? '700' : '600'),
       shadow: brandTextShadow(),
       maxBottom: TEXT_MAX_BOTTOM,
     });
@@ -1368,7 +1362,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       fill: '#FFFFFF',
       textAlign: 'left',
       lineHeight: 1.1,
-      fontWeight: slide.fontWeight || '700',
+      fontWeight: slide.fontWeight || '600',
       shadow: 'rgba(0,0,0,0.35) 0px 2px 10px',
     });
     try {

@@ -668,7 +668,9 @@ const ContentPlanner = () => {
           ...s2,
           layout: picked, layoutId: picked,
           textAnchor,
-          fontWeight: bold ? '700' : 'normal',
+          fontWeight: brandConfig?.warmEditorial
+            ? (bold ? '800' : '700')
+            : (bold ? '700' : 'normal'),
         };
       });
 
@@ -759,7 +761,7 @@ const ContentPlanner = () => {
         cleaned.layout = _picked;
         cleaned.layoutId = _picked;
         cleaned.textAnchor = textAnchor;
-        cleaned.fontWeight = bold ? '700' : 'normal';
+        cleaned.fontWeight = brandSettings.currentBrandConfig?.warmEditorial ? (bold ? '800' : '700') : (bold ? '700' : 'normal');
         // Keep the per-slide serif/caps switch.
         if (slide.serifHeadline === false) cleaned.serifHeadline = false;
         return cleaned;
@@ -872,7 +874,7 @@ const ContentPlanner = () => {
           // Preserve the per-slide serif/caps switch across reloads.
           if (slide.serifHeadline === false) cleaned.serifHeadline = false;
           cleaned.textAnchor = textAnchor;
-          cleaned.fontWeight = bold ? '700' : 'normal';
+          cleaned.fontWeight = brandSettings.currentBrandConfig?.warmEditorial ? (bold ? '800' : '700') : (bold ? '700' : 'normal');
           return cleaned;
         });
 
