@@ -14,7 +14,7 @@ import { renderSlide } from '../utils/canvasRenderer';
 import { attachSmartImages, getActiveImagePool } from '../utils/smartLayoutGenerator';
 import { decidePostDesign, dayHasImage } from '../utils/postDesignEngine';
 
-const { FiSmartphone, FiDownload, FiRefreshCw, FiLayers, FiFileText, FiX, FiPlay, FiTrash2, FiEdit3, FiPlus, FiCopy, FiCheck } = FiIcons;
+const { FiSmartphone, FiDownload, FiRefreshCw, FiLayers, FiFileText, FiX, FiPlay, FiTrash2, FiEdit3, FiPlus, FiCopy, FiCheck, FiImage } = FiIcons;
 
 const StoryPlanner = () => {
   const { brandSettings, updateBrandSettings, dataLoaded } = useBrand();
@@ -38,6 +38,54 @@ const StoryPlanner = () => {
   };
 
   const brandName = brandSettings.currentBrandConfig?.name || "";
+
+  // --- AI background generation (same Netlify function as the Ads Builder,
+  // but with 9:16 prompts so the image fits a story) -------------------------
+  const [aiStyle, setAiStyle] = useState('editorial');
+  const [aiBusy, setAiBusy] = useState(false);
+  const [aiError, setAiError] = useState('');
+  const [aiImages, setAiImages] = useState([]);
+  const [aiTargetIndex, setAiTargetIndex] = useState(null); // which slide gets it
+
+  const storyAiStyles = {
+    editorial: 'Moody editorial magazine background, warm dark tones, soft window light, elegant interior blur, cinematic, no text, vertical 9:16 format',
+    studio: 'Minimal bright studio backdrop for an elegant female coach brand, soft beige tones, clean light, subtle shadows, editorial photography style, no people, no text, vertical 9:16 format',
+    texture: 'Abstract soft texture background, warm neutral tones, subtle paper grain and gentle gradient, calm and premium, no text, no people, vertical 9:16 format',
+    collage: 'Bold punk collage background, torn paper scraps, tape strips, halftone cutouts, hand-drawn scribbles and arrows, gritty texture, no text, vertical 9:16 format',
+  };
+
+  const generateStoryImage = async (targetIndex) => {
+    setAiBusy(true); setAiError('');
+    try {
+      const strategy = brandSettings.currentBrandConfig?.adsStrategy || {};
+      const context = [strategy?.zielgruppe, strategy?.angebot].filter(Boolean).join(', ');
+      const prompt = `${storyAiStyles[aiStyle]}${context ? `. Theme context: ${context}` : ''}`;
+      const res = await fetch('/.netlify/functions/generate-ad-image', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt }),
+      });
+      const raw = await res.text();
+      let data = null;
+      try { data = JSON.parse(raw); } catch { /* HTML or empty */ }
+      if (!data) {
+        throw new Error('KI-Funktion nicht erreichbar. Sie ist nur bei Git-Deploys aktiv und braucht den GEMINI_API_KEY in Netlify.');
+      }
+      if (!res.ok || !data.image) throw new Error(data.error || 'Generierung fehlgeschlagen');
+      setAiImages((prev) => [data.image, ...prev].slice(0, 6));
+      // Put it straight on the chosen slide (or the first one).
+      const idx = typeof targetIndex === 'number' ? targetIndex : 0;
+      setStories((prev) => prev.map((s, i) => (i === idx ? { ...s, background: data.image } : s)));
+    } catch (e) {
+      setAiError(String(e.message || e));
+    } finally {
+      setAiBusy(false);
+    }
+  };
+
+  // Apply an already generated image to a slide.
+  const applyAiImage = (img, index) => {
+    setStories((prev) => prev.map((s, i) => (i === index ? { ...s, background: img } : s)));
+  };
 
   // Initialize with one empty story if nothing exists
   useEffect(() => {
@@ -354,6 +402,73 @@ const StoryPlanner = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* AI BACKGROUND GENERATOR (like the Ads Builder, 9:16 prompts) */}
+      {stories.length > 0 && (
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-4 mb-6">
+          <div className="flex items-center gap-2 mb-3">
+            <SafeIcon icon={FiImage} className="text-purple-600" />
+            <h3 className="font-bold text-gray-900 text-sm">Hintergrundbild erzeugen</h3>
+          </div>
+
+          <div className="flex flex-wrap gap-2 mb-3">
+            {Object.keys(storyAiStyles).map((key) => (
+              <button
+                key={key}
+                onClick={() => setAiStyle(key)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors ${
+                  aiStyle === key
+                    ? 'bg-purple-600 text-white border-purple-600'
+                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                }`}
+              >
+                {key === 'editorial' ? 'Editorial' : key === 'studio' ? 'Studio' : key === 'texture' ? 'Textur' : 'Collage'}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2 mb-2">
+            <select
+              value={aiTargetIndex ?? 0}
+              onChange={(e) => setAiTargetIndex(parseInt(e.target.value, 10))}
+              className="border border-gray-200 rounded-lg px-2 py-2 text-xs font-bold text-gray-700 bg-white"
+            >
+              {stories.map((_, i) => (
+                <option key={i} value={i}>Slide {i + 1}</option>
+              ))}
+            </select>
+            <button
+              onClick={() => generateStoryImage(aiTargetIndex ?? 0)}
+              disabled={aiBusy}
+              className="flex-1 bg-gray-900 text-white rounded-lg py-2 text-xs font-bold flex items-center justify-center gap-1.5 disabled:opacity-50"
+            >
+              <SafeIcon icon={FiRefreshCw} className={aiBusy ? 'animate-spin' : ''} />
+              {aiBusy ? 'Wird erstellt…' : 'Bild generieren'}
+            </button>
+          </div>
+
+          {aiError && (
+            <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg p-2 mb-2">{aiError}</p>
+          )}
+
+          {aiImages.length > 0 && (
+            <>
+              <p className="text-[11px] text-gray-500 mb-1.5">Antippen, um es der gewählten Slide zuzuweisen:</p>
+              <div className="flex gap-2 overflow-x-auto pb-1">
+                {aiImages.map((img, i) => (
+                  <button
+                    key={i}
+                    onClick={() => applyAiImage(img, aiTargetIndex ?? 0)}
+                    className="shrink-0 w-14 aspect-[9/16] rounded-lg overflow-hidden border-2 border-gray-200 hover:border-purple-500"
+                  >
+                    <img src={img} alt="" className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      )}
 
       {/* GRID VIEW (Vertical Cards) */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">

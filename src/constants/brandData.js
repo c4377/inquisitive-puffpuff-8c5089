@@ -458,6 +458,29 @@ export const REFERENCE_PRESETS = [
     tags: ['laut', 'statement', 'kuratiert'],
     extra: { boldMode: true, headlineTracking: 0, layout: 'brand_photo_bigword' },
   }),
+  // "Warm Editorial" — the calm, premium coach look: warm off-black and cream
+  // (never pure black/white), muted beige-sepia photo tones, clean sans-serif
+  // headlines with a single bold word for emphasis. NO coloured accent — the
+  // highlight is weight, not colour. Text sits low on photos, generous margins.
+  buildBrandPreset({
+    id: 'preset_warm_editorial',
+    name: 'Warm Editorial',
+    colors: {
+      primary: '#F2EDE6',      // warm cream (text on dark, and light plates)
+      secondary: '#1A1612',    // warm near-black
+      tertiary: '#8A7B6B',     // muted taupe for secondary text
+      accent: '#1A1612',       // no colour accent — emphasis via weight
+      neutral: '#E8E0D6',      // soft beige plate
+      background: '#1A1612',   // warm near-black plate
+    },
+    typography: { fontFamily: 'Montserrat', accentFontFamily: 'Montserrat', bodyFontFamily: 'Montserrat' },
+    tags: ['warm', 'editorial', 'ruhig', 'kuratiert'],
+    extra: {
+      headlineTracking: -20,
+      layout: 'brand_photo_gradient',
+      warmEditorial: true,     // renderer flag for the calm bold-word treatment
+    },
+  }),
 ];
 
 export const CURATED_BRANDS = [
