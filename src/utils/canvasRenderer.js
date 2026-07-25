@@ -395,8 +395,38 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // Helper: parse *accent* segments out of a string.
   // Robust against **double stars** (markdown paste) and stray unpaired stars:
   // no '*' can ever reach the rendered output.
+  // German filler words that stay in the normal weight — everything else in a
+  // warmEditorial headline is emphasised (bold), giving the reference's
+  // word-by-word normal/bold rhythm without the user marking anything.
+  const FILLER = new Set([
+    'der','die','das','den','dem','des','ein','eine','einen','einem','einer','eines',
+    'und','oder','aber','doch','denn','weil','dass','ob','wenn','als','wie','wo','was',
+    'ist','sind','war','waren','bin','bist','hat','habe','haben','hatte','wird','werden',
+    'wurde','kann','könnte','muss','musst','soll','will','für','mit','von','vom','zum',
+    'zur','auf','aus','bei','nach','über','unter','vor','durch','um','an','am','im','in',
+    'zu','so','nicht','auch','noch','schon','nur','sehr','ganz','mehr','sich','du','dein',
+    'deine','ich','mein','meine','sie','ihr','es','wir','man','dann','dir','mir','da',
+  ]);
+
+  // Turn a plain (unmarked) string into segments where content words are bold.
+  const autoBoldSegments = (text) => {
+    const tokens = (text || '').split(/(\s+)/); // keep whitespace tokens
+    return tokens.map((tok) => {
+      if (/^\s+$/.test(tok) || tok === '') return { text: tok, accent: false, bold: false };
+      const clean = tok.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+      const isFiller = clean.length <= 2 || FILLER.has(clean);
+      return { text: tok, accent: false, bold: !isFiller };
+    });
+  };
+
   const parseAccent = (text) => {
     const raw = (text || '').replace(/\*{2,}/g, '*');
+    // warmEditorial with NO explicit *marks*: auto-bold the content words so the
+    // headline reads like the reference (normal filler, bold key words).
+    if (slide.warmEditorial && !raw.includes('*')) {
+      const segments = autoBoldSegments(raw);
+      return { plain: segments.map((s) => s.text).join(''), segments };
+    }
     const parts = raw.split(/(\*[^*]+\*)/g).filter((s) => s !== '');
     const segments = parts.map((seg) => {
       const isAccent = seg.startsWith('*') && seg.endsWith('*') && seg.length > 2;
@@ -486,6 +516,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
             idx,
             idx + s.text.length
           );
+        }
+        // warmEditorial auto-bold: content words bold, filler stays normal.
+        if (s.bold && s.text.length) {
+          textObj.setSelectionStyles({ fontWeight: '800' }, idx, idx + s.text.length);
         }
         idx += s.text.length;
       });
@@ -699,6 +733,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
               idx, idx + s.text.length
             );
           }
+          // warmEditorial auto-bold: content words bold, filler stays normal.
+          if (s.bold && s.text.length) {
+            t.setSelectionStyles({ fontWeight: '800' }, idx, idx + s.text.length);
+          }
           idx += s.text.length;
         });
       }
@@ -863,7 +901,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         : V.textPos === 'top' ? height * 0.14
         : V.textPos === 'center' ? height * 0.4
         : height * 0.64);
-    const alignLeft = V.align === 'left';
+    const alignLeft = slide.warmEditorial ? true : (V.align === 'left');
     const cx = alignLeft ? width * 0.09 : width / 2;
     const originX = alignLeft ? 'left' : 'center';
     const tAlign = alignLeft ? 'left' : 'center';
@@ -1043,7 +1081,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     }
 
     const { plain, segments } = parseAccent(slide.text);
-    const alignLeft = V.align === 'left';
+    const alignLeft = slide.warmEditorial ? true : (V.align === 'left');
     const cx = alignLeft ? width * 0.1 : width / 2;
     const originX = alignLeft ? 'left' : 'center';
     const tAlign = alignLeft ? 'left' : 'center';
