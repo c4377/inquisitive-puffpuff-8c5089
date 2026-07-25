@@ -762,7 +762,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // Stronger default so light text stays legible on bright photos.
     const strength = (typeof slide.overlayStrength === 'number')
       ? slide.overlayStrength
-      : (slide.warmEditorial ? 0.92 : 0.78);
+      : (slide.warmEditorial ? 0.55 : 0.78);
 
     // Gradient shape. Key idea: keep the TOP of the photo perfectly clear (0
     // opacity) so the face/subject stays clean, and only darken the band right

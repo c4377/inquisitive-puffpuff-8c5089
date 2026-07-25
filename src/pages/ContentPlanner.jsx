@@ -139,7 +139,16 @@ const ContentPlanner = () => {
       let bg, text, sec, acc;
       
       // Smart Color Rotation Logic
-      if (rules.vibe === 'luxury_dark') {
+      if (config.warmEditorial) {
+        // Light, warm coach look: cream is the default surface, the greenish
+        // beige-grey plate appears regularly, and a dark warm plate only rarely
+        // for contrast — matching the reference feed (mostly light, few dark).
+        const wePattern = ['cream', 'beige', 'cream', 'cream', 'dark', 'cream', 'beige', 'cream', 'cream', 'beige'];
+        const role = wePattern[index % 10];
+        if (role === 'cream') { bg = colors.neutral; text = colors.primary; }        // near-black on cream
+        else if (role === 'beige') { bg = colors.secondary; text = colors.primary; } // near-black on beige-grey
+        else { bg = colors.darkPlate || '#26221C'; text = colors.neutral; }          // cream on rare dark plate
+      } else if (rules.vibe === 'luxury_dark') {
         const luxPattern = ['primary', 'primary', 'accent', 'primary', 'background', 'primary', 'primary'];
         const role = luxPattern[index % 7];
         if (role === 'primary') {

@@ -466,12 +466,13 @@ export const REFERENCE_PRESETS = [
     id: 'preset_warm_editorial',
     name: 'Warm Editorial',
     colors: {
-      primary: '#F0EAE0',      // warm cream / off-white (text on dark, light plates)
-      secondary: '#3B2E23',    // warm chocolate brown (dark plates, text on light)
-      tertiary: '#8B8560',     // olive-beige mid tone (secondary text, tints)
-      accent: '#6B5D48',       // muted warm taupe accent (not a loud colour)
-      neutral: '#E4DCCE',      // soft beige plate
-      background: '#3B2E23',   // chocolate brown plate (never pure black)
+      primary: '#2A2620',      // warm near-black — the main TEXT colour on light
+      secondary: '#DBD9CC',    // light greenish beige-grey (the signature plate)
+      tertiary: '#8A8470',     // muted olive-grey mid tone
+      accent: '#6B5D48',       // quiet warm taupe accent
+      neutral: '#F4F0E8',      // cream / off-white — the dominant plate
+      background: '#F4F0E8',   // cream is the DEFAULT surface (light look)
+      darkPlate: '#26221C',    // rare dark plate for contrast (warm, not black)
     },
     typography: { fontFamily: 'Montserrat', accentFontFamily: 'Montserrat', bodyFontFamily: 'Montserrat' },
     tags: ['warm', 'editorial', 'ruhig', 'kuratiert'],
