@@ -532,6 +532,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // User-controlled text shadow (per slide, 0–100%). No automatic shadow — the
   // strength comes only from slide.textShadowStrength, default 0 (off).
   const brandTextShadow = () => {
+    // Warm Editorial always gets a soft dark shadow so the (bold) text stays
+    // legible and never looks washed-out grey on a light photo area — this is
+    // what the reference does.
+    if (slide.warmEditorial && hasBgImage) {
+      return 'rgba(0,0,0,0.55) 0px 2px 18px';
+    }
     const s = (typeof slide.textShadowStrength === 'number') ? slide.textShadowStrength : 0;
     if (s <= 0) return '';
     const alpha = Math.min(s, 1) * 0.8;
@@ -750,7 +756,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const textCol = brandTextColor(slide.color, hasBgImage, scrim);
     const accentCol = slide.accentColor || textCol;
     // Stronger default so light text stays legible on bright photos.
-    const strength = (typeof slide.overlayStrength === 'number') ? slide.overlayStrength : 0.78;
+    const strength = (typeof slide.overlayStrength === 'number')
+      ? slide.overlayStrength
+      : (slide.warmEditorial ? 0.92 : 0.78);
 
     // Gradient shape. Key idea: keep the TOP of the photo perfectly clear (0
     // opacity) so the face/subject stays clean, and only darken the band right

@@ -304,6 +304,12 @@ const ContentPlanner = () => {
             // Headline letter spacing from the brand (default slightly tight).
             headlineTracking: (typeof config.headlineTracking === 'number') ? config.headlineTracking : -30,
             boldMode: config.boldMode === true,
+            // Warm Editorial: calm coach look — clean Montserrat, but the
+            // headlines are properly BOLD (like the reference), not the thin 600
+            // default, and never the semi-transparent grey that washes out on a
+            // photo.
+            warmEditorial: config.warmEditorial === true,
+            fontWeight: config.warmEditorial === true ? '700' : (slide.fontWeight),
             // In Bold Statement mode the feed VARIES like the reference (not one
             // loud font on every tile): rotate the headline treatment per slide.
             //  0 -> Anton display caps (loud)
