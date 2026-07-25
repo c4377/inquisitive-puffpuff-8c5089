@@ -34,13 +34,14 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // face is ready. Best-effort with a short timeout so it never hangs a render.
   try {
     if (typeof document !== 'undefined' && document.fonts && document.fonts.load) {
-      const needed = new Set(['Anton', 'Montserrat', 'Playfair Display']);
+      const needed = new Set(['Anton', 'Montserrat', 'Playfair Display', 'Helvetica Now']);
       if (slide.fontFamily) needed.add(slide.fontFamily);
       if (slide.accentFontFamily) needed.add(slide.accentFontFamily);
       const loads = [];
       needed.forEach((f) => {
         loads.push(document.fonts.load(`700 40px "${f}"`).catch(() => {}));
         loads.push(document.fonts.load(`400 40px "${f}"`).catch(() => {}));
+        loads.push(document.fonts.load(`italic 400 40px "${f}"`).catch(() => {}));
       });
       await Promise.race([
         Promise.all(loads),
@@ -519,7 +520,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         }
         // warmEditorial auto-bold: content words bold, filler stays normal.
         if (s.bold && s.text.length) {
-          textObj.setSelectionStyles({ fontWeight: '800' }, idx, idx + s.text.length);
+          textObj.setSelectionStyles({ fontWeight: '700' }, idx, idx + s.text.length);
         }
         idx += s.text.length;
       });
@@ -735,7 +736,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           }
           // warmEditorial auto-bold: content words bold, filler stays normal.
           if (s.bold && s.text.length) {
-            t.setSelectionStyles({ fontWeight: '800' }, idx, idx + s.text.length);
+            t.setSelectionStyles({ fontWeight: '700' }, idx, idx + s.text.length);
           }
           idx += s.text.length;
         });

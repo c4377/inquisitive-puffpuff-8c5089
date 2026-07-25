@@ -474,7 +474,7 @@ export const REFERENCE_PRESETS = [
       background: '#F6F2EA',   // cream is the DEFAULT surface (light look)
       darkPlate: '#4A4038',    // lighter warm taupe-brown for the rare dark tile
     },
-    typography: { fontFamily: 'Inter', accentFontFamily: 'Inter', bodyFontFamily: 'Inter' },
+    typography: { fontFamily: 'Helvetica Now', accentFontFamily: 'Helvetica Now', bodyFontFamily: 'Helvetica Now' },
     tags: ['warm', 'editorial', 'ruhig', 'kuratiert'],
     extra: {
       headlineTracking: -35,   // tight, like the reference grotesk
