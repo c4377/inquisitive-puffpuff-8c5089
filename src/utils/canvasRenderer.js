@@ -644,7 +644,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const boxW = opts.width;
     const measureBox = (fsz) => new fabric.Textbox(headText, {
       width: boxW, fontSize: fsz, fontFamily: headFont,
-      fontWeight: headWeight, lineHeight: opts.lineHeight || 1.15,
+      fontWeight: headWeight, lineHeight: opts.lineHeight || (slide.warmEditorial ? 1.04 : 1.15),
       textAlign: opts.textAlign || 'center', charSpacing: headSpacing,
     });
     try {
@@ -682,7 +682,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       originY: opts.originY || 'center', width: boxW,
       fontSize, fontFamily: headFont,
       fill: opts.fill, textAlign: opts.textAlign || 'center',
-      lineHeight: opts.lineHeight || 1.15, fontWeight: headWeight,
+      lineHeight: opts.lineHeight || (slide.warmEditorial ? 1.04 : 1.15), fontWeight: headWeight,
       fontStyle: headItalic ? 'italic' : 'normal',
       charSpacing: headSpacing,
       shadow: opts.shadow || '',
@@ -762,7 +762,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // Stronger default so light text stays legible on bright photos.
     const strength = (typeof slide.overlayStrength === 'number')
       ? slide.overlayStrength
-      : (slide.warmEditorial ? 0.55 : 0.78);
+      : (slide.warmEditorial ? 0.42 : 0.78);
 
     // Gradient shape. Key idea: keep the TOP of the photo perfectly clear (0
     // opacity) so the face/subject stays clean, and only darken the band right
@@ -896,7 +896,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       left: cx, top: y, originX, originY: headOriginY,
       width: width * (alignLeft ? 0.82 : 0.86), fontSize: fs(finalFont),
       fill: textCol, accentFill: accentCol, textAlign: tAlign,
-      lineHeight: V.bigWord ? 0.98 : 1.12, fontWeight: slide.fontWeight || (V.bigWord ? '700' : '600'),
+      lineHeight: V.bigWord ? 0.98 : (slide.warmEditorial ? 1.04 : 1.12), fontWeight: slide.fontWeight || (V.bigWord ? '700' : '600'),
       shadow: brandTextShadow(),
       maxBottom: TEXT_MAX_BOTTOM,
     });
@@ -955,7 +955,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       makeHeadline(segments, plain, {
         left: width / 2, top: height * 0.22, originX: 'center', originY: 'center',
         width: width * 0.82, fontSize: fs(slide.fontSize || 46),
-        fill: textCol, accentFill: accentCol, textAlign: 'center', lineHeight: 1.12,
+        fill: textCol, accentFill: accentCol, textAlign: 'center', lineHeight: slide.warmEditorial ? 1.04 : 1.12,
         shadow: brandTextShadow(),
       maxBottom: TEXT_MAX_BOTTOM,
       });
@@ -1004,7 +1004,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         left: width / 2, top: hasBgImage ? frameBottom + gap : height * 0.42,
         originX: 'center', originY: 'top',
         width: width * 0.84, fontSize: fs(slide.fontSize || 44),
-        fill: textCol, accentFill: accentCol, textAlign: 'center', lineHeight: 1.12,
+        fill: textCol, accentFill: accentCol, textAlign: 'center', lineHeight: slide.warmEditorial ? 1.04 : 1.12,
         shadow: brandTextShadow(),
       maxBottom: TEXT_MAX_BOTTOM,
       });
@@ -1105,7 +1105,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       left: cx, top: cy, originX, originY: anchorY,
       width: width * (alignLeft ? 0.8 : 0.74), fontSize: fs(finalFont),
       fill: textCol, accentFill: accentCol, textAlign: tAlign,
-      lineHeight: V.bigWord ? 0.98 : 1.14,
+      lineHeight: V.bigWord ? 0.98 : (slide.warmEditorial ? 1.04 : 1.14),
       fontWeight: slide.fontWeight || (V.bigWord ? '700' : '600'),
       shadow: brandTextShadow(),
       maxBottom: TEXT_MAX_BOTTOM,

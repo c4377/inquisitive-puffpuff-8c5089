@@ -143,7 +143,7 @@ const ContentPlanner = () => {
         // Light, warm coach look: cream is the default surface, the greenish
         // beige-grey plate appears regularly, and a dark warm plate only rarely
         // for contrast — matching the reference feed (mostly light, few dark).
-        const wePattern = ['cream', 'beige', 'cream', 'cream', 'dark', 'cream', 'beige', 'cream', 'cream', 'beige'];
+        const wePattern = ['cream', 'beige', 'cream', 'cream', 'beige', 'cream', 'cream', 'beige', 'cream', 'dark'];
         const role = wePattern[index % 10];
         if (role === 'cream') { bg = colors.neutral; text = colors.primary; }        // near-black on cream
         else if (role === 'beige') { bg = colors.secondary; text = colors.primary; } // near-black on beige-grey

@@ -467,19 +467,20 @@ export const REFERENCE_PRESETS = [
     name: 'Warm Editorial',
     colors: {
       primary: '#2A2620',      // warm near-black — the main TEXT colour on light
-      secondary: '#DBD9CC',    // light greenish beige-grey (the signature plate)
-      tertiary: '#8A8470',     // muted olive-grey mid tone
+      secondary: '#E6E3D8',    // light greenish beige-grey (brighter than before)
+      tertiary: '#9A9078',     // muted olive-grey mid tone
       accent: '#6B5D48',       // quiet warm taupe accent
-      neutral: '#F4F0E8',      // cream / off-white — the dominant plate
-      background: '#F4F0E8',   // cream is the DEFAULT surface (light look)
-      darkPlate: '#26221C',    // rare dark plate for contrast (warm, not black)
+      neutral: '#F6F2EA',      // cream / off-white — the dominant plate
+      background: '#F6F2EA',   // cream is the DEFAULT surface (light look)
+      darkPlate: '#4A4038',    // lighter warm taupe-brown for the rare dark tile
     },
-    typography: { fontFamily: 'Montserrat', accentFontFamily: 'Montserrat', bodyFontFamily: 'Montserrat' },
+    typography: { fontFamily: 'Inter', accentFontFamily: 'Inter', bodyFontFamily: 'Inter' },
     tags: ['warm', 'editorial', 'ruhig', 'kuratiert'],
     extra: {
-      headlineTracking: -20,
+      headlineTracking: -35,   // tight, like the reference grotesk
       layout: 'brand_photo_gradient',
       warmEditorial: true,     // renderer flag for the calm bold-word treatment
+      headlineLineHeight: 1.08, // tight leading
     },
   }),
 ];
