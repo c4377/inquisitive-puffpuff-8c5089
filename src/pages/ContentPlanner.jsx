@@ -526,7 +526,7 @@ const ContentPlanner = () => {
   // Toggle a single day between the default brand layouts and Dark Editorial,
   // reassigning each slide's layout so the switch is visible immediately.
   const toggleDayLayoutMode = (dayNum) => {
-    const rotation = buildLayoutRotation();
+    const rotation = buildLayoutRotation(brandSettings.currentBrandConfig);
     let idx = 0;
     const updated = weekPlan.map((d) => {
       if (d.day !== dayNum) {
@@ -610,14 +610,20 @@ const ContentPlanner = () => {
     // text slots (index 4 and 9) match dayHasImage(), so a post that gets no
     // photo also gets a text layout — and the pattern simply repeats for any
     // number of posts (14 imported = same 8:2 rhythm, not a different tail).
+    //
+    // Warm Editorial is a calm full-bleed look — no white-bordered polaroid or
+    // framed photos. Swap those two slots for full-bleed photo layouts.
+    const framed = brandConfig?.warmEditorial
+      ? { polaroid: 'brand_photo_bottom_serif', frame: 'brand_photo_gradient' }
+      : { polaroid: 'brand_frame_polaroid', frame: 'brand_photo_frame' };
     return [
       'brand_photo_gradient',      // 0  photo
       'brand_photo_center',        // 1  photo
-      'brand_frame_polaroid',      // 2  photo
+      framed.polaroid,             // 2  photo (polaroid, or full-bleed for warm)
       'brand_photo_bottom_left',   // 3  photo
       'brand_text_bigword',        // 4  TEXT
       'brand_photo_top',           // 5  photo
-      'brand_photo_frame',         // 6  photo
+      framed.frame,                // 6  photo (framed, or full-bleed for warm)
       'brand_photo_bigword',       // 7  photo
       'brand_photo_quote',         // 8  photo
       'brand_text_statement',      // 9  TEXT
@@ -754,7 +760,7 @@ const ContentPlanner = () => {
         const { textAnchor, bold } = decidePostDesign({
           globalIndex: dayIdx, hasImage: hasImg, autoImage: cleaned._autoImage,
         });
-        const _rot = buildLayoutRotation();
+        const _rot = buildLayoutRotation(brandSettings.currentBrandConfig);
         let _picked = _rot[dayIdx % _rot.length];
         const _pickedIsPhoto = typeof _picked === 'string' && (_picked.includes('photo') || _picked.includes('frame'));
         if (_pickedIsPhoto && !hasImg) _picked = photoToTextLayout(_picked);
@@ -801,7 +807,7 @@ const ContentPlanner = () => {
       }
       const reloadedPlan = [];
       let layoutCursor = 0; // tracks rotation position across days
-      const rotationAll = buildLayoutRotation();
+      const rotationAll = buildLayoutRotation(brandSettings.currentBrandConfig);
       for (let dayIdx = 0; dayIdx < weekPlan.length; dayIdx++) {
         const day = weekPlan[dayIdx];
         // Locked (already posted) days are never regenerated — keep as-is.
