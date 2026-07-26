@@ -988,21 +988,21 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     brand_text_bold_top:       { base: 'plate', textPos: 'top',    align: 'left', bigWord: true },
     // -- MARINA TEMPLATE LIBRARY (measured from the reference feed) ----------
     // T1: photo, white centered block in the lower band ("Wenn du 2026 …").
-    we_photo_bottom:    { base: 'gradient', textPos: 'bottom', align: 'center', exactFont: 78, exactWidth: 0.72, scrim: 0.5 },
+    we_photo_bottom:    { base: 'gradient', textPos: 'bottom', align: 'center', exactFont: 59, exactWidth: 0.78, scrim: 0.5 },
     // T2: photo, white block in the upper band ("Heute Morgen stand ich …").
-    we_photo_top:       { base: 'gradient', textPos: 'top',    align: 'center', exactFont: 78, exactWidth: 0.72, scrim: 0.45 },
+    we_photo_top:       { base: 'gradient', textPos: 'top',    align: 'center', exactFont: 59, exactWidth: 0.78, scrim: 0.45 },
     // T3: photo, one big statement in the middle ("WARNING!").
-    we_photo_statement: { base: 'gradient', textPos: 'center', align: 'center', exactFont: 78, exactWidth: 0.72, scrim: 0.4 },
+    we_photo_statement: { base: 'gradient', textPos: 'center', align: 'center', exactFont: 59, exactWidth: 0.78, scrim: 0.4 },
     // T4: khaki-greige plate, black centered block ("3 Dinge die du tun kannst").
-    we_plate_khaki:     { base: 'plate', textPos: 'center', align: 'center', exactY: 0.5,  exactFont: 80, exactWidth: 0.64, plateColor: '#CBC7B4' },
+    we_plate_khaki:     { base: 'plate', textPos: 'center', align: 'center', exactY: 0.5,  exactFont: 64, exactWidth: 0.68, plateColor: '#CBC7B4' },
     // T5: cream plate, black centered block ("Du sagst, du willst stabile 20k …").
-    we_plate_cream:     { base: 'plate', textPos: 'center', align: 'center', exactY: 0.5,  exactFont: 78, exactWidth: 0.66, plateColor: '#F2EEE7' },
+    we_plate_cream:     { base: 'plate', textPos: 'center', align: 'center', exactY: 0.5,  exactFont: 62, exactWidth: 0.7, plateColor: '#F2EEE7' },
     // T6: near-black plate, light block slightly high ("11 DINGE …").
-    we_plate_dark:      { base: 'plate', textPos: 'center', align: 'center', exactY: 0.44, exactFont: 75, exactWidth: 0.68, plateColor: '#211B10' },
+    we_plate_dark:      { base: 'plate', textPos: 'center', align: 'center', exactY: 0.44, exactFont: 62, exactWidth: 0.7, plateColor: '#211B10' },
     // T7: photo, LEFT-aligned block mid-left ("Die 10 wahren Gründe …").
-    we_photo_left:      { base: 'gradient', textPos: 'center', align: 'left', exactFont: 78, exactWidth: 0.66, scrim: 0.45 },
+    we_photo_left:      { base: 'gradient', textPos: 'center', align: 'left', exactFont: 59, exactWidth: 0.66, scrim: 0.45 },
     // T8: cream plate, LEFT-aligned block ("Diese drei Dinge kannst du …").
-    we_plate_cream_left:{ base: 'plate', textPos: 'center', align: 'left', exactY: 0.5, exactFont: 70, exactWidth: 0.72, plateColor: '#F2EEE7' },
+    we_plate_cream_left:{ base: 'plate', textPos: 'center', align: 'left', exactY: 0.5, exactFont: 60, exactWidth: 0.72, plateColor: '#F2EEE7' },
   };
   let brandVariant = BRAND_VARIANTS[layoutResolved];
 
