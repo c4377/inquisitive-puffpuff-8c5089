@@ -466,13 +466,13 @@ export const REFERENCE_PRESETS = [
     id: 'preset_warm_editorial',
     name: 'Warm Editorial',
     colors: {
-      primary: '#2A2620',      // warm near-black — the main TEXT colour on light
-      secondary: '#E6E3D8',    // light greenish beige-grey (brighter than before)
-      tertiary: '#9A9078',     // muted olive-grey mid tone
-      accent: '#6B5D48',       // quiet warm taupe accent
-      neutral: '#F6F2EA',      // cream / off-white — the dominant plate
-      background: '#F6F2EA',   // cream is the DEFAULT surface (light look)
-      darkPlate: '#4A4038',    // lighter warm taupe-brown for the rare dark tile
+      primary: '#252220',      // near-black, slightly warm — main text on light
+      secondary: '#EDEBE6',    // very light greige (barely warm, not yellow)
+      tertiary: '#9A968C',     // neutral grey-taupe mid tone
+      accent: '#6B5D48',       // quiet taupe accent
+      neutral: '#F7F5F1',      // near-white with the faintest warm tint
+      background: '#F7F5F1',   // near-white is the DEFAULT surface
+      darkPlate: '#2C2823',    // dark neutral brown-black for the rare dark tile
     },
     typography: { fontFamily: 'Helvetica Now', accentFontFamily: 'Helvetica Now', bodyFontFamily: 'Helvetica Now' },
     tags: ['warm', 'editorial', 'ruhig', 'kuratiert'],

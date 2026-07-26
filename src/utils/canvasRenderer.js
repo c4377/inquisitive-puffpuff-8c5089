@@ -420,19 +420,88 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     });
   };
 
+  // Automatically pick the "big statement" part of a headline, the way the
+  // reference does (one short punchy line large, the rest small). We split on
+  // sentence enders and line breaks, then choose the shortest non-trivial chunk
+  // (2–5 words) as the big one — that's almost always the key line
+  // ("PERSONAL POWER", "11 DINGE", "WARNING!"). If nothing qualifies, no part is
+  // enlarged. Returns segments with a `big` flag on the chosen chunk's words.
+  const autoSizedSegments = (text) => {
+    const raw = (text || '').trim();
+    // Split into chunks but remember the separators so we can rebuild exactly.
+    const chunks = raw.split(/([.!?]\s+|\n+|:\s+)/);
+    const textChunks = [];
+    for (let i = 0; i < chunks.length; i += 2) {
+      if (chunks[i] && chunks[i].trim()) {
+        textChunks.push({ text: chunks[i], sep: chunks[i + 1] || '', wc: chunks[i].trim().split(/\s+/).length, prevSep: chunks[i - 1] || '' });
+      } else if (chunks[i] !== undefined) {
+        textChunks.push({ text: chunks[i] + (chunks[i + 1] || ''), sep: '', wc: 999, skip: true });
+      }
+    }
+    // Choose the BIG chunk:
+    //  1) a short (1–4 word) FIRST chunk — headline-style opener ("11 DINGE",
+    //     "WARNING!"), OR
+    //  2) a short (1–4 word) chunk right after a colon — the punch line
+    //     ("… heisst: PERSONAL POWER").
+    // Only when there is also a longer chunk to contrast with.
+    let bigIdx = -1;
+    const realChunks = textChunks.filter((c) => !c.skip);
+    const hasLong = realChunks.some((c) => c.wc >= 5);
+    if (hasLong && realChunks.length > 1) {
+      // opener?
+      const first = textChunks.findIndex((c) => !c.skip);
+      if (first >= 0 && textChunks[first].wc <= 4) {
+        bigIdx = first;
+      } else {
+        // after-colon punch line?
+        for (let i = 0; i < textChunks.length; i++) {
+          const c = textChunks[i];
+          if (!c.skip && /:\s*$/.test(c.prevSep) && c.wc <= 4) { bigIdx = i; break; }
+        }
+        // else: last short chunk
+        if (bigIdx === -1) {
+          for (let i = textChunks.length - 1; i >= 0; i--) {
+            if (!textChunks[i].skip && textChunks[i].wc <= 4) { bigIdx = i; break; }
+          }
+        }
+      }
+    }
+    const out = [];
+    textChunks.forEach((c, i) => {
+      const isBig = i === bigIdx;
+      const words = c.text.split(/(\s+)/);
+      words.forEach((w) => {
+        if (/^\s+$/.test(w) || w === '') { out.push({ text: w, accent: false, bold: false }); return; }
+        const clean = w.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+        const isFiller = clean.length <= 2 || FILLER.has(clean);
+        out.push({ text: w, accent: false, bold: isBig ? true : !isFiller, big: isBig });
+      });
+      if (c.sep) out.push({ text: c.sep, accent: false, bold: false });
+    });
+    return out;
+  };
+
   const parseAccent = (text) => {
     const raw = (text || '').replace(/\*{2,}/g, '*');
-    // warmEditorial with NO explicit *marks*: auto-bold the content words so the
-    // headline reads like the reference (normal filler, bold key words).
+    // warmEditorial with NO explicit *marks*: auto-size + auto-bold so the
+    // headline reads like the reference (one big punch line, bold key words).
     if (slide.warmEditorial && !raw.includes('*')) {
-      const segments = autoBoldSegments(raw);
+      const segments = autoSizedSegments(raw);
       return { plain: segments.map((s) => s.text).join(''), segments };
     }
     const parts = raw.split(/(\*[^*]+\*)/g).filter((s) => s !== '');
-    const segments = parts.map((seg) => {
+    const segments = [];
+    parts.forEach((seg) => {
       const isAccent = seg.startsWith('*') && seg.endsWith('*') && seg.length > 2;
-      // Strip any leftover stray stars from non-accent segments too.
-      return { text: (isAccent ? seg.slice(1, -1) : seg).replace(/\*/g, ''), accent: isAccent };
+      const clean = (isAccent ? seg.slice(1, -1) : seg).replace(/\*/g, '');
+      if (isAccent) {
+        // Explicit *mark* wins: that part is the big bold statement.
+        segments.push({ text: clean, accent: true, bold: false });
+      } else if (slide.warmEditorial) {
+        autoBoldSegments(clean).forEach((s) => segments.push(s));
+      } else {
+        segments.push({ text: clean, accent: false });
+      }
     });
     return { plain: segments.map((s) => s.text).join(''), segments };
   };
@@ -729,14 +798,27 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         let idx = 0;
         segments.forEach((s) => {
           if (s.accent && s.text.length) {
-            t.setSelectionStyles(
-              { fill: opts.accentFill, fontStyle: 'italic', fontFamily: accentFont },
-              idx, idx + s.text.length
-            );
+            if (slide.warmEditorial) {
+              // Reference look: the *marked* part is the BIG bold statement
+              // (like "PERSONAL POWER"), not an italic accent colour.
+              t.setSelectionStyles(
+                { fontWeight: '700', fontSize: (opts.fontSize || 40) * 1.7 },
+                idx, idx + s.text.length
+              );
+            } else {
+              t.setSelectionStyles(
+                { fill: opts.accentFill, fontStyle: 'italic', fontFamily: accentFont },
+                idx, idx + s.text.length
+              );
+            }
           }
           // warmEditorial auto-bold: content words bold, filler stays normal.
           if (s.bold && s.text.length) {
             t.setSelectionStyles({ fontWeight: '700' }, idx, idx + s.text.length);
+          }
+          // warmEditorial auto-size: the chosen punch line is enlarged.
+          if (s.big && s.text.length) {
+            t.setSelectionStyles({ fontSize: (opts.fontSize || 40) * 1.55, fontWeight: '700' }, idx, idx + s.text.length);
           }
           idx += s.text.length;
         });
