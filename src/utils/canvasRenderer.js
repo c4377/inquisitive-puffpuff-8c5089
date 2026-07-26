@@ -1049,6 +1049,88 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     return t;
   };
 
+  // === AD-READY HEADLINE ==================================================
+  // Jeder Post soll als Anzeige funktionieren. Der Unterschied zur normalen
+  // Textbox ist nicht "groesser", sondern GESETZT:
+  //   1. Der Text wird in Zeilen GEBROCHEN, nicht umgebrochen. Die Zeilenzahl
+  //      ist das Stellrad — daraus folgt die Groesse, nicht umgekehrt.
+  //   2. Die Groesse fuellt die Spalte aus (Breite UND Hoehe werden genutzt),
+  //      statt von einem Startwert nach unten zu schrumpfen.
+  //   3. Rhythmus pro ZEILE: fett / leicht im Wechsel, die letzten Zeilen im
+  //      warmen Ton. Kein Fett-Mager-Flimmern mitten im Satz.
+  const makeAdHeadline = (plain, opts) => {
+    const family = opts.fontFamily || 'HelveticaNeueBrand';
+    const colW = opts.width;
+    const availH = opts.maxBottom - opts.minTop;
+    const LH = 1.18;
+    const words = String(plain || '').trim().split(/\s+/).filter(Boolean);
+    if (!words.length) return null;
+
+    // Zeilen moeglichst gleich lang aufteilen. Nach einem Komma darf eine
+    // Zeile enden — das trifft die natuerliche Sprechpause.
+    const splitInto = (n) => {
+      const totalChars = words.join(' ').length;
+      const target = totalChars / n;
+      const lines = [];
+      let cur = [];
+      words.forEach((w, i) => {
+        const len = cur.join(' ').length;
+        const wouldBe = len ? len + 1 + w.length : w.length;
+        const comma = /[,:;—-]$/.test(cur[cur.length - 1] || '');
+        const full = wouldBe > target * 1.12 || (comma && len >= target * 0.6);
+        if (cur.length && full && lines.length < n - 1) { lines.push(cur.join(' ')); cur = [w]; }
+        else cur.push(w);
+        if (i === words.length - 1 && cur.length) lines.push(cur.join(' '));
+      });
+      return lines;
+    };
+
+    // Breite einer Zeile bei 100px messen -> Groesse skaliert linear.
+    const width100 = (line, weight) => {
+      const probe = new fabric.Text(line, { fontSize: 100, fontFamily: family, fontWeight: weight });
+      return probe.width || 1;
+    };
+
+    // Kandidaten durchrechnen und die groesste Schrift nehmen, die noch passt.
+    let best = null;
+    for (let n = 2; n <= 12; n++) {
+      const lines = splitInto(n);
+      if (!lines.length || lines.length > 12) continue;
+      const wide = Math.max(...lines.map((l, i) => width100(l, i % 2 === 0 ? '700' : '300')));
+      const byWidth = (colW * 0.99) / (wide / 100);
+      const byHeight = availH / (lines.length * LH);
+      // Deckel: ohne ihn wuerde ein sehr kurzer Hook die Kachel sprengen.
+      // 88/1080 liegt knapp ueber der Referenz (~76) und bleibt souveraen.
+      const size = Math.min(byWidth, byHeight, width * (88 / 1080));
+      if (!best || size > best.size + 0.5) best = { lines, size, count: lines.length };
+    }
+    if (!best) return null;
+
+    // Bei sehr langem Text wird der Fett-Leicht-Wechsel unruhig — dann eine
+    // ruhige mittlere Staerke, Betonung nur ueber den Ton der Schlusszeilen.
+    const rhythm = best.count <= 7;
+    const goldFrom = opts.goldOk ? Math.max(1, Math.round(best.count * 0.6)) : best.count;
+
+    const blockH = best.count * best.size * LH;
+    let top = opts.maxBottom - blockH;              // von unten gesetzt
+    if (top < opts.minTop) top = opts.minTop;
+
+    best.lines.forEach((line, i) => {
+      canvas.add(new fabric.Text(line, {
+        left: opts.left,
+        top: top + i * best.size * LH,
+        originX: 'left', originY: 'top',
+        fontSize: best.size,
+        fontFamily: family,
+        fontWeight: rhythm ? (i % 2 === 0 ? '700' : '300') : '500',
+        fill: i >= goldFrom ? GOLD : opts.fill,
+        shadow: opts.shadow || '',
+        selectable: false,
+      }));
+    });
+    return best;
+  };
+
   // === 20 BRAND LAYOUT VARIANTS =========================================
   // Each id maps to a base engine (gradient photo / framed photo / text plate)
   // plus parameters (text vertical position, alignment, big-word mode, kicker
@@ -1246,7 +1328,15 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // dort, wo die Variante es vorgesehen hatte. Nur so traegt eine gleich
     // grosse Schrift auf JEDEM Foto — und nur so ist die Helligkeit hinter
     // dem Text vorhersagbar (Voraussetzung fuer die Gold-Regel).
-    const bandF = Math.min(Math.max(anchorY / height, 0.08), 0.92);
+    // Ad-Ready setzt den Block unten links (oder oben, wenn dort ein Gesicht
+    // liegt) — das Band muss genau dorthin, sonst steht die grosse Typo wieder
+    // auf einer hellen Stelle.
+    const _adReady = hasBgImage && !V.bigWord && slide.warmEditorial && slide.adReady !== false;
+    const _faceLow = faceZones.length > 0
+      && (faceZones.map((z) => Math.floor(z / 3)).reduce((a, b) => a + b, 0) / faceZones.length) > 1.4;
+    const bandF = _adReady
+      ? (_faceLow ? 0.26 : 0.72)
+      : Math.min(Math.max(anchorY / height, 0.08), 0.92);
     const peakAlpha = Math.min(strength + 0.12, 0.95);
     const bandStops = (f) => {
       const pts = [];
@@ -1297,10 +1387,14 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // ---- GOLD-ENTSCHEIDUNG ----------------------------------------------
     // Helligkeit hinter dem Text = gemessene Fotostelle, abgedunkelt durch das
     // Band. Auf einer Flaeche ohne Foto zaehlt der Scrim-Ton selbst.
-    const measuredLum = spot && typeof spot.brightness === 'number'
-      ? spot.brightness
-      : (slide._autoImage && typeof slide._autoImage.avgBrightness === 'number'
-        ? slide._autoImage.avgBrightness : 128);
+    // Helligkeit dort messen, wo der Text WIRKLICH landet. Im Ad-Modus ist das
+    // die Zone unten links (6) bzw. oben links (0), nicht der Spot.
+    const _zones = (slide._autoImage && slide._autoImage.zoneBrightness) || null;
+    const _avgLum = (slide._autoImage && typeof slide._autoImage.avgBrightness === 'number')
+      ? slide._autoImage.avgBrightness : 128;
+    const measuredLum = _adReady
+      ? (_zones && typeof _zones[_faceLow ? 0 : 6] === 'number' ? _zones[_faceLow ? 0 : 6] : _avgLum)
+      : (spot && typeof spot.brightness === 'number' ? spot.brightness : _avgLum);
     const bgLumBehindText = hasBgImage
       ? effectiveBgLum(measuredLum, scrim, peakAlpha * (V.tint ? 1.1 : 1))
       : hexLuminance(scrim);
@@ -1341,6 +1435,40 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const onPhoto = hasBgImage && !V.bigWord;
     const startW = editorial ? 0.52 : (V.exactWidth || (alignLeft ? 0.82 : 0.86));
     const growW = editorial ? 0.78 : 0.9;
+
+    // ---- AD-READY: der Standard auf Fotos --------------------------------
+    // Gesetzte Zeilen statt Umbruch, Groesse aus der Zeilenzahl, Rhythmus pro
+    // Zeile. Abschaltbar per slide.adReady === false.
+    const adReady = onPhoto && slide.warmEditorial && slide.adReady !== false;
+    if (adReady) {
+      // Unten links gesetzt — wie in der Referenz. Nur wenn ein Gesicht im
+      // unteren Drittel liegt, wandert der Block nach oben.
+      const faceLow = faceZones.length > 0
+        && (faceZones.map((z) => Math.floor(z / 3)).reduce((a, b) => a + b, 0) / faceZones.length) > 1.4;
+      const placed = makeAdHeadline(plain, {
+        left: width * 0.09,
+        width: width * 0.64,
+        minTop: faceLow ? height * 0.08 : height * 0.34,
+        maxBottom: faceLow ? height * 0.46 : TEXT_MAX_BOTTOM - height * 0.02,
+        fill: textCol,
+        goldOk,
+        shadow: brandTextShadow(),
+        fontFamily: (slide.fontFamily === 'AspektaBrand') ? 'AspektaBrand' : 'HelveticaNeueBrand',
+      });
+      if (placed) {
+        if (options.globalBrandName) {
+          canvas.add(new fabric.Text(options.globalBrandName.toUpperCase(), {
+            left: width / 2, top: FOOTER_TOP + FOOTER_SPACE / 2, fontSize: fs(12),
+            fill: hexToRgba(textCol, 0.8), fontFamily: 'Montserrat', charSpacing: 300,
+            originX: 'center', originY: 'bottom', selectable: false,
+          }));
+        }
+        if (slide.overlayImage) { try { await drawOverlayImage(slide.overlayImage); } catch (e) {} }
+        applyBrandGrain();
+        canvas.renderAll();
+        return;
+      }
+    }
 
     makeHeadline(segments, plain, {
       left: cx, top: y, originX, originY: headOriginY,
