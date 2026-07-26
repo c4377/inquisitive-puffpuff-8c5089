@@ -1037,6 +1037,19 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     brand_text_kicker_lead:    { base: 'plate', textPos: 'center', align: 'center', kicker: 'top' },
     brand_text_minimal:        { base: 'plate', textPos: 'center', align: 'center' },
     brand_text_bold_top:       { base: 'plate', textPos: 'top',    align: 'left', bigWord: true },
+    // -- MARINA TEMPLATE LIBRARY (measured from the reference feed) ----------
+    // T1: photo, white centered block in the lower band ("Wenn du 2026 …").
+    we_photo_bottom:    { base: 'gradient', textPos: 'bottom', align: 'center', exactY: 0.68, exactFont: 59, exactWidth: 0.8, scrim: 0.5 },
+    // T2: photo, white block in the upper band ("Heute Morgen stand ich …").
+    we_photo_top:       { base: 'gradient', textPos: 'top',    align: 'center', exactY: 0.22, exactFont: 53, exactWidth: 0.78, scrim: 0.45 },
+    // T3: photo, one big statement in the middle ("WARNING!").
+    we_photo_statement: { base: 'gradient', textPos: 'center', align: 'center', exactY: 0.55, exactFont: 100, exactWidth: 0.84, scrim: 0.4 },
+    // T4: khaki-greige plate, black centered block ("3 Dinge die du tun kannst").
+    we_plate_khaki:     { base: 'plate', textPos: 'center', align: 'center', exactY: 0.5,  exactFont: 80, exactWidth: 0.64, plateColor: '#CBC7B4' },
+    // T5: cream plate, black centered block ("Du sagst, du willst stabile 20k …").
+    we_plate_cream:     { base: 'plate', textPos: 'center', align: 'center', exactY: 0.5,  exactFont: 78, exactWidth: 0.66, plateColor: '#F2EEE7' },
+    // T6: near-black plate, light block slightly high ("11 DINGE …").
+    we_plate_dark:      { base: 'plate', textPos: 'center', align: 'center', exactY: 0.44, exactFont: 75, exactWidth: 0.68, plateColor: '#211B10' },
   };
   let brandVariant = BRAND_VARIANTS[layoutResolved];
 
@@ -1064,6 +1077,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // Stronger default so light text stays legible on bright photos.
     const strength = (typeof slide.overlayStrength === 'number')
       ? slide.overlayStrength
+      : (brandVariant && brandVariant.scrim != null) ? brandVariant.scrim
       : (slide.warmEditorial ? 0.42 : 0.78);
 
     // Depth rhythm (warmEditorial): "far" posts get a clear dark wash so they
@@ -1172,6 +1186,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       // placement wins, otherwise default LOW so text never lands on the face.
       ? (photoAnchorY != null ? photoAnchorY : (hasBgImage ? height * 0.64 : height * 0.54))
       : (photoAnchorY != null ? photoAnchorY
+        // Marina template: exact measured position (face detection above wins).
+        : V.exactY != null ? height * V.exactY
         // No reliable face/quiet data: on a PHOTO, default the text LOW (0.64),
         // because portrait subjects almost always sit in the upper/middle band —
         // putting text on top would land on the face. Text-only layouts keep
@@ -1196,7 +1212,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       y += 34 * scale;
     }
 
-    const baseFont = V.bigWord ? (slide.fontSize || 120) : (slide.fontSize || (slide.warmEditorial ? 52 : 66));
+    const baseFont = V.bigWord ? (slide.fontSize || 120) : (slide.fontSize || V.exactFont || (slide.warmEditorial ? 52 : 66));
     // Follow-ups: 15% smaller, then another 5% (~0.8075 of base).
     const finalFont = followUp ? Math.round(baseFont * 0.8) : baseFont;
     // Anchoring: follow-ups and detected face/quiet placement grow downward from
@@ -1205,13 +1221,14 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const faceOrQuiet = quiet || faceZones.length > 0;
     const headOriginY = followUp ? 'top'
       : (hasBgImage && faceOrQuiet) ? 'top'
+      : (V.exactY != null) ? 'center'
       : (hasBgImage && photoAnchorY == null) ? 'center'
       : (V.textPos === 'center' ? 'center' : 'top');
     // FOLLOW-UP photo pages: clean — text only, no label or rule.
 
     makeHeadline(segments, plain, {
       left: cx, top: y, originX, originY: headOriginY,
-      width: width * (alignLeft ? 0.82 : 0.86), fontSize: fs(finalFont),
+      width: width * (V.exactWidth || (alignLeft ? 0.82 : 0.86)), fontSize: fs(finalFont),
       fill: textCol, accentFill: accentCol, textAlign: tAlign,
       lineHeight: V.bigWord ? 0.98 : (slide.warmEditorial ? 1.04 : 1.12), fontWeight: slide.fontWeight || (V.bigWord ? '700' : '600'),
       shadow: brandTextShadow(),
@@ -1239,7 +1256,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // --- ENGINE 2: frame (framed photo on a plate) — base:'frame' -------------
   if (brandVariant && brandVariant.base === 'frame') {
     const V = brandVariant;
-    const plate = slide.backgroundColor || '#EDE9E3';
+    const plate = (V && V.plateColor) || slide.backgroundColor || '#EDE9E3';
     const textCol = brandTextColor(slide.color, false, plate);
     const accentCol = slide.accentColor || textCol;
 
@@ -1343,7 +1360,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // --- ENGINE 3: plate (text only) — base:'plate' ---------------------------
   if (brandVariant && brandVariant.base === 'plate') {
     const V = brandVariant;
-    const plate = slide.backgroundColor || '#EDE9E3';
+    const plate = (V && V.plateColor) || slide.backgroundColor || '#EDE9E3';
     const textCol = brandTextColor(slide.color, false, plate);
     const accentCol = slide.accentColor || textCol;
 
@@ -1406,7 +1423,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     }
 
     // Vertical anchor for first/hero plate pages.
-    let cy = V.textPos === 'top' ? height * 0.24 : height * 0.5;
+    let cy = V.exactY != null ? height * V.exactY : (V.textPos === 'top' ? height * 0.24 : height * 0.5);
     const anchorY = V.textPos === 'top' ? 'top' : 'center';
 
     // Kicker lead (top).
@@ -1416,11 +1433,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       drawKickerAt(slide.secondaryText, cx, height * 0.3, hexToRgba(textCol, 0.7), originX, 'center');
     }
 
-    const baseFont = V.bigWord ? (slide.fontSize || 110) : (slide.fontSize || (slide.warmEditorial ? 46 : 58));
+    const baseFont = V.bigWord ? (slide.fontSize || 110) : (slide.fontSize || V.exactFont || (slide.warmEditorial ? 46 : 58));
     const finalFont = baseFont;
     makeHeadline(segments, plain, {
       left: cx, top: cy, originX, originY: anchorY,
-      width: width * (alignLeft ? 0.8 : 0.74), fontSize: fs(finalFont),
+      width: width * (V.exactWidth || (alignLeft ? 0.8 : 0.74)), fontSize: fs(finalFont),
       fill: textCol, accentFill: accentCol, textAlign: tAlign,
       lineHeight: V.bigWord ? 0.98 : (slide.warmEditorial ? 1.04 : 1.14),
       fontWeight: slide.fontWeight || (V.bigWord ? '700' : '600'),

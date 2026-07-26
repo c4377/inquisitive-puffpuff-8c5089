@@ -34,34 +34,57 @@ PREVIOUS POST (for feed rhythm — vary from it): ${prevSummary}
 
 Apply real design judgement: whitespace balance, visual hierarchy, optical centering, contrast. Vary from the previous post (light vs dark, text position high vs low).
 
-Respond with ONLY strict JSON, no markdown, no commentary:
-{
- "background": {"type": "${hasImage ? 'photo' : 'plate'}", "color": "#hex (plate colour or overlay tint)", "overlay": 0.0-0.5},
- "elements": [
-   {"content":"text part","x":0.0-1.0,"y":0.06-0.82,"width":0.5-0.9,"align":"center|left","fontSize":30-120,"fontWeight":"300|400|700","color":"#hex","italic":false,"underline":false,"lineHeight":1.0-1.3}
- ],
- "summary": "one line describing this design (bg tone, text position) for the next post's rhythm"
-}
-Rules: x/y are the CENTER of each text block as canvas fractions. All post text must be covered by the elements. Max 4 elements. y+height of text must stay above 0.85.`;
+Respond with ONLY strict, valid JSON (no markdown, no commentary, no ranges — concrete numbers only). Shape, shown here as a filled example:
+{"background":{"type":"plate","color":"#F7F5F1","overlay":0},"elements":[{"content":"Der schnellste Weg","x":0.5,"y":0.34,"width":0.8,"align":"center","fontSize":58,"fontWeight":"300","color":"#252220","italic":false,"underline":false,"lineHeight":1.1}],"summary":"light cream plate, text upper third"}
+Constraints: background.type must be "${hasImage ? 'photo' : 'plate'}". overlay between 0 and 0.5. x and y are the CENTER of each text block as canvas fractions; y between 0.06 and 0.80. width between 0.5 and 0.9. fontSize between 30 and 120 (canvas 1080 wide). fontWeight one of "300","400","700". Max 4 elements. All post text must be covered by the elements, split naturally. The summary is one line describing bg tone and text position for the next post's rhythm.`;
 
   try {
-    const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.7, responseMimeType: 'application/json' },
-        }),
-      }
-    );
-    const data = await r.json();
-    const raw = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    // Model fallback chain: API availability differs per key/region.
+    const models = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+    let raw = '';
+    let lastErr = '';
+    for (const model of models) {
+      // 2.5 models "think" by default, which can consume the whole output
+      // budget and return an EMPTY text part — disable thinking and give a
+      // generous output budget.
+      const genCfg = {
+        temperature: 0.7,
+        responseMimeType: 'application/json',
+        maxOutputTokens: 4096,
+      };
+      if (model.startsWith('gemini-2.5')) genCfg.thinkingConfig = { thinkingBudget: 0 };
+      const r = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: genCfg,
+          }),
+        }
+      );
+      const data = await r.json();
+      if (data?.error) { lastErr = `${model}: ${data.error.message || data.error.status}`; continue; }
+      // Collect ALL text parts — some responses split JSON across parts.
+      const parts = data?.candidates?.[0]?.content?.parts || [];
+      raw = parts.map((p) => p?.text || '').join('');
+      if (raw) break;
+      const finish = data?.candidates?.[0]?.finishReason || 'leer';
+      lastErr = `${model}: keine Antwort (${finish})`;
+    }
+    if (!raw) {
+      return new Response(JSON.stringify({ error: `KI nicht erreichbar — ${lastErr}` }), { status: 502 });
+    }
+    // Tolerant JSON extraction: strip fences and anything around the outermost object.
+    let jsonStr = raw.replace(/```json|```/g, '').trim();
+    const first = jsonStr.indexOf('{');
+    const last = jsonStr.lastIndexOf('}');
+    if (first > 0 || last < jsonStr.length - 1) jsonStr = jsonStr.slice(first, last + 1);
     let spec = null;
-    try { spec = JSON.parse(raw.replace(/```json|```/g, '').trim()); } catch { /* below */ }
+    try { spec = JSON.parse(jsonStr); } catch { /* below */ }
     if (!spec || !Array.isArray(spec.elements) || spec.elements.length === 0) {
-      return new Response(JSON.stringify({ error: 'KI-Antwort unbrauchbar', raw: raw.slice(0, 300) }), { status: 502 });
+      return new Response(JSON.stringify({ error: `KI-Antwort unbrauchbar: ${raw.slice(0, 200)}` }), { status: 502 });
     }
     return new Response(JSON.stringify({ spec }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (e) {

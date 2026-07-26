@@ -91,6 +91,9 @@ const ContentPlanner = () => {
   // similar character (big word -> big word, quote -> quote, etc.).
   const photoToTextLayout = (layoutId) => {
     const map = {
+      we_photo_bottom: 'we_plate_khaki',
+      we_photo_top: 'we_plate_cream',
+      we_photo_statement: 'we_plate_dark',
       brand_photo_gradient: 'brand_text_plate',
       brand_photo_bottom_left: 'brand_text_left',
       brand_photo_top: 'brand_text_plate_top',
@@ -191,7 +194,7 @@ const ContentPlanner = () => {
           // Brand layouts (brand_*) are self-contained and colour-adjustable.
           // They must survive brand styling untouched — never normalized to the
           // Editorial 'auto' path, or the 20 layouts would collapse to one look.
-          const isBrandLayout = typeof finalLayout === 'string' && finalLayout.startsWith('brand_');
+          const isBrandLayout = typeof finalLayout === 'string' && (finalLayout.startsWith('brand_') || finalLayout.startsWith('we_'));
           if (sIdx === 0 && !isBrandLayout) {
              if (finalLayout === 'minimal_quote' && rules.vibe === 'bold_pop') {
                  finalLayout = 'maximized_bold';
@@ -690,6 +693,23 @@ const ContentPlanner = () => {
     return 'editorial_classic';
   };
   const buildLayoutRotation = (brandConfig) => {
+    // Warm Editorial: the measured Marina template library rotates in HER feed
+    // rhythm — roughly two photo tiles then a plate tile, plate tones varying
+    // khaki/cream/dark, photo text position varying bottom/statement/top.
+    if (brandConfig?.warmEditorial) {
+      return [
+        'we_photo_bottom',     // 0  photo, text low
+        'we_plate_khaki',      // 1  PLATE khaki
+        'we_photo_statement',  // 2  photo, big middle statement
+        'we_photo_top',        // 3  photo, text high
+        'we_plate_cream',      // 4  PLATE cream
+        'we_photo_bottom',     // 5  photo, text low
+        'we_plate_dark',       // 6  PLATE dark ("11 DINGE")
+        'we_photo_bottom',     // 7  photo, text low
+        'we_plate_cream',      // 8  PLATE cream
+        'we_photo_statement',  // 9  photo, statement
+      ];
+    }
     // Feed rhythm in blocks of TEN: 8 photo posts, 2 text-only posts. The
     // text slots (index 4 and 9) match dayHasImage(), so a post that gets no
     // photo also gets a text layout — and the pattern simply repeats for any
