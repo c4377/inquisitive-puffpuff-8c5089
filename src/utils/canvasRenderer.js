@@ -334,6 +334,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   const GOLD_MAX_BG_LUM = 120;   // darueber ist der Grund zu hell fuer Gold
   const GOLD_MIN_DELTA = 70;     // Mindestabstand Gold <-> Grund
   const goldFits = (bgLumEff) => {
+    // Standard: KEIN Gold. Die Schrift bleibt in ihrer eigenen Farbe — auf
+    // Fotos und dunklen Platten also weiss. Wer den warmen Akzent wieder
+    // will, setzt slide.useGold = true; dann greift die Kontrastpruefung
+    // wie gehabt und Gold erscheint nur auf dunklem Grund.
+    if (slide.useGold !== true) return false;
     if (typeof bgLumEff !== 'number' || Number.isNaN(bgLumEff)) return false;
     return bgLumEff <= GOLD_MAX_BG_LUM && Math.abs(GOLD_LUM - bgLumEff) >= GOLD_MIN_DELTA;
   };
