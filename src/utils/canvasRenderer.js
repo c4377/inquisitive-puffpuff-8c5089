@@ -201,6 +201,19 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
               img.applyFilters();
             } catch (e) { /* blur optional */ }
           }
+          // Warm Editorial: deepen the blacks in every photo (the reference's
+          // moody look comes from rich dark tones, not from grey washes).
+          // Contrast pulls shadows down, slight negative brightness anchors it.
+          if (slide.warmEditorial && fabric.Image.filters?.Contrast) {
+            try {
+              img.filters = img.filters || [];
+              img.filters.push(new fabric.Image.filters.Contrast({ contrast: 0.16 }));
+              if (fabric.Image.filters.Brightness) {
+                img.filters.push(new fabric.Image.filters.Brightness({ brightness: -0.04 }));
+              }
+              img.applyFilters();
+            } catch (e) { /* filter optional */ }
+          }
           canvas.add(img);
           canvas.sendToBack(img);
 
@@ -1094,7 +1107,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     if (slide.warmEditorial && slide.depthShade === 'far') {
       canvas.add(new fabric.Rect({
         left: 0, top: 0, width, height,
-        fill: 'rgba(26,18,8,0.16)', selectable: false,
+        fill: 'rgba(0,0,0,0.2)', selectable: false,
       }));
     } else if (slide.warmEditorial && slide.depthShade === 'near') {
       canvas.add(new fabric.Rect({
