@@ -1353,7 +1353,7 @@ const ContentPlanner = () => {
             {aiDesignError && (
               <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg p-2 mb-2">KI-Design: {aiDesignError}</p>
             )}
-            <div className="grid grid-cols-3 gap-1">
+            <div className="grid grid-cols-3 gap-[2px]">
               {[...weekPlan].reverse().map((day, dayIndex) => {
                 // Guard: a day with missing/empty slides must not crash the whole
                 // feed (that produced a white screen after importing).

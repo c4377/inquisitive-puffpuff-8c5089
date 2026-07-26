@@ -1060,12 +1060,20 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // The first page (the hook, slideIndex 0) keeps its designed layout.
   if (brandVariant && typeof options.slideIndex === 'number' && options.slideIndex > 0) {
     const keepPhoto = brandVariant.base === 'gradient' || brandVariant.base === 'frame';
-    brandVariant = {
-      base: keepPhoto && hasBgImage ? 'gradient' : 'plate',
-      textPos: 'center',
-      align: 'left',
-      followUp: true,
-    };
+    if (slide.warmEditorial && !(keepPhoto && hasBgImage)) {
+      // Warm Editorial follow-up TEXT pages: the dark reference plate
+      // (tpl_dark look) — near-black plate, light centered block, template
+      // size. followUp:false so the exact template layout applies; the text
+      // RULES still follow slideIndex (one weight + gold closing).
+      brandVariant = { ...BRAND_VARIANTS.we_plate_dark, followUp: false };
+    } else {
+      brandVariant = {
+        base: keepPhoto && hasBgImage ? 'gradient' : 'plate',
+        textPos: 'center',
+        align: slide.warmEditorial ? 'center' : 'left',
+        followUp: true,
+      };
+    }
   }
 
   // --- ENGINE 1: gradient (photo + scrim) — handles all base:'gradient' ids -
