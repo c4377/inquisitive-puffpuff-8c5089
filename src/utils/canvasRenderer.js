@@ -866,7 +866,14 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     } catch (e) { /* measuring is best-effort */ }
 
     const t = new fabric.Textbox(headText, {
-      left: opts.originX === 'center' ? (width - boxW) / 2 : opts.left,
+      // originX 'center' means: centre the box ON opts.left. (For the classic
+      // calls that pass width/2 this is identical to the old behaviour; for the
+      // editorial spot placement it honours the measured position.)
+      left: opts.originX === 'center'
+        ? (typeof opts.left === 'number'
+            ? Math.min(Math.max(opts.left - boxW / 2, width * 0.04), width - boxW - width * 0.04)
+            : (width - boxW) / 2)
+        : opts.left,
       top: opts.top,
       originX: opts.originX === 'center' ? 'left' : (opts.originX || 'left'),
       originY: opts.originY || 'center', width: boxW,
@@ -899,8 +906,15 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
             }
           }
           // warmEditorial auto-bold: content words bold, filler stays normal.
+          // On PHOTOS the bold gets a hairline stroke in the text colour so it
+          // reads heavier (towards Black) without needing a heavier font cut.
           if (s.bold && s.text.length) {
-            t.setSelectionStyles({ fontWeight: '700' }, idx, idx + s.text.length);
+            const boldStyle = { fontWeight: '700' };
+            if (slide.warmEditorial && hasBgImage) {
+              boldStyle.stroke = opts.fill;
+              boldStyle.strokeWidth = Math.max(0.8, (opts.fontSize || 40) * 0.022);
+            }
+            t.setSelectionStyles(boldStyle, idx, idx + s.text.length);
           }
           // warmEditorial auto-gold: the closing clause in warm tan — upright
           // and BOLD, exactly like the reference ("als in den 6 Monaten davor.").
@@ -990,11 +1004,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     brand_text_bold_top:       { base: 'plate', textPos: 'top',    align: 'left', bigWord: true },
     // -- MARINA TEMPLATE LIBRARY (measured from the reference feed) ----------
     // T1: photo, white centered block in the lower band ("Wenn du 2026 …").
-    we_photo_bottom:    { base: 'gradient', textPos: 'bottom', align: 'center', exactFont: 47, exactWidth: 0.78, scrim: 0.5 },
+    we_photo_bottom:    { base: 'gradient', textPos: 'bottom', align: 'center', exactFont: 54, exactWidth: 0.78, scrim: 0.5 },
     // T2: photo, white block in the upper band ("Heute Morgen stand ich …").
-    we_photo_top:       { base: 'gradient', textPos: 'top',    align: 'center', exactFont: 47, exactWidth: 0.78, scrim: 0.45 },
+    we_photo_top:       { base: 'gradient', textPos: 'top',    align: 'center', exactFont: 54, exactWidth: 0.78, scrim: 0.45 },
     // T3: photo, one big statement in the middle ("WARNING!").
-    we_photo_statement: { base: 'gradient', textPos: 'center', align: 'center', exactFont: 47, exactWidth: 0.78, scrim: 0.4 },
+    we_photo_statement: { base: 'gradient', textPos: 'center', align: 'center', exactFont: 54, exactWidth: 0.78, scrim: 0.4 },
     // T4: khaki-greige plate, black centered block ("3 Dinge die du tun kannst").
     we_plate_khaki:     { base: 'plate', textPos: 'center', align: 'center', exactY: 0.47, exactFont: 64, exactWidth: 0.64, plateColor: '#CBC7B4' },
     // T5: cream plate, black centered block ("Du sagst, du willst stabile 20k …").
@@ -1002,7 +1016,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // T6: near-black plate, light block slightly high ("11 DINGE …").
     we_plate_dark:      { base: 'plate', textPos: 'center', align: 'center', exactY: 0.47, exactFont: 60, exactWidth: 0.68, plateColor: '#211B10' },
     // T7: photo, LEFT-aligned block mid-left ("Die 10 wahren Gründe …").
-    we_photo_left:      { base: 'gradient', textPos: 'center', align: 'left', exactFont: 47, exactWidth: 0.66, scrim: 0.45 },
+    we_photo_left:      { base: 'gradient', textPos: 'center', align: 'left', exactFont: 54, exactWidth: 0.66, scrim: 0.45 },
     // T8: cream plate, LEFT-aligned block ("Diese drei Dinge kannst du …").
     we_plate_cream_left:{ base: 'plate', textPos: 'center', align: 'left', exactY: 0.5, exactFont: 58, exactWidth: 0.72, plateColor: '#F2EEE7' },
   };
@@ -1162,11 +1176,15 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         }
       }
     }
+    const _spot = (slide.warmEditorial && hasBgImage && slide._autoImage && slide._autoImage.textSpot)
+      ? slide._autoImage.textSpot : null;
     const anchorY = followUp
       // Follow-up on a PHOTO: same face-safe rule as the hero — detected
       // placement wins, otherwise default LOW so text never lands on the face.
       ? (photoAnchorY != null ? photoAnchorY : (hasBgImage ? height * 0.64 : height * 0.54))
-      : (exactAnchor != null ? height * exactAnchor
+      // Editorial: the measured flat, face-free spot wins on photos.
+      : (_spot ? height * Math.min(Math.max(_spot.y, 0.18), 0.74)
+        : exactAnchor != null ? height * exactAnchor
         : photoAnchorY != null ? photoAnchorY
         // No reliable face/quiet data: on a PHOTO, default the text LOW (0.64),
         // because portrait subjects almost always sit in the upper/middle band —
@@ -1177,9 +1195,18 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         : V.textPos === 'center' ? height * 0.4
         : height * 0.64);
     const alignLeft = V.align === 'left';
-    const cx = alignLeft ? width * 0.09 : width / 2;
-    const originX = alignLeft ? 'left' : 'center';
-    const tAlign = alignLeft ? 'left' : 'center';
+    // ---- EDITORIAL PLACEMENT (warmEditorial + photo) ---------------------
+    // Use the fine-grained text spot from the image analysis: the flattest,
+    // face-free area. The block sits THERE (left, right or centre — whatever
+    // the photo offers) as a narrow editorial column, left-aligned inside.
+    const spot = (slide.warmEditorial && hasBgImage && slide._autoImage && slide._autoImage.textSpot)
+      ? slide._autoImage.textSpot : null;
+    const editorial = !!spot;
+    const cx = editorial
+      ? Math.min(Math.max(width * spot.x, width * 0.28), width * 0.72)
+      : (alignLeft ? width * 0.09 : width / 2);
+    const originX = editorial ? 'center' : (alignLeft ? 'left' : 'center');
+    const tAlign = editorial ? 'left' : (alignLeft ? 'left' : 'center');
 
     let y = anchorY;
     // Clean: no kicker label box. Only the optional inline kicker for non-bold
@@ -1202,6 +1229,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // CENTERED, so the block sits neatly in the lower band above the signature.
     const faceOrQuiet = quiet || faceZones.length > 0;
     const headOriginY = followUp ? 'top'
+      : _spot ? 'center'
       : (exactAnchor != null) ? 'center'
       : (hasBgImage && faceOrQuiet) ? 'top'
       : (hasBgImage && photoAnchorY == null) ? 'center'
@@ -1210,7 +1238,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     makeHeadline(segments, plain, {
       left: cx, top: y, originX, originY: headOriginY,
-      width: width * (V.exactWidth || (alignLeft ? 0.82 : 0.86)),
+      width: width * (editorial ? 0.44 : (V.exactWidth || (alignLeft ? 0.82 : 0.86))),
       fontSize: (slide.warmEditorial && V.exactFont) ? width * (V.exactFont / 1080) : fs(finalFont),
       fill: textCol, accentFill: accentCol, textAlign: tAlign,
       lineHeight: V.bigWord ? 0.98 : (slide.warmEditorial ? 1.04 : 1.12), fontWeight: slide.fontWeight || (V.bigWord ? '700' : '600'),

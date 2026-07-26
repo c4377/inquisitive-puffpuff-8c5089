@@ -132,6 +132,9 @@ export const attachSmartImages = async (slides, imagePool = [], startOffset = 0)
         // the first slide, regardless of the layout's default text position.
         faceZones: best.faceZones || [],
         hasFace: best.hasFace === true,
+        // Fine-grained editorial text spot (flattest, face-free area) with its
+        // brightness, so the renderer can place the block exactly there.
+        textSpot: best.textSpot || null,
       },
     };
   });

@@ -127,6 +127,80 @@ export const analyzeImage = (src) =>
           if (zoneVariance[z] > zoneVariance[busyZone]) busyZone = z;
         }
 
+        // ---- FINE TEXT-SPOT SEARCH -------------------------------------
+        // The 3x3 grid above is too coarse to place an editorial text block.
+        // Scan a fine grid and score every candidate block (a column of the
+        // image, roughly 40% wide / 30% tall) by: flatness (low variance),
+        // tonal consistency, distance from faces, and a slight preference for
+        // the lower half + side columns (where an editorial block usually
+        // sits). Returns the block CENTRE as fractions plus its brightness so
+        // the renderer can choose light/dark text.
+        const FX = 8, FY = 10;                 // fine grid columns / rows
+        const fSum = new Array(FX * FY).fill(0);
+        const fSumSq = new Array(FX * FY).fill(0);
+        const fCount = new Array(FX * FY).fill(0);
+        const fcw = w / FX, fch = h / FY;
+        for (let y = 0; y < h; y++) {
+          const fr = Math.min(FY - 1, Math.floor(y / fch));
+          for (let x = 0; x < w; x++) {
+            const fc = Math.min(FX - 1, Math.floor(x / fcw));
+            const fz = fr * FX + fc;
+            const i = (y * w + x) * 4;
+            const lum = luminance(data[i], data[i + 1], data[i + 2]);
+            fSum[fz] += lum; fSumSq[fz] += lum * lum; fCount[fz] += 1;
+          }
+        }
+        const fBright = new Array(FX * FY).fill(0);
+        const fVar = new Array(FX * FY).fill(0);
+        for (let z = 0; z < FX * FY; z++) {
+          const n = fCount[z] || 1;
+          const mean = fSum[z] / n;
+          fBright[z] = mean;
+          fVar[z] = Math.sqrt(Math.max(0, fSumSq[z] / n - mean * mean));
+        }
+        // Block size in fine cells (~44% wide, ~34% tall -> narrow editorial column)
+        const BW = 3, BH = 3;
+        let best = null;
+        for (let r = 0; r <= FY - BH; r++) {
+          for (let c = 0; c <= FX - BW; c++) {
+            let vSum = 0, bSum = 0, n = 0, faceHit = false;
+            for (let rr = r; rr < r + BH; rr++) {
+              for (let cc = c; cc < c + BW; cc++) {
+                vSum += fVar[rr * FX + cc];
+                bSum += fBright[rr * FX + cc];
+                n += 1;
+                // map fine cell -> coarse 3x3 zone to reuse face detection
+                const coarse = Math.min(2, Math.floor(rr / (FY / 3))) * 3
+                             + Math.min(2, Math.floor(cc / (FX / 3)));
+                if (faceZones.has(coarse)) faceHit = true;
+              }
+            }
+            const variance = vSum / n;          // 0 = perfectly flat
+            const brightness = bSum / n;
+            // Penalties: busy area, face overlap, and the very top/bottom edges.
+            let score = variance;
+            if (faceHit) score += 220;          // effectively excludes face blocks
+            if (r === 0) score += 14;           // avoid hugging the top edge
+            if (r + BH === FY) score += 26;     // keep clear of the signature band
+            // Slight preference for side columns (editorial look) over dead centre
+            const centreCol = Math.abs((c + BW / 2) - FX / 2);
+            score += (2.2 - Math.min(2.2, centreCol)) * 5;
+            if (!best || score < best.score) {
+              best = {
+                score,
+                brightness,
+                variance,
+                x: (c + BW / 2) / FX,
+                y: (r + BH / 2) / FY,
+              };
+            }
+          }
+        }
+        const textSpot = best
+          ? { x: +best.x.toFixed(3), y: +best.y.toFixed(3),
+              brightness: Math.round(best.brightness), variance: Math.round(best.variance) }
+          : null;
+
         done({
           src,
           ok: true,
@@ -134,6 +208,7 @@ export const analyzeImage = (src) =>
           zoneVariance,
           quietZone,
           busyZone,
+          textSpot,
           quietLabel: ZONE_LABELS[quietZone],
           busyLabel: ZONE_LABELS[busyZone],
           faceZones: Array.from(faceZones),
@@ -164,6 +239,7 @@ const fallbackAnalysis = (src) => ({
   busyZone: 4,
   quietLabel: 'center',
   busyLabel: 'center',
+  textSpot: null,
   avgColor: { r: 128, g: 128, b: 128 },
   avgBrightness: 128,
 });
