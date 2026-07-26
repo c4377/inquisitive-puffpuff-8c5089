@@ -345,6 +345,72 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // flip to white/black so text never disappears on same-tone backgrounds.
   // When a photo background is present, always use white (photo is darkened).
   const hasBgImage = typeof slide.background === 'string' && slide.background.length > 5;
+
+  // === AI DESIGN SPEC ======================================================
+  // If the slide carries a designSpec (from the KI-Designer), render it
+  // directly — free-form elements with x/y/size/weight/colour — instead of any
+  // layout engine. The renderer still enforces the footer safe-zone.
+  if (slide.designSpec && Array.isArray(slide.designSpec.elements)) {
+    const spec = slide.designSpec;
+    const bg = spec.background || {};
+    if (hasBgImage) {
+      await drawBackgroundImage(slide.background);
+      const ov = Math.min(Math.max(Number(bg.overlay) || 0, 0), 0.6);
+      if (ov > 0.01) {
+        canvas.add(new fabric.Rect({
+          left: 0, top: 0, width, height,
+          fill: `rgba(18,14,10,${ov.toFixed(2)})`, selectable: false,
+        }));
+      }
+    } else {
+      canvas.setBackgroundColor(bg.color || '#F7F5F1', () => {});
+    }
+    const SAFE_BOTTOM = height * 0.85;
+    spec.elements.slice(0, 5).forEach((el) => {
+      if (!el || !el.content) return;
+      const boxW = width * Math.min(Math.max(Number(el.width) || 0.8, 0.3), 0.92);
+      const fsz = Math.min(Math.max(Number(el.fontSize) || 44, 18), 140) * (width / 1080);
+      const cx = width * Math.min(Math.max(Number(el.x) || 0.5, 0.08), 0.92);
+      let cy = height * Math.min(Math.max(Number(el.y) || 0.5, 0.06), 0.82);
+      const t = new fabric.Textbox(String(el.content), {
+        left: cx, top: cy, originX: 'center', originY: 'center',
+        width: boxW, fontSize: fsz,
+        fontFamily: slide.fontFamily || 'HelveticaNeueBrand',
+        fontWeight: String(el.fontWeight || '400'),
+        fill: el.color || (hasBgImage ? '#F7F5F1' : '#252220'),
+        fontStyle: el.italic ? 'italic' : 'normal',
+        underline: el.underline === true,
+        textAlign: el.align === 'left' ? 'left' : 'center',
+        lineHeight: Math.min(Math.max(Number(el.lineHeight) || 1.1, 0.95), 1.45),
+        selectable: false, splitByGrapheme: false,
+      });
+      // Hard safe-zone: shrink until the block ends above the footer band.
+      try {
+        t.initDimensions && t.initDimensions();
+        let guard = 0;
+        while ((t.top + t.height / 2) > SAFE_BOTTOM && t.fontSize > 14 && guard < 60) {
+          t.set('fontSize', t.fontSize - 1);
+          t.initDimensions && t.initDimensions();
+          guard++;
+        }
+        if ((t.top + t.height / 2) > SAFE_BOTTOM) t.set('top', SAFE_BOTTOM - t.height / 2);
+      } catch (e) { /* best-effort */ }
+      canvas.add(t);
+    });
+    // Brand footer signature (same as engines).
+    const brandName = (options.globalBrandName || '').toUpperCase();
+    if (brandName) {
+      canvas.add(new fabric.Text(brandName.split('').join(' '), {
+        left: width / 2, top: height - height * 0.055, originX: 'center', originY: 'center',
+        fontSize: 15 * (width / 1080) * 2.7, fontFamily: 'Montserrat', fontWeight: '400',
+        fill: hasBgImage ? 'rgba(255,255,255,0.75)' : 'rgba(37,34,32,0.4)',
+        charSpacing: 300, selectable: false,
+      }));
+    }
+    try { canvas.renderAll(); } catch (e) { /* ok */ }
+    return;
+  }
+
   // Cover-blur mode: follow-up slides show the cover photo blurred + darkened.
   // A CTA slide is exempt — its photo is a deliberate choice and stays sharp.
   const coverBlurActive = (slide.coverBlurMode === true || options.coverBlurMode === true) && slide.isCtaSlide !== true;
@@ -870,7 +936,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
               // Reference look: *marked* words are the warm tan/gold accent
               // ("als in den 6 Monaten davor"), italic like "*gut*".
               t.setSelectionStyles(
-                { fontStyle: 'italic', fill: '#B29A6B' },
+                { fontStyle: 'italic' },
                 idx, idx + s.text.length
               );
             } else {
@@ -884,9 +950,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           if (s.bold && s.text.length) {
             t.setSelectionStyles({ fontWeight: '700' }, idx, idx + s.text.length);
           }
-          // warmEditorial auto-gold: the closing clause in warm tan, italic.
+          // warmEditorial auto-gold: the closing clause in warm tan — upright
+          // and BOLD, exactly like the reference ("als in den 6 Monaten davor.").
           if (s.gold && s.text.length) {
-            t.setSelectionStyles({ fill: '#B29A6B', fontStyle: 'italic' }, idx, idx + s.text.length);
+            t.setSelectionStyles({ fill: '#B29A6B', fontWeight: '700' }, idx, idx + s.text.length);
           }
           // warmEditorial: underline the first strong key word (reference style).
           if (s.underline && s.text.length) {
