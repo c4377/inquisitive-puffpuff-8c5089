@@ -22,7 +22,7 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "", as
   // under-shrink and the text overflows (was visible only on first render in
   // the Editor). Re-runs when the slide's fonts change.
   useEffect(() => {
-    const fams = ['Playfair Display', 'Montserrat', 'Inter', 'Caveat'];
+    const fams = ['Playfair Display', 'Montserrat', 'Inter', 'Caveat', 'AspektaBrand', 'HelveticaNeueBrand'];
     if (data?.fontFamily) fams.push(data.fontFamily);
     if (data?.accentFontFamily) fams.push(data.accentFontFamily);
     if (data?.bodyFontFamily) fams.push(data.bodyFontFamily);

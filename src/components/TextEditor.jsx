@@ -142,6 +142,8 @@ const TextEditor = ({ currentSlide, onUpdate, onGlobalUpdate, onBatchUpdate, tot
 
   // --- FONT LIST ---
   const standardFonts = [
+    { name: 'Aspekta (Warm Editorial)', value: 'AspektaBrand' },
+    { name: 'Helvetica Neue', value: 'HelveticaNeueBrand' },
     { name: 'Playfair Display', value: 'Playfair Display' },
     { name: 'Cormorant Garamond', value: 'Cormorant Garamond' },
     { name: 'Montserrat', value: 'Montserrat' },

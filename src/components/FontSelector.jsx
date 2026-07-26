@@ -7,6 +7,18 @@ const FontSelector = ({ selectedFont, onFontSelect }) => {
   const { brandSettings } = useBrand();
 
   const defaultFonts = [
+    {
+      name: 'AspektaBrand',
+      category: 'Sans Serif',
+      style: { fontFamily: 'AspektaBrand, sans-serif', fontWeight: '300' },
+      description: 'Aspekta — Thin bis Bold (Warm Editorial)'
+    },
+    {
+      name: 'HelveticaNeueBrand',
+      category: 'Sans Serif',
+      style: { fontFamily: 'HelveticaNeueBrand, sans-serif', fontWeight: '300' },
+      description: 'Helvetica Neue — Light bis Bold'
+    },
     { 
       name: 'Outfit', 
       category: 'Sans Serif', 

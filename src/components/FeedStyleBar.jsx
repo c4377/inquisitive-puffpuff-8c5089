@@ -8,6 +8,7 @@ const { FiDroplet, FiType } = FiIcons;
 // onColors / onFont, which cascade to EVERY slide immediately (same path the
 // Brand Settings use), so the whole feed updates live.
 const FONTS = [
+  'AspektaBrand', 'HelveticaNeueBrand',
   'Playfair Display', 'Cormorant Garamond', 'Montserrat',
   'Inter', 'Outfit', 'Poppins', 'Caveat', 'La Belle Aurore', 'Courier Prime',
 ];

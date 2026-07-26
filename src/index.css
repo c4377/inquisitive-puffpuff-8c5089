@@ -10,6 +10,15 @@
 @font-face { font-family: 'AspektaBrand'; src: url('/fonts/Aspekta-600.woff2') format('woff2'); font-weight: 600; font-style: normal; font-display: swap; }
 @font-face { font-family: 'AspektaBrand'; src: url('/fonts/Aspekta-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
 
+/* Helvetica Neue (user-provided) as its own collision-free family, real weights:
+   200 Thin, 300 Light, 400 Roman, 500 Medium, 700 Bold. */
+@font-face { font-family: 'HelveticaNeueBrand'; src: url('/fonts/HelveticaNeue-Thin.otf') format('opentype'); font-weight: 200; font-style: normal; font-display: swap; }
+@font-face { font-family: 'HelveticaNeueBrand'; src: url('/fonts/HelveticaNeue-Light.otf') format('opentype'); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'HelveticaNeueBrand'; src: url('/fonts/HelveticaNeue-Roman.otf') format('opentype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'HelveticaNeueBrand'; src: url('/fonts/HelveticaNeue-Medium.otf') format('opentype'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'HelveticaNeueBrand'; src: url('/fonts/HelveticaNeue-Medium.otf') format('opentype'); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: 'HelveticaNeueBrand'; src: url('/fonts/HelveticaNeue-Bold.otf') format('opentype'); font-weight: 700; font-style: normal; font-display: swap; }
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
