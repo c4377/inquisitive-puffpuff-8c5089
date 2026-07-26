@@ -40,8 +40,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       const loads = [];
       needed.forEach((f) => {
         loads.push(document.fonts.load(`700 40px "${f}"`).catch(() => {}));
+        loads.push(document.fonts.load(`600 40px "${f}"`).catch(() => {}));
         loads.push(document.fonts.load(`400 40px "${f}"`).catch(() => {}));
         loads.push(document.fonts.load(`300 40px "${f}"`).catch(() => {}));
+        loads.push(document.fonts.load(`200 40px "${f}"`).catch(() => {}));
         loads.push(document.fonts.load(`italic 400 40px "${f}"`).catch(() => {}));
       });
       await Promise.race([
@@ -461,23 +463,26 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // Only when there is also a longer chunk to contrast with.
     let bigIdx = -1;
     const realChunks = textChunks.filter((c) => !c.skip);
-    const hasLong = realChunks.some((c) => c.wc >= 5);
-    if (hasLong && realChunks.length > 1) {
-      // opener?
-      const first = textChunks.findIndex((c) => !c.skip);
-      if (first >= 0 && textChunks[first].wc <= 4) {
-        bigIdx = first;
-      } else {
-        // after-colon punch line?
-        for (let i = 0; i < textChunks.length; i++) {
-          const c = textChunks[i];
-          if (!c.skip && /:\s*$/.test(c.prevSep) && c.wc <= 4) { bigIdx = i; break; }
+    // Contrast exists if any chunk is clearly longer than the shortest one.
+    const maxWc = Math.max(...realChunks.map((c) => c.wc));
+    if (realChunks.length > 1 && maxWc >= 3) {
+      // 1) A short (1–4 word) chunk right after a colon is the punch line and
+      //    takes priority ("… heisst: PERSONAL POWER").
+      for (let i = 0; i < textChunks.length; i++) {
+        const c = textChunks[i];
+        if (!c.skip && /:\s*$/.test(c.prevSep) && c.wc <= 4) { bigIdx = i; break; }
+      }
+      // 2) Else a short opening chunk ("WARNING!", "11 DINGE").
+      if (bigIdx === -1) {
+        const first = textChunks.findIndex((c) => !c.skip);
+        if (first >= 0 && textChunks[first].wc <= 4 && textChunks.length > first + 1) {
+          bigIdx = first;
         }
-        // else: last short chunk
-        if (bigIdx === -1) {
-          for (let i = textChunks.length - 1; i >= 0; i--) {
-            if (!textChunks[i].skip && textChunks[i].wc <= 4) { bigIdx = i; break; }
-          }
+      }
+      // 3) Else the last short chunk.
+      if (bigIdx === -1) {
+        for (let i = textChunks.length - 1; i >= 0; i--) {
+          if (!textChunks[i].skip && textChunks[i].wc <= 4 && textChunks[i].wc < maxWc) { bigIdx = i; break; }
         }
       }
     }
@@ -498,10 +503,13 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
   const parseAccent = (text) => {
     const raw = (text || '').replace(/\*{2,}/g, '*');
+    // Hook = the first slide (slideIndex 0). Only hooks get the big/small size
+    // switch; follow-up slides keep a calm, single-size thin/bold rhythm.
+    const isHook = (options.slideIndex || 0) === 0;
     // warmEditorial with NO explicit *marks*: auto-size + auto-bold so the
     // headline reads like the reference (one big punch line, bold key words).
     if (slide.warmEditorial && !raw.includes('*')) {
-      const segments = autoSizedSegments(raw);
+      const segments = isHook ? autoSizedSegments(raw) : autoBoldSegments(raw);
       return { plain: segments.map((s) => s.text).join(''), segments };
     }
     const parts = raw.split(/(\*[^*]+\*)/g).filter((s) => s !== '');
@@ -604,7 +612,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         }
         // warmEditorial auto-bold: content words bold, filler stays normal.
         if (s.bold && s.text.length) {
-          textObj.setSelectionStyles({ fontWeight: '700' }, idx, idx + s.text.length);
+          textObj.setSelectionStyles({ fontWeight: '600' }, idx, idx + s.text.length);
         }
         idx += s.text.length;
       });
@@ -832,11 +840,17 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           }
           // warmEditorial auto-bold: content words bold, filler stays normal.
           if (s.bold && s.text.length) {
-            t.setSelectionStyles({ fontWeight: '700' }, idx, idx + s.text.length);
+            t.setSelectionStyles({ fontWeight: '600' }, idx, idx + s.text.length);
           }
-          // warmEditorial auto-size: the chosen punch line is enlarged.
+          // warmEditorial auto-size (HOOKS only): the punch line is enlarged
+          // AND rendered slightly transparent in the greenish-beige tone, like
+          // the reference hooks. (s.big is only set on hook slides.)
           if (s.big && s.text.length) {
-            t.setSelectionStyles({ fontSize: (opts.fontSize || 40) * 1.35, fontWeight: '700' }, idx, idx + s.text.length);
+            t.setSelectionStyles({
+              fontSize: (opts.fontSize || 40) * 1.35,
+              fontWeight: '600',
+              fill: hexToRgba('#9A968C', 0.72),
+            }, idx, idx + s.text.length);
           }
           idx += s.text.length;
         });
