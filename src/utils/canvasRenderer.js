@@ -427,13 +427,20 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   ]);
 
   // Turn a plain (unmarked) string into segments where content words are bold.
+  // The FIRST emphasised word also gets underlined — the reference underlines a
+  // single key word per statement ("das Unmögliche", "waren alle").
   const autoBoldSegments = (text) => {
     const tokens = (text || '').split(/(\s+)/); // keep whitespace tokens
+    let underlinedYet = false;
     return tokens.map((tok) => {
       if (/^\s+$/.test(tok) || tok === '') return { text: tok, accent: false, bold: false };
       const clean = tok.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
       const isFiller = clean.length <= 2 || FILLER.has(clean);
-      return { text: tok, accent: false, bold: !isFiller };
+      const bold = !isFiller;
+      // Underline the first strong word only, and only if it's reasonably long.
+      let underline = false;
+      if (bold && !underlinedYet && clean.length >= 5) { underline = true; underlinedYet = true; }
+      return { text: tok, accent: false, bold, underline };
     });
   };
 
@@ -487,6 +494,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       }
     }
     const out = [];
+    let underlinedYet = false;
     textChunks.forEach((c, i) => {
       const isBig = i === bigIdx;
       const words = c.text.split(/(\s+)/);
@@ -494,7 +502,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         if (/^\s+$/.test(w) || w === '') { out.push({ text: w, accent: false, bold: false }); return; }
         const clean = w.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
         const isFiller = clean.length <= 2 || FILLER.has(clean);
-        out.push({ text: w, accent: false, bold: isBig ? true : !isFiller, big: isBig });
+        const bold = isBig ? true : !isFiller;
+        // Underline the first strong (non-big) key word, like the reference.
+        let underline = false;
+        if (bold && !isBig && !underlinedYet && clean.length >= 5) { underline = true; underlinedYet = true; }
+        out.push({ text: w, accent: false, bold, underline, big: isBig });
       });
       if (c.sep) out.push({ text: c.sep, accent: false, bold: false });
     });
@@ -523,10 +535,14 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       const isAccent = seg.startsWith('*') && seg.endsWith('*') && seg.length > 2;
       const clean = (isAccent ? seg.slice(1, -1) : seg).replace(/\*/g, '');
       if (isAccent) {
-        // Explicit *mark* wins: that part is the big bold statement.
+        // Explicit *mark* = italic accent word ("*gut*", "*kleines*").
         segments.push({ text: clean, accent: true, bold: false });
-      } else if (slide.warmEditorial) {
+      } else if (slide.warmEditorial && isHook) {
+        // Only hooks get per-word auto-bold on the unmarked parts.
         autoBoldSegments(clean).forEach((s) => segments.push(s));
+      } else if (slide.warmEditorial) {
+        // Follow-up slides: one calm weight, no auto-bold.
+        segments.push({ text: clean, accent: false, bold: false });
       } else {
         segments.push({ text: clean, accent: false });
       }
@@ -830,10 +846,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         segments.forEach((s) => {
           if (s.accent && s.text.length) {
             if (slide.warmEditorial) {
-              // Reference look: the *marked* part is the BIG bold statement
-              // (like "PERSONAL POWER"), not an italic accent colour.
+              // Reference look: *marked* words are italic accents ("*gut*",
+              // "*kleines*"), matching how she italicises single words.
               t.setSelectionStyles(
-                { fontWeight: '700', fontSize: (opts.fontSize || 40) * 1.4 },
+                { fontStyle: 'italic' },
                 idx, idx + s.text.length
               );
             } else {
@@ -846,6 +862,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           // warmEditorial auto-bold: content words bold, filler stays normal.
           if (s.bold && s.text.length) {
             t.setSelectionStyles({ fontWeight: '700' }, idx, idx + s.text.length);
+          }
+          // warmEditorial: underline the first strong key word (reference style).
+          if (s.underline && s.text.length) {
+            t.setSelectionStyles({ underline: true }, idx, idx + s.text.length);
           }
           // warmEditorial auto-size (HOOKS only): the punch line is enlarged
           // AND rendered slightly transparent in the greenish-beige tone, like
