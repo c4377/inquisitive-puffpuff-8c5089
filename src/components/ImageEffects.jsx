@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FiSun, FiDroplet, FiActivity, FiMaximize, FiMove, FiLayers, FiImage, FiCircle, FiSquare, FiAlertCircle, FiType } from 'react-icons/fi';
 import SafeIcon from '../common/SafeIcon';
 
-const ImageEffects = ({ overlay, blur, grain, textShadowStrength, imageScale, imageX, imageY, overlayImageScale, overlayImageX, overlayImageY, overlayImageRounded, onUpdate }) => {
+const ImageEffects = ({ overlay, blur, grain, sageTone, textShadowStrength, imageScale, imageX, imageY, overlayImageScale, overlayImageX, overlayImageY, overlayImageRounded, onUpdate }) => {
   const [activeTab, setActiveTab] = useState('background'); // 'background' or 'overlay'
   
   return (
@@ -74,6 +74,13 @@ const ImageEffects = ({ overlay, blur, grain, textShadowStrength, imageScale, im
                 <span className="text-xs font-mono bg-white px-2 py-1 rounded border border-gray-200">{Math.round((grain || 0) * 100)}%</span>
               </label>
               <input type="range" min="0" max="0.5" step="0.01" value={grain || 0} onChange={(e) => onUpdate({ grain: parseFloat(e.target.value) })} className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-600" />
+            </div>
+            <div>
+              <label className="flex justify-between items-center text-sm font-medium text-gray-700 mb-2">
+                <div className="flex items-center"><SafeIcon icon={FiDroplet} className="mr-2 text-gray-400" /> Salbei-Ton</div>
+                <span className="text-xs font-mono bg-white px-2 py-1 rounded border border-gray-200">{Math.round((sageTone === undefined ? 0.6 : sageTone) * 100)}%</span>
+              </label>
+              <input type="range" min="0" max="1" step="0.05" value={sageTone === undefined ? 0.6 : sageTone} onChange={(e) => onUpdate({ sageTone: parseFloat(e.target.value) })} className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-purple-600" />
             </div>
             <div>
               <label className="flex justify-between items-center text-sm font-medium text-gray-700 mb-2">

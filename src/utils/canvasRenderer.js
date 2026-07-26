@@ -211,6 +211,30 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
               if (fabric.Image.filters.Brightness) {
                 img.filters.push(new fabric.Image.filters.Brightness({ brightness: -0.04 }));
               }
+              // SALBEIGRUENER FILM-LOOK --------------------------------------
+              // Zwei Schritte, weil Salbei nicht "mehr Gruen" ist, sondern
+              // "gedaempftes Gruen": erst Saettigung raus, dann die Kanaele
+              // leicht kippen (Rot und Blau runter, Gruen minimal rauf).
+              // Staerke ueber slide.sageTone 0..1 regelbar, 0 = aus.
+              const sage = (typeof slide.sageTone === 'number')
+                ? Math.min(Math.max(slide.sageTone, 0), 1) : 0.6;
+              if (sage > 0) {
+                if (fabric.Image.filters.Saturation) {
+                  img.filters.push(new fabric.Image.filters.Saturation({
+                    saturation: -0.3 * sage,
+                  }));
+                }
+                if (fabric.Image.filters.ColorMatrix) {
+                  img.filters.push(new fabric.Image.filters.ColorMatrix({
+                    matrix: [
+                      1 - 0.10 * sage, 0.06 * sage,     0.02 * sage,     0, 0.004 * sage,
+                      0.02 * sage,     1 + 0.02 * sage, 0.03 * sage,     0, 0.010 * sage,
+                      0.01 * sage,     0.07 * sage,     1 - 0.12 * sage, 0, 0.002 * sage,
+                      0,               0,               0,               1, 0,
+                    ],
+                  }));
+                }
+              }
               img.applyFilters();
             } catch (e) { /* filter optional */ }
           }
@@ -1223,7 +1247,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // --- ENGINE 1: gradient (photo + scrim) — handles all base:'gradient' ids -
   if (brandVariant && brandVariant.base === 'gradient') {
     const V = brandVariant;
-    const scrim = slide.overlayColor || '#1A1512';
+    // Der Scrim traegt den gleichen Ton wie der Filter: kein warmes Braun mehr,
+    // sondern ein salbeiges Schwarz. Sonst kippt das Bild gruen und das Band
+    // bleibt braun.
+    const scrim = slide.overlayColor || (slide.warmEditorial ? '#161C17' : '#1A1512');
     const textCol = brandTextColor(slide.color, hasBgImage, scrim);
     const accentCol = slide.accentColor || textCol;
     // Stronger default so light text stays legible on bright photos.
@@ -1243,7 +1270,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     } else if (slide.warmEditorial && slide.depthShade === 'near') {
       canvas.add(new fabric.Rect({
         left: 0, top: 0, width, height,
-        fill: 'rgba(255,248,235,0.07)', selectable: false,
+        fill: 'rgba(238,244,232,0.07)', selectable: false,
       }));
     }
 
