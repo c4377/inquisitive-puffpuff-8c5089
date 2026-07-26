@@ -1238,8 +1238,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     makeHeadline(segments, plain, {
       left: cx, top: y, originX, originY: headOriginY,
-      width: width * (editorial ? 0.44 : (V.exactWidth || (alignLeft ? 0.82 : 0.86))),
-      fontSize: (slide.warmEditorial && V.exactFont) ? width * (V.exactFont / 1080) : fs(finalFont),
+      width: width * (editorial ? 0.46 : (V.exactWidth || (alignLeft ? 0.82 : 0.86))),
+      // Editorial spot placement uses a NARROW column, so the type has to be
+      // bigger to keep the reference's presence (~72 per 1080 width).
+      fontSize: editorial ? width * (72 / 1080)
+        : (slide.warmEditorial && V.exactFont) ? width * (V.exactFont / 1080)
+        : fs(finalFont),
       fill: textCol, accentFill: accentCol, textAlign: tAlign,
       lineHeight: V.bigWord ? 0.98 : (slide.warmEditorial ? 1.04 : 1.12), fontWeight: slide.fontWeight || (V.bigWord ? '700' : '600'),
       shadow: brandTextShadow(),
