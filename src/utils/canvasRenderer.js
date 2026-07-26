@@ -41,6 +41,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       needed.forEach((f) => {
         loads.push(document.fonts.load(`700 40px "${f}"`).catch(() => {}));
         loads.push(document.fonts.load(`400 40px "${f}"`).catch(() => {}));
+        loads.push(document.fonts.load(`300 40px "${f}"`).catch(() => {}));
         loads.push(document.fonts.load(`italic 400 40px "${f}"`).catch(() => {}));
       });
       await Promise.race([
@@ -102,9 +103,23 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           }
           if (avail > 0) {
             let guard = 0;
-            // Shrink until the rendered height fits (or we hit a floor).
-            while (obj.height > avail && obj.fontSize > 10 && guard < 40) {
-              obj.set('fontSize', obj.fontSize - 1);
+            // Shrink until the rendered height fits (or we hit a floor). When the
+            // box has per-character font sizes (warmEditorial big words), scale
+            // those proportionally too, so an enlarged word can't overflow.
+            const scaleStyles = (factor) => {
+              if (!obj.styles) return;
+              Object.keys(obj.styles).forEach((line) => {
+                Object.keys(obj.styles[line]).forEach((ch) => {
+                  const st = obj.styles[line][ch];
+                  if (st && typeof st.fontSize === 'number') st.fontSize *= factor;
+                });
+              });
+            };
+            while (obj.height > avail && obj.fontSize > 10 && guard < 60) {
+              const before = obj.fontSize;
+              const next = before - 1;
+              scaleStyles(next / before);
+              obj.set('fontSize', next);
               obj.initDimensions && obj.initDimensions();
               guard++;
             }
@@ -802,7 +817,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
               // Reference look: the *marked* part is the BIG bold statement
               // (like "PERSONAL POWER"), not an italic accent colour.
               t.setSelectionStyles(
-                { fontWeight: '700', fontSize: (opts.fontSize || 40) * 1.7 },
+                { fontWeight: '700', fontSize: (opts.fontSize || 40) * 1.4 },
                 idx, idx + s.text.length
               );
             } else {
@@ -818,7 +833,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           }
           // warmEditorial auto-size: the chosen punch line is enlarged.
           if (s.big && s.text.length) {
-            t.setSelectionStyles({ fontSize: (opts.fontSize || 40) * 1.55, fontWeight: '700' }, idx, idx + s.text.length);
+            t.setSelectionStyles({ fontSize: (opts.fontSize || 40) * 1.35, fontWeight: '700' }, idx, idx + s.text.length);
           }
           idx += s.text.length;
         });

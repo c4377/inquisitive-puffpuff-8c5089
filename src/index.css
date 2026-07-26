@@ -1,7 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 
-/* Self-hosted Helvetica (user-provided). Normal + bold + oblique variants so the
-   warmEditorial auto-bold effect (normal filler, bold key words) renders. */
+/* Self-hosted Helvetica (user-provided). Light + normal + bold + oblique so the
+   warmEditorial look (thin body text, bold key words) renders. */
+@font-face {
+  font-family: 'Helvetica Now';
+  src: url('/fonts/Helvetica-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
 @font-face {
   font-family: 'Helvetica Now';
   src: url('/fonts/Helvetica.ttf') format('truetype');
