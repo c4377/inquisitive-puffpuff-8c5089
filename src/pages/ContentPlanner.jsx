@@ -318,6 +318,13 @@ const ContentPlanner = () => {
             // default, and never the semi-transparent grey that washes out on a
             // photo.
             warmEditorial: config.warmEditorial === true,
+            // Depth rhythm (warmEditorial): every 2nd post is "near" (bright,
+            // no extra overlay), the others "far" (slightly darkened) — the
+            // front/back feel of the reference feed. Removable per post via
+            // the day menu (sets depthShade to null).
+            depthShade: config.warmEditorial === true
+              ? (slide.depthShade === null ? null : (index % 2 === 0 ? 'near' : 'far'))
+              : slide.depthShade,
             fontWeight: config.warmEditorial === true ? (sIdx === 0 ? '300' : '400') : (slide.fontWeight),
             // In Bold Statement mode the feed VARIES like the reference (not one
             // loud font on every tile): rotate the headline treatment per slide.
@@ -386,6 +393,18 @@ const ContentPlanner = () => {
     const updated = weekPlan.map((d) => {
       if (d.day !== dayNum) return d;
       const slides = (d.slides || []).map((s, i) => (i === 0 ? { ...s, bigHeadline: s.bigHeadline !== true } : s));
+      return { ...d, slides };
+    });
+    updateBrandSettings({ contentPlan: applyBrandStyling(updated, currentBrand) });
+  };
+
+  // Depth overlay toggle: null = removed for this post, undefined = automatic
+  // (parity: every 2nd post "near"/bright, others "far"/darkened).
+  const toggleDepthShade = (dayNum) => {
+    const updated = weekPlan.map((d) => {
+      if (d.day !== dayNum) return d;
+      const isOff = d.slides?.[0]?.depthShade === null;
+      const slides = (d.slides || []).map((s) => ({ ...s, depthShade: isOff ? undefined : null }));
       return { ...d, slides };
     });
     updateBrandSettings({ contentPlan: applyBrandStyling(updated, currentBrand) });
@@ -1373,6 +1392,12 @@ const ContentPlanner = () => {
                               <SafeIcon icon={FiMaximize2} className={`text-base ${day.slides?.[0]?.bigHeadline ? 'text-purple-600' : 'text-gray-500'}`} /> Große Headline
                             </span>
                             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${day.slides?.[0]?.bigHeadline ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-500'}`}>{day.slides?.[0]?.bigHeadline ? 'An' : 'Aus'}</span>
+                          </button>
+                          <button onClick={() => { setMenuDayId(null); toggleDepthShade(day.day); }} className="w-full flex items-center justify-between px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50">
+                            <span className="flex items-center gap-3">
+                              <SafeIcon icon={FiImage} className={`text-base ${day.slides?.[0]?.depthShade === null ? 'text-gray-500' : 'text-amber-600'}`} /> Tiefen-Overlay
+                            </span>
+                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${day.slides?.[0]?.depthShade === null ? 'bg-gray-200 text-gray-500' : 'bg-amber-500 text-white'}`}>{day.slides?.[0]?.depthShade === null ? 'Aus' : 'Auto'}</span>
                           </button>
                           <button onClick={() => { setMenuDayId(null); setExpandedCaptionId(expandedCaptionId === day.day ? null : day.day); }} className="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50">
                             <SafeIcon icon={FiMessageSquare} className="text-base text-gray-500" /> Caption

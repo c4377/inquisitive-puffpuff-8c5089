@@ -765,7 +765,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const boldSerif = boldMode && boldStyle === 1;                 // elegant serif
     // Only the Anton style (0) uses ALL CAPS in bold mode now. Style 2 is calm
     // mixed-case Montserrat.
-    const capsMode = (slide.serifHeadline === false) || (boldMode && boldStyle === 0);
+    const capsMode = slide.warmEditorial ? false : ((slide.serifHeadline === false) || (boldMode && boldStyle === 0));
     const bigMode = slide.bigHeadline === true;
     let headFont;
     if (boldMode && boldStyle === 0) headFont = 'Anton';
@@ -973,6 +973,16 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const strength = (typeof slide.overlayStrength === 'number')
       ? slide.overlayStrength
       : (slide.warmEditorial ? 0.42 : 0.78);
+
+    // Depth rhythm (warmEditorial): "far" posts get a flat dark wash over the
+    // whole photo so they visually step back; "near" posts stay bright. The
+    // wash sits UNDER the text gradient. Removable per post (depthShade null).
+    if (slide.warmEditorial && slide.depthShade === 'far') {
+      canvas.add(new fabric.Rect({
+        left: 0, top: 0, width, height,
+        fill: 'rgba(20,16,12,0.24)', selectable: false,
+      }));
+    }
 
     // Gradient shape. Key idea: keep the TOP of the photo perfectly clear (0
     // opacity) so the face/subject stays clean, and only darken the band right
