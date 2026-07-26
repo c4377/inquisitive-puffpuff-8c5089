@@ -617,7 +617,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         }
         // warmEditorial auto-bold: content words bold, filler stays normal.
         if (s.bold && s.text.length) {
-          textObj.setSelectionStyles({ fontWeight: '600' }, idx, idx + s.text.length);
+          textObj.setSelectionStyles({ fontWeight: '700' }, idx, idx + s.text.length);
         }
         idx += s.text.length;
       });
@@ -845,7 +845,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           }
           // warmEditorial auto-bold: content words bold, filler stays normal.
           if (s.bold && s.text.length) {
-            t.setSelectionStyles({ fontWeight: '600' }, idx, idx + s.text.length);
+            t.setSelectionStyles({ fontWeight: '700' }, idx, idx + s.text.length);
           }
           // warmEditorial auto-size (HOOKS only): the punch line is enlarged
           // AND rendered slightly transparent in the greenish-beige tone, like
