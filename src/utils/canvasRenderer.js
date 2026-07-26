@@ -846,10 +846,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         segments.forEach((s) => {
           if (s.accent && s.text.length) {
             if (slide.warmEditorial) {
-              // Reference look: *marked* words are italic accents ("*gut*",
-              // "*kleines*"), matching how she italicises single words.
+              // Reference look: *marked* words are the warm tan/gold accent
+              // ("als in den 6 Monaten davor"), italic like "*gut*".
               t.setSelectionStyles(
-                { fontStyle: 'italic' },
+                { fontStyle: 'italic', fill: '#B29A6B' },
                 idx, idx + s.text.length
               );
             } else {
@@ -1073,7 +1073,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         : V.textPos === 'top' ? height * 0.14
         : V.textPos === 'center' ? height * 0.4
         : height * 0.64);
-    const alignLeft = slide.warmEditorial ? true : (V.align === 'left');
+    const alignLeft = slide.warmEditorial ? false : (V.align === 'left');
     const cx = alignLeft ? width * 0.09 : width / 2;
     const originX = alignLeft ? 'left' : 'center';
     const tAlign = alignLeft ? 'left' : 'center';
@@ -1253,7 +1253,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     }
 
     const { plain, segments } = parseAccent(slide.text);
-    const alignLeft = slide.warmEditorial ? true : (V.align === 'left');
+    const alignLeft = slide.warmEditorial ? false : (V.align === 'left');
     const cx = alignLeft ? width * 0.1 : width / 2;
     const originX = alignLeft ? 'left' : 'center';
     const tAlign = alignLeft ? 'left' : 'center';
@@ -1276,10 +1276,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       const textTop = height * 0.42;
       const fUpFont = V.bigWord ? 62 : 46;
       makeHeadline(segments, plain, {
-        left: marginX, top: textTop,
-        originX: 'left', originY: 'top',
+        left: slide.warmEditorial ? width / 2 : marginX, top: textTop,
+        originX: slide.warmEditorial ? 'center' : 'left', originY: 'top',
         width: width * 0.82, fontSize: fs(fUpFont),
-        fill: textCol, accentFill: accentCol, textAlign: 'left', lineHeight: 1.2,
+        fill: textCol, accentFill: accentCol, textAlign: slide.warmEditorial ? 'center' : 'left', lineHeight: 1.2,
         fontWeight: slide.fontWeight || '600',
         shadow: brandTextShadow(),
         maxBottom: FOOTER_TOP - height * 0.01,

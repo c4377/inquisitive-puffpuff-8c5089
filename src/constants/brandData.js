@@ -467,7 +467,7 @@ export const REFERENCE_PRESETS = [
     name: 'Warm Editorial',
     colors: {
       primary: '#252220',      // near-black, slightly warm — main text on light
-      secondary: '#EDEBE6',    // very light greige (barely warm, not yellow)
+      secondary: '#CFCBB8',    // khaki-greige plate (the reference's signature tile)
       tertiary: '#9A968C',     // neutral grey-taupe mid tone
       accent: '#6B5D48',       // quiet taupe accent
       neutral: '#F7F5F1',      // near-white with the faintest warm tint
