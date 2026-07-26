@@ -28,10 +28,9 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "", as
     if (data?.bodyFontFamily) fams.push(data.bodyFontFamily);
     let cancelled = false;
     const loads = fams.filter(Boolean).flatMap((f) => [
+      document.fonts.load(`100 16px "${f}"`),
       document.fonts.load(`200 16px "${f}"`),
-      document.fonts.load(`300 16px "${f}"`),
       document.fonts.load(`400 16px "${f}"`),
-      document.fonts.load(`500 16px "${f}"`),
       document.fonts.load(`600 16px "${f}"`),
       document.fonts.load(`700 16px "${f}"`),
     ]);

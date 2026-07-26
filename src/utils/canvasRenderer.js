@@ -43,7 +43,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         loads.push(document.fonts.load(`600 40px "${f}"`).catch(() => {}));
         loads.push(document.fonts.load(`400 40px "${f}"`).catch(() => {}));
         loads.push(document.fonts.load(`300 40px "${f}"`).catch(() => {}));
-        loads.push(document.fonts.load(`200 40px "${f}"`).catch(() => {}));
+        loads.push(document.fonts.load(`100 40px "${f}"`).catch(() => {}));
         loads.push(document.fonts.load(`italic 400 40px "${f}"`).catch(() => {}));
       });
       await Promise.race([
@@ -849,7 +849,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
             t.setSelectionStyles({
               fontSize: (opts.fontSize || 40) * 1.35,
               fontWeight: '600',
-              fill: hexToRgba('#9A968C', 0.72),
+              fill: hexToRgba('#D8D4C8', 0.9),
             }, idx, idx + s.text.length);
           }
           idx += s.text.length;
