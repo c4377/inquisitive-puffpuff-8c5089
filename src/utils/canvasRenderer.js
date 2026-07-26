@@ -211,27 +211,33 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
               if (fabric.Image.filters.Brightness) {
                 img.filters.push(new fabric.Image.filters.Brightness({ brightness: -0.04 }));
               }
-              // SALBEIGRUENER FILM-LOOK --------------------------------------
-              // Zwei Schritte, weil Salbei nicht "mehr Gruen" ist, sondern
-              // "gedaempftes Gruen": erst Saettigung raus, dann die Kanaele
-              // leicht kippen (Rot und Blau runter, Gruen minimal rauf).
-              // Staerke ueber slide.sageTone 0..1 regelbar, 0 = aus.
-              const sage = (typeof slide.sageTone === 'number')
-                ? Math.min(Math.max(slide.sageTone, 0), 1) : 0.6;
-              if (sage > 0) {
+              // DUNKELBRAUNER FILM-LOOK --------------------------------------
+              // Drei Schritte: Saettigung leicht raus, Blau deutlich runter
+              // (das erzeugt das Braun, nicht mehr Rot), und das Bild etwas
+              // tiefer setzen. Staerke ueber slide.brownTone 0..1, 0 = aus.
+              const brown = (typeof slide.brownTone === 'number')
+                ? Math.min(Math.max(slide.brownTone, 0), 1)
+                : (typeof slide.sageTone === 'number'
+                  ? Math.min(Math.max(slide.sageTone, 0), 1) : 0.6);
+              if (brown > 0) {
                 if (fabric.Image.filters.Saturation) {
                   img.filters.push(new fabric.Image.filters.Saturation({
-                    saturation: -0.3 * sage,
+                    saturation: -0.15 * brown,
                   }));
                 }
                 if (fabric.Image.filters.ColorMatrix) {
                   img.filters.push(new fabric.Image.filters.ColorMatrix({
                     matrix: [
-                      1 - 0.10 * sage, 0.06 * sage,     0.02 * sage,     0, 0.004 * sage,
-                      0.02 * sage,     1 + 0.02 * sage, 0.03 * sage,     0, 0.010 * sage,
-                      0.01 * sage,     0.07 * sage,     1 - 0.12 * sage, 0, 0.002 * sage,
-                      0,               0,               0,               1, 0,
+                      1 + 0.07 * brown, 0.03 * brown,     0,                0,  0.006 * brown,
+                      0.01 * brown,     1 - 0.03 * brown, 0,                0,  0,
+                      0,                0.01 * brown,     1 - 0.20 * brown, 0, -0.012 * brown,
+                      0,                0,                0,                1,  0,
                     ],
+                  }));
+                }
+                if (fabric.Image.filters.Brightness) {
+                  img.filters.push(new fabric.Image.filters.Brightness({
+                    brightness: -0.03 * brown,
                   }));
                 }
               }
@@ -1139,11 +1145,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     let top = opts.maxBottom - blockH;              // von unten gesetzt
     if (top < opts.minTop) top = opts.minTop;
 
+    const centered = opts.align === 'center';
     best.lines.forEach((line, i) => {
       canvas.add(new fabric.Text(line, {
-        left: opts.left,
+        left: centered ? width / 2 : opts.left,
         top: top + i * best.size * LH,
-        originX: 'left', originY: 'top',
+        originX: centered ? 'center' : 'left', originY: 'top',
         fontSize: best.size,
         fontFamily: family,
         fontWeight: rhythm ? (i % 2 === 0 ? '700' : '300') : '500',
@@ -1247,10 +1254,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // --- ENGINE 1: gradient (photo + scrim) — handles all base:'gradient' ids -
   if (brandVariant && brandVariant.base === 'gradient') {
     const V = brandVariant;
-    // Der Scrim traegt den gleichen Ton wie der Filter: kein warmes Braun mehr,
-    // sondern ein salbeiges Schwarz. Sonst kippt das Bild gruen und das Band
-    // bleibt braun.
-    const scrim = slide.overlayColor || (slide.warmEditorial ? '#161C17' : '#1A1512');
+    // Der Scrim traegt den gleichen Ton wie der Filter: tiefes Dunkelbraun,
+    // damit das Band nicht neutral-grau gegen das warme Bild steht.
+    const scrim = slide.overlayColor || (slide.warmEditorial ? '#171008' : '#1A1512');
     const textCol = brandTextColor(slide.color, hasBgImage, scrim);
     const accentCol = slide.accentColor || textCol;
     // Stronger default so light text stays legible on bright photos.
@@ -1270,7 +1276,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     } else if (slide.warmEditorial && slide.depthShade === 'near') {
       canvas.add(new fabric.Rect({
         left: 0, top: 0, width, height,
-        fill: 'rgba(238,244,232,0.07)', selectable: false,
+        fill: 'rgba(255,246,230,0.07)', selectable: false,
       }));
     }
 
@@ -1444,8 +1450,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const _avgLum = (slide._autoImage && typeof slide._autoImage.avgBrightness === 'number')
       ? slide._autoImage.avgBrightness : 128;
     const _zoneAt = (i) => (_zones && typeof _zones[i] === 'number' ? _zones[i] : _avgLum);
+    // Der Ad-Block steht jetzt mittig -> Helligkeit in der Bildmitte messen
+    // (Zone 7 unten Mitte, Zone 1 oben Mitte), nicht mehr am linken Rand.
     const measuredLum = _adReady
-      ? _zoneAt(_faceLow ? 0 : 6)
+      ? _zoneAt(_faceLow ? 1 : 7)
       : isFollowPage && hasBgImage ? _zoneAt(7)
       : (spot && typeof spot.brightness === 'number' ? spot.brightness : _avgLum);
     const bgLumBehindText = hasBgImage
@@ -1501,8 +1509,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       const faceLow = faceZones.length > 0
         && (faceZones.map((z) => Math.floor(z / 3)).reduce((a, b) => a + b, 0) / faceZones.length) > 1.4;
       const placed = makeAdHeadline(plain, {
+        // Zentriert wie die Text-Hooks — eine Achse fuer den ganzen Feed.
+        align: 'center',
         left: width * 0.09,
-        width: width * 0.64,
+        width: width * 0.72,
         minTop: faceLow ? height * 0.08 : height * 0.34,
         maxBottom: faceLow ? height * 0.46 : TEXT_MAX_BOTTOM - height * 0.02,
         fill: textCol,
@@ -1693,7 +1703,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     }
 
     const { plain, segments } = parseAccent(slide.text);
-    const alignLeft = V.align === 'left';
+    // TEXT-ONLY HOOKS SIND IMMER ZENTRIERT. Linksbuendige Varianten wie
+    // we_plate_cream_left oder brand_text_left gelten damit nur noch fuer
+    // Folgeseiten — die erste Seite steht mittig, egal welche Variante der
+    // Tagesrhythmus zugeteilt hat.
+    const alignLeft = V.align === 'left'
+      && !(slide.warmEditorial && (options.slideIndex || 0) === 0);
     const cx = alignLeft ? width * 0.1 : width / 2;
     const originX = alignLeft ? 'left' : 'center';
     const tAlign = alignLeft ? 'left' : 'center';
