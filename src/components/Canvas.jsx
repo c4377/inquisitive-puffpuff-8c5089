@@ -92,6 +92,11 @@ const Canvas = forwardRef(({ data, width = 400, height = 500, brandName = "", as
   useEffect(() => {
     const canvas = fabricRef.current;
     if (!canvas || !data) return;
+    // For the feed grid (asImage) we render ONCE and freeze it to a JPEG. If we
+    // do that before the self-hosted font (Aspekta thin/bold) has loaded, the
+    // frozen image bakes in a fallback font and the thin/bold contrast is lost.
+    // So for asImage, wait until fontLoaded before the one-shot render.
+    if (asImage && !fontLoaded) return;
 
     // Dimensions (internal render resolution — kept high for crisp scaling)
     let canvasWidth = 800;

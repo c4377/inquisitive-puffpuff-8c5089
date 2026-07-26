@@ -509,7 +509,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // warmEditorial with NO explicit *marks*: auto-size + auto-bold so the
     // headline reads like the reference (one big punch line, bold key words).
     if (slide.warmEditorial && !raw.includes('*')) {
-      const segments = isHook ? autoSizedSegments(raw) : autoBoldSegments(raw);
+      // Hooks get the big/small size switch + thin/bold word rhythm. Follow-up
+      // slides stay calm: ONE single weight, no per-word bold (the base weight
+      // is set to 300 for warmEditorial follow-ups in ContentPlanner).
+      const segments = isHook
+        ? autoSizedSegments(raw)
+        : [{ text: raw, accent: false, bold: false }];
       return { plain: segments.map((s) => s.text).join(''), segments };
     }
     const parts = raw.split(/(\*[^*]+\*)/g).filter((s) => s !== '');
