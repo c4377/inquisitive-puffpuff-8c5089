@@ -1179,6 +1179,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   };
   let brandVariant = BRAND_VARIANTS[layoutResolved];
 
+  // Eine einzige Textgeometrie fuer ALLE Folgeseiten — mit oder ohne Foto.
+  // Nur so sitzt der Text beim Wischen auf derselben Hoehe.
+  const FOLLOWUP_Y = 0.62;
+  const FOLLOWUP_PT = 60;
+  const FOLLOWUP_W = 0.72;
+
   // FOLLOW-UP PAGES (slideIndex > 0): make every follow-up calm and uniform so
   // the carousel reads cleanly when swiping — one font, LEFT aligned, always
   // vertically CENTERED, same position on every page. Photos are still allowed
@@ -1186,13 +1192,24 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // The first page (the hook, slideIndex 0) keeps its designed layout.
   if (brandVariant && typeof options.slideIndex === 'number' && options.slideIndex > 0) {
     const keepPhoto = brandVariant.base === 'gradient' || brandVariant.base === 'frame';
-    if (slide.warmEditorial) {
-      // Warm Editorial: NUR die erste Seite traegt den gesetzten Ad-Look auf
-      // dem Foto. Jede Folgeseite ist eine reine Textseite auf der dunklen
-      // Platte — auch wenn ein Foto hinterlegt waere. followUp:false laesst die
-      // Template-Werte gelten: Anker fix bei 47%, 60/1080, Spalte 0.68. Damit
-      // sitzt der Text auf JEDER Folgeseite auf derselben Hoehe.
-      brandVariant = { ...BRAND_VARIANTS.we_plate_dark, followUp: false };
+    if (slide.warmEditorial && hasBgImage && keepPhoto) {
+      // Folgeseite MIT Foto: das Bild bleibt — es erzeugt den Sog, den eine
+      // reine Textseite nicht hat. Der TEXT bekommt aber exakt dieselbe
+      // Geometrie wie eine Textseite: gleicher Anker, gleiche Groesse, gleiche
+      // Spalte. lockY schaltet das Ausweichen vor Gesichtern ab, damit die
+      // Hoehe ueber das ganze Karussell wirklich konstant bleibt.
+      brandVariant = {
+        base: 'gradient', textPos: 'bottom', align: 'center',
+        exactY: FOLLOWUP_Y, exactFont: FOLLOWUP_PT, exactWidth: FOLLOWUP_W,
+        scrim: 0.6, lockY: true, followUp: false,
+      };
+    } else if (slide.warmEditorial) {
+      // Folgeseite OHNE Foto: dunkle Platte, identische Textgeometrie.
+      brandVariant = {
+        ...BRAND_VARIANTS.we_plate_dark,
+        exactY: FOLLOWUP_Y, exactFont: FOLLOWUP_PT, exactWidth: FOLLOWUP_W,
+        followUp: false,
+      };
     } else {
       brandVariant = {
         base: keepPhoto && hasBgImage ? 'gradient' : 'plate',
@@ -1280,7 +1297,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     let exactAnchor = null;
     if (!followUp && V.exactY != null) {
       exactAnchor = V.exactY;
-      if (hasBgImage && faceZones.length > 0) {
+      if (hasBgImage && faceZones.length > 0 && !V.lockY) {
         const faceRows = new Set(faceZones.map((z) => Math.floor(z / 3)));
         const rowOf = (f) => (f < 0.34 ? 0 : f < 0.66 ? 1 : 2);
         if (faceRows.has(rowOf(exactAnchor))) {
@@ -1292,7 +1309,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         }
       }
     }
-    const _spot = (slide.warmEditorial && hasBgImage && slide._autoImage && slide._autoImage.textSpot)
+    // Die gemessene Textstelle gilt NUR auf der ersten Seite. Auf Folgeseiten
+    // wuerde sie die feste Hoehe wieder aufbrechen.
+    const isFollowPage = (options.slideIndex || 0) > 0;
+    const _spot = (!isFollowPage && slide.warmEditorial && hasBgImage
+      && slide._autoImage && slide._autoImage.textSpot)
       ? slide._autoImage.textSpot : null;
     const anchorY = followUp
       // Follow-up on a PHOTO: same face-safe rule as the hero — detected
@@ -1315,7 +1336,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // Use the fine-grained text spot from the image analysis: the flattest,
     // face-free area. The block sits THERE (left, right or centre — whatever
     // the photo offers) as a narrow editorial column, left-aligned inside.
-    const spot = (slide.warmEditorial && hasBgImage && slide._autoImage && slide._autoImage.textSpot)
+    const spot = (!isFollowPage && slide.warmEditorial && hasBgImage
+      && slide._autoImage && slide._autoImage.textSpot)
       ? slide._autoImage.textSpot : null;
     const editorial = !!spot;
     const cx = editorial
@@ -1394,8 +1416,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const _zones = (slide._autoImage && slide._autoImage.zoneBrightness) || null;
     const _avgLum = (slide._autoImage && typeof slide._autoImage.avgBrightness === 'number')
       ? slide._autoImage.avgBrightness : 128;
+    const _zoneAt = (i) => (_zones && typeof _zones[i] === 'number' ? _zones[i] : _avgLum);
     const measuredLum = _adReady
-      ? (_zones && typeof _zones[_faceLow ? 0 : 6] === 'number' ? _zones[_faceLow ? 0 : 6] : _avgLum)
+      ? _zoneAt(_faceLow ? 0 : 6)
+      : isFollowPage && hasBgImage ? _zoneAt(7)
       : (spot && typeof spot.brightness === 'number' ? spot.brightness : _avgLum);
     const bgLumBehindText = hasBgImage
       ? effectiveBgLum(measuredLum, scrim, peakAlpha * (V.tint ? 1.1 : 1))
@@ -1477,8 +1501,14 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     makeHeadline(segments, plain, {
       left: cx, top: y, originX, originY: headOriginY,
       width: width * (onPhoto ? startW : (editorial ? 0.46 : (V.exactWidth || (alignLeft ? 0.82 : 0.86)))),
-      maxWidth: onPhoto ? width * growW : undefined,
-      fontSize: onPhoto ? photoHeadlineSize()
+      // Auf Folgeseiten darf die Spalte NICHT mitwachsen — sonst waere die
+      // Zeilenbreite von Seite zu Seite unterschiedlich.
+      maxWidth: isFollowPage ? undefined : (onPhoto ? width * growW : undefined),
+      // Folgeseiten nehmen den Template-Wert (60/1080) — mit UND ohne Foto
+      // derselbe. Die grosse Foto-Groesse gilt nur fuer die erste Seite.
+      fontSize: (isFollowPage && slide.warmEditorial && V.exactFont)
+        ? width * (V.exactFont / 1080)
+        : onPhoto ? photoHeadlineSize()
         : (slide.warmEditorial && V.exactFont) ? width * (V.exactFont / 1080)
         : fs(finalFont),
       // Untergrenze nur auf Foto — Textflaechen behalten ihr Feintuning.
