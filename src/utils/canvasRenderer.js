@@ -287,6 +287,39 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
   };
 
+  // === BRAND RULES (hart, nicht verhandelbar) ==============================
+  // 1) TYPO AUF FOTO: immer die gleiche, grosse Groesse. Referenz 72/1080.
+  //    Nie unter PHOTO_MIN_PT — lieber die Textspalte breiter machen als die
+  //    Schrift kleiner. (Frueher: 72 mit Spot, 54 ohne, ~42 auf Follow-ups.)
+  const PHOTO_HEADLINE_PT = 72;
+  const PHOTO_MIN_PT = 56;
+  const photoHeadlineSize = () => width * (PHOTO_HEADLINE_PT / 1080);
+  const photoHeadlineMin = () => width * (PHOTO_MIN_PT / 1080);
+
+  // 2) GOLD NUR WENN ES PASST. Das warme Tan ist ein Mittelton (Lum ~156):
+  //    es traegt nur auf dunklem Grund. Auf Creme, Khaki oder einer hellen
+  //    Fotostelle verschwindet es — dann bleibt der Text in Textfarbe (fett).
+  const GOLD = '#B29A6B';
+  const GOLD_LUM = hexLuminance(GOLD);
+  const GOLD_MAX_BG_LUM = 120;   // darueber ist der Grund zu hell fuer Gold
+  const GOLD_MIN_DELTA = 70;     // Mindestabstand Gold <-> Grund
+  const goldFits = (bgLumEff) => {
+    if (typeof bgLumEff !== 'number' || Number.isNaN(bgLumEff)) return false;
+    return bgLumEff <= GOLD_MAX_BG_LUM && Math.abs(GOLD_LUM - bgLumEff) >= GOLD_MIN_DELTA;
+  };
+  // Effektive Helligkeit hinter dem Text = Foto-Helligkeit, abgedunkelt durch
+  // den Scrim, der an dieser Stelle liegt.
+  const effectiveBgLum = (photoLum, scrimHex, scrimAlpha) => {
+    const a = Math.min(Math.max(scrimAlpha || 0, 0), 1);
+    return photoLum * (1 - a) + hexLuminance(scrimHex || '#1A1512') * a;
+  };
+
+  // 3) NIEMALS WEISSE RAHMEN. Jede Passepartout-/Rahmenflaeche zieht sich
+  //    diesen Brand-Ton, kein #FFFFFF. Strichrahmen entfallen, sobald sie
+  //    hell werden wuerden.
+  const MAT_TONE = slide.backgroundColor || '#EDE9E3';
+  const frameStrokeOk = (col) => hexLuminance(col) < 200;
+
   // --- LOGO / STICKER OVERLAY (second image on top) ---
   // Draw a SMALL framed photo (not full-bleed). Returns true only if the
   // image actually loaded & drew; false otherwise so the caller can fall back.
@@ -315,7 +348,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
             left: cx, top: cy, originX: 'center', originY: 'center',
             width: drawnW + mat * 2, height: drawnH + mat * 2,
             rx: 12 * scale, ry: 12 * scale,
-            fill: '#FFFFFF', selectable: false,
+            fill: MAT_TONE, selectable: false,
             shadow: 'rgba(0,0,0,0.22) 0px 10px 30px',
           }));
           img.set({
@@ -828,7 +861,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     //  (2) height — if opts.maxBottom is given, the whole wrapped block must end
     //      above it, so text never runs into the reserved footer space.
     let fontSize = bigMode ? Math.round(opts.fontSize * 1.35) : opts.fontSize;
-    const boxW = opts.width;
+    // Untergrenze: auf Fotos darf die Schrift nicht wegschrumpfen.
+    const minFont = Math.max(12, opts.minFontSize || 14);
+    // Die Spalte darf BREITER werden, bevor die Schrift kleiner wird.
+    let boxW = opts.width;
+    const maxBoxW = Math.max(boxW, opts.maxWidth || boxW);
     const measureBox = (fsz) => new fabric.Textbox(headText, {
       width: boxW, fontSize: fsz, fontFamily: headFont,
       fontWeight: headWeightFinal, lineHeight: opts.lineHeight || (slide.warmEditorial ? 1.04 : 1.15),
@@ -859,10 +896,20 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         }
         return (topY + h) <= opts.maxBottom;
       };
+      // Schritt 1: Spalte verbreitern, solange das noch erlaubt ist. Das ist
+      // der Grund, warum Texte frueher unterschiedlich gross wirkten — eine
+      // enge Spalte hat die Schrift heruntergeregelt statt breiter zu setzen.
+      let growGuard = 0;
+      while (boxW < maxBoxW && (!widthFits(fontSize) || !heightFits(fontSize)) && growGuard < 40) {
+        boxW = Math.min(maxBoxW, boxW + width * 0.02);
+        growGuard++;
+      }
+      // Schritt 2: erst jetzt die Schrift reduzieren — nie unter minFont.
       let guard = 0;
-      while (fontSize > 14 && (!widthFits(fontSize) || !heightFits(fontSize)) && guard < 60) {
+      while (fontSize > minFont && (!widthFits(fontSize) || !heightFits(fontSize)) && guard < 60) {
         fontSize -= 2; guard++;
       }
+      if (fontSize < minFont) fontSize = minFont;
     } catch (e) { /* measuring is best-effort */ }
 
     const t = new fabric.Textbox(headText, {
@@ -918,8 +965,16 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           }
           // warmEditorial auto-gold: the closing clause in warm tan — upright
           // and BOLD, exactly like the reference ("als in den 6 Monaten davor.").
+          // GOLD-REGEL: nur wenn der Grund dunkel genug ist. Passt es nicht,
+          // bleibt die Schlussklammer in Textfarbe — fett, aber ohne Gold.
+          // (Der Aufrufer entscheidet ueber opts.goldOk.)
           if (s.gold && s.text.length) {
-            t.setSelectionStyles({ fill: '#B29A6B', fontWeight: '700' }, idx, idx + s.text.length);
+            t.setSelectionStyles(
+              opts.goldOk === true
+                ? { fill: GOLD, fontWeight: '700' }
+                : { fontWeight: '700' },
+              idx, idx + s.text.length
+            );
           }
           // warmEditorial: underline the first strong key word (reference style).
           if (s.underline && s.text.length) {
@@ -952,11 +1007,31 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         const h = t.height || 0;
         return (t.originY === 'center') ? (t.top + h / 2) : (t.top + h);
       };
-      while (blockBottom() > limit && t.fontSize > 12 && safeGuard < 80) {
+      // Zuerst nur bis zur Untergrenze schrumpfen. Nur wenn der Block DANN
+      // immer noch in die Signaturzone laeuft, geht es weiter runter — ein
+      // ueberlaufender Block waere schlimmer als eine kleinere Zeile.
+      const softFloor = Math.max(12, opts.minFontSize || 14);
+      while (blockBottom() > limit && t.fontSize > softFloor && safeGuard < 80) {
         const factor = (t.fontSize - 1) / t.fontSize;
         // scale base size
         t.set('fontSize', t.fontSize - 1);
         // scale every per-character override proportionally
+        if (t.styles) {
+          Object.keys(t.styles).forEach((ln) => {
+            Object.keys(t.styles[ln]).forEach((ch) => {
+              const st = t.styles[ln][ch];
+              if (st && typeof st.fontSize === 'number') st.fontSize *= factor;
+            });
+          });
+        }
+        t.initDimensions && t.initDimensions();
+        safeGuard++;
+      }
+      // Notfall: laeuft der Block trotz Untergrenze noch in die Signatur,
+      // gewinnt die Signatur.
+      while (blockBottom() > limit && t.fontSize > 12 && safeGuard < 160) {
+        const factor = (t.fontSize - 1) / t.fontSize;
+        t.set('fontSize', t.fontSize - 1);
         if (t.styles) {
           Object.keys(t.styles).forEach((ln) => {
             Object.keys(t.styles[ln]).forEach((ch) => {
@@ -1075,56 +1150,14 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // Gradient shape. Key idea: keep the TOP of the photo perfectly clear (0
     // opacity) so the face/subject stays clean, and only darken the band right
     // behind the text. No flat wash over the whole image.
-    const stopsFor = (pos) => {
-      if (pos === 'top') return [
-        { offset: 0,    color: hexToRgba(scrim, Math.min(strength + 0.15, 0.95)) },
-        { offset: 0.22, color: hexToRgba(scrim, strength * 0.7) },
-        { offset: 0.45, color: hexToRgba(scrim, 0) },
-        { offset: 1,    color: hexToRgba(scrim, 0) },
-      ];
-      if (pos === 'center') return [
-        { offset: 0,    color: hexToRgba(scrim, 0) },
-        { offset: 0.32, color: hexToRgba(scrim, 0) },
-        { offset: 0.52, color: hexToRgba(scrim, strength * 0.75) },
-        { offset: 0.72, color: hexToRgba(scrim, Math.min(strength + 0.1, 0.92)) },
-        { offset: 1,    color: hexToRgba(scrim, strength * 0.55) },
-      ];
-      return [ // bottom
-        { offset: 0,    color: hexToRgba(scrim, 0) },
-        { offset: 0.4,  color: hexToRgba(scrim, 0) },
-        { offset: 0.6,  color: hexToRgba(scrim, strength * 0.45) },
-        { offset: 0.8,  color: hexToRgba(scrim, strength * 0.82) },
-        { offset: 1,    color: hexToRgba(scrim, Math.min(strength + 0.15, 0.95)) },
-      ];
-    };
+    // (Der alte positionsbasierte Verlauf ist entfallen — der Scrim folgt
+    //  jetzt dem gemessenen Textanker, siehe bandStops weiter unten.)
 
-    if (hasBgImage) {
-      // Ton-in-Ton: on tinted variants, add a SOFT brand-colour wash — stronger
-      // at the bottom, fading to clear at the top so the subject stays crisp
-      // (not a flat muddy veil over the whole photo).
-      if (V.tint) {
-        canvas.add(new fabric.Rect({
-          left: 0, top: 0, width, height, selectable: false,
-          fill: new fabric.Gradient({
-            type: 'linear', coords: { x1: 0, y1: 0, x2: 0, y2: height },
-            colorStops: [
-              { offset: 0,   color: hexToRgba(scrim, 0.12) },
-              { offset: 0.5, color: hexToRgba(scrim, 0.28) },
-              { offset: 1,   color: hexToRgba(scrim, 0.42) },
-            ],
-          }),
-        }));
-      }
-      canvas.add(new fabric.Rect({
-        left: 0, top: 0, width, height, selectable: false,
-        fill: new fabric.Gradient({
-          type: 'linear', coords: { x1: 0, y1: 0, x2: 0, y2: height },
-          colorStops: stopsFor(V.textPos),
-        }),
-      }));
-    } else {
-      canvas.add(new fabric.Rect({ left: 0, top: 0, width, height, fill: scrim, selectable: false }));
-    }
+
+    // Der Scrim wird WEITER UNTEN gezeichnet — erst wenn feststeht, wo der
+    // Text wirklich sitzt. Vorher lag das dunkle Band bei der Standardposition
+    // der Variante, waehrend der Text auf einer gemessenen hellen Stelle
+    // landete: genau dann sind Schrift und Gold weggebrochen.
 
     const { plain, segments } = parseAccent(slide.text);
 
@@ -1208,6 +1241,71 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const originX = editorial ? 'center' : (alignLeft ? 'left' : 'center');
     const tAlign = editorial ? 'left' : (alignLeft ? 'left' : 'center');
 
+    // ---- SCRIM, DER DEM TEXT FOLGT --------------------------------------
+    // Das dunkle Band liegt jetzt dort, wo der Text tatsaechlich sitzt, nicht
+    // dort, wo die Variante es vorgesehen hatte. Nur so traegt eine gleich
+    // grosse Schrift auf JEDEM Foto — und nur so ist die Helligkeit hinter
+    // dem Text vorhersagbar (Voraussetzung fuer die Gold-Regel).
+    const bandF = Math.min(Math.max(anchorY / height, 0.08), 0.92);
+    const peakAlpha = Math.min(strength + 0.12, 0.95);
+    const bandStops = (f) => {
+      const pts = [];
+      const push = (o, a) => pts.push({ o: Math.min(Math.max(o, 0), 1), a });
+      push(0, f < 0.3 ? peakAlpha : 0);
+      push(f - 0.34, 0);
+      push(f - 0.15, strength * 0.72);
+      push(f, peakAlpha);
+      push(f + 0.15, strength * 0.72);
+      push(f + 0.34, f > 0.7 ? peakAlpha : 0);
+      push(1, f > 0.66 ? peakAlpha : 0);
+      // Offsets muessen streng steigen, sonst rendert fabric den Verlauf falsch.
+      const clean = [];
+      pts.sort((p, q) => p.o - q.o).forEach((p) => {
+        const last = clean[clean.length - 1];
+        if (last && Math.abs(last.o - p.o) < 0.001) { last.a = Math.max(last.a, p.a); return; }
+        clean.push({ ...p });
+      });
+      return clean.map((p) => ({ offset: p.o, color: hexToRgba(scrim, p.a) }));
+    };
+
+    if (hasBgImage) {
+      // Ton-in-Ton: on tinted variants, a SOFT brand wash under the band.
+      if (V.tint) {
+        canvas.add(new fabric.Rect({
+          left: 0, top: 0, width, height, selectable: false,
+          fill: new fabric.Gradient({
+            type: 'linear', coords: { x1: 0, y1: 0, x2: 0, y2: height },
+            colorStops: [
+              { offset: 0,   color: hexToRgba(scrim, 0.12) },
+              { offset: 0.5, color: hexToRgba(scrim, 0.28) },
+              { offset: 1,   color: hexToRgba(scrim, 0.42) },
+            ],
+          }),
+        }));
+      }
+      canvas.add(new fabric.Rect({
+        left: 0, top: 0, width, height, selectable: false,
+        fill: new fabric.Gradient({
+          type: 'linear', coords: { x1: 0, y1: 0, x2: 0, y2: height },
+          colorStops: bandStops(bandF),
+        }),
+      }));
+    } else {
+      canvas.add(new fabric.Rect({ left: 0, top: 0, width, height, fill: scrim, selectable: false }));
+    }
+
+    // ---- GOLD-ENTSCHEIDUNG ----------------------------------------------
+    // Helligkeit hinter dem Text = gemessene Fotostelle, abgedunkelt durch das
+    // Band. Auf einer Flaeche ohne Foto zaehlt der Scrim-Ton selbst.
+    const measuredLum = spot && typeof spot.brightness === 'number'
+      ? spot.brightness
+      : (slide._autoImage && typeof slide._autoImage.avgBrightness === 'number'
+        ? slide._autoImage.avgBrightness : 128);
+    const bgLumBehindText = hasBgImage
+      ? effectiveBgLum(measuredLum, scrim, peakAlpha * (V.tint ? 1.1 : 1))
+      : hexLuminance(scrim);
+    const goldOk = goldFits(bgLumBehindText);
+
     let y = anchorY;
     // Clean: no kicker label box. Only the optional inline kicker for non-bold
     // layouts that explicitly place one.
@@ -1236,14 +1334,24 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       : (V.textPos === 'center' ? 'center' : 'top');
     // FOLLOW-UP photo pages: clean — text only, no label or rule.
 
+    // ---- SCHRIFTGROESSE AUF FOTO ----------------------------------------
+    // EINE Groesse, egal ob Hook oder Follow-up, egal ob eine Spot-Messung
+    // gelungen ist. Vorher: 72 mit Spot, 54 ohne, ~42 auf Follow-ups — deshalb
+    // wirkte die Typo im Feed mal gross, mal klein.
+    const onPhoto = hasBgImage && !V.bigWord;
+    const startW = editorial ? 0.52 : (V.exactWidth || (alignLeft ? 0.82 : 0.86));
+    const growW = editorial ? 0.78 : 0.9;
+
     makeHeadline(segments, plain, {
       left: cx, top: y, originX, originY: headOriginY,
-      width: width * (editorial ? 0.46 : (V.exactWidth || (alignLeft ? 0.82 : 0.86))),
-      // Editorial spot placement uses a NARROW column, so the type has to be
-      // bigger to keep the reference's presence (~72 per 1080 width).
-      fontSize: editorial ? width * (72 / 1080)
+      width: width * (onPhoto ? startW : (editorial ? 0.46 : (V.exactWidth || (alignLeft ? 0.82 : 0.86)))),
+      maxWidth: onPhoto ? width * growW : undefined,
+      fontSize: onPhoto ? photoHeadlineSize()
         : (slide.warmEditorial && V.exactFont) ? width * (V.exactFont / 1080)
         : fs(finalFont),
+      // Untergrenze nur auf Foto — Textflaechen behalten ihr Feintuning.
+      minFontSize: onPhoto ? photoHeadlineMin() : undefined,
+      goldOk,
       fill: textCol, accentFill: accentCol, textAlign: tAlign,
       lineHeight: V.bigWord ? 0.98 : (slide.warmEditorial ? 1.04 : 1.12), fontWeight: slide.fontWeight || (V.bigWord ? '700' : '600'),
       shadow: brandTextShadow(),
@@ -1314,12 +1422,13 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       await new Promise((res) => {
         fabric.Image.fromURL(slide.background, (img) => {
           if (!img) return res();
+          // NIEMALS WEISSE RAHMEN: das Passepartout zieht sich den Flaechen-
+          // ton der Kachel. Kein #FFFFFF, kein harter Schlagschatten.
           if (V.polaroid) {
             canvas.add(new fabric.Rect({
               left: frameX - mat, top: frameY - mat,
               width: frameW + mat * 2, height: frameH + matBottom,
-              fill: '#FFFFFF', selectable: false,
-              shadow: 'rgba(0,0,0,0.18) 0px 8px 24px',
+              fill: plate, selectable: false,
             }));
           }
           const f = Math.max(frameW / img.width, frameH / img.height);
@@ -1333,7 +1442,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
             }),
           });
           canvas.add(img);
-          if (!V.polaroid) {
+          // Haarlinie nur, solange sie NICHT weiss wird (auf dunkler Platte
+          // waere die Textfarbe hell -> das ergaebe genau den weissen Rahmen,
+          // der nie vorkommen soll).
+          if (!V.polaroid && frameStrokeOk(textCol)) {
             canvas.add(new fabric.Rect({
               left: frameX, top: frameY, width: frameW, height: frameH,
               fill: 'transparent', stroke: hexToRgba(textCol, 0.25),
@@ -1382,7 +1494,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     canvas.add(new fabric.Rect({ left: 0, top: 0, width, height, fill: plate, selectable: false }));
 
     // Optional thin inner rule frame.
-    if (V.rule) {
+    if (V.rule && frameStrokeOk(textCol)) {
       const m = width * 0.08;
       canvas.add(new fabric.Rect({
         left: m, top: m, width: width - m * 2, height: height - m * 2,
@@ -1418,6 +1530,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         left: slide.warmEditorial ? width / 2 : marginX, top: textTop,
         originX: slide.warmEditorial ? 'center' : 'left', originY: 'top',
         width: width * 0.82, fontSize: fs(fUpFont),
+        goldOk: goldFits(hexLuminance(plate)),
         fill: textCol, accentFill: accentCol, textAlign: slide.warmEditorial ? 'center' : 'left', lineHeight: 1.2,
         fontWeight: slide.fontWeight || '600',
         shadow: brandTextShadow(),
@@ -1452,10 +1565,14 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       : (slide.warmEditorial && V.exactFont) ? V.exactFont
       : (slide.fontSize || V.exactFont || (slide.warmEditorial ? 46 : 58));
     const finalFont = baseFont;
+    // Gold auf einer Flaeche: nur wenn die Flaeche dunkel genug ist. Creme und
+    // Khaki fallen damit automatisch raus, die dunkle Platte behaelt das Gold.
+    const goldOk = goldFits(hexLuminance(plate));
     makeHeadline(segments, plain, {
       left: cx, top: cy, originX, originY: anchorY,
       width: width * (V.exactWidth || (alignLeft ? 0.8 : 0.74)),
       fontSize: (slide.warmEditorial && V.exactFont) ? width * (V.exactFont / 1080) : fs(finalFont),
+      goldOk,
       fill: textCol, accentFill: accentCol, textAlign: tAlign,
       lineHeight: V.bigWord ? 0.98 : (slide.warmEditorial ? 1.04 : 1.14),
       fontWeight: slide.fontWeight || (V.bigWord ? '700' : '600'),
@@ -2454,7 +2571,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     canvas.add(new fabric.Rect({
       left: gm, top: gTop, width: width - gm * 2, height: gH,
       fill: hasBgImage ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.10)',
-      stroke: 'rgba(255,255,255,0.45)', strokeWidth: 1.5 * scale,
+      stroke: 'rgba(0,0,0,0.18)', strokeWidth: 1.5 * scale,
       rx: fs(20), ry: fs(20), selectable: false,
     }));
     const { plain, segments } = parseAccent(slide.text);
