@@ -34,7 +34,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // face is ready. Best-effort with a short timeout so it never hangs a render.
   try {
     if (typeof document !== 'undefined' && document.fonts && document.fonts.load) {
-      const needed = new Set(['Anton', 'Montserrat', 'Playfair Display', 'Helvetica Now']);
+      const needed = new Set(['Anton', 'Montserrat', 'Playfair Display', 'AspektaBrand']);
       if (slide.fontFamily) needed.add(slide.fontFamily);
       if (slide.accentFontFamily) needed.add(slide.accentFontFamily);
       const loads = [];

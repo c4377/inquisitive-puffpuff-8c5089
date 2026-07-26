@@ -474,7 +474,7 @@ export const REFERENCE_PRESETS = [
       background: '#F7F5F1',   // near-white is the DEFAULT surface
       darkPlate: '#2C2823',    // dark neutral brown-black for the rare dark tile
     },
-    typography: { fontFamily: 'Helvetica Now', accentFontFamily: 'Helvetica Now', bodyFontFamily: 'Helvetica Now' },
+    typography: { fontFamily: 'AspektaBrand', accentFontFamily: 'AspektaBrand', bodyFontFamily: 'AspektaBrand' },
     tags: ['warm', 'editorial', 'ruhig', 'kuratiert'],
     extra: {
       headlineTracking: -35,   // tight, like the reference grotesk
