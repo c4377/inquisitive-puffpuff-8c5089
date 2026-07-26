@@ -811,8 +811,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       : (capsMode ? '700' : (opts.fontWeight || '600'));
     // Warm Editorial follow-ups: ALWAYS bold, regardless of what weight the
     // stored plan carries (works without re-importing the plan).
-    const headWeightFinal = (slide.warmEditorial && typeof options.slideIndex === 'number' && options.slideIndex > 0)
+    let headWeightFinal = (slide.warmEditorial && typeof options.slideIndex === 'number' && options.slideIndex > 0)
       ? '700' : headWeight;
+    // On PHOTOS the thin 300 base washes out — lift the base to 400 there.
+    if (slide.warmEditorial && hasBgImage && (headWeightFinal === '300' || headWeightFinal === '200')) headWeightFinal = '400';
     const headItalic = boldSerif;                                 // Playfair italic
     // Fixed, clean letter spacing per style (no user-adjustable tracking — it
     // caused torn glyphs when it clashed with a font's own metrics). Values are
@@ -1190,7 +1192,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       y += 34 * scale;
     }
 
-    const baseFont = V.bigWord ? (slide.fontSize || 120) : (slide.fontSize || V.exactFont || (slide.warmEditorial ? 52 : 66));
+    const baseFont = V.bigWord ? (slide.fontSize || 120)
+      : (slide.warmEditorial && V.exactFont) ? V.exactFont
+      : (slide.fontSize || V.exactFont || (slide.warmEditorial ? 52 : 66));
     // Follow-ups: 15% smaller, then another 5% (~0.8075 of base).
     const finalFont = followUp ? Math.round(baseFont * 0.8) : baseFont;
     // Anchoring: follow-ups and detected face/quiet placement grow downward from
@@ -1411,7 +1415,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       drawKickerAt(slide.secondaryText, cx, height * 0.3, hexToRgba(textCol, 0.7), originX, 'center');
     }
 
-    const baseFont = V.bigWord ? (slide.fontSize || 110) : (slide.fontSize || V.exactFont || (slide.warmEditorial ? 46 : 58));
+    const baseFont = V.bigWord ? (slide.fontSize || 110)
+      : (slide.warmEditorial && V.exactFont) ? V.exactFont
+      : (slide.fontSize || V.exactFont || (slide.warmEditorial ? 46 : 58));
     const finalFont = baseFont;
     makeHeadline(segments, plain, {
       left: cx, top: cy, originX, originY: anchorY,
