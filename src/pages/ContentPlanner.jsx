@@ -292,7 +292,7 @@ const ContentPlanner = () => {
             return {
               ...slide,
               background: bgOverride,
-              coverBlurMode: coverBlurMode && !isCtaSlide,
+              coverBlurMode: config.warmEditorial === true ? false : (coverBlurMode && !isCtaSlide),
               isCtaSlide,
               // keep the slide's own colours
               layout: finalLayout,
@@ -306,7 +306,7 @@ const ContentPlanner = () => {
           return {
             ...slide,
             background: bgOverride,
-            coverBlurMode: coverBlurMode && !isCtaSlide,
+            coverBlurMode: config.warmEditorial === true ? false : (coverBlurMode && !isCtaSlide),
             isCtaSlide,
             color: isBrandLayout ? brandText : text,
             backgroundColor: isBrandLayout ? brandBg : bg,
@@ -423,61 +423,7 @@ const ContentPlanner = () => {
     updateBrandSettings({ contentPlan: applyBrandStyling(updated, currentBrand) });
   };
 
-  // === KI-DESIGNER =========================================================
-  // One post at a time: the AI designs the tile freely (position/size/weight/
-  // colour) guided by the previous post's design for feed rhythm. The spec is
-  // stored on the slide and rendered directly; run again to re-design, or
-  // remove it to fall back to the preset engines.
-  const [aiDesignBusyDay, setAiDesignBusyDay] = useState(null);
-  const [aiDesignError, setAiDesignError] = useState('');
-  const aiDesignDay = async (dayNum) => {
-    setAiDesignError('');
-    const dayIdx = weekPlan.findIndex((d) => d.day === dayNum);
-    if (dayIdx === -1) return;
-    const day = weekPlan[dayIdx];
-    const slide = day.slides?.[0];
-    if (!slide) return;
-    // Toggle off: if a spec exists, remove it (back to preset look).
-    if (slide.designSpec) {
-      const updated = weekPlan.map((d) => (d.day === dayNum
-        ? { ...d, slides: d.slides.map((s, i) => (i === 0 ? { ...s, designSpec: null } : s)) }
-        : d));
-      updateBrandSettings({ contentPlan: updated });
-      return;
-    }
-    setAiDesignBusyDay(dayNum);
-    try {
-      // Previous post (the one BELOW in feed order = previous day) for rhythm.
-      const prev = weekPlan[dayIdx + 1]?.slides?.[0];
-      const prevSummary = prev?.designSpec?.summary
-        || (prev ? `${prev.background ? 'photo' : 'plate'} background, layout ${prev.layout || '-'}` : 'none');
-      const cfg = brandSettings.currentBrandConfig || {};
-      const res = await fetch('/.netlify/functions/design-post', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text: slide.text || '',
-          isHook: true,
-          hasImage: typeof slide.background === 'string' && slide.background.length > 5,
-          prevSummary,
-          palette: cfg.colors || {},
-        }),
-      });
-      const raw = await res.text();
-      let data = null;
-      try { data = JSON.parse(raw); } catch { /* html */ }
-      if (!data) throw new Error('KI-Designer nicht erreichbar (nur bei Git-Deploy mit GEMINI_API_KEY).');
-      if (!res.ok || !data.spec) throw new Error(data.error || 'Design fehlgeschlagen');
-      const updated = weekPlan.map((d) => (d.day === dayNum
-        ? { ...d, slides: d.slides.map((s, i) => (i === 0 ? { ...s, designSpec: data.spec } : s)) }
-        : d));
-      updateBrandSettings({ contentPlan: updated });
-    } catch (e) {
-      setAiDesignError(String(e?.message || e));
-      setTimeout(() => setAiDesignError(''), 6000);
-    } finally {
-      setAiDesignBusyDay(null);
-    }
-  };
+
 
   // Toggle cover-blur for ONE post (day): follow-up slides reuse the cover
   // photo, blurred and slightly darkened.
@@ -707,17 +653,21 @@ const ContentPlanner = () => {
     // rhythm — roughly two photo tiles then a plate tile, plate tones varying
     // khaki/cream/dark, photo text position varying bottom/statement/top.
     if (brandConfig?.warmEditorial) {
+      // Measured from the reference feed: 9 photos + 3 plates per 12 tiles
+      // (3:1), plates diagonally offset across rows (never stacked).
       return [
-        'we_photo_bottom',     // 0  photo, text low
-        'we_plate_khaki',      // 1  PLATE khaki
-        'we_photo_left',       // 2  photo, LEFT block mid
-        'we_photo_top',        // 3  photo, text high
-        'we_plate_cream',      // 4  PLATE cream
-        'we_photo_bottom',     // 5  photo, text low
-        'we_plate_dark',       // 6  PLATE dark ("11 DINGE")
-        'we_photo_statement',  // 7  photo, big middle statement
-        'we_plate_cream_left', // 8  PLATE cream, LEFT
-        'we_photo_bottom',     // 9  photo, text low
+        'we_photo_bottom',     // 0  photo
+        'we_plate_khaki',      // 1  PLATE (row 1, middle)
+        'we_photo_top',        // 2  photo
+        'we_photo_left',       // 3  photo
+        'we_photo_bottom',     // 4  photo
+        'we_plate_cream',      // 5  PLATE (row 2, right)
+        'we_photo_statement',  // 6  photo
+        'we_photo_bottom',     // 7  photo
+        'we_photo_top',        // 8  photo
+        'we_plate_dark',       // 9  PLATE (row 4, left)
+        'we_photo_bottom',     // 10 photo
+        'we_photo_left',       // 11 photo
       ];
     }
     // Feed rhythm in blocks of TEN: 8 photo posts, 2 text-only posts. The
@@ -1360,9 +1310,6 @@ const ContentPlanner = () => {
             // sits top-left, the oldest bottom-right. We reverse a shallow copy
             // for display only; the underlying plan/day numbers are unchanged.
             <>
-            {aiDesignError && (
-              <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg p-2 mb-2">KI-Design: {aiDesignError}</p>
-            )}
             <div className="grid grid-cols-3 gap-[2px]">
               {[...weekPlan].reverse().map((day, dayIndex) => {
                 // Guard: a day with missing/empty slides must not crash the whole
@@ -1489,12 +1436,7 @@ const ContentPlanner = () => {
                             </span>
                             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${day.slides?.[0]?.depthShade === null ? 'bg-gray-200 text-gray-500' : 'bg-amber-500 text-white'}`}>{day.slides?.[0]?.depthShade === null ? 'Aus' : 'Auto'}</span>
                           </button>
-                          <button onClick={() => { setMenuDayId(null); aiDesignDay(day.day); }} disabled={aiDesignBusyDay === day.day} className="w-full flex items-center justify-between px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50 disabled:opacity-50">
-                            <span className="flex items-center gap-3">
-                              <SafeIcon icon={FiZap} className={`text-base ${day.slides?.[0]?.designSpec ? 'text-purple-600' : 'text-gray-500'}`} /> KI-Design
-                            </span>
-                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${day.slides?.[0]?.designSpec ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-500'}`}>{aiDesignBusyDay === day.day ? '…' : (day.slides?.[0]?.designSpec ? 'An' : 'Aus')}</span>
-                          </button>
+                          
                           <button onClick={() => { setMenuDayId(null); setExpandedCaptionId(expandedCaptionId === day.day ? null : day.day); }} className="w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50">
                             <SafeIcon icon={FiMessageSquare} className="text-base text-gray-500" /> Caption
                           </button>

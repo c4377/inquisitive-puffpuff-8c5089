@@ -359,70 +359,6 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // When a photo background is present, always use white (photo is darkened).
   const hasBgImage = typeof slide.background === 'string' && slide.background.length > 5;
 
-  // === AI DESIGN SPEC ======================================================
-  // If the slide carries a designSpec (from the KI-Designer), render it
-  // directly — free-form elements with x/y/size/weight/colour — instead of any
-  // layout engine. The renderer still enforces the footer safe-zone.
-  if (slide.designSpec && Array.isArray(slide.designSpec.elements)) {
-    const spec = slide.designSpec;
-    const bg = spec.background || {};
-    if (hasBgImage) {
-      await drawBackgroundImage(slide.background);
-      const ov = Math.min(Math.max(Number(bg.overlay) || 0, 0), 0.6);
-      if (ov > 0.01) {
-        canvas.add(new fabric.Rect({
-          left: 0, top: 0, width, height,
-          fill: `rgba(18,14,10,${ov.toFixed(2)})`, selectable: false,
-        }));
-      }
-    } else {
-      canvas.setBackgroundColor(bg.color || '#F7F5F1', () => {});
-    }
-    const SAFE_BOTTOM = height * 0.85;
-    spec.elements.slice(0, 5).forEach((el) => {
-      if (!el || !el.content) return;
-      const boxW = width * Math.min(Math.max(Number(el.width) || 0.8, 0.3), 0.92);
-      const fsz = Math.min(Math.max(Number(el.fontSize) || 44, 18), 140) * (width / 1080);
-      const cx = width * Math.min(Math.max(Number(el.x) || 0.5, 0.08), 0.92);
-      let cy = height * Math.min(Math.max(Number(el.y) || 0.5, 0.06), 0.82);
-      const t = new fabric.Textbox(String(el.content), {
-        left: cx, top: cy, originX: 'center', originY: 'center',
-        width: boxW, fontSize: fsz,
-        fontFamily: slide.fontFamily || 'HelveticaNeueBrand',
-        fontWeight: String(el.fontWeight || '400'),
-        fill: el.color || (hasBgImage ? '#F7F5F1' : '#252220'),
-        fontStyle: el.italic ? 'italic' : 'normal',
-        underline: el.underline === true,
-        textAlign: el.align === 'left' ? 'left' : 'center',
-        lineHeight: Math.min(Math.max(Number(el.lineHeight) || 1.1, 0.95), 1.45),
-        selectable: false, splitByGrapheme: false,
-      });
-      // Hard safe-zone: shrink until the block ends above the footer band.
-      try {
-        t.initDimensions && t.initDimensions();
-        let guard = 0;
-        while ((t.top + t.height / 2) > SAFE_BOTTOM && t.fontSize > 14 && guard < 60) {
-          t.set('fontSize', t.fontSize - 1);
-          t.initDimensions && t.initDimensions();
-          guard++;
-        }
-        if ((t.top + t.height / 2) > SAFE_BOTTOM) t.set('top', SAFE_BOTTOM - t.height / 2);
-      } catch (e) { /* best-effort */ }
-      canvas.add(t);
-    });
-    // Brand footer signature (same as engines).
-    const brandName = (options.globalBrandName || '').toUpperCase();
-    if (brandName) {
-      canvas.add(new fabric.Text(brandName.split('').join(' '), {
-        left: width / 2, top: height - height * 0.055, originX: 'center', originY: 'center',
-        fontSize: 15 * (width / 1080) * 2.7, fontFamily: 'Montserrat', fontWeight: '400',
-        fill: hasBgImage ? 'rgba(255,255,255,0.75)' : 'rgba(37,34,32,0.4)',
-        charSpacing: 300, selectable: false,
-      }));
-    }
-    try { canvas.renderAll(); } catch (e) { /* ok */ }
-    return;
-  }
 
   // Cover-blur mode: follow-up slides show the cover photo blurred + darkened.
   // A CTA slide is exempt — its photo is a deliberate choice and stays sharp.
@@ -544,39 +480,22 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     //  2) a short (1–4 word) chunk right after a colon — the punch line
     //     ("… heisst: PERSONAL POWER").
     // Only when there is also a longer chunk to contrast with.
-    let bigIdx = -1;
-    const realChunks = textChunks.filter((c) => !c.skip);
-    // Contrast exists if any chunk is clearly longer than the shortest one.
-    const maxWc = Math.max(...realChunks.map((c) => c.wc));
-    if (realChunks.length > 1 && maxWc >= 3) {
-      // 1) A short (1–4 word) chunk right after a colon is the punch line and
-      //    takes priority ("… heisst: PERSONAL POWER").
-      for (let i = 0; i < textChunks.length; i++) {
-        const c = textChunks[i];
-        if (!c.skip && /:\s*$/.test(c.prevSep) && c.wc <= 4) { bigIdx = i; break; }
-      }
-      // 2) Else a short opening chunk ("WARNING!", "11 DINGE").
-      if (bigIdx === -1) {
-        const first = textChunks.findIndex((c) => !c.skip);
-        if (first >= 0 && textChunks[first].wc <= 4 && textChunks.length > first + 1) {
-          bigIdx = first;
-        }
-      }
-      // 3) Else the last short chunk.
-      if (bigIdx === -1) {
-        for (let i = textChunks.length - 1; i >= 0; i--) {
-          if (!textChunks[i].skip && textChunks[i].wc <= 4 && textChunks[i].wc < maxWc) { bigIdx = i; break; }
-        }
-      }
-    }
+    // Size switching removed on request: one text size per tile (no auto-big).
+    const bigIdx = -1;
     // Auto-GOLD: the reference colours the closing clause of a statement in a
     // warm tan ("…als in den 6 Monaten davor."). Pick the LAST chunk if it is
     // short-ish, not the big chunk, and there is preceding text.
     let goldIdx = -1;
-    for (let i = textChunks.length - 1; i >= 0; i--) {
-      if (!textChunks[i].skip) {
-        if (i !== bigIdx && textChunks[i].wc <= 8 && textChunks.filter((c) => !c.skip).length > 1) goldIdx = i;
-        break;
+    if (bigIdx === -1) {
+      for (let i = textChunks.length - 1; i >= 0; i--) {
+        if (!textChunks[i].skip) {
+          const rest = textChunks.filter((c, j) => !c.skip && j !== i)
+            .reduce((a, c) => a + c.wc, 0);
+          // Gold = a SMALL trailing accent: max 5 words AND shorter than the
+          // rest of the text — never half the tile.
+          if (textChunks[i].wc <= 5 && rest > textChunks[i].wc) goldIdx = i;
+          break;
+        }
       }
     }
     const out = [];
@@ -632,16 +551,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         const segments = autoSizedSegments(raw);
         return { plain: segments.map((s) => s.text).join(''), segments };
       }
-      // Follow-up: split off a short closing clause for the gold accent.
-      const m = raw.match(/^([\s\S]*[.!?:]\s+)([^.!?:]{2,80}[.!?]?)\s*$/);
-      const closing = m && m[2] && m[2].trim().split(/\s+/).length <= 8 ? m[2] : null;
-      const segments = closing
-        ? [
-            { text: m[1], accent: false, bold: false },
-            { text: closing, accent: false, bold: false, gold: true },
-          ]
-        : [{ text: raw, accent: false, bold: false }];
-      return { plain: segments.map((s) => s.text).join(''), segments };
+      // Follow-up: one calm block — NO gold, no per-word styling.
+      const segments = [{ text: raw, accent: false, bold: false }];
+      return { plain: raw, segments };
     }
     const parts = raw.split(/(\*[^*]+\*)/g).filter((s) => s !== '');
     const segments = [];
@@ -886,13 +798,21 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     else if (boldSerif) headFont = 'Playfair Display';
     else if (boldMode && boldStyle === 2) headFont = 'Montserrat';
     else headFont = capsMode ? 'Montserrat' : fontFamily;
-    // Warm Editorial: ALWAYS the brand grotesk — no engine may fall back to a
-    // serif or Montserrat on any slide (hook or follow-up).
-    if (slide.warmEditorial) headFont = slide.fontFamily || 'HelveticaNeueBrand';
+    // Warm Editorial: ONLY the two brand grotesks are ever allowed. Any other
+    // family a slide may carry from older paths (Playfair, Inter, Montserrat)
+    // is overridden hard — this covers hooks AND follow-ups on every engine.
+    if (slide.warmEditorial) {
+      const fam = String(slide.fontFamily || '');
+      headFont = (fam === 'AspektaBrand' || fam === 'HelveticaNeueBrand') ? fam : 'HelveticaNeueBrand';
+    }
     const headText = capsMode ? String(plain).toUpperCase() : plain;
     const headWeight = boldMode
       ? (boldStyle === 0 ? '400' : boldStyle === 2 ? '600' : '400')
       : (capsMode ? '700' : (opts.fontWeight || '600'));
+    // Warm Editorial follow-ups: ALWAYS bold, regardless of what weight the
+    // stored plan carries (works without re-importing the plan).
+    const headWeightFinal = (slide.warmEditorial && typeof options.slideIndex === 'number' && options.slideIndex > 0)
+      ? '700' : headWeight;
     const headItalic = boldSerif;                                 // Playfair italic
     // Fixed, clean letter spacing per style (no user-adjustable tracking — it
     // caused torn glyphs when it clashed with a font's own metrics). Values are
@@ -909,7 +829,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     const boxW = opts.width;
     const measureBox = (fsz) => new fabric.Textbox(headText, {
       width: boxW, fontSize: fsz, fontFamily: headFont,
-      fontWeight: headWeight, lineHeight: opts.lineHeight || (slide.warmEditorial ? 1.04 : 1.15),
+      fontWeight: headWeightFinal, lineHeight: opts.lineHeight || (slide.warmEditorial ? 1.04 : 1.15),
       textAlign: opts.textAlign || 'center', charSpacing: headSpacing,
     });
     try {
@@ -917,7 +837,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       const longestWord = words.sort((a, b) => b.length - a.length)[0] || headText;
       const widthFits = (fsz) => {
         const probe = new fabric.Text(longestWord, {
-          fontSize: fsz, fontFamily: headFont, fontWeight: headWeight, charSpacing: headSpacing,
+          fontSize: fsz, fontFamily: headFont, fontWeight: headWeightFinal, charSpacing: headSpacing,
         });
         return probe.width <= boxW * 0.98;
       };
@@ -950,7 +870,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       originY: opts.originY || 'center', width: boxW,
       fontSize, fontFamily: headFont,
       fill: opts.fill, textAlign: opts.textAlign || 'center',
-      lineHeight: opts.lineHeight || (slide.warmEditorial ? 1.04 : 1.15), fontWeight: headWeight,
+      lineHeight: opts.lineHeight || (slide.warmEditorial ? 1.04 : 1.15), fontWeight: headWeightFinal,
       fontStyle: headItalic ? 'italic' : 'normal',
       charSpacing: headSpacing,
       shadow: opts.shadow || '',
@@ -996,7 +916,6 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
             t.setSelectionStyles({
               fontSize: (opts.fontSize || 40) * 1.35,
               fontWeight: '700',
-              fill: '#B29A6B',
             }, idx, idx + s.text.length);
           }
           idx += s.text.length;
@@ -1069,11 +988,11 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     brand_text_bold_top:       { base: 'plate', textPos: 'top',    align: 'left', bigWord: true },
     // -- MARINA TEMPLATE LIBRARY (measured from the reference feed) ----------
     // T1: photo, white centered block in the lower band ("Wenn du 2026 …").
-    we_photo_bottom:    { base: 'gradient', textPos: 'bottom', align: 'center', exactY: 0.68, exactFont: 59, exactWidth: 0.8, scrim: 0.5 },
+    we_photo_bottom:    { base: 'gradient', textPos: 'bottom', align: 'center', exactFont: 78, exactWidth: 0.72, scrim: 0.5 },
     // T2: photo, white block in the upper band ("Heute Morgen stand ich …").
-    we_photo_top:       { base: 'gradient', textPos: 'top',    align: 'center', exactY: 0.22, exactFont: 53, exactWidth: 0.78, scrim: 0.45 },
+    we_photo_top:       { base: 'gradient', textPos: 'top',    align: 'center', exactFont: 78, exactWidth: 0.72, scrim: 0.45 },
     // T3: photo, one big statement in the middle ("WARNING!").
-    we_photo_statement: { base: 'gradient', textPos: 'center', align: 'center', exactY: 0.55, exactFont: 100, exactWidth: 0.84, scrim: 0.4 },
+    we_photo_statement: { base: 'gradient', textPos: 'center', align: 'center', exactFont: 78, exactWidth: 0.72, scrim: 0.4 },
     // T4: khaki-greige plate, black centered block ("3 Dinge die du tun kannst").
     we_plate_khaki:     { base: 'plate', textPos: 'center', align: 'center', exactY: 0.5,  exactFont: 80, exactWidth: 0.64, plateColor: '#CBC7B4' },
     // T5: cream plate, black centered block ("Du sagst, du willst stabile 20k …").
@@ -1081,7 +1000,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // T6: near-black plate, light block slightly high ("11 DINGE …").
     we_plate_dark:      { base: 'plate', textPos: 'center', align: 'center', exactY: 0.44, exactFont: 75, exactWidth: 0.68, plateColor: '#211B10' },
     // T7: photo, LEFT-aligned block mid-left ("Die 10 wahren Gründe …").
-    we_photo_left:      { base: 'gradient', textPos: 'center', align: 'left', exactY: 0.5, exactFont: 59, exactWidth: 0.6, scrim: 0.45 },
+    we_photo_left:      { base: 'gradient', textPos: 'center', align: 'left', exactFont: 78, exactWidth: 0.66, scrim: 0.45 },
     // T8: cream plate, LEFT-aligned block ("Diese drei Dinge kannst du …").
     we_plate_cream_left:{ base: 'plate', textPos: 'center', align: 'left', exactY: 0.5, exactFont: 70, exactWidth: 0.72, plateColor: '#F2EEE7' },
   };
@@ -1685,8 +1604,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     if (slide.ctaLine) {
       const ct = new fabric.Text(String(slide.ctaLine), {
         left: width / 2, top: height * 0.74, originX: 'center', originY: 'center',
-        fontSize: fs(24), fill: ink, fontFamily: 'Playfair Display',
-        fontStyle: 'italic', fontWeight: '500',
+        fontSize: fs(24), fill: ink,
+        fontFamily: slide.warmEditorial ? 'HelveticaNeueBrand' : 'Playfair Display',
+        fontStyle: slide.warmEditorial ? 'normal' : 'italic', fontWeight: slide.warmEditorial ? '700' : '500',
       });
       const ell = new fabric.Ellipse({
         left: width / 2, top: height * 0.74, originX: 'center', originY: 'center',
@@ -2140,8 +2060,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       const h = new fabric.Textbox(headline, {
         left: centerX, top: 0, originX: 'center', originY: 'top',
         width: width * 0.86, fontSize: fs(slide.fontSize || 54),
-        fill: lightText, fontFamily: 'Playfair Display', fontWeight: '500',
-        textAlign: 'center', lineHeight: 1.08, shadow: sh,
+        fill: lightText,
+        fontFamily: slide.warmEditorial ? 'HelveticaNeueBrand' : 'Playfair Display',
+        fontWeight: slide.warmEditorial ? '700' : '500',
+        textAlign: 'center', lineHeight: slide.warmEditorial ? 1.15 : 1.08, shadow: sh,
       });
       // Hard cap by text length BEFORE measuring — this is the reliable guard.
       // Font metrics can be wrong on first paint (font still loading), so we
