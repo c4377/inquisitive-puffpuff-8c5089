@@ -93,6 +93,7 @@ const ContentPlanner = () => {
     const map = {
       we_photo_bottom: 'we_plate_khaki',
       we_photo_top: 'we_plate_cream',
+      we_photo_left: 'we_plate_cream_left',
       we_photo_statement: 'we_plate_dark',
       brand_photo_gradient: 'brand_text_plate',
       brand_photo_bottom_left: 'brand_text_left',
@@ -328,6 +329,15 @@ const ContentPlanner = () => {
             depthShade: config.warmEditorial === true
               ? (slide.depthShade === null ? null : (index % 2 === 0 ? 'near' : 'far'))
               : slide.depthShade,
+            // Treatment rotation: underline only every 4th post ('mixed'),
+            // otherwise all-bold, calm, or mix without underline — like the
+            // reference, where underline is rare and tiles vary.
+            weTextMode: config.warmEditorial === true
+              ? ['mixed', 'bold', 'calm', 'mixed2'][index % 4]
+              : slide.weTextMode,
+            // Underline is a RARE accent in the reference (maybe 1 in 5-6
+            // tiles) — not a rule on every post.
+            weUnderline: config.warmEditorial === true ? (index % 5 === 2) : undefined,
             fontWeight: config.warmEditorial === true ? (sIdx === 0 ? '300' : '400') : (slide.fontWeight),
             // In Bold Statement mode the feed VARIES like the reference (not one
             // loud font on every tile): rotate the headline treatment per slide.
@@ -700,14 +710,14 @@ const ContentPlanner = () => {
       return [
         'we_photo_bottom',     // 0  photo, text low
         'we_plate_khaki',      // 1  PLATE khaki
-        'we_photo_statement',  // 2  photo, big middle statement
+        'we_photo_left',       // 2  photo, LEFT block mid
         'we_photo_top',        // 3  photo, text high
         'we_plate_cream',      // 4  PLATE cream
         'we_photo_bottom',     // 5  photo, text low
         'we_plate_dark',       // 6  PLATE dark ("11 DINGE")
-        'we_photo_bottom',     // 7  photo, text low
-        'we_plate_cream',      // 8  PLATE cream
-        'we_photo_statement',  // 9  photo, statement
+        'we_photo_statement',  // 7  photo, big middle statement
+        'we_plate_cream_left', // 8  PLATE cream, LEFT
+        'we_photo_bottom',     // 9  photo, text low
       ];
     }
     // Feed rhythm in blocks of TEN: 8 photo posts, 2 text-only posts. The

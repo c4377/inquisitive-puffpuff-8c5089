@@ -584,6 +584,23 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     }
     const out = [];
     let underlinedYet = false;
+    // Treatment rotation (set per day in ContentPlanner): the reference varies
+    // its tiles — underline is RARE, some tiles are all-bold, some calm.
+    //  'mixed'  = thin/bold word mix WITH one underline (the signature, ~1 in 4)
+    //  'mixed2' = thin/bold word mix, NO underline
+    //  'bold'   = every word bold (solid statement tiles)
+    //  'calm'   = light text, only the single strongest word bold
+    const weMode = slide.weTextMode || 'mixed';
+    let calmBoldWord = '';
+    if (weMode === 'calm') {
+      textChunks.forEach((c, i) => {
+        if (c.skip || i === bigIdx) return;
+        c.text.split(/\s+/).forEach((w) => {
+          const clean = w.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
+          if (!FILLER.has(clean) && clean.length > calmBoldWord.length) calmBoldWord = clean;
+        });
+      });
+    }
     textChunks.forEach((c, i) => {
       const isBig = i === bigIdx;
       const isGold = i === goldIdx;
@@ -592,10 +609,13 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         if (/^\s+$/.test(w) || w === '') { out.push({ text: w, accent: false, bold: false }); return; }
         const clean = w.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
         const isFiller = clean.length <= 2 || FILLER.has(clean);
-        const bold = isBig ? true : !isFiller;
-        // Underline the first strong (non-big) key word, like the reference.
+        const bold = isBig ? true
+          : weMode === 'bold' ? true
+          : weMode === 'calm' ? (clean === calmBoldWord && clean.length > 0)
+          : !isFiller;
+        // Underline ONLY in 'mixed' mode — the reference uses it sparingly.
         let underline = false;
-        if (bold && !isBig && !isGold && !underlinedYet && clean.length >= 5) { underline = true; underlinedYet = true; }
+        if (weMode === 'mixed' && bold && !isBig && !isGold && !underlinedYet && clean.length >= 5) { underline = true; underlinedYet = true; }
         out.push({ text: w, accent: false, bold, underline, big: isBig, gold: isGold });
       });
       if (c.sep) out.push({ text: c.sep, accent: false, bold: false });
@@ -1063,6 +1083,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     we_plate_cream:     { base: 'plate', textPos: 'center', align: 'center', exactY: 0.5,  exactFont: 78, exactWidth: 0.66, plateColor: '#F2EEE7' },
     // T6: near-black plate, light block slightly high ("11 DINGE …").
     we_plate_dark:      { base: 'plate', textPos: 'center', align: 'center', exactY: 0.44, exactFont: 75, exactWidth: 0.68, plateColor: '#211B10' },
+    // T7: photo, LEFT-aligned block mid-left ("Die 10 wahren Gründe …").
+    we_photo_left:      { base: 'gradient', textPos: 'center', align: 'left', exactY: 0.5, exactFont: 59, exactWidth: 0.6, scrim: 0.45 },
+    // T8: cream plate, LEFT-aligned block ("Diese drei Dinge kannst du …").
+    we_plate_cream_left:{ base: 'plate', textPos: 'center', align: 'left', exactY: 0.5, exactFont: 70, exactWidth: 0.72, plateColor: '#F2EEE7' },
   };
   let brandVariant = BRAND_VARIANTS[layoutResolved];
 
@@ -1234,7 +1258,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         : V.textPos === 'top' ? height * 0.14
         : V.textPos === 'center' ? height * 0.4
         : height * 0.64);
-    const alignLeft = slide.warmEditorial ? false : (V.align === 'left');
+    const alignLeft = V.align === 'left';
     const cx = alignLeft ? width * 0.09 : width / 2;
     const originX = alignLeft ? 'left' : 'center';
     const tAlign = alignLeft ? 'left' : 'center';
@@ -1415,7 +1439,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     }
 
     const { plain, segments } = parseAccent(slide.text);
-    const alignLeft = slide.warmEditorial ? false : (V.align === 'left');
+    const alignLeft = V.align === 'left';
     const cx = alignLeft ? width * 0.1 : width / 2;
     const originX = alignLeft ? 'left' : 'center';
     const tAlign = alignLeft ? 'left' : 'center';
