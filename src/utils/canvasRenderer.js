@@ -493,10 +493,21 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         }
       }
     }
+    // Auto-GOLD: the reference colours the closing clause of a statement in a
+    // warm tan ("…als in den 6 Monaten davor."). Pick the LAST chunk if it is
+    // short-ish, not the big chunk, and there is preceding text.
+    let goldIdx = -1;
+    for (let i = textChunks.length - 1; i >= 0; i--) {
+      if (!textChunks[i].skip) {
+        if (i !== bigIdx && textChunks[i].wc <= 8 && textChunks.filter((c) => !c.skip).length > 1) goldIdx = i;
+        break;
+      }
+    }
     const out = [];
     let underlinedYet = false;
     textChunks.forEach((c, i) => {
       const isBig = i === bigIdx;
+      const isGold = i === goldIdx;
       const words = c.text.split(/(\s+)/);
       words.forEach((w) => {
         if (/^\s+$/.test(w) || w === '') { out.push({ text: w, accent: false, bold: false }); return; }
@@ -505,8 +516,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         const bold = isBig ? true : !isFiller;
         // Underline the first strong (non-big) key word, like the reference.
         let underline = false;
-        if (bold && !isBig && !underlinedYet && clean.length >= 5) { underline = true; underlinedYet = true; }
-        out.push({ text: w, accent: false, bold, underline, big: isBig });
+        if (bold && !isBig && !isGold && !underlinedYet && clean.length >= 5) { underline = true; underlinedYet = true; }
+        out.push({ text: w, accent: false, bold, underline, big: isBig, gold: isGold });
       });
       if (c.sep) out.push({ text: c.sep, accent: false, bold: false });
     });
@@ -522,10 +533,20 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // headline reads like the reference (one big punch line, bold key words).
     if (slide.warmEditorial && !raw.includes('*')) {
       // Hooks get the big/small size switch + thin/bold word rhythm. Follow-up
-      // slides stay calm: ONE single weight, no per-word bold (the base weight
-      // is set to 300 for warmEditorial follow-ups in ContentPlanner).
-      const segments = isHook
-        ? autoSizedSegments(raw)
+      // slides stay calm: ONE single weight, but the closing clause still gets
+      // the gold accent (same rule as hooks).
+      if (isHook) {
+        const segments = autoSizedSegments(raw);
+        return { plain: segments.map((s) => s.text).join(''), segments };
+      }
+      // Follow-up: split off a short closing clause for the gold accent.
+      const m = raw.match(/^([\s\S]*[.!?:]\s+)([^.!?:]{2,80}[.!?]?)\s*$/);
+      const closing = m && m[2] && m[2].trim().split(/\s+/).length <= 8 ? m[2] : null;
+      const segments = closing
+        ? [
+            { text: m[1], accent: false, bold: false },
+            { text: closing, accent: false, bold: false, gold: true },
+          ]
         : [{ text: raw, accent: false, bold: false }];
       return { plain: segments.map((s) => s.text).join(''), segments };
     }
@@ -863,6 +884,10 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           if (s.bold && s.text.length) {
             t.setSelectionStyles({ fontWeight: '700' }, idx, idx + s.text.length);
           }
+          // warmEditorial auto-gold: the closing clause in warm tan, italic.
+          if (s.gold && s.text.length) {
+            t.setSelectionStyles({ fill: '#B29A6B', fontStyle: 'italic' }, idx, idx + s.text.length);
+          }
           // warmEditorial: underline the first strong key word (reference style).
           if (s.underline && s.text.length) {
             t.setSelectionStyles({ underline: true }, idx, idx + s.text.length);
@@ -974,13 +999,18 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       ? slide.overlayStrength
       : (slide.warmEditorial ? 0.42 : 0.78);
 
-    // Depth rhythm (warmEditorial): "far" posts get a flat dark wash over the
-    // whole photo so they visually step back; "near" posts stay bright. The
-    // wash sits UNDER the text gradient. Removable per post (depthShade null).
+    // Depth rhythm (warmEditorial): "far" posts get a clear dark wash so they
+    // visually step back; "near" posts get a subtle warm lift so they step
+    // forward. The washes sit UNDER the text gradient. Removable per post.
     if (slide.warmEditorial && slide.depthShade === 'far') {
       canvas.add(new fabric.Rect({
         left: 0, top: 0, width, height,
-        fill: 'rgba(20,16,12,0.24)', selectable: false,
+        fill: 'rgba(18,14,10,0.32)', selectable: false,
+      }));
+    } else if (slide.warmEditorial && slide.depthShade === 'near') {
+      canvas.add(new fabric.Rect({
+        left: 0, top: 0, width, height,
+        fill: 'rgba(255,250,240,0.10)', selectable: false,
       }));
     }
 
