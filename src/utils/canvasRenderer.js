@@ -777,15 +777,18 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       };
       // Available vertical space for the text block (top of text -> footer top).
       const topY = opts.originY === 'center' ? null : opts.top;
+      // If the headline contains an enlarged part (warmEditorial big word),
+      // the real block is taller than measureBox reports (it measures at the
+      // base size). Reserve extra height so the big line can't overflow.
+      const hasBig = Array.isArray(segments) && segments.some((s) => s && s.big);
+      const bigPad = hasBig ? 1.35 : 1;   // the big words are ~1.35x tall
       const heightFits = (fsz) => {
         if (!opts.maxBottom) return true;
         const probe = measureBox(fsz);
-        const h = probe.height || 0;
+        const h = (probe.height || 0) * bigPad;
         if (opts.originY === 'center') {
-          // centered: half the block sits below opts.top
           return (opts.top + h / 2) <= opts.maxBottom;
         }
-        // top-anchored: block grows down from opts.top
         return (topY + h) <= opts.maxBottom;
       };
       let guard = 0;
@@ -839,6 +842,38 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         });
       }
     } catch (e) { /* best-effort */ }
+
+    // HARD SAFE-ZONE: after all per-character sizing is applied, measure the
+    // REAL rendered height (which includes any enlarged big words) and shrink
+    // the whole block — base size and every per-character fontSize together —
+    // until it provably ends above the reserved footer band. This is the
+    // guarantee the earlier estimate couldn't give.
+    try {
+      const limit = opts.maxBottom || (height - height * 0.15);
+      t.initDimensions && t.initDimensions();
+      let safeGuard = 0;
+      const blockBottom = () => {
+        const h = t.height || 0;
+        return (t.originY === 'center') ? (t.top + h / 2) : (t.top + h);
+      };
+      while (blockBottom() > limit && t.fontSize > 12 && safeGuard < 80) {
+        const factor = (t.fontSize - 1) / t.fontSize;
+        // scale base size
+        t.set('fontSize', t.fontSize - 1);
+        // scale every per-character override proportionally
+        if (t.styles) {
+          Object.keys(t.styles).forEach((ln) => {
+            Object.keys(t.styles[ln]).forEach((ch) => {
+              const st = t.styles[ln][ch];
+              if (st && typeof st.fontSize === 'number') st.fontSize *= factor;
+            });
+          });
+        }
+        t.initDimensions && t.initDimensions();
+        safeGuard++;
+      }
+    } catch (e) { /* safe-zone best-effort */ }
+
     canvas.add(t);
     return t;
   };
@@ -1015,7 +1050,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       y += 34 * scale;
     }
 
-    const baseFont = V.bigWord ? (slide.fontSize || 120) : (slide.fontSize || 66);
+    const baseFont = V.bigWord ? (slide.fontSize || 120) : (slide.fontSize || (slide.warmEditorial ? 52 : 66));
     // Follow-ups: 15% smaller, then another 5% (~0.8075 of base).
     const finalFont = followUp ? Math.round(baseFont * 0.8) : baseFont;
     // Anchoring: follow-ups and detected face/quiet placement grow downward from
@@ -1235,7 +1270,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       drawKickerAt(slide.secondaryText, cx, height * 0.3, hexToRgba(textCol, 0.7), originX, 'center');
     }
 
-    const baseFont = V.bigWord ? (slide.fontSize || 110) : (slide.fontSize || 58);
+    const baseFont = V.bigWord ? (slide.fontSize || 110) : (slide.fontSize || (slide.warmEditorial ? 46 : 58));
     const finalFont = baseFont;
     makeHeadline(segments, plain, {
       left: cx, top: cy, originX, originY: anchorY,
