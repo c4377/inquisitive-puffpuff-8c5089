@@ -1094,12 +1094,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     if (slide.warmEditorial && slide.depthShade === 'far') {
       canvas.add(new fabric.Rect({
         left: 0, top: 0, width, height,
-        fill: 'rgba(18,14,10,0.32)', selectable: false,
+        fill: 'rgba(26,18,8,0.16)', selectable: false,
       }));
     } else if (slide.warmEditorial && slide.depthShade === 'near') {
       canvas.add(new fabric.Rect({
         left: 0, top: 0, width, height,
-        fill: 'rgba(255,250,240,0.10)', selectable: false,
+        fill: 'rgba(255,248,235,0.07)', selectable: false,
       }));
     }
 
@@ -1189,13 +1189,30 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       else if (quiet.includes('bottom')) photoAnchorY = height * 0.6;
       else photoAnchorY = height * 0.54; // middle band
     }
+    // Marina templates: the measured position WINS. Text may sit on the body
+    // (like the reference) — we only dodge an actual FACE: if the template's
+    // target band contains a detected face, move to the nearest face-free band.
+    let exactAnchor = null;
+    if (!followUp && V.exactY != null) {
+      exactAnchor = V.exactY;
+      if (hasBgImage && faceZones.length > 0) {
+        const faceRows = new Set(faceZones.map((z) => Math.floor(z / 3)));
+        const rowOf = (f) => (f < 0.34 ? 0 : f < 0.66 ? 1 : 2);
+        if (faceRows.has(rowOf(exactAnchor))) {
+          const startRow = rowOf(exactAnchor);
+          const prefs = startRow === 2 ? [1, 0] : startRow === 0 ? [2, 1] : [2, 0];
+          const free = prefs.find((r) => !faceRows.has(r));
+          exactAnchor = free === 0 ? 0.2 : free === 1 ? 0.5 : 0.7;
+          if (free == null) exactAnchor = 0.72;
+        }
+      }
+    }
     const anchorY = followUp
       // Follow-up on a PHOTO: same face-safe rule as the hero — detected
       // placement wins, otherwise default LOW so text never lands on the face.
       ? (photoAnchorY != null ? photoAnchorY : (hasBgImage ? height * 0.64 : height * 0.54))
-      : (photoAnchorY != null ? photoAnchorY
-        // Marina template: exact measured position (face detection above wins).
-        : V.exactY != null ? height * V.exactY
+      : (exactAnchor != null ? height * exactAnchor
+        : photoAnchorY != null ? photoAnchorY
         // No reliable face/quiet data: on a PHOTO, default the text LOW (0.64),
         // because portrait subjects almost always sit in the upper/middle band —
         // putting text on top would land on the face. Text-only layouts keep
@@ -1228,8 +1245,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // CENTERED, so the block sits neatly in the lower band above the signature.
     const faceOrQuiet = quiet || faceZones.length > 0;
     const headOriginY = followUp ? 'top'
+      : (exactAnchor != null) ? 'center'
       : (hasBgImage && faceOrQuiet) ? 'top'
-      : (V.exactY != null) ? 'center'
       : (hasBgImage && photoAnchorY == null) ? 'center'
       : (V.textPos === 'center' ? 'center' : 'top');
     // FOLLOW-UP photo pages: clean — text only, no label or rule.
