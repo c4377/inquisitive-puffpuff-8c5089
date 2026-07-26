@@ -1186,11 +1186,12 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
   // The first page (the hook, slideIndex 0) keeps its designed layout.
   if (brandVariant && typeof options.slideIndex === 'number' && options.slideIndex > 0) {
     const keepPhoto = brandVariant.base === 'gradient' || brandVariant.base === 'frame';
-    if (slide.warmEditorial && !(keepPhoto && hasBgImage)) {
-      // Warm Editorial follow-up TEXT pages: the dark reference plate
-      // (tpl_dark look) — near-black plate, light centered block, template
-      // size. followUp:false so the exact template layout applies; the text
-      // RULES still follow slideIndex (one weight + gold closing).
+    if (slide.warmEditorial) {
+      // Warm Editorial: NUR die erste Seite traegt den gesetzten Ad-Look auf
+      // dem Foto. Jede Folgeseite ist eine reine Textseite auf der dunklen
+      // Platte — auch wenn ein Foto hinterlegt waere. followUp:false laesst die
+      // Template-Werte gelten: Anker fix bei 47%, 60/1080, Spalte 0.68. Damit
+      // sitzt der Text auf JEDER Folgeseite auf derselben Hoehe.
       brandVariant = { ...BRAND_VARIANTS.we_plate_dark, followUp: false };
     } else {
       brandVariant = {
@@ -1331,7 +1332,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // Ad-Ready setzt den Block unten links (oder oben, wenn dort ein Gesicht
     // liegt) — das Band muss genau dorthin, sonst steht die grosse Typo wieder
     // auf einer hellen Stelle.
-    const _adReady = hasBgImage && !V.bigWord && slide.warmEditorial && slide.adReady !== false;
+    const _adReady = hasBgImage && !V.bigWord && slide.warmEditorial && slide.adReady !== false
+      && !followUp && (options.slideIndex || 0) === 0;
     const _faceLow = faceZones.length > 0
       && (faceZones.map((z) => Math.floor(z / 3)).reduce((a, b) => a + b, 0) / faceZones.length) > 1.4;
     const bandF = _adReady
@@ -1439,7 +1441,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // ---- AD-READY: der Standard auf Fotos --------------------------------
     // Gesetzte Zeilen statt Umbruch, Groesse aus der Zeilenzahl, Rhythmus pro
     // Zeile. Abschaltbar per slide.adReady === false.
-    const adReady = onPhoto && slide.warmEditorial && slide.adReady !== false;
+    // NUR die erste Seite. Folgeseiten laufen ohnehin auf die Textplatte.
+    const adReady = onPhoto && slide.warmEditorial && slide.adReady !== false
+      && !followUp && (options.slideIndex || 0) === 0;
     if (adReady) {
       // Unten links gesetzt — wie in der Referenz. Nur wenn ein Gesicht im
       // unteren Drittel liegt, wandert der Block nach oben.
