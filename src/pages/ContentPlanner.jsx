@@ -338,7 +338,7 @@ const ContentPlanner = () => {
             // Underline is a RARE accent in the reference (maybe 1 in 5-6
             // tiles) — not a rule on every post.
             weUnderline: config.warmEditorial === true ? (index % 5 === 2) : undefined,
-            fontWeight: config.warmEditorial === true ? (sIdx === 0 ? '300' : '400') : (slide.fontWeight),
+            fontWeight: config.warmEditorial === true ? (sIdx === 0 ? '300' : '700') : (slide.fontWeight),
             // In Bold Statement mode the feed VARIES like the reference (not one
             // loud font on every tile): rotate the headline treatment per slide.
             //  0 -> Anton display caps (loud)
@@ -881,7 +881,7 @@ const ContentPlanner = () => {
         cleaned.layout = _picked;
         cleaned.layoutId = _picked;
         cleaned.textAnchor = textAnchor;
-        cleaned.fontWeight = brandSettings.currentBrandConfig?.warmEditorial ? (_sIdx === 0 ? '300' : '400') : (bold ? '700' : 'normal');
+        cleaned.fontWeight = brandSettings.currentBrandConfig?.warmEditorial ? (_sIdx === 0 ? '300' : '700') : (bold ? '700' : 'normal');
         // Keep the per-slide serif/caps switch.
         if (slide.serifHeadline === false) cleaned.serifHeadline = false;
         return cleaned;
@@ -994,7 +994,7 @@ const ContentPlanner = () => {
           // Preserve the per-slide serif/caps switch across reloads.
           if (slide.serifHeadline === false) cleaned.serifHeadline = false;
           cleaned.textAnchor = textAnchor;
-          cleaned.fontWeight = brandSettings.currentBrandConfig?.warmEditorial ? (slideIdx === 0 ? '300' : '400') : (bold ? '700' : 'normal');
+          cleaned.fontWeight = brandSettings.currentBrandConfig?.warmEditorial ? (slideIdx === 0 ? '300' : '700') : (bold ? '700' : 'normal');
           return cleaned;
         });
 

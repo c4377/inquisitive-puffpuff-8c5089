@@ -516,10 +516,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       const clean = tok.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
       const isFiller = clean.length <= 2 || FILLER.has(clean);
       const bold = !isFiller;
-      // Underline the first strong word only, and only if it's reasonably long.
-      let underline = false;
-      if (bold && !underlinedYet && clean.length >= 5) { underline = true; underlinedYet = true; }
-      return { text: tok, accent: false, bold, underline };
+      return { text: tok, accent: false, bold };
     });
   };
 
@@ -613,10 +610,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           : weMode === 'bold' ? true
           : weMode === 'calm' ? (clean === calmBoldWord && clean.length > 0)
           : !isFiller;
-        // Underline ONLY in 'mixed' mode — the reference uses it sparingly.
-        let underline = false;
-        if (weMode === 'mixed' && bold && !isBig && !isGold && !underlinedYet && clean.length >= 5) { underline = true; underlinedYet = true; }
-        out.push({ text: w, accent: false, bold, underline, big: isBig, gold: isGold });
+        out.push({ text: w, accent: false, bold, big: isBig, gold: isGold });
       });
       if (c.sep) out.push({ text: c.sep, accent: false, bold: false });
     });
@@ -892,6 +886,9 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     else if (boldSerif) headFont = 'Playfair Display';
     else if (boldMode && boldStyle === 2) headFont = 'Montserrat';
     else headFont = capsMode ? 'Montserrat' : fontFamily;
+    // Warm Editorial: ALWAYS the brand grotesk — no engine may fall back to a
+    // serif or Montserrat on any slide (hook or follow-up).
+    if (slide.warmEditorial) headFont = slide.fontFamily || 'HelveticaNeueBrand';
     const headText = capsMode ? String(plain).toUpperCase() : plain;
     const headWeight = boldMode
       ? (boldStyle === 0 ? '400' : boldStyle === 2 ? '600' : '400')
@@ -998,8 +995,8 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           if (s.big && s.text.length) {
             t.setSelectionStyles({
               fontSize: (opts.fontSize || 40) * 1.35,
-              fontWeight: '600',
-              fill: hexToRgba('#D8D4C8', 0.9),
+              fontWeight: '700',
+              fill: '#B29A6B',
             }, idx, idx + s.text.length);
           }
           idx += s.text.length;
