@@ -142,12 +142,42 @@ export const BrandProvider = ({ children }) => {
           .map((d) => ({ ...d, slides: Array.isArray(d.slides) ? d.slides.filter(Boolean) : [] }))
           .filter((d) => d.slides.length > 0);
 
+        // TOTE BILDVERWEISE ENTFERNEN.
+        // Wird ein Foto im Brand-Bereich geloescht, behalten alte Kacheln ihre
+        // URL. Der Browser fordert die geloeschte Datei dann weiter an und der
+        // Speicher antwortet mit "Bad Request". Deshalb beim Laden pruefen:
+        // zeigt eine Kachel auf ein Foto, das es nicht mehr gibt, wird der
+        // Verweis geloescht — die Kachel wird zur Textkachel statt kaputt.
+        // Nur wenn der Pool wirklich geladen ist, sonst wuerde ein Ladefehler
+        // alle Fotos aus dem Plan werfen.
+        const pool = Array.isArray(images) ? images : [];
+        let planForState = safePlan;
+        if (pool.length > 0) {
+          const alive = new Set(
+            pool.map((i) => (typeof i === 'string' ? i : i?.src || i?.url || i?.dataUrl))
+              .filter(Boolean)
+          );
+          let removed = 0;
+          planForState = safePlan.map((d) => ({
+            ...d,
+            slides: d.slides.map((sl) => {
+              const bg = sl && sl.background;
+              if (typeof bg !== 'string' || !bg || alive.has(bg)) return sl;
+              removed++;
+              return { ...sl, background: null, overlay: undefined, _autoImage: undefined };
+            }),
+          }));
+          if (removed > 0) {
+            console.warn(`[BrandStudio] ${removed} Kachel(n) zeigten auf geloeschte Fotos — Verweis entfernt.`);
+          }
+        }
+
         setBrandSettings(prev => ({
           ...prev,
           brandImages: images || [],
           savedDesigns: designs || [],
           customFonts: fonts || [],
-          contentPlan: safePlan,
+          contentPlan: planForState,
           communityDecks: decks || {}
         }));
       } catch (error) {

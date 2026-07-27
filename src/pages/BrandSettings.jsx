@@ -182,6 +182,32 @@ const BrandSettings = () => {
     }
   };
 
+  // Geloeschte Bild-URLs auch aus dem Content-Plan werfen. Ohne das behalten
+  // die Slides ihre alte URL, der Browser fordert die geloeschte Datei an und
+  // der Speicher antwortet mit "Bad Request" — auf jeder Kachel.
+  const purgeFromPlan = (urls) => {
+    const dead = new Set(urls);
+    const plan = brandSettings.contentPlan || [];
+    let touched = 0;
+    const cleaned = plan.map((day) => ({
+      ...day,
+      slides: (day.slides || []).map((slide) => {
+        const bgDead = dead.has(slide.background);
+        const ovDead = dead.has(slide.overlayImage);
+        if (!bgDead && !ovDead) return slide;
+        touched++;
+        return {
+          ...slide,
+          background: bgDead ? null : slide.background,
+          overlay: bgDead ? undefined : slide.overlay,
+          _autoImage: bgDead ? undefined : slide._autoImage,
+          overlayImage: ovDead ? null : slide.overlayImage,
+        };
+      }),
+    }));
+    return { cleaned, touched };
+  };
+
   // Delete several images at once (selection mode) or the whole pool.
   const removeImages = async (urls) => {
     if (!urls.length) return;
@@ -198,10 +224,16 @@ const BrandSettings = () => {
     const cfg = brandSettings.currentBrandConfig || {};
     const ctaCleared = urls.includes(cfg.ctaImage) ? { ...cfg, ctaImage: null } : cfg;
 
-    updateBrandSettings({ brandImages: remaining, imageMeta: meta, currentBrandConfig: ctaCleared });
+    const { cleaned, touched } = purgeFromPlan(urls);
+    updateBrandSettings({
+      brandImages: remaining, imageMeta: meta, currentBrandConfig: ctaCleared,
+      contentPlan: cleaned,
+    });
     setSelectedImages([]);
     setSelectMode(false);
-    setSuccessMessage(urls.length === 1 ? 'Bild gelöscht.' : `${urls.length} Bilder gelöscht.`);
+    setSuccessMessage(urls.length === 1
+      ? `Bild gelöscht.${touched ? ` ${touched} Kachel(n) bereinigt.` : ''}`
+      : `${urls.length} Bilder gelöscht.${touched ? ` ${touched} Kachel(n) bereinigt.` : ''}`);
 
     let failed = 0;
     for (const u of urls) {
@@ -217,7 +249,8 @@ const BrandSettings = () => {
     const imgToRemove = currentImages[indexToRemove];
     // Remove from local pool first (instant feedback)
     const updatedImages = currentImages.filter((_, index) => index !== indexToRemove);
-    updateBrandSettings({ brandImages: updatedImages });
+    const { cleaned } = purgeFromPlan([imgToRemove]);
+    updateBrandSettings({ brandImages: updatedImages, contentPlan: cleaned });
     setSuccessMessage("Bild gelöscht.");
     // Also delete from cloud so it doesn't reappear on next load
     try {

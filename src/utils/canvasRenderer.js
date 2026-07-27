@@ -173,6 +173,24 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
         src,
         (img) => {
           if (!img) return resolve(false);
+          // --- SPEICHER-SCHUTZ ------------------------------------------
+          // Filter arbeiten pixelweise auf der QUELLE. Ein Foto frisch aus der
+          // Kamera (z.B. 4032x3024 = 12 Mio Pixel) mal fuenf Filter sprengt auf
+          // dem iPhone den Arbeitsspeicher — die Seite wird dann einfach weiss.
+          // Deshalb vorher auf eine sinnvolle Kantenlaenge herunterrechnen.
+          // Fuer eine 1080er Kachel bringt mehr als 1800px nichts sichtbares.
+          try {
+            const el = img.getElement && img.getElement();
+            const MAXPX = 1800;
+            if (el && el.width && Math.max(el.width, el.height) > MAXPX) {
+              const f = MAXPX / Math.max(el.width, el.height);
+              const small = document.createElement('canvas');
+              small.width = Math.round(el.width * f);
+              small.height = Math.round(el.height * f);
+              small.getContext('2d').drawImage(el, 0, 0, small.width, small.height);
+              img.setElement(small);
+            }
+          } catch (e) { /* Herunterrechnen ist optional */ }
           // Cover-fit: scale so image fills the whole canvas, center-crop.
           const baseScale = Math.max(width / img.width, height / img.height);
           // Apply user Zoom (imageScale, default 1) and position offsets.
@@ -241,7 +259,14 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
                   }));
                 }
               }
-              img.applyFilters();
+              try {
+                img.applyFilters();
+              } catch (e) {
+                // Filter fehlgeschlagen -> lieber das Foto UNGEFILTERT zeigen
+                // als gar nichts. Vorher waere die Kachel leer geblieben.
+                img.filters = [];
+                try { img.applyFilters(); } catch (e2) { /* aufgeben */ }
+              }
             } catch (e) { /* filter optional */ }
           }
           canvas.add(img);
@@ -1121,9 +1146,33 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     };
 
     // Breite einer Zeile bei 100px messen -> Groesse skaliert linear.
+    // WICHTIG fuer die Geschwindigkeit: es werden WOERTER gemessen, nicht
+    // Zeilen. Sonst entstehen pro Kachel bis zu 80 Messobjekte (11 Varianten
+    // mal Zeilen) — auf dem Handy ist das der Unterschied zwischen fluessig
+    // und einstuerzen. Jedes Wort wird genau einmal gemessen und gemerkt.
+    const _wCache = new Map();
+    const wordW = (w, weight) => {
+      const k = weight + '|' + w;
+      if (_wCache.has(k)) return _wCache.get(k);
+      let v = 1;
+      try {
+        v = new fabric.Text(w, { fontSize: 100, fontFamily: family, fontWeight: weight }).width || 1;
+      } catch (e) { v = w.length * 55; }
+      _wCache.set(k, v);
+      return v;
+    };
+    const spaceW = (weight) => {
+      const k = weight + '|__space__';
+      if (_wCache.has(k)) return _wCache.get(k);
+      const v = Math.max(0, wordW('n n', weight) - 2 * wordW('n', weight));
+      _wCache.set(k, v);
+      return v;
+    };
     const width100 = (line, weight) => {
-      const probe = new fabric.Text(line, { fontSize: 100, fontFamily: family, fontWeight: weight });
-      return probe.width || 1;
+      const parts = line.split(' ');
+      let sum = 0;
+      parts.forEach((w) => { sum += wordW(w, weight); });
+      return sum + spaceW(weight) * Math.max(0, parts.length - 1);
     };
 
     // Kandidaten durchrechnen und die groesste Schrift nehmen, die noch passt.
