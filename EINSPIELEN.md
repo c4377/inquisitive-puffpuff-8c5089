@@ -68,6 +68,24 @@ Die Schrift- und Modelldateien in `fonts/` und `models/` sind binär und
 müssen mit. Ohne sie misst der Zeichner mit einer Ersatzschrift, und
 der Text läuft über den Rand.
 
+## Alte Bundles entfernen
+
+Die Regel "nichts loeschen, nur weil es im ZIP fehlt" gilt weiter — mit
+einer Ausnahme, die Carina freigegeben hat: das **abgeloeste Bundle**.
+
+Wird `assets/index-*.js` umbenannt, bleibt die alte Datei sonst liegen
+und wird bei jedem Einspielen zwei Megabyte schwerer. Sie darf weg,
+sobald nachweislich nichts mehr darauf verweist. Zu pruefen sind:
+
+- `index.html`
+- die anderen Dateien in `assets/` (das Nebenmodul `index.es-*.js`
+  importiert aus dem Hauptbundle und wird beim Drop mit umbenannt)
+
+Verweist keine davon mehr darauf, `git rm` — sonst stehen lassen.
+Rueckholbar bleibt die Datei ohnehin ueber die Versionsgeschichte.
+
+Fuer alles andere gilt weiter: nicht loeschen.
+
 ## Netlify-Funktionen
 
 Alle brauchen `GEMINI_API_KEY` in den Netlify-Umgebungsvariablen.
