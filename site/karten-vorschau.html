@@ -22,27 +22,37 @@
 </style>
 </head>
 <body>
-<h1>Reminder-Folien — Zitat und Große Aussage</h1>
+<h1>Reminder-Folien — acht Fassungen</h1>
 <p class="sub">Gleicher Zeichner wie in der App. Wenn hier Text steht, steht er auch im Content Plan.</p>
 <div class="raster" id="raster"></div>
 
 <script type="module">
 const uA="#F6F1E6",lg="#141210",jV="#A88354",F1="#6B5238",kC="#64737B",IV="#8CA0B4",hA="#3E5063",wa="#F3E5AB";
 const UV=e=>{const KA={
- zitat:{grund:"#F5EFE9",schrift:"#141210",betont:"#141210",monogramm:"#141210",absender:"rgba(20,18,16,0.55)",fassung:"zitat",schriftart:"Playfair Display"},
- aussage:{grund:"#16202E",schrift:"#F2EBE4",betont:"#F2EBE4",monogramm:"#F2EBE4",absender:"rgba(242,235,228,0.60)",fassung:"aussage",schriftart:"Playfair Display"}
+ zitat:{grund:uA,schrift:hA,betont:hA,monogramm:F1,absender:"rgba(62,80,99,0.55)",fassung:"zitat",schriftart:"Playfair Display"},
+ linie:{grund:uA,schrift:hA,betont:hA,monogramm:F1,absender:"rgba(62,80,99,0.55)",fassung:"linie",schriftart:"PoppinsBold"},
+ wieder:{grund:uA,schrift:hA,betont:hA,monogramm:F1,absender:"rgba(62,80,99,0.55)",fassung:"wieder",schriftart:"PoppinsBold"},
+ zettel:{grund:IV,schriftGrund:uA,schrift:hA,betont:hA,monogramm:lg,absender:"rgba(20,18,16,0.70)",fassung:"zettel",schriftart:"Playfair Display"},
+ notiz:{grund:IV,schriftGrund:"#FFFFFF",schrift:hA,betont:hA,monogramm:lg,absender:"rgba(20,18,16,0.70)",fassung:"notiz",schriftart:"HelveticaNeueBrand"},
+ merken:{grund:IV,schriftGrund:uA,schrift:hA,betont:hA,monogramm:lg,absender:"rgba(20,18,16,0.70)",fassung:"merken",schriftart:"PoppinsBold"},
+ zwei:{grund:lg,schriftGrund:lg,schrift:"#FFFFFF",betont:"#FFFFFF",monogramm:"rgba(246,241,230,0.70)",absender:"rgba(246,241,230,0.62)",fassung:"zwei",schriftart:"PoppinsBold"},
+ aussage:{grund:IV,schriftGrund:uA,schrift:hA,betont:hA,monogramm:lg,absender:"rgba(20,18,16,0.70)",fassung:"aussage",schriftart:"ArchivoBlack"}
 };return KA[e]||{grund:lg,schrift:uA,betont:wa,monogramm:jV,absender:"rgba(246,241,230,0.55)"}};
 
 const T1karte=k=>{const h=UV(k);return{istKarte:!0,grundFarbe:h.grund,schriftFarbe:h.schrift,highlight:h.betont,monogrammFarbe:h.monogramm,absenderFarbe:h.absender,fassung:h.fassung,schriftart:h.schriftart,schriftGrund:h.schriftGrund}};
 
 const PROBEN=[
- ["zitat","Du hast diese Woche zwei Angebote nicht rausgeschickt, weil sie noch nicht fertig genug waren. Fertig genug gibt es *nicht*. Es gibt nur verschickt oder nicht verschickt."],
- ["zitat","Planen f\u00FChlt sich produktiv an, bringt aber *keinen Cent*."],
- ["aussage","Kein Move ist auch eine *Entscheidung* gegen Umsatz."],
- ["aussage","Du musst nicht *bereit* sein."]
+ ["zitat","Du brauchst keine \u201EMoney Making Energy\u201C. Du brauchst einen Verkaufsprozess."],
+ ["linie","Family > Business. Always."],
+ ["wieder","Less is MORE"],
+ ["zettel","Freiheit ist kein Privileg. Freiheit ist eine Entscheidung."],
+ ["notiz","Manifestieren bringt keine Kunden. Systeme schon."],
+ ["merken","Mehr Stunden l\u00F6sen keine strukturellen Probleme."],
+ ["zwei","Ich sage dir, was du h\u00F6ren musst.|Nicht was du h\u00F6ren willst."],
+ ["aussage","Weniger ist mehr|F\u00FCnf Stunden Fokus schlagen vierzig Stunden Chaos."]
 ];
 
-const NAMEN={zitat:"Zitat",aussage:"Gro\u00DFe Aussage"};
+const NAMEN={zitat:"1 \u00B7 Zitat",linie:"2 \u00B7 Satz mit Linie",wieder:"3 \u00B7 Wiederholung",zettel:"4 \u00B7 Notizzettel",notiz:"5 \u00B7 Notes-App",merken:"6 \u00B7 Reminder",zwei:"7 \u00B7 Zweizeiler",aussage:"8 \u00B7 Gro\u00DFe Aussage"};
 
 const Pe={fabric};
 const r=1080,n=1350,c=x=>x*0.8;
@@ -55,52 +65,99 @@ function zeichnen(art,text,ziel){
   cv.add(new fabric.Rect({left:0,top:0,width:r,height:n,fill:Je.grundFarbe,selectable:!1,evented:!1}));
   // Handle unten links, wie im Vorschaubild
   const wt=(Je,rt)=>{
-const ROH=String(rt||"").replace(/\s+/g," ").trim();
+const TX=String(rt||"").replace(/\*/g,"").trim();
 const FA=Je.fassung;
-if(!ROH||!FA)return!1;
-const SCH=Je.schriftFarbe||"#141210",ABS=Je.absenderFarbe||SCH;
-const SERIF="Playfair Display";
+if(!TX||!FA)return!1;
+const SCH=Je.schriftFarbe||"#141210",MON=Je.monogrammFarbe||SCH,ABS=Je.absenderFarbe||MON,GRD=Je.schriftGrund||"#F6F1E6";
+const SERIF="Playfair Display",FETT="PoppinsBold",BLOCK="ArchivoBlack",GLATT="HelveticaNeueBrand",DUENN="HelveticaNeueLight";
+const TINTE="#1F2933";
+const add=o=>{e.add(o);return o};
+const txt=(x,o)=>{const mb=o&&o.maxB,oo=Object.assign({selectable:!1,evented:!1},o);delete oo.maxB;const tx=new Pe.fabric.Text(String(x),oo);if(mb>0)for(let i=0;i<3&&tx.width>mb;i+=1)tx.set({fontSize:tx.fontSize*(mb/tx.width)*.99});return add(tx)};
+txt("carinaannaprav",{left:r*.10,top:n*.925,originX:"left",originY:"center",fontSize:c(19),fontFamily:FETT,fontWeight:"700",charSpacing:120,fill:ABS,maxB:r*.5});
+const linie=(x1,y1,x2,y2,o)=>add(new Pe.fabric.Line([x1,y1,x2,y2],Object.assign({selectable:!1,evented:!1 },o)));
+const kasten=o=>add(new Pe.fabric.Rect(Object.assign({selectable:!1,evented:!1 },o)));
+const breit=(x,gr,fam,gew)=>new Pe.fabric.Text(String(x),{fontSize:gr,fontFamily:fam,fontWeight:gew||"400"}).width;
+const umbruch=(x,gr,fam,max,gew)=>{const w=String(x).split(/\s+/).filter(Boolean),z=[];let a="";w.forEach(q=>{const p=a?a+" "+q:q;(breit(p,gr,fam,gew)<=max||!a)?a=p:(z.push(a),a=q)});a&&z.push(a);return z};
+const passt=(x,gr,fam,max,maxZeilen,gew)=>{let s2=gr;for(let i=0;i<14;i+=1){const z=umbruch(x,s2,fam,max,gew);if(z.length<=maxZeilen)return{zeilen:z,groesse:s2};s2*=.92}return{zeilen:umbruch(x,s2,fam,max,gew).slice(0,maxZeilen),groesse:s2}};
+const teile=x=>{if(x.indexOf("|")>-1){const p=x.split("|");return[p[0].trim(),p.slice(1).join(" ").trim()]}const m=x.match(/^([^.!?]{2,}[.!?])\s+(.+)$/);return m?[m[1].trim(),m[2].trim()]:[x,""]};
 
-/* Sternchen markieren EIN Wort oder eine Wendung kursiv — das ist
-   der Kniff, der diesen Folien ihre Betonung gibt. */
-const worte=[];
-ROH.split(/(\*[^*]+\*)/).filter(Boolean).forEach(st=>{
-const ku=/^\*[^*]+\*$/.test(st);
-(ku?st.slice(1,-1):st).split(/\s+/).filter(Boolean).forEach(w=>worte.push({w:w,kursiv:ku}))});
-if(!worte.length)return!1;
+if(FA==="zitat"){
+const L=r*.12,MAX=r*.74;
+txt("\u201C",{left:L-r*.015,top:n*.215,originX:"left",originY:"center",fontSize:c(128.8),fontFamily:SERIF,fill:MON,opacity:.28});
+const A=passt(TX,c(33.6),SERIF,MAX,6);
+let y=n*.44-(A.zeilen.length-1)*A.groesse*1.34/2;
+A.zeilen.forEach(z=>{txt(z,{left:L,top:y,originX:"left",originY:"center",fontSize:A.groesse,fontFamily:SERIF,fill:SCH,maxB:MAX});y+=A.groesse*1.34});
+txt("\u2014 Carina Anna Prav",{left:L,top:y+c(15.68),originX:"left",originY:"center",fontSize:c(16.8),fontFamily:FETT,fontWeight:"700",charSpacing:60,fill:MON});
+return!0}
 
-const miss=(w,gr,ku)=>new Pe.fabric.Text(String(w),{fontSize:gr,fontFamily:SERIF,fontStyle:ku?"italic":"normal"}).width;
-const brechen=(gr,maxB)=>{const sp=miss("\u00a0",gr,!1)||gr*.26,zeilen=[];let z=[],br=0;
-worte.forEach(o=>{const b=miss(o.w,gr,o.kursiv);
-if(z.length&&br+sp+b>maxB){zeilen.push({worte:z,breite:br}),z=[],br=0}
-br+=(z.length?sp:0)+b,z.push({...o,b:b})});
-z.length&&zeilen.push({worte:z,breite:br});
-return{zeilen:zeilen,abstand:sp}};
+if(FA==="linie"){
+const MAX=r*.74,A=passt(TX.toLocaleUpperCase("de-DE"),c(32.48),FETT,MAX,3,"700");
+let y=n*.43-(A.zeilen.length-1)*A.groesse*1.3/2;
+A.zeilen.forEach(z=>{txt(z,{left:r/2,top:y,originX:"center",originY:"center",fontSize:A.groesse,fontFamily:FETT,fontWeight:"700",fill:SCH,maxB:MAX});y+=A.groesse*1.3});
+linie(r*.34,y+c(8.96),r*.66,y+c(8.96),{stroke:MON,strokeWidth:Math.max(1,c(1.568)),strokeDashArray:[c(5.6),c(5.6)]});
+return!0}
 
-const L=r*.09,MAXB=r*.82,ZH=1.16;
-const start=FA==="aussage"?c(74):c(44);
-const maxZeilen=FA==="aussage"?5:9;
-const maxHoehe=n*.60;
-let gr=start,satz=brechen(gr,MAXB);
-for(let i=0;i<26;i+=1){
-const hoch=satz.zeilen.length*gr*ZH,breit=Math.max(...satz.zeilen.map(z=>z.breite));
-if(satz.zeilen.length<=maxZeilen&&hoch<=maxHoehe&&breit<=MAXB)break;
-gr*=.94,satz=brechen(gr,MAXB)}
+if(FA==="wieder"){
+const A=passt(TX,c(49.28),FETT,r*.78,1,"700"),S=A.groesse,Z=A.zeilen[0]||TX;
+if(S<c(26))return!1;
+if(S<c(29.12))return!1;
+[1,.66,.42,.24].forEach((op,i)=>{txt(Z,{left:r/2,top:n*.33+i*S*1.16,originX:"center",originY:"center",fontSize:S,fontFamily:FETT,fontWeight:"700",fill:SCH,opacity:op,maxB:r*.78})});
+return!0}
 
-const hoch=satz.zeilen.length*gr*ZH;
-let y=n*.46-hoch/2+gr*.5;
-satz.zeilen.forEach(z=>{
-let x=L;
-z.worte.forEach(o=>{
-e.add(new Pe.fabric.Text(o.w,{left:x,top:y,originX:"left",originY:"center",
-fontSize:gr,fontFamily:SERIF,fontStyle:o.kursiv?"italic":"normal",
-fill:SCH,selectable:!1,evented:!1}));
-x+=o.b+satz.abstand});
-y+=gr*ZH});
+if(FA==="zettel"){
+const KL=r*.14,KB=r*.72,PAD=r*.055,MAX=KB-PAD*2;
+const A=passt(TX,c(28),SERIF,MAX,5);
+const KT=n*.235,KH=Math.max(n*.195,n*.105+A.zeilen.length*A.groesse*1.36+PAD*.8);
+kasten({left:KL,top:KT,width:KB,height:KH,fill:GRD,shadow:new Pe.fabric.Shadow({color:"rgba(0,0,0,0.22)",blur:c(15.68),offsetX:0,offsetY:c(4.48)})});
+kasten({left:r/2-r*.085,top:KT-n*.018,width:r*.17,height:n*.036,fill:"rgba(20,18,16,0.18)"});
+txt("REMINDER",{left:KL+PAD,top:KT+n*.05,originX:"left",originY:"center",fontSize:c(15.68),fontFamily:FETT,fontWeight:"700",charSpacing:220,fill:MON,opacity:.72});
+let y=KT+n*.10;
+A.zeilen.forEach(z=>{txt(z,{left:KL+PAD,top:y,originX:"left",originY:"center",fontSize:A.groesse,fontFamily:SERIF,fill:TINTE,maxB:MAX});y+=A.groesse*1.36});
+return!0}
 
-e.add(new Pe.fabric.Text("carinaannaprav",{left:r/2,top:n*.905,originX:"center",originY:"center",
-fontSize:c(17),fontFamily:SERIF,charSpacing:60,fill:ABS,selectable:!1,evented:!1}));
-return!0};
+if(FA==="notiz"){
+const KL=r*.11,KB=r*.62,PAD=r*.042,MAX=KB-PAD*2,KOPF=n*.032,ZL=c(26.88);
+const A=passt(TX,c(24.64),GLATT,MAX,4);
+const KT=n*.29,KH=KOPF+n*.035+A.zeilen.length*A.groesse*1.34+c(11.2)+4*ZL+PAD;
+kasten({left:KL,top:KT,width:KB,height:KH,fill:GRD,shadow:new Pe.fabric.Shadow({color:"rgba(0,0,0,0.18)",blur:c(13.44),offsetX:0,offsetY:c(3.36)})});
+kasten({left:KL,top:KT,width:KB,height:KOPF,fill:"rgba(20,18,16,0.08)"});
+txt("Notes",{left:KL+PAD*.8,top:KT+KOPF/2,originX:"left",originY:"center",fontSize:c(14.56),fontFamily:GLATT,fill:"rgba(20,18,16,0.55)"});
+let y=KT+KOPF+n*.032;
+A.zeilen.forEach(z=>{txt(z,{left:KL+PAD,top:y,originX:"left",originY:"center",fontSize:A.groesse,fontFamily:GLATT,fill:TINTE,maxB:MAX});y+=A.groesse*1.34});
+y+=c(11.2);
+for(let i=0;i<4;i+=1)linie(KL+PAD,y+i*ZL,KL+KB-PAD,y+i*ZL,{stroke:"rgba(20,18,16,0.12)",strokeWidth:Math.max(1,c(1.12))});
+return!0}
+
+if(FA==="merken"){
+const KL=r*.12,KB=r*.62,PAD=r*.045,MAX=KB-PAD*2;
+const A=passt(TX,c(26.88),FETT,MAX,4,"700");
+const KH=n*.058+A.zeilen.length*A.groesse*1.34+PAD,KT=n*.42-KH/2;
+kasten({left:KL,top:KT,width:KB,height:KH,fill:GRD});
+txt("HEUTE MERKEN",{left:KL+PAD,top:KT+n*.028,originX:"left",originY:"center",fontSize:c(14.56),fontFamily:FETT,fontWeight:"700",charSpacing:220,fill:MON,opacity:.7});
+let y=KT+n*.062;
+A.zeilen.forEach(z=>{txt(z,{left:KL+PAD,top:y,originX:"left",originY:"center",fontSize:A.groesse,fontFamily:FETT,fontWeight:"700",fill:TINTE,maxB:MAX});y+=A.groesse*1.34});
+return!0}
+
+if(FA==="zwei"){
+const P=teile(TX),L=r*.12,MAX=r*.76;
+const A=passt(P[0],c(33.6),FETT,MAX,3,"700");
+const B=P[1]?passt(P[1],c(29.12),DUENN,MAX,3):null;
+const HOCH=A.zeilen.length*A.groesse*1.3+(B?c(13.44)+B.zeilen.length*B.groesse*1.3:0);
+let y=n*.42-HOCH/2+A.groesse*.5;
+A.zeilen.forEach(z=>{txt(z,{left:L,top:y,originX:"left",originY:"center",fontSize:A.groesse,fontFamily:FETT,fontWeight:"700",fill:SCH,maxB:MAX});y+=A.groesse*1.3});
+if(B){y+=c(13.44);B.zeilen.forEach(z=>{txt(z,{left:L,top:y,originX:"left",originY:"center",fontSize:B.groesse,fontFamily:DUENN,fill:ABS,maxB:MAX});y+=B.groesse*1.3})}
+return!0}
+
+if(FA==="aussage"){
+const P=teile(TX),L=r*.10,MAX=r*.80;
+const A=passt(P[0].toLocaleUpperCase("de-DE"),c(62.72),BLOCK,MAX,3);
+let y=n*.40-(A.zeilen.length-1)*A.groesse*1.06/2;
+A.zeilen.forEach(z=>{txt(z,{left:L,top:y,originX:"left",originY:"center",fontSize:A.groesse,fontFamily:BLOCK,fill:SCH,maxB:MAX});y+=A.groesse*1.06});
+if(P[1]){const B=passt(P[1],c(16.8),FETT,MAX,2,"700");y+=c(17.92);
+B.zeilen.forEach(z=>{txt(z,{left:L,top:y,originX:"left",originY:"center",fontSize:B.groesse,fontFamily:FETT,fontWeight:"700",fill:MON,opacity:.85,maxB:MAX});y+=B.groesse*1.4})}
+return!0}
+
+return!1};
   const ok=wt(Je,text);
   cv.renderAll();
   return ok;

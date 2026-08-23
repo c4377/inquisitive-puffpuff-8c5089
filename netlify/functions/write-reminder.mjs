@@ -5,14 +5,12 @@
  * gepostet werden, muessen aber nicht. Deshalb entstehen sie getrennt
  * von den Karussells und tragen die Kennzeichnung "optional".
  *
- * ZWEI Fassungen, editorial gesetzt, jede mit harter Laengengrenze —
- * die Grenzen kommen aus dem Zeichner, nicht aus dem Geschmack:
+ * ACHT Fassungen, jede mit einer HARTEN Laengengrenze — die Grenzen
+ * kommen aus dem Zeichner, nicht aus dem Geschmack. Passt der Text
+ * nicht, faellt die Kachel auf die schlichte Karte zurueck.
  *
- *   zitat    bis 190 Zeichen   heller Grund, grosse Serife, der ruhige Gedanke
- *   aussage  bis  90 Zeichen   dunkler Grund, sehr gross, der harte Satz
- *
- * In jedem Text steht genau ein *Sternchen*-Paar. Das Wort darin wird
- * kursiv gesetzt und traegt die Betonung.
+ *   zitat   140   linie  60   wieder  22   zettel 110
+ *   notiz    90   merken 80   zwei   2x55  aussage 28+70
  */
 
 const KANON = `
@@ -38,39 +36,52 @@ HOOK-REGEL: eine Behauptung oder ein Widerspruch, kein Ratschlag.
 `;
 
 const FASSUNGEN = `
-ZWEI FASSUNGEN, MEHR NICHT
+DIE ACHT FASSUNGEN UND IHRE GRENZEN
 
-zitat   BIS 190 ZEICHEN, zwei bis vier Saetze. Steht auf hellem Grund,
-        gross in einer Serifenschrift gesetzt, gemischt geschrieben.
-        Das ist der lange, ruhige Gedanke — einer, bei dem eine
-        Unternehmerin innerlich nickt, bevor sie zu Ende gelesen hat.
-        Sie darf ihn sich selbst schicken wollen.
-        Beispiel: Du hast diese Woche zwei Angebote nicht rausgeschickt,
-        weil sie noch nicht fertig genug waren. Fertig genug gibt es nicht.
-        Es gibt nur verschickt oder nicht verschickt.
+zitat   BIS 140 ZEICHEN. Ein Satz mit Haltung, der auch allein steht.
+        Wird mit Anfuehrungszeichen und "— Carina Anna Prav" gesetzt.
+        Beispiel: Du brauchst keine Money-Making Energy. Du brauchst
+        einen Verkaufsprozess.
 
-aussage BIS 90 ZEICHEN, ein bis zwei Saetze. Steht auf dunklem Grund,
-        sehr gross gesetzt. Das ist der kurze harte Satz, der allein
-        stehen kann und nichts erklaert.
-        Beispiel: Kein Move ist auch eine Entscheidung gegen Umsatz.
+linie   BIS 60 ZEICHEN. Zwei sehr kurze Saetze, mittig, in Versalien.
+        Der zweite kippt den ersten.
+        Beispiel: Family > Business. Always.
 
-DAS STERNCHEN
-In JEDEM Text steht GENAU EIN Wort oder eine kurze Wendung in
-*Sternchen*. Das wird kursiv gesetzt und traegt die Betonung.
-Setze es auf das Wort, das den Satz kippt — nicht auf das lauteste.
-  Richtig: Fertig genug gibt es *nicht*.
-  Falsch:  *Fertig genug* gibt es nicht.
+wieder  BIS 22 ZEICHEN, EINE Zeile, hoechstens drei Woerter. Sie wird
+        VIERMAL untereinander gesetzt und verblasst nach unten.
+        Beispiel: Less is MORE
+
+zettel  BIS 110 ZEICHEN. Notizzettel mit Klebestreifen. Klingt wie eine
+        Notiz an sich selbst, nicht wie eine Ansage ans Publikum.
+        Beispiel: Freiheit ist kein Privileg. Freiheit ist eine
+        Entscheidung.
+
+notiz   BIS 90 ZEICHEN. Sieht aus wie ein Screenshot aus der Notizen-App.
+        Trocken, beilaeufig, ohne Pathos.
+        Beispiel: Manifestieren bringt keine Kunden. Systeme schon.
+
+merken  BIS 80 ZEICHEN. Steht unter der Kopfzeile "HEUTE MERKEN", also
+        ein Satz zum Mitnehmen, fett gesetzt.
+        Beispiel: Mehr Stunden loesen keine strukturellen Probleme.
+
+zwei    ZWEI TEILE, getrennt durch |, jeder Teil bis 55 Zeichen. Der
+        erste steht fett, der zweite leise darunter und dreht ihn.
+        Beispiel: Ich sage dir, was du hoeren musst.|Nicht was du hoeren willst.
+
+aussage ZWEI TEILE, getrennt durch |. Teil 1 bis 28 Zeichen, wird RIESIG
+        gesetzt. Teil 2 bis 70 Zeichen, kleine Unterzeile.
+        Beispiel: Weniger ist mehr|Fuenf Stunden Fokus schlagen vierzig Stunden Chaos.
 
 WAS EIN JA AUSLOEST
 Nenne einen konkreten Moment, den sie diese Woche hatte. Eine Uhrzeit,
 ein Tab, ein Entwurf, eine ungesendete Nachricht. Je genauer die Szene,
 desto sicherer das Nicken.
 VERBOTEN: Mutmach-Saetze, "du bist genug", Manifestieren, Hustle,
-Ausrufezeichen, Anfuehrungszeichen, Emojis, Hashtags.
-Kein Beginner-Shaming: sie ist nicht dumm, sie ist im Leerlauf.
+Emojis, Hashtags. Kein Beginner-Shaming: sie ist nicht dumm, sie ist
+im Leerlauf.
 
-DIE GRENZEN SIND HART. Zu langer Text faellt auf eine schlichte Karte
-zurueck, dann ist die Fassung weg. Lieber kuerzer.
+DIE GRENZEN SIND HART. Der Zeichner faellt bei laengerem Text auf eine
+schlichte Karte zurueck — die Fassung waere dann weg. Lieber kuerzer.
 `;
 
 export default async (req) => {
@@ -101,14 +112,14 @@ AUFTRAG
 Schreibe ${anzahl} Reminder-Folien auf Deutsch.
 ${thema ? `Themenschwerpunkt: ${thema}` : 'Themen frei aus der Position oben.'}
 
-Verteile sie ungefaehr halbe halbe auf die zwei Fassungen.
+Verteile sie ungefaehr gleichmaessig auf die acht Fassungen.
 Kein Text darf seine Grenze ueberschreiten — zaehle die Zeichen.
-In jedem Text MUSS genau ein *Sternchen*-Paar stehen.
+Bei "zwei" und "aussage" MUSS ein | im Text stehen.
 
 Antworte NUR mit JSON, ohne Vorrede, ohne Backticks:
-[{"art":"zitat","text":"... *Wort* ..."}, {"art":"aussage","text":"... *Wort* ..."}]
+[{"art":"zitat","text":"..."}, {"art":"aussage","text":"Teil eins|Teil zwei"}]
 
-Erlaubte Werte fuer "art": zitat, aussage`;
+Erlaubte Werte fuer "art": zitat, linie, wieder, zettel, notiz, merken, zwei, aussage`;
 
   const MODELLE = ['gemini-2.5-flash', 'gemini-flash-latest'];
   let letzterFehler = '';
@@ -142,7 +153,11 @@ Erlaubte Werte fuer "art": zitat, aussage`;
        * faellt die Kachel spaeter still auf die schlichte Karte zurueck
        * und niemand weiss, warum.
        */
-      const GRENZEN = { zitat: 190, aussage: 90 };
+      const GRENZEN = {
+        zitat: 140, linie: 60, wieder: 22, zettel: 110,
+        notiz: 90, merken: 80, zwei: 115, aussage: 100,
+      };
+      const ZWEITEILIG = { zwei: [55, 55], aussage: [28, 70] };
       const geprueft = [];
       const verworfen = [];
       liste.forEach((e) => {
@@ -153,14 +168,24 @@ Erlaubte Werte fuer "art": zitat, aussage`;
           verworfen.push({ art, text, grund: `${text.length} statt max ${GRENZEN[art]} Zeichen` });
           return;
         }
-        const sterne = (text.match(/\*/g) || []).length;
-        if (sterne !== 2) {
-          verworfen.push({ art, text, grund: `${sterne} Sternchen statt genau zwei` });
+        if (art === 'wieder' && text.split(/\s+/).length > 3) {
+          verworfen.push({ art, text, grund: 'mehr als drei Woerter' });
           return;
         }
-        if (/[!"\u201c\u201e\u201d]/.test(text)) {
-          verworfen.push({ art, text, grund: 'Ausrufe- oder Anfuehrungszeichen' });
-          return;
+        if (ZWEITEILIG[art]) {
+          const teile = text.split('|').map((t) => t.trim()).filter(Boolean);
+          if (teile.length !== 2) {
+            verworfen.push({ art, text, grund: 'kein | zwischen den zwei Teilen' });
+            return;
+          }
+          const [maxA, maxB] = ZWEITEILIG[art];
+          if (teile[0].length > maxA || teile[1].length > maxB) {
+            verworfen.push({
+              art, text,
+              grund: `Teile ${teile[0].length}/${teile[1].length} statt max ${maxA}/${maxB}`,
+            });
+            return;
+          }
         }
         geprueft.push({ art, text, optional: true });
       });
