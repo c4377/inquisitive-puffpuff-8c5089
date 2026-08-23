@@ -4,6 +4,10 @@
 
 [build]
   publish = "site"
+  # Leerer Befehl = ausdruecklich kein Build. Muss dastehen: laesst man
+  # "command" ganz weg, greift der Build-Befehl aus den Netlify-Einstellungen,
+  # und der wuerde die App aus dem veralteten src/ neu bauen.
+  command = ""
 
 [[redirects]]
   from = "/*"
