@@ -74,6 +74,17 @@ Alle brauchen `GEMINI_API_KEY` in den Netlify-Umgebungsvariablen.
 Fehlt der Schlüssel, antworten sie mit einem Fehler — das ist kein
 Codefehler und nichts zum Reparieren.
 
+## Wie der Deploy ausgeloest wird
+
+Die Netlify-Seite ist mit diesem Repo verbunden. Ein Push auf `main`
+loest den Deploy aus — es muss nichts mehr von Hand abgelegt werden.
+
+Netlify liest die `netlify.toml` aus dem Repo; was im Netlify-Formular
+unter Build-Befehl und Publish-Ordner steht, wird davon ueberstimmt.
+Der Build-Befehl ist dort ausdruecklich leer gesetzt. Steht da je wieder
+`npm run build`, wird die App aus dem veralteten `src/` gebaut und alles
+Neuere ist weg.
+
 ## Adresse
 
 https://inquisitive-puffpuff-8c5089.netlify.app
