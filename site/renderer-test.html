@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Renderer Selbsttest — Position & Last-One-Wins</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+  <style>
+    body { font-family: -apple-system, system-ui, sans-serif; max-width: 760px; margin: 20px auto; padding: 0 16px; color: #1a1a1a; }
+    h1 { font-size: 20px; }
+    .test { padding: 10px 14px; border-radius: 10px; margin: 8px 0; font-size: 14px; display: flex; align-items: center; gap: 10px; }
+    .pass { background: #e8f5e9; color: #1b5e20; }
+    .fail { background: #ffebee; color: #b71c1c; }
+    .badge { font-weight: 700; }
+    canvas { display: none; }
+    #summary { font-size: 16px; font-weight: 700; margin: 16px 0; padding: 12px; border-radius: 10px; }
+    .ok { background: #1b5e20; color: white; }
+    .bad { background: #b71c1c; color: white; }
+    .desc { font-size: 12px; color: #666; margin-top: 2px; }
+  </style>
+</head>
+<body>
+  <h1>Renderer Selbsttest</h1>
+  <p class="desc">Dieser Test rendert echte Slides mit Fabric.js im Browser und prüft, ob die manuelle Position, der Layout-Wechsel und „the last one wins" korrekt funktionieren.<br><br><b>So führst du ihn aus:</b> Im Projektordner npm run dev starten, dann im Chrome http://localhost:5173/renderer-test.html öffnen. Unten muss alles grün sein.</p>
+  <div id="summary">Läuft…</div>
+  <div id="results"></div>
+  <canvas id="c"></canvas>
+
+  <script type="module">
+    // Import the REAL renderer from the built app source.
+    // When served by the app (same origin), this path resolves to the module.
+    let renderSlide;
+    try {
+      const mod = await import('/src/utils/canvasRenderer.js');
+      renderSlide = mod.renderSlide;
+    } catch (e) {
+      document.getElementById('summary').textContent =
+        'Konnte den Renderer nicht laden. Bitte diese Seite über die laufende App öffnen (npm run dev), nicht als lokale Datei.';
+      document.getElementById('summary').className = 'bad';
+      throw e;
+    }
+
+    const results = document.getElementById('results');
+    let passed = 0, failed = 0;
+
+    function record(name, ok, detail) {
+      const div = document.createElement('div');
+      div.className = 'test ' + (ok ? 'pass' : 'fail');
+      div.innerHTML = `<span class="badge">${ok ? '✓' : '✗'}</span> <div><div>${name}</div>${detail ? `<div class="desc">${detail}</div>` : ''}</div>`;
+      results.appendChild(div);
+      ok ? passed++ : failed++;
+    }
+
+    const W = 800, H = 1000;
+    const el = document.getElementById('c');
+    el.width = W; el.height = H;
+
+    // Helper: render a slide and return the main text object's position.
+    async function renderAndGetText(slide) {
+      const canvas = new fabric.StaticCanvas(el, { width: W, height: H });
+      await renderSlide(canvas, slide, W, H, { scale: W / 400, totalSlides: 1, slideIndex: 0, globalBrandName: 'TEST' });
+      // find the text object matching the main text
+      const objs = canvas.getObjects().filter(o => o.type === 'textbox' || o.type === 'text');
+      const main = objs.find(o => (o.text || '').includes(slide.text?.split(' ')[0] || '###')) || objs[0];
+      const pos = main ? { left: main.left, top: main.top, weight: main.fontWeight, fill: main.fill, opacity: main.opacity } : null;
+      canvas.dispose();
+      return pos;
+    }
+
+    const base = { text: 'Testtext Eins Zwei', layout: 'editorial_classic', color: '#222', backgroundColor: '#fff' };
+
+    // T1: baseline render (no offset)
+    const p0 = await renderAndGetText({ ...base });
+    record('Baseline: Text wird gerendert', !!p0, p0 ? `left=${Math.round(p0.left)}, top=${Math.round(p0.top)}` : 'kein Text gefunden');
+
+    // T2: xOffset moves text right
+    const p1 = await renderAndGetText({ ...base, xOffset: 60 });
+    record('Position X verschiebt Text', p0 && p1 && Math.abs(p1.left - p0.left) > 50,
+      p0 && p1 ? `ohne=${Math.round(p0.left)} → mit=${Math.round(p1.left)}` : '—');
+
+    // T3: yOffset moves text down
+    const p2 = await renderAndGetText({ ...base, yOffset: 80 });
+    record('Position Y verschiebt Text', p0 && p2 && Math.abs(p2.top - p0.top) > 50,
+      p0 && p2 ? `ohne=${Math.round(p0.top)} → mit=${Math.round(p2.top)}` : '—');
+
+    // T4: layout pick resets offsets (last one wins) — simulate what LayoutPicker sends
+    const afterLayoutPick = { ...base, xOffset: 0, yOffset: 0, layout: 'minimal_quote' };
+    const p3 = await renderAndGetText(afterLayoutPick);
+    const p3base = await renderAndGetText({ ...base, layout: 'minimal_quote' });
+    record('Layout-Wechsel: Position zurückgesetzt', p3 && p3base && Math.abs(p3.left - p3base.left) < 2 && Math.abs(p3.top - p3base.top) < 2,
+      'nach Layout-Klick sitzt Text auf Layout-Position (offset genullt)');
+
+    // T5: manual position wins again after layout
+    const p4 = await renderAndGetText({ ...base, layout: 'minimal_quote', yOffset: -100 });
+    record('Position gewinnt erneut nach Layout', p3base && p4 && Math.abs(p4.top - p3base.top) > 50,
+      p3base && p4 ? `layout=${Math.round(p3base.top)} → +offset=${Math.round(p4.top)}` : '—');
+
+    // T6: color override from menu
+    const p5 = await renderAndGetText({ ...base, color: '#ff0000' });
+    record('Textfarbe aus Menü greift', p5 && String(p5.fill).toLowerCase().includes('ff0000') || (p5 && p5.fill === 'rgb(255,0,0)'),
+      p5 ? `fill=${p5.fill}` : '—');
+
+    // T7: opacity override
+    const p6 = await renderAndGetText({ ...base, textOpacity: 0.4 });
+    record('Deckkraft aus Menü greift', p6 && Math.abs((p6.opacity ?? 1) - 0.4) < 0.01,
+      p6 ? `opacity=${p6.opacity}` : '—');
+
+    // T8: no double-application on repeated render of same canvas
+    const canvas2 = new fabric.StaticCanvas(el, { width: W, height: H });
+    await renderSlide(canvas2, { ...base, xOffset: 30 }, W, H, { scale: W/400 });
+    let firstLeft = (canvas2.getObjects().find(o => o.type==='textbox')||{}).left;
+    await renderSlide(canvas2, { ...base, xOffset: 30 }, W, H, { scale: W/400 });
+    let secondLeft = (canvas2.getObjects().find(o => o.type==='textbox')||{}).left;
+    canvas2.dispose();
+    record('Kein Doppel-Offset bei Re-Render', firstLeft != null && Math.abs(firstLeft - secondLeft) < 2,
+      `render1=${Math.round(firstLeft)} render2=${Math.round(secondLeft)} (müssen gleich sein)`);
+
+    const summary = document.getElementById('summary');
+    summary.textContent = `${passed} von ${passed+failed} Tests bestanden` + (failed ? ` — ${failed} fehlgeschlagen` : ' — alles grün ✓');
+    summary.className = failed ? 'bad' : 'ok';
+  </script>
+</body>
+</html>
