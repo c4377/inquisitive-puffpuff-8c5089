@@ -1,9 +1,12 @@
 // Netlify Function: Story-Texte zu einem Tag aus dem Content Plan.
 // Der Schluessel bleibt SERVERSEITIG (GEMINI_API_KEY) — nie in der App.
 // ZWEI MODI:
-//   Am Post:  POST { day: { day, title, slides: [text], caption }, count }
-//   Frei:     POST { frei: true, anlass?: "…", count }   — ohne day
+//   Frei (Normalfall):  POST { anlass?: "…", count }
+//   Am Post:            POST { frei: false, day: { day, title, slides, caption }, count }
 // -> { stories: [...] }
+// Ein mitgeschicktes "day" allein schaltet NICHT auf den Post-Modus um —
+// dafuer braucht es frei:false. So liefert der bestehende Stories-Knopf,
+// der immer ein day mitschickt, trotzdem freie Stories.
 
 const STIMME = `
 TONLAGE "MONDAY" — nur wenn ausdrücklich verlangt:
@@ -215,7 +218,10 @@ export default async (req) => {
     const body = await req.json();
     day = body.day || null;
     monday = body.monday === true;
-    frei = body.frei === true || !body.day;
+    // Freie Stories sind der Normalfall. Der Stories-Knopf schickt kein
+    // "frei"-Feld mit — deshalb greift hier die Voreinstellung. Wer die
+    // Stories zum Post will, schickt ausdruecklich frei:false samt day.
+    frei = body.frei !== false;
     anlass = String(body.anlass || '').slice(0, 600).trim();
     count = Math.min(Math.max(parseInt(body.count, 10) || 5, 3), 8);
   } catch {
