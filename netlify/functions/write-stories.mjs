@@ -1,6 +1,9 @@
 // Netlify Function: Story-Texte zu einem Tag aus dem Content Plan.
 // Der Schluessel bleibt SERVERSEITIG (GEMINI_API_KEY) — nie in der App.
-// POST { day: { day, title, slides: [text], caption }, count } -> { stories: [...] }
+// ZWEI MODI:
+//   Am Post:  POST { day: { day, title, slides: [text], caption }, count }
+//   Frei:     POST { frei: true, anlass?: "…", count }   — ohne day
+// -> { stories: [...] }
 
 const STIMME = `
 TONLAGE "MONDAY" — nur wenn ausdrücklich verlangt:
@@ -153,6 +156,51 @@ Eine Story endet nie mit einem Punkt, der alles abschliesst. Sie endet so,
 dass man die nächste sehen will: eine offene Frage, ein ">>", ein halber Satz.
 Ausnahme ist die Einladung — die ist eindeutig und geschlossen.`;
 
+const FREIE_STORIES = `
+FREIE STORIES — NICHT AM POST
+
+Diese Stories haengen an keinem Post. Sie kommen aus dem Leben und tragen
+die Message. Jede steht fuer sich allein und ist auch verstaendlich, wenn
+man die vorige nicht gesehen hat.
+
+WORAUS SIE ENTSTEHEN — nimm fuer jede Story einen ANDEREN Anlass:
+
+  frueher-ich     Was Carina selbst gemacht hat, bevor es lief. Konkret,
+                  nicht heroisch. Der Fehler darf peinlich sein.
+  frueher-kundin  Wo eine Kundin stand, bevor sie kam. Die Situation, nicht
+                  das Etikett.
+  ergebnis        Was eine Kundin erreicht hat. Mit Zahl oder mit dem einen
+                  Satz, der die Veraenderung zeigt.
+  nachricht       Eine Nachricht einer Kundin, die Carina daran erinnert, wo
+                  sie selbst mal stand. Erst die Nachricht, dann die
+                  Erinnerung.
+  alltag          Etwas von heute: untertags einkaufen gehen, waehrend andere
+                  im Buero sitzen. Zeit mit dem Kind. Ein leerer Dienstag.
+                  Der Kontrast traegt die Aussage, nicht die Ansage.
+  beobachtung     Eine kleine Szene von aussen, die kippt: erst harmlos,
+                  dann sitzt sie.
+  naechster-move  Was Carina gerade tut und warum. Sie kann jederzeit sagen,
+                  was der naechste Schritt ist — das ist der Beweis.
+
+DIE DREHUNG
+Jede Story faengt im Leben an und dreht sich dann zur Message. Die Drehung
+kommt spaet und in einem Satz. Nie andersherum: kein Lehrsatz mit
+angehaengter Anekdote.
+
+DAS ANGEBOT — DAS IST DIE WICHTIGSTE REGEL HIER
+Nicht jede Story spricht vom Angebot. HOECHSTENS ZWEI der Stories tragen eine
+Einladung, alle uebrigen tragen nur die Message. Eine Story ohne
+Einladung ist kein Fehler, sondern der Normalfall. Wer staendig einlaedt,
+wird weggeklickt.
+
+Wenn eingeladen wird, dann ins Mentoring oder in die 1:1-Begleitung, per DM,
+in einem Satz, ohne Druck.
+
+KEINE ABFOLGE
+Diese Stories bauen nicht aufeinander auf. Kein Aufriss-Beweis-Einwand-
+Einladung. Jede ist ein eigener Anlauf auf dieselbe Message.
+`;
+
 export default async (req) => {
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'POST only' }), { status: 405 });
@@ -162,35 +210,51 @@ export default async (req) => {
     return new Response(JSON.stringify({ error: 'GEMINI_API_KEY fehlt (Netlify → Environment variables).' }), { status: 500 });
   }
 
-  let monday = false, day = null, count = 5;
+  let monday = false, day = null, count = 5, frei = false, anlass = '';
   try {
     const body = await req.json();
     day = body.day || null;
     monday = body.monday === true;
+    frei = body.frei === true || !body.day;
+    anlass = String(body.anlass || '').slice(0, 600).trim();
     count = Math.min(Math.max(parseInt(body.count, 10) || 5, 3), 8);
   } catch {
     return new Response(JSON.stringify({ error: 'Ungültiger Body' }), { status: 400 });
   }
-  if (!day) return new Response(JSON.stringify({ error: 'day fehlt' }), { status: 400 });
+  if (!frei && !day) return new Response(JSON.stringify({ error: 'day fehlt' }), { status: 400 });
 
-  const folien = (day.slides || []).filter(Boolean).slice(0, 20)
+  const folien = frei ? '' : (day.slides || []).filter(Boolean).slice(0, 20)
     .map((t, i) => `${i + 1}. ${String(t).replace(/\u00A0/g, ' ')}`).join('\n');
 
   const tonzusatz = monday
     ? '\n\nSCHREIBE IN DER TONLAGE "MONDAY" (siehe oben). Sie gilt fuer den ganzen Text.'
     : '';
-  const prompt = `${monday ? 'SCHREIBE IM MONDAY-TON — die Regeln dazu stehen unten.\n\n' : ''}${STIMME}
-
+  const quelle = frei
+    ? `${FREIE_STORIES}
+${anlass ? `\nDER ANLASS VON HEUTE — bau mindestens eine Story darauf:\n${anlass}\n` : ''}`
+    : `
 DER POST, auf den sich die Stories beziehen — Tag ${day.day}${day.title ? `: ${day.title}` : ''}
 ${folien}
 ${day.caption ? `\nCaption:\n${String(day.caption).slice(0, 1200)}` : ''}
+`;
 
-AUFGABE
+  const auftrag = frei
+    ? `AUFGABE
+Schreibe ${count} freie Stories. Jede nimmt einen ANDEREN Anlass aus der Liste
+oben und steht fuer sich allein. Mindestens eine mit einer konkreten Zahl,
+mindestens eine als Gegensatzpaar.
+Denk an die Regel zum Angebot: hoechstens zwei laden ein, der Rest nicht.
+Keine Abfolge, kein roter Faden von Story 1 bis ${count}.`
+    : `AUFGABE
 Schreibe ${count} Stories, die auf diesen Post hinführen oder ihn vertiefen.
 Sie sollen zusammen eine Abfolge ergeben — Aufriss, Beweis, Mechanismus,
 Einwand, Einladung ins Mentoring. Nutze die Muster aus BAUWEISE: mindestens
 eine Story als Gegensatzpaar, eine mit einer konkreten Zahl.
-Wiederhole den Post nicht — greif einen Gedanken auf und dreh ihn weiter.
+Wiederhole den Post nicht — greif einen Gedanken auf und dreh ihn weiter.`;
+
+  const prompt = `${monday ? 'SCHREIBE IM MONDAY-TON — die Regeln dazu stehen unten.\n\n' : ''}${STIMME}
+${quelle}
+${auftrag}
 
 ANTWORTE NUR MIT JSON, ohne Vorwort, ohne Markdown:
 {"stories":[{"typ":"screenshot|aussage|fly|frage|cta","text":"…","hinweis":"kurz: was ins Bild gehört"}]}
