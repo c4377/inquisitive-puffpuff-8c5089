@@ -1,0 +1,86 @@
+# Direkt am Bundle geaendert — noch nicht im Quellcode
+
+Diese Aenderungen wurden im gebauten Bundle vorgenommen, weil sie hier
+sofort gebraucht wurden. Im Quellcode der Bau-Session stehen sie NICHT.
+Jeder neue Drop setzt sie zurueck, bis sie dort nachgezogen sind.
+
+Stand: Bundle `karten61f`.
+
+---
+
+## 1. Verlauf hinter Playfair auf Foto — deutlich dunkler
+
+Das Tiefen-Overlay, das gesetzt wird, wenn Playfair auf einem Foto liegt.
+
+Vorher:
+
+    colorStops: [
+      { offset: 0,   color: "rgba(18,16,14,0.34)" },
+      { offset: 0.5, color: "rgba(18,16,14,0.16)" },
+      { offset: 1,   color: "rgba(18,16,14,0.40)" },
+    ]
+
+Jetzt:
+
+    colorStops: [
+      { offset: 0,   color: "rgba(18,16,14,0.82)" },
+      { offset: 0.5, color: "rgba(18,16,14,0.58)" },
+      { offset: 1,   color: "rgba(18,16,14,0.90)" },
+    ]
+
+---
+
+## 2. Weichzeichner — zufaellig statt an einem Schalter
+
+Die Bedingung haengte an einem Flag, das in der Praxis nie griff, deshalb
+war nie ein Weichzeichner zu sehen.
+
+Vorher:
+
+    const blurAn = FLAG && (slide.slideIndex || 0) > 0;
+
+Jetzt: ab Folie 2, und dort etwa jedes zweite Bild. Der Keim kommt aus der
+Bildadresse, damit dieselbe Folie immer gleich faellt.
+
+    const idx = slide.slideIndex || 0;
+    const blurAn = idx > 0 && (() => {
+      const s = String(bildUrl || "");
+      let h = 0;
+      for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 99991;
+      return (h + idx * 17) % 100 >= 50;
+    })();
+
+Die Staerke bleibt wie gehabt: `Math.max(design.blur || 0, 12)`.
+
+---
+
+## 3. Farbfolien in Fotoposts — rund ein Drittel ab Folie 2
+
+An der Stelle, die entscheidet, ob eine Folie ueberhaupt ein Hintergrund-
+bild bekommt (`hatBild`). Faellt sie negativ aus, wird das Bild entfernt
+und die Folie erscheint als reine Farbflaeche.
+
+    hatBild = istFotoPost
+      && typeof folie.background === "string"
+      && folie.background.length > 5
+      && (folieNr === 0 || streu(postNr, folieNr) >= 34);
+
+Mit:
+
+    const streu = (a, b) => {
+      let h = Math.imul(a ^ 2654435769, 374761393)
+            + Math.imul(b ^ 2246822519, 668265263) | 0;
+      h = Math.imul(h ^ h >>> 13, 1274126177);
+      return ((h ^ h >>> 16) >>> 0) % 100;
+    };
+
+`postNr` ist die laufende Nummer des Posts im Contentplan, `folieNr` die
+Folie innerhalb des Posts.
+
+WICHTIG: Eine einfache lineare Formel wie `(postNr*73 + folieNr*151) % 100`
+reicht hier NICHT. Sie ergibt je Post eine starre Reihe — manche Posts
+bekommen dann gar keine Farbfolie, andere strikt jede zweite. Der
+Mischschritt oben streut richtig; nachgerechnet ueber 400 Posts: 33 %
+Farbfolien, 13 % der Posts ohne eine einzige.
+
+Folie 1 behaelt immer ihr Foto.
