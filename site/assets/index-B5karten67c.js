@@ -813,21 +813,28 @@ if(bild==="stationen"&&bildTeile.length){
    Beschriftung. Kein Sinnbild mit vier Punkten unter einem Text, der
    von acht Etappen spricht. */
 const st=bildTeile,anz=st.length,reihen=anz>5?2:1,proReihe=Math.ceil(anz/reihen);
+/* Jede Reihe bekommt ein eigenes Band. Punkt und Beschriftung liegen
+   darin, damit bei zwei Reihen nichts an den Rahmen stoesst. */
+const bandH=bh/reihen,zg=c(13);
 for(let ri=0;ri<reihen;ri++){
 const von=ri*proReihe,bis=Math.min(anz,von+proReihe),k=bis-von;
-const my=y+bh*(reihen===1?.42:(ri===0?.28:.72));
-linie(L+MAXB*.06,my,L+MAXB*.94,my,{stroke:RAND,strokeWidth:Math.max(1,c(1.4))});
+const gp=Math.min(c(26),bandH*.40),my=y+bandH*ri+(bandH-gp)/2,ly=my+gp;
+const pA=k===1?L+MAXB*.5:L+MAXB*.10,pE=k===1?L+MAXB*.5:L+MAXB*.90;
+/* Die Linie endet kurz hinter dem ersten und letzten Punkt, statt
+   quer durch den ganzen Rahmen zu laufen. */
+linie(k===1?L+MAXB*.06:pA-c(14),my,k===1?L+MAXB*.94:pE+c(14),my,{stroke:RAND,strokeWidth:Math.max(1,c(1.4))});
 for(let ix=0;ix<k;ix++){
-const px=k===1?L+MAXB*.5:L+MAXB*.10+(MAXB*.80)*(ix/(k-1));
+const px=k===1?pA:pA+(pE-pA)*(ix/(k-1));
 e.add(new Pe.fabric.Ellipse({left:px,top:my,originX:"center",originY:"center",rx:c(7),ry:c(7),
 fill:VOLL,stroke:RAND,strokeWidth:Math.max(1,c(1.2)),selectable:!1,evented:!1}));
-const wort=st[von+ix];
-/* Aussen buendig statt mittig, sonst haengt die Beschriftung
-   ueber den Rahmen hinaus. */
-const ersteZ=ix===0&&k>1,letzteZ=ix===k-1&&k>1;
-txt(wort,{left:ersteZ?L+c(8):letzteZ?L+MAXB-c(8):px,top:my+c(24),
-originX:ersteZ?"left":letzteZ?"right":"center",originY:"center",
-fontSize:c(11),fontFamily:GLATT,fill:SUB,maxB:MAXB/k*.92})}}}
+const wort=String(st[von+ix]);
+/* Mittig unter ihrem Punkt. Nur wer sonst ueber den Rahmen haengt,
+   rueckt so weit herein, wie noetig. */
+let bw=0;try{bw=new Pe.fabric.Text(wort,{fontSize:zg,fontFamily:GLATT}).width||0}catch{}
+const halb=Math.min(bw,MAXB/k*.92)/2;
+const lx=Math.max(L+c(8)+halb,Math.min(L+MAXB-c(8)-halb,px));
+txt(wort,{left:lx,top:ly,originX:"center",originY:"center",
+fontSize:zg,fontFamily:GLATT,fill:SUB,maxB:MAXB/k*.92})}}}
 
 if(bild==="zeitstrahl"){
 const my=y+bh*.42,pk=4;

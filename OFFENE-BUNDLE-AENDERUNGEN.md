@@ -132,3 +132,30 @@ kursiv, ohne Farbwechsel.
 
 Die Handschrift-Karte bleibt unberuehrt: dort bedeutet das Sternchen
 kursiv UND unterstrichen, das ist so gewollt.
+
+## 8. Stationsreihe: Beschriftung bleibt im Rahmen und bei ihrem Punkt
+
+Bei acht Etappen standen die Punkte in zwei Reihen bei 28 und 72 Prozent
+der Rahmenhoehe, die Beschriftung fest 24 Punkt darunter. Die zweite Reihe
+lag damit auf dem unteren Rahmenrand. Ausserdem sassen der erste und der
+letzte Text aussen buendig am Rahmen, also sichtbar neben ihrem Punkt.
+
+Jede Reihe bekommt ein eigenes Band, Punkt und Text stehen darin mittig:
+
+    const bandH = bh / reihen;
+    const gp = Math.min(c(26), bandH * .40);     // Abstand Punkt -> Text
+    const linieY = y + bandH * ri + (bandH - gp) / 2;
+    const textY  = linieY + gp;
+
+Damit ist der Abstand oben und unten in jeder Reihe gleich gross.
+
+Die Beschriftung steht mittig unter ihrem Punkt und rueckt nur so weit
+herein, wie noetig, statt pauschal an den Rand zu springen:
+
+    const halb = Math.min(gemesseneBreite, MAXB / k * .92) / 2;
+    const lx = Math.max(L + c(8) + halb, Math.min(L + MAXB - c(8) - halb, px));
+
+Dazu zwei Kleinigkeiten: die Linie endet kurz hinter dem ersten und dem
+letzten Punkt statt quer durch den Rahmen zu laufen, und die Schrift ist
+von c(11) auf c(13) gewachsen — dieselbe Groesse wie die Tagesnamen im
+Wochenraster, damit sie auf dem Handy lesbar ist.
