@@ -84,3 +84,51 @@ Mischschritt oben streut richtig; nachgerechnet ueber 400 Posts: 33 %
 Farbfolien, 13 % der Posts ohne eine einzige.
 
 Folie 1 behaelt immer ihr Foto.
+
+---
+
+## 4. Ersatzwert der Bildanalyse: Mitte -> unten mittig
+
+Scheitert die Analyse (Zeitueberschreitung, Ladefehler, fremdes Bild),
+setzte der Ersatzwert die ruhige Zone auf 4 = Mitte. Bei einem Portraet
+landet der Text damit im Gesicht.
+
+    quietZone: 7, quietLabel: "bottom-center"   // statt 4 / "center"
+
+## 5. Zone unter dem Gesicht mitmeiden
+
+Gemieden wurde nur die Zone, in der ein Gesicht erkannt wurde. Ein Gesicht
+reicht in die Zone darunter (Kinn, Hals) — und die ist sehr gleichmaessig,
+wird also gerne als "ruhig" gewaehlt.
+
+    const jx = new Set(faceZones);
+    faceZones.forEach(N => { if (N + 3 < 9) jx.add(N + 3) });
+    const wahl = jx.size < 9 ? jx : faceZones;   // Notausgang, falls alles voll
+
+## 6. Textspalte endet vor dem Gesicht
+
+Die Textbreite war fest bei 82 Prozent, unabhaengig davon, wo die Person
+steht.
+
+    const spalte = faceZones.length ? Math.min(...faceZones.map(z => z % 3)) : -1;
+    const breite = ausrichtungLinks
+      ? (spalte > 0 ? Math.max(.42, Math.min(.82, spalte / 3 + .08)) : .82)
+      : .86;
+
+Bei Gesicht in der linken Spalte bleibt es bei 82 — dort wuerde Schmaelern
+nichts bringen, weil der Text links beginnt.
+
+## 7. Sternchen setzt kursiv statt Farbe
+
+`*Wort*` hat je nach Weg gefaerbt statt kursiv zu setzen. Carina will
+kursiv, ohne Farbwechsel.
+
+  - Standardweg: `const rr = wort.kursiv && stil.highlight` -> `false`,
+    und `fontStyle: stil.kursiv || wort.kursiv ? "italic" : "normal"`
+    (vorher stand dort `wort.kursiv && !stil.highlight`, das Wort wurde
+    also gerade gesetzt, sobald eine Highlight-Farbe existierte)
+  - Pin-Weg: `fillStyle = wort.betont ? akzent : normal` -> immer `normal`
+    (zwei Stellen). Die Schriftlage bleibt an `betont`.
+
+Die Handschrift-Karte bleibt unberuehrt: dort bedeutet das Sternchen
+kursiv UND unterstrichen, das ist so gewollt.
