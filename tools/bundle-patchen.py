@@ -111,6 +111,23 @@ P.append((
  "Stationsreihe aufgeraeumt", 1))
 
 
+def schild(s, pfad):
+    """Das Versionsschild in der Kopfzeile auf den echten Dateinamen setzen.
+
+    Die Bau-Session traegt dort den Namen ihres Drops ein. Nach dem Patchen
+    heisst die Datei anders — dann zeigt das Schild eine Datei an, die gar
+    nicht geladen ist, und man kann nicht mehr sehen, welcher Stand live ist.
+    """
+    import os
+    name = os.path.basename(pfad)
+    name = re.sub(r"^index-B5", "", name)
+    name = re.sub(r"\.js$", "", name)
+    s2, n = re.subn(r'children:"karten[0-9]+[a-z]*"', 'children:"%s"' % name, s)
+    if n != 1:
+        raise SystemExit(f"ABBRUCH beim Versionsschild: {n}x gefunden, erwartet 1x")
+    return s2, name
+
+
 def main():
     if len(sys.argv) != 2:
         raise SystemExit("Aufruf: bundle-patchen.py <bundle.js>")
@@ -119,6 +136,8 @@ def main():
     for alt, neu, was, anz in P:
         s, name = tausche(s, alt, neu, was, anz)
         print(f"  OK  {name}")
+    s, schildname = schild(s, p)
+    print(f"  OK  Versionsschild zeigt {schildname}")
     if "brand-randomizer" in s:
         raise SystemExit("ABBRUCH: brand-randomizer noch im Bundle")
     open(p, "w", encoding="utf-8").write(s)

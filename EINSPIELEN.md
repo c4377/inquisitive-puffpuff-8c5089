@@ -74,15 +74,27 @@ Die Regel "nichts loeschen, nur weil es im ZIP fehlt" gilt weiter — mit
 einer Ausnahme, die Carina freigegeben hat: das **abgeloeste Bundle**.
 
 Wird `assets/index-*.js` umbenannt, bleibt die alte Datei sonst liegen
-und wird bei jedem Einspielen zwei Megabyte schwerer. Sie darf weg,
-sobald nachweislich nichts mehr darauf verweist. Zu pruefen sind:
+und wird bei jedem Einspielen zwei Megabyte schwerer. Sie darf weg —
+aber **nicht ersatzlos**.
 
-- `index.html`
-- die anderen Dateien in `assets/` (das Nebenmodul `index.es-*.js`
-  importiert aus dem Hauptbundle und wird beim Drop mit umbenannt)
+Der Grund: im Repo verweist danach nichts mehr auf den alten Namen, im
+Browser aber schon. Wer die `index.html` zwischengespeichert hat, fragt
+weiter nach der alten Datei. Ist sie ersatzlos geloescht, antwortet
+Netlify mit 404, und die Seite laedt gar nicht mehr — auch nicht die
+neue Fassung. Genau das ist am 26. August passiert.
 
-Verweist keine davon mehr darauf, `git rm` — sonst stehen lassen.
-Rueckholbar bleibt die Datei ohnehin ueber die Versionsgeschichte.
+Deshalb: den alten Namen als **Weiterleitung** stehen lassen. Fuenf
+Zeilen statt zwei Megabyte:
+
+    import "./index-B5kartenNN.js";   // der aktuelle Name
+
+Damit startet auch eine alte `index.html` die aktuelle App. Ein echtes
+Bundle wird also durch seine Weiterleitung ersetzt, nicht geloescht.
+
+Beim naechsten Einspielen zeigen alle vorhandenen Weiterleitungen auf
+den neuen Namen — ein `sed` ueber `site/assets/index-B5karten*.js`
+genuegt. Weiterleitungen, die aelter als etwa fuenf Fassungen sind,
+duerfen ganz weg; so lange haelt kein Zwischenspeicher durch.
 
 Fuer alles andere gilt weiter: nicht loeschen.
 
