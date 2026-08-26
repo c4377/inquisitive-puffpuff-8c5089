@@ -258,6 +258,98 @@ FUENF STORIES ZUM POST — immer genau diese fuenf, in dieser Reihenfolge:
 Jede Story hoechstens 300 Zeichen. Zeilenumbrueche sind erwuenscht.
 `;
 
+const VOICE = {
+  1: {
+    name: 'Preis-Pause',
+    bau: `Hook: "Der Grund, warum du deinen Umsatz fuer ein Persoenlichkeitsproblem haeltst:"
+Dann VIER nummerierte Gewohnheiten, jede beginnt mit "Du" und beschreibt
+eine Handlung, keine Eigenschaft.
+Dann der Dreh: "Du musst nicht X werden. Du musst aufhoeren, Y."
+Dann das Angebot mit Preis, der Beweis mit Einzelfall-Hinweis,
+dann die Qualifizierung, dann der CTA.`,
+  },
+  2: {
+    name: 'Geboren zum Verkaufen',
+    bau: `Hook: "Du bist nicht 'nicht der Verkaufstyp'. Du hast vier Angewohnheiten,
+die dich so aussehen lassen."
+Vier nummerierte Punkte, jeder eine Handlung.
+Dann: "Vierstellig verkaufst du nicht mit neuem Charakter. Sondern wenn du
+aufhoerst, Verkaufen fuer Magie zu halten."
+Kurzes Angebot, CTA. Diese Fassung bleibt knapp.`,
+  },
+  3: {
+    name: 'Ehrlich',
+    bau: `Beginnt mit dem alten Glaubenssatz: "Frueher dachtest du: Ich muss erst
+extrovertierter, disziplinierter, schlagfertiger werden."
+Dann eine Zeile allein: "Bullshit."
+Dann "Du musst:" und VIER Spiegelstriche, jeder beginnt mit "Aufhoeren, ...".
+Dann: "Das ist kein Charakter. Das sind vier Gewohnheiten. Und Gewohnheiten
+tauscht man aus."
+Angebot, Qualifizierung, CTA.`,
+  },
+  4: {
+    name: 'Kurz und fies',
+    bau: `Hook: "Du hast kein Mindset-Problem. Du hast ein Gewohnheits-Problem."
+Dann "Solange du:" und vier Zeilen in Kleinschreibung, mit Komma getrennt,
+die letzte endet auf drei Punkte.
+Dann: "wirst du weiter denken, du bist falsch."
+Dann zwei kurze Saetze: "Bist du nicht. Du bist nur untrainiert."
+Angebot in einer Zeile, CTA. Die kuerzeste Fassung, keine Fuellsaetze.`,
+  },
+  5: {
+    name: 'Launch',
+    bau: `Beginnt mit einer Zahl aus ihrem Alltag: "6.000 Euro Launch fuehlt sich
+nicht nach 'Ich bin halt introvertiert' an. Es fuehlt sich nach vier falschen
+Moves an, die du jeden Tag wiederholst."
+Dann der Beweis als Erzaehlung: Kundin dachte, sie muesse ihre Persoenlichkeit
+aendern, ging von 6k auf 12k, nachdem EINE Gewohnheit getauscht wurde.
+Einzelfall, kein Durchschnitt — dieser Satz MUSS dabeistehen.
+Angebot, Qualifizierung, CTA.`,
+  },
+  6: {
+    name: 'Persoenlichkeits-Luege',
+    bau: `Hook: "Der teuerste Satz in deinem Business: 'Ich bin halt so.'"
+Dann: "Du bist nicht so. Du MACHST so." — das MACHST in Versalien.
+Dann vier Zeilen, jede beginnt mit "Du machst ...", von der konkreten
+Handlung bis zur letzten: "Du machst aus vier Gewohnheiten eine Identitaet."
+Dann: "In THE MONEY ROOM entkoppeln wir das." Preis, CTA.`,
+  },
+  7: {
+    name: 'Alles schon probiert',
+    bau: `Drei Zeilen "Du brauchst kein ...", die aufzaehlen, was sie schon
+gekauft hat: neues Branding, neues Reading, neuer Charakter.
+Dann: "Du brauchst jemanden, der dir sagt: ..." und darin steht die
+Aufforderung, die alles kippt.
+Dann das Angebot in zwei Saetzen, CTA.
+Fuer Leute, die schon zehn Kurse gekauft haben.`,
+  },
+};
+
+const VOICE_REGELN = `
+DIE VOICE-FASSUNGEN
+
+Sieben feste Bauplaene im Sound von Laura Hersche: gleicher Mechanismus,
+gleicher Punch. Das Muster ist immer dasselbe —
+
+  Behauptung ueber ihre Persoenlichkeit widerlegen
+  -> vier Gewohnheiten benennen, als Handlung, nie als Eigenschaft
+  -> der Dreh: nicht werden, sondern aufhoeren
+  -> Angebot mit Preis
+  -> Qualifizierung
+  -> CTA
+
+WAS DIESEN SOUND AUSMACHT
+Kurze Zeilen, viele Umbrueche, jede Aussage steht allein. Keine
+Ueberleitungen. Zahlen statt Adjektive. "Du" in jeder Zeile. Das Wort
+"Gewohnheit" traegt die ganze Caption — sie ist nicht falsch, sie ist
+untrainiert.
+
+VERBOTEN in diesen Fassungen: Emojis, Hashtags, Ausrufezeichen,
+Zwischenueberschriften, "In diesem Post zeige ich dir".
+
+Vier Punkte heisst VIER. Nicht drei, nicht fuenf.
+`;
+
 export default async (req) => {
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'POST only' }), { status: 405 });
@@ -267,13 +359,14 @@ export default async (req) => {
     return new Response(JSON.stringify({ error: 'GEMINI_API_KEY fehlt (Netlify → Environment variables).' }), { status: 500 });
   }
 
-  let monday = false, day = null, keyword = '', art = 0, stories = false;
+  let monday = false, day = null, keyword = '', art = 0, stories = false, voice = 0;
   try {
     const body = await req.json();
     day = body.day || null;
     monday = body.monday === true;
     keyword = String(body.keyword || '').trim().slice(0, 24);
     art = [1, 2, 3].includes(Number(body.art)) ? Number(body.art) : 0;
+    voice = [1, 2, 3, 4, 5, 6, 7].includes(Number(body.voice)) ? Number(body.voice) : 0;
     stories = body.stories === true;
   } catch {
     return new Response(JSON.stringify({ error: 'Ungültiger Body' }), { status: 400 });
@@ -299,6 +392,8 @@ export default async (req) => {
   const prompt = `${monday ? 'SCHREIBE IM MONDAY-TON — die Regeln dazu stehen unten.\n\n' : ''}${REGELN}
 ${art ? MONEYROOM : ''}
 ${art ? ARTEN[art] : ''}
+${voice ? VOICE_REGELN : ''}
+${voice ? `DEIN BAUPLAN — ${VOICE[voice].name}\n${VOICE[voice].bau}` : ''}
 ${stories ? STORY_ANLEITUNG : ''}
 
 DER POST — Tag ${day.day}${day.title ? `: ${day.title}` : ''}

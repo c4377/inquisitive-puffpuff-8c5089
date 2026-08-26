@@ -778,14 +778,16 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     return { kicker, headline: lines[headlineIdx], footer };
   };
 
-  // Helper: apply accent color + accent font to *..* parts of a Textbox
+  // Sternchen bedeutet kursiv, nicht farbig: die Akzentfarbe ist hier
+  // absichtlich raus. Die Handschrift-Karte bleibt davon unberuehrt,
+  // dort heisst das Sternchen kursiv UND unterstrichen.
   const applyAccentStyles = (textObj, segments) => {
     try {
       let idx = 0;
       segments.forEach((s) => {
         if (s.accent && s.text.length) {
           textObj.setSelectionStyles(
-            { fill: accentColor, fontStyle: 'italic', fontFamily: accentFont },
+            { fontStyle: 'italic', fontFamily: accentFont },
             idx,
             idx + s.text.length
           );
@@ -1588,7 +1590,16 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
     // gelungen ist. Vorher: 72 mit Spot, 54 ohne, ~42 auf Follow-ups — deshalb
     // wirkte die Typo im Feed mal gross, mal klein.
     const onPhoto = hasBgImage && !V.bigWord;
-    const startW = editorial ? 0.52 : (V.exactWidth || (alignLeft ? 0.82 : 0.86));
+    // Die Textbreite lag fest bei 82 Prozent, egal wo die Person steht.
+    // Steht sie rechts, laeuft der Satz in sie hinein. Also bis zur
+    // Spalte kuerzen, in der das erste Gesicht sitzt. Gesicht links:
+    // bleibt bei 82, dort wuerde Schmaelern nichts bringen, weil der
+    // Text ohnehin links beginnt.
+    const gesichtSpalte = faceZones.length ? Math.min(...faceZones.map((z) => z % 3)) : -1;
+    const textBreite = alignLeft
+      ? (gesichtSpalte > 0 ? Math.max(0.42, Math.min(0.82, gesichtSpalte / 3 + 0.08)) : 0.82)
+      : 0.86;
+    const startW = editorial ? 0.52 : (V.exactWidth || textBreite);
     const growW = editorial ? 0.78 : 0.9;
 
     // ---- AD-READY: der Standard auf Fotos --------------------------------
@@ -1631,7 +1642,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
 
     makeHeadline(segments, plain, {
       left: cx, top: y, originX, originY: headOriginY,
-      width: width * (onPhoto ? startW : (editorial ? 0.46 : (V.exactWidth || (alignLeft ? 0.82 : 0.86)))),
+      width: width * (onPhoto ? startW : (editorial ? 0.46 : (V.exactWidth || textBreite))),
       // Auf Folgeseiten darf die Spalte NICHT mitwachsen — sonst waere die
       // Zeilenbreite von Seite zu Seite unterschiedlich.
       maxWidth: isFollowPage ? undefined : (onPhoto ? width * growW : undefined),
@@ -2138,7 +2149,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       segments.forEach((s) => {
         if (s.accent && s.text.length) {
           titleObj.setSelectionStyles(
-            { fill: accentColor, fontStyle: 'italic', fontFamily: accentFont },
+            { fontStyle: 'italic', fontFamily: accentFont },
             idx, idx + s.text.length
           );
         }
@@ -2227,7 +2238,7 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
       segments.forEach((s) => {
         if (s.accent && s.text.length) {
           titleObj.setSelectionStyles(
-            { fill: accentColor, fontStyle: 'italic', fontFamily: accentFont },
+            { fontStyle: 'italic', fontFamily: accentFont },
             idx, idx + s.text.length
           );
         }

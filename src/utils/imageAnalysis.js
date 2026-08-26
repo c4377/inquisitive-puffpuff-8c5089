@@ -113,9 +113,16 @@ export const analyzeImage = (src) =>
         // Quiet zone = lowest variance (flattest -> safest for text),
         // but NEVER a zone containing a face. If every non-face zone is worse,
         // we still prefer a non-face zone over a face zone (strict avoidance).
+        // Ein Gesicht reicht in die Zone darunter — Kinn und Hals. Die ist
+        // sehr gleichmaessig und wurde deshalb gern als "ruhig" gewaehlt.
+        // Also mitmeiden, solange danach ueberhaupt etwas uebrig bleibt.
+        const gemieden = new Set(faceZones);
+        faceZones.forEach((z) => { if (z + 3 < 9) gemieden.add(z + 3); });
+        const meiden = gemieden.size < 9 ? gemieden : faceZones;
+
         let quietZone = -1, busyZone = 0;
         for (let z = 0; z < 9; z++) {
-          if (faceZones.has(z)) continue; // skip face zones entirely
+          if (meiden.has(z)) continue; // Gesicht und die Zone darunter
           if (quietZone === -1 || zoneVariance[z] < zoneVariance[quietZone]) quietZone = z;
         }
         // If literally every zone has a face (rare), fall back to lowest variance overall.
@@ -235,9 +242,11 @@ const fallbackAnalysis = (src) => ({
   ok: false,
   zoneBrightness: new Array(9).fill(128),
   zoneVariance: new Array(9).fill(0),
-  quietZone: 4,
+  // Scheitert die Analyse, landete der Text bisher in der Mitte — bei
+  // einem Portraet also im Gesicht. Unten mittig ist der sichere Platz.
+  quietZone: 7,
   busyZone: 4,
-  quietLabel: 'center',
+  quietLabel: 'bottom-center',
   busyLabel: 'center',
   textSpot: null,
   avgColor: { r: 128, g: 128, b: 128 },
