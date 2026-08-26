@@ -87,6 +87,15 @@ Folie 1 behaelt immer ihr Foto.
 
 ---
 
+Ausgenommen sind Posts mit `karte === "ablauf"` oder
+`reminderArt === "ablauf"`. Dort stellt Carina das Foto ausdruecklich pro
+Post ein — eine Folie, die es dann doch nicht bekommt, liest sich als
+Fehler, nicht als Abwechslung.
+
+    && (slideIndex === 0
+        || post.karte === "ablauf" || post.reminderArt === "ablauf"
+        || mischer(postIndex, slideIndex) >= 34)
+
 ## 4. Ersatzwert der Bildanalyse: Mitte -> unten mittig
 
 Scheitert die Analyse (Zeitueberschreitung, Ladefehler, fremdes Bild),

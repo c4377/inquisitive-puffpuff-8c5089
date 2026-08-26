@@ -35,7 +35,8 @@ P.append((
 P.append((
  'const qt={...pt},Vt=stJa&&typeof qt.background=="string"&&qt.background.length>5;',
  'const qt={...pt},Vt=stJa&&typeof qt.background=="string"&&qt.background.length>5'
- '&&(ct===0||((zA,zB)=>{let zh=Math.imul(zA^2654435769,374761393)'
+ '&&(ct===0||ot.karte==="ablauf"||ot.reminderArt==="ablauf"'
+ '||((zA,zB)=>{let zh=Math.imul(zA^2654435769,374761393)'
  '+Math.imul(zB^2246822519,668265263)|0;zh=Math.imul(zh^zh>>>13,1274126177);'
  'return((zh^zh>>>16)>>>0)%100})(De,ct)>=34);',
  "Farbfolien gestreut", 1))
