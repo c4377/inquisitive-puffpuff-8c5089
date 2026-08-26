@@ -212,7 +212,18 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
           // coverBlurMode: follow-up slides (index > 0) reuse the cover photo
           // blurred + darkened, so carousels stay calm and readable.
           const isFollowUp = coverBlurActive && (options.slideIndex || 0) > 0;
-          const effBlur = isFollowUp ? Math.max(slide.blur || 0, 12) : slide.blur;
+          // Weichzeichner haengte an coverBlurMode — ein Flag, das in der
+          // Praxis nie gesetzt war, deshalb war nie einer zu sehen. Jetzt ab
+          // Folie 2 und dort etwa jedes zweite Bild. Der Keim kommt aus der
+          // Bildadresse, damit dieselbe Folie immer gleich faellt.
+          const slideIdx = options.slideIndex || 0;
+          const blurAn = slideIdx > 0 && (() => {
+            const src = String(slide.background || '');
+            let h = 0;
+            for (let i = 0; i < src.length; i += 1) h = (h * 31 + src.charCodeAt(i)) % 99991;
+            return (h + slideIdx * 17) % 100 >= 50;
+          })();
+          const effBlur = (isFollowUp || blurAn) ? Math.max(slide.blur || 0, 12) : slide.blur;
           if (typeof effBlur === 'number' && effBlur >= 1 && fabric.Image.filters?.Blur) {
             try {
               img.filters = [new fabric.Image.filters.Blur({ blur: Math.min(effBlur / 40, 0.5) })];
@@ -310,6 +321,35 @@ export const renderSlide = async (canvas, slide, width, height, options = {}) =>
             });
             canvas.add(grad);
           } catch (e) { /* gradient optional */ }
+
+          // Playfair auf einem Foto braucht mehr Grund unter sich: eine
+          // Serife mit duennen Strichen steht auf unruhigem Bild schlecht.
+          // Oben und unten dichter, in der Mitte offener, damit das Foto
+          // sichtbar bleibt.
+          // Playfair kommt auf zwei Wegen in die Kopfzeile: ueber
+          // slide.fontFamily, ODER ueber den Bold-Statement-Stil 1, der die
+          // Serife unabhaengig davon setzt. Warm Editorial ueberschreibt die
+          // Kopfschrift dagegen hart auf eine Groteske — dort nie.
+          const playfairKopf = !slide.warmEditorial && (
+            /Playfair/.test(String(slide.fontFamily || ''))
+            || (slide.boldMode === true && slide.boldStyle === 1)
+          );
+          if (playfairKopf && slide.tiefenOverlay !== false) {
+            try {
+              canvas.add(new fabric.Rect({
+                left: 0, top: 0, width, height, selectable: false,
+                fill: new fabric.Gradient({
+                  type: 'linear',
+                  coords: { x1: 0, y1: 0, x2: 0, y2: height },
+                  colorStops: [
+                    { offset: 0,   color: 'rgba(18,16,14,0.82)' },
+                    { offset: 0.5, color: 'rgba(18,16,14,0.58)' },
+                    { offset: 1,   color: 'rgba(18,16,14,0.90)' },
+                  ],
+                }),
+              }));
+            } catch (e) { /* overlay optional */ }
+          }
           resolve(true);
         },
         { crossOrigin: 'anonymous' }
