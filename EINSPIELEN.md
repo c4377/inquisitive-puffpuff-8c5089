@@ -93,8 +93,14 @@ Bundle wird also durch seine Weiterleitung ersetzt, nicht geloescht.
 
 Beim naechsten Einspielen zeigen alle vorhandenen Weiterleitungen auf
 den neuen Namen — ein `sed` ueber `site/assets/index-B5karten*.js`
-genuegt. Weiterleitungen, die aelter als etwa fuenf Fassungen sind,
-duerfen ganz weg; so lange haelt kein Zwischenspeicher durch.
+genuegt.
+
+**Weiterleitungen werden nicht mehr geloescht.** Erst hiess es hier, sie
+duerften nach etwa fuenf Fassungen weg. Das war falsch: niemand weiss,
+wie alt die `index.html` in einem fremden Zwischenspeicher ist, und ein
+Handy, das wochenlang nicht neu geladen hat, faellt sonst auf 404. Jede
+Weiterleitung kostet 300 Byte — alle Namen zusammen sind ein Bruchteil
+eines einzigen Bundles. Sie bleiben liegen.
 
 Fuer alles andere gilt weiter: nicht loeschen.
 
