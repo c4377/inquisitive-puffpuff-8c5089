@@ -94,12 +94,10 @@ FRAMEWORK: DEMI BERMEJO (Kanon v3 — Myron Golden ist RAUS)
 
   Value-Stacking     Jeder Baustein bekommt einen Einzelwert, der
                      Gesamtwert steht gegen den Preis.
-  Mindestbindung     3 Monate Commitment statt Verknappung, danach
-                     jederzeit kuendbar. Begruendung: Ergebnisse
-                     brauchen Zeit. KEIN kuenstlicher Druck.
-  Vault als Bonus    Alles Frueherer bleibt fuer Mitglieder zugaenglich.
-                     Limitless Files: aussen einzeln kaufbar, drinnen
-                     komplett.
+  Ergebnis statt     Wo bei Demi die Vertragsdetails stehen, steht
+  Kleingedrucktes    bei uns das Danach. Siehe unten, DER LETZTE
+                     SCHLAG. Bindung, Laufzeit, Kuendigung, Vault:
+                     kommen nicht vor. Kein Wort davon.
 
 SPRACHE NACH DEMI
   - KONTRAST als Grundfigur, meist NEGATIV definiert: zuerst sagen, was
@@ -167,6 +165,38 @@ BEWEIS
 Launch von 6.000 auf 12.000 Euro, nur durch neue erste drei Saetze.
 IMMER dazusagen: Einzelfall, kein Durchschnitt.
 
+DER LETZTE SCHLAG — direkt nach dem Angebot, vor der Qualifizierung
+
+Hier steht KEIN Kleingedrucktes. Nicht die Laufzeit, nicht die
+Bindung, nicht die Kuendigungsfrist, kein "danach jederzeit", kein
+Vault, kein Archiv, keine Liste, was alles enthalten ist. Nichts,
+was nach Vertrag klingt. Kein Wort ueber die Dauer.
+
+Stattdessen EIN Ergebnis. Was sie hinterher kann, was sie vorher
+nicht konnte. Der Moment, in dem sie es merkt — nicht das Gefuehl
+danach, sondern die Szene. So konkret, dass sie sich selbst darin
+sieht:
+
+  gut   "In zwei Wochen tippst du einen Post und weisst schon beim
+         Schreiben, welchen Job er erledigt. Das ist der ganze
+         Unterschied zwischen posten und verkaufen."
+  gut   "Dein naechster Launch wird nicht groesser. Er wird mit
+         denselben Leuten gemacht und mit den richtigen ersten drei
+         Saetzen."
+  mies  "Du wirst endlich sichtbar und ziehst deine Traumkundinnen an."
+  mies  "Mehr Umsatz, mehr Klarheit, mehr Leichtigkeit."
+
+Regeln fuer diese Zeile:
+  - Eine Zeile, hoechstens zwei. Sie steht allein.
+  - Ihre Sprache, ihr Alltag, ihre Handgriffe. Kein Marketingwort.
+  - Ein KOENNEN, kein Gefuehl. "Du weisst", "du schreibst", "du
+    siehst" — nicht "du fuehlst dich".
+  - Kein Superlativ, kein Ausrufezeichen, keine Garantie.
+  - Zahlen nur, wenn sie belegbar sind, und nie als Versprechen.
+
+Das ist das Letzte, was haengen bleibt, bevor die Qualifizierung und
+der CTA kommen. Wenn diese Zeile nicht sitzt, sitzt die Caption nicht.
+
 QUALIFIZIERUNG — gehoert in JEDE Caption, keine Ausnahme
 Sie geht ueber die HALTUNG, nie ueber Voraussetzungen. Niemand wird
 daran gemessen, was er schon hat, wie weit er ist oder wo er gerade
@@ -190,6 +220,7 @@ Aufbau, in dieser Reihenfolge:
   Warum sie nicht kauft — drei bis vier harte Wahrheiten, je eine Zeile
   Der Mechanismus — ein Post, ein Job
   Das Angebot — 97 Euro im Monat, was sie mitbringt, was sie bekommt
+  Der letzte Schlag — ein Ergebnis, kein Kleingedrucktes
   Qualifizierung — fuer wen es NICHT ist
   CTA — Schreib mir MOVE
 
@@ -341,6 +372,7 @@ gleicher Punch. Das Muster ist immer dasselbe —
   -> vier Gewohnheiten benennen, als Handlung, nie als Eigenschaft
   -> der Dreh: nicht werden, sondern aufhoeren
   -> Angebot mit Preis
+  -> der letzte Schlag: ein Ergebnis, kein Kleingedrucktes
   -> Qualifizierung
   -> CTA
 
