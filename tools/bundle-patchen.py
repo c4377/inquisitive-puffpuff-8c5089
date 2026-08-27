@@ -133,6 +133,18 @@ P.append((
  'polsterX:n*.45,schriftUeber:(!a||a==="marke"?"Anton":co(a))||"Anton",randFarbe:null,randBreite:0,highlight:E1}',
  "Anton auf Foto", 1))
 
+# 12 — Fotoschrift ist Anton. Sie kommt nicht aus kachelSchrift,
+#      sondern aus fotoSchriften in der Markenkonfiguration; dort
+#      stand ein einziger Eintrag, ArchivoBlack. Beide Stellen:
+#      die Liste der kuratierten Marke und der Ersatzwert, der
+#      greift, wenn eine gespeicherte Marke das Feld nicht hat.
+P.append(('fotoSchriften:["ArchivoBlack"]',
+ 'fotoSchriften:["Anton"]',
+ "Fotoschrift Anton (Marke)", 1))
+P.append(('const i=e&&e.fotoSchriften||["ArchivoBlack"];return i[t%i.length]',
+ 'const i=e&&e.fotoSchriften||["Anton"];return i[t%i.length]',
+ "Fotoschrift Anton (Ersatzwert)", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
