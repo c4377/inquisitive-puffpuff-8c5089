@@ -139,10 +139,10 @@ P.append((
 #      die Liste der kuratierten Marke und der Ersatzwert, der
 #      greift, wenn eine gespeicherte Marke das Feld nicht hat.
 P.append(('fotoSchriften:["ArchivoBlack"]',
- 'fotoSchriften:["Anton"]',
+ 'fotoSchriften:["Anton","Playfair Display"]',
  "Fotoschrift Anton (Marke)", 1))
 P.append(('const i=e&&e.fotoSchriften||["ArchivoBlack"];return i[t%i.length]',
- 'const i=e&&e.fotoSchriften||["Anton"];return i[t%i.length]',
+ 'const i=e&&e.fotoSchriften||["Anton","Playfair Display"];return i[t%i.length]',
  "Fotoschrift Anton (Ersatzwert)", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
