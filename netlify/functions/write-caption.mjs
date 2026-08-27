@@ -168,8 +168,14 @@ Launch von 6.000 auf 12.000 Euro, nur durch neue erste drei Saetze.
 IMMER dazusagen: Einzelfall, kein Durchschnitt.
 
 QUALIFIZIERUNG — gehoert in JEDE Caption, keine Ausnahme
-Nicht fuer Frauen, die gerade in einem anderen Programm stecken.
-Nicht fuer Frauen, die eine Idee haben statt eines Angebots.
+Sie geht ueber die HALTUNG, nie ueber Voraussetzungen. Niemand wird
+daran gemessen, was er schon hat, wie weit er ist oder wo er gerade
+steckt. Ausgeschlossen wird, wer nicht bereit ist:
+
+Nicht fuer die, die nicht umsetzen wollen.
+Nicht fuer die, die nicht investieren wollen.
+Nicht fuer die, die an ihrem jetzigen Zustand nichts aendern wollen.
+Nicht fuer die, die glauben, sie bekommen das alles allein hin.
 `;
 
 const ARTEN = {
@@ -403,7 +409,7 @@ ${ctaZeile}
 
 Schreibe die Caption. Wiederhole die Folien nicht wörtlich — die Caption
 führt den Gedanken weiter und macht ihn anwendbar.
-${art || voice ? 'Die Qualifizierung MUSS vorkommen: nicht fuer Frauen ohne Angebot,\nnicht fuer Frauen, die noch in einem anderen Programm stecken.' : ''}
+${art || voice ? 'Die Qualifizierung MUSS vorkommen, und sie geht ueber die Haltung:\nnicht fuer die, die nicht umsetzen, nicht investieren oder an ihrem\nZustand nichts aendern wollen — und nicht fuer die, die glauben, sie\nbekommen das allein hin. Nie daran festmachen, was jemand schon hat.' : ''}
 
 ANTWORTE NUR MIT JSON, ohne Vorwort, ohne Markdown:
 ${stories
