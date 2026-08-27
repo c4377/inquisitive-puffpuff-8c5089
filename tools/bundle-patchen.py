@@ -104,6 +104,19 @@ P.append(('path:"/",element:v.jsx(kV,{})', 'path:"/",element:v.jsx(MG,{})',
 P.append(('to:"/brand-randomizer"', 'to:"/brand-settings"',
  "Randomizer-Verweise umgebogen", 2))
 
+# 9 — Caption-Abfrage: Umbrueche und Zifferfilter waren doppelt
+#     maskiert. Der Prompt zeigte \n als Text, und mit dem "s"
+#     fuer Stories ging die Zahl verloren — es kam immer die
+#     Standard-Fassung heraus.
+P.append((
+ 'welche Fassung?\\\\n1 = Carina Original (Direct Call-Out)\\\\n2 = Lisa Bisschop (Soft Educational)\\\\n3 = US-Sales (kurz, Pitch)\\\\n4 = Preis-Pause\\\\n5 = Geboren zum Verkaufen\\\\n6 = Ehrlich\\\\n7 = Kurz und fies\\\\n8 = Launch\\\\n9 = Persönlichkeits-Lüge\\\\n10 = Alles schon probiert\\\\n\\\\nMit 5 Stories: s anhängen, z.B. 4s.',
+ 'welche Fassung?\\n1 = Carina Original (Direct Call-Out)\\n2 = Lisa Bisschop (Soft Educational)\\n3 = US-Sales (kurz, Pitch)\\n4 = Preis-Pause\\n5 = Geboren zum Verkaufen\\n6 = Ehrlich\\n7 = Kurz und fies\\n8 = Launch\\n9 = Persönlichkeits-Lüge\\n10 = Alles schon probiert\\n\\nMit 5 Stories: s anhängen, z.B. 4s.',
+ "Caption-Abfrage lesbar", 2))
+P.append((
+ 'Number(String(nr).replace(/\\\\D/g,""))||0',
+ 'Number(String(nr).replace(/\\D/g,""))||0',
+ "Caption-Abfrage erkennt die Zahl", 2))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
