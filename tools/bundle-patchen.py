@@ -117,6 +117,22 @@ P.append((
  'Number(String(nr).replace(/\\D/g,""))||0',
  "Caption-Abfrage erkennt die Zahl", 2))
 
+# 10 — Monogramm: der Ring steht links unten, die Buchstaben standen
+#      in der Kartenmitte. Jetzt sitzen sie im Ring und werden
+#      kleiner gerechnet, damit sie hineinpassen.
+P.append((
+ 'const Vt=c(38),Tt=rt.slice(0,1),xt=rt.slice(1)||"",rr=Cr=>new Pe.fabric.Text(Cr,{fontSize:Vt,fontFamily:"Playfair Display"}).width,Ut=rr(Tt),Ir=xt?rr(xt):0,Hr=xt?Ir*.23:0,Br=Ut+Ir-Hr,Mt=r/2-Br/2;',
+ 'const zMx=r*.10+pt,Tt=rt.slice(0,1),xt=rt.slice(1)||"",rr=(Cr,gg)=>new Pe.fabric.Text(Cr,{fontSize:gg,fontFamily:"Playfair Display"}).width;let Vt=c(17),Ut=rr(Tt,Vt),Ir=xt?rr(xt,Vt):0,Hr=xt?Ir*.23:0,Br=Ut+Ir-Hr;/* in den Ring hinein passen, nicht darueber hinaus */const zBr=pt*1.5;if(Br>zBr&&Br>0){const zf=zBr/Br;Vt*=zf,Ut*=zf,Ir*=zf,Hr*=zf,Br=zBr}const Mt=zMx-Br/2;',
+ "Monogramm zusammengefuehrt", 1))
+
+# 11 — Auf Foto automatisch Anton, solange fuer den Tag keine
+#      eigene Schrift gewaehlt ist. "marke" loeste zu gar keiner
+#      Schrift auf und fiel auf die Markenschrift zurueck.
+P.append((
+ 'polsterX:n*.45,schriftUeber:co(a)||"ArchivoBlack",randFarbe:null,randBreite:0,highlight:E1}',
+ 'polsterX:n*.45,schriftUeber:(!a||a==="marke"?"Anton":co(a))||"Anton",randFarbe:null,randBreite:0,highlight:E1}',
+ "Anton auf Foto", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
