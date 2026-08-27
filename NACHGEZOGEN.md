@@ -1,33 +1,40 @@
-# Die drei offenen Bundle-Änderungen — jetzt im Quellcode
+# Offene Bundle-Änderungen — Stand im Quellcode
 
-Grundlage: `OFFENE-BUNDLE-AENDERUNGEN.md` auf `main`, Bundle `karten61f`.
-Basis der Dateien: `main`, Stand 26. August 2026.
+Grundlage: `OFFENE-BUNDLE-AENDERUNGEN.md` auf `main`.
+Basis: `main`, frisch gezogen.
 
-## 1. Verlauf hinter Playfair auf Foto
-`src/utils/canvasRenderer.js`, im Bildlade-Block direkt nach dem
-vorhandenen Kantenverlauf. Neu eingefügt — im Quellcode gab es diesen
-Verlauf noch gar nicht.
+## Nachgezogen
 
-    0.82 / 0.58 / 0.90 statt 0.34 / 0.16 / 0.40
+1. **Verlauf hinter Playfair auf Foto** — `canvasRenderer.js`, im
+   Bildlade-Block. 0,82 / 0,58 / 0,90. Der Verlauf existierte im
+   Quellcode noch gar nicht, er ist neu.
+   *Zu prüfen:* ob die Kachelschrift wirklich über `slide.fontFamily`
+   ankommt. Trägt das Feld einen anderen Namen, greift die Bedingung nicht.
+2. **Weichzeichner** — `canvasRenderer.js`. `isFollowUp` bleibt, weil es
+   auch die Abdunklung steuert; daneben `blurAn` mit dem Keim aus der
+   Bildadresse. Filter greift bei `isFollowUp || blurAn`.
+3. **Farbfolien** — `ContentPlanner.jsx`, beide `hasImg`-Stellen, inklusive
+   der Ausnahme für `karte === 'ablauf'` und `reminderArt === 'ablauf'`.
+   Die Streufunktion steht als `streuung` oben in der Datei.
+4. **Ersatzwert der Bildanalyse** — `imageAnalysis.js`, `quietZone: 7`,
+   `quietLabel: 'bottom-center'`.
+5. **Zone unter dem Gesicht** — `imageAnalysis.js`, `gemieden` erweitert um
+   `z + 3`, mit Notausgang, falls dann alle neun Zonen wegfielen.
+6. **Textspalte endet vor dem Gesicht** — `canvasRenderer.js`, `textBreite`
+   aus der Gesichtsspalte, an zwei Stellen eingesetzt.
+7. **Sternchen kursiv statt Farbe** — `canvasRenderer.js`, drei Stellen:
+   `fill: accentColor` entfernt, `fontStyle: 'italic'` bleibt.
 
-Bedingung: `/Playfair/.test(slide.fontFamily)` und
-`slide.tiefenOverlay !== false`, damit der vorhandene Schalter greift.
+## Nicht nachgezogen, weil es die Stelle im Quellcode nicht gibt
 
-**Bitte prüfen:** Ob die Kachelschrift im Quellcode wirklich über
-`slide.fontFamily` ankommt. Im gebauten Bundle heißt die Variable anders.
-Trägt das Feld einen anderen Namen, greift der Verlauf nicht.
+- **7, Pin-Weg.** Der Pin-Zeichner mit `fillStyle` existiert in `src`
+  nicht. Nur der Standardweg ist geändert.
+- **8, Stationsreihe.** Die Fassung `ablauf` mit `[stationen: …]` gibt es
+  im Quellcode nicht. `src/utils/kartenzeichner.js` kennt nur `zitat` und
+  `aussage`. Die Änderung steckt im Bundle `karten68`.
 
-## 2. Weichzeichner
-`src/utils/canvasRenderer.js`, Zeile ~214. `isFollowUp` bleibt unangetastet
-— es steuert auch die Abdunklung weiter unten. Daneben steht jetzt `blurAn`
-mit der Streuung aus der Bildadresse; der Filter greift bei `isFollowUp ||
-blurAn`. Stärke unverändert `Math.max(slide.blur || 0, 12)`.
+## Zahlen zur Kontrolle
 
-## 3. Farbfolien in Fotoposts
-`src/pages/ContentPlanner.jsx`, beide Stellen mit `hasImg` — Einzeltag und
-alle Tage. Die Streufunktion steht als `streuung` oben in der Datei.
-
-Nachgerechnet über 400 Posts à 6 Folien: **28 % Farbfolien, 13 % der Posts
-ohne eine einzige.** Das Dokument nennt 33 % — die Zahl hängt daran, wie
-viele Folien ein Post hat. Folie 1 behält immer ihr Foto, deshalb sinkt der
-Anteil, je kürzer die Posts sind.
+Streuung über 400 Posts à 6 Folien: **28 % Farbfolien, 13 % der Posts
+ohne eine einzige.** Das Dokument nennt 33 % — der Unterschied kommt aus
+der Folienzahl je Post, Folie 1 behält immer ihr Foto.

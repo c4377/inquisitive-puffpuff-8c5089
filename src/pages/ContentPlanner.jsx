@@ -830,7 +830,9 @@ const ContentPlanner = () => {
         const cleaned = { ...slide };
         const hasImg = wantsImage
           && typeof cleaned.background === 'string' && cleaned.background.length > 5
-          && (_sIdx === 0 || streuung(dayIdx, _sIdx) >= 34);
+          && (_sIdx === 0
+              || day.karte === 'ablauf' || day.reminderArt === 'ablauf'
+              || streuung(dayIdx, _sIdx) >= 34);
         if (!hasImg) {
           const { background, overlay, _autoImage, ...rest } = cleaned;
           Object.assign(cleaned, rest, { background: null, overlay: undefined, _autoImage: undefined });
@@ -922,7 +924,9 @@ const ContentPlanner = () => {
           // Only keep a background if this specific slide's layout uses one.
           const hasImg = wantsImage && (pickedIsPhoto || dayIsEditorial)
             && typeof cleaned.background === 'string' && cleaned.background.length > 5
-            && (slideIdx === 0 || streuung(dayIdx, slideIdx) >= 34);
+            && (slideIdx === 0
+                || day.karte === 'ablauf' || day.reminderArt === 'ablauf'
+                || streuung(dayIdx, slideIdx) >= 34);
           if (!hasImg) {
             const { background, overlay, _autoImage, ...rest } = cleaned;
             Object.assign(cleaned, rest, { background: null, overlay: undefined, _autoImage: undefined });

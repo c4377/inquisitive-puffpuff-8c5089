@@ -381,7 +381,7 @@ export default async (req) => {
     : '';
   const ctaZeile = keyword
     ? `CTA: "Kommentiere ${keyword.toUpperCase()}"`
-    : art === 1
+    : (art === 1 || voice)
       ? 'CTA: "Schreib mir MOVE"'
       : art === 2
         ? 'CTA: Speichern und ein Kommentar — welcher Punkt trifft dich?'
@@ -390,7 +390,7 @@ export default async (req) => {
           : 'CTA: die Frage auf die Liste ("Was davon triggert dich am meisten? 1–N in die Kommentare.")';
 
   const prompt = `${monday ? 'SCHREIBE IM MONDAY-TON — die Regeln dazu stehen unten.\n\n' : ''}${REGELN}
-${art ? MONEYROOM : ''}
+${art || voice ? MONEYROOM : ''}
 ${art ? ARTEN[art] : ''}
 ${voice ? VOICE_REGELN : ''}
 ${voice ? `DEIN BAUPLAN — ${VOICE[voice].name}\n${VOICE[voice].bau}` : ''}
@@ -403,7 +403,7 @@ ${ctaZeile}
 
 Schreibe die Caption. Wiederhole die Folien nicht wörtlich — die Caption
 führt den Gedanken weiter und macht ihn anwendbar.
-${art ? 'Die Qualifizierung MUSS vorkommen: nicht fuer Frauen ohne Angebot,\nnicht fuer Frauen, die noch in einem anderen Programm stecken.' : ''}
+${art || voice ? 'Die Qualifizierung MUSS vorkommen: nicht fuer Frauen ohne Angebot,\nnicht fuer Frauen, die noch in einem anderen Programm stecken.' : ''}
 
 ANTWORTE NUR MIT JSON, ohne Vorwort, ohne Markdown:
 ${stories

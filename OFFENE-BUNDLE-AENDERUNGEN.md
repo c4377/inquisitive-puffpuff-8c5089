@@ -4,7 +4,43 @@ Diese Aenderungen wurden im gebauten Bundle vorgenommen, weil sie hier
 sofort gebraucht wurden. Im Quellcode der Bau-Session stehen sie NICHT.
 Jeder neue Drop setzt sie zurueck, bis sie dort nachgezogen sind.
 
-Stand: Bundle `karten61f`.
+Stand: Bundle `karten67e`.
+
+## Was inzwischen im Quellcode steht
+
+Die Bau-Session hat **1 bis 7 nachgezogen** (Lieferung vom 27. August,
+`NACHGEZOGEN.md`). Sie stehen unten weiter drin, weil das Bundle sie
+weiterhin nicht mitbringt: solange die Seite nicht aus `src/` gebaut
+wird, muessen sie bei jedem Drop nachgetragen werden. Dafuer gibt es
+`tools/bundle-patchen.py`.
+
+**Noch nicht im Quellcode:**
+
+- **8, Stationsreihe.** Die Fassung `ablauf` mit `[stationen: …]` gibt es
+  in `src/utils/kartenzeichner.js` nicht — dort stehen nur `zitat` und
+  `aussage`. Der ganze Kartenzeichner ist im Quellcode aelter als im
+  Bundle.
+- **7, Pin-Weg.** Der Pin-Zeichner mit `fillStyle` fehlt in `src`
+  ebenfalls. Nur der Standardweg ist dort geaendert.
+
+## Eine Bitte an die Bau-Session
+
+Die Korrektur an Punkt 1 wird bei jeder Lieferung wieder herausgenommen.
+Sie beantwortet genau die Frage, die in `NACHGEZOGEN.md` als "zu
+pruefen" steht: **nein, die Kopfschrift kommt nicht nur ueber
+`slide.fontFamily`.** Der Bold-Statement-Stil 1 setzt die Serife
+unabhaengig davon, und Warm Editorial ueberschreibt sie hart auf eine
+Groteske. Ohne diese Bedingung fehlt der Verlauf bei jedem
+Bold-Statement-Post, und bei Warm Editorial steht er zu Unrecht:
+
+    const playfairKopf = !slide.warmEditorial && (
+      /Playfair/.test(String(slide.fontFamily || ''))
+      || (slide.boldMode === true && slide.boldStyle === 1)
+    );
+
+Diese Fassung steht in `src/utils/canvasRenderer.js` auf `main` und ist
+die richtige. Bitte beim naechsten Ziehen von `main` uebernehmen, statt
+sie zu ersetzen.
 
 ---
 
