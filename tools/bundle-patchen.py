@@ -125,25 +125,7 @@ P.append((
  'const zMx=r*.10+pt,Tt=rt.slice(0,1),xt=rt.slice(1)||"",rr=(Cr,gg)=>new Pe.fabric.Text(Cr,{fontSize:gg,fontFamily:"Playfair Display"}).width;let Vt=c(17),Ut=rr(Tt,Vt),Ir=xt?rr(xt,Vt):0,Hr=xt?Ir*.23:0,Br=Ut+Ir-Hr;/* in den Ring hinein passen, nicht darueber hinaus */const zBr=pt*1.5;if(Br>zBr&&Br>0){const zf=zBr/Br;Vt*=zf,Ut*=zf,Ir*=zf,Hr*=zf,Br=zBr}const Mt=zMx-Br/2;',
  "Monogramm zusammengefuehrt", 1))
 
-# 11 — Auf Foto automatisch Anton, solange fuer den Tag keine
-#      eigene Schrift gewaehlt ist. "marke" loeste zu gar keiner
-#      Schrift auf und fiel auf die Markenschrift zurueck.
-P.append((
- 'polsterX:n*.45,schriftUeber:co(a)||"ArchivoBlack",randFarbe:null,randBreite:0,highlight:E1}',
- 'polsterX:n*.45,schriftUeber:(!a||a==="marke"?"Anton":co(a))||"Anton",randFarbe:null,randBreite:0,highlight:E1}',
- "Anton auf Foto", 1))
 
-# 12 — Fotoschrift ist Anton. Sie kommt nicht aus kachelSchrift,
-#      sondern aus fotoSchriften in der Markenkonfiguration; dort
-#      stand ein einziger Eintrag, ArchivoBlack. Beide Stellen:
-#      die Liste der kuratierten Marke und der Ersatzwert, der
-#      greift, wenn eine gespeicherte Marke das Feld nicht hat.
-P.append(('fotoSchriften:["ArchivoBlack"]',
- 'fotoSchriften:["Anton","Playfair Display"]',
- "Fotoschrift Anton (Marke)", 1))
-P.append(('const i=e&&e.fotoSchriften||["ArchivoBlack"];return i[t%i.length]',
- 'const i=e&&e.fotoSchriften||["Anton","Playfair Display"];return i[t%i.length]',
- "Fotoschrift Anton (Ersatzwert)", 1))
 
 # 14 — Der starke Tiefenverlauf gilt wieder nur fuer Playfair.
 #      Er war fuer die duenne Serife gedacht. Seit die Fotoschrift
@@ -153,6 +135,25 @@ P.append(('const i=e&&e.fotoSchriften||["ArchivoBlack"];return i[t%i.length]',
 P.append(('if($e&&/Playfair|Anton/.test(String(Qe))&&t.tiefenOverlay!==!1)',
  'if($e&&/Playfair/.test(String(Qe))&&t.tiefenOverlay!==!1)',
  "Tiefenverlauf nur fuer Playfair", 1))
+
+# 15 — Zurueck auf den Stand vor dem Gestaltungsdurchgang:
+#      Schriften und Textplatzierung wie in karten70. Nur die Farben
+#      aus karten72 bleiben.
+P.append(('nS=()=>"anton"',
+ 'nS=()=>"playfair"',
+ "Zurueck: Kachelschrift", 1))
+P.append(('let A=passt(TT,c(LINKS?32:MITTE?(COVER?52:43):120),TITELSCHRIFT,MAXB,LINKS?6:MITTE?4:(titel.length>34?3:1));',
+ 'let A=passt(TT,c(LINKS?(COVER?65:52):MITTE?(COVER?52:43):120),TITELSCHRIFT,MAXB,LINKS?6:MITTE?4:(titel.length>34?3:1));',
+ "Zurueck: LINKS-Groesse", 1))
+P.append(('A.zeilen.length*A.groesse*1.24<=',
+ 'A.zeilen.length*A.groesse*1.06<=',
+ "Zurueck: Umbruchpruefung", 1))
+P.append(('A.groesse*(LINKS?1.24:1.10)',
+ 'A.groesse*(LINKS?1.06:1.10)',
+ "Zurueck: Zeilenabstand", 3))
+P.append(('let ty=MITTE?(LINKS?n*.11:Math.min(Math.max(n*.13,n*.47-gesamt/2),Math.max(n*.13,n*.84-gesamt)))+A.groesse*.55',
+ 'let ty=MITTE?Math.min(Math.max(n*.13,n*.47-gesamt/2),Math.max(n*.13,n*.84-gesamt))+A.groesse*.55',
+ "Zurueck: Ansatz", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
