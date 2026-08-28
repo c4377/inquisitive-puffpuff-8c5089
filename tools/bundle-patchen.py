@@ -155,6 +155,16 @@ P.append(('let ty=MITTE?(LINKS?n*.11:Math.min(Math.max(n*.13,n*.47-gesamt/2),Mat
  'let ty=MITTE?Math.min(Math.max(n*.13,n*.47-gesamt/2),Math.max(n*.13,n*.84-gesamt))+A.groesse*.55',
  "Zurueck: Ansatz", 1))
 
+# 16 — Fotoschrift ist Anton statt ArchivoBlack. Nur die Schrift —
+#      die Versalien haengen ohnehin an beiden, und der starke
+#      Tiefenverlauf bleibt auf Playfair beschraenkt (Patch 14),
+#      sonst verdunkelt es doppelt.
+P.append(('fotoSchriften:["ArchivoBlack"]', 'fotoSchriften:["Anton"]',
+ "Fotoschrift Anton (Marke)", 1))
+P.append((r'const i=e&&e.fotoSchriften||["ArchivoBlack"];return i[t%i.length]',
+ r'const i=e&&e.fotoSchriften||["Anton"];return i[t%i.length]',
+ "Fotoschrift Anton (Ersatzwert)", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
