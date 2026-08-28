@@ -142,18 +142,8 @@ P.append(('if($e&&/Playfair|Anton/.test(String(Qe))&&t.tiefenOverlay!==!1)',
 #      wie der Drop sie liefert — das ist die Fassung, die
 #      Carina behalten will.
 P.append(('const TITELSCHRIFT=FOLGE&&!LINKS?GLATT:SERIF;',
- 'const TITELSCHRIFT=Je.antonTitel?"Anton":(FOLGE&&!LINKS?GLATT:SERIF);',
- "Ablauf-Schlagzeile in Anton", 1))
-# Die Marke setzen — nur an den beiden Aufrufen, die wirklich eine
-# Ablauf-Folie zeichnen. Textkacheln laufen durch denselben Zeichner,
-# weil ihnen die Fassung "ablauf" untergeschoben wird; sie bekommen
-# die Marke nicht und bleiben in Playfair.
-P.append(('Ab.aufFoto=!0,Ab.schriftFarbe="#FFFFFF"',
- 'Ab.antonTitel=!0,Ab.aufFoto=!0,Ab.schriftFarbe="#FFFFFF"',
- "Ablauf auf Foto: Marke setzen", 1))
-P.append(('Ye.fassung=Ye.fassung||"ablauf",wt(Ye,t.text)',
- 'Ye.fassung=Ye.fassung||"ablauf",Ye.antonTitel=t.karte==="ablauf"||t.reminderArt==="ablauf",wt(Ye,t.text)',
- "Ablauf ohne Foto: Marke setzen", 1))
+ 'const TITELSCHRIFT=LINKS?SERIF:"Anton";',
+ "Schlagzeile: Textkachel Playfair, alles andere Anton", 1))
 
 # 16 — Fotoschrift ist Anton statt ArchivoBlack. Nur die Schrift —
 #      die Versalien haengen ohnehin an beiden, und der starke
