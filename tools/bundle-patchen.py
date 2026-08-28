@@ -145,6 +145,15 @@ P.append(('const i=e&&e.fotoSchriften||["ArchivoBlack"];return i[t%i.length]',
  'const i=e&&e.fotoSchriften||["Anton","Playfair Display"];return i[t%i.length]',
  "Fotoschrift Anton (Ersatzwert)", 1))
 
+# 14 — Der starke Tiefenverlauf gilt wieder nur fuer Playfair.
+#      Er war fuer die duenne Serife gedacht. Seit die Fotoschrift
+#      Anton ist, traf die Bedingung auf jedem zweiten Tag zu und
+#      legte sich auf den ohnehin vorhandenen Kantenverlauf —
+#      doppelt verdunkelt. Anton traegt auch ohne.
+P.append(('if($e&&/Playfair|Anton/.test(String(Qe))&&t.tiefenOverlay!==!1)',
+ 'if($e&&/Playfair/.test(String(Qe))&&t.tiefenOverlay!==!1)',
+ "Tiefenverlauf nur fuer Playfair", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
