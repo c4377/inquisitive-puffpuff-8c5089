@@ -137,11 +137,11 @@ P.append(('if($e&&/Playfair|Anton/.test(String(Qe))&&t.tiefenOverlay!==!1)',
  "Tiefenverlauf nur fuer Playfair", 1))
 
 # 15 — Zurueck auf den Stand vor dem Gestaltungsdurchgang:
-#      Schriften und Textplatzierung wie in karten70. Nur die Farben
-#      aus karten72 bleiben.
-P.append(('nS=()=>"anton"',
- 'nS=()=>"playfair"',
- "Zurueck: Kachelschrift", 1))
+#      Textplatzierung wie in karten70. Nur die Farben aus karten72
+#      bleiben — und die Fotoschrift Anton, siehe Patch 16.
+#      nS heisst zwar Kachelschrift, steuert aber ueber
+#      schriftUeber die Schrift AUF DEM FOTO. Die Textkacheln
+#      haben Playfair fest verdrahtet und haengen nicht daran.
 P.append(('let A=passt(TT,c(LINKS?32:MITTE?(COVER?52:43):120),TITELSCHRIFT,MAXB,LINKS?6:MITTE?4:(titel.length>34?3:1));',
  'let A=passt(TT,c(LINKS?(COVER?65:52):MITTE?(COVER?52:43):120),TITELSCHRIFT,MAXB,LINKS?6:MITTE?4:(titel.length>34?3:1));',
  "Zurueck: LINKS-Groesse", 1))
