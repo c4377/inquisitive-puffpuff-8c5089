@@ -165,6 +165,25 @@ P.append((r'const i=e&&e.fotoSchriften||["ArchivoBlack"];return i[t%i.length]',
  r'const i=e&&e.fotoSchriften||["Anton"];return i[t%i.length]',
  "Fotoschrift Anton (Ersatzwert)", 1))
 
+# 17 — Textkacheln zurueck auf karten70: Groesse, Zeilenabstand und
+#      Ansatz. Die vier Werte haengen alle an LINKS, und LINKS ist
+#      genau der Fall Textkachel — keine Kopfzeile, kein Foto.
+#      Ablauffolien haben immer eine #Kopfzeile, fallen also in den
+#      anderen Zweig und sind davon nicht betroffen. Mit dem
+#      karten72-Wert stand der Text bei 11 Prozent, also oben im Eck.
+P.append(('let A=passt(TT,c(LINKS?32:MITTE?(COVER?52:43):120),TITELSCHRIFT,MAXB,LINKS?6:MITTE?4:(titel.length>34?3:1));',
+ 'let A=passt(TT,c(LINKS?(COVER?65:52):MITTE?(COVER?52:43):120),TITELSCHRIFT,MAXB,LINKS?6:MITTE?4:(titel.length>34?3:1));',
+ "Textkachel zurueck: LINKS-Groesse", 1))
+P.append(('A.zeilen.length*A.groesse*1.24<=',
+ 'A.zeilen.length*A.groesse*1.06<=',
+ "Textkachel zurueck: Umbruchpruefung", 1))
+P.append(('A.groesse*(LINKS?1.24:1.10)',
+ 'A.groesse*(LINKS?1.06:1.10)',
+ "Textkachel zurueck: Zeilenabstand", 3))
+P.append(('let ty=MITTE?(LINKS?n*.11:Math.min(Math.max(n*.13,n*.47-gesamt/2),Math.max(n*.13,n*.84-gesamt)))+A.groesse*.55',
+ 'let ty=MITTE?Math.min(Math.max(n*.13,n*.47-gesamt/2),Math.max(n*.13,n*.84-gesamt))+A.groesse*.55',
+ "Textkachel zurueck: Ansatz", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
