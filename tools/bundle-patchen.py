@@ -136,24 +136,14 @@ P.append(('if($e&&/Playfair|Anton/.test(String(Qe))&&t.tiefenOverlay!==!1)',
  'if($e&&/Playfair/.test(String(Qe))&&t.tiefenOverlay!==!1)',
  "Tiefenverlauf nur fuer Playfair", 1))
 
-# 15 — Zurueck auf den Stand vor dem Gestaltungsdurchgang:
-#      Textplatzierung wie in karten70. Nur die Farben aus karten72
-#      bleiben — und die Fotoschrift Anton, siehe Patch 16.
-#      nS heisst zwar Kachelschrift, steuert aber ueber
-#      schriftUeber die Schrift AUF DEM FOTO. Die Textkacheln
-#      haben Playfair fest verdrahtet und haengen nicht daran.
-P.append(('let A=passt(TT,c(LINKS?32:MITTE?(COVER?52:43):120),TITELSCHRIFT,MAXB,LINKS?6:MITTE?4:(titel.length>34?3:1));',
- 'let A=passt(TT,c(LINKS?(COVER?65:52):MITTE?(COVER?52:43):120),TITELSCHRIFT,MAXB,LINKS?6:MITTE?4:(titel.length>34?3:1));',
- "Zurueck: LINKS-Groesse", 1))
-P.append(('A.zeilen.length*A.groesse*1.24<=',
- 'A.zeilen.length*A.groesse*1.06<=',
- "Zurueck: Umbruchpruefung", 1))
-P.append(('A.groesse*(LINKS?1.24:1.10)',
- 'A.groesse*(LINKS?1.06:1.10)',
- "Zurueck: Zeilenabstand", 3))
-P.append(('let ty=MITTE?(LINKS?n*.11:Math.min(Math.max(n*.13,n*.47-gesamt/2),Math.max(n*.13,n*.84-gesamt)))+A.groesse*.55',
- 'let ty=MITTE?Math.min(Math.max(n*.13,n*.47-gesamt/2),Math.max(n*.13,n*.84-gesamt))+A.groesse*.55',
- "Zurueck: Ansatz", 1))
+# 15 — Ablauffolien: die Schlagzeile steht in Anton.
+#      Der Zeichner nahm dort Playfair (SERIF) bzw. Helvetica
+#      (GLATT). Groesse, Zeilenabstand und Ansatz bleiben so,
+#      wie der Drop sie liefert — das ist die Fassung, die
+#      Carina behalten will.
+P.append(('const TITELSCHRIFT=FOLGE&&!LINKS?GLATT:SERIF;',
+ 'const TITELSCHRIFT="Anton";',
+ "Ablauf-Schlagzeile in Anton", 1))
 
 # 16 — Fotoschrift ist Anton statt ArchivoBlack. Nur die Schrift —
 #      die Versalien haengen ohnehin an beiden, und der starke
