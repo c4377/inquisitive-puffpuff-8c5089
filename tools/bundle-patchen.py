@@ -176,6 +176,14 @@ P.append(('let ty=MITTE?(LINKS?n*.11:Math.min(Math.max(n*.13,n*.47-gesamt/2),Mat
  'let ty=MITTE?Math.min(Math.max(n*.13,n*.47-gesamt/2),Math.max(n*.13,n*.84-gesamt))+A.groesse*.55',
  "Textkachel zurueck: Ansatz", 1))
 
+# 18 — Auch die Textzone ignoriert das Gesicht, wenn weichgezeichnet.
+#      Die Zone (oben, mitte, unten) kommt aus der Bildanalyse und
+#      meidet dort das Gesicht. Auf einer weichgezeichneten Folie
+#      faellt sie jetzt auf den Normalwert zurueck: unten mittig.
+P.append(('const Oe=t.textAnchor&&typeof t.textAnchor=="object"?t.textAnchor:{row:$?"bottom":"mid",col:"center"}',
+ 'const Oe=!t._blurAn&&t.textAnchor&&typeof t.textAnchor=="object"?t.textAnchor:{row:$?"bottom":"mid",col:"center"}',
+ "Textzone ohne Gesichtsruecksicht bei Weichzeichner", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
