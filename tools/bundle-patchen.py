@@ -28,7 +28,7 @@ P.append((
  'const dr=_&&(i.slideIndex||0)>0,Lt=dr?Math.max(t.blur||0,12):t.blur',
  'const dr=Qe>0&&(()=>{const zs=String(ge||"");let zh=0;'
  'for(let zi=0;zi<zs.length;zi++)zh=(zh*31+zs.charCodeAt(zi))%99991;'
- 'return (zh+Qe*17)%100>=50})(),Lt=dr?Math.max(t.blur||0,12):t.blur',
+ 'return (zh+Qe*17)%100>=50})(),Lt=(t._blurAn=dr)?Math.max(t.blur||0,12):t.blur',
  "Weichzeichner gestreut", 1))
 
 # 3 — Farbfolien: rund ein Drittel ab Folie 2
@@ -55,10 +55,12 @@ P.append((
  'for(let N=0;N<9;N++)jw.has(N)||(R===-1||T[N]<T[R])&&(R=N);',
  "Zone unter dem Gesicht", 1))
 
-# 6 — Textspalte endet vor dem Gesicht
+# 6 — Textspalte endet vor dem Gesicht. Nicht auf weichgezeichneten
+#     Folgefolien: dort ist kein Gesicht mehr zu erkennen, also
+#     braucht der Text auch nicht auszuweichen.
 P.append((
  'const Qt=(tt.ausrichtung==="links"?r*.82:r*.86)-(tt.polsterX||0)*2,',
- 'const zfz=(t._autoImage&&t._autoImage.faceZones)||[],'
+ 'const zfz=(!t._blurAn&&t._autoImage&&t._autoImage.faceZones)||[],'
  'zsp=zfz.length?Math.min.apply(null,zfz.map(zz=>zz%3)):-1,'
  'zbr=tt.ausrichtung==="links"?(zsp>0?Math.max(.42,Math.min(.82,zsp/3+.08)):.82):.86,'
  'Qt=r*zbr-(tt.polsterX||0)*2,',
