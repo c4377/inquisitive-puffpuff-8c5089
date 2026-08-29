@@ -184,6 +184,16 @@ P.append(('const Oe=t.textAnchor&&typeof t.textAnchor=="object"?t.textAnchor:{ro
  'const Oe=!t._blurAn&&t.textAnchor&&typeof t.textAnchor=="object"?t.textAnchor:{row:$?"bottom":"mid",col:"center"}',
  "Textzone ohne Gesichtsruecksicht bei Weichzeichner", 1))
 
+# 19 — Die neue Abfrage "Wofuer?" hat denselben doppelt maskierten
+#      Umbruch und Zifferfilter wie die Fassungsabfrage. Ohne das
+#      steht \\n als Text im Fenster.
+P.append(('Wofür? (leer = Money Room)\\\\n1 = Angebotsserie, die gerade läuft\\\\n2 = The Money Room\\\\n3 = Mentoring, das 1:1\\\\n4 = Das Intensive\\\\n5 = The Strategy',
+ 'Wofür? (leer = Money Room)\\n1 = Angebotsserie, die gerade läuft\\n2 = The Money Room\\n3 = Mentoring, das 1:1\\n4 = Das Intensive\\n5 = The Strategy',
+ "Ziel-Abfrage lesbar", 2))
+P.append(('Number(String(zl).replace(/\\\\D/g,""))||2',
+ 'Number(String(zl).replace(/\\D/g,""))||2',
+ "Ziel-Abfrage erkennt die Zahl", 2))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

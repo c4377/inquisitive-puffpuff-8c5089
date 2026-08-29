@@ -149,6 +149,117 @@ HALTUNG
 - Beweis statt Eigenlob. Weniger erklären, mehr zeigen.
 `;
 
+// Wofuer die Caption arbeitet. Der Angebotsblock haengt nicht mehr fest
+// am Money Room — Carina verkauft mehrere Dinge nebeneinander.
+const ZIELE = {
+  1: {
+    name: 'Angebotsserie',
+    cta: 'DABEI',
+    block: `
+DAS ZIEL — DIE LAUFENDE SERIE
+Es geht um Angebote schreiben: ein Paket statt drei, der Preis sichtbar,
+der Beleg neben der Behauptung, am Ende eine Aufforderung.
+
+WAS DIE CAPTION LEISTEN MUSS
+Sie gehoert zu einer Reihe, die weiterlaeuft. Also ein Satz, der die
+naechste Folge ankuendigt oder auf die vorige zeigt. Nicht "Teil 3 von 7",
+sondern inhaltlich: was heute drankommt und was als Naechstes kommt.
+
+DER CTA
+Kein Verkauf. Wer dabeibleiben will, sagt es — und bekommt die naechste
+Folge. Das ist die einzige Aufforderung.
+
+WER CARINA IST — gehoert dazu, aber beilaeufig
+Angebotsarchitektin in Wien. Gruenderin von The Money Room. Hat einen
+Kurs, The Strategy. Zehn eigene Gruendungen. Das steht als Nebensatz da,
+nicht als Vorstellungsrunde.
+
+KEINE Qualifizierung in dieser Fassung. Die Serie ist fuer alle offen.
+`,
+  },
+  2: {
+    name: 'The Money Room',
+    cta: 'MOVE',
+    block: `
+DAS ANGEBOT — THE MONEY ROOM
+97 Euro im Monat, Starterpreis, solange die Gruppe klein ist.
+Kein Lernprogramm, ein Umsetzungsraum. Alle zwei Wochen ein Slot,
+dazwischen werden Fragen beantwortet. Alles liegt hochgeladen bereit.
+Das Intensive gibt es fuer Mitglieder um 444 statt 888 Euro.
+
+BEWEIS
+Launch von 6.000 auf 12.000 Euro, nur durch neue erste drei Saetze.
+IMMER dazusagen: Einzelfall, kein Durchschnitt.
+
+QUALIFIZIERUNG — gehoert in JEDE Caption, keine Ausnahme
+Sie geht ueber die HALTUNG, nie ueber Voraussetzungen. Niemand wird
+daran gemessen, was er schon hat, wie weit er ist oder wo er gerade
+steckt. Ausgeschlossen wird, wer nicht bereit ist:
+
+Nicht fuer die, die nicht umsetzen wollen.
+Nicht fuer die, die nicht investieren wollen.
+Nicht fuer die, die an ihrem jetzigen Zustand nichts aendern wollen.
+Nicht fuer die, die glauben, sie bekommen das alles allein hin.
+`,
+  },
+  3: {
+    name: 'Mentoring, das 1:1',
+    cta: 'MENTORING',
+    block: `
+DAS ANGEBOT — DAS MENTORING
+Zwoelf Monate, acht Plaetze. 15.000 Euro auf einmal oder 1.250 im Monat.
+Taeglich auf Telegram, ohne Uhrzeit. Jeder Launch, jedes Angebot, jeder
+Sale wird gemacht, nicht besprochen. Acht Etappen ueber das Jahr:
+Brainstorm, Strategiesitzung, Zusammenfassung, Testphase, Plan, Pruefen,
+Nachschaerfen, Umsatzbooster.
+
+KEIN KAUFKNOPF
+Es laeuft nur ueber Anfrage. Carina antwortet mit einem von drei Saetzen:
+Platz frei. Platz frei, aber der Money Room passt gerade besser. Oder
+kein Platz, du stehst auf der Liste.
+
+QUALIFIZIERUNG
+Acht Plaetze, nicht mehr. Nicht fuer Frauen, die sammeln statt umzusetzen.
+`,
+  },
+  4: {
+    name: 'Das Intensive',
+    cta: 'INTENSIVE',
+    block: `
+DAS ANGEBOT — DAS INTENSIVE
+888 Euro, aus dem Money Room 444. Eine Sitzung, vierzig Minuten, nur ein
+Fall. Vorab fuellt sie ein Dokument aus: Angebot, Preis, woran es haengt.
+Carina arbeitet es durch, bevor sie sich sehen.
+Die Sitzung IST die Ausarbeitung, nicht die Besprechung davon.
+
+DER UNTERSCHIED
+Kein Rebrand, keine Positionierungsschleife. Umgebaut wird, was schon
+steht: ein Paket statt drei, der Preis sichtbar, der Beleg neben der
+Behauptung.
+
+KEIN KAUFKNOPF
+Nur auf Anfrage, Antwort innerhalb von zwei Tagen.
+`,
+  },
+  5: {
+    name: 'The Strategy',
+    cta: 'STRATEGY',
+    block: `
+DAS ANGEBOT — THE STRATEGY
+Der Kurs, mit dem sie auf Instagram verkauft. Startvideo und Voice Notes,
+kein Modulberg, den man nachholen muss. Man hoert eine Note und macht
+danach etwas.
+
+WAS DIE CAPTION LEISTEN MUSS
+Der Unterschied zu einem Kurs, der im Ordner liegt: hier ist nach jeder
+Note etwas zu tun. Das ist das Verkaufsargument, nicht der Umfang.
+
+QUALIFIZIERUNG
+Nicht fuer Frauen, die sammeln statt umzusetzen.
+`,
+  },
+};
+
 const MONEYROOM = `
 DAS ANGEBOT — THE MONEY ROOM
 97 Euro im Monat. Kein Lernprogramm. Ein Umsetzungsraum.
@@ -160,10 +271,6 @@ Die fuenf Jobs sind:
   Bin ich gemeint?   Was hab ich danach?   Warum du?
   Was kostet es?     Was, wenn ich nichts tue?
 Ein Post, der keinen dieser Jobs schliesst, ist Leerlauf.
-
-BEWEIS
-Launch von 6.000 auf 12.000 Euro, nur durch neue erste drei Saetze.
-IMMER dazusagen: Einzelfall, kein Durchschnitt.
 
 DER LETZTE SCHLAG — direkt nach dem Angebot, vor der Qualifizierung
 
@@ -196,6 +303,10 @@ Regeln fuer diese Zeile:
 
 Das ist das Letzte, was haengen bleibt, bevor die Qualifizierung und
 der CTA kommen. Wenn diese Zeile nicht sitzt, sitzt die Caption nicht.
+
+BEWEIS
+Launch von 6.000 auf 12.000 Euro, nur durch neue erste drei Saetze.
+IMMER dazusagen: Einzelfall, kein Durchschnitt.
 
 QUALIFIZIERUNG — gehoert in JEDE Caption, keine Ausnahme
 Sie geht ueber die HALTUNG, nie ueber Voraussetzungen. Niemand wird
@@ -397,7 +508,7 @@ export default async (req) => {
     return new Response(JSON.stringify({ error: 'GEMINI_API_KEY fehlt (Netlify → Environment variables).' }), { status: 500 });
   }
 
-  let monday = false, day = null, keyword = '', art = 0, stories = false, voice = 0;
+  let monday = false, day = null, keyword = '', art = 0, stories = false, voice = 0, ziel = 2;
   try {
     const body = await req.json();
     day = body.day || null;
@@ -405,6 +516,7 @@ export default async (req) => {
     keyword = String(body.keyword || '').trim().slice(0, 24);
     art = [1, 2, 3].includes(Number(body.art)) ? Number(body.art) : 0;
     voice = [1, 2, 3, 4, 5, 6, 7].includes(Number(body.voice)) ? Number(body.voice) : 0;
+    ziel = [1, 2, 3, 4, 5].includes(Number(body.ziel)) ? Number(body.ziel) : 2;
     stories = body.stories === true;
   } catch {
     return new Response(JSON.stringify({ error: 'Ungültiger Body' }), { status: 400 });
@@ -420,7 +532,7 @@ export default async (req) => {
   const ctaZeile = keyword
     ? `CTA: "Kommentiere ${keyword.toUpperCase()}"`
     : (art === 1 || voice)
-      ? 'CTA: "Schreib mir MOVE"'
+      ? `CTA: "Kommentiere ${ZIELE[ziel].cta}"`
       : art === 2
         ? 'CTA: Speichern und ein Kommentar — welcher Punkt trifft dich?'
         : art === 3
@@ -428,7 +540,7 @@ export default async (req) => {
           : 'CTA: die Frage auf die Liste ("Was davon triggert dich am meisten? 1–N in die Kommentare.")';
 
   const prompt = `${monday ? 'SCHREIBE IM MONDAY-TON — die Regeln dazu stehen unten.\n\n' : ''}${REGELN}
-${art || voice ? MONEYROOM : ''}
+${art || voice ? ZIELE[ziel].block : ''}
 ${art ? ARTEN[art] : ''}
 ${voice ? VOICE_REGELN : ''}
 ${voice ? `DEIN BAUPLAN — ${VOICE[voice].name}\n${VOICE[voice].bau}` : ''}
