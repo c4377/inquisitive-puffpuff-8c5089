@@ -201,64 +201,6 @@ Nicht fuer Frauen, die sammeln statt umzusetzen.
   },
 };
 
-const MONEYROOM = `
-DAS ANGEBOT — THE MONEY ROOM
-97 Euro im Monat. Kein Lernprogramm. Ein Umsetzungsraum.
-Die Kundin bringt mit, was gerade auf dem Tisch liegt.
-Ziel: in den naechsten Tagen 2.000 Euro mehr machen.
-
-DER MECHANISMUS — JEDER POST HAT EINEN JOB
-Die fuenf Jobs sind:
-  Bin ich gemeint?   Was hab ich danach?   Warum du?
-  Was kostet es?     Was, wenn ich nichts tue?
-Ein Post, der keinen dieser Jobs schliesst, ist Leerlauf.
-
-DER LETZTE SCHLAG — direkt nach dem Angebot, vor der Qualifizierung
-
-Hier steht KEIN Kleingedrucktes. Nicht die Laufzeit, nicht die
-Bindung, nicht die Kuendigungsfrist, kein "danach jederzeit", kein
-Vault, kein Archiv, keine Liste, was alles enthalten ist. Nichts,
-was nach Vertrag klingt. Kein Wort ueber die Dauer.
-
-Stattdessen EIN Ergebnis. Was sie hinterher kann, was sie vorher
-nicht konnte. Der Moment, in dem sie es merkt — nicht das Gefuehl
-danach, sondern die Szene. So konkret, dass sie sich selbst darin
-sieht:
-
-  gut   "In zwei Wochen tippst du einen Post und weisst schon beim
-         Schreiben, welchen Job er erledigt. Das ist der ganze
-         Unterschied zwischen posten und verkaufen."
-  gut   "Dein naechster Launch wird nicht groesser. Er wird mit
-         denselben Leuten gemacht und mit den richtigen ersten drei
-         Saetzen."
-  mies  "Du wirst endlich sichtbar und ziehst deine Traumkundinnen an."
-  mies  "Mehr Umsatz, mehr Klarheit, mehr Leichtigkeit."
-
-Regeln fuer diese Zeile:
-  - Eine Zeile, hoechstens zwei. Sie steht allein.
-  - Ihre Sprache, ihr Alltag, ihre Handgriffe. Kein Marketingwort.
-  - Ein KOENNEN, kein Gefuehl. "Du weisst", "du schreibst", "du
-    siehst" — nicht "du fuehlst dich".
-  - Kein Superlativ, kein Ausrufezeichen, keine Garantie.
-  - Zahlen nur, wenn sie belegbar sind, und nie als Versprechen.
-
-Das ist das Letzte, was haengen bleibt, bevor die Qualifizierung und
-der CTA kommen. Wenn diese Zeile nicht sitzt, sitzt die Caption nicht.
-
-BEWEIS
-Launch von 6.000 auf 12.000 Euro, nur durch neue erste drei Saetze.
-IMMER dazusagen: Einzelfall, kein Durchschnitt.
-
-QUALIFIZIERUNG — gehoert in JEDE Caption, keine Ausnahme
-Sie geht ueber die HALTUNG, nie ueber Voraussetzungen. Niemand wird
-daran gemessen, was er schon hat, wie weit er ist oder wo er gerade
-steckt. Ausgeschlossen wird, wer nicht bereit ist:
-
-Nicht fuer die, die nicht umsetzen wollen.
-Nicht fuer die, die nicht investieren wollen.
-Nicht fuer die, die an ihrem jetzigen Zustand nichts aendern wollen.
-Nicht fuer die, die glauben, sie bekommen das alles allein hin.
-`;
 
 // Die Stilreferenz kommt aus dem Aufruf. Kommt keine, steht hier der
 // Ersatz — dann traegt das Regelwerk oben den Ton allein. Sobald Carina
@@ -308,146 +250,11 @@ ihn um Kontext, Gegenbeispiel, Konsequenz oder Einordnung.
    stattdessen nummeriert (1) / 2) mit je einem erklärenden Satz)
    und CTA darunter.
 
-Diese drei Abschnitte gehen jedem Bauplan vor. Sagt ein Bauplan etwas
-anderes über Aufbau, Ton oder Länge, gilt, was hier steht.
+Diese drei Abschnitte sind bindend. Die Variante der Caption ergibt sich
+aus dem Post selbst — aus dem, was in den Folien steht — nicht aus einer
+vorgegebenen Fassung.
 `;
 
-const BAUPLAENE = {
-  1: {
-    name: 'Der Widerspruch',
-    bau: `Beginne mit einem Satz, den die Leserin selbst sagt, in
-Anfuehrungszeichen. Einen echten, keinen erfundenen.
-  "Ich will nicht pushy wirken."
-  "Ich warte noch, bis es fertig ist."
-
-Dann eine Zeile, die zeigt, was dieser Satz sie kostet. Nicht moralisch —
-rechnerisch oder zeitlich.
-
-Dann der Widerspruch: was sie gleichzeitig will und tut. Zwei Zeilen.
-
-Dann der Ausweg in EINER Handlung, die sie heute machen kann. Nicht
-"ueberdenke", sondern "schreib", "streich", "setz".
-
-Angebot, letzter Schlag, Qualifizierung, CTA.`,
-  },
-  2: {
-    name: 'Die Reihenfolge',
-    bau: `Fuer alles, was nicht am Aufwand scheitert, sondern an der
-Abfolge. Hook: "Du hast kein X-Problem. Du hast ein
-Reihenfolge-Problem."
-
-Dann VIER nummerierte Schritte in der falschen Reihenfolge, so wie sie
-es gerade macht. Jeder ein Halbsatz.
-
-Dann dieselben vier in der richtigen. Ohne Erklaerung dazwischen — die
-Umstellung spricht fuer sich.
-
-Ein Satz, warum die zweite Reihenfolge verkauft und die erste nicht.
-
-Angebot, letzter Schlag, Qualifizierung, CTA.`,
-  },
-  3: {
-    name: 'Die Zahl zuerst',
-    bau: `Beginne mit einer belegbaren Zahl aus der Arbeit mit einer
-Kundin. Nackt, ohne Aufbau:
-  "4.000 Euro in dreissig Tagen. Secondhand-Brautmode."
-  "Von 6.000 auf 12.000, geaendert wurden drei Saetze."
-
-Zweite Zeile: was sie NICHT geaendert hat. Das ist der eigentliche
-Punkt — kein Rebrand, keine neue Zielgruppe, kein neues Angebot.
-
-Dann der Mechanismus dahinter, in drei bis vier Zeilen. Was genau
-gedreht wurde und warum das wirkt.
-
-"Einzelfall, kein Durchschnitt." — dieser Satz MUSS stehen.
-
-Angebot, letzter Schlag, Qualifizierung, CTA.`,
-  },
-  4: {
-    name: 'Was es kostet zu bleiben',
-    bau: `Die einzige Fassung, die rechnet. Hook ist eine Frage mit
-Zahl: "Was kostet dich ein Monat ohne Angebotsseite?"
-
-Dann die Rechnung, drei bis vier Zeilen, in ihren Groessen. Anfragen
-mal Abschlussquote mal Preis. Konservativ schaetzen und das dazusagen.
-
-Dann die Gegenrechnung: was die Umstellung kostet, an Zeit und an Geld.
-
-Kein Druck, kein Countdown, keine Verknappung. Die Zahlen stehen
-nebeneinander, die Leserin zieht den Schluss.
-
-Angebot, letzter Schlag, Qualifizierung, CTA.`,
-  },
-  5: {
-    name: 'Die Nachricht',
-    bau: `Beginne mit einer echten Nachricht, die Carina bekommen hat,
-in Anfuehrungszeichen und als eigener Block. Eine Frage oder ein
-Einwand.
-
-Dann die Antwort, die sie tatsaechlich gegeben haette — direkt, ohne
-Hoeflichkeitsfloskel, ohne "gute Frage".
-
-Dann eine Zeile, warum diese Frage so oft kommt. Das ist die Stelle,
-an der die Leserin sich wiedererkennt.
-
-Diese Fassung bleibt kurz. Hoechstens zwoelf Zeilen bis zum Angebot.
-
-Angebot, letzter Schlag, Qualifizierung, CTA.`,
-  },
-  6: {
-    name: 'Von damals',
-    bau: `Carina stand da, wo die Leserin gerade steht. Beginne mit
-einer Szene, nicht mit einer Erkenntnis:
-  "Zehn Gruendungen. Bei sechs davon habe ich den Preis erst im
-  Gespraech genannt."
-
-Dann was daran nicht funktioniert hat. Konkret, ohne Selbstmitleid und
-ohne Heldenerzaehlung.
-
-Dann die EINE Sache, die sie geaendert hat. Eine, nicht drei.
-
-Dann was danach anders war. Belegbar oder gar nicht.
-
-Kein "und heute helfe ich Frauen dabei". Die Bruecke zum Angebot
-passiert im naechsten Absatz von selbst.
-
-Angebot, letzter Schlag, Qualifizierung, CTA.`,
-  },
-  7: {
-    name: 'Kurz',
-    bau: `Fuer Tage, an denen die Folien schon alles sagen. Die
-gesamte Caption hat hoechstens acht Zeilen.
-
-Eine Behauptung. Eine Folge. Ein Angebotssatz mit Preis. Ein Ergebnis.
-Der CTA.
-
-Keine Erklaerung, kein Beispiel, kein Beweis. Wer mehr will, liest die
-Folien. Diese Fassung darf sich unhoeflich kurz anfuehlen.`,
-  },
-  8: {
-    name: 'Serie — ein Schritt von dreissig',
-    bau: `Fuer die laufende Serie. Kein Verkauf, keine Qualifizierung.
-
-Erste Zeile: "Schritt X von 30:" und dahinter eine Behauptung, der man
-widersprechen moechte. Kein Thema, keine Ueberschrift.
-  gut   "Schritt 12 von 30: Der Preis steht im Post. Oder er steht nicht."
-  mies  "Schritt 12 von 30: Preiskommunikation"
-
-Dann in drei bis vier Zeilen, was an diesem einen Schritt haengt.
-Konkret genug, dass sie ihn heute machen kann, ohne die anderen 29.
-
-Dann Gestern und Morgen, immer inhaltlich, nie "Teil 12 von 30":
-  "Gestern ging es darum, warum dein Angebot drei Versprechen gibt
-  statt einem. Morgen kommt die Zeile direkt nach dem Preis."
-Ist kein Vortag bekannt, nur der Ausblick. Ist kein Folgetag bekannt,
-nur der Rueckblick. Nie beides erfinden.
-
-Dann das Ergebnis nach allen dreissig Schritten, als Szene.
-
-Dann: "Kommentiere DABEI, dann bekommst du die naechsten Schritte."
-Nichts sonst.`,
-  },
-};
 
 
 export default async (req) => {
@@ -459,14 +266,13 @@ export default async (req) => {
     return new Response(JSON.stringify({ error: 'GEMINI_API_KEY fehlt (Netlify → Environment variables).' }), { status: 500 });
   }
 
-  let monday = false, day = null, keyword = '', bauplan = 0, ziel = 2;
+  let monday = false, day = null, keyword = '', ziel = 2;
   let stilreferenz = '';
   try {
     const body = await req.json();
     day = body.day || null;
     monday = body.monday === true;
     keyword = String(body.keyword || '').trim().slice(0, 24);
-    bauplan = [1, 2, 3, 4, 5, 6, 7, 8].includes(Number(body.bauplan)) ? Number(body.bauplan) : 0;
     ziel = [1, 2, 3, 4, 5].includes(Number(body.ziel)) ? Number(body.ziel) : 2;
     stilreferenz = String(body.stilreferenz || '').slice(0, 8000).trim();
   } catch {
@@ -482,15 +288,12 @@ export default async (req) => {
     : '';
   const ctaZeile = keyword
     ? `CTA: "Kommentiere ${keyword.toUpperCase()}"`
-    : bauplan
-      ? `CTA: "Kommentiere ${ZIELE[ziel].cta}"`
-      : 'CTA: die Frage auf die Liste ("Was davon triggert dich am meisten? 1–N in die Kommentare.")';
+    : `CTA: "Kommentiere ${ZIELE[ziel].cta}"`;
 
   const prompt = `${monday ? 'SCHREIBE IM MONDAY-TON — die Regeln dazu stehen unten.\n\n' : ''}${REGELN}
-${bauplan ? ZIELE[ziel].block : ''}
+${ZIELE[ziel].block}
 ${stilreferenz ? `STILREFERENZ — nur die Machart, nie den Inhalt uebernehmen:\n---\n${stilreferenz}\n---` : ''}
 ${VOICE_BLOCK}
-${bauplan ? `DEIN BAUPLAN — ${BAUPLAENE[bauplan].name}\n${BAUPLAENE[bauplan].bau}` : ''}
 
 DER POST — Tag ${day.day}${day.title ? `: ${day.title}` : ''}
 ${folien}
@@ -501,7 +304,7 @@ Schreibe die Caption. Sie muss in den ersten drei Zeilen erkennbar an
 einem Satz aus dem Content Piece andocken und danach genau eine Sache
 bringen, die dort nicht steht. Keine Zusammenfassung, keine
 Wegbeschreibung.
-${bauplan && ziel !== 1 && bauplan !== 8 ? 'Die Qualifizierung MUSS vorkommen, und sie geht ueber die Haltung:\nnicht fuer die, die nicht umsetzen, nicht investieren oder an ihrem\nZustand nichts aendern wollen — und nicht fuer die, die glauben, sie\nbekommen das allein hin. Nie daran festmachen, was jemand schon hat.' : ''}
+${ziel !== 1 ? 'Die Qualifizierung MUSS vorkommen, und sie geht ueber die Haltung:\nnicht fuer die, die nicht umsetzen, nicht investieren oder an ihrem\nZustand nichts aendern wollen — und nicht fuer die, die glauben, sie\nbekommen das allein hin. Nie daran festmachen, was jemand schon hat.' : ''}
 
 ANTWORTE NUR MIT JSON, ohne Vorwort, ohne Markdown:
 {"caption":"…"}
