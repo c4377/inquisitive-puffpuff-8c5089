@@ -319,72 +319,67 @@ Nicht fuer die, die an ihrem jetzigen Zustand nichts aendern wollen.
 Nicht fuer die, die glauben, sie bekommen das alles allein hin.
 `;
 
-const TON = `
-DER TON — gilt fuer jeden Bauplan
+// Die Stilreferenz kommt aus dem Aufruf. Kommt keine, steht hier der
+// Ersatz — dann traegt das Regelwerk oben den Ton allein. Sobald Carina
+// zwei, drei eigene Captions liefert, gehoeren sie hier hinein.
+const STILREFERENZ_STANDARD = `Keine Stilreferenz uebergeben.
+Leite den Ton in diesem Fall aus dem Regelwerk oben ab: kurze Zeilen,
+eine Aussage pro Zeile, Zahlen statt Adjektive, keine Floskeln, keine
+Hashtags, keine Emojis.`;
 
-Kurze Zeilen. Eine Aussage pro Zeile, Umbruch, naechste. Kein Absatz
-laenger als drei Zeilen.
+const STORY_ANLEITUNG = `
+FUENF STORIES ZUM POST — immer genau diese fuenf, in dieser Reihenfolge:
 
-Zahlen statt Adjektive. Nicht "deutlich mehr", sondern "von 6.000 auf
-12.000". Nicht "viele Kundinnen", sondern "acht Plaetze".
+1  Call-Out
+   Schwarzer Grund, weisse Schrift. EIN Satz aus Folie 1.
+   Dazu eine Umfrage: Ertappt? Ja / Nein
 
-Der Fehler wird beobachtet, nie vorgeworfen. Es geht gegen die
-Situation, nie gegen die Leserin. Kein "du machst den Fehler", sondern
-"das passiert, weil".
+2  Mechanismus
+   Erklaere "ein Post, ein Job" an EINER Frage, zum Beispiel
+   "Bin ich gemeint?", und zeige an einem Beispiel, wie ein Post sie
+   schliesst. Sticker: Frag mich.
 
-Keine Hashtags. Keine Emojis. Keine Aufzaehlungszeichen im fertigen
-Text. Keine Zwischenueberschriften.
+3  Behind / Mindset
+   Kurze persoenliche Anekdote zum Gedanken aus Folie 3. Nahbar,
+   konkrete Uhrzeit, konkrete Situation.
 
-Verboten, ausnahmslos:
-  "In diesem Post zeige ich dir"
-  "Lass uns mal ehrlich sein"
-  "Spoiler:"
-  "Und genau deshalb"
-  jede Zusammenfassung der Folien
-  jedes Wort, das nur in Marketingtexten vorkommt: Sichtbarkeit,
-  Traumkundin, Sales-Maschine, Leichtigkeit, Klarheit, Reise
+4  Beweis
+   "Gleiches Angebot. Neue erste drei Saetze. 6k auf 12k."
+   Platzhalter fuer den Screenshot mitschreiben. Disclaimer nicht
+   vergessen: Einzelfall, kein Durchschnitt.
 
-Die Caption wiederholt das Content Piece nicht. Sie greift es auf und
-fuehrt es weiter — wie, steht im naechsten Block.
+5  Sales
+   Die letzten beiden Folien direkt. The Money Room, 97 Euro im Monat,
+   was sie mitbringt, was sie bekommt, fuer wen ja und fuer wen nicht.
+   Schreib MOVE.
+
+Jede Story hoechstens 300 Zeichen. Zeilenumbrueche sind erwuenscht.
 `;
 
-const BEZUG = `
-BEZUG AUF DAS CONTENT PIECE — Pflicht, in jeder Fassung
+const VOICE_BLOCK = `
+=== VOICE ===
+Leite Ton, Satzlänge, Rhythmus, Interpunktion, Absatzlogik und
+Emoji-Dichte ausschließlich aus STILREFERENZ ab. Übernimm keine
+Inhalte, Beispiele oder Formulierungen daraus – nur die Machart.
+Kein Marketing-Sprech, keine Dienstleisterinnen-Höflichkeit,
+kein "5 Tipps"-Ton, keine Floskeln, keine Hashtag-Wolke.
 
-Carina schreibt vor allem Content Pieces. Die Caption steht nicht daneben,
-sie haengt daran. Wer nur die Caption liest, muss merken, dass da oben
-etwas steht, das er sehen will.
+=== BEZUG ===
+Jede Caption greift den konkreten Post-Inhalt auf: Aussage, Zahl,
+Beispiel, Szene oder Slide-Reihenfolge. Test: Ohne den Post darf die
+Caption keinen Sinn ergeben. Wiederhole den Post nicht 1:1 – ergänze
+ihn um Kontext, Gegenbeispiel, Konsequenz oder Einordnung.
 
-1  ANDOCKEN, in den ersten drei Zeilen
-   Greif EINEN konkreten Satz, eine Zahl oder eine Behauptung aus dem
-   Piece auf. Woertlich zitiert oder klar benannt. Nicht das Thema —
-   den Satz.
-     gut   "'Du hast keinen Content-Mangel.' Das steht oben, und es ist
-            der unbequemere Teil der Wahrheit."
-     gut   "Punkt drei da oben ist der, an dem die meisten aussteigen."
-     mies  "In diesem Carousel geht es um Angebote."
-     mies  "Oben siehst du fuenf Tipps fuer bessere Posts."
+=== AUFBAU ===
+1. Hook: eine Zeile, direkt aus dem Post-Kern.
+2. Body: Bezug + Vertiefung, in Absätzen wie in der Stilreferenz.
+3. CTA: letzte Zeile, genau einer, in der übergebenen Form.
+Keine Wiederholung der Hook am Ende, kein zweiter CTA.
 
-2  BENENNEN, wenn das Piece nummeriert ist
-   Ist es eine Serie oder hat es nummerierte Folien, sag welche Stelle
-   du meinst. "Schritt 12", "der dritte Punkt", "die letzte Folie".
-
-3  WEITERGEHEN, das ist der eigentliche Job
-   Die Caption bringt GENAU EINE Sache, die im Piece nicht steht:
-   ein Beispiel, eine Zahl, eine Folge, einen Einwand, eine Gegenprobe.
-   Steht in der Caption nichts Neues, ist sie ueberfluessig.
-
-4  ZURUECKGEBEN am Ende, wenn das Piece einen starken Schlusssatz hat
-   Nimm ihn auf und dreh ihn. Nicht wiederholen — drehen.
-
-VERBOTEN
-   Jede Zusammenfassung. Jede Aufzaehlung dessen, was in den Folien
-   steht. "Swipe", "im Carousel", "oben im Post", "wie du oben siehst".
-   Der Bezug entsteht ueber den Inhalt, nie ueber eine Wegbeschreibung.
+Diese drei Abschnitte gehen jedem Bauplan vor. Sagt ein Bauplan etwas
+anderes über Aufbau, Ton oder Länge, gilt, was hier steht.
 `;
 
-// Acht Bauplaene. Sie unterscheiden sich darin, was die Caption TUT —
-// nicht darin, wie sie klingt. Der Ton steht oben und gilt fuer alle.
 const BAUPLAENE = {
   1: {
     name: 'Der Widerspruch',
@@ -533,6 +528,7 @@ export default async (req) => {
   }
 
   let monday = false, day = null, keyword = '', stories = false, bauplan = 0, ziel = 2;
+  let stilreferenz = '';
   try {
     const body = await req.json();
     day = body.day || null;
@@ -540,6 +536,7 @@ export default async (req) => {
     keyword = String(body.keyword || '').trim().slice(0, 24);
     bauplan = [1, 2, 3, 4, 5, 6, 7, 8].includes(Number(body.bauplan)) ? Number(body.bauplan) : 0;
     ziel = [1, 2, 3, 4, 5].includes(Number(body.ziel)) ? Number(body.ziel) : 2;
+    stilreferenz = String(body.stilreferenz || '').slice(0, 8000).trim() || STILREFERENZ_STANDARD;
     stories = body.stories === true;
   } catch {
     return new Response(JSON.stringify({ error: 'Ungültiger Body' }), { status: 400 });
@@ -560,8 +557,11 @@ export default async (req) => {
 
   const prompt = `${monday ? 'SCHREIBE IM MONDAY-TON — die Regeln dazu stehen unten.\n\n' : ''}${REGELN}
 ${bauplan ? ZIELE[ziel].block : ''}
-${TON}
-${BEZUG}
+STILREFERENZ — nur die Machart, nie den Inhalt uebernehmen:
+---
+${stilreferenz}
+---
+${VOICE_BLOCK}
 ${bauplan ? `DEIN BAUPLAN — ${BAUPLAENE[bauplan].name}\n${BAUPLAENE[bauplan].bau}` : ''}
 ${stories ? STORY_ANLEITUNG : ''}
 
