@@ -204,3 +204,38 @@ Dazu zwei Kleinigkeiten: die Linie endet kurz hinter dem ersten und dem
 letzten Punkt statt quer durch den Rahmen zu laufen, und die Schrift ist
 von c(11) auf c(13) gewachsen — dieselbe Groesse wie die Tagesnamen im
 Wochenraster, damit sie auf dem Handy lesbar ist.
+
+## 9. Caption Import (neuer Dialog) und ein Absturz im Bulk Import
+
+Im Content Plan gab es einen Knopf "Captions", der stumm `/captions.json`
+holte und eintrug. Carina wollte stattdessen einen richtigen Import wie
+den Bulk Import. Der Knopf oeffnet jetzt den Dialog `CaptionImport`.
+
+Der Dialog steht als eigene Komponente in `tools/caption-import.js` und
+wird von `tools/caption-import-einbauen.py` vor `AblaufMenue` eingesetzt.
+Wer das Bundle neu baut, braucht im Quellcode:
+
+  - Komponente `CaptionImport({isOpen, onClose, onImport})` — Textfeld,
+    zwei Modi ("Überschreiben" / "Nur leere füllen"), ein Knopf
+    "Aus captions.json laden" (fuellt das Textfeld aus der Datei) und
+    eine laufende Zaehlung der erkannten Captions.
+  - Das Format ist zeilenbasiert: `Tag 8: Titel`, darunter `Caption:`
+    und der Text, Eintraege durch eine Strichzeile getrennt. Ein
+    `Tag N:` mitten im Fliesstext zaehlt nicht, es muss am Zeilenanfang
+    stehen. Der Import legt keine neuen Tage an; Tage, die es im Plan
+    nicht gibt, werden in der Rueckmeldung genannt.
+  - Im Content Plan: `[capOffen, capSetzen]` und `capEintragen(liste,
+    modus)`, das ueber `t({contentPlan})` speichert — denselben Weg wie
+    der Speichern-Knopf, also IndexedDB und (eingeloggt) Supabase.
+
+Dabei ist ein bestehender Fehler aufgefallen und mitbehoben: im
+Bulk-Import stand am Ende
+
+    const Ve = existing.length > 0;
+
+`existing` gibt es dort nicht. Die Zeile kam nach `t({contentPlan: st})`,
+der Import lief also durch, aber die Rueckmeldung ("Plan importiert –
+x/y mit Bild") ging verloren und im Log stand "existing is not defined".
+Gemeint ist der bisherige Plan, der ein paar Zeilen darueber als `ut`
+bereitliegt. Bitte im Quellcode ebenfalls korrigieren, sonst kommt der
+Absturz mit dem naechsten Bau zurueck.
