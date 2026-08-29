@@ -344,8 +344,43 @@ Verboten, ausnahmslos:
   jedes Wort, das nur in Marketingtexten vorkommt: Sichtbarkeit,
   Traumkundin, Sales-Maschine, Leichtigkeit, Klarheit, Reise
 
-Die Caption wiederholt die Folien nicht. Sie fuehrt den Gedanken weiter
-und macht ihn heute anwendbar.
+Die Caption wiederholt das Content Piece nicht. Sie greift es auf und
+fuehrt es weiter — wie, steht im naechsten Block.
+`;
+
+const BEZUG = `
+BEZUG AUF DAS CONTENT PIECE — Pflicht, in jeder Fassung
+
+Carina schreibt vor allem Content Pieces. Die Caption steht nicht daneben,
+sie haengt daran. Wer nur die Caption liest, muss merken, dass da oben
+etwas steht, das er sehen will.
+
+1  ANDOCKEN, in den ersten drei Zeilen
+   Greif EINEN konkreten Satz, eine Zahl oder eine Behauptung aus dem
+   Piece auf. Woertlich zitiert oder klar benannt. Nicht das Thema —
+   den Satz.
+     gut   "'Du hast keinen Content-Mangel.' Das steht oben, und es ist
+            der unbequemere Teil der Wahrheit."
+     gut   "Punkt drei da oben ist der, an dem die meisten aussteigen."
+     mies  "In diesem Carousel geht es um Angebote."
+     mies  "Oben siehst du fuenf Tipps fuer bessere Posts."
+
+2  BENENNEN, wenn das Piece nummeriert ist
+   Ist es eine Serie oder hat es nummerierte Folien, sag welche Stelle
+   du meinst. "Schritt 12", "der dritte Punkt", "die letzte Folie".
+
+3  WEITERGEHEN, das ist der eigentliche Job
+   Die Caption bringt GENAU EINE Sache, die im Piece nicht steht:
+   ein Beispiel, eine Zahl, eine Folge, einen Einwand, eine Gegenprobe.
+   Steht in der Caption nichts Neues, ist sie ueberfluessig.
+
+4  ZURUECKGEBEN am Ende, wenn das Piece einen starken Schlusssatz hat
+   Nimm ihn auf und dreh ihn. Nicht wiederholen — drehen.
+
+VERBOTEN
+   Jede Zusammenfassung. Jede Aufzaehlung dessen, was in den Folien
+   steht. "Swipe", "im Carousel", "oben im Post", "wie du oben siehst".
+   Der Bezug entsteht ueber den Inhalt, nie ueber eine Wegbeschreibung.
 `;
 
 // Acht Bauplaene. Sie unterscheiden sich darin, was die Caption TUT —
@@ -526,6 +561,7 @@ export default async (req) => {
   const prompt = `${monday ? 'SCHREIBE IM MONDAY-TON — die Regeln dazu stehen unten.\n\n' : ''}${REGELN}
 ${bauplan ? ZIELE[ziel].block : ''}
 ${TON}
+${BEZUG}
 ${bauplan ? `DEIN BAUPLAN — ${BAUPLAENE[bauplan].name}\n${BAUPLAENE[bauplan].bau}` : ''}
 ${stories ? STORY_ANLEITUNG : ''}
 
@@ -534,8 +570,10 @@ ${folien}
 
 ${ctaZeile}
 
-Schreibe die Caption. Wiederhole die Folien nicht wörtlich — die Caption
-führt den Gedanken weiter und macht ihn anwendbar.
+Schreibe die Caption. Sie muss in den ersten drei Zeilen erkennbar an
+einem Satz aus dem Content Piece andocken und danach genau eine Sache
+bringen, die dort nicht steht. Keine Zusammenfassung, keine
+Wegbeschreibung.
 ${bauplan && ziel !== 1 && bauplan !== 8 ? 'Die Qualifizierung MUSS vorkommen, und sie geht ueber die Haltung:\nnicht fuer die, die nicht umsetzen, nicht investieren oder an ihrem\nZustand nichts aendern wollen — und nicht fuer die, die glauben, sie\nbekommen das allein hin. Nie daran festmachen, was jemand schon hat.' : ''}
 
 ANTWORTE NUR MIT JSON, ohne Vorwort, ohne Markdown:
