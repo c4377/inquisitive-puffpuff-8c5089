@@ -106,19 +106,6 @@ P.append(('path:"/",element:v.jsx(kV,{})', 'path:"/",element:v.jsx(MG,{})',
 P.append(('to:"/brand-randomizer"', 'to:"/brand-settings"',
  "Randomizer-Verweise umgebogen", 2))
 
-# 9 — Caption-Abfrage: Umbrueche und Zifferfilter waren doppelt
-#     maskiert. Der Prompt zeigte \n als Text, und mit dem "s"
-#     fuer Stories ging die Zahl verloren — es kam immer die
-#     Standard-Fassung heraus.
-P.append((
- 'welche Fassung?\\\\n1 = Carina Original (Direct Call-Out)\\\\n2 = Lisa Bisschop (Soft Educational)\\\\n3 = US-Sales (kurz, Pitch)\\\\n4 = Preis-Pause\\\\n5 = Geboren zum Verkaufen\\\\n6 = Ehrlich\\\\n7 = Kurz und fies\\\\n8 = Launch\\\\n9 = Persönlichkeits-Lüge\\\\n10 = Alles schon probiert\\\\n\\\\nMit 5 Stories: s anhängen, z.B. 4s.',
- 'welche Fassung?\\n1 = Carina Original (Direct Call-Out)\\n2 = Lisa Bisschop (Soft Educational)\\n3 = US-Sales (kurz, Pitch)\\n4 = Preis-Pause\\n5 = Geboren zum Verkaufen\\n6 = Ehrlich\\n7 = Kurz und fies\\n8 = Launch\\n9 = Persönlichkeits-Lüge\\n10 = Alles schon probiert\\n\\nMit 5 Stories: s anhängen, z.B. 4s.',
- "Caption-Abfrage lesbar", 2))
-P.append((
- 'Number(String(nr).replace(/\\\\D/g,""))||0',
- 'Number(String(nr).replace(/\\D/g,""))||0',
- "Caption-Abfrage erkennt die Zahl", 2))
-
 # 10 — Monogramm: der Ring steht links unten, die Buchstaben standen
 #      in der Kartenmitte. Jetzt sitzen sie im Ring und werden
 #      kleiner gerechnet, damit sie hineinpassen.
@@ -184,35 +171,39 @@ P.append(('const Oe=t.textAnchor&&typeof t.textAnchor=="object"?t.textAnchor:{ro
  'const Oe=!t._blurAn&&t.textAnchor&&typeof t.textAnchor=="object"?t.textAnchor:{row:$?"bottom":"mid",col:"center"}',
  "Textzone ohne Gesichtsruecksicht bei Weichzeichner", 1))
 
-# 19 — Die neue Abfrage "Wofuer?" hat denselben doppelt maskierten
-#      Umbruch und Zifferfilter wie die Fassungsabfrage. Ohne das
-#      steht \\n als Text im Fenster.
+# 9 — Die Caption-Abfrage: acht neue Fassungen, lesbare Umbrueche,
+#     funktionierender Zifferfilter, und die App schickt jetzt
+#     einen Bauplan statt Art und Voice.
+P.append(('Caption Tag ${ae.day} — welche Fassung?\\\\n1 = Carina Original (Direct Call-Out)\\\\n2 = Lisa Bisschop (Soft Educational)\\\\n3 = US-Sales (kurz, Pitch)\\\\n4 = Preis-Pause\\\\n5 = Geboren zum Verkaufen\\\\n6 = Ehrlich\\\\n7 = Kurz und fies\\\\n8 = Launch\\\\n9 = Persönlichkeits-Lüge\\\\n10 = Alles schon probiert\\\\n\\\\nMit 5 Stories: s anhängen, z.B. 4s.',
+ 'Caption Tag ${ae.day} — welche Fassung?\\n1 = Der Widerspruch\\n2 = Die Reihenfolge\\n3 = Die Zahl zuerst\\n4 = Was es kostet zu bleiben\\n5 = Die Nachricht\\n6 = Von damals\\n7 = Kurz\\n8 = Serie, ein Schritt von dreissig\\n\\nMit 5 Stories: s anhängen, z.B. 4s.',
+ "Fassungsliste (Caption Tag )", 1))
+P.append(('Caption — welche Fassung?\\\\n1 = Carina Original (Direct Call-Out)\\\\n2 = Lisa Bisschop (Soft Educational)\\\\n3 = US-Sales (kurz, Pitch)\\\\n4 = Preis-Pause\\\\n5 = Geboren zum Verkaufen\\\\n6 = Ehrlich\\\\n7 = Kurz und fies\\\\n8 = Launch\\\\n9 = Persönlichkeits-Lüge\\\\n10 = Alles schon probiert\\\\n\\\\nMit 5 Stories: s anhängen, z.B. 4s.',
+ 'Caption — welche Fassung?\\n1 = Der Widerspruch\\n2 = Die Reihenfolge\\n3 = Die Zahl zuerst\\n4 = Was es kostet zu bleiben\\n5 = Die Nachricht\\n6 = Von damals\\n7 = Kurz\\n8 = Serie, ein Schritt von dreissig\\n\\nMit 5 Stories: s anhängen, z.B. 4s.',
+ "Fassungsliste (Caption — we)", 1))
+P.append(('Number(String(nr).replace(/\\\\D/g,""))||0',
+ 'Number(String(nr).replace(/\\D/g,""))||0',
+ "Zifferfilter Fassung", 2))
 P.append(('Wofür? (leer = Money Room)\\\\n1 = Angebotsserie, die gerade läuft\\\\n2 = The Money Room\\\\n3 = Mentoring, das 1:1\\\\n4 = Das Intensive\\\\n5 = The Strategy',
  'Wofür? (leer = Money Room)\\n1 = Angebotsserie, die gerade läuft\\n2 = The Money Room\\n3 = Mentoring, das 1:1\\n4 = Das Intensive\\n5 = The Strategy',
  "Ziel-Abfrage lesbar", 2))
 P.append(('Number(String(zl).replace(/\\\\D/g,""))||2',
  'Number(String(zl).replace(/\\D/g,""))||2',
- "Ziel-Abfrage erkennt die Zahl", 2))
+ "Zifferfilter Ziel", 2))
+P.append(('const Sr=Zz>=1&&Zz<=3?Zz:0,Vc=Zz>=4&&Zz<=10?Zz-3:0;',
+ 'const Sr=0,Vc=Zz>=1&&Zz<=8?Zz:0;',
+ "Fassung 1-8 auf den Bauplan", 2))
+P.append(('art:Sr,voice:Vc,ziel:Zl,',
+ 'bauplan:Vc,ziel:Zl,',
+ "App schickt bauplan", 2))
 
-# 20 — Reihenfolge der beiden Abfragen: erst wofuer, dann wie.
-#      Muss nach Patch 9 und 19 laufen, weil es deren korrigierten
-#      Text als Anker benutzt.
-P.append(('const nr=window.prompt(`Caption Tag ${ae.day} — welche Fassung?\\n1 = Carina Original (Direct Call-Out)\\n2 = Lisa Bisschop (Soft Educational)\\n3 = US-Sales (kurz, Pitch)\\n4 = Preis-Pause\\n5 = Geboren zum Verkaufen\\n6 = Ehrlich\\n7 = Kurz und fies\\n8 = Launch\\n9 = Persönlichkeits-Lüge\\n10 = Alles schon probiert\\n\\nMit 5 Stories: s anhängen, z.B. 4s.`,"1s");if(nr===null)return;const Zz=Number(String(nr).replace(/\\D/g,""))||0,Kr=/s/i.test(nr);const Sr=Zz>=1&&Zz<=3?Zz:0,Vc=Zz>=4&&Zz<=10?Zz-3:0;const zl=window.prompt(`Wofür? (leer = Money Room)\\n1 = Angebotsserie, die gerade läuft\\n2 = The Money Room\\n3 = Mentoring, das 1:1\\n4 = Das Intensive\\n5 = The Strategy`,"2");if(zl===null)return;const Zl=Number(String(zl).replace(/\\D/g,""))||2;',
- 'const zl=window.prompt(`Wofür? (leer = Money Room)\\n1 = Angebotsserie, die gerade läuft\\n2 = The Money Room\\n3 = Mentoring, das 1:1\\n4 = Das Intensive\\n5 = The Strategy`,"2");if(zl===null)return;const Zl=Number(String(zl).replace(/\\D/g,""))||2;const nr=window.prompt(`Caption Tag ${ae.day} — welche Fassung?\\n1 = Carina Original (Direct Call-Out)\\n2 = Lisa Bisschop (Soft Educational)\\n3 = US-Sales (kurz, Pitch)\\n4 = Preis-Pause\\n5 = Geboren zum Verkaufen\\n6 = Ehrlich\\n7 = Kurz und fies\\n8 = Launch\\n9 = Persönlichkeits-Lüge\\n10 = Alles schon probiert\\n\\nMit 5 Stories: s anhängen, z.B. 4s.`,"1s");if(nr===null)return;const Zz=Number(String(nr).replace(/\\D/g,""))||0,Kr=/s/i.test(nr);const Sr=Zz>=1&&Zz<=3?Zz:0,Vc=Zz>=4&&Zz<=10?Zz-3:0;',
- "Erst wofuer, dann wie (Caption Tag ${)", 1))
-P.append(('const nr=window.prompt(`Caption — welche Fassung?\\n1 = Carina Original (Direct Call-Out)\\n2 = Lisa Bisschop (Soft Educational)\\n3 = US-Sales (kurz, Pitch)\\n4 = Preis-Pause\\n5 = Geboren zum Verkaufen\\n6 = Ehrlich\\n7 = Kurz und fies\\n8 = Launch\\n9 = Persönlichkeits-Lüge\\n10 = Alles schon probiert\\n\\nMit 5 Stories: s anhängen, z.B. 4s.`,"1s");if(nr===null)return;const Zz=Number(String(nr).replace(/\\D/g,""))||0,Kr=/s/i.test(nr);const Sr=Zz>=1&&Zz<=3?Zz:0,Vc=Zz>=4&&Zz<=10?Zz-3:0;const zl=window.prompt(`Wofür? (leer = Money Room)\\n1 = Angebotsserie, die gerade läuft\\n2 = The Money Room\\n3 = Mentoring, das 1:1\\n4 = Das Intensive\\n5 = The Strategy`,"2");if(zl===null)return;const Zl=Number(String(zl).replace(/\\D/g,""))||2;',
- 'const zl=window.prompt(`Wofür? (leer = Money Room)\\n1 = Angebotsserie, die gerade läuft\\n2 = The Money Room\\n3 = Mentoring, das 1:1\\n4 = Das Intensive\\n5 = The Strategy`,"2");if(zl===null)return;const Zl=Number(String(zl).replace(/\\D/g,""))||2;const nr=window.prompt(`Caption — welche Fassung?\\n1 = Carina Original (Direct Call-Out)\\n2 = Lisa Bisschop (Soft Educational)\\n3 = US-Sales (kurz, Pitch)\\n4 = Preis-Pause\\n5 = Geboren zum Verkaufen\\n6 = Ehrlich\\n7 = Kurz und fies\\n8 = Launch\\n9 = Persönlichkeits-Lüge\\n10 = Alles schon probiert\\n\\nMit 5 Stories: s anhängen, z.B. 4s.`,"1s");if(nr===null)return;const Zz=Number(String(nr).replace(/\\D/g,""))||0,Kr=/s/i.test(nr);const Sr=Zz>=1&&Zz<=3?Zz:0,Vc=Zz>=4&&Zz<=10?Zz-3:0;',
- "Erst wofuer, dann wie (Caption — welc)", 1))
-
-# 21 — Die Serie als elfte Fassung anbieten. Laeuft nach Patch 20,
-#      der die Reihenfolge tauscht — der Text bleibt dabei gleich,
-#      nur seine Stelle aendert sich.
-P.append(('\\n10 = Alles schon probiert\\n\\nMit 5 Stories: s anhängen, z.B. 4s.',
- '\\n10 = Alles schon probiert\\n11 = Serie, ein Schritt von dreissig\\n\\nMit 5 Stories: s anhängen, z.B. 4s.',
- "Fassung 11: Serie", 2))
-P.append(('Vc=Zz>=4&&Zz<=10?Zz-3:0',
- 'Vc=Zz>=4&&Zz<=11?Zz-3:0',
- "Fassung 11 auf Bauplan 8 abbilden", 2))
+# 10 — Erst wofuer, dann wie. Laeuft nach Patch 9, benutzt also
+#      dessen neuen Text als Anker.
+P.append(('const nr=window.prompt(`Caption Tag ${ae.day} — welche Fassung?\\n1 = Der Widerspruch\\n2 = Die Reihenfolge\\n3 = Die Zahl zuerst\\n4 = Was es kostet zu bleiben\\n5 = Die Nachricht\\n6 = Von damals\\n7 = Kurz\\n8 = Serie, ein Schritt von dreissig\\n\\nMit 5 Stories: s anhängen, z.B. 4s.`,"1s");if(nr===null)return;const Zz=Number(String(nr).replace(/\\D/g,""))||0,Kr=/s/i.test(nr);const Sr=0,Vc=Zz>=1&&Zz<=8?Zz:0;const zl=window.prompt(`Wofür? (leer = Money Room)\\n1 = Angebotsserie, die gerade läuft\\n2 = The Money Room\\n3 = Mentoring, das 1:1\\n4 = Das Intensive\\n5 = The Strategy`,"2");if(zl===null)return;const Zl=Number(String(zl).replace(/\\D/g,""))||2;',
+ 'const zl=window.prompt(`Wofür? (leer = Money Room)\\n1 = Angebotsserie, die gerade läuft\\n2 = The Money Room\\n3 = Mentoring, das 1:1\\n4 = Das Intensive\\n5 = The Strategy`,"2");if(zl===null)return;const Zl=Number(String(zl).replace(/\\D/g,""))||2;const nr=window.prompt(`Caption Tag ${ae.day} — welche Fassung?\\n1 = Der Widerspruch\\n2 = Die Reihenfolge\\n3 = Die Zahl zuerst\\n4 = Was es kostet zu bleiben\\n5 = Die Nachricht\\n6 = Von damals\\n7 = Kurz\\n8 = Serie, ein Schritt von dreissig\\n\\nMit 5 Stories: s anhängen, z.B. 4s.`,"1s");if(nr===null)return;const Zz=Number(String(nr).replace(/\\D/g,""))||0,Kr=/s/i.test(nr);const Sr=0,Vc=Zz>=1&&Zz<=8?Zz:0;',
+ "Erst wofuer dann wie (Caption Tag )", 1))
+P.append(('const nr=window.prompt(`Caption — welche Fassung?\\n1 = Der Widerspruch\\n2 = Die Reihenfolge\\n3 = Die Zahl zuerst\\n4 = Was es kostet zu bleiben\\n5 = Die Nachricht\\n6 = Von damals\\n7 = Kurz\\n8 = Serie, ein Schritt von dreissig\\n\\nMit 5 Stories: s anhängen, z.B. 4s.`,"1s");if(nr===null)return;const Zz=Number(String(nr).replace(/\\D/g,""))||0,Kr=/s/i.test(nr);const Sr=0,Vc=Zz>=1&&Zz<=8?Zz:0;const zl=window.prompt(`Wofür? (leer = Money Room)\\n1 = Angebotsserie, die gerade läuft\\n2 = The Money Room\\n3 = Mentoring, das 1:1\\n4 = Das Intensive\\n5 = The Strategy`,"2");if(zl===null)return;const Zl=Number(String(zl).replace(/\\D/g,""))||2;',
+ 'const zl=window.prompt(`Wofür? (leer = Money Room)\\n1 = Angebotsserie, die gerade läuft\\n2 = The Money Room\\n3 = Mentoring, das 1:1\\n4 = Das Intensive\\n5 = The Strategy`,"2");if(zl===null)return;const Zl=Number(String(zl).replace(/\\D/g,""))||2;const nr=window.prompt(`Caption — welche Fassung?\\n1 = Der Widerspruch\\n2 = Die Reihenfolge\\n3 = Die Zahl zuerst\\n4 = Was es kostet zu bleiben\\n5 = Die Nachricht\\n6 = Von damals\\n7 = Kurz\\n8 = Serie, ein Schritt von dreissig\\n\\nMit 5 Stories: s anhängen, z.B. 4s.`,"1s");if(nr===null)return;const Zz=Number(String(nr).replace(/\\D/g,""))||0,Kr=/s/i.test(nr);const Sr=0,Vc=Zz>=1&&Zz<=8?Zz:0;',
+ "Erst wofuer dann wie (Caption — we)", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

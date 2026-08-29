@@ -319,230 +319,174 @@ Nicht fuer die, die an ihrem jetzigen Zustand nichts aendern wollen.
 Nicht fuer die, die glauben, sie bekommen das alles allein hin.
 `;
 
-const ARTEN = {
-  1: `
-ART 1 — CARINA ORIGINAL, DIRECT CALL-OUT
+const TON = `
+DER TON — gilt fuer jeden Bauplan
 
-Hook: der erste Satz aus dem Carousel, konfrontativ, in Versalien.
-      Beispiel: SIE SAGT: GENAU MEIN THEMA. DANN KAUFT SIE WOANDERS.
+Kurze Zeilen. Eine Aussage pro Zeile, Umbruch, naechste. Kein Absatz
+laenger als drei Zeilen.
 
-Aufbau, in dieser Reihenfolge:
-  Hook
-  Warum sie nicht kauft — drei bis vier harte Wahrheiten, je eine Zeile
-  Der Mechanismus — ein Post, ein Job
-  Das Angebot — 97 Euro im Monat, was sie mitbringt, was sie bekommt
-  Der letzte Schlag — ein Ergebnis, kein Kleingedrucktes
-  Qualifizierung — fuer wen es NICHT ist
-  CTA — Schreib mir MOVE
+Zahlen statt Adjektive. Nicht "deutlich mehr", sondern "von 6.000 auf
+12.000". Nicht "viele Kundinnen", sondern "acht Plaetze".
 
-Sprache: Du, aktiv, Praesens. Saetze wie "Das haelt dich in der
-Kategorie Option-fuer-spaeter." oder "Du erklaerst zu Tode."
-Verboten: "In diesem Post zeige ich dir", Aufzaehlungen mit Emojis,
-Zusammenfassungen des Carousels. Verdichten, nicht nacherzaehlen.
-Keine Hashtags.`,
+Der Fehler wird beobachtet, nie vorgeworfen. Es geht gegen die
+Situation, nie gegen die Leserin. Kein "du machst den Fehler", sondern
+"das passiert, weil".
 
-  2: `
-ART 2 — LISA BISSCHOP, SOFT EDUCATIONAL
+Keine Hashtags. Keine Emojis. Keine Aufzaehlungszeichen im fertigen
+Text. Keine Zwischenueberschriften.
 
-Hook als Frage:
-  "Warum schreibt dir deine Traumkundin 'total mein Thema' und bucht
-   dann woanders?"
+Verboten, ausnahmslos:
+  "In diesem Post zeige ich dir"
+  "Lass uns mal ehrlich sein"
+  "Spoiler:"
+  "Und genau deshalb"
+  jede Zusammenfassung der Folien
+  jedes Wort, das nur in Marketingtexten vorkommt: Sichtbarkeit,
+  Traumkundin, Sales-Maschine, Leichtigkeit, Klarheit, Reise
 
-Framing: Das ist ein Content-Problem, kein Charakterproblem. Sie kann
-verkaufen. Ihre Posts schliessen nur keinen Job.
-
-Aufbau:
-  Relatable Intro — "Das sehe ich gerade bei vielen ..."
-  Drei bis fuenf Punkte aus dem Carousel als Liste
-  Die Loesung als Konzept — jeder Post hat einen Job
-  Weiches Angebot
-  Community-CTA — "Speicher dir das ab. Welcher Punkt trifft dich?"
-
-Sprache: wir, weicher, erklaerend, einladend. Mehr Erklaerung als in
-Art 1. Kein DM-Druck. Hoechstens drei Hashtags am Ende.`,
-
-  3: `
-ART 3 — US-SALES, KURZ UND PITCH
-
-Hook in Versalien, englisch oder denglisch:
-  YOUR CONTENT IS NOT THE PROBLEM. YOUR MESSAGE IS.
-
-Aufbau:
-  Hook
-  Drei Fehler als Liste, jeder Punkt beginnt mit einem Kreuz-Zeichen
-  Ein Satz Mechanismus
-  Mini-Case — 6k auf 12k, Einzelfall
-  CTA mit Keyword
-
-Sprache: sehr kurz, punchy, viel Zeilenumbruch. Denglisch erlaubt.`,
-};
-
-const STORY_ANLEITUNG = `
-FUENF STORIES ZUM POST — immer genau diese fuenf, in dieser Reihenfolge:
-
-1  Call-Out
-   Schwarzer Grund, weisse Schrift. EIN Satz aus Folie 1.
-   Dazu eine Umfrage: Ertappt? Ja / Nein
-
-2  Mechanismus
-   Erklaere "ein Post, ein Job" an EINER Frage, zum Beispiel
-   "Bin ich gemeint?", und zeige an einem Beispiel, wie ein Post sie
-   schliesst. Sticker: Frag mich.
-
-3  Behind / Mindset
-   Kurze persoenliche Anekdote zum Gedanken aus Folie 3. Nahbar,
-   konkrete Uhrzeit, konkrete Situation.
-
-4  Beweis
-   "Gleiches Angebot. Neue erste drei Saetze. 6k auf 12k."
-   Platzhalter fuer den Screenshot mitschreiben. Disclaimer nicht
-   vergessen: Einzelfall, kein Durchschnitt.
-
-5  Sales
-   Die letzten beiden Folien direkt. The Money Room, 97 Euro im Monat,
-   was sie mitbringt, was sie bekommt, fuer wen ja und fuer wen nicht.
-   Schreib MOVE.
-
-Jede Story hoechstens 300 Zeichen. Zeilenumbrueche sind erwuenscht.
+Die Caption wiederholt die Folien nicht. Sie fuehrt den Gedanken weiter
+und macht ihn heute anwendbar.
 `;
 
-const VOICE = {
+// Acht Bauplaene. Sie unterscheiden sich darin, was die Caption TUT —
+// nicht darin, wie sie klingt. Der Ton steht oben und gilt fuer alle.
+const BAUPLAENE = {
   1: {
-    name: 'Preis-Pause',
-    bau: `Hook: "Der Grund, warum du deinen Umsatz fuer ein Persoenlichkeitsproblem haeltst:"
-Dann VIER nummerierte Gewohnheiten, jede beginnt mit "Du" und beschreibt
-eine Handlung, keine Eigenschaft.
-Dann der Dreh: "Du musst nicht X werden. Du musst aufhoeren, Y."
-Dann das Angebot mit Preis, der Beweis mit Einzelfall-Hinweis,
-dann die Qualifizierung, dann der CTA.`,
+    name: 'Der Widerspruch',
+    bau: `Beginne mit einem Satz, den die Leserin selbst sagt, in
+Anfuehrungszeichen. Einen echten, keinen erfundenen.
+  "Ich will nicht pushy wirken."
+  "Ich warte noch, bis es fertig ist."
+
+Dann eine Zeile, die zeigt, was dieser Satz sie kostet. Nicht moralisch —
+rechnerisch oder zeitlich.
+
+Dann der Widerspruch: was sie gleichzeitig will und tut. Zwei Zeilen.
+
+Dann der Ausweg in EINER Handlung, die sie heute machen kann. Nicht
+"ueberdenke", sondern "schreib", "streich", "setz".
+
+Angebot, letzter Schlag, Qualifizierung, CTA.`,
   },
   2: {
-    name: 'Geboren zum Verkaufen',
-    bau: `Hook: "Du bist nicht 'nicht der Verkaufstyp'. Du hast vier Angewohnheiten,
-die dich so aussehen lassen."
-Vier nummerierte Punkte, jeder eine Handlung.
-Dann: "Vierstellig verkaufst du nicht mit neuem Charakter. Sondern wenn du
-aufhoerst, Verkaufen fuer Magie zu halten."
-Kurzes Angebot, CTA. Diese Fassung bleibt knapp.`,
+    name: 'Die Reihenfolge',
+    bau: `Fuer alles, was nicht am Aufwand scheitert, sondern an der
+Abfolge. Hook: "Du hast kein X-Problem. Du hast ein
+Reihenfolge-Problem."
+
+Dann VIER nummerierte Schritte in der falschen Reihenfolge, so wie sie
+es gerade macht. Jeder ein Halbsatz.
+
+Dann dieselben vier in der richtigen. Ohne Erklaerung dazwischen — die
+Umstellung spricht fuer sich.
+
+Ein Satz, warum die zweite Reihenfolge verkauft und die erste nicht.
+
+Angebot, letzter Schlag, Qualifizierung, CTA.`,
   },
   3: {
-    name: 'Ehrlich',
-    bau: `Beginnt mit dem alten Glaubenssatz: "Frueher dachtest du: Ich muss erst
-extrovertierter, disziplinierter, schlagfertiger werden."
-Dann eine Zeile allein: "Bullshit."
-Dann "Du musst:" und VIER Spiegelstriche, jeder beginnt mit "Aufhoeren, ...".
-Dann: "Das ist kein Charakter. Das sind vier Gewohnheiten. Und Gewohnheiten
-tauscht man aus."
-Angebot, Qualifizierung, CTA.`,
+    name: 'Die Zahl zuerst',
+    bau: `Beginne mit einer belegbaren Zahl aus der Arbeit mit einer
+Kundin. Nackt, ohne Aufbau:
+  "4.000 Euro in dreissig Tagen. Secondhand-Brautmode."
+  "Von 6.000 auf 12.000, geaendert wurden drei Saetze."
+
+Zweite Zeile: was sie NICHT geaendert hat. Das ist der eigentliche
+Punkt — kein Rebrand, keine neue Zielgruppe, kein neues Angebot.
+
+Dann der Mechanismus dahinter, in drei bis vier Zeilen. Was genau
+gedreht wurde und warum das wirkt.
+
+"Einzelfall, kein Durchschnitt." — dieser Satz MUSS stehen.
+
+Angebot, letzter Schlag, Qualifizierung, CTA.`,
   },
   4: {
-    name: 'Kurz und fies',
-    bau: `Hook: "Du hast kein Mindset-Problem. Du hast ein Gewohnheits-Problem."
-Dann "Solange du:" und vier Zeilen in Kleinschreibung, mit Komma getrennt,
-die letzte endet auf drei Punkte.
-Dann: "wirst du weiter denken, du bist falsch."
-Dann zwei kurze Saetze: "Bist du nicht. Du bist nur untrainiert."
-Angebot in einer Zeile, CTA. Die kuerzeste Fassung, keine Fuellsaetze.`,
+    name: 'Was es kostet zu bleiben',
+    bau: `Die einzige Fassung, die rechnet. Hook ist eine Frage mit
+Zahl: "Was kostet dich ein Monat ohne Angebotsseite?"
+
+Dann die Rechnung, drei bis vier Zeilen, in ihren Groessen. Anfragen
+mal Abschlussquote mal Preis. Konservativ schaetzen und das dazusagen.
+
+Dann die Gegenrechnung: was die Umstellung kostet, an Zeit und an Geld.
+
+Kein Druck, kein Countdown, keine Verknappung. Die Zahlen stehen
+nebeneinander, die Leserin zieht den Schluss.
+
+Angebot, letzter Schlag, Qualifizierung, CTA.`,
   },
   5: {
-    name: 'Launch',
-    bau: `Beginnt mit einer Zahl aus ihrem Alltag: "6.000 Euro Launch fuehlt sich
-nicht nach 'Ich bin halt introvertiert' an. Es fuehlt sich nach vier falschen
-Moves an, die du jeden Tag wiederholst."
-Dann der Beweis als Erzaehlung: Kundin dachte, sie muesse ihre Persoenlichkeit
-aendern, ging von 6k auf 12k, nachdem EINE Gewohnheit getauscht wurde.
-Einzelfall, kein Durchschnitt — dieser Satz MUSS dabeistehen.
-Angebot, Qualifizierung, CTA.`,
+    name: 'Die Nachricht',
+    bau: `Beginne mit einer echten Nachricht, die Carina bekommen hat,
+in Anfuehrungszeichen und als eigener Block. Eine Frage oder ein
+Einwand.
+
+Dann die Antwort, die sie tatsaechlich gegeben haette — direkt, ohne
+Hoeflichkeitsfloskel, ohne "gute Frage".
+
+Dann eine Zeile, warum diese Frage so oft kommt. Das ist die Stelle,
+an der die Leserin sich wiedererkennt.
+
+Diese Fassung bleibt kurz. Hoechstens zwoelf Zeilen bis zum Angebot.
+
+Angebot, letzter Schlag, Qualifizierung, CTA.`,
   },
   6: {
-    name: 'Persoenlichkeits-Luege',
-    bau: `Hook: "Der teuerste Satz in deinem Business: 'Ich bin halt so.'"
-Dann: "Du bist nicht so. Du MACHST so." — das MACHST in Versalien.
-Dann vier Zeilen, jede beginnt mit "Du machst ...", von der konkreten
-Handlung bis zur letzten: "Du machst aus vier Gewohnheiten eine Identitaet."
-Dann: "In THE MONEY ROOM entkoppeln wir das." Preis, CTA.`,
+    name: 'Von damals',
+    bau: `Carina stand da, wo die Leserin gerade steht. Beginne mit
+einer Szene, nicht mit einer Erkenntnis:
+  "Zehn Gruendungen. Bei sechs davon habe ich den Preis erst im
+  Gespraech genannt."
+
+Dann was daran nicht funktioniert hat. Konkret, ohne Selbstmitleid und
+ohne Heldenerzaehlung.
+
+Dann die EINE Sache, die sie geaendert hat. Eine, nicht drei.
+
+Dann was danach anders war. Belegbar oder gar nicht.
+
+Kein "und heute helfe ich Frauen dabei". Die Bruecke zum Angebot
+passiert im naechsten Absatz von selbst.
+
+Angebot, letzter Schlag, Qualifizierung, CTA.`,
   },
   7: {
-    name: 'Alles schon probiert',
-    bau: `Drei Zeilen "Du brauchst kein ...", die aufzaehlen, was sie schon
-gekauft hat: neues Branding, neues Reading, neuer Charakter.
-Dann: "Du brauchst jemanden, der dir sagt: ..." und darin steht die
-Aufforderung, die alles kippt.
-Dann das Angebot in zwei Saetzen, CTA.
-Fuer Leute, die schon zehn Kurse gekauft haben.`,
+    name: 'Kurz',
+    bau: `Fuer Tage, an denen die Folien schon alles sagen. Die
+gesamte Caption hat hoechstens acht Zeilen.
+
+Eine Behauptung. Eine Folge. Ein Angebotssatz mit Preis. Ein Ergebnis.
+Der CTA.
+
+Keine Erklaerung, kein Beispiel, kein Beweis. Wer mehr will, liest die
+Folien. Diese Fassung darf sich unhoeflich kurz anfuehlen.`,
   },
   8: {
     name: 'Serie — ein Schritt von dreissig',
-    bau: `Diese Fassung folgt NICHT dem Gewohnheiten-Muster der anderen
-sieben. Sie hat ihr eigenes Geruest, und zwar genau dieses:
+    bau: `Fuer die laufende Serie. Kein Verkauf, keine Qualifizierung.
 
-1  DER SCHRITT ALS BEHAUPTUNG
-   "Schritt X von 30:" und dahinter ein Satz, der weh tut. Kein Thema,
-   keine Ueberschrift. Ein Satz, dem man widersprechen moechte.
-   gut   "Schritt 12 von 30: Der Preis steht im Post. Oder er steht nicht."
-   mies  "Schritt 12 von 30: Preiskommunikation"
+Erste Zeile: "Schritt X von 30:" und dahinter eine Behauptung, der man
+widersprechen moechte. Kein Thema, keine Ueberschrift.
+  gut   "Schritt 12 von 30: Der Preis steht im Post. Oder er steht nicht."
+  mies  "Schritt 12 von 30: Preiskommunikation"
 
-2  DER FEHLER ALS BEOBACHTUNG
-   Zwei bis drei kurze Zeilen, die beschreiben, was sie gerade tut. In
-   ihren Handgriffen, nicht in Begriffen. Nie als Vorwurf — es geht gegen
-   die Situation, nie gegen sie. Ein woertlicher Satz, den sie selbst
-   schreibt, wirkt hier am staerksten.
+Dann in drei bis vier Zeilen, was an diesem einen Schritt haengt.
+Konkret genug, dass sie ihn heute machen kann, ohne die anderen 29.
 
-3  DER DREH
-   Warum es nicht das ist, wofuer sie es haelt. Ein Satz, hoechstens zwei.
-   Hier faellt die Erkenntnis, nicht am Ende.
+Dann Gestern und Morgen, immer inhaltlich, nie "Teil 12 von 30":
+  "Gestern ging es darum, warum dein Angebot drei Versprechen gibt
+  statt einem. Morgen kommt die Zeile direkt nach dem Preis."
+Ist kein Vortag bekannt, nur der Ausblick. Ist kein Folgetag bekannt,
+nur der Rueckblick. Nie beides erfinden.
 
-4  EIN NEBENSATZ UEBER CARINA
-   Eine Zeile, beilaeufig. Zehn eigene Gruendungen, Angebotsarchitektin in
-   Wien, The Money Room, der Kurs The Strategy. Nie mehr als eins davon
-   pro Caption, nie als Vorstellungsrunde.
+Dann das Ergebnis nach allen dreissig Schritten, als Szene.
 
-5  GESTERN UND MORGEN
-   Pflicht. Immer inhaltlich, nie "Teil 12 von 30":
-   "Gestern ging es darum, warum dein Angebot drei Versprechen gibt statt
-   einem. Morgen kommt die Zeile direkt nach dem Preis — die entscheidet
-   mehr als der Preis selbst."
-   Ist kein Vortag bekannt, nur der Ausblick. Ist kein Folgetag bekannt,
-   nur der Rueckblick. Nie beides erfinden.
-
-6  DAS ERGEBNIS
-   Der letzte Schlag, wie oben beschrieben: was sie nach den dreissig
-   Schritten kann. Eine Szene, kein Gefuehl.
-
-7  DER AUFRUF
-   "Kommentiere DABEI, dann bekommst du die naechsten Schritte."
-   Nichts anderes. Kein Verkauf, keine Qualifizierung.
-
-Sprache: kurze Zeilen, viele Umbrueche, Du in jeder zweiten Zeile. Keine
-Hashtags, keine Emojis, keine Aufzaehlungszeichen im fertigen Text.`,
+Dann: "Kommentiere DABEI, dann bekommst du die naechsten Schritte."
+Nichts sonst.`,
   },
 };
 
-const VOICE_REGELN = `
-DIE VOICE-FASSUNGEN
-
-Sieben feste Bauplaene im Sound von Laura Hersche: gleicher Mechanismus,
-gleicher Punch. Das Muster ist immer dasselbe —
-
-  Behauptung ueber ihre Persoenlichkeit widerlegen
-  -> vier Gewohnheiten benennen, als Handlung, nie als Eigenschaft
-  -> der Dreh: nicht werden, sondern aufhoeren
-  -> Angebot mit Preis
-  -> der letzte Schlag: ein Ergebnis, kein Kleingedrucktes
-  -> Qualifizierung
-  -> CTA
-
-WAS DIESEN SOUND AUSMACHT
-Kurze Zeilen, viele Umbrueche, jede Aussage steht allein. Keine
-Ueberleitungen. Zahlen statt Adjektive. "Du" in jeder Zeile. Das Wort
-"Gewohnheit" traegt die ganze Caption — sie ist nicht falsch, sie ist
-untrainiert.
-
-VERBOTEN in diesen Fassungen: Emojis, Hashtags, Ausrufezeichen,
-Zwischenueberschriften, "In diesem Post zeige ich dir".
-
-Vier Punkte heisst VIER. Nicht drei, nicht fuenf.
-`;
 
 export default async (req) => {
   if (req.method !== 'POST') {
@@ -553,14 +497,13 @@ export default async (req) => {
     return new Response(JSON.stringify({ error: 'GEMINI_API_KEY fehlt (Netlify → Environment variables).' }), { status: 500 });
   }
 
-  let monday = false, day = null, keyword = '', art = 0, stories = false, voice = 0, ziel = 2;
+  let monday = false, day = null, keyword = '', stories = false, bauplan = 0, ziel = 2;
   try {
     const body = await req.json();
     day = body.day || null;
     monday = body.monday === true;
     keyword = String(body.keyword || '').trim().slice(0, 24);
-    art = [1, 2, 3].includes(Number(body.art)) ? Number(body.art) : 0;
-    voice = [1, 2, 3, 4, 5, 6, 7, 8].includes(Number(body.voice)) ? Number(body.voice) : 0;
+    bauplan = [1, 2, 3, 4, 5, 6, 7, 8].includes(Number(body.bauplan)) ? Number(body.bauplan) : 0;
     ziel = [1, 2, 3, 4, 5].includes(Number(body.ziel)) ? Number(body.ziel) : 2;
     stories = body.stories === true;
   } catch {
@@ -576,19 +519,14 @@ export default async (req) => {
     : '';
   const ctaZeile = keyword
     ? `CTA: "Kommentiere ${keyword.toUpperCase()}"`
-    : (art === 1 || voice)
+    : bauplan
       ? `CTA: "Kommentiere ${ZIELE[ziel].cta}"`
-      : art === 2
-        ? 'CTA: Speichern und ein Kommentar — welcher Punkt trifft dich?'
-        : art === 3
-          ? 'CTA: "Comment MOVE"'
-          : 'CTA: die Frage auf die Liste ("Was davon triggert dich am meisten? 1–N in die Kommentare.")';
+      : 'CTA: die Frage auf die Liste ("Was davon triggert dich am meisten? 1–N in die Kommentare.")';
 
   const prompt = `${monday ? 'SCHREIBE IM MONDAY-TON — die Regeln dazu stehen unten.\n\n' : ''}${REGELN}
-${art || voice ? ZIELE[ziel].block : ''}
-${art ? ARTEN[art] : ''}
-${voice && voice <= 7 ? VOICE_REGELN : ''}
-${voice ? `DEIN BAUPLAN — ${VOICE[voice].name}\n${VOICE[voice].bau}` : ''}
+${bauplan ? ZIELE[ziel].block : ''}
+${TON}
+${bauplan ? `DEIN BAUPLAN — ${BAUPLAENE[bauplan].name}\n${BAUPLAENE[bauplan].bau}` : ''}
 ${stories ? STORY_ANLEITUNG : ''}
 
 DER POST — Tag ${day.day}${day.title ? `: ${day.title}` : ''}
@@ -598,7 +536,7 @@ ${ctaZeile}
 
 Schreibe die Caption. Wiederhole die Folien nicht wörtlich — die Caption
 führt den Gedanken weiter und macht ihn anwendbar.
-${(art || voice) && ziel !== 1 ? 'Die Qualifizierung MUSS vorkommen, und sie geht ueber die Haltung:\nnicht fuer die, die nicht umsetzen, nicht investieren oder an ihrem\nZustand nichts aendern wollen — und nicht fuer die, die glauben, sie\nbekommen das allein hin. Nie daran festmachen, was jemand schon hat.' : ''}
+${bauplan && ziel !== 1 && bauplan !== 8 ? 'Die Qualifizierung MUSS vorkommen, und sie geht ueber die Haltung:\nnicht fuer die, die nicht umsetzen, nicht investieren oder an ihrem\nZustand nichts aendern wollen — und nicht fuer die, die glauben, sie\nbekommen das allein hin. Nie daran festmachen, was jemand schon hat.' : ''}
 
 ANTWORTE NUR MIT JSON, ohne Vorwort, ohne Markdown:
 ${stories
