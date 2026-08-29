@@ -327,34 +327,6 @@ Leite den Ton in diesem Fall aus dem Regelwerk oben ab: kurze Zeilen,
 eine Aussage pro Zeile, Zahlen statt Adjektive, keine Floskeln, keine
 Hashtags, keine Emojis.`;
 
-const STORY_ANLEITUNG = `
-FUENF STORIES ZUM POST — immer genau diese fuenf, in dieser Reihenfolge:
-
-1  Call-Out
-   Schwarzer Grund, weisse Schrift. EIN Satz aus Folie 1.
-   Dazu eine Umfrage: Ertappt? Ja / Nein
-
-2  Mechanismus
-   Erklaere "ein Post, ein Job" an EINER Frage, zum Beispiel
-   "Bin ich gemeint?", und zeige an einem Beispiel, wie ein Post sie
-   schliesst. Sticker: Frag mich.
-
-3  Behind / Mindset
-   Kurze persoenliche Anekdote zum Gedanken aus Folie 3. Nahbar,
-   konkrete Uhrzeit, konkrete Situation.
-
-4  Beweis
-   "Gleiches Angebot. Neue erste drei Saetze. 6k auf 12k."
-   Platzhalter fuer den Screenshot mitschreiben. Disclaimer nicht
-   vergessen: Einzelfall, kein Durchschnitt.
-
-5  Sales
-   Die letzten beiden Folien direkt. The Money Room, 97 Euro im Monat,
-   was sie mitbringt, was sie bekommt, fuer wen ja und fuer wen nicht.
-   Schreib MOVE.
-
-Jede Story hoechstens 300 Zeichen. Zeilenumbrueche sind erwuenscht.
-`;
 
 const VOICE_BLOCK = `
 === VOICE ===
@@ -527,7 +499,7 @@ export default async (req) => {
     return new Response(JSON.stringify({ error: 'GEMINI_API_KEY fehlt (Netlify → Environment variables).' }), { status: 500 });
   }
 
-  let monday = false, day = null, keyword = '', stories = false, bauplan = 0, ziel = 2;
+  let monday = false, day = null, keyword = '', bauplan = 0, ziel = 2;
   let stilreferenz = '';
   try {
     const body = await req.json();
@@ -537,7 +509,6 @@ export default async (req) => {
     bauplan = [1, 2, 3, 4, 5, 6, 7, 8].includes(Number(body.bauplan)) ? Number(body.bauplan) : 0;
     ziel = [1, 2, 3, 4, 5].includes(Number(body.ziel)) ? Number(body.ziel) : 2;
     stilreferenz = String(body.stilreferenz || '').slice(0, 8000).trim() || STILREFERENZ_STANDARD;
-    stories = body.stories === true;
   } catch {
     return new Response(JSON.stringify({ error: 'Ungültiger Body' }), { status: 400 });
   }
@@ -563,7 +534,6 @@ ${stilreferenz}
 ---
 ${VOICE_BLOCK}
 ${bauplan ? `DEIN BAUPLAN — ${BAUPLAENE[bauplan].name}\n${BAUPLAENE[bauplan].bau}` : ''}
-${stories ? STORY_ANLEITUNG : ''}
 
 DER POST — Tag ${day.day}${day.title ? `: ${day.title}` : ''}
 ${folien}
@@ -577,9 +547,7 @@ Wegbeschreibung.
 ${bauplan && ziel !== 1 && bauplan !== 8 ? 'Die Qualifizierung MUSS vorkommen, und sie geht ueber die Haltung:\nnicht fuer die, die nicht umsetzen, nicht investieren oder an ihrem\nZustand nichts aendern wollen — und nicht fuer die, die glauben, sie\nbekommen das allein hin. Nie daran festmachen, was jemand schon hat.' : ''}
 
 ANTWORTE NUR MIT JSON, ohne Vorwort, ohne Markdown:
-${stories
-  ? '{"caption":"…","stories":[{"titel":"Call-Out","text":"…"},{"titel":"Mechanismus","text":"…"},{"titel":"Behind","text":"…"},{"titel":"Beweis","text":"…"},{"titel":"Sales","text":"…"}]}'
-  : '{"caption":"…"}'}
+{"caption":"…"}
 Zeilenumbrüche im Text als \\n.${tonzusatz}`;
 
   const MODELLE = ['gemini-3.6-flash', 'gemini-3-flash', 'gemini-flash-latest', 'gemini-2.5-flash'];
@@ -622,17 +590,7 @@ Zeilenumbrüche im Text als \\n.${tonzusatz}`;
     if (!caption) {
       return new Response(JSON.stringify({ error: 'Keine Caption erhalten. Nochmal versuchen.' }), { status: 502 });
     }
-    const storyListe = stories && Array.isArray(out.stories)
-      ? out.stories
-        .map((st) => ({
-          titel: String(st?.titel || '').trim().slice(0, 40),
-          text: String(st?.text || '').trim(),
-        }))
-        .filter((st) => st.text)
-        .slice(0, 5)
-      : [];
-
-    return new Response(JSON.stringify({ caption, laenge: caption.length, stories: storyListe }), {
+    return new Response(JSON.stringify({ caption, laenge: caption.length }), {
       status: 200, headers: { 'Content-Type': 'application/json' },
     });
   } catch (e) {
