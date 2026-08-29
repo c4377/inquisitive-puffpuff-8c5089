@@ -52,8 +52,8 @@ FORM
 - Du-Form, Präsens.
 - Jeder Punkt eine eigene Zeile. Zwischen den Bloecken eine Leerzeile.
 - Die Listenzeilen sind kurz genug zum Scannen — höchstens rund 90 Zeichen.
-- Keine Hashtags und keine Emojis. Nur wenn ausdrücklich verlangt:
-  höchstens #moneymindset #sheo, Emojis dann ganz am Ende.
+- Keine Hashtag-Wolke. Wenn Hashtags, dann höchstens #moneymindset #sheo.
+- Zu Emojis gilt der VOICE-Block weiter unten, nicht diese Zeile.
 
 MONDAY-TON (nur wenn ausdruecklich verlangt)
 Trocken, leicht genervt, sehr direkt. Der Ton einer Frau, die das alles
@@ -322,19 +322,29 @@ Nicht fuer die, die glauben, sie bekommen das alles allein hin.
 // Die Stilreferenz kommt aus dem Aufruf. Kommt keine, steht hier der
 // Ersatz — dann traegt das Regelwerk oben den Ton allein. Sobald Carina
 // zwei, drei eigene Captions liefert, gehoeren sie hier hinein.
-const STILREFERENZ_STANDARD = `Keine Stilreferenz uebergeben.
-Leite den Ton in diesem Fall aus dem Regelwerk oben ab: kurze Zeilen,
-eine Aussage pro Zeile, Zahlen statt Adjektive, keine Floskeln, keine
-Hashtags, keine Emojis.`;
 
 
 const VOICE_BLOCK = `
 === VOICE ===
-Leite Ton, Satzlänge, Rhythmus, Interpunktion, Absatzlogik und
-Emoji-Dichte ausschließlich aus STILREFERENZ ab. Übernimm keine
-Inhalte, Beispiele oder Formulierungen daraus – nur die Machart.
-Kein Marketing-Sprech, keine Dienstleisterinnen-Höflichkeit,
-kein "5 Tipps"-Ton, keine Floskeln, keine Hashtag-Wolke.
+Sprache: Deutsch mit selbstverständlichem Denglisch (Dream Client,
+Offer, Funnel, Test Reel, Social Proof, Win, ready, geil). Nicht
+erklären, nicht übersetzen.
+Anrede: durchgehend "du", fourth wall, direkt. Sie liest dir Gedanken
+vor, die du selbst noch nicht ausgesprochen hast.
+Sätze: kurz. Ein Gedanke pro Absatz, Leerzeile dazwischen. Fragmente
+als Betonung erlaubt. Absätze von 1–3 Sätzen, nie Blocktext.
+Beweis: konkrete Zahlen statt Adjektiven (Monatsumsatz, Follower-
+Zuwachs, Reichweite, Zeitraum). Nie eine Behauptung ohne Zahl oder
+Beispiel dahinter.
+Einwand: den Gegeneinwand offen benennen, kurz gelten lassen
+("X kann geil sein, um ..."), dann drehen ("Doch, wenn ...").
+Rhetorische Frage im letzten Drittel, die das Reframe trägt.
+Kurzer Punch-Satz als Absatzschluss (3–5 Wörter, Aussage, kein Hedging).
+Emojis: sparsam, 2–4 pro Caption, immer am Satzende, nie im Satz,
+nie zwei nebeneinander. Nie am Anfang einer Zeile außer bei ⬇️ im Hook.
+Verboten: Höflichkeitsfloskeln, "Hey ihr Lieben", Hashtag-Wolke,
+Tipp-Listen ohne Ich-Bezug, Konjunktiv-Weichmacher ("könnte
+vielleicht"), Erklärbär-Ton.
 
 === BEZUG ===
 Jede Caption greift den konkreten Post-Inhalt auf: Aussage, Zahl,
@@ -343,10 +353,19 @@ Caption keinen Sinn ergeben. Wiederhole den Post nicht 1:1 – ergänze
 ihn um Kontext, Gegenbeispiel, Konsequenz oder Einordnung.
 
 === AUFBAU ===
-1. Hook: eine Zeile, direkt aus dem Post-Kern.
-2. Body: Bezug + Vertiefung, in Absätzen wie in der Stilreferenz.
-3. CTA: letzte Zeile, genau einer, in der übergebenen Form.
-Keine Wiederholung der Hook am Ende, kein zweiter CTA.
+1. Hook (1 Zeile): setzt den Post fort, statt ihn zusammenzufassen.
+   Entweder Fortsetzung des Reels ("Auf diese 2 Dinge achte ich
+   zusätzlich ⬇️"), harte Behauptung über die Leserin, oder
+   Zeitanker mit Ergebnis ("Vor 4 Jahren ... heute ...").
+2. Kontext/Problem: was im Post steht, weitergedreht — Konsequenz,
+   Gegenbeispiel oder das, was die Leserin insgeheim denkt.
+3. Beweis: eigene Zahlen oder Client-Ergebnisse, konkret benannt.
+4. Reframe: rhetorische Frage oder Umkehrung des Einwands.
+5. Optional eine Zeile Selbstvorstellung, wenn der Post Reichweite
+   außerhalb der Community bekommt.
+6. CTA: letzte Zeile, ein Satz, locker, ein Emoji. Bei Listenposts
+   stattdessen nummeriert (1) / 2) mit je einem erklärenden Satz)
+   und CTA darunter.
 
 Diese drei Abschnitte gehen jedem Bauplan vor. Sagt ein Bauplan etwas
 anderes über Aufbau, Ton oder Länge, gilt, was hier steht.
@@ -508,7 +527,7 @@ export default async (req) => {
     keyword = String(body.keyword || '').trim().slice(0, 24);
     bauplan = [1, 2, 3, 4, 5, 6, 7, 8].includes(Number(body.bauplan)) ? Number(body.bauplan) : 0;
     ziel = [1, 2, 3, 4, 5].includes(Number(body.ziel)) ? Number(body.ziel) : 2;
-    stilreferenz = String(body.stilreferenz || '').slice(0, 8000).trim() || STILREFERENZ_STANDARD;
+    stilreferenz = String(body.stilreferenz || '').slice(0, 8000).trim();
   } catch {
     return new Response(JSON.stringify({ error: 'Ungültiger Body' }), { status: 400 });
   }
@@ -528,10 +547,7 @@ export default async (req) => {
 
   const prompt = `${monday ? 'SCHREIBE IM MONDAY-TON — die Regeln dazu stehen unten.\n\n' : ''}${REGELN}
 ${bauplan ? ZIELE[ziel].block : ''}
-STILREFERENZ — nur die Machart, nie den Inhalt uebernehmen:
----
-${stilreferenz}
----
+${stilreferenz ? `STILREFERENZ — nur die Machart, nie den Inhalt uebernehmen:\n---\n${stilreferenz}\n---` : ''}
 ${VOICE_BLOCK}
 ${bauplan ? `DEIN BAUPLAN — ${BAUPLAENE[bauplan].name}\n${BAUPLAENE[bauplan].bau}` : ''}
 
