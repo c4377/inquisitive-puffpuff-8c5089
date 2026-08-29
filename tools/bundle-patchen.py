@@ -189,6 +189,13 @@ P.append(('const nr=window.prompt(`Caption — welche Fassung?\\\\n1 = Carina Or
 P.append(('art:Sr,voice:Vc,ziel:Zl,stories:Kr,', 'cta:Zl,',
  "App schickt nur noch den CTA", 2))
 
+# 12 — Knopf "Captions": laedt site/captions.json und traegt die
+#      Texte bei den passenden Tagen ein. Tage ohne Eintrag bleiben
+#      unberuehrt.
+P.append(('v.jsxs("button",{onClick:()=>quSetzen(!0),',
+ 'v.jsxs("button",{onClick:async()=>{try{const cr=await fetch("/captions.json",{cache:"no-store"});if(!cr.ok)throw new Error("nicht gefunden");const cd=await cr.json();let cz=0;const cn=i.map(cx=>{const cq=cd[String(cx.day)];if(!cq||!cq.caption)return cx;cz++;return{...cx,caption:cq.caption}});t({contentPlan:cn}),ue(cz+" Captions eingetragen."),setTimeout(()=>ue(""),2500)}catch{ue("Captions konnten nicht geladen werden.")}},className:"px-2.5 py-1.5 bg-white text-purple-700 border border-purple-200 rounded-lg font-bold hover:bg-purple-50 transition-colors flex items-center whitespace-nowrap text-[11px]",children:[v.jsx(ke,{icon:AS,className:"mr-2"}),"Captions"]}),v.jsxs("button",{onClick:()=>quSetzen(!0),',
+ "Knopf Captions", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
