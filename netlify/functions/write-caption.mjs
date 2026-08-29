@@ -471,6 +471,51 @@ Aufforderung, die alles kippt.
 Dann das Angebot in zwei Saetzen, CTA.
 Fuer Leute, die schon zehn Kurse gekauft haben.`,
   },
+  8: {
+    name: 'Serie — ein Schritt von dreissig',
+    bau: `Diese Fassung folgt NICHT dem Gewohnheiten-Muster der anderen
+sieben. Sie hat ihr eigenes Geruest, und zwar genau dieses:
+
+1  DER SCHRITT ALS BEHAUPTUNG
+   "Schritt X von 30:" und dahinter ein Satz, der weh tut. Kein Thema,
+   keine Ueberschrift. Ein Satz, dem man widersprechen moechte.
+   gut   "Schritt 12 von 30: Der Preis steht im Post. Oder er steht nicht."
+   mies  "Schritt 12 von 30: Preiskommunikation"
+
+2  DER FEHLER ALS BEOBACHTUNG
+   Zwei bis drei kurze Zeilen, die beschreiben, was sie gerade tut. In
+   ihren Handgriffen, nicht in Begriffen. Nie als Vorwurf — es geht gegen
+   die Situation, nie gegen sie. Ein woertlicher Satz, den sie selbst
+   schreibt, wirkt hier am staerksten.
+
+3  DER DREH
+   Warum es nicht das ist, wofuer sie es haelt. Ein Satz, hoechstens zwei.
+   Hier faellt die Erkenntnis, nicht am Ende.
+
+4  EIN NEBENSATZ UEBER CARINA
+   Eine Zeile, beilaeufig. Zehn eigene Gruendungen, Angebotsarchitektin in
+   Wien, The Money Room, der Kurs The Strategy. Nie mehr als eins davon
+   pro Caption, nie als Vorstellungsrunde.
+
+5  GESTERN UND MORGEN
+   Pflicht. Immer inhaltlich, nie "Teil 12 von 30":
+   "Gestern ging es darum, warum dein Angebot drei Versprechen gibt statt
+   einem. Morgen kommt die Zeile direkt nach dem Preis — die entscheidet
+   mehr als der Preis selbst."
+   Ist kein Vortag bekannt, nur der Ausblick. Ist kein Folgetag bekannt,
+   nur der Rueckblick. Nie beides erfinden.
+
+6  DAS ERGEBNIS
+   Der letzte Schlag, wie oben beschrieben: was sie nach den dreissig
+   Schritten kann. Eine Szene, kein Gefuehl.
+
+7  DER AUFRUF
+   "Kommentiere DABEI, dann bekommst du die naechsten Schritte."
+   Nichts anderes. Kein Verkauf, keine Qualifizierung.
+
+Sprache: kurze Zeilen, viele Umbrueche, Du in jeder zweiten Zeile. Keine
+Hashtags, keine Emojis, keine Aufzaehlungszeichen im fertigen Text.`,
+  },
 };
 
 const VOICE_REGELN = `
@@ -515,7 +560,7 @@ export default async (req) => {
     monday = body.monday === true;
     keyword = String(body.keyword || '').trim().slice(0, 24);
     art = [1, 2, 3].includes(Number(body.art)) ? Number(body.art) : 0;
-    voice = [1, 2, 3, 4, 5, 6, 7].includes(Number(body.voice)) ? Number(body.voice) : 0;
+    voice = [1, 2, 3, 4, 5, 6, 7, 8].includes(Number(body.voice)) ? Number(body.voice) : 0;
     ziel = [1, 2, 3, 4, 5].includes(Number(body.ziel)) ? Number(body.ziel) : 2;
     stories = body.stories === true;
   } catch {
@@ -542,7 +587,7 @@ export default async (req) => {
   const prompt = `${monday ? 'SCHREIBE IM MONDAY-TON — die Regeln dazu stehen unten.\n\n' : ''}${REGELN}
 ${art || voice ? ZIELE[ziel].block : ''}
 ${art ? ARTEN[art] : ''}
-${voice ? VOICE_REGELN : ''}
+${voice && voice <= 7 ? VOICE_REGELN : ''}
 ${voice ? `DEIN BAUPLAN — ${VOICE[voice].name}\n${VOICE[voice].bau}` : ''}
 ${stories ? STORY_ANLEITUNG : ''}
 
@@ -553,7 +598,7 @@ ${ctaZeile}
 
 Schreibe die Caption. Wiederhole die Folien nicht wörtlich — die Caption
 führt den Gedanken weiter und macht ihn anwendbar.
-${art || voice ? 'Die Qualifizierung MUSS vorkommen, und sie geht ueber die Haltung:\nnicht fuer die, die nicht umsetzen, nicht investieren oder an ihrem\nZustand nichts aendern wollen — und nicht fuer die, die glauben, sie\nbekommen das allein hin. Nie daran festmachen, was jemand schon hat.' : ''}
+${(art || voice) && ziel !== 1 ? 'Die Qualifizierung MUSS vorkommen, und sie geht ueber die Haltung:\nnicht fuer die, die nicht umsetzen, nicht investieren oder an ihrem\nZustand nichts aendern wollen — und nicht fuer die, die glauben, sie\nbekommen das allein hin. Nie daran festmachen, was jemand schon hat.' : ''}
 
 ANTWORTE NUR MIT JSON, ohne Vorwort, ohne Markdown:
 ${stories

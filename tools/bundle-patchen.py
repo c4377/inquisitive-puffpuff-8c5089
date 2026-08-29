@@ -204,6 +204,16 @@ P.append(('const nr=window.prompt(`Caption — welche Fassung?\\n1 = Carina Orig
  'const zl=window.prompt(`Wofür? (leer = Money Room)\\n1 = Angebotsserie, die gerade läuft\\n2 = The Money Room\\n3 = Mentoring, das 1:1\\n4 = Das Intensive\\n5 = The Strategy`,"2");if(zl===null)return;const Zl=Number(String(zl).replace(/\\D/g,""))||2;const nr=window.prompt(`Caption — welche Fassung?\\n1 = Carina Original (Direct Call-Out)\\n2 = Lisa Bisschop (Soft Educational)\\n3 = US-Sales (kurz, Pitch)\\n4 = Preis-Pause\\n5 = Geboren zum Verkaufen\\n6 = Ehrlich\\n7 = Kurz und fies\\n8 = Launch\\n9 = Persönlichkeits-Lüge\\n10 = Alles schon probiert\\n\\nMit 5 Stories: s anhängen, z.B. 4s.`,"1s");if(nr===null)return;const Zz=Number(String(nr).replace(/\\D/g,""))||0,Kr=/s/i.test(nr);const Sr=Zz>=1&&Zz<=3?Zz:0,Vc=Zz>=4&&Zz<=10?Zz-3:0;',
  "Erst wofuer, dann wie (Caption — welc)", 1))
 
+# 21 — Die Serie als elfte Fassung anbieten. Laeuft nach Patch 20,
+#      der die Reihenfolge tauscht — der Text bleibt dabei gleich,
+#      nur seine Stelle aendert sich.
+P.append(('\\n10 = Alles schon probiert\\n\\nMit 5 Stories: s anhängen, z.B. 4s.',
+ '\\n10 = Alles schon probiert\\n11 = Serie, ein Schritt von dreissig\\n\\nMit 5 Stories: s anhängen, z.B. 4s.',
+ "Fassung 11: Serie", 2))
+P.append(('Vc=Zz>=4&&Zz<=10?Zz-3:0',
+ 'Vc=Zz>=4&&Zz<=11?Zz-3:0',
+ "Fassung 11 auf Bauplan 8 abbilden", 2))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
