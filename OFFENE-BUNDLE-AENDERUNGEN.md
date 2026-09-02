@@ -239,3 +239,56 @@ x/y mit Bild") ging verloren und im Log stand "existing is not defined".
 Gemeint ist der bisherige Plan, der ein paar Zeilen darueber als `ut`
 bereitliegt. Bitte im Quellcode ebenfalls korrigieren, sonst kommt der
 Absturz mit dem naechsten Bau zurueck.
+
+## 10. Fotostil "Montserrat auf Foto"
+
+Neue Version im Tagesmenue, an der Stelle von "Serif auf Foto" (das ist
+raus). Sie setzt `tileMode:"photo"` und `textStil:"montserrat"` und holt
+danach wie "Foto" die Bilder.
+
+Der Stil im Aufloeser `T1` (Zweig `l==="montserrat"`, nur mit Foto):
+
+    platten:!1, nurErsteZeilePlatte:!0, ohnePlatteErste:!0, fettNurErste:!0,
+    ausrichtung:"links", schriftFarbe:"#FFFFFF", bandSchriftFarbe:"#FFFFFF",
+    plattenFarbe:null, polsterX:0,
+    schriftUeber:"Montserrat", staerkeUeber:"700"
+
+Drei neue Schalter, die der Zeichner auswertet:
+
+  - `ohnePlatteErste` — der Eingangssatz bekommt keine weisse Platte
+    (`tt.platten||Ve&&!tt.ohnePlatteErste`) und dafuer den Schatten, den
+    sonst nur die Zeilen ohne Platte bekommen.
+  - `fettNurErste` — nur die Zeilen des Eingangssatzes stehen in 700, der
+    Rest in 400. Wichtig: der Umbruch des Fliesstexts misst dann auch mit
+    400 (`$t(_t(pr),qe,!tt.fettNurErste)`), sonst bricht er zu frueh um.
+  - Die erste, scharfe Folie richtet ihre Texthoehe nach `t.textAnchor.row`
+    aus (aus der ruhigen Zone der Gesichtserkennung), statt nach der
+    festen `textLage`. Auf den verwischten Folgefolien greift das nicht,
+    dort zaehlt wieder `textLage` — so wollte Carina es.
+
+Verwischen: `dr=Qe>0&&(t.textStil==="montserrat"||<Streuwerk>)`. Bei diesem
+Stil ist Folie 1 scharf und jede weitere verwischt, statt etwa jeder
+zweiten nach Streuwerk.
+
+Montserrat liegt jetzt als woff2 unter `site/fonts/` (400 und 700, Subset
+latin, SIL OFL, Lizenz daneben) und wird in `site/index.html` per
+`@font-face` mit `font-display:block` eingebunden. Ueber Google Fonts
+allein war sie beim ersten Zeichnen manchmal noch nicht da, und der
+Zeichner misst die Textbreiten auf dem Canvas — dann stimmen die Umbrueche
+nicht. Alle anderen Canvas-Schriften der App liegen aus demselben Grund
+lokal. Bitte im Quellcode genauso halten.
+
+## 11. Beim Umstellen auf Foto behaelt jede Folie ihr Bild
+
+In `jr` (ein Tag neu laden / auf Foto stellen) stand pro Folie:
+
+    Vt = stJa && hatBild && (ct===0 || ablauf || streuwerk(De,ct)>=34)
+
+Das Streuwerk hat etwa jede dritte Folie wieder aus dem Foto geworfen; sie
+wurde dann als Textkachel gezeichnet. Carina ist das bei Folie 9, 12, 13
+und 14 aufgefallen. Die Bedingung ist jetzt nur noch
+
+    Vt = stJa && hatBild
+
+Der gleiche Ausfall steckte nicht im Weg "Alle Posts neu laden" — dort
+gibt es kein Streuwerk. Bitte im Quellcode nicht wieder einbauen.
