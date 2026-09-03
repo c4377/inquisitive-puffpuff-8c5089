@@ -1577,3 +1577,43 @@ liest sich als Absicht und laesst Luft.
 
 Wer es staerker will: bei mehr als 4 Grad muss der Abstand
 (schildAbstand) mitwachsen, sonst beruehrt die Ecke die erste Zeile.
+
+## 56. Der Kasten kommt zurueck, und die Textlage bewegt sich wieder
+
+**Der Kasten.** "Statt Band immer fett und nicht fett" habe ich auf
+alle Fotokacheln angewendet. Gemeint waren die Folgeslides. Jetzt:
+
+    Deckblatt ohne Schild   Kasten bleibt
+    Deckblatt mit Schild    kein Kasten (das Schild ist der Kasten)
+    Folgeslides             kein Kasten
+
+Fett und nicht fett gilt weiter ueberall auf Fotos.
+
+**Die Textlage.** Sie liess sich nicht mehr umstellen — oben, mitte
+und unten sahen gleich aus. Das war meine Schuld und rechnerisch
+zwingend:
+
+Der Text wird zwischen `n*.1 + SR` und `n*.9` eingeklemmt, das sind
+bei gesetztem Schild 72,5 Prozent der Hoehe. Die Anpassungsschleife
+durfte ihn aber bis auf **78 Prozent** wachsen lassen. Ein Text, der
+hoeher ist als das Fenster, in das er soll, wird von beiden Klammern
+gefasst — und die zweite gewinnt immer. Ergebnis: ein und dieselbe
+Position, egal was eingestellt war.
+
+Zwei Aenderungen:
+
+1. Die Schleife rechnet das Schild ab: `Je = n*textHoehe - SR`. Damit
+   passt der Text immer in das Fenster, und es gibt keinen Ueberlauf
+   mehr, unabhaengig vom Schild.
+2. `textHoehe` von .78 auf **.70**. Der Weg, den der Text wandern
+   kann, ist `n*(.8 - textHoehe)` — bei .78 waren das 2 Prozent der
+   Hoehe, jetzt 10. Die Rechnung faellt das Schild heraus, die
+   Bewegung ist also mit und ohne Schild gleich.
+
+Nachgerechnet fuer 800x1000 mit Schild:
+
+    oben   De = 222
+    mitte  De = 247
+    unten  De = 347
+
+Vorher standen alle drei auf 222.

@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"400",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:58,spalteMin:.72,textHoehe:.78,textHoeheZaehler:.56,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.12,tiefeMitte:.24,tiefeUnten:.86,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"400",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:58,spalteMin:.72,textHoehe:.70,textHoeheZaehler:.50,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.12,tiefeMitte:.24,tiefeUnten:.86,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -579,8 +579,10 @@ P.append(('zbr=tt.ausrichtung==="links"?(zsp>0?Math.max(.42,Math.min(.82,zsp/3+.
  'zbr=tt.ausrichtung==="links"?(zsp>0?Math.max(BS_KACHEL.spalteMin||.42,Math.min(.82,zsp/3+.08)):.82):.86',
  "Mindestbreite der Textspalte aus dem Block", 1))
 P.append(('{const Je=n*(jr?.48:.74);let rt=0;for(;;){',
- '{const Je=n*(jr?(BS_KACHEL.textHoeheZaehler||.48):(BS_KACHEL.textHoehe||.74));let rt=0;for(;;){',
- "Erlaubte Texthoehe aus dem Block", 1))
+ 'const SR=$e&&String(t.schild||"").trim()?r*((BS_KACHEL.schildGroesse||.03)*(BS_KACHEL.schildHoehe||2)'
+ '+(BS_KACHEL.schildAbstand||.034)):0;'
+ '{const Je=n*(jr?(BS_KACHEL.textHoeheZaehler||.48):(BS_KACHEL.textHoehe||.74))-SR;let rt=0;for(;;){',
+ "Erlaubte Texthoehe aus dem Block, abzueglich des Schilds", 1))
 
 # 52 — Schild und Plaettchen schliessen einander aus.
 #
@@ -597,8 +599,9 @@ P.append(('{const Je=n*(jr?.48:.74);let rt=0;for(;;){',
 #      das Bild. Ohne Schild bleibt alles wie es war.
 P.append(('$e&&t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeFamilie&&(Qe=BS_KACHEL.folgeFamilie);',
  '$e&&t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeFamilie&&(Qe=BS_KACHEL.folgeFamilie);'
- '$e&&(tt.platten=!1,tt.ohnePlatteErste=!0,tt.nurErsteZeilePlatte=!0,tt.fettNurErste=!0);',
- "Auf Fotos kein Kasten, dafuer fett und nicht fett", 1))
+ '$e&&(tt.nurErsteZeilePlatte=!0,tt.fettNurErste=!0,'
+ '(t.folienRolle!=="deckblatt"||String(t.schild||"").trim())&&(tt.platten=!1,tt.ohnePlatteErste=!0));',
+ "Fotos immer fett/nicht fett; Kasten nur weg auf Folgeslides und mit Schild", 1))
 
 # 53 — Auf Fotos keine Luecke zwischen den Saetzen.
 #
@@ -628,10 +631,6 @@ P.append(('$e&&t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeFamili
 #      Ist eines eingetragen, faengt der Text so viel tiefer an, wie
 #      das Schild samt Abstand braucht. Ohne Schild aendert sich
 #      nichts.
-P.append(('let De=n*He-ae/2+Et/2;',
- 'const SR=$e&&String(t.schild||"").trim()?r*((BS_KACHEL.schildGroesse||.03)*(BS_KACHEL.schildHoehe||2)'
- '+(BS_KACHEL.schildAbstand||.034)):0;let De=n*He-ae/2+Et/2;',
- "Platzbedarf des Schilds ausrechnen", 1))
 P.append(('De-Et/2<n*.1&&(De=n*.1+Et/2)', 'De-Et/2<n*.1+SR&&(De=n*.1+SR+Et/2)',
  "Text faengt tiefer an, wenn ein Schild darueber steht", 1))
 
