@@ -485,6 +485,9 @@ oder Abstaende aendern will, aendert **nur** ihn:
       rand:.11,           // Seitenrand als Anteil der Breite
       mitte:.52,          // Hoehe der Textmitte als Anteil
       maxhoehe:.70,       // hoechstens so viel Hoehe darf der Text
+      name:"carinaannaprav",              // steht unter dem Text
+      nameGroesse:24, nameAbstand:1.9,
+      fotoSchrift:"Playfair Display",     // Schrift auf Fotokacheln
       deckblattSchrift:"playfair", deckblattGroesse:46
     };
 
@@ -519,7 +522,12 @@ Die Aufteilung in zwei Absaetze greift nicht nur bei einer Leerzeile.
 Echte Texte haben meist keine. Ohne Leerzeile trennt der vorhandene
 Helfer `teile()` am Ende des ersten Satzes: erster Satz normal, Rest
 fett. Genau die Struktur des Vorbilds. Gibt es keinen zweiten Satz,
-bleibt es ein Block
+bleibt es ein Block.
+
+Unter dem Text steht der Name aus `BS_KACHEL.name`, zentriert und
+gedaempft. Nicht zu verwechseln mit der alten Wortmarke, die unten links
+in der Ecke klebte und dem Monogramm-Ring — beide sind auf dieser
+Fassung aus
 
 `linie` und `wieder` bekommen dieselbe Fassung, damit im Bundle keine
 ungeprueften Kombinationen stehenbleiben.
@@ -610,3 +618,22 @@ vorletzte — bleibt bei Anton, sie gehoert optisch zum Rest.
 
 Aufpassen bei der Suche: `TITELSCHRIFT = LINKS ? SERIF : "Anton"` steht im
 Kartenzeichner und gilt fuer Ablauffolien, nicht fuer normale Fotoposts.
+
+
+## 23. Fotokacheln in der Serife statt in Anton
+
+*Skript-Eintrag 28.*
+
+Eintrag 16 setzt `fotoSchriften:["Anton"]`. Der Wert kommt schon aus dem
+Drop, der Eintrag laeuft hier also nicht mehr. Deshalb tauscht ein
+eigener Eintrag den fertigen Wert nochmal aus, gegen
+`BS_KACHEL.fotoSchrift`.
+
+**Wechselwirkung mit Eintrag 14.** Der starke Tiefenverlauf hinter dem
+Text gilt nur fuer Playfair:
+
+    if($e && /Playfair/.test(String(Qe)) && t.tiefenOverlay!==!1)
+
+Mit Anton als Fotoschrift traf das nie zu. Jetzt greift er wieder — und
+das ist richtig: die duenne Serife braucht den Verlauf auf dem Foto,
+sonst steht weisse Schrift auf hellem Bild.

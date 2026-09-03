@@ -275,7 +275,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#BEB7A7",grundB:"#E7E2CE",schrift:"#112250",schriftart:"HelveticaNeueBrand",groesse:80,zeile:1.28,absatz:.85,rand:.11,mitte:.52,maxhoehe:.70,deckblattSchrift:"playfair",deckblattGroesse:46};'
+KONFIG = 'const BS_KACHEL={grundA:"#BEB7A7",grundB:"#E7E2CE",schrift:"#112250",schriftart:"HelveticaNeueBrand",groesse:80,zeile:1.28,absatz:.85,rand:.11,mitte:.52,maxhoehe:.70,name:"carinaannaprav",nameGroesse:24,nameAbstand:1.9,fotoSchrift:"Playfair Display",deckblattSchrift:"playfair",deckblattGroesse:46};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -305,9 +305,25 @@ P.append(('Je.aufFoto!==!0&&txt("carinaannaprav"',
 # 27 — Der Zeichner fuer die Fassung marke. Zentriert, zwei Absaetze,
 #      der zweite fett als Pointe, Groesse schrumpft bis es passt.
 #      Genau das Bild aus dem Vorbild, alle Werte aus BS_KACHEL.
-ZWEIG = '\nif(FA==="marke"){\nconst K=BS_KACHEL;\nconst MAXB=r*(1-2*K.rand);\nconst B0=ROH.replace(/\\*/g,"").split(/\\n\\s*\\n/).map(x=>x.trim()).filter(Boolean);\nconst BL=B0.length>1?B0:(()=>{const t2=teile(B0[0]||"");return t2[1]?[t2[0],t2[1]]:[B0[0]||""]})();\nif(!BL.length)return!1;\nconst GEW=ix=>(BL.length>1&&ix===BL.length-1)?"700":"400";\nlet gr=c(K.groesse),ZL=[];\nfor(let i=0;i<60;i+=1){\nZL=BL.map((b,ix)=>umbruch(b,gr,K.schriftart,MAXB,GEW(ix)));\nconst anz=ZL.reduce((a,z)=>a+z.length,0);\nconst hh=anz*gr*K.zeile+(BL.length-1)*gr*K.absatz;\nif(hh<=n*K.maxhoehe)break;\ngr*=.95}\nconst anz=ZL.reduce((a,z)=>a+z.length,0);\nconst gesamt=anz*gr*K.zeile+(BL.length-1)*gr*K.absatz;\nlet y=n*K.mitte-gesamt/2+gr*.5;\nZL.forEach((blk,ix)=>{const gw=GEW(ix);\nblk.forEach(z=>{txt(z,{left:r/2,top:y,originX:"center",originY:"center",\nfontSize:gr,fontFamily:K.schriftart,fontWeight:gw,fill:SCH,maxB:MAXB});\ny+=gr*K.zeile});\ny+=gr*K.absatz});\nreturn!0}\n'
+ZWEIG = '\nif(FA==="marke"){\nconst K=BS_KACHEL;\nconst MAXB=r*(1-2*K.rand);\nconst B0=ROH.replace(/\\*/g,"").split(/\\n\\s*\\n/).map(x=>x.trim()).filter(Boolean);\nconst BL=B0.length>1?B0:(()=>{const t2=teile(B0[0]||"");return t2[1]?[t2[0],t2[1]]:[B0[0]||""]})();\nif(!BL.length||!BL[0])return!1;\nconst NA=String(K.name||""),NG=c(K.nameGroesse||19);\nconst GEW=ix=>(BL.length>1&&ix===BL.length-1)?"700":"400";\nlet gr=c(K.groesse),ZL=[];\nconst hoeheVon=g=>{const z=BL.map((b,ix)=>umbruch(b,g,K.schriftart,MAXB,GEW(ix)));\nconst a=z.reduce((x,q)=>x+q.length,0);\nreturn{z:z,h:a*g*K.zeile+(BL.length-1)*g*K.absatz+(NA?g*K.nameAbstand:0)}};\nfor(let i=0;i<60;i+=1){const m=hoeheVon(gr);ZL=m.z;if(m.h<=n*K.maxhoehe)break;gr*=.95}\nconst M=hoeheVon(gr);ZL=M.z;\nlet y=n*K.mitte-M.h/2+gr*.5;\nZL.forEach((blk,ix)=>{const gw=GEW(ix);\nblk.forEach(z=>{txt(z,{left:r/2,top:y,originX:"center",originY:"center",\nfontSize:gr,fontFamily:K.schriftart,fontWeight:gw,fill:SCH,maxB:MAXB});\ny+=gr*K.zeile});\nif(ix<ZL.length-1)y+=gr*K.absatz});\nif(NA)txt(NA,{left:r/2,top:y-gr*K.zeile+gr*K.nameAbstand,originX:"center",originY:"center",\nfontSize:NG,fontFamily:K.schriftart,fontWeight:"500",charSpacing:150,fill:SCH,opacity:.55,maxB:MAXB});\nreturn!0}\n'
 P.append((chr(10) + 'if(FA==="ablauf"){', ZWEIG + chr(10) + 'if(FA==="ablauf"){',
  "Zeichner-Zweig fuer die Fassung marke", 1))
+
+# 28 — Fotokacheln in der Serife aus dem Vorbild statt in Anton.
+#      Eintrag 16 setzt Anton; das kommt schon aus dem Drop und wird
+#      hier nicht mehr ausgefuehrt. Deshalb ein eigener Eintrag, der
+#      den fertigen Wert nochmal austauscht.
+#
+#      Achtung, Wechselwirkung mit Eintrag 14: der starke Tiefenverlauf
+#      gilt nur fuer Playfair. Mit Anton als Fotoschrift traf das nie
+#      zu. Jetzt greift er wieder — und das ist richtig so, die duenne
+#      Serife braucht ihn auf dem Foto, sonst steht weisse Schrift auf
+#      hellem Bild.
+P.append(('fotoSchriften:["Anton"]', 'fotoSchriften:[BS_KACHEL.fotoSchrift]',
+ "Fotoschrift aus BS_KACHEL", 1))
+P.append((r'const i=e&&e.fotoSchriften||["Anton"];return i[t%i.length]',
+ r'const i=e&&e.fotoSchriften||[BS_KACHEL.fotoSchrift];return i[t%i.length]',
+ "Fotoschrift Ersatzwert aus BS_KACHEL", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
