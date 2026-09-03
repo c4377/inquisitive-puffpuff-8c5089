@@ -38,6 +38,8 @@ SEITE = """<!doctype html><html><head><meta charset="utf-8">
 <title>Kachel-Pruefung</title>
 <script src="fabric.min.js"></script>
 <style>
+@font-face{font-family:HelveticaNeueBrand;src:url(fonts/HelveticaNeue-Thin.otf) format("opentype");font-weight:200}
+@font-face{font-family:HelveticaNeueBrand;src:url(fonts/HelveticaNeue-Light.otf) format("opentype");font-weight:300}
 @font-face{font-family:HelveticaNeueBrand;src:url(fonts/HelveticaNeue-Roman.otf) format("opentype");font-weight:400}
 @font-face{font-family:HelveticaNeueBrand;src:url(fonts/HelveticaNeue-Medium.otf) format("opentype");font-weight:500}
 @font-face{font-family:HelveticaNeueBrand;src:url(fonts/HelveticaNeue-Bold.otf) format("opentype");font-weight:700}
@@ -63,7 +65,7 @@ __KONFIG__
 (async () => {
   const melde = t => { document.getElementById('lage').textContent = t; window.ERG = t; };
   try {
-    await Promise.all(['400 40px "HelveticaNeueBrand"','700 40px "HelveticaNeueBrand"',
+    await Promise.all(['200 40px "HelveticaNeueBrand"','300 40px "HelveticaNeueBrand"','400 40px "HelveticaNeueBrand"','700 40px "HelveticaNeueBrand"',
       '400 40px "Playfair Display"','700 40px "PoppinsBold"','400 40px "ArchivoBlack"',
       '400 40px "Anton"','400 40px "AspektaBrand"','700 40px "AspektaBrand"','400 40px "Inter"','700 40px "Inter"','400 40px "Marcellus"', __MEHRLADEN__].map(f => document.fonts.load(f)));
     const Pe = { fabric: window.fabric };

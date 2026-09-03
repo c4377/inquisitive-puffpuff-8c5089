@@ -1617,3 +1617,29 @@ Nachgerechnet fuer 800x1000 mit Schild:
     unten  De = 347
 
 Vorher standen alle drei auf 222.
+
+## 57. Helvetica Neue Thin
+
+    gewicht         200   (Textkachel, erster Block)
+    leichtGewicht   200   (Fotokachel, alle Zeilen ausser der ersten)
+    unterGewicht    700   (bleibt: die Pointe)
+
+Auf den Fotokacheln stand das leichte Gewicht fest im Bundle:
+
+    fontWeight: tt.fettNurErste && !Ve ? "400" : kt
+
+An drei Stellen. Sie lesen jetzt `leichtGewicht`, damit Textkachel und
+Fotokachel denselben Schnitt benutzen und eine Aenderung an einer
+Stelle reicht.
+
+**200 wird mitgeladen.** Die Ladeliste kannte 400, 500 und 700. Ein
+Gewicht, das dort fehlt, kommt zu spaet — und was dann passiert, steht
+in Abschnitt 48: Luecken mitten in den Woertern. Jetzt 200, 400, 500,
+700.
+
+Verglichen wurden Thin 200, Light 300 und Roman 400 an derselben
+Kachel (`tools/.pruefen/th*.html`). Thin gibt der Pointe den groessten
+Abstand; Light waere die Zwischenstufe, falls 200 auf dem Handy zu
+duenn wirkt.
+
+`tools/kachel-pruefen.py` kennt jetzt auch Thin und Light.
