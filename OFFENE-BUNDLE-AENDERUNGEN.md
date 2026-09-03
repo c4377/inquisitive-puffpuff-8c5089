@@ -1240,3 +1240,48 @@ Levels von Hooks"). Es ist das Element, das die Fotokacheln im Vorbild
 als Reihe lesbar macht. Es fehlt ihm aber eine Quelle im Datenmodell —
 es braucht einen kurzen Reihen- oder Themennamen, den es heute nicht
 gibt. Deshalb bewusst offen und nicht erfunden.
+
+## 46. Helvetica, und die Laufweite gemessen statt geschaetzt
+
+Sie hat die Schrift des Vorbilds erkannt: Helvetica. DM Sans war die
+naechstbeste Google-Schrift, aber die naechstbeste ist nicht dieselbe.
+HelveticaNeueBrand liegt seit jeher im Projekt und ist im gebauten CSS
+mit 400, 500 und 700 angemeldet — es war nichts nachzuladen.
+
+    schriftart      HelveticaNeueBrand
+    unterSchrift    HelveticaNeueBrand
+    folgeFamilie    HelveticaNeueBrand
+
+DM Sans ist aus der Schriftanforderung in index.html wieder raus, es
+wird nirgends mehr benutzt.
+
+### Laufweite: gemessen, nicht geschaetzt
+
+Statt Werte auszuprobieren wurde ein Verhaeltnis verglichen, das von
+der Aufloesung unabhaengig ist: Breite durch Hoehe desselben Wortes.
+
+    Vorbild, "Nervenzusammenbruch" fett     309/22 = 14,05
+    Vorbild, "machst kurz Content und"      286/21 = 13,62
+
+Dieselben Woerter in HelveticaNeueBrand bei verschiedenen Werten
+gesetzt und gemessen (tools/.pruefen/mess.html):
+
+    fett      charSpacing -50 -> 14,24     -60 -> 13,99
+    normal    charSpacing -40 -> 13,81     -50 -> 13,52
+
+Ein Wert fuer beide: **-50**. Nachgemessen an der fertigen Kachel
+14,30 gegen 14,05 im Vorbild, also 1,8 Prozent daneben — innerhalb der
+Messunsicherheit einer 22 Pixel hohen Zeile.
+
+### Korrektur zu Abschnitt 44
+
+Dort steht "Zeile 1,11 im Vorbild". Das war falsch. Die Zahl entstand
+aus einer geschaetzten Schriftgroesse von 27 Pixeln. Aus der jetzt
+gemessenen Zeichenhoehe folgt eine Groesse von 28 bis 30 Pixeln, und
+damit ein Zeilenschritt von rund 1,02 — genau der Wert, der vor 44
+schon eingestellt war und den ich mit einer schlechteren Messung
+"korrigiert" habe. Steht wieder auf 1,02.
+
+**Merksatz:** Ein Verhaeltnis zweier gemessener Strecken im selben
+Bild ist belastbar. Eine aus dem Augenmass geschaetzte Schriftgroesse
+ist es nicht — und alles, was man darauf rechnet, erbt den Fehler.
