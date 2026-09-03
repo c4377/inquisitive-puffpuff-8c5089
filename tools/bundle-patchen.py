@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"400",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Playfair Display",deckblattFamilie:"Playfair Display",deckblattGewicht:"700",deckblattGroesse:52,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",fotoGroesse:44,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.12,tiefeMitte:.24,tiefeUnten:.86,tiefeSchriften:"Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"400",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Playfair Display",deckblattFamilie:"Playfair Display",deckblattGewicht:"700",deckblattGroesse:52,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.12,tiefeMitte:.24,tiefeUnten:.86,tiefeSchriften:"Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -442,6 +442,71 @@ P.append(('colorStops:[{offset:0,color:"rgba(18,16,14,0.82)"},{offset:.5,color:"
  '{offset:.45,color:`rgba(${BS_KACHEL.bildTon},${BS_KACHEL.tiefeMitte})`},'
  '{offset:1,color:`rgba(${BS_KACHEL.bildTon},${BS_KACHEL.tiefeUnten})`}]',
  "Tiefenverlauf unten schwer statt ueberall dunkel", 1))
+
+# 47 — Das Schildchen ueber der Ueberschrift der Fotokachel.
+#
+#      Im Vorbild steht ueber der Ueberschrift eine kleine beige
+#      Flaeche mit dem Namen der Reihe ("Die 5 Levels von Hooks").
+#      Sie ist das Element, das die Fotokacheln als Reihe lesbar
+#      macht.
+#
+#      Es haengt nicht an einer festen Hoehe, sondern an der ersten
+#      Zeile der Ueberschrift: De ist deren Mitte, Et ihre Hoehe, _e
+#      der linke Rand. Wandert die Ueberschrift (Lage oben, mitte,
+#      unten, mehr oder weniger Zeilen), wandert das Schild mit.
+#
+#      Der Text kommt aus t.schild. Eingetragen wird er im Tagesmenue
+#      des Content Plans, siehe Eintrag 48.
+SCHILD = ('(()=>{try{const SS=String(t.schild||"").trim();'
+ 'if(!SS||!$e||t.folienRolle!=="deckblatt")return;'
+ 'const KK=BS_KACHEL,sg=r*(KK.schildGroesse||.03),'
+ 'pol=sg*(KK.schildPolster||.9),bh=sg*(KK.schildHoehe||2),'
+ 'mess=new Pe.fabric.Text(SS,{fontSize:sg,fontFamily:KK.schildSchrift||KK.schriftart,'
+ 'fontWeight:KK.schildGewicht||"400",charSpacing:KK.schildLaufweite||0}),'
+ 'bw=mess.width+pol*2,'
+ 'my=De-Et/2-r*(KK.schildAbstand||.034)-bh/2,'
+ 'lx=tt.ausrichtung==="links"?_e:r/2-bw/2,'
+ 'rd=r*(KK.schildRundung||.004);'
+ 'e.add(new Pe.fabric.Rect({left:lx,top:my,width:bw,height:bh,originX:"left",originY:"center",'
+ 'fill:KK.schildGrund||"#A57F55",rx:rd,ry:rd,selectable:!1,evented:!1}));'
+ 'e.add(new Pe.fabric.Text(SS,{left:lx+pol,top:my,originX:"left",originY:"center",'
+ 'fontSize:sg,fontFamily:KK.schildSchrift||KK.schriftart,fontWeight:KK.schildGewicht||"400",'
+ 'charSpacing:KK.schildLaufweite||0,fill:KK.schildSchriftFarbe||"#FFFFFF",'
+ 'selectable:!1,evented:!1}));}catch(zz){}})();')
+P.append(('dr.forEach((Je,rt)=>{if(!Je.length){',
+ SCHILD + 'dr.forEach((Je,rt)=>{if(!Je.length){',
+ "Schildchen ueber der ersten Zeile der Ueberschrift", 1))
+
+# 48 — Und das Feld dazu im Tagesmenue des Content Plans.
+#
+#      Gleiche Form wie die vorhandenen Schalter daneben: der Wert
+#      wird auf den Tag UND auf jede seiner Folien geschrieben, damit
+#      der Zeichner ihn als t.schild vorfindet.
+#
+#      Das Feld ist bewusst unkontrolliert (defaultValue statt value)
+#      und schreibt erst beim Verlassen. Ein kontrolliertes Feld
+#      wuerde bei jedem Tastendruck den ganzen Plan neu zeichnen und
+#      dabei den Schreibcursor verlieren.
+P.append(('Qt=(ae,_e)=>{$(`Tag ${ae}: Stil ${_e}`);',
+ 'schildSetzen=(ae,_e)=>{const ve=i.map(He=>He.day===ae?{...He,schild:_e,'
+ 'slides:(Array.isArray(He.slides)?He.slides:[]).map(De=>De&&typeof De=="object"?{...De,schild:_e}:De)}:He);'
+ 't({contentPlan:Rt(ve,We)})},'
+ 'Qt=(ae,_e)=>{$(`Tag ${ae}: Stil ${_e}`);',
+ "Setzer fuer das Schild", 1))
+
+P.append(('v.jsx("span",{className:"block text-[10px] font-bold text-gray-400 mb-1.5",'
+ 'children:"SCHRIFT \u2014 je schmaler, desto mehr Text passt"})',
+ 'v.jsx("span",{className:"block text-[10px] font-bold text-gray-400 mb-1.5",'
+ 'children:"SCHILD \u2014 Name der Reihe, steht ueber der Ueberschrift"}),'
+ 'v.jsx("input",{type:"text",defaultValue:ae.schild||"",'
+ 'placeholder:"z. B. Die 5 Levels von Hooks",'
+ 'onClick:Mt=>Mt.stopPropagation(),'
+ 'onBlur:Mt=>schildSetzen(ae.day,Mt.target.value.trim()),'
+ 'onKeyDown:Mt=>{Mt.key==="Enter"&&Mt.target.blur()},'
+ 'className:"w-full mb-3 px-2.5 py-2 rounded-lg border border-gray-200 text-[11px]"}),'
+ 'v.jsx("span",{className:"block text-[10px] font-bold text-gray-400 mb-1.5",'
+ 'children:"SCHRIFT \u2014 je schmaler, desto mehr Text passt"})',
+ "Eingabefeld fuer das Schild im Tagesmenue", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

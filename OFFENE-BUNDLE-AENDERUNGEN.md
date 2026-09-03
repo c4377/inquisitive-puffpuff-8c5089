@@ -1285,3 +1285,63 @@ schon eingestellt war und den ich mit einer schlechteren Messung
 **Merksatz:** Ein Verhaeltnis zweier gemessener Strecken im selben
 Bild ist belastbar. Eine aus dem Augenmass geschaetzte Schriftgroesse
 ist es nicht — und alles, was man darauf rechnet, erbt den Fehler.
+
+## 47. Das Schildchen — Eingabefeld und Zeichnung
+
+Im Vorbild steht ueber der Ueberschrift der Fotokachel eine kleine
+beige Flaeche mit dem Namen der Reihe ("Die 5 Levels von Hooks"). Sie
+ist das Element, das die Fotokacheln als Reihe lesbar macht. Es fehlte
+ihm bisher eine Quelle; jetzt hat es eine.
+
+### Eintragen
+
+Im Tagesmenue des Content Plans, zwischen VERSION und SCHRIFT, steht
+ein Feld **SCHILD**. Was dort steht, wird auf den Tag und auf jede
+seiner Folien geschrieben — dieselbe Form wie bei den Schaltern
+daneben. Leer lassen heisst: kein Schild.
+
+Das Feld ist bewusst unkontrolliert (`defaultValue` statt `value`) und
+schreibt erst beim Verlassen oder mit Enter. Ein kontrolliertes Feld
+wuerde bei jedem Tastendruck den ganzen Plan neu zeichnen und dabei
+den Schreibcursor verlieren.
+
+### Bewegt sich mit der Ueberschrift
+
+Das Schild haengt an keiner festen Hoehe, sondern an der ersten Zeile:
+
+    De   Mitte der ersten Zeile
+    Et   Zeilenhoehe
+    _e   linker Rand der Ueberschrift
+
+    Mitte des Schilds = De - Et/2 - Abstand - Schildhoehe/2
+
+Steht der Text oben, mitte oder unten, hat er zwei Zeilen oder fuenf,
+faellt er wegen eines Gesichts im Bild anders aus — das Schild wandert
+mit. Es sitzt immer direkt ueber der ersten Zeile und beginnt an
+derselben Kante, wenn linksbuendig gesetzt wird.
+
+    schildGrund        #A57F55
+    schildSchriftFarbe #FFFFFF
+    schildGroesse      .030 der Breite
+    schildPolster      .9 der Schriftgroesse
+    schildHoehe        2.0 der Schriftgroesse
+    schildAbstand      .034 der Breite
+    schildRundung      .004 der Breite
+
+Ihre Flaeche ist genau ausgemessen `#BD9A71` — mit weisser Schrift
+sind das 2,62 zu 1. Das traegt auch fuer eine grosse Schrift nicht
+(noetig waeren 3). `#A57F55` liegt im selben Ton und kommt auf 3,64.
+Wer ihre Farbe exakt will, aendert eine Zeile.
+
+Der ganze Block liegt in einem try/catch. Ein Fehler im Schild darf
+nie die Kachel leer lassen.
+
+### Nachweis
+
+Der Schnipsel wurde aus dem gebauten Bundle geschnitten und mit den
+Werten gezeichnet, die der Zeichner beim Export einsetzt
+(tools/.pruefen/schild.html). Das Schild sitzt an der richtigen
+Stelle. Die Einbettung selbst ist ueber die Sichtbarkeit der
+Variablen geprueft: De, Et, _e, tt, r, e, Pe, $e und t stehen an der
+Einfuegestelle alle im selben Gueltigkeitsbereich, und das Bundle
+laeuft durch `node --check`.
