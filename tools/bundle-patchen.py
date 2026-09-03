@@ -284,16 +284,16 @@ P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
 #      als einzige kein Feld fassung, wurden deshalb als Ablauf-Fassung
 #      gezeichnet und kamen linksbuendig mit winzigem Fliesstext heraus.
 P.append(('stein:{grund:SF,schriftGrund:SF,schrift:"#FFFFFF",betont:"#FFFFFF",monogramm:"#FFFFFF",absender:"rgba(255,255,255,0.60)",schriftart:"Playfair Display"}',
- 'stein:{grund:BS_KACHEL.grundA,schriftGrund:BS_KACHEL.grundA,schrift:BS_KACHEL.schrift,betont:BS_KACHEL.schrift,monogramm:BS_KACHEL.schrift,absender:BS_KACHEL.schrift,fassung:"marke",schriftart:BS_KACHEL.schriftart}',
+ 'stein:{grund:BS_KACHEL.grundA,schriftGrund:BS_KACHEL.grundA,schrift:BS_KACHEL.schrift,betont:BS_KACHEL.schrift,absender:BS_KACHEL.schrift,fassung:"marke",schriftart:BS_KACHEL.schriftart}',
  "stein: Fassung marke, Farben aus dem Block", 1))
 P.append(('hell:{grund:OW,schriftGrund:OW,schrift:OD,betont:OD,monogramm:OD,absender:"rgba(35,40,44,0.55)",schriftart:"Playfair Display"}',
- 'hell:{grund:BS_KACHEL.grundB,schriftGrund:BS_KACHEL.grundB,schrift:BS_KACHEL.schrift,betont:BS_KACHEL.schrift,monogramm:BS_KACHEL.schrift,absender:BS_KACHEL.schrift,fassung:"marke",schriftart:BS_KACHEL.schriftart}',
+ 'hell:{grund:BS_KACHEL.grundB,schriftGrund:BS_KACHEL.grundB,schrift:BS_KACHEL.schrift,betont:BS_KACHEL.schrift,absender:BS_KACHEL.schrift,fassung:"marke",schriftart:BS_KACHEL.schriftart}',
  "hell: Fassung marke, Farben aus dem Block", 1))
 P.append(('linie:{grund:uA,schrift:hA,betont:hA,monogramm:F1,absender:"rgba(62,80,99,0.55)",fassung:"linie",schriftart:"PoppinsBold"}',
- 'linie:{grund:BS_KACHEL.grundA,schrift:BS_KACHEL.schrift,betont:BS_KACHEL.schrift,monogramm:BS_KACHEL.schrift,absender:BS_KACHEL.schrift,fassung:"marke",schriftart:BS_KACHEL.schriftart}',
+ 'linie:{grund:BS_KACHEL.grundA,schrift:BS_KACHEL.schrift,betont:BS_KACHEL.schrift,absender:BS_KACHEL.schrift,fassung:"marke",schriftart:BS_KACHEL.schriftart}',
  "linie: Fassung marke", 1))
 P.append(('wieder:{grund:uA,schrift:hA,betont:hA,monogramm:F1,absender:"rgba(62,80,99,0.55)",fassung:"wieder",schriftart:"PoppinsBold"}',
- 'wieder:{grund:BS_KACHEL.grundB,schrift:BS_KACHEL.schrift,betont:BS_KACHEL.schrift,monogramm:BS_KACHEL.schrift,absender:BS_KACHEL.schrift,fassung:"marke",schriftart:BS_KACHEL.schriftart}',
+ 'wieder:{grund:BS_KACHEL.grundB,schrift:BS_KACHEL.schrift,betont:BS_KACHEL.schrift,absender:BS_KACHEL.schrift,fassung:"marke",schriftart:BS_KACHEL.schriftart}',
  "wieder: Fassung marke", 1))
 
 # 26 — Keine Wortmarke auf der Fassung marke. Im Vorbild steht unten
@@ -305,7 +305,7 @@ P.append(('Je.aufFoto!==!0&&txt("carinaannaprav"',
 # 27 — Der Zeichner fuer die Fassung marke. Zentriert, zwei Absaetze,
 #      der zweite fett als Pointe, Groesse schrumpft bis es passt.
 #      Genau das Bild aus dem Vorbild, alle Werte aus BS_KACHEL.
-ZWEIG = '\nif(FA==="marke"){\nconst K=BS_KACHEL;\nconst MAXB=r*(1-2*K.rand);\nconst BL=ROH.replace(/\\*/g,"").split(/\\n\\s*\\n/).map(x=>x.trim()).filter(Boolean);\nif(!BL.length)return!1;\nconst GEW=ix=>(BL.length>1&&ix===BL.length-1)?"700":"400";\nlet gr=c(K.groesse),ZL=[];\nfor(let i=0;i<60;i+=1){\nZL=BL.map((b,ix)=>umbruch(b,gr,K.schriftart,MAXB,GEW(ix)));\nconst anz=ZL.reduce((a,z)=>a+z.length,0);\nconst hh=anz*gr*K.zeile+(BL.length-1)*gr*K.absatz;\nif(hh<=n*K.maxhoehe)break;\ngr*=.95}\nconst anz=ZL.reduce((a,z)=>a+z.length,0);\nconst gesamt=anz*gr*K.zeile+(BL.length-1)*gr*K.absatz;\nlet y=n*K.mitte-gesamt/2+gr*.5;\nZL.forEach((blk,ix)=>{const gw=GEW(ix);\nblk.forEach(z=>{txt(z,{left:r/2,top:y,originX:"center",originY:"center",\nfontSize:gr,fontFamily:K.schriftart,fontWeight:gw,fill:SCH,maxB:MAXB});\ny+=gr*K.zeile});\ny+=gr*K.absatz});\nreturn!0}\n'
+ZWEIG = '\nif(FA==="marke"){\nconst K=BS_KACHEL;\nconst MAXB=r*(1-2*K.rand);\nconst B0=ROH.replace(/\\*/g,"").split(/\\n\\s*\\n/).map(x=>x.trim()).filter(Boolean);\nconst BL=B0.length>1?B0:(()=>{const t2=teile(B0[0]||"");return t2[1]?[t2[0],t2[1]]:[B0[0]||""]})();\nif(!BL.length)return!1;\nconst GEW=ix=>(BL.length>1&&ix===BL.length-1)?"700":"400";\nlet gr=c(K.groesse),ZL=[];\nfor(let i=0;i<60;i+=1){\nZL=BL.map((b,ix)=>umbruch(b,gr,K.schriftart,MAXB,GEW(ix)));\nconst anz=ZL.reduce((a,z)=>a+z.length,0);\nconst hh=anz*gr*K.zeile+(BL.length-1)*gr*K.absatz;\nif(hh<=n*K.maxhoehe)break;\ngr*=.95}\nconst anz=ZL.reduce((a,z)=>a+z.length,0);\nconst gesamt=anz*gr*K.zeile+(BL.length-1)*gr*K.absatz;\nlet y=n*K.mitte-gesamt/2+gr*.5;\nZL.forEach((blk,ix)=>{const gw=GEW(ix);\nblk.forEach(z=>{txt(z,{left:r/2,top:y,originX:"center",originY:"center",\nfontSize:gr,fontFamily:K.schriftart,fontWeight:gw,fill:SCH,maxB:MAXB});\ny+=gr*K.zeile});\ny+=gr*K.absatz});\nreturn!0}\n'
 P.append((chr(10) + 'if(FA==="ablauf"){', ZWEIG + chr(10) + 'if(FA==="ablauf"){',
  "Zeichner-Zweig fuer die Fassung marke", 1))
 

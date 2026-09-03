@@ -511,7 +511,15 @@ Zweig dafuer:
   fett als Pointe
 * Groesse schrumpft in Schritten von fuenf Prozent, bis der Block in
   `maxhoehe` passt
-* keine Wortmarke (Eintrag 26) — im Vorbild steht unten nichts
+* keine Wortmarke und **kein Monogramm-Ring**. Der Ring kommt aus `ht`
+  und wird nur gezeichnet, wenn `Je.monogrammFarbe` gesetzt ist — die
+  Fassung marke setzt das Feld deshalb nicht.
+
+Die Aufteilung in zwei Absaetze greift nicht nur bei einer Leerzeile.
+Echte Texte haben meist keine. Ohne Leerzeile trennt der vorhandene
+Helfer `teile()` am Ende des ersten Satzes: erster Satz normal, Rest
+fett. Genau die Struktur des Vorbilds. Gibt es keinen zweiten Satz,
+bleibt es ein Block
 
 `linie` und `wieder` bekommen dieselbe Fassung, damit im Bundle keine
 ungeprueften Kombinationen stehenbleiben.
