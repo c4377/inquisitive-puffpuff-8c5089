@@ -889,3 +889,25 @@ Die Folgeslides laufen wieder in `fotoSchrift`, also Playfair Display.
 
     fotoSchrift       Playfair Display   Folgeslides
     deckblattFamilie  Prata              nur die erste
+
+## 34. Inter fett und nicht fett im Wechsel
+
+Die Textkachel setzt die Ueberschrift fett und die Unterzeile normal,
+beide in Inter:
+
+    gewicht        "700"   Ueberschrift
+    unterGewicht   "400"   Unterzeile
+
+Die Staerke geht auch in den Umbruch ein — fett laeuft breiter, sonst
+bricht der Zeichner zu spaet und die Zeile ragt heraus.
+
+**Prata, zum Mitschreiben:** sie wird an genau einer Stelle als Schrift
+gesetzt, `BS_KACHEL.deckblattFamilie`, und die Bedingung dafuer ist
+
+    $e && t.folienRolle === "deckblatt"
+
+also nur mit Foto und nur auf der ersten Slide. Die uebrigen Treffer im
+Bundle sind: die Vorladeliste, zwei Auswahllisten im Einstellungsdialog,
+eine Schriftbeschreibung und die Kombination "Sanft" — letztere greift
+nur, wenn sie angeklickt wird. Folgeslides laufen in
+`fotoSchrift` = Playfair Display.
