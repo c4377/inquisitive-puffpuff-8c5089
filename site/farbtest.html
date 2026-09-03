@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Farbtest — Textkacheln</title>
+<style>
+  /* Deine Marken-Schrift, dieselben Dateien wie in der App */
+  @font-face { font-family:HelveticaNeueBrand; src:url(fonts/HelveticaNeue-Roman.otf)  format("opentype"); font-weight:400; font-style:normal; font-display:swap; }
+  @font-face { font-family:HelveticaNeueBrand; src:url(fonts/HelveticaNeue-Medium.otf) format("opentype"); font-weight:500; font-style:normal; font-display:swap; }
+  @font-face { font-family:HelveticaNeueBrand; src:url(fonts/HelveticaNeue-Bold.otf)   format("opentype"); font-weight:700; font-style:normal; font-display:swap; }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    margin: 0;
+    background: #14171A;
+    color: #E9ECEF;
+    font-family: HelveticaNeueBrand, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding: 14px 14px calc(20px + env(safe-area-inset-bottom));
+    display: flex; flex-direction: column; gap: 16px;
+    min-height: 100dvh;
+  }
+
+  h1 { font-size: 13px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+       color: #98A3AD; margin: 2px 0 0; }
+
+  /* ---- Die Folie: immer 4:5, passt sich der Breite an ---- */
+  .buehne { display: flex; justify-content: center; }
+  .folie {
+    width: 100%; max-width: 460px; aspect-ratio: 4/5;
+    container-type: inline-size;
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 12cqw;
+    background: var(--grund);
+    transition: background .18s ease;
+  }
+  .block { display: flex; flex-direction: column; gap: 4.8cqw; text-align: center; width: 100%; }
+  .zeile { margin: 0; color: var(--schrift); font-size: 6cqw; line-height: 1.34; letter-spacing: -.008em;
+           white-space: pre-wrap; outline: none; }
+  .zeile.normal { font-weight: 400; }
+  .zeile.fett   { font-weight: 700; }
+  .zeile:focus { box-shadow: inset 0 0 0 1px rgba(128,128,128,.45); border-radius: 2px; }
+  .wm { position: absolute; left:0; right:0; bottom: 6cqw; text-align: center;
+        font-size: 2.3cqw; font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
+        color: var(--wm); }
+
+  /* ---- Bedienung ---- */
+  .gruppe { display: flex; flex-direction: column; gap: 9px; }
+  .titel { font-size: 11px; letter-spacing: .13em; text-transform: uppercase; color: #7C8792; font-weight: 500; }
+
+  .farben { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 8px; }
+  .farbe {
+    border: 1px solid rgba(255,255,255,.14); border-radius: 3px; padding: 0;
+    aspect-ratio: 4/5; cursor: pointer; position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    font: inherit; font-size: 9px; letter-spacing: .04em;
+  }
+  .farbe[aria-pressed="true"] { outline: 2px solid #FFFFFF; outline-offset: 1px; }
+  .farbe span { padding: 0 3px; text-align: center; line-height: 1.15; }
+
+  .reihe { display: flex; gap: 8px; flex-wrap: wrap; }
+  .knopf {
+    background: #1F242A; color: #E9ECEF; border: 1px solid #2E353C; border-radius: 999px;
+    padding: 9px 15px; font: inherit; font-size: 13px; cursor: pointer;
+  }
+  .knopf[aria-pressed="true"] { background: #E9ECEF; color: #14171A; border-color: #E9ECEF; }
+
+  .werte { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; color: #98A3AD; }
+  .werte b { color: #E9ECEF; font-weight: 500; font-variant-numeric: tabular-nums; }
+  .warn { color: #FFB4A6; }
+
+  .hinweis { font-size: 12px; line-height: 1.5; color: #7C8792; margin: 0; }
+</style>
+</head>
+<body>
+
+<h1>Farbtest · Textkachel</h1>
+
+<div class="buehne">
+  <div class="folie" id="folie">
+    <div class="block">
+      <p class="zeile normal" id="t1" contenteditable="true">Alle denken, du schreibst kurz einen Post und stellst ihn online.</p>
+      <p class="zeile fett"   id="t2" contenteditable="true">Niemand sieht die zwei Stunden, die du vorher am ersten Satz gesessen bist.</p>
+    </div>
+    <span class="wm">Limitless Selling</span>
+  </div>
+</div>
+
+<div class="gruppe">
+  <span class="titel">Hintergrund</span>
+  <div class="farben" id="farben"></div>
+</div>
+
+<div class="gruppe">
+  <span class="titel">Schrift</span>
+  <div class="reihe">
+    <button class="knopf" id="hell" aria-pressed="false">Weiß</button>
+    <button class="knopf" id="dunkel" aria-pressed="false">Dunkel</button>
+  </div>
+  <div class="werte">
+    <span>Kontrast</span>
+    <span><b id="kontrast">—</b> <span id="urteil"></span></span>
+  </div>
+</div>
+
+<p class="hinweis">
+  Die Texte kannst du direkt in der Kachel antippen und überschreiben.
+  Ab 4,5 zu 1 ist der Kontrast auch bei Sonnenlicht und nach der
+  Instagram-Komprimierung sicher lesbar; unter 3 zu 1 wird es dünn.
+</p>
+
+<script>
+  var FARBEN = [
+    { name: "Creme",       grund: "#F6F1E6", dunkel: "#1A1714", vor: "heute" },
+    { name: "Sand",        grund: "#E4D9C6", dunkel: "#1A1512" },
+    { name: "Altrosa",     grund: "#E8CFC9", dunkel: "#241812" },
+    { name: "Terrakotta",  grund: "#C75B39", dunkel: "#2A140C" },
+    { name: "Orange hell", grund: "#F2A26B", dunkel: "#241812" },
+    { name: "Orange satt", grund: "#E08A4A", dunkel: "#241812" },
+    { name: "Orange App",  grund: "#EA580C", dunkel: "#2A140C" },
+    { name: "Signalrot",   grund: "#FF3A2E", dunkel: "#2A0B08" },
+    { name: "Dunkelbraun", grund: "#2B211A", dunkel: "#F6F1E6" },
+    { name: "Schiefer",    grund: "#3A4750", dunkel: "#F6F1E6" }
+  ];
+
+  var folie = document.getElementById("folie");
+  var kasten = document.getElementById("farben");
+  var knopfHell = document.getElementById("hell");
+  var knopfDunkel = document.getElementById("dunkel");
+  var anzeige = document.getElementById("kontrast");
+  var urteil = document.getElementById("urteil");
+
+  var gewaehlt = 3;      // Terrakotta
+  var schriftHell = true;
+
+  function leuchtkraft(hex) {
+    var c = [1,3,5].map(function (i) { return parseInt(hex.substr(i,2),16)/255; })
+                   .map(function (x) { return x <= 0.04045 ? x/12.92 : Math.pow((x+0.055)/1.055, 2.4); });
+    return 0.2126*c[0] + 0.7152*c[1] + 0.0722*c[2];
+  }
+  function kontrastwert(a, b) {
+    var la = leuchtkraft(a), lb = leuchtkraft(b);
+    var hoch = Math.max(la,lb), tief = Math.min(la,lb);
+    return (hoch + 0.05) / (tief + 0.05);
+  }
+
+  function mische(hex, alpha) {
+    return "rgba(" + [1,3,5].map(function (i) { return parseInt(hex.substr(i,2),16); }).join(",") + "," + alpha + ")";
+  }
+
+  function zeichne() {
+    var f = FARBEN[gewaehlt];
+    var schrift = schriftHell ? "#FFFFFF" : f.dunkel;
+    folie.style.setProperty("--grund", f.grund);
+    folie.style.setProperty("--schrift", schrift);
+    folie.style.setProperty("--wm", mische(schrift, schriftHell ? 0.58 : 0.48));
+
+    knopfHell.setAttribute("aria-pressed", String(schriftHell));
+    knopfDunkel.setAttribute("aria-pressed", String(!schriftHell));
+
+    var k = kontrastwert(f.grund, schrift);
+    anzeige.textContent = k.toFixed(1).replace(".", ",") + " : 1";
+    if (k >= 4.5)      { urteil.textContent = "· sicher";  urteil.className = ""; }
+    else if (k >= 3)   { urteil.textContent = "· knapp";   urteil.className = ""; }
+    else               { urteil.textContent = "· zu dünn"; urteil.className = "warn"; }
+
+    Array.prototype.forEach.call(kasten.children, function (el, i) {
+      el.setAttribute("aria-pressed", String(i === gewaehlt));
+    });
+  }
+
+  FARBEN.forEach(function (f, i) {
+    var b = document.createElement("button");
+    b.className = "farbe";
+    b.type = "button";
+    b.style.background = f.grund;
+    b.style.color = leuchtkraft(f.grund) > 0.35 ? "#241812" : "#FFFFFF";
+    b.setAttribute("aria-pressed", "false");
+    b.innerHTML = "<span>" + f.name + (f.vor ? "<br>(" + f.vor + ")" : "") + "</span>";
+    b.addEventListener("click", function () { gewaehlt = i; zeichne(); });
+    kasten.appendChild(b);
+  });
+
+  knopfHell.addEventListener("click", function () { schriftHell = true; zeichne(); });
+  knopfDunkel.addEventListener("click", function () { schriftHell = false; zeichne(); });
+
+  zeichne();
+</script>
+</body>
+</html>
