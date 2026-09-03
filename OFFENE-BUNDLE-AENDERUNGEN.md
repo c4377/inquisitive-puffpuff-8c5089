@@ -1643,3 +1643,40 @@ Abstand; Light waere die Zwischenstufe, falls 200 auf dem Handy zu
 duenn wirkt.
 
 `tools/kachel-pruefen.py` kennt jetzt auch Thin und Light.
+
+## 58. Auf Fotos lief der Text seitlich heraus
+
+Die Anpassungsschleife hat nur die **Hoehe** geprueft. Der Umbruch in
+`$t` hat aber eine Notbremse:
+
+    Ht(Vt,rt,Ve) <= Qt-c(30)  ||  ct.length === 0
+
+Das zweite Oder sorgt dafuer, dass eine Zeile nie leer bleibt. Passt
+ein einzelnes Wort nicht in die Spalte, landet es trotzdem darin — und
+laeuft rechts hinaus, wo es abgeschnitten wird. Dasselbe beim Kasten:
+seine Breite folgt der Zeilenbreite, also lief auch er hinaus.
+
+Sichtbar wurde es erst mit Fraunces: der fette Schnitt setzt rund
+**30 Prozent breiter** als Helvetica (nachgemessen: 1789 zu 1603 Pixel
+bei 92 px fuer denselben Satz), dazu deckblattGroesse 58 statt 52.
+
+Es ist dieselbe Luecke wie bei den Textkacheln in Abschnitt 45, nur an
+der zweiten Stelle. Dort prueft die Schleife seither auch die Breite,
+hier nicht. Jetzt hier auch: die laengste Zeile bestimmt die Groesse
+mit.
+
+Nachgerechnet, Spalte 0,72 also Umbruchgrenze 528 px:
+
+    "Von der Idee zum vierstelligen Angebot…"
+        nur Hoehe   Groesse 87   14 px ueber die Kante
+        auch Breite Groesse 82   17 px innerhalb
+
+    "Nervenzusammenbruch nach dem Verkaufsgespraech"
+        nur Hoehe   Groesse 93   588 px ueber die Kante
+        auch Breite Groesse 41   innerhalb
+
+Der zweite Fall zeigt den Preis: ein Wort mit 19 Buchstaben passt bei
+grosser Schrift in keine Spalte, also wird die ganze Ueberschrift
+klein. Das ist richtig — abgeschnitten war es vorher — aber es heisst
+auch: sehr lange Komposita kosten Schriftgroesse. Wer sie umgeht,
+behaelt die grosse Schrift.

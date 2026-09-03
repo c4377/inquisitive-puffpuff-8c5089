@@ -652,6 +652,30 @@ P.append(('.flatMap(b=>["400","500","700"].map(B=>{try{return document.fonts.loa
  '.flatMap(b=>["200","400","500","700"].map(B=>{try{return document.fonts.load(`${B} 16px "${b}"`)}',
  "Auch das duenne Gewicht vorladen", 1))
 
+# 58 — Auf Fotos lief der Text seitlich heraus.
+#
+#      Die Anpassungsschleife hat nur die HOEHE geprueft. Passt ein
+#      einzelnes Wort nicht in die Spalte, setzt der Umbruch es
+#      trotzdem in die Zeile — die Bedingung dafuer steht in $t:
+#
+#          Ht(Vt,rt,Ve)<=Qt-c(30) || ct.length===0
+#
+#      Das zweite Oder ist die Notbremse: eine Zeile darf nie leer
+#      bleiben. Ein zu langes Wort landet also in der Zeile und
+#      laeuft rechts hinaus. Sichtbar wurde das erst mit Fraunces,
+#      weil der fette Schnitt rund 30 Prozent breiter setzt als
+#      Helvetica, und mit deckblattGroesse 58 statt 52.
+#
+#      Dieselbe Luecke wie damals bei den Textkacheln, an der zweiten
+#      Stelle: dort prueft die Schleife seit Abschnitt 45 auch die
+#      Breite, hier nicht. Jetzt hier auch. Die laengste Zeile
+#      bestimmt die Groesse mit.
+P.append(('if((Ve.length+pt.length)*qe*1.3<=Je||qe<=c(16)||rt++>60)break;',
+ 'const zb=Math.max(0,...Ve.map(zz=>Ht(zz,qe,!0)),'
+ '...pt.map(zz=>Ht(zz,qe,!tt.fettNurErste)));'
+ 'if(((Ve.length+pt.length)*qe*1.3<=Je&&zb<=Qt-c(30))||qe<=c(16)||rt++>60)break;',
+ "Anpassungsschleife prueft auf Fotos auch die Breite", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
