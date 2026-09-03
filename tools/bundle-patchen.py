@@ -845,6 +845,32 @@ P.append(('const ve=tt.fettNurErste&&!t._blurAn&&t.textAnchor&&t.textAnchor.row&
  'const ve=t.textLage||(tt.fettNurErste&&!t._blurAn&&t.textAnchor&&t.textAnchor.row&&{top:"oben",mid:"mitte",bottom:"unten"}[t.textAnchor.row])||($e?"unten":"mitte")',
  "Eingestellte Textlage schlaegt die Automatik", 1))
 
+# 66 — Der erste Block darf mehr als eine Zeile sein.
+#
+#      Im Bundle steht eine Stelle, die den ersten Block auf GENAU
+#      EINE Zeile zusammenstreicht: sie sucht die groesste Zahl an
+#      Woertern, die noch in eine Zeile passt, und schiebt alles
+#      weitere in den zweiten Block.
+#
+#          Ve = Woerter, die in eine Zeile passen
+#          Ve < rt.length && (pr = Rest + pr, er = erste Ve Woerter)
+#
+#      Das gehoert zum Kasten: der Kasten ist ein Balken hinter EINER
+#      Zeile. Ohne Kasten ist es nur eine Kappung mitten im Satz — der
+#      erste Satz bricht nach ein paar Woertern ab und der Rest steht
+#      klein darunter. Genau das war zu sehen.
+#
+#      Wieder eine Folge davon, dass ich nurErsteZeilePlatte auf allen
+#      Fotokacheln setze (Abschnitt 56). Vorher lief die Stelle nur im
+#      Stil "montserrat".
+#
+#      Die Kappung passiert jetzt nur noch, wenn wirklich ein Kasten
+#      gezeichnet wird. Im Vorbild laeuft der Serifenblock ueber vier
+#      Zeilen — genau das geht damit wieder.
+P.append(('Ve=Math.max(2,Math.min(Ve,rt.length)),Ve<rt.length&&(',
+ 'Ve=Math.max(2,Math.min(Ve,rt.length)),(tt.platten||!tt.ohnePlatteErste)&&Ve<rt.length&&(',
+ "Erster Block nur mit Kasten auf eine Zeile gekappt", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

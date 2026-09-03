@@ -1881,3 +1881,40 @@ inzwischen dreierlei — Kasten, Fettschrift und "Automatik darf die
 Lage bestimmen". Wer eines davon einschaltet, schaltet die anderen
 mit. Kasten und Farbe sind bereits geloest (56, 59), die Lage jetzt
 auch.
+
+## 65. Der erste Block darf mehr als eine Zeile sein
+
+Im Bundle steht eine Stelle, die den ersten Block auf **genau eine
+Zeile** zusammenstreicht. Sie sucht die groesste Zahl an Woertern, die
+noch in eine Zeile passt, und schiebt alles weitere in den zweiten
+Block:
+
+    Ve = Woerter, die in eine Zeile passen
+    Ve < rt.length && (pr = Rest + pr, er = erste Ve Woerter)
+
+Das gehoert zum Kasten: der Kasten ist ein Balken hinter **einer**
+Zeile. Ohne Kasten ist es nur eine Kappung mitten im Satz — der erste
+Satz bricht nach ein paar Woertern ab, der Rest steht klein darunter.
+Genau das war zu sehen.
+
+Wieder eine Folge davon, dass ich `nurErsteZeilePlatte` seit
+Abschnitt 56 auf allen Fotokacheln setze. Vorher lief die Stelle nur
+im Stil "montserrat".
+
+Gekappt wird jetzt nur noch, wenn wirklich ein Kasten gezeichnet wird.
+Ohne Kasten trennt allein die Satzgrenze:
+
+    /^(.{10,90}?[.!?:])\s+(.*)$/
+
+Bei ihrem Beitrag heisst das: "Du siehst mich heute, mit einer
+starken, mehrfach 6-stelligen Personal Brand." (76 Zeichen, endet auf
+Punkt) wird der Serifenblock ueber vier Zeilen, "Aber lass mich dich
+mal mitnehmen…" der Grotesk-Block darunter. Genau ihre Aufteilung.
+
+Ist der erste Satz laenger als 90 Zeichen, greift die Regel nicht und
+alles bleibt im ersten Block, also durchgehend Serif.
+
+**Damit sind vier Dinge entkoppelt, die alle an derselben Marke
+hingen:** Kasten (56), Schriftfarbe (59), Textlage (64) und jetzt die
+Kappung auf eine Zeile. Die Marke bedeutet wieder nur eines — "das
+ist der erste Block".
