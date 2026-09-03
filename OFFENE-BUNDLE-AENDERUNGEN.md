@@ -2311,3 +2311,22 @@ Spaltenzahl decken. Der Multiplikator 37 vermeidet das.
 Die ersten sechsunddreissig Tage:
 
     T T F T T F T F T T F T T F T F T T F T T F T T T T F T T F T T F T F T
+
+## 80. Schrift auf Fotos reinweiss
+
+Der Stil "montserrat", auf dem alle Fotoslides laufen, setzt
+
+    schriftFarbe: "#F6F1E6"
+
+also ein warmes Elfenbein, kein Weiss. Auf dem Foto liest sich das als
+leicht vergilbt, besonders neben dem echten Weiss des Schildchens.
+
+    fotoSchriftFarbe   #FFFFFF
+
+wird gesetzt, sobald ein Foto im Spiel ist — an derselben Stelle, an
+der die Fotokacheln ohnehin ihre Eigenheiten bekommen (kein Kasten,
+fett und leicht). Der Wert ueberschreibt `tt.schriftFarbe`, damit
+greift er auf alle Zeilen, ohne dass jede Zeichenstelle einzeln
+angefasst werden muss.
+
+Kacheln ohne Foto behalten ihre Farben aus dem Farbpaar.
