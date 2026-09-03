@@ -2017,3 +2017,38 @@ Speicher:
 
 Damit ist beim naechsten Mal sichtbar, ob es wirklich der Platz ist
 oder etwas anderes.
+
+## 69. Text hoeher, Wortmarke an feste Stelle, Grading
+
+### Die Unterkante
+
+Der Text durfte bis `n*.9` reichen. Die Wortmarke wird **darunter**
+gezeichnet (`De + qe*.5`) und stand deshalb auf der Kachelkante, halb
+angeschnitten. Zwei Aenderungen statt einer:
+
+    textUnten   .86    der Text endet hoeher
+    nameUnten   .945   die Wortmarke steht an einer FESTEN Stelle
+
+Die Wortmarke gehoert zur Kachel, nicht zum Textblock. Solange sie am
+Textende hing, schob jede weitere Zeile sie weiter aus dem Bild.
+
+Weil der Text jetzt zwischen 10 und 86 Prozent liegt, also in 76
+Prozent der Hoehe, muss `textHoehe` darunter bleiben — sonst klemmen
+beide Klammern und die Textlage steht wieder still, wie in Abschnitt
+56. Deshalb .74 auf **.70**, Weg also 6 Prozent der Hoehe.
+
+### Das Grading
+
+Bisher lag nur ein Verlauf ueber dem Bild. Ein Verlauf dunkelt
+gleichmaessig ab und nimmt Zeichnung heraus — das war der Grund fuer
+die blassen Bilder. Kontrast gibt er keinen. Jetzt wird das Bild
+selbst gerechnet:
+
+    bildKontrast     .18    spreizt Lichter und Tiefen
+    bildHelligkeit  -.06    setzt den Schwarzpunkt tiefer
+
+Beide auf 0 heisst: kein Filter, keine Rechenzeit. Gerechnet wird auf
+dem Bild, das der Lader ohnehin schon auf 1800 Pixel begrenzt hat.
+
+Nachgesehen in `tools/.pruefen/grading.html`: Tiefen deutlich tiefer,
+Lichter bleiben hell — also Kontrast statt Abdunklung.

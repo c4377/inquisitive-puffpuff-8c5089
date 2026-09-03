@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.74,textHoeheZaehler:.54,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,bandAuf:0,folgeGewicht:"700",weichAnteil:0,fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:1350,bildGuete:.85,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.05,tiefeMitte:.10,tiefeUnten:.42,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,bandAuf:0,folgeGewicht:"700",weichAnteil:0,fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:1350,bildGuete:.85,bildKontrast:.18,bildHelligkeit:-.06,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.05,tiefeMitte:.10,tiefeUnten:.42,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -950,6 +950,49 @@ P.append(('textLage:rt.textLage||ot.textLage||lS[(ot.day-1)%lS.length]',
 #         es hergibt, belegter und verfuegbarer Speicher.
 P.append(('let l={__packed:2,gallery:r,days:s};return new Promise(o=>{const a=h=>{console.error("[BrandStudio] Plan konnte nicht gespeichert werden:",h),typeof window<"u"&&window.dispatchEvent(new CustomEvent("brandstudio:plan-save-failed",{detail:{reason:String(h&&h.name||h||"unbekannt")}})),o(!1)},u=t.transaction([wr],"readwrite");u.onabort=()=>a(u.error);const A=u.objectStore(wr).put(l,D3);A.onsuccess=()=>o(!0),A.onerror=()=>{a(A.error)}})', 'const zKlein=zu=>new Promise(zr=>{try{if(typeof zu!="string"||!/^data:image\\//.test(zu)||zu.length<200000)return zr(zu);const zi=new Image();zi.onload=()=>{try{const zM=BS_KACHEL.bildKante||1350,zw=zi.width,zh=zi.height,zf=Math.min(1,zM/Math.max(zw,zh));if(zf>=1&&zu.length<1200000)return zr(zu);const zc=document.createElement("canvas");zc.width=Math.max(1,Math.round(zw*zf)),zc.height=Math.max(1,Math.round(zh*zf));zc.getContext("2d").drawImage(zi,0,0,zc.width,zc.height);const zn=zc.toDataURL("image/jpeg",BS_KACHEL.bildGuete||.85);zr(zn&&zn.length<zu.length?zn:zu)}catch(ze){zr(zu)}};zi.onerror=()=>zr(zu);zi.src=zu}catch(ze){zr(zu)}});const rk=await Promise.all(r.map(zKlein));let l={__packed:2,gallery:rk,days:s};const zSchreib=zd=>new Promise(zo=>{try{const zu2=t.transaction([wr],"readwrite");zu2.onabort=()=>zo(zu2.error||new Error("abort"));const zA=zu2.objectStore(wr).put(zd,D3);zA.onsuccess=()=>zo(null);zA.onerror=()=>zo(zA.error||new Error("error"))}catch(ze){zo(ze)}});let zF=await zSchreib(l);if(zF){try{await new Promise(zf2=>{const zs2=t.transaction([wr],"readwrite").objectStore(wr);try{zs2.delete(W3)}catch(ze){}const zd2=zs2.delete(z3);zd2.onsuccess=()=>zf2();zd2.onerror=()=>zf2()})}catch(ze){}zF=await zSchreib(l)}if(zF){const zMB=zx=>Math.round(zx/1048576*10)/10+" MB",zB=rk.reduce((za,zx)=>za+(typeof zx=="string"?zx.length:0),0);let zP="";try{if(navigator.storage&&navigator.storage.estimate){const zq=await navigator.storage.estimate();if(zq&&zq.quota)zP=", belegt "+zMB(zq.usage||0)+" von "+zMB(zq.quota)}}catch(ze){}const zT=String(zF&&zF.name||zF||"unbekannt")+" \\u2014 Bilder im Plan "+zMB(zB)+zP;console.error("[BrandStudio] Plan konnte nicht gespeichert werden:",zF);typeof window<"u"&&window.dispatchEvent(new CustomEvent("brandstudio:plan-save-failed",{detail:{reason:zT}}));return!1}return!0',
  "Plan speichern: verkleinern, zweiter Versuch, ehrliche Meldung", 1))
+
+# 70 — Text etwas hoeher, Wortmarke an feste Stelle, und ein Grading.
+#
+#      **Die Unterkante.** Der Text durfte bis n*.9 reichen. Die
+#      Wortmarke wird darunter gezeichnet (De + qe*.5) und stand
+#      dadurch auf der Kachelkante, halb angeschnitten. Zwei
+#      Aenderungen statt einer:
+#
+#        textUnten  .86   der Text endet hoeher
+#        nameUnten  .945  die Wortmarke steht an einer FESTEN Stelle
+#                         und haengt nicht mehr an der Textlaenge
+#
+#      Die Wortmarke gehoert zur Kachel, nicht zum Textblock. Solange
+#      sie am Text hing, verschob jede Zeile mehr sie nach unten aus
+#      dem Bild.
+#
+#      Weil der Text jetzt zwischen .10 und .86 liegt, also in 76
+#      Prozent der Hoehe, muss textHoehe darunter bleiben, sonst
+#      klemmen beide Klammern und die Textlage steht wieder still
+#      (Abschnitt 56). Deshalb .74 -> .70, Weg also 6 Prozent.
+#
+#      **Das Grading.** Bisher lag nur ein Verlauf ueber dem Bild —
+#      der dunkelt gleichmaessig ab und nimmt Zeichnung heraus, statt
+#      Kontrast zu geben. Jetzt wird das Bild selbst gerechnet:
+#
+#        bildKontrast    .18   spreizt Lichter und Tiefen
+#        bildHelligkeit  -.06  setzt den Schwarzpunkt tiefer
+#
+#      Beide 0 heisst: kein Filter, keine Rechenzeit. Die Filter
+#      laufen auf dem bereits auf 1800 Pixel begrenzten Bild.
+P.append(('De+ae-Et/2>n*.9&&(De=n*.9-ae+Et/2)',
+ 'De+ae-Et/2>n*(BS_KACHEL.textUnten||.9)&&(De=n*(BS_KACHEL.textUnten||.9)-ae+Et/2)',
+ "Unterkante des Textes aus dem Block", 1))
+P.append(('Pe.fabric.Text(Ze,{left:_e,top:De+qe*.5,originX:"left",originY:"center"',
+ 'Pe.fabric.Text(Ze,{left:_e,top:n*(BS_KACHEL.nameUnten||.945),originX:"left",originY:"center"',
+ "Wortmarke an fester Stelle statt am Textende", 1))
+P.append(('me.set({originX:"center",originY:"center",left:r/2+pr,top:n/2+jr,scaleX:jt,scaleY:jt,selectable:!1});',
+ 'me.set({originX:"center",originY:"center",left:r/2+pr,top:n/2+jr,scaleX:jt,scaleY:jt,selectable:!1});'
+ 'try{const zK=Number(BS_KACHEL.bildKontrast)||0,zH=Number(BS_KACHEL.bildHelligkeit)||0,zFl=[];'
+ 'zK&&zFl.push(new Pe.fabric.Image.filters.Contrast({contrast:zK}));'
+ 'zH&&zFl.push(new Pe.fabric.Image.filters.Brightness({brightness:zH}));'
+ 'zFl.length&&(me.filters=zFl,me.applyFilters())}catch(ze){}',
+ "Kontrast und Schwarzpunkt auf dem Bild selbst", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
