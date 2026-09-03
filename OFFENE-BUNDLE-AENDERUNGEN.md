@@ -687,3 +687,25 @@ So wird nachgemessen:
 
     python3 tools/kachel-pruefen.py <bundle> --breite 402 --hoehe 502 \
       --scale 1 --grund "#F6F1F1" --schrift "#0F0A08" --text "<Vorbildtext>"
+
+## 26. Beige Gruende, braune Schrift, Aspekta
+
+Kein Navy mehr. Textkacheln tragen Braun auf hellem Beige, Weiss bleibt
+den Fotokacheln vorbehalten.
+
+    grundA  #E9E0CC   Beige
+    grundB  #F4EFE3   helles Beige
+    schrift #4A3A2A   Braun   (8,3 und 9,5 zu 1)
+
+Die Schrift ist `AspektaBrand` statt HelveticaNeueBrand. Aspekta hat
+einen echten Fettschnitt (400 und 700 sind im CSS registriert) und
+trifft den schweren Fettsatz des Vorbilds deutlich besser.
+
+Der fette Absatz kann eine eigene Familie bekommen:
+
+    schriftart      fuer den normalen Absatz
+    schriftartFett  fuer die Pointe, sonst wie schriftart
+
+Steht beides auf AspektaBrand. Wer den Fettsatz noch schwerer will:
+ArchivoBlack oder Anton, beide im CSS registriert — dann aber nur fuer
+schriftartFett, sonst kippt der ganze Satz.
