@@ -447,3 +447,23 @@ Schriftgroesse von 84 auf **70 Prozent**. Der Wert steht an einer Stelle:
 
 Wenn Carina "noch kleiner" oder "wieder groesser" sagt, ist das genau diese
 eine Zahl.
+
+## 17. Textkacheln bekamen ArchivoBlack statt der Marken-Schrift
+
+Direkter Folgefehler von Abschnitt 15. Im Zusammenbau steht
+
+    plateFont: ct || Vt || He.plateFontFamily
+    Vt = vT(_e, ot.day-1, {hatFoto: !qt})
+
+und `vT` liefert **ohne Foto fest "ArchivoBlack"**. Fuer jede Textkachel
+stand in `plateFont` also ArchivoBlack. Solange der Kartenzeichner Playfair
+fest verdrahtet hatte, ist das nie aufgefallen; seit die Kacheln der Marke
+folgen, kam die fette Grotesk durch — und lief aus der Kachel heraus, weil
+der Zeichner mit ihr nicht mehr sauber umbricht.
+
+Der Zeichner bekommt jetzt eine eigene Angabe aus der Marke:
+
+    platteSchrift: He.plateFontFamily || He.fontFamily || ""
+    Ye.markenSchrift = ...ablauf... ? "" : t.platteSchrift || ""
+
+`plateFont` bleibt unangetastet, es wird an anderer Stelle gebraucht.
