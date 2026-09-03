@@ -853,3 +853,16 @@ kleiner als im Vorbild.
 Was noch fehlt: das Vorbild setzt einzelne Woerter in einem warmen
 Goldton ("& 60k", "vertraut") und legt auf Fotokacheln eine kleine
 beige Schriftplatte unter die Ueberschrift. Beides ist nicht gebaut.
+
+## 32. Inter auf der Textkachel, Prata auf dem Foto
+
+Carinas Aufteilung, ausdruecklich so gewollt:
+
+    schriftart        Inter    Ueberschrift der Textkachel
+    unterSchrift      Inter    Unterzeile der Textkachel
+    fotoSchrift       Prata    alle Fotoslides
+    deckblattFamilie  Prata    erste Fotoslide
+
+Das Vorbild setzt auch die Textkachel in einer Serife. Carina will dort
+Inter — die Serife bleibt den Fotokacheln vorbehalten. Playfair Display
+kommt damit nicht mehr vor.

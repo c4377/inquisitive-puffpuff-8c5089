@@ -272,7 +272,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#E9E0CC",grundB:"#F4EFE3",schrift:"#2A211A",schriftart:"Prata",unterSchrift:"Inter",unterVerhaeltnis:.64,unterFarbe:"#6B5B4A",groesseAnteil:.098,enge:1,laufweite:-18,zeile:1.02,absatz:.20,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Playfair Display",deckblattFamilie:"Prata",deckblattGroesse:52,fotoGroesse:41};'
+KONFIG = 'const BS_KACHEL={grundA:"#E9E0CC",grundB:"#F4EFE3",schrift:"#2A211A",schriftart:"Inter",unterSchrift:"Inter",unterVerhaeltnis:.64,unterFarbe:"#6B5B4A",groesseAnteil:.098,enge:1,laufweite:-18,zeile:1.02,absatz:.20,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Prata",deckblattFamilie:"Prata",deckblattGroesse:52,fotoGroesse:41};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
