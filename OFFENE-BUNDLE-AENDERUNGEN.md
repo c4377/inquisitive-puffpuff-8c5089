@@ -292,3 +292,36 @@ und 14 aufgefallen. Die Bedingung ist jetzt nur noch
 
 Der gleiche Ausfall steckte nicht im Weg "Alle Posts neu laden" — dort
 gibt es kein Streuwerk. Bitte im Quellcode nicht wieder einbauen.
+
+## 12. Elegante Serifen und Schrift-Kombinationen im Fonts-Reiter
+
+Carina wollte den Look ihrer Canva-Liste. Hatton, Atteron, Ansam und Black
+Mango sind lizenzierte Canva-Schriften und lassen sich nicht ausliefern —
+also vier frei lizenzierte (SIL OFL), die dem am naechsten kommen:
+
+  - Bodoni Moda  — hoher Kontrast, feine Haarlinien (Hatton, Atteron)
+  - Prata        — weicher und runder (Black Mango)
+  - Italiana     — duenne, weite Versalien (Ansam)
+  - Marcellus    — ruhige Antiqua fuer Fliesstext
+
+Alle liegen als woff2 unter `site/fonts/` und haengen per `@font-face` in
+`site/index.html`, wie Montserrat. Cormorant Garamond stand bisher nur im
+Google-Link und liegt jetzt ebenfalls lokal — der Zeichner misst Textbreiten
+auf dem Canvas und darf nicht auf eine Ersatzschrift laufen. Lizenzen in
+`site/fonts/Serifen-LICENSE.txt`.
+
+Eingebaut an drei Stellen:
+
+  1. Schriftkatalog im Brand-Bereich (die Liste mit Musterzeile) — vier
+     neue Eintraege vor "Playfair Display".
+  2. Auswahlfeld SCHRIFTART (HEADLINE) im Editor — dieselben vier.
+  3. Neu: eine Reihe "SCHRIFT-KOMBINATIONEN" oben im Fonts-Reiter, direkt
+     unter der Vorschau. Ein Tipp setzt Titelschrift, Textkachel-Schrift,
+     Accent und Body zusammen; die Signatur-Schrift bleibt unangetastet.
+
+         Editorial   Bodoni Moda · Bodoni Moda · Italiana   · Montserrat
+         Sanft       Prata       · Prata       · Marcellus  · Montserrat
+         Weit        Italiana    · Cormorant   · Italiana   · Montserrat
+         Wie bisher  Petrona     · Petrona     · OpenSans   · OpenSans
+
+     "Wie bisher" ist der Rueckweg und soll bleiben.
