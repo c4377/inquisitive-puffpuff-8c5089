@@ -739,7 +739,7 @@ setzt `groesseAnteil` zurueck auf `.058` und `zeile` auf `1.28`.
 Aspekta war ein Umweg: gleiche Groesse, aber zwoelf Zeilen und optisch
 noch kleiner — die x-Hoehe ist dort noch geringer.
 
-## 28. Enger gestellt — und damit deckungsgleich
+## 28. Enger gestellt (ueberholt von Abschnitt 29)
 
 Das Vorbild hatte hohe Buchstaben *und* nur acht Zeilen. Mit Inter war
 nur eines davon zu haben: bei passender Breite waren die Buchstaben zu
@@ -769,3 +769,29 @@ rand .0885, mitte .595, maxhoehe .80`.
 `mitte` steht auf .595 und nicht auf .538, weil in die Hoehenrechnung
 der Platz fuer den Namen eingeht — der Textblock selbst landet damit auf
 53,7 Prozent.
+
+## 29. Enger heisst Abstand, nicht Buchstaben
+
+Die waagrechte Stauchung aus Abschnitt 28 (`enge .80`) traf die Maße des
+Vorbilds, verzerrte aber die Buchstabenformen. Carina wollte den
+*Abstand* enger, nicht die Buchstaben. `enge` steht deshalb auf 1 und
+bleibt nur als Notausgang im Block stehen.
+
+Stattdessen zwei echte Abstandswerte:
+
+    laufweite  -28   Abstand zwischen den Buchstaben, in Tausendstel em
+    zeile     1.04   Zeilenabstand
+
+Die Laufweite geht in den Umbruch ein, sonst rechnet der Zeichner mit
+der ungetrackten Breite und bricht zu frueh:
+
+    MESS = MAXB / ENG / (1 + laufweite/500)
+
+Der Faktor 500 ist eine Naeherung: ein Zeichen ist im Schnitt etwa ein
+halbes em breit, ein Tausendstel em Laufweite pro Zeichen aendert die
+Zeilenbreite also um etwa zwei Tausendstel.
+
+Der Preis gegenueber Abschnitt 28: zehn Zeilen statt acht. Das ist der
+Unterschied zwischen einer echten schmalen Schrift und einer, die man
+nur zusammenschiebt. Ohne die passende Schriftdatei ist beides nicht
+gleichzeitig zu haben.
