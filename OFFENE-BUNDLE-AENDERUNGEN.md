@@ -1771,3 +1771,30 @@ Spalte immer so breit ist. Das Ausweichen vor Gesichtern ist damit
 praktisch aus — es war der Grund fuer die winzige Schrift in
 Abschnitt 51. Wenn Text kuenftig auf einem Gesicht liegt, ist das der
 Wert.
+
+## 62. Ein Band, keine Treppe
+
+Selbst nachgesehen (`tools/.pruefen/band.html`), und der Fehler war
+sofort zu sehen: **jede Zeile bekam einen eigenen Kasten in ihrer
+eigenen Breite.** Gemessen an einer Kachel:
+
+    Zeile "Von der Idee"        Text 635   Kasten 727
+    Zeile "zum"                 Text 219   Kasten 310
+    Zeile "vierstelligen"       Text 636   Kasten 728
+    Zeile "Angebot."            Text 460   Kasten 552
+
+Vier verschieden lange Kaesten. Der Kasten hinter "zum" ist 310 statt
+727 breit — das ist das "zu kurze Band". Kein Rechenfehler: die
+Kastenbreite war korrekt, nur eben pro Zeile.
+
+Solange der erste Block **eine** Zeile lang war, fiel das nicht auf.
+Seit die Schrift die Kachel fuellt (Abschnitt 61), sind es vier.
+
+Alle Kaesten des ersten Blocks nehmen jetzt dieselbe Breite: die der
+laengsten Zeile. Da sie mit `Et` untereinander stehen und `Et+c(1.5)`
+hoch sind, stossen sie aneinander und ergeben eine durchgehende
+Flaeche. Zeilen ohne Kasten bleiben, wie sie waren.
+
+**Merksatz:** "zu kurz" hiess nicht, dass eine Zahl zu klein war. Es
+hiess, dass die Zahl fuer jede Zeile einzeln richtig war, obwohl die
+vier Zeilen zusammen eine Form ergeben sollen.

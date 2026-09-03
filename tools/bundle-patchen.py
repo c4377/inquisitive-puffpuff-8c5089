@@ -756,6 +756,28 @@ P.append(('Et=qe*(tt.engZeilen?1.17:$e?1.3:1.06)',
  'Et=qe*(tt.engZeilen?1.17:$e?(BS_KACHEL.fotoZeile||1.3):1.06)',
  "Zeilenabstand auf Fotos aus dem Block", 1))
 
+# 63 — Ein Band, keine Treppe.
+#
+#      Jede Zeile bekam einen eigenen Kasten in ihrer eigenen Breite.
+#      Solange der erste Block eine Zeile lang war, fiel das nicht auf.
+#      Seit die Schrift die Kachel fuellt, sind es vier Zeilen — und
+#      vier verschieden lange Kaesten sehen aus wie eine Treppe, bei
+#      der der kurze Kasten "zu kurz" wirkt.
+#
+#      Alle Kaesten des ersten Blocks bekommen jetzt dieselbe Breite:
+#      die der laengsten Zeile. Da sie mit Et untereinander stehen und
+#      Et+c(1.5) hoch sind, stossen sie aneinander und ergeben eine
+#      durchgehende Flaeche. Zeilen ohne Kasten bleiben unveraendert.
+P.append(('dr.forEach((Je,rt)=>{if(!Je.length){',
+ 'const PB=(()=>{let mx=0;for(let ii=0;ii<Lt&&ii<dr.length;ii+=1){const zz=dr[ii];'
+ 'if(!zz||!zz.length)continue;'
+ 'const p2=new Pe.fabric.Text(zz.map(xx=>xx.w).join(" "),{fontSize:qe,fontFamily:Qe,fontWeight:kt});'
+ 'mx=Math.max(mx,p2.width,Ht(zz,qe,!0))}return mx})();'
+ 'dr.forEach((Je,rt)=>{if(!Je.length){',
+ "Breiteste Zeile des ersten Blocks vorab messen", 1))
+P.append((',qt=ct+It*2', ',qt=(Ve?Math.max(ct,PB):ct)+It*2',
+ "Alle Kaesten des ersten Blocks gleich breit", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
