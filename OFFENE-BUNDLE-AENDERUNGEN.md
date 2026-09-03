@@ -401,3 +401,34 @@ Fliesstext-Stil wird sie jetzt fest eingesetzt:
 **Kombination "Sanft"** ist jetzt Prata mit Helvetica Neue statt Montserrat
 — Helvetica Neue liegt seit jeher im Projekt (Thin bis Bold) und kommt dem
 Vorbild am naechsten.
+
+## 15. Balken statt Fettdruck, waermeres Weiss, kleinere Schrift
+
+Carina hat den Stil an einem Screenshot korrigiert: der Einstieg steht auf
+einem **Balken** und ist **nicht fett** — nicht fett gegen normal, sondern
+Balken gegen normal. Der Fliesstext-Stil sieht jetzt so aus:
+
+    plattenFarbe: "#F6F1E6"    Balken in warmem Papierweiss
+    bandSchriftFarbe: "#1A1614"
+    schriftFarbe: "#F6F1E6"    Fliesstext, waermer als Reinweiss
+    staerkeUeber: "400"        auch die erste Zeile normal
+    polsterX: n*.42
+
+`ohnePlatteErste` faellt damit weg. `fettNurErste` bleibt gesetzt, weil an
+dem Schalter auch die Messung mit 400 und die Ausrichtung nach der ruhigen
+Zone haengen — mit `staerkeUeber:"400"` steht trotzdem alles normal.
+
+Schriftgroesse: der Stil startet mit 84 Prozent
+(`t.textStil==="montserrat"&&(qe=Math.round(qe*.84))` vor dem T1-Aufruf);
+die Schrumpfschleife arbeitet danach von dort weiter.
+
+**Textkacheln folgen jetzt auch der Marke.** Sie liefen bisher ohne eigene
+Fassung als `"ablauf"` durch und haben darum Playfair behalten. Ob Playfair
+bleibt, entscheidet nicht mehr die Fassung, sondern der Tag:
+
+    Ye.markenSchrift = t.reminderArt==="ablauf" || t.karte==="ablauf"
+                       ? "" : t.plateFont || t.fontFamily
+
+Echte Ablauf-Tage behalten Playfair, alles andere folgt der Marke.
+Nachgemessen gegen den Stand vor allen Schrift-Aenderungen: vier
+Ablauf-Folien, null abweichende Pixel.
