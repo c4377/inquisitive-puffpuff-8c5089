@@ -2172,3 +2172,39 @@ Ergebnis gegengelesen:
 
 Preise, Fristen, Platzzahlen und Bedingungen sind damit nachweislich
 dieselben geblieben.
+
+## 75. Der Wechsel fett/leicht war weg, sobald der Text nur einen Satz hat
+
+Die Trennung in ersten und zweiten Block haengt an einer Satzgrenze:
+
+    /^(.{10,90}?[.!?:])\s+(.*)$/
+
+Bis Abschnitt 65 gab es daneben die Kappung auf eine Zeile: was nicht
+in die erste Zeile passte, rutschte in den zweiten Block. Damit gab es
+**immer** zwei Bloecke — dafuer mitten im Wort getrennt, was zu Recht
+bemaengelt wurde. Die Kappung ist weg, und mit ihr bei einsaetzigen
+Texten auch der Wechsel. Ihre Kacheln bestehen fast alle aus einem
+Satz, also stand alles in fettem Fraunces.
+
+Neue Reihenfolge:
+
+1. eigene Zeilenumbrueche im Text
+2. Satzgrenze
+3. **Satzteilgrenze** — das Komma oder die Konjunktion (und, aber,
+   weil, denn, damit, sondern, oder), die der Mitte am naechsten
+   liegt, und nur zwischen 25 und 78 Prozent der Laenge, damit kein
+   Zweizeiler mit einem einzelnen Wort dahinter entsteht
+4. sonst gar nicht — kurze Saetze bleiben ein Block
+
+`teilungAb` (52 Zeichen) legt fest, ab welcher Laenge ueberhaupt
+geteilt wird.
+
+Getrennt wird damit dort, wo man auch beim Sprechen Luft holt. An
+ihren echten Texten geprueft (die Regel aus dem gebauten Bundle
+geschnitten und in node laufen lassen):
+
+    Wie kommst du in die Energie,          / aus der heraus verkauft wird?
+    Scham ist der teuerste Zustand,        / in dem du arbeiten kannst.
+    Es gibt eine Skala fuer …zustaende     / und sie erklaert mehr ueber …
+    Alles, was gerade in deinem Leben ist, / hast du dorthin gebracht.
+    Ich glaub nicht an positives Denken.   / (bleibt ein Block)
