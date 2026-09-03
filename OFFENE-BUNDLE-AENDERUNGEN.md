@@ -1177,3 +1177,66 @@ Gegenteil von dem sagen, was sie tun, sind die naechste Stolperstelle.
 **Merksatz:** Bevor etwas "wie das Vorbild" aussehen soll, das Vorbild
 ausmessen — Farbe, Kontrast, Gewicht, Zeile, Absatz. Alle vier Zahlen
 lagen daneben, jede einzeln haette man fuer Geschmack halten koennen.
+
+## 45. Ein Schriftsystem statt einer Schriftsammlung
+
+Bisher: Marcellus auf der Textkachel, Inter fuer die Unterzeile,
+Marcellus auf dem Foto, Montserrat im Folgestil. Vier Familien, keine
+Entscheidung. Jetzt zwei, jede mit einer Aufgabe.
+
+    Textkachel, Folgeslides, Name    DM Sans      400 und 700
+    Deckblatt der Fotokachel         Playfair Display  700
+
+**DM Sans** statt Inter, weil das Vorbild eine geometrische Grotesk
+ist: kreisrunde Punzen bei o und C, flach abgeschnittene Enden. Inter
+hat engere Punzen und liest sich wie eine Oberflaeche, nicht wie eine
+Zeitschrift. Verglichen wurden am selben Satz: Inter, DM Sans, Plus
+Jakarta Sans, Figtree, Schibsted Grotesk, Manrope. Manrope waere die
+Alternative, wenn es fetter sein soll; Schibsted ist neutraler,
+Figtree schmaler, Jakarta eigenwilliger im a und z.
+
+**Playfair Display 700** statt Marcellus auf dem Deckblatt. Das
+Vorbild setzt dort eine fette Serif mit starkem Strichkontrast.
+Marcellus hat nur einen Schnitt, und der ist duenn — auf einem Foto
+verschwindet er. Ebenfalls verglichen: Prata (feiner), Bodoni Moda
+Bold (kaelter), Fraunces Bold (eigenwilliger), Instrument Serif (zu
+leicht).
+
+### Zwei Fallen, die dabei aufgefallen sind
+
+**Playfair wurde hart auf 400 gezwungen.** Im Bundle steht
+
+    /Playfair/.test(String(Qe))&&(kt="400");
+
+Wer die Deckblattschrift auf Playfair stellt, bekommt still eine
+duenne Ueberschrift und sucht den Fehler bei der Groesse. Das
+Deckblatt liest jetzt `deckblattGewicht`, alles andere bleibt.
+
+**Einzelne Zeilen wurden kleiner gezeichnet als der Rest.** Passte ein
+langes Wort wie "Nervenzusammenbruch" nicht in die Spalte, schrumpfte
+`txt` nur diese eine Zeile. Der Block hatte dann drei Groessen. Die
+Anpassungsschleife prueft jetzt neben der Hoehe auch die Breite: die
+laengste Zeile bestimmt die Groesse fuer alle. Das nachtraegliche
+Schrumpfen einzelner Zeilen ist nur noch Notnagel.
+
+### Und eine Falle im Pruefwerkzeug
+
+Die Schriftvergleiche waren zuerst wertlos: fuenf von sechs Kandidaten
+sahen identisch aus, weil alle in dieselbe Serif zurueckfielen. Grund:
+Google liefert pro Familie mehrere woff2-Ausschnitte, und der erste im
+Stylesheet ist kyrillisch. Geladen wurde also eine Datei ohne
+lateinische Zeichen. Der Browser meldet das nicht, er nimmt die
+Ersatzschrift. `tools/.pruefen/fonts` enthaelt jetzt nur Dateien, deren
+unicode-range U+0000-00FF abdeckt.
+
+`tools/kachel-pruefen.py` kann mit `--wert NAME=WERT` einzelne Werte
+aus BS_KACHEL ueberschreiben, ohne das Bundle neu zu bauen. Damit
+entstand der Vergleich.
+
+### Noch nicht gebaut
+
+Das beige Schildchen ueber der Ueberschrift der Fotokachel ("Die 5
+Levels von Hooks"). Es ist das Element, das die Fotokacheln im Vorbild
+als Reihe lesbar macht. Es fehlt ihm aber eine Quelle im Datenmodell —
+es braucht einen kurzen Reihen- oder Themennamen, den es heute nicht
+gibt. Deshalb bewusst offen und nicht erfunden.

@@ -51,6 +51,8 @@ SEITE = """<!doctype html><html><head><meta charset="utf-8">
 @font-face{font-family:Inter;src:url(fonts/Inter-400.woff2) format("woff2");font-weight:400}
 @font-face{font-family:Inter;src:url(fonts/Inter-700.woff2) format("woff2");font-weight:700}
 @font-face{font-family:Marcellus;src:url(fonts/Marcellus-Regular.woff2) format("woff2");font-weight:400}
+@font-face{font-family:Prata;src:url(fonts/Prata-Regular.woff2) format("woff2");font-weight:400}
+__KANDIDATEN__
 body{margin:10px;background:#2a2a2a}
 #lage{position:fixed;right:12px;top:12px;color:#ddd;font:13px monospace;white-space:pre-wrap;max-width:320px}
 </style></head><body>
@@ -63,7 +65,7 @@ __KONFIG__
   try {
     await Promise.all(['400 40px "HelveticaNeueBrand"','700 40px "HelveticaNeueBrand"',
       '400 40px "Playfair Display"','700 40px "PoppinsBold"','400 40px "ArchivoBlack"',
-      '400 40px "Anton"','400 40px "AspektaBrand"','700 40px "AspektaBrand"','400 40px "Inter"','700 40px "Inter"','400 40px "Marcellus"'].map(f => document.fonts.load(f)));
+      '400 40px "Anton"','400 40px "AspektaBrand"','700 40px "AspektaBrand"','400 40px "Inter"','700 40px "Inter"','400 40px "Marcellus"', __MEHRLADEN__].map(f => document.fonts.load(f)));
     const Pe = { fabric: window.fabric };
     const e = new fabric.StaticCanvas('cv');
     const r = __BREITE__, n = __HOEHE__, d = __SCALE__, h = 0.8;
@@ -106,6 +108,9 @@ def main():
     ap.add_argument("bundle")
     ap.add_argument("--fassung", default="marke")
     ap.add_argument("--paar", default="A", help="Farbpaar A oder B aus BS_KACHEL")
+    ap.add_argument("--wert", action="append", default=[],
+                    metavar="NAME=WERT",
+                    help="einen Wert aus BS_KACHEL ueberschreiben, mehrfach moeglich")
     ap.add_argument("--grund", default=None, help="Hintergrund, sonst aus dem Paar")
     ap.add_argument("--schrift", default=None, help="Schriftfarbe, sonst aus dem Paar")
     ap.add_argument("--text", default=BEISPIEL)
@@ -124,6 +129,15 @@ def main():
     if i < 0:
         raise SystemExit("ABBRUCH: BS_KACHEL fehlt im Bundle — falsche Fassung?")
     konfig = s[i:s.find("};", i) + 2]
+    for paar_txt in a.wert:
+        if "=" not in paar_txt:
+            raise SystemExit("ABBRUCH: --wert braucht NAME=WERT, bekam " + paar_txt)
+        name, wert = paar_txt.split("=", 1)
+        muster = re.compile(r'\b%s:("[^"]*"|[^,}]+)' % re.escape(name))
+        if not muster.search(konfig):
+            raise SystemExit("ABBRUCH: %s steht nicht in BS_KACHEL" % name)
+        ersatz = wert if wert[:1] in "0123456789.-" else '"%s"' % wert
+        konfig = muster.sub(lambda m: name + ":" + ersatz, konfig, count=1)
     werte = dict(re.findall(r'(\w+):"([^"]*)"', konfig))
 
     paar = a.paar.upper()
@@ -145,7 +159,22 @@ def main():
     if not os.path.isdir(ziel_fonts):
         shutil.copytree(os.path.join(WURZEL, "site", "fonts"), ziel_fonts)
 
-    seite = (SEITE.replace("__KONFIG__", konfig)
+    kand = "\n".join(
+        '@font-face{font-family:"%s";src:url(fonts/%s.woff2) format("woff2");'
+        'font-weight:100 900}' % (fam, datei)
+        for fam, datei in (("Inter", "Inter-400"), ("DM Sans", "DMSans-400"),
+                           ("Plus Jakarta Sans", "Jakarta-400"),
+                           ("Figtree", "Figtree-400"),
+                           ("Schibsted Grotesk", "Schibsted-400"),
+                           ("Manrope", "Manrope-400"))
+        if os.path.exists(os.path.join(AUS, "fonts", datei + ".woff2")))
+    laden = ",".join("'%s 40px \"%s\"'" % (g, f)
+                     for f in ("Inter", "DM Sans", "Plus Jakarta Sans", "Figtree",
+                               "Schibsted Grotesk", "Manrope", "Marcellus", "Prata")
+                     for g in ("400", "700"))
+    seite = (SEITE.replace("__KANDIDATEN__", kand)
+                  .replace("__MEHRLADEN__", laden)
+                  .replace("__KONFIG__", konfig)
                   .replace("__ZEICHNER__", zeichner)
                   .replace("__JE__", je)
                   .replace("__TEXT__", repr(a.text).replace("'", '"'))
