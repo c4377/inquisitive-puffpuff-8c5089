@@ -7,18 +7,17 @@ Repo: `c4377/inquisitive-puffpuff-8c5089`, Branch `main`, Build `vite build`.
 | Datei | Ziel im Repo |
 |---|---|
 | `write-reminder.mjs` | `netlify/functions/write-reminder.mjs` |
-| `write-caption.mjs` | `netlify/functions/write-caption.mjs` |
 
-Beides ist echter Quelltext, kein Build nötig. Beide brauchen
+Das ist echter Quelltext, kein Build nötig. Braucht
 `GEMINI_API_KEY` in den Netlify-Umgebungsvariablen.
 
 `write-reminder` schreibt die zwei Fassungen und verwirft jeden Text,
 der zu lang ist, kein Sternchenpaar hat oder Ausrufe- und
 Anführungszeichen enthält.
 
-`write-caption` nimmt zusätzlich `art` (1, 2 oder 3) und `stories`
-(true/false) entgegen und gibt neben `caption` ein Feld `stories` mit
-fünf Einträgen zurück.
+`write-caption` gibt es nicht mehr: seit Bundle karten74 schreibt die
+App keine Captions mehr selbst, sie werden über den Caption-Import als
+Text eingefügt. Die Funktion wurde entfernt.
 
 ## Muss verdrahtet werden
 
@@ -51,7 +50,7 @@ Monogramm, sowie sechs der acht Netlify-Funktionen.
 
 Solange der neuere `src` vom Rechner nicht im Repo ist, lässt sich
 `kartenzeichner.js` nicht anschließen — es gibt keinen Kartenpfad, in
-den er hineingehört. Die zwei Funktionen oben gehen trotzdem sofort.
+den er hineingehört. Die Funktion oben geht trotzdem sofort.
 
 ## Weitere Änderungen, die nur im gebauten Bundle stecken
 
