@@ -2113,3 +2113,25 @@ Ansprache authentischer" heisst, sie neu zu schreiben — Struktur
 (Kopfzeile, Titel, Unterzeile, Liste/Stationen, Fliesstext) bleibt,
 der Ton aendert sich. Das ist Redaktion an ihrer Stimme, nicht am
 Aussehen, und wird erst nach ihrer Freigabe eines Musters gemacht.
+
+## 73. Das letzte Overlay ausserhalb des Systems
+
+Liegt eine Ablauf-Folie auf einem Foto, bekam sie einen eigenen
+Verlauf, fest im Bundle:
+
+    rgba(18,16,14, .62 / .38 / .66)
+
+Kalter Ton, oben wie unten mehr als 60 Prozent Abdunklung. Waehrend
+die Fotokacheln seit Abschnitt 63 bei .05/.10/.42 in warmem Ton
+liegen, stand hier noch der alte Wert — das Bild war praktisch nicht
+mehr zu sehen.
+
+Ablauf-Folien tragen viel kleinen Text und brauchen mehr Halt als eine
+Ueberschrift, deshalb eigene Werte statt derselben:
+
+    ablaufTiefeOben    .30
+    ablaufTiefeMitte   .22
+    ablaufTiefeUnten   .42
+
+Der Ton kommt aus `bildTon`, also derselbe warme Braunton wie ueberall
+sonst. Damit liegt kein Verlauf mehr ausserhalb des Blocks.

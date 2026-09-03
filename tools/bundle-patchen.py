@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,bandAuf:0,folgeGewicht:"700",weichAnteil:0,fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:1350,bildGuete:.85,bildKontrast:.18,bildHelligkeit:-.06,ablaufTitel:"HelveticaNeueBrand",ablaufTitelGewicht:"700",bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.05,tiefeMitte:.10,tiefeUnten:.42,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,bandAuf:0,folgeGewicht:"700",weichAnteil:0,fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:1350,bildGuete:.85,bildKontrast:.18,bildHelligkeit:-.06,ablaufTitel:"HelveticaNeueBrand",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.05,tiefeMitte:.10,tiefeUnten:.42,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -1054,6 +1054,33 @@ P.append(('txt(zl,{left:AX,top:ty,originX:AO,originY:"center",fontSize:A.groesse
  '...(LINKS?{}:{fontWeight:BS_KACHEL.ablaufTitelGewicht||"400"}),'
  'charSpacing:FOLGE&&!LINKS?25:0,fill:TINT,maxB:MAXB});',
  "Ablauf-Titel in seinem Gewicht", 1))
+
+# 73 — Das letzte Overlay, das noch ausserhalb des Systems lag.
+#
+#      Liegt eine Ablauf-Folie auf einem Foto, bekommt sie einen
+#      eigenen Verlauf, fest im Bundle:
+#
+#          rgba(18,16,14, .62 / .38 / .66)
+#
+#      Kalter Ton, und oben wie unten mehr als 60 Prozent Abdunklung.
+#      Waehrend die Fotokacheln seit Abschnitt 63 bei .05/.10/.42 in
+#      warmem Ton liegen, stand hier noch der alte Wert — das Bild
+#      war praktisch nicht mehr zu sehen.
+#
+#      Ablauf-Folien tragen viel kleinen Text und brauchen mehr Halt
+#      als eine Ueberschrift, deshalb eigene Werte statt derselben:
+#
+#          ablaufTiefeOben   .30
+#          ablaufTiefeMitte  .22
+#          ablaufTiefeUnten  .42
+#
+#      Der Ton kommt aus bildTon, also derselbe warme Braunton wie
+#      ueberall sonst.
+P.append(('colorStops:[{offset:0,color:"rgba(18,16,14,0.62)"},{offset:.45,color:"rgba(18,16,14,0.38)"},{offset:1,color:"rgba(18,16,14,0.66)"}]',
+ 'colorStops:[{offset:0,color:`rgba(${BS_KACHEL.bildTon},${BS_KACHEL.ablaufTiefeOben})`},'
+ '{offset:.45,color:`rgba(${BS_KACHEL.bildTon},${BS_KACHEL.ablaufTiefeMitte})`},'
+ '{offset:1,color:`rgba(${BS_KACHEL.bildTon},${BS_KACHEL.ablaufTiefeUnten})`}]',
+ "Ablauf-Verlauf aus dem Block, warm und heller", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
