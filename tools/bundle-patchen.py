@@ -251,9 +251,6 @@ P.append(('istKarte:!0,grundFarbe:h.grund,rundung:0,ausrichtung:"links",schriftF
 #      Groesse: PV ist der Grundwert fuer Folien mit Foto (34).
 #      Auf dem Deckblatt 46. sizeLocked sticht weiterhin — eine von
 #      Hand gesetzte Groesse bleibt unangetastet.
-P.append(('folienRolle:ta,zaehler:"",kachelSchrift:ot.kachelSchrift||(D1(ot.day)?nS(ot.day):BG(rt.kachelSchrift)||"marke")',
- 'folienRolle:ta,zaehler:"",kachelSchrift:ta==="deckblatt"?BS_KACHEL.deckblattSchrift:(ot.kachelSchrift||(D1(ot.day)?nS(ot.day):BG(rt.kachelSchrift)||"marke"))',
- "Deckblatt in Playfair statt Anton", 1))
 P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?PV:OV);',
  'let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?(t.folienRolle==="deckblatt"?BS_KACHEL.deckblattGroesse:PV):OV);',
  "Deckblatt groesser (aus BS_KACHEL)", 1))
@@ -275,7 +272,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#E9E0CC",grundB:"#F4EFE3",schrift:"#4A3A2A",schriftart:"Inter",schriftartFett:"Inter",groesseAnteil:.072,enge:1,laufweite:-28,zeile:1.04,absatz:.90,rand:.0885,mitte:.595,maxhoehe:.86,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Playfair Display",deckblattSchrift:"playfair",deckblattGroesse:46};'
+KONFIG = 'const BS_KACHEL={grundA:"#E9E0CC",grundB:"#F4EFE3",schrift:"#4A3A2A",schriftart:"Inter",schriftartFett:"Inter",groesseAnteil:.072,enge:1,laufweite:-28,zeile:1.04,absatz:.90,rand:.0885,mitte:.595,maxhoehe:.86,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Playfair Display",deckblattFamilie:"Prata",deckblattGroesse:46};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -324,6 +321,26 @@ P.append(('fotoSchriften:["Anton"]', 'fotoSchriften:[BS_KACHEL.fotoSchrift]',
 P.append((r'const i=e&&e.fotoSchriften||["Anton"];return i[t%i.length]',
  r'const i=e&&e.fotoSchriften||[BS_KACHEL.fotoSchrift];return i[t%i.length]',
  "Fotoschrift Ersatzwert aus BS_KACHEL", 1))
+
+# 30 — Erste Fotoslide in Prata. Der Weg ueber kachelSchrift und co()
+#      war zu indirekt: co() sucht die Familie in einer Auswahlliste,
+#      und dort steht Prata nicht. Die Familie wird jetzt direkt gesetzt,
+#      an derselben Stelle, an der schriftUeber wirkt.
+#
+#      Prata ist in site/index.html per @font-face registriert (NICHT im
+#      gebauten CSS — dort steht sie nicht, das hatte mich getaeuscht)
+#      und liegt als site/fonts/Prata-Regular.woff2.
+P.append(('tt.schriftUeber&&(Qe=tt.schriftUeber),tt.flieszSchrift&&t.bodySchrift&&(Qe=t.bodySchrift);',
+ 'tt.schriftUeber&&(Qe=tt.schriftUeber),tt.flieszSchrift&&t.bodySchrift&&(Qe=t.bodySchrift),'
+ '$e&&t.folienRolle==="deckblatt"&&BS_KACHEL.deckblattFamilie&&(Qe=BS_KACHEL.deckblattFamilie);',
+ "Erste Fotoslide in der Deckblatt-Familie", 1))
+
+# 31 — Prata muss vor dem Zeichnen geladen sein. Fabric misst sonst mit
+#      der Ersatzschrift, haelt zu breite Zeilen fuer passend, und der
+#      Text laeuft aus dem Bild. Genau die Falle aus EINBAU.md.
+P.append(('["Anton","Montserrat","Playfair Display","Playfair","Instrument Serif","Syne","Archivo","Cormorant Garamond","AspektaBrand","HelveticaNeueBrand","Mirage","Rosaline","ZT Otez"]',
+ '["Anton","Montserrat","Playfair Display","Playfair","Instrument Serif","Syne","Archivo","Cormorant Garamond","AspektaBrand","HelveticaNeueBrand","Mirage","Rosaline","ZT Otez","Prata","Inter"]',
+ "Prata und Inter vorladen", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

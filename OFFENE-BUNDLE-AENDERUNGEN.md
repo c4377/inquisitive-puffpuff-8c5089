@@ -795,3 +795,31 @@ Der Preis gegenueber Abschnitt 28: zehn Zeilen statt acht. Das ist der
 Unterschied zwischen einer echten schmalen Schrift und einer, die man
 nur zusammenschiebt. Ohne die passende Schriftdatei ist beides nicht
 gleichzeitig zu haben.
+
+## 30. Erste Fotoslide in Prata
+
+*Skript-Eintraege 30 und 31.*
+
+Der Weg ueber `kachelSchrift` und `co()` war zu indirekt: `co()` sucht
+die Familie in einer Auswahlliste, und dort steht Prata nicht. Er ist
+entfallen. Die Familie wird jetzt direkt gesetzt, an derselben Stelle,
+an der `schriftUeber` wirkt:
+
+    $e && t.folienRolle==="deckblatt" && BS_KACHEL.deckblattFamilie
+      && (Qe = BS_KACHEL.deckblattFamilie)
+
+`$e` heisst: nur mit Foto. Die Folgeslides bleiben bei
+`BS_KACHEL.fotoSchrift`.
+
+**Wo Prata registriert ist:** in `site/index.html` per `@font-face`,
+NICHT im gebauten CSS. Wer im CSS sucht, findet sie nicht und haelt sie
+faelschlich fuer fehlend. Die Datei ist `site/fonts/Prata-Regular.woff2`.
+
+**Vorladen ist Pflicht.** Prata und Inter stehen jetzt in der Liste, die
+der Zeichner vor dem Zeichnen abwartet. Ohne das misst Fabric mit der
+Ersatzschrift, haelt zu breite Zeilen fuer passend, und der Text laeuft
+aus dem Bild — die Falle aus EINBAU.md.
+
+Geprueft: Prata und Playfair messen bei 60 px unterschiedlich breit
+(34,6 gegen 31,1 px fuer "x"). Waeren sie gleich, wuerde die
+Ersatzschrift greifen.
