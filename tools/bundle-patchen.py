@@ -200,6 +200,60 @@ P.append(('v.jsxs("button",{onClick:()=>quSetzen(!0),',
  'v.jsxs("button",{onClick:async()=>{try{const cr=await fetch("/captions.json",{cache:"no-store"});if(!cr.ok)throw new Error("nicht gefunden");const cd=await cr.json();let cz=0;const cn=i.map(cx=>{const cq=cd[String(cx.day)];if(!cq||!cq.caption)return cx;cz++;return{...cx,caption:cq.caption}});t({contentPlan:cn}),ue(cz+" Captions eingetragen, speichere …"),setTimeout(()=>ue("Gespeichert."),2600),setTimeout(()=>ue(""),5200)}catch{ue("Captions konnten nicht geladen werden.")}},className:"px-2.5 py-1.5 bg-white text-purple-700 border border-purple-200 rounded-lg font-bold hover:bg-purple-50 transition-colors flex items-center whitespace-nowrap text-[11px]",children:[v.jsx(ke,{icon:AS,className:"mr-2"}),"Captions"]}),v.jsxs("button",{onClick:()=>quSetzen(!0),',
  "Knopf Captions", 1))
 
+# 19 — Kachelfarben: matte Erdtoene, hell genug fuer Weiss.
+#      Vorher lagen die Alltagskacheln auf Hellgrau (hell) und
+#      Schiefer (stein) — die beiden waehlt aS(day-1) im Wechsel,
+#      sie sind also das, was im Feed wirklich zu sehen ist.
+#      Sand und helles Orange trugen weisse Schrift nicht (1,4 bzw.
+#      2,1 zu 1). Olive und Gold liegen bei 5,5 und 5,4 zu 1.
+#      linie und wieder bekommen dieselben Toene, damit nirgends
+#      weisse Schrift auf hellem Grund steht.
+P.append(('stein:{grund:SF,schriftGrund:SF,schrift:"#FFFFFF",betont:"#FFFFFF",monogramm:"#FFFFFF",absender:"rgba(255,255,255,0.60)",schriftart:"Playfair Display"}',
+ 'stein:{grund:"#6B6B47",schriftGrund:"#6B6B47",schrift:"#FFFFFF",betont:"#FFFFFF",monogramm:"#FFFFFF",absender:"rgba(255,255,255,0.66)",schriftart:"Playfair Display"}',
+ "stein auf Olive #6B6B47", 1))
+P.append(('hell:{grund:OW,schriftGrund:OW,schrift:OD,betont:OD,monogramm:OD,absender:"rgba(35,40,44,0.55)",schriftart:"Playfair Display"}',
+ 'hell:{grund:"#8E6134",schriftGrund:"#8E6134",schrift:"#FFFFFF",betont:"#FFFFFF",monogramm:"#FFFFFF",absender:"rgba(255,255,255,0.66)",schriftart:"Playfair Display"}',
+ "hell auf Gold #8E6134", 1))
+P.append(('linie:{grund:uA,schrift:hA,betont:hA,monogramm:F1,absender:"rgba(62,80,99,0.55)",fassung:"linie",schriftart:"PoppinsBold"}',
+ 'linie:{grund:"#6B6B47",schrift:"#FFFFFF",betont:"#FFFFFF",monogramm:"#FFFFFF",absender:"rgba(255,255,255,0.66)",fassung:"linie",schriftart:"PoppinsBold"}',
+ "linie auf Olive", 1))
+P.append(('wieder:{grund:uA,schrift:hA,betont:hA,monogramm:F1,absender:"rgba(62,80,99,0.55)",fassung:"wieder",schriftart:"PoppinsBold"}',
+ 'wieder:{grund:"#8E6134",schrift:"#FFFFFF",betont:"#FFFFFF",monogramm:"#FFFFFF",absender:"rgba(255,255,255,0.66)",fassung:"wieder",schriftart:"PoppinsBold"}',
+ "wieder auf Gold", 1))
+
+# 20 — Textkacheln laufen in der Marken-Grotesk statt in Playfair.
+#      ACHTUNG, das hebt die Absicht aus Patch 15 teilweise auf:
+#      dort stand "Textkachel Playfair" als gewollte Fassung. Carina
+#      hat das am 3. September ausdruecklich umentschieden.
+#      Der Zeichner setzt den Fliesstext ueber
+#      FLIESSCHRIFT = LINKS ? SERIF : GLATT und die Schlagzeile ueber
+#      TITELSCHRIFT = LINKS ? SERIF : "Anton". LINKS ist bei jeder
+#      Kachel ohne #Kopfzeile wahr, also hing beides an SERIF.
+#      Eine gesetzte Marken-Schrift (Je.markenSchrift) sticht das
+#      weiterhin — nur der Ersatzwert wechselt.
+P.append(('const SERIF=Je.markenSchrift||"Playfair Display"',
+ 'const SERIF=Je.markenSchrift||"HelveticaNeueBrand"',
+ "Textkachel-Schrift: Grotesk statt Playfair", 1))
+
+# 21 — Zwei tote Fassungen aus der Farbtafel. notiz und merken
+#      stehen dort, aber keine Regel waehlt sie je aus: die
+#      Laengenregel liefert nur wieder/linie/zettel/zitat, die
+#      Reminder liefern aussage/zitat/zwei, zwei Knoepfe setzen
+#      ablauf und hand, alles andere kommt aus aS(day-1).
+P.append(('notiz:{grund:IV,schriftGrund:"#FFFFFF",schrift:hA,betont:hA,monogramm:lg,absender:"rgba(20,18,16,0.70)",fassung:"notiz",schriftart:"HelveticaNeueBrand"},',
+ '', "tote Fassung notiz raus", 1))
+P.append(('merken:{grund:IV,schriftGrund:uA,schrift:hA,betont:hA,monogramm:lg,absender:"rgba(20,18,16,0.70)",fassung:"merken",schriftart:"PoppinsBold"},',
+ '', "tote Fassung merken raus", 1))
+
+# 22 — Der Kartenpfad in T1 setzt zentriert und Grotesk. Wirkt nur,
+#      wenn der Zeichner aussteigt (er tut das zum Beispiel, wenn
+#      die Fassung "wieder" fuer den Text zu gross ausfaellt).
+#      Sonst zeichnet wt und rechnet seine Ausrichtung selbst.
+#      Steht hier, damit beide Wege dasselbe Bild ergeben.
+P.append(('istKarte:!0,grundFarbe:h.grund,rundung:0,ausrichtung:"links",schriftFarbe:h.schrift,plattenFarbe:null,polsterX:0,schriftUeber:"Playfair Display",staerkeUeber:"400"',
+ 'istKarte:!0,grundFarbe:h.grund,rundung:0,ausrichtung:"mitte",schriftFarbe:h.schrift,plattenFarbe:null,polsterX:0,schriftUeber:"HelveticaNeueBrand",staerkeUeber:"400"',
+ "Kartenpfad zentriert und Grotesk", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

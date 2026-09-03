@@ -467,3 +467,73 @@ Der Zeichner bekommt jetzt eine eigene Angabe aus der Marke:
     Ye.markenSchrift = ...ablauf... ? "" : t.platteSchrift || ""
 
 `plateFont` bleibt unangetastet, es wird an anderer Stelle gebraucht.
+
+## 18. Kachelfarben: matte Erdtoene statt Hellgrau und Schiefer
+
+*Skript-Eintrag 19.*
+
+Die Alltagskacheln kamen nie aus der Laengenregel, sondern aus
+
+    aS = e => ["hell","stein"][r % 2]
+
+Das wechselt auf jedem Kartentag zwischen `hell` (Hellgrau `#E8E8E6`) und
+`stein` (Schiefer `#3A4750`). Wer die Farbe der Textkacheln aendern will,
+muss diese beiden anfassen — alles andere kommt im Alltag kaum vor.
+
+    hell   -> Gold  #8E6134
+    stein  -> Olive #6B6B47
+
+Beide tragen weisse Schrift: 5,4 und 5,5 zu 1. Die vorher probierten Toene
+Sand `#E4D9C6` und helles Orange `#F2A26B` schafften mit Weiss nur 1,4
+beziehungsweise 2,1 zu 1 und waren am Handy nicht lesbar.
+
+`linie` und `wieder` bekommen dieselben zwei Toene. Nicht weil sie oft
+vorkommen — sie brauchen eine optionale Kachel mit hoechstens drei Woertern
+beziehungsweise durchgehenden Grossbuchstaben — sondern damit nirgends im
+Bundle weisse Schrift auf hellem Grund stehenbleibt.
+
+## 19. Textkacheln laufen in der Marken-Grotesk
+
+*Skript-Eintrag 20. Hebt die Absicht aus Abschnitt 15 teilweise auf.*
+
+Der Kartenzeichner setzt beides ueber dieselbe Rolle:
+
+    FLIESSCHRIFT = LINKS ? SERIF : GLATT
+    TITELSCHRIFT = LINKS ? SERIF : "Anton"
+    SERIF        = Je.markenSchrift || "Playfair Display"
+    LINKS        = MITTE && !AF,  MITTE = !kopf
+
+`LINKS` ist bei jeder Kachel ohne `#`-Kopfzeile wahr, also bei praktisch
+jeder Textkachel. Damit hing Schlagzeile *und* Fliesstext am Ersatzwert
+Playfair. Der Ersatzwert ist jetzt `HelveticaNeueBrand`; eine gesetzte
+`markenSchrift` sticht ihn weiterhin (siehe Abschnitt 17).
+
+Frueher stand hier ausdruecklich „Textkachel Playfair" als gewollte
+Fassung. Carina hat das am 3. September umentschieden.
+
+Zwei Wege fuehren ins Leere, das ist beim Suchen wichtig: `ausrichtung`
+und `schriftUeber` aus `T1` wirken fuer Textkacheln **nicht**. Der Aufruf
+
+    if(!$e && Ye.grundFarbe && (… wt(Ye, t.text))) { renderAll(); return }
+
+steigt vorher aus, und `wt` rechnet seine Ausrichtung selbst. Beides ist
+trotzdem mitgesetzt (Skript-Eintrag 22), damit der seltene Fall, in dem
+`wt` mit `return !1` abbricht, dasselbe Bild ergibt.
+
+## 20. Zwei tote Fassungen aus der Farbtafel
+
+*Skript-Eintrag 21.*
+
+`notiz` und `merken` standen in der Farbtafel, aber keine Regel waehlt sie
+je aus: die Laengenregel liefert nur `wieder`, `linie`, `zettel`, `zitat`,
+die Reminder liefern `aussage`, `zitat`, `zwei`, zwei Knoepfe setzen
+`ablauf` und `hand`, alles andere kommt aus `aS(day-1)`. Beide sind raus.
+
+Nebenbei aufgefallen und **nicht** geaendert: `stein` und `hell` haben als
+einzige kein Feld `fassung`. Deshalb greift im Zeichner
+
+    Ye.fassung = Ye.fassung || "ablauf"
+
+und die beiden werden als Ablauf-Fassung gezeichnet. Das ist der Grund,
+warum eine Aenderung an `stein`/`hell` im Zeichner nur ueber den
+`ablauf`-Zweig wirkt.
