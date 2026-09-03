@@ -1497,3 +1497,42 @@ eines eingetragen, entfallen deshalb Plaettchen und Trennung; die
 Ueberschrift laeuft wieder als ein Block ueber das Bild. Ohne Schild
 bleibt alles, wie es war — die anderen Kachelarten brauchen das
 Plaettchen weiter.
+
+## 53. Vier Sachen an der Fotokachel
+
+**Der Ueberlauf.** `textHoehe` stand auf .86. Die Kachel klemmt den
+Text aber zwischen `n*.1` und `n*.9` ein — mehr als **80 Prozent**
+passen nie hinein. Bei .86 rechnet die Anpassungsschleife eine Groesse
+aus, die anschliessend nicht mehr untergebracht werden kann, und der
+Text laeuft unten heraus. Jetzt .78, mit Zaehler .56. Der Wert war
+mein Fehler aus 51: gross gerechnet, aber die Klammern nicht
+mitgelesen.
+
+**Kein Kasten mehr, dafuer fett und nicht fett.** Bisher war beides
+aneinandergekettet: die Marke "erste Zeile" (`nurErsteZeilePlatte`)
+steuerte den Kasten UND das Fett. Kasten aus hiess Fett aus. Jetzt
+bleibt die Marke stehen, gezeichnet wird der Kasten aber nicht mehr
+(`platten` aus, `ohnePlatteErste` an). Auf jedem Foto gilt damit
+dasselbe wie auf den Textkacheln: erster Block fett, Rest normal.
+
+**Keine Luecke zwischen den Saetzen.** Zwischen den beiden Bloecken
+stand eine leere Zeile. Sie gehoerte zum Kasten und gab ihm Luft.
+Ohne Kasten ist sie nur ein Loch. Auf Fotos faellt sie weg, auf
+Kacheln ohne Foto bleibt sie.
+
+**Die Folgeslides bekommen ihre Schrift auch ohne Foto.** Die
+Zuweisung `folgeFamilie` hing an `$e`, also am Hintergrundbild.
+Folgeslides ohne Bild fielen durch und behielten, was ihr Stil vorgab.
+Das `$e&&` ist weg.
+
+### Zur Frage, ob die Zeilen darunter Playfair sind
+
+Nein. Sie sind Fraunces in 400. Fraunces hat bei 400 deutlich mehr
+Strichkontrast und wirkt klassischer als bei 700 — das liest sich wie
+eine andere Schrift, ist aber dieselbe Familie in einem anderen
+Schnitt. Zum Vergleich nebeneinander gesetzt in
+`tools/.pruefen/frx.html`: Fraunces 700, Fraunces 400, Playfair 400.
+Playfair ist deutlich schmaler und spitzer.
+
+Wer die Zeilen darunter kraeftiger will, ist das ein Wert: ein
+mittlerer Schnitt statt 400.
