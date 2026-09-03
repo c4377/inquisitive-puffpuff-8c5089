@@ -1476,3 +1476,24 @@ im schlechtesten Fall bei 5,6 Prozent, jetzt bei 9 bis 11,6.
 
 Beide Werte stehen im Block. Ist eine Spalte von 72 Prozent zu breit,
 weil ein Gesicht darunter liegt, ist das eine Zahl.
+
+## 52. Schild und Plaettchen schliessen einander aus
+
+Die Fotokachel hatte laengst eine Flaeche: `nurErsteZeilePlatte` legt
+einen cremefarbenen Kasten hinter die erste Zeile — und trennt den
+Text dafuer in zwei Bloecke mit einer Luecke dazwischen. Kommt jetzt
+oben noch das Schild dazu, hat die Kachel zwei Kaesten uebereinander
+und eine Ueberschrift, die auseinanderfaellt:
+
+    [ 5 Levels of Hooks ]
+    [ Von der Idee zum  ]
+
+    vierstelligen
+    Angebot. Schritt 30
+    von 30.
+
+Im Vorbild gibt es genau eine Flaeche, und das ist das Schild. Ist
+eines eingetragen, entfallen deshalb Plaettchen und Trennung; die
+Ueberschrift laeuft wieder als ein Block ueber das Bild. Ohne Schild
+bleibt alles, wie es war — die anderen Kachelarten brauchen das
+Plaettchen weiter.

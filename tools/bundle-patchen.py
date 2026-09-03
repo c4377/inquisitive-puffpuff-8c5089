@@ -581,6 +581,24 @@ P.append(('{const Je=n*(jr?.48:.74);let rt=0;for(;;){',
  '{const Je=n*(jr?(BS_KACHEL.textHoeheZaehler||.48):(BS_KACHEL.textHoehe||.74));let rt=0;for(;;){',
  "Erlaubte Texthoehe aus dem Block", 1))
 
+# 52 — Schild und Plaettchen schliessen einander aus.
+#
+#      Die Fotokachel hatte schon eine Flaeche: nurErsteZeilePlatte
+#      legt einen cremefarbenen Kasten hinter die erste Zeile und
+#      trennt den Text dafuer in zwei Bloecke — mit Luecke dazwischen.
+#      Steht darueber jetzt auch noch das Schild, hat die Kachel zwei
+#      Kaesten uebereinander und eine Ueberschrift, die auseinander
+#      faellt. Im Vorbild gibt es genau eine Flaeche, und das ist das
+#      Schild.
+#
+#      Ist ein Schild eingetragen, entfallen deshalb Plaettchen und
+#      Trennung. Die Ueberschrift laeuft wieder als ein Block ueber
+#      das Bild. Ohne Schild bleibt alles wie es war.
+P.append(('$e&&t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeFamilie&&(Qe=BS_KACHEL.folgeFamilie);',
+ '$e&&t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeFamilie&&(Qe=BS_KACHEL.folgeFamilie);'
+ '$e&&String(t.schild||"").trim()&&(tt.nurErsteZeilePlatte=!1,tt.platten=!1,tt.ohnePlatteErste=!0);',
+ "Mit Schild kein Plaettchen hinter der ersten Zeile", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
