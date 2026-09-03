@@ -362,3 +362,42 @@ Ausserdem gewinnt auf der ersten Folie jetzt die Titelschrift vor
 Damit das keine Einbahnstrasse ist, stehen **Anton** und **ArchivoBlack**
 jetzt auch in der Schriftliste — vorher waren sie nur pro Tag erreichbar.
 Wer den alten Look will, waehlt Anton als Titelschrift.
+
+## 14. Fotostil "Fließtext auf Foto" — Schrift aus der Marke, Abstaende wie im Beispiel
+
+Carina hat einen fremden Karussell-Post als Vorbild geschickt: ruhiger
+Grotesk in zwei Schnitten, enge Zeilen innerhalb eines Absatzes, eine ganze
+Leerzeile zwischen den Absaetzen. Der bisherige "Montserrat auf Foto" heisst
+jetzt **"Fließtext auf Foto"** und macht genau das.
+
+**Schrift.** Der Stil hatte `schriftUeber:"Montserrat"` fest verdrahtet.
+Jetzt setzt er `flieszSchrift:!0`, und der Zeichner nimmt die Body-Schrift
+der Marke:
+
+    tt.schriftUeber && (Qe = tt.schriftUeber),
+    tt.flieszSchrift && t.bodySchrift && (Qe = t.bodySchrift);
+
+`bodySchrift` kommt neu aus `Rt` (`He.bodyFontFamily||"Montserrat"`) und
+gilt fuer alle Folien des Posts, auch die erste — der Stil soll durchgehend
+eine Schrift haben, in zwei Schnitten.
+
+**Abstaende.** Vorher lagen Zeilenabstand und Absatzabstand beide bei 1.3;
+ein Absatz stand also genauso eng wie seine eigenen Zeilen. Mit
+`engZeilen:!0`:
+
+    Zeile im Absatz   Et = qe * 1.17     (vorher 1.3)
+    Leerzeile         qe * 0.92
+    Gesamthoehe       dr.reduce(...)     statt dr.length*Et
+
+Die Gesamthoehe muss die Leerzeilen einzeln zaehlen, sonst sitzt der Block
+nicht mehr mittig.
+
+Dazu eine Eigenheit der Aufteilung: `pr` wird um fuehrende Leerzeilen
+gekuerzt, die Leerzeile nach dem fetten Einstieg ging also verloren. Im
+Fliesstext-Stil wird sie jetzt fest eingesetzt:
+
+    [...$t(_t(er)...), ...tt.engZeilen&&pr?[[]]:[], ...$t(_t(pr)...)]
+
+**Kombination "Sanft"** ist jetzt Prata mit Helvetica Neue statt Montserrat
+— Helvetica Neue liegt seit jeher im Projekt (Thin bis Bold) und kommt dem
+Vorbild am naechsten.
