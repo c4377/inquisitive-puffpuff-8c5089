@@ -1966,3 +1966,54 @@ Falls Text auf einem unruhigen Bild schwer lesbar wird, sind das die
 Stellschrauben, in dieser Reihenfolge: `tiefeUnten` (Abdunklung
 unten), `spalteMin` (Ausweichen vor dem Gesicht, steht auf .82, also
 praktisch aus), `weichAnteil` (Weichzeichner zurueckholen).
+
+## 68. "Plan konnte nicht gespeichert werden (UnknownError)"
+
+Der Plan liegt in der IndexedDB des Browsers, nicht auf einem Server.
+Die Fotos stecken als Datenzeilen **im Plan selbst** — die Galerie
+speichert jedes Bild nur einmal, aber in voller Kameraaufloesung. Bei
+siebzig Tagen sind das schnell zig Megabyte. Safari auf dem iPhone
+meldet einen vollen Speicher nicht als "quota exceeded", sondern als
+`UnknownError`.
+
+Drei Aenderungen, in der Reihenfolge ihrer Wirkung:
+
+### 1. Bilder verkleinern
+
+Vor dem Schreiben wird jedes Bild auf hoechstens `bildKante` (1350)
+an der langen Seite gerechnet und als JPEG mit `bildGuete` (.85)
+abgelegt. 1350 ist die Hoehe des Exports (1080x1350) — groesser
+gespeichert bringt nichts.
+
+**Das Seitenverhaeltnis bleibt.** Der vorhandene Helfer `n9` haette
+auf 2:3 beschnitten, und die Kachel schneidet danach noch einmal auf
+4:5 — das haette die Bildausschnitte verschoben. Deshalb ein eigener,
+der nur die Kantenlaenge begrenzt.
+
+Nachgemessen (`tools/.pruefen/klein.html`):
+
+    3000x2000, 0,63 MB   ->   1350x900, 0,11 MB
+    Seitenverhaeltnis    1,500  ->  1,500
+    zweiter Durchlauf    aendert nichts
+    Bild unter 200 KB    bleibt unangetastet
+
+Der zweite Speichervorgang ist damit so schnell wie vorher: was schon
+klein ist, wird nicht noch einmal angefasst. Und das Ergebnis wird nur
+uebernommen, wenn es wirklich kuerzer ist.
+
+### 2. Zweiter Versuch
+
+Schlaegt das Schreiben fehl, werden **Bilder-Vorrat** und
+**Pin-Archiv** geloescht — beides ist nachladbar, der Plan nicht — und
+es wird noch einmal geschrieben.
+
+### 3. Ehrliche Meldung
+
+Statt "UnknownError" steht jetzt der Grund, die Groesse der Bilder im
+Plan und, wo der Browser es hergibt, belegter und verfuegbarer
+Speicher:
+
+    QuotaExceededError — Bilder im Plan 48,3 MB, belegt 52,1 MB von 60,0 MB
+
+Damit ist beim naechsten Mal sichtbar, ob es wirklich der Platz ist
+oder etwas anderes.

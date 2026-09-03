@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.74,textHoeheZaehler:.54,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,bandAuf:0,folgeGewicht:"700",weichAnteil:0,fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.05,tiefeMitte:.10,tiefeUnten:.42,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.74,textHoeheZaehler:.54,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,bandAuf:0,folgeGewicht:"700",weichAnteil:0,fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:1350,bildGuete:.85,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.05,tiefeMitte:.10,tiefeUnten:.42,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -916,6 +916,40 @@ P.append(('return (zh+Qe*17)%100>=50})()',
 P.append(('textLage:rt.textLage||ot.textLage||lS[(ot.day-1)%lS.length]',
  'textLage:rt.textLage||ot.textLage',
  "Keine rotierende Vorgabe mehr, sonst kommt die Bildanalyse nie dran", 1))
+
+# 69 — Plan speichern: kleinere Bilder, zweiter Versuch, ehrliche
+#      Meldung.
+#
+#      "Plan konnte nicht gespeichert werden (UnknownError)." Der Plan
+#      liegt in der IndexedDB des Browsers, und die Fotos stecken als
+#      Datenzeilen im Plan selbst. Bei siebzig Tagen sind das schnell
+#      zig Megabyte; auf dem iPhone meldet Safari das nicht als
+#      "Speicher voll", sondern als UnknownError.
+#
+#      Drei Dinge, in dieser Reihenfolge:
+#
+#      1. **Bilder verkleinern.** Vor dem Schreiben wird jedes Bild
+#         auf hoechstens bildKante (1350) an der langen Seite
+#         gerechnet und als JPEG mit bildGuete (.85) gespeichert. Das
+#         Seitenverhaeltnis bleibt — der vorhandene Helfer n9 haette
+#         auf 2:3 beschnitten, und die Kachel schneidet danach noch
+#         einmal auf 4:5. Bilder unter 200 KB und solche, die schon
+#         klein genug sind, bleiben unangetastet; das Ergebnis wird
+#         nur genommen, wenn es wirklich kuerzer ist. Damit ist der
+#         zweite Speichervorgang so schnell wie vorher.
+#
+#         1350 ist die Hoehe des Exports (1080x1350). Groesser
+#         gespeichert bringt nichts.
+#
+#      2. **Zweiter Versuch.** Schlaegt das Schreiben fehl, werden
+#         Bilder-Vorrat und Pin-Archiv geloescht — beides ist
+#         nachladbar — und es wird noch einmal geschrieben.
+#
+#      3. **Ehrliche Meldung.** Statt "UnknownError" steht jetzt der
+#         Grund, die Groesse der Bilder im Plan und, wo der Browser
+#         es hergibt, belegter und verfuegbarer Speicher.
+P.append(('let l={__packed:2,gallery:r,days:s};return new Promise(o=>{const a=h=>{console.error("[BrandStudio] Plan konnte nicht gespeichert werden:",h),typeof window<"u"&&window.dispatchEvent(new CustomEvent("brandstudio:plan-save-failed",{detail:{reason:String(h&&h.name||h||"unbekannt")}})),o(!1)},u=t.transaction([wr],"readwrite");u.onabort=()=>a(u.error);const A=u.objectStore(wr).put(l,D3);A.onsuccess=()=>o(!0),A.onerror=()=>{a(A.error)}})', 'const zKlein=zu=>new Promise(zr=>{try{if(typeof zu!="string"||!/^data:image\\//.test(zu)||zu.length<200000)return zr(zu);const zi=new Image();zi.onload=()=>{try{const zM=BS_KACHEL.bildKante||1350,zw=zi.width,zh=zi.height,zf=Math.min(1,zM/Math.max(zw,zh));if(zf>=1&&zu.length<1200000)return zr(zu);const zc=document.createElement("canvas");zc.width=Math.max(1,Math.round(zw*zf)),zc.height=Math.max(1,Math.round(zh*zf));zc.getContext("2d").drawImage(zi,0,0,zc.width,zc.height);const zn=zc.toDataURL("image/jpeg",BS_KACHEL.bildGuete||.85);zr(zn&&zn.length<zu.length?zn:zu)}catch(ze){zr(zu)}};zi.onerror=()=>zr(zu);zi.src=zu}catch(ze){zr(zu)}});const rk=await Promise.all(r.map(zKlein));let l={__packed:2,gallery:rk,days:s};const zSchreib=zd=>new Promise(zo=>{try{const zu2=t.transaction([wr],"readwrite");zu2.onabort=()=>zo(zu2.error||new Error("abort"));const zA=zu2.objectStore(wr).put(zd,D3);zA.onsuccess=()=>zo(null);zA.onerror=()=>zo(zA.error||new Error("error"))}catch(ze){zo(ze)}});let zF=await zSchreib(l);if(zF){try{await new Promise(zf2=>{const zs2=t.transaction([wr],"readwrite").objectStore(wr);try{zs2.delete(W3)}catch(ze){}const zd2=zs2.delete(z3);zd2.onsuccess=()=>zf2();zd2.onerror=()=>zf2()})}catch(ze){}zF=await zSchreib(l)}if(zF){const zMB=zx=>Math.round(zx/1048576*10)/10+" MB",zB=rk.reduce((za,zx)=>za+(typeof zx=="string"?zx.length:0),0);let zP="";try{if(navigator.storage&&navigator.storage.estimate){const zq=await navigator.storage.estimate();if(zq&&zq.quota)zP=", belegt "+zMB(zq.usage||0)+" von "+zMB(zq.quota)}}catch(ze){}const zT=String(zF&&zF.name||zF||"unbekannt")+" \\u2014 Bilder im Plan "+zMB(zB)+zP;console.error("[BrandStudio] Plan konnte nicht gespeichert werden:",zF);typeof window<"u"&&window.dispatchEvent(new CustomEvent("brandstudio:plan-save-failed",{detail:{reason:zT}}));return!1}return!0',
+ "Plan speichern: verkleinern, zweiter Versuch, ehrliche Meldung", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
