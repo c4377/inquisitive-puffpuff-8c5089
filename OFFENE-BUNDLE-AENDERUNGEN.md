@@ -1734,3 +1734,40 @@ damit zu breit sein, nie zu schmal.
 `gewicht` und `leichtGewicht` stehen auf **300 (Light)**. Auf
 "Light nicht thin" hin gesetzt und dort belassen. Thin waere 200 —
 eine Zahl, falls doch.
+
+## 61. Fraunces fuellt die Kachel
+
+Vier Werte, kein Umbau:
+
+    deckblattGroesse   58  ->  68
+    spalteMin         .72  ->  .82
+    umbruchRand        30  ->  12
+    fotoZeile         1.30 ->  1.10
+    textHoehe         .70  ->  .74
+
+**Der Umbruchrand.** Der Umbruch warf `c(30)` der Spaltenbreite weg,
+bei Massstab 2 also 48 Pixel — 6 Prozent der Kachel. Der Abstand
+stammte aus einer Zeit, in der Messen und Malen auseinanderliefen;
+nachgemessen weichen sie um 0,1 Prozent ab (`messbreite.html`). 12
+reicht.
+
+**Der Zeilenabstand.** `Et = qe * 1.3` auf Fotos. Im Vorbild
+nachgemessen: Zeilenschritt 39 Pixel bei einer Schriftgroesse von rund
+38,6 — also etwa **1,0**. Wir standen ein Drittel darueber. Jede Zeile
+Abstand kostet Schriftgroesse, weil die Anpassungsschleife die Hoehe
+aller Zeilen zusammenzaehlt. Jetzt 1,10; etwas mehr als das Vorbild,
+weil Fraunces laengere Ober- und Unterlaengen hat als eine Grotesk.
+
+Gerechnet mit der echten Schleife (`gross.html`), Text "Von der Idee
+zum vierstelligen Angebot. / Schritt 30 von 30.":
+
+    vorher                       77 px   ( 9,6% der Breite)  6 Zeilen
+    Spalte .82                   87 px   (10,9%)             5 Zeilen
+    + Rand 12 + Start 68         90 px   (11,3%)             5 Zeilen
+    + Zeile 1.10                 groesser, siehe Bild
+
+**Achtung, eine Nebenwirkung:** `spalteMin` .82 heisst, dass die
+Spalte immer so breit ist. Das Ausweichen vor Gesichtern ist damit
+praktisch aus — es war der Grund fuer die winzige Schrift in
+Abschnitt 51. Wenn Text kuenftig auf einem Gesicht liegt, ist das der
+Wert.

@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:58,spalteMin:.72,textHoehe:.70,textHoeheZaehler:.50,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.12,tiefeMitte:.24,tiefeUnten:.86,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.74,textHoeheZaehler:.54,umbruchRand:12,fotoZeile:1.10,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.12,tiefeMitte:.24,tiefeUnten:.86,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -673,7 +673,7 @@ P.append(('.flatMap(b=>["400","500","700"].map(B=>{try{return document.fonts.loa
 P.append(('if((Ve.length+pt.length)*qe*1.3<=Je||qe<=c(16)||rt++>60)break;',
  'const zb=Math.max(0,...Ve.map(zz=>Ht(zz,qe,!0)),'
  '...pt.map(zz=>Ht(zz,qe,!tt.fettNurErste)));'
- 'if(((Ve.length+pt.length)*qe*1.3<=Je&&zb<=Qt-c(30))||qe<=c(16)||rt++>60)break;',
+ 'if(((Ve.length+pt.length)*qe*1.3<=Je&&zb<=Qt-c(BS_KACHEL.umbruchRand||30))||qe<=c(16)||rt++>60)break;',
  "Anpassungsschleife prueft auf Fotos auch die Breite", 1))
 
 # 59 — Die fette Zeile war schwarz, wo kein Kasten mehr ist.
@@ -717,6 +717,44 @@ P.append(('stroke:Ve?void 0:ut,strokeWidth:Ve?0:st',
 P.append(('ct=sr(Je)?Ht(Je,qe,!(tt.fettNurErste&&!Ve)):pt.width,qt=ct+It*2',
  'ct=Math.max(pt.width,Ht(Je,qe,!(tt.fettNurErste&&!Ve))),qt=ct+It*2',
  "Kastenbreite aus der groesseren der beiden Messungen", 1))
+
+# 61 — Fraunces darf die Kachel fuellen.
+#
+#      Drei Werte, kein Umbau. Nachgerechnet mit der echten
+#      Anpassungsschleife (tools/.pruefen/gross.html), Vorschau
+#      800x1000, Text "Von der Idee zum vierstelligen Angebot. /
+#      Schritt 30 von 30.":
+#
+#        vorher   Spalte .72, Rand 48, Start 58  ->  77 px, 6 Zeilen
+#        Spalte .82                              ->  87 px, 5 Zeilen
+#        + Rand 12 + Start 68                    ->  90 px, 5 Zeilen
+#
+#      Der Umbruch warf bisher c(30) der Spaltenbreite weg, das sind
+#      48 Pixel oder 6 Prozent der Kachel. Der Sicherheitsabstand
+#      stammte aus einer Zeit, in der Messen und Malen
+#      auseinanderliefen; nachgemessen weichen sie um 0,1 Prozent ab
+#      (messbreite.html). 12 reicht.
+#
+#      Achtung: spalteMin .82 heisst, dass die Spalte immer so breit
+#      ist. Das Ausweichen vor Gesichtern ist damit praktisch aus —
+#      es war der Grund fuer die winzige Schrift in Abschnitt 51.
+#      Eine Zahl, falls es zurueck soll.
+P.append(('Ht(Vt,rt,Ve)<=Qt-c(30)', 'Ht(Vt,rt,Ve)<=Qt-c(BS_KACHEL.umbruchRand||30)',
+ "Umbruchrand aus dem Block", 1))
+
+# 62 — Der Zeilenabstand auf Fotos war das Letzte, was Platz frass.
+#
+#      Et = qe * 1.3 auf Fotos. Im Vorbild nachgemessen: Zeilenschritt
+#      39 Pixel bei einer Schriftgroesse von rund 38,6 — also etwa
+#      1,0. Wir standen ein Drittel darueber, und jede Zeile Abstand
+#      kostet Schriftgroesse, weil die Anpassungsschleife die Hoehe
+#      aller Zeilen zusammenzaehlt.
+#
+#      Jetzt 1,10 aus dem Block. Etwas mehr als das Vorbild, weil
+#      Fraunces laengere Ober- und Unterlaengen hat als eine Grotesk.
+P.append(('Et=qe*(tt.engZeilen?1.17:$e?1.3:1.06)',
+ 'Et=qe*(tt.engZeilen?1.17:$e?(BS_KACHEL.fotoZeile||1.3):1.06)',
+ "Zeilenabstand auf Fotos aus dem Block", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
