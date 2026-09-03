@@ -994,6 +994,37 @@ P.append(('me.set({originX:"center",originY:"center",left:r/2+pr,top:n/2+jr,scal
  'zFl.length&&(me.filters=zFl,me.applyFilters())}catch(ze){}',
  "Kontrast und Schwarzpunkt auf dem Bild selbst", 1))
 
+# 71 — Nein, die Folgeslides waren noch weichgezeichnet.
+#
+#      Abschnitt 67 hat den Zufallsanteil an weichgezeichneten Bildern
+#      auf 0 gesetzt. Davor steht aber noch eine zweite Bedingung, die
+#      der Drop selbst mitbringt:
+#
+#          dr = Qe>0 && ( t.textStil==="montserrat" || Zufall )
+#
+#      Und **alle** Folgeslides haben textStil "montserrat" — das ist
+#      der Stil, der sie linksbuendig mit fetter erster Zeile setzt
+#      (folgeStil). Die erste Bedingung war also immer wahr, der
+#      Zufallsanteil kam nie zum Zug. Weichgezeichnet wurde weiter,
+#      und zwar jede einzelne Folgeslide.
+#
+#      Jetzt schaltet weichAnteil den ganzen Weichzeichner: bei 0
+#      bleibt kein Bild weich, auch kein montserrat-Bild.
+P.append(('const dr=Qe>0&&(t.textStil==="montserrat"||',
+ 'const dr=Qe>0&&(BS_KACHEL.weichAnteil||0)>0&&(t.textStil==="montserrat"||',
+ "weichAnteil schaltet auch die montserrat-Folien", 1))
+
+# 72 — Der Weichzeichner hat das Grading ueberschrieben.
+#
+#      Abschnitt 69 haengt Kontrast und Schwarzpunkt an me.filters.
+#      Ein paar Zeilen weiter setzt der Weichzeichner me.filters=[...]
+#      — mit eckigen Klammern, also ersetzend. Auf jedem
+#      weichgezeichneten Bild war das Grading damit weg. Jetzt haengt
+#      er sich an, statt zu ersetzen.
+P.append(('me.filters=[new Pe.fabric.Image.filters.Blur({blur:Math.min(Lt/40,.5)})],me.applyFilters()',
+ 'me.filters=(me.filters||[]).concat([new Pe.fabric.Image.filters.Blur({blur:Math.min(Lt/40,.5)})]),me.applyFilters()',
+ "Weichzeichner haengt sich an das Grading an", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

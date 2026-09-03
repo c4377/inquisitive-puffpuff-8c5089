@@ -2052,3 +2052,35 @@ dem Bild, das der Lader ohnehin schon auf 1800 Pixel begrenzt hat.
 
 Nachgesehen in `tools/.pruefen/grading.html`: Tiefen deutlich tiefer,
 Lichter bleiben hell — also Kontrast statt Abdunklung.
+
+## 70. Nein — die Folgeslides waren noch weichgezeichnet
+
+Gute Frage, und die Antwort war nein. Abschnitt 67 hat den
+Zufallsanteil auf 0 gesetzt. Davor steht aber eine zweite Bedingung,
+die der Drop selbst mitbringt:
+
+    dr = Qe>0 && ( t.textStil==="montserrat" || Zufall )
+
+Und **alle** Folgeslides haben `textStil: "montserrat"` — das ist der
+Stil, der sie linksbuendig mit fetter erster Zeile setzt
+(`folgeStil`). Die erste Bedingung war also immer wahr, der
+Zufallsanteil kam nie zum Zug. Weichgezeichnet wurde weiter, und zwar
+**jede einzelne** Folgeslide.
+
+`weichAnteil` schaltet jetzt den ganzen Weichzeichner: bei 0 bleibt
+kein Bild weich, auch kein montserrat-Bild.
+
+## 71. Und der Weichzeichner hat das Grading ueberschrieben
+
+Abschnitt 69 haengt Kontrast und Schwarzpunkt an `me.filters`. Ein
+paar Zeilen weiter setzte der Weichzeichner
+
+    me.filters = [ new Blur(...) ]
+
+mit eckigen Klammern, also **ersetzend**. Auf jedem weichgezeichneten
+Bild war das Grading damit weg — und weichgezeichnet war jede
+Folgeslide. Jetzt haengt er sich an, statt zu ersetzen.
+
+**Merksatz:** Zwei Stellen, die derselben Eigenschaft etwas zuweisen,
+und die spaetere gewinnt. Erst pruefen, wer sonst noch an `filters`
+schreibt, bevor man selbst etwas hineinlegt.
