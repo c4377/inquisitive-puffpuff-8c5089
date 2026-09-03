@@ -531,6 +531,13 @@ P.append(('v.jsx("span",{className:"block text-[10px] font-bold text-gray-400 mb
 #         Kachel falsch, weil d(!0) auf einen bereits gesetzten Wert
 #         keine Neuzeichnung ausloest.
 P.append(('const g=()=>{p||d(!0)},m=setTimeout(g,2e3);',
+ # Nachtrag karten135: der Speicher wird zusaetzlich geleert,
+ # sobald der Browser mit dem Laden von Schriften fertig ist.
+ # Die Freigabe in der Vorschau deckt nur ihre eigene Zeichnung
+ # ab; jede andere Leinwand, die frueher zeichnet, fuellt ihn neu.
+ 'try{if(!window.__bsSchriftWacht){window.__bsSchriftWacht=1;'
+ 'document.fonts&&document.fonts.addEventListener&&document.fonts.addEventListener("loadingdone",'
+ '()=>{try{Pe.fabric.util.clearFabricFontCache()}catch(zz){}})}}catch(zz){}'
  'const g=()=>{if(p)return;try{Pe.fabric.util.clearFabricFontCache()}catch(zz){}d(!0)},'
  'm=setTimeout(g,2e3);',
  "Zeichenbreiten-Speicher leeren, bevor gezeichnet wird", 1))

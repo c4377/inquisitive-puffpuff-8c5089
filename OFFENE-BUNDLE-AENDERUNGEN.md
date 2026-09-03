@@ -2208,3 +2208,30 @@ geschnitten und in node laufen lassen):
     Es gibt eine Skala fuer …zustaende     / und sie erklaert mehr ueber …
     Alles, was gerade in deinem Leben ist, / hast du dorthin gebracht.
     Ich glaub nicht an positives Denken.   / (bleibt ein Block)
+
+## 76. Zeilen liefen wieder ueber den Rand — derselbe Speicher
+
+Auf ihren Kacheln waren einzelne fette Zeilen rechts abgeschnitten
+("Es gibt eine Skala fi", "Du kannst niemanden auf ein"), andere nicht.
+
+Nachgerechnet ist die Umbruchrechnung sauber: bei Spalte .82 endet die
+breiteste Zeile bei 693 bis 739 von 800 Pixeln, also gut innerhalb.
+Und Messen und Zeichnen benutzen dieselbe Familie, dasselbe Gewicht,
+dieselbe Groesse — es kann nur auseinanderlaufen, wenn die **Messung**
+aus dem Zeichenbreiten-Speicher von Fabric kommt und dort noch die
+Masse der Ersatzschrift liegen. Das ist der Fehler aus Abschnitt 48,
+diesmal fuer Fraunces, das erst seit karten109 benutzt wird.
+
+Abschnitt 48 leert den Speicher, bevor **die Vorschau** zeichnet. Das
+deckt aber nur ihre eigene Zeichnung ab. Jede andere Leinwand, die
+frueher zeichnet — Bildexport, Vorschaustreifen, was auch immer —
+fuellt ihn danach wieder mit Ersatzmassen.
+
+Deshalb jetzt zusaetzlich global und einmalig:
+
+    document.fonts.addEventListener("loadingdone",
+      () => fabric.util.clearFabricFontCache())
+
+Sobald der Browser mit dem Laden **irgendeiner** Schrift fertig ist,
+faellt der Speicher weg. Danach misst jede Leinwand neu, egal welche
+vorher zu frueh gezeichnet hat.
