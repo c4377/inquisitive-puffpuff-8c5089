@@ -209,17 +209,17 @@ P.append(('v.jsxs("button",{onClick:()=>quSetzen(!0),',
 #      linie und wieder bekommen dieselben Toene, damit nirgends
 #      weisse Schrift auf hellem Grund steht.
 P.append(('stein:{grund:SF,schriftGrund:SF,schrift:"#FFFFFF",betont:"#FFFFFF",monogramm:"#FFFFFF",absender:"rgba(255,255,255,0.60)",schriftart:"Playfair Display"}',
- 'stein:{grund:"#6B6B47",schriftGrund:"#6B6B47",schrift:"#FFFFFF",betont:"#FFFFFF",monogramm:"#FFFFFF",absender:"rgba(255,255,255,0.66)",schriftart:"Playfair Display"}',
- "stein auf Olive #6B6B47", 1))
+ 'stein:{grund:"#BEB7A7",schriftGrund:"#BEB7A7",schrift:"#112250",betont:"#112250",monogramm:"#112250",absender:"rgba(17,34,80,0.62)",schriftart:"Playfair Display"}',
+ "stein auf Warm Taupe #BEB7A7", 1))
 P.append(('hell:{grund:OW,schriftGrund:OW,schrift:OD,betont:OD,monogramm:OD,absender:"rgba(35,40,44,0.55)",schriftart:"Playfair Display"}',
- 'hell:{grund:"#8E6134",schriftGrund:"#8E6134",schrift:"#FFFFFF",betont:"#FFFFFF",monogramm:"#FFFFFF",absender:"rgba(255,255,255,0.66)",schriftart:"Playfair Display"}',
- "hell auf Gold #8E6134", 1))
+ 'hell:{grund:"#E7E2CE",schriftGrund:"#E7E2CE",schrift:"#112250",betont:"#112250",monogramm:"#112250",absender:"rgba(17,34,80,0.58)",schriftart:"Playfair Display"}',
+ "hell auf Champagne #E7E2CE", 1))
 P.append(('linie:{grund:uA,schrift:hA,betont:hA,monogramm:F1,absender:"rgba(62,80,99,0.55)",fassung:"linie",schriftart:"PoppinsBold"}',
- 'linie:{grund:"#6B6B47",schrift:"#FFFFFF",betont:"#FFFFFF",monogramm:"#FFFFFF",absender:"rgba(255,255,255,0.66)",fassung:"linie",schriftart:"PoppinsBold"}',
- "linie auf Olive", 1))
+ 'linie:{grund:"#BEB7A7",schrift:"#112250",betont:"#112250",monogramm:"#112250",absender:"rgba(17,34,80,0.62)",fassung:"linie",schriftart:"PoppinsBold"}',
+ "linie auf Warm Taupe", 1))
 P.append(('wieder:{grund:uA,schrift:hA,betont:hA,monogramm:F1,absender:"rgba(62,80,99,0.55)",fassung:"wieder",schriftart:"PoppinsBold"}',
- 'wieder:{grund:"#8E6134",schrift:"#FFFFFF",betont:"#FFFFFF",monogramm:"#FFFFFF",absender:"rgba(255,255,255,0.66)",fassung:"wieder",schriftart:"PoppinsBold"}',
- "wieder auf Gold", 1))
+ 'wieder:{grund:"#E7E2CE",schrift:"#112250",betont:"#112250",monogramm:"#112250",absender:"rgba(17,34,80,0.58)",fassung:"wieder",schriftart:"PoppinsBold"}',
+ "wieder auf Champagne", 1))
 
 # 20 — Textkacheln laufen in der Marken-Grotesk statt in Playfair.
 #      ACHTUNG, das hebt die Absicht aus Patch 15 teilweise auf:

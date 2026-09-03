@@ -468,7 +468,7 @@ Der Zeichner bekommt jetzt eine eigene Angabe aus der Marke:
 
 `plateFont` bleibt unangetastet, es wird an anderer Stelle gebraucht.
 
-## 18. Kachelfarben: matte Erdtoene statt Hellgrau und Schiefer
+## 18. Kachelfarben: Warm Taupe und Champagne, Schrift in Navy
 
 *Skript-Eintrag 19.*
 
@@ -476,21 +476,25 @@ Die Alltagskacheln kamen nie aus der Laengenregel, sondern aus
 
     aS = e => ["hell","stein"][r % 2]
 
-Das wechselt auf jedem Kartentag zwischen `hell` (Hellgrau `#E8E8E6`) und
-`stein` (Schiefer `#3A4750`). Wer die Farbe der Textkacheln aendern will,
-muss diese beiden anfassen — alles andere kommt im Alltag kaum vor.
+Das wechselt auf jedem Kartentag zwischen `hell` und `stein`. Wer die Farbe
+der Textkacheln aendern will, muss diese beiden anfassen — alles andere
+kommt im Alltag kaum vor.
 
-    hell   -> Gold  #8E6134
-    stein  -> Olive #6B6B47
+    hell   -> Champagne  #E7E2CE
+    stein  -> Warm Taupe #BEB7A7
+    Schrift, Monogramm, Absender -> Navy #112250
 
-Beide tragen weisse Schrift: 5,4 und 5,5 zu 1. Die vorher probierten Toene
-Sand `#E4D9C6` und helles Orange `#F2A26B` schafften mit Weiss nur 1,4
-beziehungsweise 2,1 zu 1 und waren am Handy nicht lesbar.
+Kontrast 11,8 beziehungsweise 7,7 zu 1 — beides deutlich ueber der
+Schwelle von 4,5.
+
+Vorher probiert und verworfen: Sand `#E4D9C6` und helles Orange `#F2A26B`
+trugen weisse Schrift nicht (1,4 und 2,1 zu 1). Olive `#6B6B47` und Gold
+`#8E6134` trugen sie zwar (5,5 und 5,4), gefielen aber nicht.
 
 `linie` und `wieder` bekommen dieselben zwei Toene. Nicht weil sie oft
 vorkommen — sie brauchen eine optionale Kachel mit hoechstens drei Woertern
-beziehungsweise durchgehenden Grossbuchstaben — sondern damit nirgends im
-Bundle weisse Schrift auf hellem Grund stehenbleibt.
+beziehungsweise durchgehenden Grossbuchstaben — sondern damit im Bundle
+nirgends eine Farbkombination stehenbleibt, die nicht geprueft ist.
 
 ## 19. Textkacheln laufen in der Marken-Grotesk
 
