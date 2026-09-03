@@ -866,3 +866,26 @@ Carinas Aufteilung, ausdruecklich so gewollt:
 Das Vorbild setzt auch die Textkachel in einer Serife. Carina will dort
 Inter — die Serife bleibt den Fotokacheln vorbehalten. Playfair Display
 kommt damit nicht mehr vor.
+
+## 33. Palette Urban Espresso, und Prata nur auf der ersten Fotoslide
+
+Farben aus der Palette, die Carina geschickt hat:
+
+    Urban Espresso   #5B4A3E   Schrift
+    Pavement Shadow  #8A8077   Unterzeile, siehe unten
+    Luxe Oat         #CBBFAF   noch nicht verwendet
+    Ivory Silk       #E8DED4   Grund A
+    Sunlit Veil      #F6F2EB   Grund B
+
+Urban Espresso traegt auf beiden Gruenden: 6,35 und 7,55 zu 1.
+
+Pavement Shadow als Unterzeile waere mit 2,91 zu 1 auf Ivory Silk zu
+blass. Er ist deshalb auf `#70675E` abgedunkelt — derselbe Ton, nur
+dunkler: 4,18 und 4,96 zu 1.
+
+**Prata gilt nur fuer die erste Fotoslide.** Ich hatte sie in karten93
+eigenmaechtig auf alle Fotoslides ausgeweitet; das war nicht verlangt.
+Die Folgeslides laufen wieder in `fotoSchrift`, also Playfair Display.
+
+    fotoSchrift       Playfair Display   Folgeslides
+    deckblattFamilie  Prata              nur die erste
