@@ -1918,3 +1918,19 @@ alles bleibt im ersten Block, also durchgehend Serif.
 hingen:** Kasten (56), Schriftfarbe (59), Textlage (64) und jetzt die
 Kappung auf eine Zeile. Die Marke bedeutet wieder nur eines — "das
 ist der erste Block".
+
+## 66. Auf den Folgeslides war der erste Block nicht fett
+
+`deckblattGewicht` gilt nur fuer das Deckblatt. Auf den Folgeslides
+blieb `kt` bei dem, was der Stil vorgab — also leicht. Der grosse
+erste Block sah damit aus wie der kleine zweite, nur groesser.
+
+    folgeGewicht   700
+
+Gleiche Form wie `deckblattGewicht`, eine Zeile daneben. Der zweite
+Block bleibt bei `leichtGewicht`; fett und nicht fett stimmt damit auf
+Deckblatt und Folgeslides gleichermassen.
+
+    Deckblatt      Fraunces 700    /  Helvetica 300
+    Folgeslides    Helvetica 700   /  Helvetica 300
+    Textkacheln    Helvetica 300   /  Helvetica 700
