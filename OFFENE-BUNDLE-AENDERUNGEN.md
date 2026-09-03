@@ -1124,3 +1124,56 @@ Geprueft und verworfen als Ersatz fuer Orange, alle nah an Beton:
 Tabak `#6B6258` (5,98), Oliv `#767561` (4,68), Rauch `#6F6E69` (5,11).
 Alle drei tragen Weiss, alle drei sind aber nur eine Stufe neben Beton
 — im Feed sieht man den Wechsel kaum. Hell gegen dunkel sieht man.
+
+## 44. Tiefe statt Blass — nachgemessen am Vorbild
+
+Nach 43 kam: "nicht mal in der Naehe des Beispiels, so blass und
+seicht". Statt weiter zu raten habe ich das Vorbild ausgemessen.
+
+Die Textkachel bei marina.persano:
+
+    Grund       #F6F1F1   fast weiss, minimal warm
+    Schrift     #050100   fast schwarz
+    Kontrast    16,9 zu 1
+    Block 1     normal
+    Block 2     FETT, gleiche Groesse
+    Zeile       1,11
+    Absatz      etwa eine ganze Zeilenhoehe Luft
+    Rand        8,2 Prozent der Breite
+
+Vier Sachen waren bei uns anders, und zusammen ergaben sie "blass":
+
+1. **Kontrast.** 7,2 und 4,6 zu 1 statt 17. Mittelbraun auf Sand und
+   Weiss auf Beton sind beide weich. Jetzt 15,0 und 10,7 zu 1.
+2. **Der zweite Block war kleiner und nicht fett.** Genau umgekehrt
+   zum Vorbild: dort ist die Pointe fett und gleich gross wie der
+   Aufbau. `unterVerhaeltnis` von .64 auf 1, `unterGewicht` von 400
+   auf 700.
+3. **Kein Absatz.** .20 gegen die gemessene ganze Zeilenhoehe. Die
+   zwei Bloecke klebten aneinander, es gab keinen Moment vor der
+   Pointe. Jetzt .55.
+4. **Zeilen zu eng.** 1,02 gegen 1,11 im Vorbild. Wir waren enger als
+   das, was wir nachbauen wollten. Jetzt 1,10.
+
+Farben aus ihrer eigenen Palette (Urban Espresso):
+
+    grundA   #F6F2EB  Sunlit Veil     schriftA #241C16   15,0 zu 1
+    grundB   #4A3B30  Urban Espresso  schriftB #FFFFFF   10,7 zu 1
+
+`#5B4A3E` aus der Palette direkt traegt Weiss nur mit 8,4 und sieht
+neben dem hellen Grund noch grau aus; eine Stufe tiefer sitzt es.
+
+**Schrift: Inter statt Marcellus auf der Textkachel.** Das Vorbild ist
+durchgehend eine Grotesk, normal und fett. Marcellus hat ueberhaupt
+keinen fetten Schnitt — mit Marcellus ist die fette Pointe nicht
+baubar. Deshalb Inter fuer beide Bloecke. Die Fotokacheln bleiben
+Marcellus, dort geht es um Serifen, nicht um Fett.
+
+Nebenbei ehrlich gemacht: `hell` nimmt jetzt den hellen Grund und
+`stein` den dunklen. Vorher war es nach 43 andersherum, weil nur die
+Farben getauscht wurden und nicht die Zuordnung. Namen, die das
+Gegenteil von dem sagen, was sie tun, sind die naechste Stolperstelle.
+
+**Merksatz:** Bevor etwas "wie das Vorbild" aussehen soll, das Vorbild
+ausmessen — Farbe, Kontrast, Gewicht, Zeile, Absatz. Alle vier Zahlen
+lagen daneben, jede einzeln haette man fuer Geschmack halten koennen.
