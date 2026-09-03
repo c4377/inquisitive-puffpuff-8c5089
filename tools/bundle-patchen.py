@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:1350,bildGuete:.85,bildKontrast:0,bildHelligkeit:0,ablaufTitel:"HelveticaNeueBrand",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.05,tiefeMitte:.10,tiefeUnten:.42,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,textAnteil:35,fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:1350,bildGuete:.85,bildKontrast:0,bildHelligkeit:0,ablaufTitel:"HelveticaNeueBrand",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.05,tiefeMitte:.10,tiefeUnten:.42,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -1176,6 +1176,31 @@ P.append(('["#CARINA | ANNA | PRAV\\nMentoring\\n>ZWÖLF MONATE, ACHT ETAPPEN\\n
 #      geteilt wird.
 P.append(('Je?(er=Je[1],pr=Je[2]):(er=pr,pr="");', 'Je?(er=Je[1],pr=Je[2]):(()=>{const zS=String(pr),zL=zS.length;if(zL<(BS_KACHEL.teilungAb||52)){er=zS,pr="";return}const zK=[];let zm;const zr1=/,\\s+/g;while((zm=zr1.exec(zS)))zK.push([zm.index+1,zm.index+zm[0].length]);const zr2=/\\s+(?:und|aber|weil|denn|damit|sondern|oder)\\s+/g;while((zm=zr2.exec(zS)))zK.push([zm.index,zm.index+zm[0].length-zm[0].replace(/^\\s+/,"").length]);const zG=zK.filter(k=>k[0]>zL*.25&&k[0]<zL*.78);if(!zG.length){er=zS,pr="";return}zG.sort((a,b)=>Math.abs(a[0]-zL/2)-Math.abs(b[0]-zL/2));er=zS.slice(0,zG[0][0]).trim(),pr=zS.slice(zG[0][1]).trim()})();',
  "Zweiter Block auch ohne Satzgrenze, an der Satzteilgrenze", 1))
+
+# 78 — Mehr Textkacheln im Raster.
+#
+#      Ob ein Tag ein Foto bekommt, entschied:
+#
+#          tS = e => { const t=(e%10+10)%10; return !(t===4||t===9) }
+#
+#      Also: von zehn Tagen bekommen acht ein Bild, zwei bleiben Text.
+#      Zwanzig Prozent Textkacheln — im Raster verschwinden die
+#      zwischen den Fotos.
+#
+#      Der Anteil steht jetzt im Block. textAnteil ist der Anteil der
+#      Tage OHNE Foto, in Prozent:
+#
+#          (pt*37+13)%100 >= textAnteil   ->  Foto
+#
+#      Der Multiplikator 37 ist teilerfremd zu 100, die Reihe laeuft
+#      also einmal durch alle Werte, bevor sie sich wiederholt: bei
+#      35 sind es genau 35 von 100 Tagen, gleichmaessig verteilt, nie
+#      zwei Textkacheln direkt hintereinander.
+#
+#      textAnteil auf 0 stellt die alte Regel wieder her.
+P.append(('Vt=(qt?!Oe(ct,pt):tS(pt))&&He.length>0',
+ 'Vt=(BS_KACHEL.textAnteil?((pt*37+13)%100)>=BS_KACHEL.textAnteil:(qt?!Oe(ct,pt):tS(pt)))&&He.length>0',
+ "Anteil der Textkacheln aus dem Block", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

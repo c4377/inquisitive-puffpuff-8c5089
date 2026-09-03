@@ -2262,3 +2262,31 @@ Geprueft an ihren zehn letzten Texten (Regel aus dem gebauten Bundle
 geschnitten, in node gelaufen): 4 oben, 2 mitte, 4 unten. In der App
 wird die Bildadresse genommen, nicht der Text — dort streut es noch
 gleichmaessiger, weil sich Fotos staerker unterscheiden als Saetze.
+
+## 78. Mehr Textkacheln im Raster
+
+Ob ein Tag ein Foto bekommt, entschied eine feste Regel:
+
+    tS = e => { const t = (e%10+10)%10; return !(t===4 || t===9) }
+
+Von zehn Tagen bekommen acht ein Bild, zwei bleiben Text. **Zwanzig
+Prozent** — im Raster verschwinden die zwischen den Fotos.
+
+Der Anteil steht jetzt im Block. `textAnteil` ist der Anteil der Tage
+**ohne** Foto, in Prozent:
+
+    (pt*37+13) % 100 >= textAnteil   ->  Foto
+
+Der Multiplikator 37 ist teilerfremd zu 100, die Reihe laeuft also
+einmal durch alle Werte, bevor sie sich wiederholt. Nachgerechnet:
+
+    textAnteil 20   20 von 100, nie zwei hintereinander
+    textAnteil 35   35 von 100, nie zwei hintereinander   <- eingestellt
+    textAnteil 40   40 von 100, gelegentlich zwei hintereinander
+
+Bei 35 kommt im Schnitt alle zwei bis drei Tage eine Textkachel, und
+es stehen nie zwei nebeneinander. Die ersten dreissig Tage:
+
+    T F F T F F F F T F F T F F T F T F F T F F T F T F F T F F
+
+`textAnteil` auf 0 stellt die alte Regel wieder her.
