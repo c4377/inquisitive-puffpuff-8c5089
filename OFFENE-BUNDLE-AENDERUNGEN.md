@@ -2235,3 +2235,30 @@ Deshalb jetzt zusaetzlich global und einmalig:
 Sobald der Browser mit dem Laden **irgendeiner** Schrift fertig ist,
 faellt der Speicher weg. Danach misst jede Leinwand neu, egal welche
 vorher zu frueh gezeichnet hat.
+
+## 77. Im Raster sah alles gleich aus
+
+Abschnitt 67 hat die rotierende Vorgabe ["unten","mitte","oben"]
+entfernt, damit die Bildanalyse ueberhaupt zum Zug kommt. Die
+Bildanalyse liefert aber bei aehnlichen Fotos — dieselbe Person,
+dieselbe Haltung, dieselbe Kameraposition — immer dieselbe ruhige
+Zone. Im Raster stand der Text dadurch auf jeder Fotokachel an
+derselben Stelle.
+
+Beide Wuensche gleichzeitig, in dieser Reihenfolge:
+
+1. **Ihre Wahl** im Tagesmenue gilt unveraendert.
+2. Sonst eine **feste Streuung** ueber unten / mitte / oben, berechnet
+   aus der Bildadresse. Fest heisst: dasselbe Bild bekommt immer
+   dieselbe Lage, es springt nicht bei jedem Zeichnen.
+3. Die **Bildanalyse ist jetzt die Wache**, nicht die Entscheidung:
+   liegt in der gestreuten Reihe ein Gesicht, gilt statt ihrer die
+   ruhige Zone.
+
+`lagenWechsel` auf 0 schaltet die Streuung ab, dann entscheidet wieder
+allein die Analyse.
+
+Geprueft an ihren zehn letzten Texten (Regel aus dem gebauten Bundle
+geschnitten, in node gelaufen): 4 oben, 2 mitte, 4 unten. In der App
+wird die Bildadresse genommen, nicht der Text — dort streut es noch
+gleichmaessiger, weil sich Fotos staerker unterscheiden als Saetze.
