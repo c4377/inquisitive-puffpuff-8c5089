@@ -272,7 +272,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#3A4750",grundB:"#7D7469",schrift:"#FFFFFF",schriftart:"Marcellus",unterSchrift:"Inter",unterVerhaeltnis:.64,unterFarbe:"#FFFFFF",gewicht:"400",unterGewicht:"400",groesseAnteil:.098,enge:1,laufweite:-18,zeile:1.02,absatz:.20,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Marcellus",deckblattFamilie:"Marcellus",deckblattGroesse:52,folgeStil:"montserrat",folgeFamilie:"Inter",fotoGroesse:44,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.12,tiefeMitte:.24,tiefeUnten:.86,tiefeSchriften:"Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#9C5E3B",grundB:"#7D7469",schrift:"#FFFFFF",schriftart:"Marcellus",unterSchrift:"Inter",unterVerhaeltnis:.64,unterFarbe:"#FFFFFF",gewicht:"400",unterGewicht:"400",groesseAnteil:.098,enge:1,laufweite:-18,zeile:1.02,absatz:.20,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Marcellus",deckblattFamilie:"Marcellus",deckblattGroesse:52,folgeStil:"montserrat",folgeFamilie:"Inter",fotoGroesse:44,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.12,tiefeMitte:.24,tiefeUnten:.86,tiefeSchriften:"Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 

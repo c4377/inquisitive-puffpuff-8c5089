@@ -1073,3 +1073,18 @@ ist zu sehen, und der Text steht auf einer dunklen Flaeche.
 **Merksatz fuer das naechste Mal:** Deckkraefte addieren sich nicht,
 sie multiplizieren sich. Vier Ebenen mit je "nur ein bisschen" ergeben
 schwarz.
+
+## 42. Orange Beton statt Schiefer
+
+    grundA   #9C5E3B   Orange Beton   Weiss 5,15 zu 1
+    grundB   #7D7469   Beton          Weiss 4,59 zu 1
+
+Schiefer #3A4750 ist raus. Beide Kartenfarben sind jetzt warme
+Betontoene, einer mit Orange, einer neutral — sie wechseln sich auf den
+Kartentagen ab.
+
+Geprueft und verworfen: `#B0714A` und `#A2705A` sehen heller und
+freundlicher aus, tragen Weiss aber nur mit 3,96 beziehungsweise 4,20
+zu 1. Das reicht fuer die grosse Ueberschrift, nicht fuer die
+18-Pixel-Unterzeile. `#A66743` liegt mit 4,52 knapp darueber und waere
+die hellere Alternative, wenn es waermer sein soll.
