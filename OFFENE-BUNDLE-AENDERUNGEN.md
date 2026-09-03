@@ -1041,3 +1041,35 @@ Mit `#7D7469` tragen beide.
 
 Die Unterzeile ist weiss und nicht gedaempft: auf Beton waere jeder
 dunklere Ton unter der Schwelle.
+
+## 41. Warum man auf den Fotos nichts lesen konnte
+
+*Skript-Eintrag 36.*
+
+Ueber einem Foto lagen vier Ebenen, und sie multiplizieren sich:
+
+    Abdunkeln .05  ->  95,0 % vom Bild
+    Lasur     .16  ->  79,8 %
+    Kante     .34  ->  52,7 %
+    Tiefe     .82  ->   9,5 %
+
+Der Tiefenverlauf war der Uebeltaeter. Seine Werte waren .82 oben,
+.58 in der Mitte, .90 unten — das ist kein Verlauf, das ist ein
+Vollflaechen-Dunkel. Danach war das Foto Schlamm, und weisser Text
+traegt in Schlamm nicht, weil ihm der Untergrund fehlt, von dem er sich
+abheben koennte.
+
+Das Vorbild macht es umgekehrt: oben hell, unten dunkel, genau dort wo
+der Text sitzt. Jetzt:
+
+    tiefeOben   .12
+    tiefeMitte  .24
+    tiefeUnten  .86
+    waerme      .07   (war .16)
+
+Damit bleiben oben 51 Prozent vom Bild und unten 7 Prozent. Das Foto
+ist zu sehen, und der Text steht auf einer dunklen Flaeche.
+
+**Merksatz fuer das naechste Mal:** Deckkraefte addieren sich nicht,
+sie multiplizieren sich. Vier Ebenen mit je "nur ein bisschen" ergeben
+schwarz.

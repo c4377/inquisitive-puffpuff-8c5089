@@ -272,7 +272,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#3A4750",grundB:"#7D7469",schrift:"#FFFFFF",schriftart:"Marcellus",unterSchrift:"Inter",unterVerhaeltnis:.64,unterFarbe:"#FFFFFF",gewicht:"400",unterGewicht:"400",groesseAnteil:.098,enge:1,laufweite:-18,zeile:1.02,absatz:.20,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Marcellus",deckblattFamilie:"Marcellus",deckblattGroesse:52,folgeStil:"montserrat",folgeFamilie:"Inter",fotoGroesse:44,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.16,tiefeSchriften:"Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#3A4750",grundB:"#7D7469",schrift:"#FFFFFF",schriftart:"Marcellus",unterSchrift:"Inter",unterVerhaeltnis:.64,unterFarbe:"#FFFFFF",gewicht:"400",unterGewicht:"400",groesseAnteil:.098,enge:1,laufweite:-18,zeile:1.02,absatz:.20,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Marcellus",deckblattFamilie:"Marcellus",deckblattGroesse:52,folgeStil:"montserrat",folgeFamilie:"Inter",fotoGroesse:44,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.12,tiefeMitte:.24,tiefeUnten:.86,tiefeSchriften:"Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -409,6 +409,23 @@ P.append(('colorStops:[{offset:0,color:"rgba(0,0,0,0.30)"},{offset:.18,color:"rg
 P.append(('if($e&&/Playfair/.test(String(Qe))&&t.tiefenOverlay!==!1)',
  'if($e&&new RegExp(BS_KACHEL.tiefeSchriften||"Playfair").test(String(Qe))&&t.tiefenOverlay!==!1)',
  "Tiefenverlauf fuer alle feinen Schriften", 1))
+
+# 36 — Der Tiefenverlauf war ein Vollflaechen-Dunkel, kein Verlauf.
+#
+#      Seine Werte waren .82 oben, .58 in der Mitte, .90 unten. Damit
+#      dunkelt er das ganze Bild ab, nicht nur die Textzone. Zusammen
+#      mit Abdunkeln, Lasur und Kantenverlauf blieben rechnerisch
+#      9,5 Prozent vom Foto uebrig — dunkler Schlamm, in dem auch
+#      weisser Text nicht mehr traegt, weil ihm der Kontrast zum
+#      Untergrund fehlt.
+#
+#      Das Vorbild macht es anders: oben hell, unten dunkel, genau
+#      dort wo der Text sitzt. Die drei Werte stehen jetzt im Block.
+P.append(('colorStops:[{offset:0,color:"rgba(18,16,14,0.82)"},{offset:.5,color:"rgba(18,16,14,0.58)"},{offset:1,color:"rgba(18,16,14,0.90)"}]',
+ 'colorStops:[{offset:0,color:`rgba(${BS_KACHEL.bildTon},${BS_KACHEL.tiefeOben})`},'
+ '{offset:.45,color:`rgba(${BS_KACHEL.bildTon},${BS_KACHEL.tiefeMitte})`},'
+ '{offset:1,color:`rgba(${BS_KACHEL.bildTon},${BS_KACHEL.tiefeUnten})`}]',
+ "Tiefenverlauf unten schwer statt ueberall dunkel", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
