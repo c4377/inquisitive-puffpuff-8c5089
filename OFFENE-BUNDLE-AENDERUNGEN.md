@@ -637,3 +637,28 @@ Text gilt nur fuer Playfair:
 Mit Anton als Fotoschrift traf das nie zu. Jetzt greift er wieder — und
 das ist richtig: die duenne Serife braucht den Verlauf auf dem Foto,
 sonst steht weisse Schrift auf hellem Bild.
+
+## 24. Groessen als Anteil der Leinwand, nicht ueber c()
+
+*Skript-Eintrag 24, Werte `groesseAnteil` und `nameAnteil`.*
+
+Der Massstab ist nicht 1. Die Vorschau im Content Plan rendert mit
+
+    format "4:5" -> g=800, m=1000,  scale 2
+
+der Export mit `1080, 1350, {scale: 2.7}`. Und `c(x) = x * scale * 0.8`.
+
+Wer die Schriftgroesse ueber `c()` setzt, die Spaltenbreite aber als
+`r * Anteil`, bekommt eine Schrift, die zwei- bis dreimal zu gross fuer
+ihre Spalte ist. Kurze Saetze zerbrachen dadurch in fuenf Zeilen.
+
+Die Fassung marke rechnet die Groessen deshalb direkt aus der Breite:
+
+    gr = r * K.groesseAnteil     (.066)
+    NG = r * K.nameAnteil        (.018)
+
+Damit sieht die Kachel in der Vorschau und im Export gleich aus.
+
+**Fuer die Pruefung wichtig:** `tools/kachel-pruefen.py` rendert
+standardmaessig mit 800x1000 und Massstab 2 — wie die Vorschau. Eine
+Pruefung mit Massstab 1 sieht richtig aus und ist trotzdem falsch.

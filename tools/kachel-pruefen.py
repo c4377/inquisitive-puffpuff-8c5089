@@ -23,7 +23,9 @@ aufgerufen wird. Aufmachen im Browser oder als Bild abziehen:
       --virtual-time-budget=9000 --screenshot=kachel.png \\
       http://localhost:8080/kachel.html
 
-Die Leinwand liegt bei 10,10 und ist 1080x1350 gross.
+Die Leinwand liegt bei 10,10. Vorgabe 800x1000 mit Massstab 2 —
+genau wie die Vorschau im Content Plan. Fuer den Export: --scale 2.7
+--breite 1080 --hoehe 1350.
 """
 import argparse, os, re, shutil, sys
 
@@ -45,7 +47,7 @@ SEITE = """<!doctype html><html><head><meta charset="utf-8">
 body{margin:10px;background:#2a2a2a}
 #lage{position:fixed;right:12px;top:12px;color:#ddd;font:13px monospace;white-space:pre-wrap;max-width:320px}
 </style></head><body>
-<canvas id="cv" width="1080" height="1350"></canvas>
+<canvas id="cv" width="__BREITE__" height="__HOEHE__"></canvas>
 <div id="lage">laedt…</div>
 <script>
 __KONFIG__
@@ -57,7 +59,7 @@ __KONFIG__
       '400 40px "Anton"'].map(f => document.fonts.load(f)));
     const Pe = { fabric: window.fabric };
     const e = new fabric.StaticCanvas('cv');
-    const r = 1080, n = 1350, d = 1, h = 0.8;
+    const r = __BREITE__, n = __HOEHE__, d = __SCALE__, h = 0.8;
     const c = ge => ge * d * h;
     const wt = __ZEICHNER__;
     const Je = __JE__;
@@ -99,6 +101,11 @@ def main():
     ap.add_argument("--grund", default=None, help="Hintergrund, sonst aus BS_KACHEL")
     ap.add_argument("--schrift", default=None, help="Schriftfarbe, sonst aus BS_KACHEL")
     ap.add_argument("--text", default=BEISPIEL)
+    ap.add_argument("--breite", type=int, default=800,
+                    help="Leinwandbreite. 800 wie die Vorschau im Content Plan")
+    ap.add_argument("--hoehe", type=int, default=1000)
+    ap.add_argument("--scale", type=float, default=2.0,
+                    help="Massstab. 2 in der Vorschau, 2.7 beim Export")
     a = ap.parse_args()
 
     s = open(a.bundle, encoding="utf-8", errors="replace").read()
@@ -130,13 +137,17 @@ def main():
     seite = (SEITE.replace("__KONFIG__", konfig)
                   .replace("__ZEICHNER__", zeichner)
                   .replace("__JE__", je)
-                  .replace("__TEXT__", repr(a.text).replace("'", '"')))
+                  .replace("__TEXT__", repr(a.text).replace("'", '"'))
+                  .replace("__BREITE__", str(a.breite))
+                  .replace("__HOEHE__", str(a.hoehe))
+                  .replace("__SCALE__", str(a.scale)))
     pfad = os.path.join(AUS, "kachel.html")
     open(pfad, "w", encoding="utf-8").write(seite)
 
     print(f"  Fassung   {a.fassung}")
     print(f"  Grund     {grund}")
     print(f"  Schrift   {schrift}")
+    print(f"  Leinwand  {a.breite}x{a.hoehe}, Massstab {a.scale}")
     print(f"  Seite     {pfad}")
     print()
     print("  (cd tools/.pruefen && python3 -m http.server 8080)")
