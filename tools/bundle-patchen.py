@@ -272,7 +272,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#E8DED4",grundB:"#F6F2EB",schrift:"#5B4A3E",schriftart:"Inter",unterSchrift:"Inter",unterVerhaeltnis:.64,unterFarbe:"#70675E",gewicht:"700",unterGewicht:"400",groesseAnteil:.098,enge:1,laufweite:-18,zeile:1.02,absatz:.20,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Playfair Display",deckblattFamilie:"Prata",deckblattGroesse:52,fotoGroesse:41};'
+KONFIG = 'const BS_KACHEL={grundA:"#E8DED4",grundB:"#F6F2EB",schrift:"#5B4A3E",schriftart:"Inter",unterSchrift:"Inter",unterVerhaeltnis:.64,unterFarbe:"#70675E",gewicht:"700",unterGewicht:"400",groesseAnteil:.098,enge:1,laufweite:-18,zeile:1.02,absatz:.20,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Playfair Display",deckblattFamilie:"Prata",deckblattGroesse:52,folgeStil:"montserrat",folgeFamilie:"Inter",fotoGroesse:44};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -341,6 +341,32 @@ P.append(('tt.schriftUeber&&(Qe=tt.schriftUeber),tt.flieszSchrift&&t.bodySchrift
 P.append(('["Anton","Montserrat","Playfair Display","Playfair","Instrument Serif","Syne","Archivo","Cormorant Garamond","AspektaBrand","HelveticaNeueBrand","Mirage","Rosaline","ZT Otez"]',
  '["Anton","Montserrat","Playfair Display","Playfair","Instrument Serif","Syne","Archivo","Cormorant Garamond","AspektaBrand","HelveticaNeueBrand","Mirage","Rosaline","ZT Otez","Prata","Inter"]',
  "Prata und Inter vorladen", 1))
+
+# 32 — Folgeslides eines Fotoposts: linksbuendig, Inter, erste Zeile
+#      fett. Der vorhandene Fotostil "montserrat" liefert genau das:
+#
+#        ausrichtung:"links", fettNurErste:!0, nurErsteZeilePlatte:!0
+#
+#      Er wird fuer Fotoslides ab der zweiten erzwungen. Wichtig: der
+#      Groessenabzug
+#
+#        t.textStil==="montserrat" && (qe = qe*.70)
+#
+#      prueft t.textStil, nicht den hier ueberschriebenen Wert — er
+#      greift also NICHT. fotoGroesse ist deshalb die echte Groesse:
+#      44 gegen 52 auf der ersten Slide, also 15 Prozent kleiner.
+P.append(('textStil:t.textStil||"platte",bandFarbe:t.bandFarbe||"weiss",kachelSchrift:t.kachelSchrift||"marke",karte:t.karte||"dunkel"});',
+ 'textStil:($e&&t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeStil)||t.textStil||"platte",'
+ 'bandFarbe:t.bandFarbe||"weiss",kachelSchrift:t.kachelSchrift||"marke",karte:t.karte||"dunkel"});',
+ "Folgeslides im Stil links mit fetter erster Zeile", 1))
+
+# 33 — Und ihre Schrift. Steht nach den beiden vorhandenen
+#      Zuweisungen, damit sie gewinnt: flieszSchrift des Stils wuerde
+#      sonst t.bodySchrift durchlassen.
+P.append(('$e&&t.folienRolle==="deckblatt"&&BS_KACHEL.deckblattFamilie&&(Qe=BS_KACHEL.deckblattFamilie);',
+ '$e&&t.folienRolle==="deckblatt"&&BS_KACHEL.deckblattFamilie&&(Qe=BS_KACHEL.deckblattFamilie),'
+ '$e&&t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeFamilie&&(Qe=BS_KACHEL.folgeFamilie);',
+ "Folgeslides in der Folge-Familie", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

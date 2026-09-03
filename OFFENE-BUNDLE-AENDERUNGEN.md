@@ -911,3 +911,29 @@ Bundle sind: die Vorladeliste, zwei Auswahllisten im Einstellungsdialog,
 eine Schriftbeschreibung und die Kombination "Sanft" — letztere greift
 nur, wenn sie angeklickt wird. Folgeslides laufen in
 `fotoSchrift` = Playfair Display.
+
+## 35. Folgeslides eines Fotoposts
+
+*Skript-Eintraege 32 und 33.*
+
+Ab der zweiten Slide gilt der vorhandene Fotostil `montserrat`. Er
+liefert genau das Gewuenschte:
+
+    ausrichtung:"links"        linksbuendig
+    fettNurErste:!0            erste Zeile fett, Rest normal
+    nurErsteZeilePlatte:!0     Platte nur hinter der ersten Zeile
+
+Die Schrift ist `folgeFamilie` = Inter. Die Zuweisung steht NACH den
+beiden vorhandenen, weil `flieszSchrift` des Stils sonst
+`t.bodySchrift` durchlaesst und gewinnt.
+
+**Zur Groesse.** Der Abzug
+
+    t.textStil==="montserrat" && (qe = Math.round(qe*.70))
+
+prueft `t.textStil`, nicht den in T1 ueberschriebenen Wert — er greift
+also nicht. `fotoGroesse` ist deshalb die echte Groesse: 44 gegen 52 auf
+der ersten Slide, also 15 Prozent kleiner.
+
+Angenommen war: "15 Prozent kleiner" bezieht sich auf die erste Slide.
+Falls es 15 Prozent unter dem alten Wert 41 heissen sollte, ist es 35.
