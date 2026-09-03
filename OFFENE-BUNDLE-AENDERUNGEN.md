@@ -937,3 +937,27 @@ der ersten Slide, also 15 Prozent kleiner.
 
 Angenommen war: "15 Prozent kleiner" bezieht sich auf die erste Slide.
 Falls es 15 Prozent unter dem alten Wert 41 heissen sollte, ist es 35.
+
+## 36. Marcellus auf den Fotokacheln — und die offene Systemfrage
+
+Prata gefiel nicht. Auf den Fotokacheln steht jetzt Marcellus, erste
+Slide und Folgeslides:
+
+    fotoSchrift       Marcellus
+    deckblattFamilie  Marcellus
+
+**Warum der Feed trotzdem zusammengestoeppelt wirkt.** Der Grund sind
+nicht die einzelnen Schriften, sondern dass zwei Systeme nebeneinander
+liegen: Textkacheln in fetter Grotesk (Inter 700), Fotokacheln in einer
+Serife. Im Raster liest das wie zwei Marken.
+
+Das Vorbild wirkt ruhig, weil dort **alles** dieselbe Serife ist —
+Textkacheln wie Fotokacheln.
+
+Zwei Wege, beides je eine Zeile:
+
+    A  schriftart:"Inter",     gewicht:"700"    zwei Systeme (aktuell)
+    B  schriftart:"Marcellus", gewicht:"400"    ein System
+
+Carina hat Inter auf der Textkachel ausdruecklich gewollt, deshalb steht
+A. Der Vergleich ist gerendert und liegt ihr vor.
