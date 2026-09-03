@@ -709,3 +709,32 @@ Der fette Absatz kann eine eigene Familie bekommen:
 Steht beides auf AspektaBrand. Wer den Fettsatz noch schwerer will:
 ArchivoBlack oder Anton, beide im CSS registriert — dann aber nur fuer
 schriftartFett, sonst kippt der ganze Satz.
+
+## 27. Inter, und warum die Schrift des Vorbilds nicht erreichbar ist
+
+Die Vorbildkachel (402 x 502) wurde Zeile fuer Zeile ausgemessen und mit
+den Kandidaten aus dem Projekt verglichen.
+
+**Inter trifft die Breite.** Bei `groesseAnteil .058` lagen die
+Zeilenbreiten bei 327 / 273 / 83 px gegen 329 / 286 / 87 px im Vorbild,
+und der Text brach in dieselben acht Zeilen.
+
+**Die Hoehe stimmte dabei nicht:** Buchstabenhoehe 17 px gegen 22 px. Das
+Vorbild nutzt eine Schrift, die bei gleicher Zeilenbreite hoehere
+Buchstaben hat — eine schmale Grotesk mit grosser x-Hoehe. Im Projekt
+gibt es keine solche. `NotoSchmal` klingt danach, zeigt im CSS aber auf
+`Petrona-Regular`, eine Serifenschrift.
+
+Beides zugleich ist mit den vorhandenen Schriften nicht zu haben. Carina
+hat "zu klein" beanstandet, also gilt die Hoehe:
+
+    groesseAnteil .072   Buchstabenhoehe 21 px (Vorbild 22)
+    zeile         1.06   Zeilenabstand 27 px (Vorbild 31)
+    absatz        .80
+    maxhoehe      .80
+
+Der Preis: zehn Zeilen statt acht. Wer die acht Zeilen wichtiger findet,
+setzt `groesseAnteil` zurueck auf `.058` und `zeile` auf `1.28`.
+
+Aspekta war ein Umweg: gleiche Groesse, aber zwoelf Zeilen und optisch
+noch kleiner — die x-Hoehe ist dort noch geringer.

@@ -47,6 +47,8 @@ SEITE = """<!doctype html><html><head><meta charset="utf-8">
 @font-face{font-family:AspektaBrand;src:url(fonts/Aspekta-400.woff2) format("woff2");font-weight:400}
 @font-face{font-family:AspektaBrand;src:url(fonts/Aspekta-600.woff2) format("woff2");font-weight:600}
 @font-face{font-family:AspektaBrand;src:url(fonts/Aspekta-700.woff2) format("woff2");font-weight:700}
+@font-face{font-family:Inter;src:url(fonts/Inter-400.woff2) format("woff2");font-weight:400}
+@font-face{font-family:Inter;src:url(fonts/Inter-700.woff2) format("woff2");font-weight:700}
 body{margin:10px;background:#2a2a2a}
 #lage{position:fixed;right:12px;top:12px;color:#ddd;font:13px monospace;white-space:pre-wrap;max-width:320px}
 </style></head><body>
@@ -59,7 +61,7 @@ __KONFIG__
   try {
     await Promise.all(['400 40px "HelveticaNeueBrand"','700 40px "HelveticaNeueBrand"',
       '400 40px "Playfair Display"','700 40px "PoppinsBold"','400 40px "ArchivoBlack"',
-      '400 40px "Anton"','400 40px "AspektaBrand"','700 40px "AspektaBrand"'].map(f => document.fonts.load(f)));
+      '400 40px "Anton"','400 40px "AspektaBrand"','700 40px "AspektaBrand"','400 40px "Inter"','700 40px "Inter"'].map(f => document.fonts.load(f)));
     const Pe = { fabric: window.fabric };
     const e = new fabric.StaticCanvas('cv');
     const r = __BREITE__, n = __HOEHE__, d = __SCALE__, h = 0.8;
