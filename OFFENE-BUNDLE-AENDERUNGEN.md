@@ -1561,3 +1561,19 @@ Schild braucht. Ohne Schild aendert sich nichts.
 
 Neu im Block: `schildNeigung` in Grad, Vorgabe 0. Flaeche und Text
 drehen zusammen.
+
+## 55. Das Schild sitzt schraeg
+
+    schildNeigung   -3 Grad
+
+Flaeche und Text drehen zusammen. Gedreht wird um den linken Punkt in
+der Mitte der Flaeche — die linke Kante bleibt also an derselben
+Stelle wie die Ueberschrift darunter, das Schild kippt nur.
+
+Verglichen wurden 2, 3 und 5 Grad. Bei 5 kippt es so weit, dass die
+untere rechte Ecke in den Abstand zur Ueberschrift hineinwaechst
+(bei einer 250 Pixel breiten Flaeche etwa 22 von 27 Pixeln). 3 Grad
+liest sich als Absicht und laesst Luft.
+
+Wer es staerker will: bei mehr als 4 Grad muss der Abstand
+(schildAbstand) mitwachsen, sonst beruehrt die Ecke die erste Zeile.
