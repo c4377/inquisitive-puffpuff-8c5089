@@ -738,3 +738,34 @@ setzt `groesseAnteil` zurueck auf `.058` und `zeile` auf `1.28`.
 
 Aspekta war ein Umweg: gleiche Groesse, aber zwoelf Zeilen und optisch
 noch kleiner — die x-Hoehe ist dort noch geringer.
+
+## 28. Enger gestellt — und damit deckungsgleich
+
+Das Vorbild hatte hohe Buchstaben *und* nur acht Zeilen. Mit Inter war
+nur eines davon zu haben: bei passender Breite waren die Buchstaben zu
+flach, bei passender Hoehe brauchte es zehn Zeilen. Der fehlende Hebel
+ist die Laufweite.
+
+Der Zeichner staucht den Text jetzt waagrecht (`scaleX`):
+
+    enge  .80
+
+Der Umbruch rechnet mit `MAXB / enge`, gesetzt wird mit `scaleX: enge`.
+Damit passt derselbe Text in dieselbe Spalte wie im Vorbild, ohne die
+Schrift kleiner zu machen.
+
+Gemessen, beides auf 402 x 502:
+
+                       Vorbild   deine Kachel
+    Zeilen                   8              8
+    Buchstabenhoehe      22 px          21 px
+    Zeilenabstand      31,0 px        31,2 px
+    Absatzsprung       54 px          53 px
+    Blockmitte          53,8 %         53,7 %
+
+Endwerte: `groesseAnteil .072, enge .80, zeile 1.05, absatz .95,
+rand .0885, mitte .595, maxhoehe .80`.
+
+`mitte` steht auf .595 und nicht auf .538, weil in die Hoehenrechnung
+der Platz fuer den Namen eingeht — der Textblock selbst landet damit auf
+53,7 Prozent.
