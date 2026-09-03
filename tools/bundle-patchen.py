@@ -275,7 +275,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#BEB7A7",grundB:"#E7E2CE",schrift:"#112250",schriftart:"HelveticaNeueBrand",groesseAnteil:.066,zeile:1.28,absatz:.85,rand:.11,mitte:.52,maxhoehe:.70,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Playfair Display",deckblattSchrift:"playfair",deckblattGroesse:46};'
+KONFIG = 'const BS_KACHEL={grundA:"#BEB7A7",grundB:"#E7E2CE",schrift:"#112250",schriftart:"HelveticaNeueBrand",groesseAnteil:.058,zeile:1.28,absatz:.70,rand:.086,mitte:.54,maxhoehe:.74,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Playfair Display",deckblattSchrift:"playfair",deckblattGroesse:46};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 

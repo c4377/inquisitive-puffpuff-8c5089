@@ -662,3 +662,28 @@ Damit sieht die Kachel in der Vorschau und im Export gleich aus.
 **Fuer die Pruefung wichtig:** `tools/kachel-pruefen.py` rendert
 standardmaessig mit 800x1000 und Massstab 2 — wie die Vorschau. Eine
 Pruefung mit Massstab 1 sieht richtig aus und ist trotzdem falsch.
+
+## 25. Die Werte sind am Vorbild gemessen, nicht geschaetzt
+
+Die Kachel aus dem Vorbild wurde aus dem Screenshot geschnitten und
+vermessen (402 x 502, also 4:5):
+
+    Grund          #F6F1F1
+    Schrift        #0F0A08
+    Textspalte     83 % der Breite   -> rand .086
+    Schriftgroesse 5,8 % der Breite  -> groesseAnteil .058
+    Zeilenabstand  1,28
+    Absatzabstand  0,70 der Schriftgroesse
+    Blockmitte     54 % der Hoehe    -> mitte .54
+
+Mit diesen Werten bricht der erste Absatz zeichengenau so um wie im
+Vorbild. Der zweite bricht eine Silbe frueher, weil die fette Schrift
+dort schwerer ist als HelveticaNeue-Bold — das ist der einzige Rest.
+
+Die Farben sind bewusst nicht uebernommen: Carina will Warm Taupe und
+Champagne mit Navy, nicht das Off-White des Vorbilds.
+
+So wird nachgemessen:
+
+    python3 tools/kachel-pruefen.py <bundle> --breite 402 --hoehe 502 \
+      --scale 1 --grund "#F6F1F1" --schrift "#0F0A08" --text "<Vorbildtext>"
