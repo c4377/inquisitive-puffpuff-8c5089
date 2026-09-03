@@ -432,3 +432,18 @@ bleibt, entscheidet nicht mehr die Fassung, sondern der Tag:
 Echte Ablauf-Tage behalten Playfair, alles andere folgt der Marke.
 Nachgemessen gegen den Stand vor allen Schrift-Aenderungen: vier
 Ablauf-Folien, null abweichende Pixel.
+
+## 16. Fliesstext ist der Standard, Schrift noch kleiner
+
+`iS=["bandOben"]` → `iS=["montserrat"]`. Damit stellen sich **alle**
+vorhandenen Tage um, ohne dass am gespeicherten Plan etwas geaendert wird:
+`textStil` wird pro Tag erst aus `ot.textStil` gelesen und faellt sonst auf
+`sS(day)` zurueck — und das ist jetzt der Fliesstext-Stil. Wer einen
+einzelnen Tag anders will, waehlt "Band oben" weiterhin im Tagesmenue.
+
+Schriftgroesse von 84 auf **70 Prozent**. Der Wert steht an einer Stelle:
+
+    t.textStil==="montserrat" && (qe = Math.round(qe*.70))
+
+Wenn Carina "noch kleiner" oder "wieder groesser" sagt, ist das genau diese
+eine Zahl.
