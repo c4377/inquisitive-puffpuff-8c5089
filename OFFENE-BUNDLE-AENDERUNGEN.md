@@ -2084,3 +2084,32 @@ Folgeslide. Jetzt haengt er sich an, statt zu ersetzen.
 **Merksatz:** Zwei Stellen, die derselben Eigenschaft etwas zuweisen,
 und die spaetere gewinnt. Erst pruefen, wer sonst noch an `filters`
 schreibt, bevor man selbst etwas hineinlegt.
+
+## 72. Die Ablauf-Folien in dasselbe System
+
+Sie standen als einzige noch auf eigenen Werten: Grund `#EFEAE2`,
+Schrift `#141210`, Titel in **Anton** — einer schmalen Grotesk, die
+mit dem Rest nichts zu tun hat.
+
+    Farben   grundA / schriftA aus dem Block
+    Titel    ablaufTitel (HelveticaNeueBrand) in
+             ablaufTitelGewicht (700)
+
+Das Monogramm faellt weg, wie bei den anderen Kacheln (Abschnitt 26):
+`ht()` zeichnet es, sobald `monogrammFarbe` gesetzt ist.
+
+Die Titelstaerke wird nur im Ablauf-Zweig gesetzt (dort ist `LINKS`
+falsch). Der andere Zweig, der dieselbe Zeile benutzt, bleibt
+unveraendert — deshalb der Spread `...(LINKS?{}:{fontWeight:…})`
+statt einer festen Zuweisung.
+
+Damit stehen alle vier Kachelarten auf demselben Block: Textkacheln,
+Fotokacheln, Folgeslides, Ablauf.
+
+### Noch nicht angefasst: die Texte
+
+Die 23 Ablauf-Texte stehen als feste Zeichenketten im Bundle. "Die
+Ansprache authentischer" heisst, sie neu zu schreiben — Struktur
+(Kopfzeile, Titel, Unterzeile, Liste/Stationen, Fliesstext) bleibt,
+der Ton aendert sich. Das ist Redaktion an ihrer Stimme, nicht am
+Aussehen, und wird erst nach ihrer Freigabe eines Musters gemacht.

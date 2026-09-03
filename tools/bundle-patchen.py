@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,bandAuf:0,folgeGewicht:"700",weichAnteil:0,fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:1350,bildGuete:.85,bildKontrast:.18,bildHelligkeit:-.06,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.05,tiefeMitte:.10,tiefeUnten:.42,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,bandAuf:0,folgeGewicht:"700",weichAnteil:0,fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:1350,bildGuete:.85,bildKontrast:.18,bildHelligkeit:-.06,ablaufTitel:"HelveticaNeueBrand",ablaufTitelGewicht:"700",bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.05,tiefeMitte:.10,tiefeUnten:.42,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -1024,6 +1024,36 @@ P.append(('const dr=Qe>0&&(t.textStil==="montserrat"||',
 P.append(('me.filters=[new Pe.fabric.Image.filters.Blur({blur:Math.min(Lt/40,.5)})],me.applyFilters()',
  'me.filters=(me.filters||[]).concat([new Pe.fabric.Image.filters.Blur({blur:Math.min(Lt/40,.5)})]),me.applyFilters()',
  "Weichzeichner haengt sich an das Grading an", 1))
+
+# 72 — Die Ablauf-Folien in dasselbe System.
+#
+#      Sie standen als einzige noch auf eigenen Werten: Grund
+#      #EFEAE2, Schrift #141210, Titel in "Anton". Anton ist eine
+#      schmale Grotesk und hat mit dem Rest nichts zu tun.
+#
+#        Farben   grundA / schriftA aus dem Block
+#        Titel    ablaufTitel (HelveticaNeueBrand) in
+#                 ablaufTitelGewicht (700)
+#
+#      Das Monogramm faellt weg, wie bei den anderen Kacheln
+#      (Abschnitt 26): ht() zeichnet es, sobald monogrammFarbe gesetzt
+#      ist.
+#
+#      Die Titelstaerke wird nur im Ablauf-Zweig gesetzt (kein
+#      Kopfzeilen-Fall, also LINKS falsch). Der andere Zweig, der
+#      dieselbe Zeile benutzt, bleibt unveraendert.
+P.append(('ablauf:{grund:"#EFEAE2",schriftGrund:"#FFFFFF",schrift:"#141210",betont:"#141210",monogramm:"#141210",absender:"rgba(20,18,16,0.55)",fassung:"ablauf",schriftart:"Playfair Display"}',
+ 'ablauf:{grund:BS_KACHEL.grundA,schriftGrund:BS_KACHEL.grundA,schrift:BS_KACHEL.schriftA,'
+ 'betont:BS_KACHEL.schriftA,absender:BS_KACHEL.schriftA,fassung:"ablauf",schriftart:BS_KACHEL.schriftart}',
+ "Ablauf-Farben aus dem Block", 1))
+P.append(('TITELSCHRIFT=LINKS?SERIF:"Anton"',
+ 'TITELSCHRIFT=LINKS?SERIF:(BS_KACHEL.ablaufTitel||"Anton")',
+ "Ablauf-Titelschrift aus dem Block", 1))
+P.append(('txt(zl,{left:AX,top:ty,originX:AO,originY:"center",fontSize:A.groesse,fontFamily:TITELSCHRIFT,charSpacing:FOLGE&&!LINKS?25:0,fill:TINT,maxB:MAXB});',
+ 'txt(zl,{left:AX,top:ty,originX:AO,originY:"center",fontSize:A.groesse,fontFamily:TITELSCHRIFT,'
+ '...(LINKS?{}:{fontWeight:BS_KACHEL.ablaufTitelGewicht||"400"}),'
+ 'charSpacing:FOLGE&&!LINKS?25:0,fill:TINT,maxB:MAXB});',
+ "Ablauf-Titel in seinem Gewicht", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
