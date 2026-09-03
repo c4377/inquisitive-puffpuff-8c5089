@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"400",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:58,spalteMin:.72,textHoehe:.78,textHoeheZaehler:.56,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.12,tiefeMitte:.24,tiefeUnten:.86,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"400",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:58,spalteMin:.72,textHoehe:.78,textHoeheZaehler:.56,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:0,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.12,tiefeMitte:.24,tiefeUnten:.86,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -467,12 +467,13 @@ SCHILD = ('(()=>{try{const SS=String(t.schild||"").trim();'
  'my=De-Et/2-r*(KK.schildAbstand||.034)-bh/2,'
  'lx=tt.ausrichtung==="links"?_e:r/2-bw/2,'
  'rd=r*(KK.schildRundung||.004);'
+ 'const nei=Number(KK.schildNeigung)||0;'
  'e.add(new Pe.fabric.Rect({left:lx,top:my,width:bw,height:bh,originX:"left",originY:"center",'
- 'fill:KK.schildGrund||"#A57F55",rx:rd,ry:rd,selectable:!1,evented:!1}));'
+ 'angle:nei,fill:KK.schildGrund||"#A57F55",rx:rd,ry:rd,selectable:!1,evented:!1}));'
  'e.add(new Pe.fabric.Text(SS,{left:lx+pol,top:my,originX:"left",originY:"center",'
  'fontSize:sg,fontFamily:KK.schildSchrift||KK.schriftart,fontWeight:KK.schildGewicht||"400",'
  'charSpacing:KK.schildLaufweite||0,fill:KK.schildSchriftFarbe||"#FFFFFF",'
- 'selectable:!1,evented:!1}));}catch(zz){}})();')
+ 'angle:nei,selectable:!1,evented:!1}));}catch(zz){}})();')
 P.append(('dr.forEach((Je,rt)=>{if(!Je.length){',
  SCHILD + 'dr.forEach((Je,rt)=>{if(!Je.length){',
  "Schildchen ueber der ersten Zeile der Ueberschrift", 1))
@@ -615,6 +616,24 @@ P.append(('...tt.engZeilen&&pr?[[]]:[],', '...tt.engZeilen&&pr&&!$e?[[]]:[],',
 P.append(('$e&&t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeFamilie&&(Qe=BS_KACHEL.folgeFamilie);',
  't.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeFamilie&&(Qe=BS_KACHEL.folgeFamilie);',
  "Folge-Familie auch ohne Foto", 1))
+
+# 55 — Platz fuer das Schild freihalten.
+#
+#      Der Text wird zwischen n*.1 und n*.9 eingeklemmt. Steht er
+#      oben, sitzt seine erste Zeile bei n*.1 — und das Schild sitzt
+#      darueber, also im Rand, halb angeschnitten in der Ecke. Genau
+#      das war zu sehen.
+#
+#      Die untere Klammer nimmt jetzt die Hoehe des Schilds mit auf.
+#      Ist eines eingetragen, faengt der Text so viel tiefer an, wie
+#      das Schild samt Abstand braucht. Ohne Schild aendert sich
+#      nichts.
+P.append(('let De=n*He-ae/2+Et/2;',
+ 'const SR=$e&&String(t.schild||"").trim()?r*((BS_KACHEL.schildGroesse||.03)*(BS_KACHEL.schildHoehe||2)'
+ '+(BS_KACHEL.schildAbstand||.034)):0;let De=n*He-ae/2+Et/2;',
+ "Platzbedarf des Schilds ausrechnen", 1))
+P.append(('De-Et/2<n*.1&&(De=n*.1+Et/2)', 'De-Et/2<n*.1+SR&&(De=n*.1+SR+Et/2)',
+ "Text faengt tiefer an, wenn ein Schild darueber steht", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

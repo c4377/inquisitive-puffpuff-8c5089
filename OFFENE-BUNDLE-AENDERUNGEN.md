@@ -1536,3 +1536,28 @@ Playfair ist deutlich schmaler und spitzer.
 
 Wer die Zeilen darunter kraeftiger will, ist das ein Wert: ein
 mittlerer Schnitt statt 400.
+
+## 54. Das Schild sass in der Ecke
+
+Selbst nachgesehen, statt zu fragen: `tools/.pruefen/n_*.html`
+zeichnet die Fotokachel mit dem Schild fuer alle drei Textlagen.
+
+Bei `textLage: oben` klebte das Schild oben links am Rand, halb
+angeschnitten. Der Grund steht in der Klammer:
+
+    De - Et/2 < n*.1  ->  De = n*.1 + Et/2
+
+Der Text darf nicht hoeher als 10 Prozent starten. Das Schild sitzt
+aber ueber der ersten Zeile — also im Rand. Die Klammer kannte es
+nicht.
+
+Sie nimmt das Schild jetzt mit auf:
+
+    SR = Schildhoehe + Abstand   (0, wenn kein Schild)
+    De - Et/2 < n*.1 + SR  ->  De = n*.1 + SR + Et/2
+
+Steht ein Schild darueber, faengt der Text so viel tiefer an, wie das
+Schild braucht. Ohne Schild aendert sich nichts.
+
+Neu im Block: `schildNeigung` in Grad, Vorgabe 0. Flaeche und Text
+drehen zusammen.
