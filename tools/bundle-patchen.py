@@ -252,7 +252,7 @@ P.append(('istKarte:!0,grundFarbe:h.grund,rundung:0,ausrichtung:"links",schriftF
 #      Auf dem Deckblatt 46. sizeLocked sticht weiterhin — eine von
 #      Hand gesetzte Groesse bleibt unangetastet.
 P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?PV:OV);',
- 'let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?(t.folienRolle==="deckblatt"?BS_KACHEL.deckblattGroesse:PV):OV);',
+ 'let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?(t.folienRolle==="deckblatt"?BS_KACHEL.deckblattGroesse:(BS_KACHEL.fotoGroesse||PV)):OV);',
  "Deckblatt groesser (aus BS_KACHEL)", 1))
 
 # 24 — EINE STELLE FUER DAS AUSSEHEN DER TEXTKACHELN.
@@ -272,7 +272,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#E9E0CC",grundB:"#F4EFE3",schrift:"#4A3A2A",schriftart:"Inter",schriftartFett:"Inter",groesseAnteil:.072,enge:1,laufweite:-28,zeile:1.04,absatz:.90,rand:.0885,mitte:.595,maxhoehe:.86,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Playfair Display",deckblattFamilie:"Prata",deckblattGroesse:46};'
+KONFIG = 'const BS_KACHEL={grundA:"#E9E0CC",grundB:"#F4EFE3",schrift:"#2A211A",schriftart:"Prata",unterSchrift:"Inter",unterVerhaeltnis:.64,unterFarbe:"#6B5B4A",groesseAnteil:.098,enge:1,laufweite:-18,zeile:1.02,absatz:.20,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Playfair Display",deckblattFamilie:"Prata",deckblattGroesse:52,fotoGroesse:41};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -302,7 +302,7 @@ P.append(('Je.aufFoto!==!0&&txt("carinaannaprav"',
 # 27 — Der Zeichner fuer die Fassung marke. Zentriert, zwei Absaetze,
 #      der zweite fett als Pointe, Groesse schrumpft bis es passt.
 #      Genau das Bild aus dem Vorbild, alle Werte aus BS_KACHEL.
-ZWEIG = '\nif(FA==="marke"){\nconst K=BS_KACHEL;\nconst MAXB=r*(1-2*K.rand);\nconst ENG=K.enge||1,LW=K.laufweite||0,MESS=MAXB/ENG/(1+LW/500);\nconst B0=ROH.replace(/\\*/g,"").split(/\\n\\s*\\n/).map(x=>x.trim()).filter(Boolean);\nconst BL=B0.length>1?B0:(()=>{const t2=teile(B0[0]||"");return t2[1]?[t2[0],t2[1]]:[B0[0]||""]})();\nif(!BL.length||!BL[0])return!1;\nconst NA=String(K.name||""),NG=r*(K.nameAnteil||.018);\nconst FETT=ix=>BL.length>1&&ix===BL.length-1;\nconst GEW=ix=>FETT(ix)?"700":"400";\nconst FAM=ix=>FETT(ix)?(K.schriftartFett||K.schriftart):K.schriftart;\nlet gr=r*(K.groesseAnteil||.059),ZL=[];\nconst hoeheVon=g=>{const z=BL.map((b,ix)=>umbruch(b,g,FAM(ix),MESS,GEW(ix)));\nconst a=z.reduce((x,q)=>x+q.length,0);\nreturn{z:z,h:a*g*K.zeile+(BL.length-1)*g*K.absatz+(NA?g*K.nameAbstand:0)}};\nfor(let i=0;i<60;i+=1){const m=hoeheVon(gr);ZL=m.z;if(m.h<=n*K.maxhoehe)break;gr*=.95}\nconst M=hoeheVon(gr);ZL=M.z;\nlet y=n*K.mitte-M.h/2+gr*.5;\nZL.forEach((blk,ix)=>{const gw=GEW(ix);\nblk.forEach(z=>{txt(z,{left:r/2,top:y,originX:"center",originY:"center",\nfontSize:gr,fontFamily:FAM(ix),fontWeight:gw,fill:SCH,scaleX:ENG,charSpacing:LW,maxB:MESS});\ny+=gr*K.zeile});\nif(ix<ZL.length-1)y+=gr*K.absatz});\nif(NA)txt(NA,{left:r/2,top:y-gr*K.zeile+gr*K.nameAbstand,originX:"center",originY:"center",\nfontSize:NG,fontFamily:K.schriftart,fontWeight:"500",charSpacing:150,fill:SCH,opacity:.55,maxB:MAXB});\nreturn!0}\n'
+ZWEIG = '\nif(FA==="marke"){\nconst K=BS_KACHEL;\nconst MAXB=r*(1-2*K.rand);\nconst LW=K.laufweite||0,MESS=MAXB/(1+LW/500);\nconst B0=ROH.replace(/\\*/g,"").split(/\\n\\s*\\n/).map(x=>x.trim()).filter(Boolean);\nconst BL=B0.length>1?B0:(()=>{const t2=teile(B0[0]||"");return t2[1]?[t2[0],t2[1]]:[B0[0]||""]})();\nif(!BL.length||!BL[0])return!1;\nconst NA=String(K.name||""),NG=r*(K.nameAnteil||.018);\nconst FAM=ix=>ix===0?K.schriftart:(K.unterSchrift||K.schriftart);\nconst GRO=(ix,g)=>ix===0?g:g*(K.unterVerhaeltnis||.64);\nconst FRB=ix=>ix===0?SCH:(K.unterFarbe||SCH);\nlet gr=r*(K.groesseAnteil||.098),ZL=[];\nconst hoeheVon=g=>{const z=BL.map((b,ix)=>umbruch(b,GRO(ix,g),FAM(ix),MESS,"400"));\nconst hh=z.reduce((x,q,ix)=>x+q.length*GRO(ix,g)*K.zeile,0)\n+(BL.length-1)*g*K.absatz+(NA?g*K.nameAbstand:0);\nreturn{z:z,h:hh}};\nfor(let i=0;i<60;i+=1){const m=hoeheVon(gr);ZL=m.z;if(m.h<=n*K.maxhoehe)break;gr*=.95}\nconst M=hoeheVon(gr);ZL=M.z;\nlet y=n*K.mitte-M.h/2+GRO(0,gr)*.5;\nZL.forEach((blk,ix)=>{const g2=GRO(ix,gr);\nblk.forEach(z=>{txt(z,{left:r/2,top:y,originX:"center",originY:"center",\nfontSize:g2,fontFamily:FAM(ix),fontWeight:"400",fill:FRB(ix),\ncharSpacing:LW,maxB:MESS});\ny+=g2*K.zeile});\nif(ix<ZL.length-1)y+=gr*K.absatz});\nif(NA)txt(NA,{left:r/2,top:y-gr*K.zeile+gr*K.nameAbstand,originX:"center",originY:"center",\nfontSize:NG,fontFamily:K.unterSchrift||K.schriftart,fontWeight:"500",charSpacing:150,\nfill:SCH,opacity:.5,maxB:MAXB});\nreturn!0}\n'
 P.append((chr(10) + 'if(FA==="ablauf"){', ZWEIG + chr(10) + 'if(FA==="ablauf"){',
  "Zeichner-Zweig fuer die Fassung marke", 1))
 

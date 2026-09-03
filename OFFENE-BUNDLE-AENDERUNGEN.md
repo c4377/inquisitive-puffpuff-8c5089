@@ -823,3 +823,33 @@ aus dem Bild — die Falle aus EINBAU.md.
 Geprueft: Prata und Playfair messen bei 60 px unterschiedlich breit
 (34,6 gegen 31,1 px fuer "x"). Waeren sie gleich, wuerde die
 Ersatzschrift greifen.
+
+## 31. Grosse Serifen-Ueberschrift, kleine Grotesk-Unterzeile
+
+Das zweite Vorbild (Grid vom 3. September) zeigte die eigentliche
+Struktur: eine grosse Serifen-Ueberschrift und darunter eine deutlich
+kleinere Zeile in einer Grotesk. Nicht zwei gleich grosse Bloecke, von
+denen einer fett ist — das war meine Fehlannahme aus dem ersten Vorbild.
+
+Gemessen auf 402 x 502:
+
+                        Vorbild        deine Kachel
+    Ueberschrift        28 px          28 px
+    Zeilenabstand       40 px          41 px
+    Unterzeile          19 px          17 px
+    Absatzsprung        48 px          ~48 px
+
+Der Zeichner kennt jetzt zwei Groessen, zwei Familien und zwei Farben:
+
+    schriftart        Prata     Ueberschrift
+    unterSchrift      Inter     Unterzeile
+    unterVerhaeltnis  .64       Groesse der Unterzeile
+    unterFarbe        #6B5B4A   gedaempftes Braun
+
+Fotokacheln: `deckblattGroesse 52` (war 46) und neu `fotoGroesse 41`
+statt des eingebauten `PV` von 34 — die Folgeslides waren deutlich
+kleiner als im Vorbild.
+
+Was noch fehlt: das Vorbild setzt einzelne Woerter in einem warmen
+Goldton ("& 60k", "vertraut") und legt auf Fotokacheln eine kleine
+beige Schriftplatte unter die Ueberschrift. Beides ist nicht gebaut.
