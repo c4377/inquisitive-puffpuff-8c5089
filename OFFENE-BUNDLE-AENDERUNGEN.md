@@ -2290,3 +2290,24 @@ es stehen nie zwei nebeneinander. Die ersten dreissig Tage:
     T F F T F F F F T F F T F F T F T F F T F F T F T F F T F F
 
 `textAnteil` auf 0 stellt die alte Regel wieder her.
+
+## 79. Textkacheln auf mindestens zwei zu eins
+
+    textAnteil   35  ->  67
+
+Nachgerechnet ueber hundert Tage:
+
+    67 von 100 Textkacheln          Verhaeltnis 2,03 : 1
+    laengste Reihe Textkacheln       4
+    laengste Reihe Fotokacheln       1
+    Verteilung auf die drei Spalten  24 / 21 / 22
+
+Zwei Punkte, die dabei zaehlen: Fotos stehen nie zwei nebeneinander,
+bleiben also Akzente. Und die Spalten sind gleichmaessig belegt — eine
+Regel mit Periode 3 (etwa `pt%3`) haette im dreispaltigen Raster einen
+senkrechten Streifen aus Fotos ergeben, weil sich Periode und
+Spaltenzahl decken. Der Multiplikator 37 vermeidet das.
+
+Die ersten sechsunddreissig Tage:
+
+    T T F T T F T F T T F T T F T F T T F T T F T T T T F T T F T T F T F T
