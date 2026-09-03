@@ -541,3 +541,34 @@ einzige kein Feld `fassung`. Deshalb greift im Zeichner
 und die beiden werden als Ablauf-Fassung gezeichnet. Das ist der Grund,
 warum eine Aenderung an `stein`/`hell` im Zeichner nur ueber den
 `ablauf`-Zweig wirkt.
+
+## 21. Erste Slide eines Fotoposts: Serife und deutlich groesser
+
+*Skript-Eintrag 23.*
+
+Das Deckblatt lief wie jede Folgeslide in Anton auf `PV = 34`. Im Vorbild
+traegt die erste Slide eine Serife und ist klar groesser als der Rest.
+
+**Schrift.** Der Weg ist nicht `fotoSchriften`, sondern `kachelSchrift`.
+Der Wert wird im Zusammenbau gesetzt, landet ueber `co(a)` in
+`schriftUeber` und wird spaet angewandt:
+
+    tt.schriftUeber && (Qe = tt.schriftUeber)
+
+Damit sticht er die Fotoschrift aus `vT`/`fotoSchriften` (Anton, siehe
+Abschnitt 16). `"marke"` liefert bewusst keine Schrift und laesst die
+Titelschrift greifen; `"playfair"` liefert `Playfair Display`.
+
+    kachelSchrift: ta === "deckblatt" ? "playfair" : (… wie bisher …)
+
+Nur die Rolle `deckblatt`. Die Rolle `foto` — bei vier und mehr Folien die
+vorletzte — bleibt bei Anton, sie gehoert optisch zum Rest.
+
+**Groesse.** `PV` ist der Grundwert fuer Folien mit Foto, `OV` der ohne.
+
+    c($e ? (t.folienRolle === "deckblatt" ? 46 : PV) : OV)
+
+`sizeLocked` sticht weiterhin: eine von Hand gesetzte Groesse bleibt.
+
+Aufpassen bei der Suche: `TITELSCHRIFT = LINKS ? SERIF : "Anton"` steht im
+Kartenzeichner und gilt fuer Ablauffolien, nicht fuer normale Fotoposts.

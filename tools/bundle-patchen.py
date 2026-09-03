@@ -254,6 +254,28 @@ P.append(('istKarte:!0,grundFarbe:h.grund,rundung:0,ausrichtung:"links",schriftF
  'istKarte:!0,grundFarbe:h.grund,rundung:0,ausrichtung:"mitte",schriftFarbe:h.schrift,plattenFarbe:null,polsterX:0,schriftUeber:"HelveticaNeueBrand",staerkeUeber:"400"',
  "Kartenpfad zentriert und Grotesk", 1))
 
+# 23 — Erste Slide eines Fotoposts: Serife und deutlich groesser.
+#      Vorher lief sie wie alle Folgeslides in Anton auf PV=34.
+#      Im Vorbild traegt das Deckblatt eine Serife und ist klar
+#      groesser als der Rest — daran soll es sich halten.
+#
+#      Schrift: kachelSchrift wird im Zusammenbau gesetzt und landet
+#      ueber co(a) in schriftUeber. Das wird spaet angewandt
+#      (tt.schriftUeber && (Qe = tt.schriftUeber)) und sticht die
+#      Fotoschrift aus vT/fotoSchriften. "marke" liefert bewusst
+#      keine Schrift, "playfair" liefert "Playfair Display".
+#      Betrifft nur die Rolle deckblatt, nicht die Rolle foto.
+#
+#      Groesse: PV ist der Grundwert fuer Folien mit Foto (34).
+#      Auf dem Deckblatt 46. sizeLocked sticht weiterhin — eine von
+#      Hand gesetzte Groesse bleibt unangetastet.
+P.append(('folienRolle:ta,zaehler:"",kachelSchrift:ot.kachelSchrift||(D1(ot.day)?nS(ot.day):BG(rt.kachelSchrift)||"marke")',
+ 'folienRolle:ta,zaehler:"",kachelSchrift:ta==="deckblatt"?"playfair":(ot.kachelSchrift||(D1(ot.day)?nS(ot.day):BG(rt.kachelSchrift)||"marke"))',
+ "Deckblatt in Playfair statt Anton", 1))
+P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?PV:OV);',
+ 'let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?(t.folienRolle==="deckblatt"?46:PV):OV);',
+ "Deckblatt groesser (46 statt 34)", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
