@@ -13,6 +13,7 @@ Aufruf:
 
     python3 tools/kachel-pruefen.py site/assets/index-B5kartenNN.js
     python3 tools/kachel-pruefen.py <bundle> --fassung zitat
+    python3 tools/kachel-pruefen.py <bundle> --paar B
     python3 tools/kachel-pruefen.py <bundle> --grund "#E7E2CE"
 
 Das Skript legt unter tools/.pruefen/ eine Seite ab und sagt, wie sie
@@ -104,8 +105,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("bundle")
     ap.add_argument("--fassung", default="marke")
-    ap.add_argument("--grund", default=None, help="Hintergrund, sonst aus BS_KACHEL")
-    ap.add_argument("--schrift", default=None, help="Schriftfarbe, sonst aus BS_KACHEL")
+    ap.add_argument("--paar", default="A", help="Farbpaar A oder B aus BS_KACHEL")
+    ap.add_argument("--grund", default=None, help="Hintergrund, sonst aus dem Paar")
+    ap.add_argument("--schrift", default=None, help="Schriftfarbe, sonst aus dem Paar")
     ap.add_argument("--text", default=BEISPIEL)
     ap.add_argument("--breite", type=int, default=800,
                     help="Leinwandbreite. 800 wie die Vorschau im Content Plan")
@@ -124,8 +126,11 @@ def main():
     konfig = s[i:s.find("};", i) + 2]
     werte = dict(re.findall(r'(\w+):"([^"]*)"', konfig))
 
-    grund = a.grund or werte.get("grundA", "#EEEEEE")
-    schrift = a.schrift or werte.get("schrift", "#111111")
+    paar = a.paar.upper()
+    if paar not in ("A", "B"):
+        raise SystemExit("ABBRUCH: --paar nimmt A oder B")
+    grund = a.grund or werte.get("grund" + paar, "#EEEEEE")
+    schrift = a.schrift or werte.get("schrift" + paar, "#111111")
     je = ('{fassung:%r,grundFarbe:%r,schriftGrund:%r,schriftFarbe:%r,'
           'monogrammFarbe:%r,absenderFarbe:%r,markenSchrift:"",rolle:"deckblatt"}'
           % (a.fassung, grund, grund, schrift, schrift, schrift)).replace("'", '"')

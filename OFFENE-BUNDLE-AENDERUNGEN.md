@@ -1088,3 +1088,39 @@ freundlicher aus, tragen Weiss aber nur mit 3,96 beziehungsweise 4,20
 zu 1. Das reicht fuer die grosse Ueberschrift, nicht fuer die
 18-Pixel-Unterzeile. `#A66743` liegt mit 4,52 knapp darueber und waere
 die hellere Alternative, wenn es waermer sein soll.
+
+## 43. Invertiert statt Orange: Grund und Schrift sind ab jetzt ein Paar
+
+Orange Beton war zu weit weg von Beton — zwei Farben statt einer
+Handschrift. Die Kartentage wechseln jetzt hell und dunkel:
+
+    grundA   #E5DED2   Sand         Schrift #4A443C   7,20 zu 1
+    grundB   #7D7469   Beton        Schrift #FFFFFF   4,59 zu 1
+
+Der Umbau dahinter ist wichtiger als die Farbe selbst. Vorher gab es im
+Block eine einzige `schrift` fuer beide Gruende. Das ging nur so lange
+gut, wie beide Gruende dunkel waren; beim ersten hellen Grund waere
+weisse Schrift auf Sand herausgekommen. Statt einer Ausnahme im
+Zeichner gehoeren Grund und Schrift jetzt zusammen:
+
+    grundA / schriftA     stein, linie
+    grundB / schriftB     hell, wieder
+
+Wer eine Kachelfarbe aendert, aendert das Paar. Ein Grund ohne seine
+Schrift laesst sich nicht mehr eintragen, ohne dass es auffaellt.
+
+Ebenfalls raus: `unterFarbe`. Die Unterzeile hatte eine eigene
+Farbangabe, die immer denselben Wert hatte wie `schrift` — ein zweiter
+Schalter fuer dieselbe Sache, und genau der haette beim hellen Grund
+vergessen werden koennen. Die Unterzeile erbt jetzt die Schriftfarbe
+ihres Grundes. Sie unterscheidet sich weiter durch Schriftart und
+Groesse, nicht durch Farbe.
+
+`tools/kachel-pruefen.py` kennt die Paare: `--paar A` und `--paar B`
+zeichnen die Kachel so, wie die App sie zeichnet. `--grund` und
+`--schrift` ueberschreiben das weiterhin einzeln, zum Ausprobieren.
+
+Geprueft und verworfen als Ersatz fuer Orange, alle nah an Beton:
+Tabak `#6B6258` (5,98), Oliv `#767561` (4,68), Rauch `#6F6E69` (5,11).
+Alle drei tragen Weiss, alle drei sind aber nur eine Stufe neben Beton
+— im Feed sieht man den Wechsel kaum. Hell gegen dunkel sieht man.
