@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.74,textHoeheZaehler:.54,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,bandAuf:0,folgeGewicht:"700",fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.05,tiefeMitte:.10,tiefeUnten:.42,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.74,textHoeheZaehler:.54,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,bandAuf:0,folgeGewicht:"700",weichAnteil:0,fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.05,tiefeMitte:.10,tiefeUnten:.42,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -886,6 +886,36 @@ P.append(('$e&&t.folienRolle==="deckblatt"&&BS_KACHEL.deckblattGewicht&&(kt=BS_K
  '$e&&t.folienRolle==="deckblatt"&&BS_KACHEL.deckblattGewicht&&(kt=BS_KACHEL.deckblattGewicht),'
  '$e&&t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeGewicht&&(kt=BS_KACHEL.folgeGewicht);',
  "Erster Block der Folgeslides in folgeGewicht", 1))
+
+# 68 — Der Text sucht sich die ruhige Zone, statt das Bild
+#      weichzuzeichnen.
+#
+#      Zwei Dinge standen dem im Weg.
+#
+#      **Der Weichzeichner.** Eintrag 2 zeichnet etwa jedes zweite
+#      Bild ab Folie 2 weich. Das war die Notloesung, damit Text
+#      irgendwo lesbar wird. Der Anteil steht jetzt im Block:
+#      weichAnteil 0 heisst gar keiner. Wichtig dabei: der Zeichner
+#      benutzt die Bildanalyse nur, wenn NICHT weichgezeichnet wird
+#      (`!t._blurAn`). Weichzeichnen aus heisst also zugleich
+#      Bildanalyse an.
+#
+#      **Die feste Textlage.** Jeder Tag bekam eine Lage aus einer
+#      rotierenden Liste ["unten","mitte","oben"], auch wenn sie
+#      keine gewaehlt hatte. Seit Abschnitt 64 schlaegt die
+#      eingestellte Lage die Automatik — und weil immer eine
+#      eingestellt war, kam die Automatik nie zum Zug. Die Liste
+#      entfaellt: ohne eigene Wahl entscheidet die Bildanalyse, wo
+#      die ruhigste Zone liegt.
+#
+#      Ihre Wahl im Tagesmenue gilt unveraendert und schlaegt weiter
+#      alles andere.
+P.append(('return (zh+Qe*17)%100>=50})()',
+ 'return (zh+Qe*17)%100>=100-(BS_KACHEL.weichAnteil||0)})()',
+ "Anteil weichgezeichneter Folgebilder aus dem Block", 1))
+P.append(('textLage:rt.textLage||ot.textLage||lS[(ot.day-1)%lS.length]',
+ 'textLage:rt.textLage||ot.textLage',
+ "Keine rotierende Vorgabe mehr, sonst kommt die Bildanalyse nie dran", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

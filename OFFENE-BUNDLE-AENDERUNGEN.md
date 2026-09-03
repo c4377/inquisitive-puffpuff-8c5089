@@ -1934,3 +1934,35 @@ Deckblatt und Folgeslides gleichermassen.
     Deckblatt      Fraunces 700    /  Helvetica 300
     Folgeslides    Helvetica 700   /  Helvetica 300
     Textkacheln    Helvetica 300   /  Helvetica 700
+
+## 67. Text in die ruhige Zone, statt das Bild weichzuzeichnen
+
+Die Bildanalyse gibt es laengst: sie teilt das Bild in neun Felder,
+bewertet, wie unruhig jedes ist, meidet das Gesicht und die Zone
+darunter (Eintraege 4 und 5) und liefert `quietZone`. Daraus wird
+`textAnchor` — die Stelle, an der Text am ruhigsten steht.
+
+Benutzt wurde sie so gut wie nie. Zwei Dinge standen davor:
+
+**Der Weichzeichner.** Eintrag 2 zeichnet etwa jedes zweite Bild ab
+Folie 2 weich. Das war die Notloesung, damit Text irgendwo lesbar
+wird. Und der Zeichner benutzt die Bildanalyse ausdruecklich nur,
+wenn **nicht** weichgezeichnet wird (`!t._blurAn`) — auf einem
+verwischten Bild gibt es keine ruhige Zone mehr, nur noch Brei. Der
+Weichzeichner hat die Analyse also selbst abgeschaltet.
+
+    weichAnteil   0        (war fest 50 Prozent)
+
+**Die feste Textlage.** Jeder Tag bekam eine Lage aus einer
+rotierenden Liste `["unten","mitte","oben"]`, auch ohne eigene Wahl.
+Seit Abschnitt 64 schlaegt die eingestellte Lage die Automatik — und
+weil immer eine eingestellt war, kam die Automatik nie zum Zug. Die
+Liste entfaellt.
+
+Damit gilt jetzt: **ihre Wahl im Tagesmenue, sonst die ruhigste Zone
+des Bildes, sonst unten.**
+
+Falls Text auf einem unruhigen Bild schwer lesbar wird, sind das die
+Stellschrauben, in dieser Reihenfolge: `tiefeUnten` (Abdunklung
+unten), `spalteMin` (Ausweichen vor dem Gesicht, steht auf .82, also
+praktisch aus), `weichAnteil` (Weichzeichner zurueckholen).
