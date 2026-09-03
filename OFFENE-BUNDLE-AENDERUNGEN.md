@@ -961,3 +961,24 @@ Zwei Wege, beides je eine Zeile:
 
 Carina hat Inter auf der Textkachel ausdruecklich gewollt, deshalb steht
 A. Der Vergleich ist gerendert und liegt ihr vor.
+
+## 37. Ein System: Marcellus als Hauptstimme
+
+Die Textkachel setzt die Ueberschrift jetzt in Marcellus, Gewicht 400.
+Damit gibt es nur noch eine Hauptstimme, auf Textkacheln wie auf der
+ersten Fotoslide.
+
+    schriftart      Marcellus   Ueberschrift Textkachel
+    gewicht         "400"
+    unterSchrift    Inter       kleine Unterzeile, bewusster Kontrast
+    unterGewicht    "400"
+    deckblattFamilie Marcellus  erste Fotoslide
+    folgeFamilie    Inter       Folgeslides, ausdruecklich so gewollt
+
+Die Groessen auf den Fotokacheln bleiben gestaffelt:
+
+    deckblattGroesse 52   erste Slide, gross
+    fotoGroesse      44   Folgeslides, 15 Prozent kleiner
+
+Die fette Grotesk als Hauptstimme ist damit weg. Sie war der Grund,
+warum der Feed wie zwei Marken wirkte.
