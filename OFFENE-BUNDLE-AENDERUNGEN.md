@@ -1345,3 +1345,69 @@ Stelle. Die Einbettung selbst ist ueber die Sichtbarkeit der
 Variablen geprueft: De, Et, _e, tt, r, e, Pe, $e und t stehen an der
 Einfuegestelle alle im selben Gueltigkeitsbereich, und das Bundle
 laeuft durch `node --check`.
+
+## 48. Die Luecken mitten in den Woertern
+
+    D afuer bin ich no ch nich t weit genug.
+    Diesen S atz hoer ich fas t tae glich.
+    car i naannaprav
+
+Fabric misst die Breite jedes Zeichens einmal und merkt sie sich
+global, fuer die ganze Sitzung. Wird eine Kachel gezeichnet, bevor die
+Schrift geladen ist, landen die Masse der **Ersatzschrift** in diesem
+Speicher. Danach zeichnet der Browser die **richtigen** Buchstaben,
+setzt sie aber an die Stellen der falschen. Ergebnis: Luecken mitten
+im Wort.
+
+Sichtbar wird das nur mit charSpacing. Ohne charSpacing setzt Fabric
+die Zeile am Stueck und der Browser bestimmt die Positionen selbst;
+mit charSpacing setzt Fabric Zeichen fuer Zeichen und braucht die
+Masse. Die Laufweite hat den Fehler also nicht verursacht, sondern
+aufgedeckt.
+
+### Drei Ursachen, alle drei behoben
+
+1. **Die Vorschau wartete gar nicht auf die Schriften.** Die Bedingung
+   lautete `if(!p||!e||i&&!u)return` — gewartet wurde nur, wenn die
+   Kachel als Bild gebraucht wurde (`i`). Im Content Plan wurde sofort
+   gezeichnet. Jetzt `if(!p||!e||!u)return`. `u` steht bereits in der
+   Abhaengigkeitsliste `[e,u,n]`, die Neuzeichnung loest also aus.
+2. **Der Speicher wurde nie geleert.** Jetzt vor jedem Freigeben mit
+   `Pe.fabric.util.clearFabricFontCache()`.
+3. **Der Notausgang nach zwei Sekunden.** Er zeichnet mit
+   Ersatzschrift. Kam die echte Schrift spaeter, blieb die Kachel
+   falsch, weil `d(!0)` auf einen bereits gesetzten Wert keine
+   Neuzeichnung ausloest. Der Pfad nach dem Laden schaltet jetzt
+   ausdruecklich zurueck und wieder vor (`d(!1)`, dann in einer
+   Mikroaufgabe `d(!0)`), damit React zweimal rendert.
+
+Ausserdem wird das mittlere Gewicht mitgeladen (`400`, `500`, `700`):
+der Name unter dem Text steht in 500 und war deshalb ebenfalls
+betroffen.
+
+### Nachweis
+
+`tools/.pruefen/drift.html` stellt den Fehler nach: einmal zeichnen
+ohne Schriften, dann Schriften laden, dann noch einmal zeichnen. Die
+Luecken erscheinen genau wie auf ihrem Bildschirm.
+`tools/.pruefen/drift_fix.html` ist dieselbe Datei mit einem
+`clearFabricFontCache()` dazwischen — die Luecken sind weg.
+
+## 49. Warum sie zwei Fassungen hinterherhinkte
+
+Auf ihrem Bildschirm stand `karten105`, veroeffentlicht war `107`.
+
+In `netlify.toml` galt
+
+    [[headers]]
+      for = "/index.html"
+
+Netlify ordnet Kopfzeilen nach dem **angefragten Pfad** zu, nicht nach
+der Datei, die am Ende ausgeliefert wird. Wer die App unter `/`
+aufmacht — also jeder — fragt nicht `/index.html` an, bekam die Regel
+nicht und behielt eine alte index.html im Browser. Die zeigt auf einen
+alten Bundle-Namen, und der liegt wegen `immutable` ein Jahr im Cache.
+Die Weiterleitungsdateien halfen nicht: sie greifen nur, wenn der
+Browser den alten Namen neu anfragt, nicht wenn er ihn schon hat.
+
+Die Regel gilt jetzt fuer `/` und fuer `/index.html`.

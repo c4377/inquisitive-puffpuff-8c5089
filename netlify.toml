@@ -17,6 +17,16 @@
 [functions]
   directory = "netlify/functions"
 
+# Die Regel unten galt nur fuer den Pfad "/index.html". Wer die App
+# unter "/" aufmacht — also alle — bekam sie nicht, weil Netlify die
+# Kopfzeilen nach dem angefragten Pfad zuordnet und nicht nach der
+# Datei, die am Ende ausgeliefert wird. Deshalb blieb ein alter Stand
+# im Browser haengen. Beide Pfade brauchen die Regel.
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
 [[headers]]
   for = "/index.html"
   [headers.values]

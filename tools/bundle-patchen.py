@@ -508,6 +508,42 @@ P.append(('v.jsx("span",{className:"block text-[10px] font-bold text-gray-400 mb
  'children:"SCHRIFT \u2014 je schmaler, desto mehr Text passt"})',
  "Eingabefeld fuer das Schild im Tagesmenue", 1))
 
+# 49 — Die Luecken mitten in den Woertern.
+#
+#      "D afuer bin ich no ch nich t weit genug." Fabric misst die
+#      Breite jedes Zeichens einmal und merkt sie sich global, fuer
+#      die ganze Sitzung. Wird eine Kachel gezeichnet, bevor die
+#      Schrift geladen ist, landen die Masse der Ersatzschrift im
+#      Speicher. Danach zeichnet der Browser die richtigen Buchstaben,
+#      setzt sie aber an die Stellen der falschen — Luecken mitten im
+#      Wort. Sichtbar wird das nur bei charSpacing, weil Fabric dann
+#      Zeichen fuer Zeichen setzt statt die Zeile am Stueck.
+#
+#      Drei Ursachen, alle drei hier:
+#
+#      1. Die Vorschau wartete gar nicht auf die Schriften. Die
+#         Bedingung "i&&!u" wartete nur, wenn die Kachel als Bild
+#         gebraucht wurde. Im Content Plan wurde sofort gezeichnet.
+#      2. Der Zwischenspeicher wurde nie geleert.
+#      3. Der Notausgang nach zwei Sekunden zeichnet mit
+#         Ersatzschrift; kam die echte Schrift spaeter, blieb die
+#         Kachel falsch, weil d(!0) auf einen bereits gesetzten Wert
+#         keine Neuzeichnung ausloest.
+P.append(('const g=()=>{p||d(!0)},m=setTimeout(g,2e3);',
+ 'const g=()=>{if(p)return;try{Pe.fabric.util.clearFabricFontCache()}catch(zz){}d(!0)},'
+ 'm=setTimeout(g,2e3);',
+ "Zeichenbreiten-Speicher leeren, bevor gezeichnet wird", 1))
+P.append(('Promise.all(w).then(()=>document.fonts.ready).catch(()=>{}).then(g)',
+ 'Promise.all(w).then(()=>document.fonts.ready).catch(()=>{}).then(()=>{if(p)return;'
+ 'try{Pe.fabric.util.clearFabricFontCache()}catch(zz){}'
+ 'd(!1),Promise.resolve().then(()=>{p||d(!0)})})',
+ "Nach dem Laden neu zeichnen, auch wenn der Notausgang schon lief", 1))
+P.append(('if(!p||!e||i&&!u)return;', 'if(!p||!e||!u)return;',
+ "Vorschau wartet auf die Schriften, nicht nur der Bildexport", 1))
+P.append(('.flatMap(b=>["400","700"].map(B=>{try{return document.fonts.load(`${B} 16px "${b}"`)}',
+ '.flatMap(b=>["400","500","700"].map(B=>{try{return document.fonts.load(`${B} 16px "${b}"`)}',
+ "Auch das mittlere Gewicht vorladen, der Name steht in 500", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
