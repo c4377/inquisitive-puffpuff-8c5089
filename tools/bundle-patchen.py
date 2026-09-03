@@ -200,26 +200,8 @@ P.append(('v.jsxs("button",{onClick:()=>quSetzen(!0),',
  'v.jsxs("button",{onClick:async()=>{try{const cr=await fetch("/captions.json",{cache:"no-store"});if(!cr.ok)throw new Error("nicht gefunden");const cd=await cr.json();let cz=0;const cn=i.map(cx=>{const cq=cd[String(cx.day)];if(!cq||!cq.caption)return cx;cz++;return{...cx,caption:cq.caption}});t({contentPlan:cn}),ue(cz+" Captions eingetragen, speichere …"),setTimeout(()=>ue("Gespeichert."),2600),setTimeout(()=>ue(""),5200)}catch{ue("Captions konnten nicht geladen werden.")}},className:"px-2.5 py-1.5 bg-white text-purple-700 border border-purple-200 rounded-lg font-bold hover:bg-purple-50 transition-colors flex items-center whitespace-nowrap text-[11px]",children:[v.jsx(ke,{icon:AS,className:"mr-2"}),"Captions"]}),v.jsxs("button",{onClick:()=>quSetzen(!0),',
  "Knopf Captions", 1))
 
-# 19 — Kachelfarben: matte Erdtoene, hell genug fuer Weiss.
-#      Vorher lagen die Alltagskacheln auf Hellgrau (hell) und
-#      Schiefer (stein) — die beiden waehlt aS(day-1) im Wechsel,
-#      sie sind also das, was im Feed wirklich zu sehen ist.
-#      Sand und helles Orange trugen weisse Schrift nicht (1,4 bzw.
-#      2,1 zu 1). Olive und Gold liegen bei 5,5 und 5,4 zu 1.
-#      linie und wieder bekommen dieselben Toene, damit nirgends
-#      weisse Schrift auf hellem Grund steht.
-P.append(('stein:{grund:SF,schriftGrund:SF,schrift:"#FFFFFF",betont:"#FFFFFF",monogramm:"#FFFFFF",absender:"rgba(255,255,255,0.60)",schriftart:"Playfair Display"}',
- 'stein:{grund:"#BEB7A7",schriftGrund:"#BEB7A7",schrift:"#112250",betont:"#112250",monogramm:"#112250",absender:"rgba(17,34,80,0.62)",schriftart:"Playfair Display"}',
- "stein auf Warm Taupe #BEB7A7", 1))
-P.append(('hell:{grund:OW,schriftGrund:OW,schrift:OD,betont:OD,monogramm:OD,absender:"rgba(35,40,44,0.55)",schriftart:"Playfair Display"}',
- 'hell:{grund:"#E7E2CE",schriftGrund:"#E7E2CE",schrift:"#112250",betont:"#112250",monogramm:"#112250",absender:"rgba(17,34,80,0.58)",schriftart:"Playfair Display"}',
- "hell auf Champagne #E7E2CE", 1))
-P.append(('linie:{grund:uA,schrift:hA,betont:hA,monogramm:F1,absender:"rgba(62,80,99,0.55)",fassung:"linie",schriftart:"PoppinsBold"}',
- 'linie:{grund:"#BEB7A7",schrift:"#112250",betont:"#112250",monogramm:"#112250",absender:"rgba(17,34,80,0.62)",fassung:"linie",schriftart:"PoppinsBold"}',
- "linie auf Warm Taupe", 1))
-P.append(('wieder:{grund:uA,schrift:hA,betont:hA,monogramm:F1,absender:"rgba(62,80,99,0.55)",fassung:"wieder",schriftart:"PoppinsBold"}',
- 'wieder:{grund:"#E7E2CE",schrift:"#112250",betont:"#112250",monogramm:"#112250",absender:"rgba(17,34,80,0.58)",fassung:"wieder",schriftart:"PoppinsBold"}',
- "wieder auf Champagne", 1))
+# (Block 19 ist entfallen: die Kachelfarben stehen jetzt im
+#  Konfigurationsblock BS_KACHEL, siehe Eintrag 24.)
 
 # 20 — Textkacheln laufen in der Marken-Grotesk statt in Playfair.
 #      ACHTUNG, das hebt die Absicht aus Patch 15 teilweise auf:
@@ -270,11 +252,62 @@ P.append(('istKarte:!0,grundFarbe:h.grund,rundung:0,ausrichtung:"links",schriftF
 #      Auf dem Deckblatt 46. sizeLocked sticht weiterhin — eine von
 #      Hand gesetzte Groesse bleibt unangetastet.
 P.append(('folienRolle:ta,zaehler:"",kachelSchrift:ot.kachelSchrift||(D1(ot.day)?nS(ot.day):BG(rt.kachelSchrift)||"marke")',
- 'folienRolle:ta,zaehler:"",kachelSchrift:ta==="deckblatt"?"playfair":(ot.kachelSchrift||(D1(ot.day)?nS(ot.day):BG(rt.kachelSchrift)||"marke"))',
+ 'folienRolle:ta,zaehler:"",kachelSchrift:ta==="deckblatt"?BS_KACHEL.deckblattSchrift:(ot.kachelSchrift||(D1(ot.day)?nS(ot.day):BG(rt.kachelSchrift)||"marke"))',
  "Deckblatt in Playfair statt Anton", 1))
 P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?PV:OV);',
- 'let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?(t.folienRolle==="deckblatt"?46:PV):OV);',
- "Deckblatt groesser (46 statt 34)", 1))
+ 'let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?(t.folienRolle==="deckblatt"?BS_KACHEL.deckblattGroesse:PV):OV);',
+ "Deckblatt groesser (aus BS_KACHEL)", 1))
+
+# 24 — EINE STELLE FUER DAS AUSSEHEN DER TEXTKACHELN.
+#
+#      Wer Farbe, Schrift, Groesse oder Abstaende aendern will, aendert
+#      NUR diesen Block. Er steht ganz oben im Bundle, alle Stellen
+#      unten lesen daraus. Kein Suchen mehr im minifizierten Code.
+#
+#        grundA / grundB   die beiden Farben im Wechsel
+#        schrift           Text, Monogramm, Absender
+#        schriftart        Schrift der Textkacheln
+#        groesse           Ausgangsgroesse, schrumpft bis es passt
+#        zeile             Zeilenabstand
+#        absatz            Abstand zwischen den zwei Absaetzen
+#        rand              Seitenrand als Anteil der Breite
+#        mitte             Hoehe der Textmitte als Anteil
+#        maxhoehe          hoechstens so viel Hoehe darf der Text
+#        deckblattSchrift  Schrift der ersten Fotoslide
+#        deckblattGroesse  Groesse der ersten Fotoslide
+KONFIG = 'const BS_KACHEL={grundA:"#BEB7A7",grundB:"#E7E2CE",schrift:"#112250",schriftart:"HelveticaNeueBrand",groesse:80,zeile:1.28,absatz:.85,rand:.11,mitte:.52,maxhoehe:.70,deckblattSchrift:"playfair",deckblattGroesse:46};'
+P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
+ "Konfigurationsblock BS_KACHEL ganz oben", 1))
+
+# 25 — Die Alltagskacheln bekommen eine eigene Fassung "marke" und
+#      lesen ihre Farben aus dem Block. Vorher hatten stein und hell
+#      als einzige kein Feld fassung, wurden deshalb als Ablauf-Fassung
+#      gezeichnet und kamen linksbuendig mit winzigem Fliesstext heraus.
+P.append(('stein:{grund:SF,schriftGrund:SF,schrift:"#FFFFFF",betont:"#FFFFFF",monogramm:"#FFFFFF",absender:"rgba(255,255,255,0.60)",schriftart:"Playfair Display"}',
+ 'stein:{grund:BS_KACHEL.grundA,schriftGrund:BS_KACHEL.grundA,schrift:BS_KACHEL.schrift,betont:BS_KACHEL.schrift,monogramm:BS_KACHEL.schrift,absender:BS_KACHEL.schrift,fassung:"marke",schriftart:BS_KACHEL.schriftart}',
+ "stein: Fassung marke, Farben aus dem Block", 1))
+P.append(('hell:{grund:OW,schriftGrund:OW,schrift:OD,betont:OD,monogramm:OD,absender:"rgba(35,40,44,0.55)",schriftart:"Playfair Display"}',
+ 'hell:{grund:BS_KACHEL.grundB,schriftGrund:BS_KACHEL.grundB,schrift:BS_KACHEL.schrift,betont:BS_KACHEL.schrift,monogramm:BS_KACHEL.schrift,absender:BS_KACHEL.schrift,fassung:"marke",schriftart:BS_KACHEL.schriftart}',
+ "hell: Fassung marke, Farben aus dem Block", 1))
+P.append(('linie:{grund:uA,schrift:hA,betont:hA,monogramm:F1,absender:"rgba(62,80,99,0.55)",fassung:"linie",schriftart:"PoppinsBold"}',
+ 'linie:{grund:BS_KACHEL.grundA,schrift:BS_KACHEL.schrift,betont:BS_KACHEL.schrift,monogramm:BS_KACHEL.schrift,absender:BS_KACHEL.schrift,fassung:"marke",schriftart:BS_KACHEL.schriftart}',
+ "linie: Fassung marke", 1))
+P.append(('wieder:{grund:uA,schrift:hA,betont:hA,monogramm:F1,absender:"rgba(62,80,99,0.55)",fassung:"wieder",schriftart:"PoppinsBold"}',
+ 'wieder:{grund:BS_KACHEL.grundB,schrift:BS_KACHEL.schrift,betont:BS_KACHEL.schrift,monogramm:BS_KACHEL.schrift,absender:BS_KACHEL.schrift,fassung:"marke",schriftart:BS_KACHEL.schriftart}',
+ "wieder: Fassung marke", 1))
+
+# 26 — Keine Wortmarke auf der Fassung marke. Im Vorbild steht unten
+#      nichts; der Schriftzug bleibt fuer alle anderen Fassungen.
+P.append(('Je.aufFoto!==!0&&txt("carinaannaprav"',
+ 'Je.aufFoto!==!0&&Je.fassung!=="marke"&&txt("carinaannaprav"',
+ "Wortmarke nicht auf der Fassung marke", 1))
+
+# 27 — Der Zeichner fuer die Fassung marke. Zentriert, zwei Absaetze,
+#      der zweite fett als Pointe, Groesse schrumpft bis es passt.
+#      Genau das Bild aus dem Vorbild, alle Werte aus BS_KACHEL.
+ZWEIG = '\nif(FA==="marke"){\nconst K=BS_KACHEL;\nconst MAXB=r*(1-2*K.rand);\nconst BL=ROH.replace(/\\*/g,"").split(/\\n\\s*\\n/).map(x=>x.trim()).filter(Boolean);\nif(!BL.length)return!1;\nconst GEW=ix=>(BL.length>1&&ix===BL.length-1)?"700":"400";\nlet gr=c(K.groesse),ZL=[];\nfor(let i=0;i<60;i+=1){\nZL=BL.map((b,ix)=>umbruch(b,gr,K.schriftart,MAXB,GEW(ix)));\nconst anz=ZL.reduce((a,z)=>a+z.length,0);\nconst hh=anz*gr*K.zeile+(BL.length-1)*gr*K.absatz;\nif(hh<=n*K.maxhoehe)break;\ngr*=.95}\nconst anz=ZL.reduce((a,z)=>a+z.length,0);\nconst gesamt=anz*gr*K.zeile+(BL.length-1)*gr*K.absatz;\nlet y=n*K.mitte-gesamt/2+gr*.5;\nZL.forEach((blk,ix)=>{const gw=GEW(ix);\nblk.forEach(z=>{txt(z,{left:r/2,top:y,originX:"center",originY:"center",\nfontSize:gr,fontFamily:K.schriftart,fontWeight:gw,fill:SCH,maxB:MAXB});\ny+=gr*K.zeile});\ny+=gr*K.absatz});\nreturn!0}\n'
+P.append((chr(10) + 'if(FA==="ablauf"){', ZWEIG + chr(10) + 'if(FA==="ablauf"){',
+ "Zeichner-Zweig fuer die Fassung marke", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

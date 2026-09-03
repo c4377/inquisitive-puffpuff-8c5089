@@ -468,35 +468,65 @@ Der Zeichner bekommt jetzt eine eigene Angabe aus der Marke:
 
 `plateFont` bleibt unangetastet, es wird an anderer Stelle gebraucht.
 
-## 18. Kachelfarben: Warm Taupe und Champagne, Schrift in Navy
+## 18. Eine Stelle fuer das Aussehen der Textkacheln
 
-*Skript-Eintrag 19.*
+*Skript-Eintrag 24. Loest die frueheren Einzelaenderungen an den Farben ab.*
 
-Die Alltagskacheln kamen nie aus der Laengenregel, sondern aus
+Ganz oben im Bundle steht jetzt ein Block. Wer Farbe, Schrift, Groesse
+oder Abstaende aendern will, aendert **nur** ihn:
 
-    aS = e => ["hell","stein"][r % 2]
+    const BS_KACHEL={
+      grundA:"#BEB7A7",   grundB:"#E7E2CE",   // die zwei Farben im Wechsel
+      schrift:"#112250",                      // Text
+      schriftart:"HelveticaNeueBrand",
+      groesse:80,         // Ausgangsgroesse, schrumpft bis es passt
+      zeile:1.28,         // Zeilenabstand
+      absatz:.85,         // Abstand zwischen den zwei Absaetzen
+      rand:.11,           // Seitenrand als Anteil der Breite
+      mitte:.52,          // Hoehe der Textmitte als Anteil
+      maxhoehe:.70,       // hoechstens so viel Hoehe darf der Text
+      deckblattSchrift:"playfair", deckblattGroesse:46
+    };
 
-Das wechselt auf jedem Kartentag zwischen `hell` und `stein`. Wer die Farbe
-der Textkacheln aendern will, muss diese beiden anfassen — alles andere
-kommt im Alltag kaum vor.
+Farbtafel, Kartenzeichner, Zusammenbau und Groessenzeile lesen daraus.
 
-    hell   -> Champagne  #E7E2CE
-    stein  -> Warm Taupe #BEB7A7
-    Schrift, Monogramm, Absender -> Navy #112250
+## 19. Fassung "marke": das Bild aus dem Vorbild
 
-Kontrast 11,8 beziehungsweise 7,7 zu 1 — beides deutlich ueber der
-Schwelle von 4,5.
+*Skript-Eintraege 25 bis 27.*
 
-Vorher probiert und verworfen: Sand `#E4D9C6` und helles Orange `#F2A26B`
-trugen weisse Schrift nicht (1,4 und 2,1 zu 1). Olive `#6B6B47` und Gold
-`#8E6134` trugen sie zwar (5,5 und 5,4), gefielen aber nicht.
+`stein` und `hell` hatten als einzige kein Feld `fassung`. Der Zeichner
+setzte deshalb
 
-`linie` und `wieder` bekommen dieselben zwei Toene. Nicht weil sie oft
-vorkommen — sie brauchen eine optionale Kachel mit hoechstens drei Woertern
-beziehungsweise durchgehenden Grossbuchstaben — sondern damit im Bundle
-nirgends eine Farbkombination stehenbleibt, die nicht geprueft ist.
+    Ye.fassung = Ye.fassung || "ablauf"
 
-## 19. Textkacheln laufen in der Marken-Grotesk
+und zeichnete die Alltagskacheln als Ablauf-Fassung: linksbuendig, der
+zweite Absatz als winziger Fliesstext, unten die Wortmarke. Das war der
+Grund, warum die Kacheln nie wie das Vorbild aussahen.
+
+Beide haben jetzt `fassung:"marke"`, und der Zeichner hat einen eigenen
+Zweig dafuer:
+
+* zentriert
+* Text am doppelten Zeilenumbruch in zwei Absaetze geteilt, der letzte
+  fett als Pointe
+* Groesse schrumpft in Schritten von fuenf Prozent, bis der Block in
+  `maxhoehe` passt
+* keine Wortmarke (Eintrag 26) — im Vorbild steht unten nichts
+
+`linie` und `wieder` bekommen dieselbe Fassung, damit im Bundle keine
+ungeprueften Kombinationen stehenbleiben.
+
+**Ansehen statt annehmen.** `tools/kachel-pruefen.py` zieht den Zeichner
+und den Konfigurationsblock aus einem Bundle und rendert eine Kachel mit
+Fabric, ohne die App zu starten:
+
+    npm install fabric@5.3.0 --prefix tools/.pruefen
+    python3 tools/kachel-pruefen.py site/assets/index-B5kartenNN.js
+    (cd tools/.pruefen && python3 -m http.server 8080)
+
+Damit laesst sich jede Aenderung sehen, bevor sie veroeffentlicht wird.
+
+## 20. Textkacheln laufen in der Marken-Grotesk
 
 *Skript-Eintrag 20. Hebt die Absicht aus Abschnitt 15 teilweise auf.*
 
@@ -524,7 +554,7 @@ steigt vorher aus, und `wt` rechnet seine Ausrichtung selbst. Beides ist
 trotzdem mitgesetzt (Skript-Eintrag 22), damit der seltene Fall, in dem
 `wt` mit `return !1` abbricht, dasselbe Bild ergibt.
 
-## 20. Zwei tote Fassungen aus der Farbtafel
+## 21. Zwei tote Fassungen aus der Farbtafel
 
 *Skript-Eintrag 21.*
 
@@ -542,7 +572,7 @@ und die beiden werden als Ablauf-Fassung gezeichnet. Das ist der Grund,
 warum eine Aenderung an `stein`/`hell` im Zeichner nur ueber den
 `ablauf`-Zweig wirkt.
 
-## 21. Erste Slide eines Fotoposts: Serife und deutlich groesser
+## 22. Erste Slide eines Fotoposts: Serife und deutlich groesser
 
 *Skript-Eintrag 23.*
 
