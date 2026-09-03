@@ -1004,3 +1004,40 @@ Jetzt:
 
 Waermer wird es mit `waerme` hoeher, kuehler mit niedriger. Ganz ohne
 Lasur: `waerme: 0` — dann bleiben nur die warm getoenten Ebenen 1 und 3.
+
+## 39. Warum das Vorbild besser zu lesen war
+
+*Skript-Eintrag 35.*
+
+Der starke Tiefenverlauf hinter dem Text auf einem Foto hing an
+
+    if($e && /Playfair/.test(String(Qe)) && t.tiefenOverlay!==!1)
+
+Eintrag 14 hatte ihn absichtlich auf Playfair beschraenkt, weil die
+Fotoschrift damals Anton war und der Verlauf dort doppelt verdunkelte.
+Seit die Fotoschrift Marcellus ist, war er damit **aus** — und genau er
+macht weissen Text auf einem Foto lesbar. Das war der ganze Unterschied
+zum Vorbild.
+
+Die Bedingung liest die Liste jetzt aus dem Block:
+
+    tiefeSchriften  "Playfair|Marcellus|Prata|Italiana|Cormorant|
+                     Bodoni|Inter|Aspekta|Helvetica"
+
+Anton und ArchivoBlack sind absichtlich nicht drin, die tragen ohne.
+
+## 40. Kartenfarben Schiefer und Beton
+
+    grundA   #3A4750   Schiefer
+    grundB   #7D7469   Beton
+    schrift  #FFFFFF   weiss, auch die Unterzeile
+
+Weiss auf Schiefer: 9,56 zu 1. Auf Beton: 4,59 zu 1.
+
+Beton ist gegenueber dem Palettenwert Pavement Shadow `#8A8077` leicht
+abgedunkelt. Im Original kaeme Weiss dort nur auf 3,86 zu 1 — fuer die
+grosse Ueberschrift reicht das, fuer die 18-Pixel-Unterzeile nicht.
+Mit `#7D7469` tragen beide.
+
+Die Unterzeile ist weiss und nicht gedaempft: auf Beton waere jeder
+dunklere Ton unter der Schwelle.
