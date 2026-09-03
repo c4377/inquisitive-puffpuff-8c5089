@@ -2135,3 +2135,40 @@ Ueberschrift, deshalb eigene Werte statt derselben:
 
 Der Ton kommt aus `bildTon`, also derselbe warme Braunton wie ueberall
 sonst. Damit liegt kein Verlauf mehr ausserhalb des Blocks.
+
+## 74. Die Ansprache der Ablauf-Texte
+
+Dreiundzwanzig feste Texte in drei Feldern: Das Intensive (6), The
+Money Room (7), Mentoring (10).
+
+**Der Ablauf bleibt unangetastet.** Kopfzeile, Titel, Unterzeile und
+die Listen- beziehungsweise Stationeneintraege stehen Zeichen fuer
+Zeichen wie vorher. Neu ist nur die letzte Zeile jedes Textes, der
+Fliesstext.
+
+Was sich aendert:
+
+- **Die Doppelverneinung faellt weg.** "Nicht besprochen, nicht
+  analysiert, sondern umgebaut" stand in fast jedem Absatz. Das ist
+  Werbetext, keine Sprechweise.
+- **Dafuer ein konkretes Bild aus der Sache selbst**, etwa "ich tippe
+  mit, du siehst zu, wie sich die Sätze verändern".
+- **An zwei Stellen ein Eingestaendnis statt einer Behauptung:** "Ich
+  habe das lange anders geglaubt" und "das ist der unangenehme Teil".
+- **Einmal etwas gegen das eigene Interesse gesagt:** "Und wenn der
+  Money Room besser passt, sage ich dir das, statt dir die Sitzung zu
+  verkaufen."
+
+### Nachweis
+
+Alle drei Felder werden als Ganzes ersetzt. Vor dem Ersetzen wurde die
+Rekonstruktion gegen das Original geprueft: mit den **alten** Texten
+ergibt sie Zeichen fuer Zeichen dieselbe Zeile. Danach wurde das
+Ergebnis gegengelesen:
+
+    23 von 23   Kopfzeile, Titel, Unterzeile, Liste unveraendert
+    23 von 23   Fliesstext neu
+    Zahlen      identisch (888, 444, 97, 3, 12, 8, 14, 2)
+
+Preise, Fristen, Platzzahlen und Bedingungen sind damit nachweislich
+dieselben geblieben.
