@@ -982,3 +982,25 @@ Die Groessen auf den Fotokacheln bleiben gestaffelt:
 
 Die fette Grotesk als Hauptstimme ist damit weg. Sie war der Grund,
 warum der Feed wie zwei Marken wirkte.
+
+## 38. Warmes Overlay ueber den Bildern
+
+*Skript-Eintrag 34.*
+
+Ueber einem Foto liegen drei Ebenen. Sie waren alle neutral schwarz,
+dadurch wirkten die Bilder kuehl und grau:
+
+    1. flaches Abdunkeln mit der Deckkraft Et
+       (normal .05, bei Weichzeichner .42)
+    2. NEU: eine warme Lasur
+    3. der Kantenverlauf oben und unten
+
+Jetzt:
+
+    bildTon     "74,58,44"     warmes Braun statt Schwarz
+                               fuer Ebene 1 und 3
+    waermeTon   "150,112,76"   die Lasur
+    waerme      .16            ihre Deckkraft, 0 schaltet sie ab
+
+Waermer wird es mit `waerme` hoeher, kuehler mit niedriger. Ganz ohne
+Lasur: `waerme: 0` — dann bleiben nur die warm getoenten Ebenen 1 und 3.

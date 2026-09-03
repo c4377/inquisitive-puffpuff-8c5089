@@ -272,7 +272,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#E8DED4",grundB:"#F6F2EB",schrift:"#5B4A3E",schriftart:"Marcellus",unterSchrift:"Inter",unterVerhaeltnis:.64,unterFarbe:"#70675E",gewicht:"400",unterGewicht:"400",groesseAnteil:.098,enge:1,laufweite:-18,zeile:1.02,absatz:.20,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Marcellus",deckblattFamilie:"Marcellus",deckblattGroesse:52,folgeStil:"montserrat",folgeFamilie:"Inter",fotoGroesse:44};'
+KONFIG = 'const BS_KACHEL={grundA:"#E8DED4",grundB:"#F6F2EB",schrift:"#5B4A3E",schriftart:"Marcellus",unterSchrift:"Inter",unterVerhaeltnis:.64,unterFarbe:"#70675E",gewicht:"400",unterGewicht:"400",groesseAnteil:.098,enge:1,laufweite:-18,zeile:1.02,absatz:.20,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Marcellus",deckblattFamilie:"Marcellus",deckblattGroesse:52,folgeStil:"montserrat",folgeFamilie:"Inter",fotoGroesse:44,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.16};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -367,6 +367,33 @@ P.append(('$e&&t.folienRolle==="deckblatt"&&BS_KACHEL.deckblattFamilie&&(Qe=BS_K
  '$e&&t.folienRolle==="deckblatt"&&BS_KACHEL.deckblattFamilie&&(Qe=BS_KACHEL.deckblattFamilie),'
  '$e&&t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeFamilie&&(Qe=BS_KACHEL.folgeFamilie);',
  "Folgeslides in der Folge-Familie", 1))
+
+# 34 — Warmes Overlay ueber den Bildern.
+#
+#      Drei Ebenen liegen ueber einem Foto. Sie waren alle neutral
+#      schwarz, dadurch wirkten die Bilder kuehl und grau:
+#
+#        1. flaches Abdunkeln mit der Deckkraft Et (normal .05,
+#           bei Weichzeichner .42)
+#        2. NEU: eine warme Lasur, bildTon nicht mehr schwarz
+#        3. der Kantenverlauf oben und unten
+#
+#      bildTon dunkelt jetzt in warmem Braun ab, waermeTon legt die
+#      Lasur darueber, und der Kantenverlauf ist ebenfalls warm.
+#      Alle drei Werte stehen im Block.
+P.append(('const ur=new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:`rgba(0,0,0,${Et})`,selectable:!1});Et>0&&e.add(ur);',
+ 'const ur=new Pe.fabric.Rect({left:0,top:0,width:r,height:n,'
+ 'fill:`rgba(${BS_KACHEL.bildTon||"0,0,0"},${Et})`,selectable:!1});Et>0&&e.add(ur);'
+ 'BS_KACHEL.waerme>0&&e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,'
+ 'fill:`rgba(${BS_KACHEL.waermeTon},${BS_KACHEL.waerme})`,selectable:!1,evented:!1}));',
+ "Warme Lasur ueber dem Bild", 1))
+
+P.append(('colorStops:[{offset:0,color:"rgba(0,0,0,0.30)"},{offset:.18,color:"rgba(0,0,0,0.0)"},{offset:.82,color:"rgba(0,0,0,0.0)"},{offset:1,color:"rgba(0,0,0,0.35)"}]',
+ 'colorStops:[{offset:0,color:`rgba(${BS_KACHEL.bildTon},0.34)`},'
+ '{offset:.18,color:`rgba(${BS_KACHEL.bildTon},0.0)`},'
+ '{offset:.82,color:`rgba(${BS_KACHEL.bildTon},0.0)`},'
+ '{offset:1,color:`rgba(${BS_KACHEL.bildTon},0.40)`}]',
+ "Kantenverlauf warm statt schwarz", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
