@@ -701,6 +701,23 @@ P.append(('stroke:Ve?void 0:ut,strokeWidth:Ve?0:st',
  'stroke:' + PLATTE + '?void 0:ut,strokeWidth:' + PLATTE + '?0:st',
  "Rand der ersten Zeile folgt dem Kasten", 1))
 
+# 60 — Der Kasten wird nie schmaler als seine Zeile.
+#
+#      Die Breite kam aus EINER von zwei Messungen: bei kursiven
+#      Woertern Wort fuer Wort (Ht), sonst der Satz am Stueck
+#      (pt.width). Gezeichnet wird aber je nach Fall mal so, mal so.
+#      Solange beide Messungen dasselbe ergeben, faellt das nicht auf
+#      — nachgemessen stimmen sie bei Helvetica und Fraunces auf den
+#      Pixel. Verlassen sollte man sich darauf nicht: sobald eine der
+#      beiden zu klein ausfaellt, steht der Text ueber dem Kasten
+#      hinaus, und man sucht den Fehler bei der Schrift.
+#
+#      Jetzt gilt der groessere der beiden Werte. Der Kasten kann
+#      damit zu breit sein, nie zu schmal.
+P.append(('ct=sr(Je)?Ht(Je,qe,!(tt.fettNurErste&&!Ve)):pt.width,qt=ct+It*2',
+ 'ct=Math.max(pt.width,Ht(Je,qe,!(tt.fettNurErste&&!Ve))),qt=ct+It*2',
+ "Kastenbreite aus der groesseren der beiden Messungen", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

@@ -1709,3 +1709,28 @@ Kasten, Schrift weiss mit Rand und Schatten wie der Rest.
 ("erster Block" und "steht auf hellem Grund"), bricht sie in dem
 Moment, in dem man eines der beiden aendert. Erst war es das Fett
 (Abschnitt 56), jetzt die Farbe. Beide hingen an derselben Marke.
+
+## 60. Der Kasten wird nie schmaler als seine Zeile
+
+Nachgemessen (`tools/.pruefen/wort.html`): die beiden Messwege — Satz
+am Stueck gegen Wort fuer Wort mit gemessener Luecke — stimmen bei
+Fraunces 700, Fraunces 400 und Helvetica auf den Pixel ueberein. Die
+Breite des Kastens war also nicht zu klein berechnet, und die
+gezeichnete Breite passt zur gemessenen. Auch Messen und Malen
+stimmen ueberein (`messbreite.html`, Abweichung 0,1 Prozent).
+
+Der Ueberlauf, der zu sehen war, kommt aus Abschnitt 58: ein Wort,
+das breiter ist als die Spalte, wurde trotzdem in die Zeile gesetzt.
+Der Kasten folgt der Zeilenbreite — also lief er mit hinaus. Behoben
+ist das seit **karten117**. Wer eine aeltere Fassung im Browser hat,
+sieht den Fehler weiter.
+
+Trotzdem gehaertet: die Kastenbreite nimmt jetzt den groesseren der
+beiden Messwerte statt sich fuer einen zu entscheiden. Der Kasten kann
+damit zu breit sein, nie zu schmal.
+
+## Zur Schriftstaerke
+
+`gewicht` und `leichtGewicht` stehen auf **300 (Light)**. Auf
+"Light nicht thin" hin gesetzt und dort belassen. Thin waere 200 —
+eine Zahl, falls doch.
