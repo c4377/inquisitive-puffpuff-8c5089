@@ -821,6 +821,30 @@ P.append(('Ut=new Pe.fabric.Text(xt.w,{left:Vt,top:De,originX:"left",originY:"ce
  'Ut=new Pe.fabric.Text(xt.w,{left:Vt,top:De,originX:"left",originY:"center",fontSize:Ve?qe:qe2,fontFamily:Ve?Qe:QeZ,fontWeight:',
  "Dasselbe im Zweig mit kursiven Woertern", 1))
 
+# 65 — Auf Fotos gewinnt jetzt ihre Einstellung, nicht die Automatik.
+#
+#      Die Textlage wurde so bestimmt:
+#
+#        ve = fettNurErste && !blur && textAnchor.row  ...   // Automatik
+#             || t.textLage                                  // ihre Wahl
+#             || (Foto ? "unten" : "mitte")                  // Vorgabe
+#
+#      Die Automatik aus der Bildanalyse stand VOR ihrer Wahl. Wo ein
+#      Gesicht erkannt wurde, war "unten" wirkungslos.
+#
+#      Aufgefallen ist es erst jetzt, und das ist meine Schuld: die
+#      Automatik haengt an fettNurErste, und das galt frueher nur fuer
+#      den Stil "montserrat". Seit Abschnitt 56 setze ich es auf allen
+#      Fotokacheln — damit war die Automatik ueberall aktiv und ihre
+#      Wahl ueberall wirkungslos.
+#
+#      Reihenfolge jetzt: ihre Wahl, dann die Automatik, dann die
+#      Vorgabe. Der Schalter "auto" im Tagesmenue setzt textLage auf
+#      nichts — dort greift die Automatik weiter.
+P.append(('const ve=tt.fettNurErste&&!t._blurAn&&t.textAnchor&&t.textAnchor.row&&{top:"oben",mid:"mitte",bottom:"unten"}[t.textAnchor.row]||t.textLage||($e?"unten":"mitte")',
+ 'const ve=t.textLage||(tt.fettNurErste&&!t._blurAn&&t.textAnchor&&t.textAnchor.row&&{top:"oben",mid:"mitte",bottom:"unten"}[t.textAnchor.row])||($e?"unten":"mitte")',
+ "Eingestellte Textlage schlaegt die Automatik", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

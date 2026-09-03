@@ -1853,3 +1853,31 @@ sehen; der weisse Text traegt ueber seine Groesse und den Schatten.
 Das ist der Kompromiss: sichtbar hellere Bilder, unten noch genug
 Halt, damit weisse Schrift auf einer hellen Stelle nicht verschwindet.
 Wird es irgendwo zu hell zum Lesen, ist `tiefeUnten` die Zahl.
+
+## 64. Auf Fotos war "unten" wirkungslos
+
+Die Textlage wurde so bestimmt:
+
+    ve = fettNurErste && !blur && textAnchor.row ...   // Automatik
+         || t.textLage                                  // ihre Wahl
+         || (Foto ? "unten" : "mitte")                  // Vorgabe
+
+Die **Automatik aus der Bildanalyse stand vor ihrer Wahl**. Wo im Bild
+ein Gesicht erkannt wurde, war "unten" ohne Wirkung — auf Fotoposts
+also fast immer.
+
+Aufgefallen ist es erst jetzt, und das ist meine Schuld. Die Automatik
+haengt an `fettNurErste`, und das galt frueher nur fuer den Stil
+"montserrat". Seit Abschnitt 56 setze ich es auf **allen**
+Fotokacheln, damit dort fett und nicht fett gilt. Damit war die
+Automatik ueberall aktiv und ihre Wahl ueberall wirkungslos.
+
+Reihenfolge jetzt: **ihre Wahl, dann die Automatik, dann die
+Vorgabe.** Der Schalter "auto" im Tagesmenue setzt `textLage` auf
+nichts — dort greift die Automatik weiter, wie gedacht.
+
+**Merksatz, zum dritten Mal in dieser Reihe:** `fettNurErste` bedeutet
+inzwischen dreierlei — Kasten, Fettschrift und "Automatik darf die
+Lage bestimmen". Wer eines davon einschaltet, schaltet die anderen
+mit. Kasten und Farbe sind bereits geloest (56, 59), die Lage jetzt
+auch.
