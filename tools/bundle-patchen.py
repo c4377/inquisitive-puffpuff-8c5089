@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.74,textHoeheZaehler:.54,umbruchRand:12,fotoZeile:1.10,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.12,tiefeMitte:.24,tiefeUnten:.86,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.74,textHoeheZaehler:.54,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,bandAuf:0,fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.05,tiefeMitte:.10,tiefeUnten:.42,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -600,7 +600,8 @@ P.append(('{const Je=n*(jr?.48:.74);let rt=0;for(;;){',
 P.append(('$e&&t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeFamilie&&(Qe=BS_KACHEL.folgeFamilie);',
  '$e&&t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeFamilie&&(Qe=BS_KACHEL.folgeFamilie);'
  '$e&&(tt.nurErsteZeilePlatte=!0,tt.fettNurErste=!0,'
- '(t.folienRolle!=="deckblatt"||String(t.schild||"").trim())&&(tt.platten=!1,tt.ohnePlatteErste=!0));',
+ '(!BS_KACHEL.bandAuf||t.folienRolle!=="deckblatt"||String(t.schild||"").trim())'
+ '&&(tt.platten=!1,tt.ohnePlatteErste=!0));',
  "Fotos immer fett/nicht fett; Kasten nur weg auf Folgeslides und mit Schild", 1))
 
 # 53 — Auf Fotos keine Luecke zwischen den Saetzen.
@@ -777,6 +778,48 @@ P.append(('dr.forEach((Je,rt)=>{if(!Je.length){',
  "Breiteste Zeile des ersten Blocks vorab messen", 1))
 P.append((',qt=ct+It*2', ',qt=(Ve?Math.max(ct,PB):ct)+It*2',
  "Alle Kaesten des ersten Blocks gleich breit", 1))
+
+# 64 — Der Look aus ihrem Beitrag: Serif oben, Grotesk darunter.
+#
+#      Ausgemessen an ihrem Bildschirmfoto (Kachel 1206 breit):
+#
+#        Serifenblock   Zeichenhoehe 71  ->  Groesse rund 95  (7,9%)
+#        Zeilenschritt  91                ->  0,96 der Groesse
+#        Grotesk-Block  Zeichenhoehe 53  ->  Groesse rund 71  (5,9%)
+#        Verhaeltnis    71/95            =   0,75
+#        linker Rand    122 von 1206     =   10,1%
+#
+#      Bisher lief die ganze Folie in EINER Familie. Jetzt bekommt der
+#      zweite Block eine eigene: zweiteFamilie, und mit zweitAnteil
+#      eine eigene Groesse.
+#
+#      Umbruch und Anpassungsschleife rechnen weiter mit der GROSSEN
+#      Groesse. Das schaetzt den zweiten Block zu breit und zu hoch —
+#      also immer zur sicheren Seite. Zeilen brechen frueher, nie
+#      spaeter; nichts kann seitlich hinauslaufen.
+P.append(('Ht=(Je,rt,Ve)=>{const pt={fontSize:rt,fontFamily:Qe,fontWeight:Ve?kt:"400"}',
+ 'Ht=(Je,rt,Ve)=>{const pt={fontSize:rt,fontFamily:Ve?Qe:(BS_KACHEL.zweiteFamilie||Qe),fontWeight:Ve?kt:"400"}',
+ "Messung des zweiten Blocks in seiner Familie", 1))
+P.append(('Et=qe*(tt.engZeilen?1.17:$e?(BS_KACHEL.fotoZeile||1.3):1.06)',
+ 'Et=qe*(tt.engZeilen?1.17:$e?(BS_KACHEL.fotoZeile||1.3):1.06),'
+ 'qe2=$e?Math.round(qe*(BS_KACHEL.zweitAnteil||1)):qe,'
+ 'Et2=$e?qe2*(BS_KACHEL.fotoZeile||1.3):Et,'
+ 'QeZ=$e?(BS_KACHEL.zweiteFamilie||Qe):Qe',
+ "Groesse, Zeilenhoehe und Familie des zweiten Blocks", 1))
+P.append(('ae=dr.reduce((zs,zz)=>zs+(zz.length?Et:tt.engZeilen?qe*.92:Et),0)',
+ 'ae=dr.reduce((zs,zz,ii)=>zs+(zz.length?(tt.nurErsteZeilePlatte&&ii>=Lt?Et2:Et):tt.engZeilen?qe*.92:Et),0)',
+ "Gesamthoehe zaehlt den zweiten Block in seiner Zeilenhoehe", 1))
+P.append(('De+=Et}),Zt.length&&', 'De+=(Ve?Et:Et2)}),Zt.length&&',
+ "Zeilenvorschub des zweiten Blocks", 1))
+P.append(('pt=new Pe.fabric.Text(Je.map(xt=>xt.w).join(" "),{fontSize:qe,fontFamily:Qe,fontWeight:',
+ 'pt=new Pe.fabric.Text(Je.map(xt=>xt.w).join(" "),{fontSize:Ve?qe:qe2,fontFamily:Ve?Qe:QeZ,fontWeight:',
+ "Zeilenbreite in der Familie und Groesse des Blocks", 1))
+P.append(('const Tt=(xt,rr,Ut)=>new Pe.fabric.Text(xt,{left:Ut,top:De,originX:"left",originY:"center",fontSize:qe,fontFamily:Qe,fontWeight:',
+ 'const Tt=(xt,rr,Ut)=>new Pe.fabric.Text(xt,{left:Ut,top:De,originX:"left",originY:"center",fontSize:Ve?qe:qe2,fontFamily:Ve?Qe:QeZ,fontWeight:',
+ "Zeichnen in der Familie und Groesse des Blocks", 1))
+P.append(('Ut=new Pe.fabric.Text(xt.w,{left:Vt,top:De,originX:"left",originY:"center",fontSize:qe,fontFamily:Qe,fontWeight:',
+ 'Ut=new Pe.fabric.Text(xt.w,{left:Vt,top:De,originX:"left",originY:"center",fontSize:Ve?qe:qe2,fontFamily:Ve?Qe:QeZ,fontWeight:',
+ "Dasselbe im Zweig mit kursiven Woertern", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

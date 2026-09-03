@@ -1798,3 +1798,58 @@ Flaeche. Zeilen ohne Kasten bleiben, wie sie waren.
 **Merksatz:** "zu kurz" hiess nicht, dass eine Zahl zu klein war. Es
 hiess, dass die Zahl fuer jede Zeile einzeln richtig war, obwohl die
 vier Zeilen zusammen eine Form ergeben sollen.
+
+## 63. Der Look aus ihrem Beitrag
+
+Ihr Bildschirmfoto ausgemessen, Kachel 1206 Pixel breit:
+
+    Serifenblock    Zeichenhoehe 71  ->  Groesse rund 95   (7,9%)
+    Zeilenschritt   91               ->  0,96 der Groesse
+    Grotesk-Block   Zeichenhoehe 53  ->  Groesse rund 71   (5,9%)
+    Verhaeltnis     71/95            =   0,75
+    linker Rand     122 von 1206     =   10,1%
+    Kasten          keiner
+
+### Zwei Schriften auf einer Folie
+
+Bisher lief eine Folie in **einer** Familie. Jetzt:
+
+    Block 1   deckblattFamilie   Fraunces, fett
+    Block 2   zweiteFamilie      HelveticaNeueBrand, leicht
+    zweitAnteil  .75             Block 2 ist drei Viertel so gross
+
+Umbruch und Anpassungsschleife rechnen weiter mit der **grossen**
+Groesse und der Serif. Das schaetzt den zweiten Block zu breit und zu
+hoch — also immer zur sicheren Seite: Zeilen brechen frueher, nie
+spaeter, nichts kann seitlich hinauslaufen (Abschnitt 58).
+
+### Kein Band mehr, ausser man will eins
+
+    bandAuf   0
+
+Ihr Beitrag hat keinen Kasten, der Text steht direkt auf dem Bild und
+bekommt stattdessen den Schatten, den der Zeichner ohnehin setzt,
+sobald keine Flaeche darunter liegt. `bandAuf` auf 1 bringt den Kasten
+auf dem Deckblatt zurueck.
+
+### Der Zeilenabstand
+
+    fotoZeile   1.10  ->  0.98
+
+Gemessen 0,96. Enger als alles bisher, und genau das macht den
+Blocksatz-Eindruck.
+
+### Die Bilder waren zu blass
+
+Der Tiefenverlauf lag bei .12 / .24 / .86. Unten also 86 Prozent
+Abdunklung — das frisst Farbe und Zeichnung aus dem Bild, und genau
+darum sahen die Fotos flau aus. Im Vorbild ist keine Abdunklung zu
+sehen; der weisse Text traegt ueber seine Groesse und den Schatten.
+
+    tiefeOben    .12  ->  .05
+    tiefeMitte   .24  ->  .10
+    tiefeUnten   .86  ->  .42
+
+Das ist der Kompromiss: sichtbar hellere Bilder, unten noch genug
+Halt, damit weisse Schrift auf einer hellen Stelle nicht verschwindet.
+Wird es irgendwo zu hell zum Lesen, ist `tiefeUnten` die Zahl.
