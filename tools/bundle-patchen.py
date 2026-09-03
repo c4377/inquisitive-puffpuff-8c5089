@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"200",leichtGewicht:"200",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:58,spalteMin:.72,textHoehe:.70,textHoeheZaehler:.50,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.12,tiefeMitte:.24,tiefeUnten:.86,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:58,spalteMin:.72,textHoehe:.70,textHoeheZaehler:.50,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.12,tiefeMitte:.24,tiefeUnten:.86,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -675,6 +675,31 @@ P.append(('if((Ve.length+pt.length)*qe*1.3<=Je||qe<=c(16)||rt++>60)break;',
  '...pt.map(zz=>Ht(zz,qe,!tt.fettNurErste)));'
  'if(((Ve.length+pt.length)*qe*1.3<=Je&&zb<=Qt-c(30))||qe<=c(16)||rt++>60)break;',
  "Anpassungsschleife prueft auf Fotos auch die Breite", 1))
+
+# 59 — Die fette Zeile war schwarz, wo kein Kasten mehr ist.
+#
+#      Die Textfarbe hing an Ve, also an "gehoert zum ersten Block":
+#
+#          fill: Ve ? bandSchriftFarbe (schwarz) : schriftFarbe (weiss)
+#
+#      Das stimmte, solange der erste Block IMMER auf dem hellen
+#      Kasten stand. Seit Abschnitt 56 zeichnen die Folgeslides
+#      keinen Kasten mehr — die fette Zeile stand also schwarz auf
+#      dem Foto, waehrend der Rest weiss blieb.
+#
+#      Richtig ist: dunkel genau dann, wenn wirklich ein Kasten
+#      darunter liegt. Das ist dieselbe Bedingung, mit der der Kasten
+#      gezeichnet wird. Sie steht jetzt bei der Farbe und beim Rand.
+PLATTE = '(!ge&&(tt.platten||Ve&&!tt.ohnePlatteErste))'
+P.append(('fill:Ve?tt.bandSchriftFarbe||"#000000":tt.schriftFarbe||"#FFFFFF"',
+ 'fill:' + PLATTE + '?tt.bandSchriftFarbe||"#000000":tt.schriftFarbe||"#FFFFFF"',
+ "Farbe der ersten Zeile folgt dem Kasten, nicht dem Block", 1))
+P.append(('fill:rr?tt.highlight:Ve?tt.bandSchriftFarbe||"#000000":tt.schriftFarbe||"#FFFFFF"',
+ 'fill:rr?tt.highlight:' + PLATTE + '?tt.bandSchriftFarbe||"#000000":tt.schriftFarbe||"#FFFFFF"',
+ "Dasselbe im Zweig mit Hervorhebung", 1))
+P.append(('stroke:Ve?void 0:ut,strokeWidth:Ve?0:st',
+ 'stroke:' + PLATTE + '?void 0:ut,strokeWidth:' + PLATTE + '?0:st',
+ "Rand der ersten Zeile folgt dem Kasten", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

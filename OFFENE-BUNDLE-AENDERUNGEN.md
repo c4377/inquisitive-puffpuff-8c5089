@@ -1680,3 +1680,32 @@ grosser Schrift in keine Spalte, also wird die ganze Ueberschrift
 klein. Das ist richtig — abgeschnitten war es vorher — aber es heisst
 auch: sehr lange Komposita kosten Schriftgroesse. Wer sie umgeht,
 behaelt die grosse Schrift.
+
+## 59. Light statt Thin, und die schwarze fette Zeile
+
+    gewicht         300
+    leichtGewicht   300
+
+**Die fette Zeile war schwarz.** Die Textfarbe hing an `Ve`, also an
+"gehoert zum ersten Block":
+
+    fill: Ve ? bandSchriftFarbe (schwarz) : schriftFarbe (weiss)
+
+Das stimmte, solange der erste Block **immer** auf dem hellen Kasten
+stand. Seit Abschnitt 56 zeichnen die Folgeslides keinen Kasten mehr —
+die fette Zeile stand also schwarz auf dem Foto, waehrend der Rest
+weiss blieb.
+
+Richtig ist: dunkel genau dann, wenn wirklich ein Kasten darunter
+liegt. Das ist dieselbe Bedingung, mit der der Kasten gezeichnet wird:
+
+    !ge && (tt.platten || Ve && !tt.ohnePlatteErste)
+
+Sie steht jetzt an drei Stellen — Fuellfarbe, Rand und Randbreite —
+statt des blossen `Ve`. Damit gilt: Kasten da, Schrift dunkel; kein
+Kasten, Schrift weiss mit Rand und Schatten wie der Rest.
+
+**Merksatz:** Wenn eine Marke zwei Dinge gleichzeitig bedeutet
+("erster Block" und "steht auf hellem Grund"), bricht sie in dem
+Moment, in dem man eines der beiden aendert. Erst war es das Fett
+(Abschnitt 56), jetzt die Farbe. Beide hingen an derselben Marke.
