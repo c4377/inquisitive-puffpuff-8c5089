@@ -325,3 +325,40 @@ Eingebaut an drei Stellen:
          Wie bisher  Petrona     · Petrona     · OpenSans   · OpenSans
 
      "Wie bisher" ist der Rueckweg und soll bleiben.
+
+## 13. Die Schriftwahl aus den Einstellungen wirkt jetzt auch im Feed
+
+Carinas Beobachtung stimmte: im Feed standen weiter Anton und Playfair,
+egal was in Settings → Fonts gewaehlt war. Zwei Ursachen, beide behoben.
+
+**a) Die Wahl ueberlebte das Neuladen nicht.** Beim Laden wurden kuratierte
+Marken aus dem Code neu aufgebaut; von den eigenen Aenderungen blieben nur
+`brandText`, `logo`, `logoUrl`. Die Liste heisst jetzt
+
+    n = ["brandText","logo","logoUrl","typography"]
+
+Farben stehen bewusst noch nicht drin — das kommt, wenn die Farbrichtung
+entschieden ist.
+
+**b) Zwei feste Werte haben die Marke ueberschrieben.**
+
+  - `nS()` gab fuer jeden Tag `"anton"` als Kachelschrift zurueck. Ueber
+    `co("anton")` → `schriftUeber:"Anton"` hat T1 damit die Schrift aus der
+    Marke wieder ueberschrieben. `nS()` gibt jetzt `"marke"` zurueck, und im
+    Stil „Band oben“ steht `schriftUeber:co(a)` ohne den Notnagel
+    `"ArchivoBlack"` — bei `"marke"` bleibt es leer, die Marke gewinnt.
+  - Im Kartenzeichner stand `const SERIF="Playfair Display"` fest. Jetzt
+
+        const SERIF = Je.fassung!=="ablauf" && Je.markenSchrift || "Playfair Display"
+
+    `markenSchrift` wird an beiden Aufrufstellen aus `t.plateFont ||
+    t.fontFamily` gesetzt. **Die Ablauf-Folien behalten Playfair** — das ist
+    ein fester Bauplan, kein Markenelement.
+
+Ausserdem gewinnt auf der ersten Folie jetzt die Titelschrift vor
+`fotoSchriften` (`Ve===0?He.fontFamily||Vt` statt `Vt||He.fontFamily`);
+`fotoSchriften` bleibt Rueckfall fuer Marken ohne Typografie.
+
+Damit das keine Einbahnstrasse ist, stehen **Anton** und **ArchivoBlack**
+jetzt auch in der Schriftliste — vorher waren sie nur pro Tag erreichbar.
+Wer den alten Look will, waehlt Anton als Titelschrift.
