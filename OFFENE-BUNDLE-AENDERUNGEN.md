@@ -1444,3 +1444,35 @@ BS_KACHEL aendern. Der Rest zieht nach.
 
 Die Schriftanforderung in index.html laedt Fraunces mit der Achse
 opsz (9..144) in 400 und 700.
+
+## 51. Warum die Schrift auf den Fotos klein war
+
+Nicht die Ausgangsgroesse. Zwei andere Werte haben sie
+kleingerechnet, und beide standen fest im Bundle.
+
+**Die Textspalte.** Erkennt die App im Bild ein Gesicht, weicht der
+Text zur Seite aus — bis hinunter auf 42 Prozent der Breite. In einer
+so schmalen Spalte braucht derselbe Satz doppelt so viele Zeilen. Die
+Anpassungsschleife schrumpft ihn dann, bis er in die erlaubte Hoehe
+passt. Deshalb standen einzelne Kacheln in winziger Schrift in einem
+Streifen am linken Rand.
+
+**Die erlaubte Texthoehe** von 74 Prozent der Kachel (48 mit Zaehler).
+
+    deckblattGroesse    52  ->  58
+    spalteMin           .42 ->  .72
+    textHoehe           .74 ->  .86
+    textHoeheZaehler    .48 ->  .60
+
+Gerechnet mit der echten Anpassungsschleife und Fraunces, Vorschau
+800x1000:
+
+    kurzer Satz, schmale Spalte    61 px  (7,6%)  ->  93 px  (11,6%)
+    langer Satz, schmale Spalte    45 px  (5,6%)  ->  72 px  ( 9,0%)
+
+Zum Vergleich das Vorbild: Zeichenhoehe 27 auf 402 Pixel Breite, also
+Schriftgroesse rund 39 — **9,6 Prozent der Breite**. Vorher lagen wir
+im schlechtesten Fall bei 5,6 Prozent, jetzt bei 9 bis 11,6.
+
+Beide Werte stehen im Block. Ist eine Spalte von 72 Prozent zu breit,
+weil ein Gesicht darunter liegt, ist das eine Zahl.

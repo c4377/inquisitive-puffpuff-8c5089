@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"400",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:52,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.12,tiefeMitte:.24,tiefeUnten:.86,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"400",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:58,spalteMin:.72,textHoehe:.86,textHoeheZaehler:.60,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.12,tiefeMitte:.24,tiefeUnten:.86,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -559,6 +559,27 @@ P.append(('const y=["Playfair Display","Instrument Serif","Syne","Archivo","Mont
  'BS_KACHEL.schriftart,BS_KACHEL.unterSchrift,BS_KACHEL.deckblattFamilie,'
  'BS_KACHEL.folgeFamilie,BS_KACHEL.fotoSchrift,BS_KACHEL.schildSchrift];',
  "Vorgeladene Schriften aus BS_KACHEL ergaenzen", 1))
+
+# 51 — Warum die Schrift auf den Fotos klein war.
+#
+#      Nicht die Ausgangsgroesse war schuld. Zwei andere Werte haben
+#      sie kleingerechnet:
+#
+#      1. Die Textspalte. Erkennt die App ein Gesicht, weicht der Text
+#         zur Seite aus — bis auf 42 Prozent der Breite. In einer so
+#         schmalen Spalte braucht derselbe Satz doppelt so viele
+#         Zeilen, und die Anpassungsschleife schrumpft ihn, bis er in
+#         die erlaubte Hoehe passt. Deshalb standen manche Kacheln in
+#         winziger Schrift in einem Streifen am linken Rand.
+#      2. Die erlaubte Texthoehe von 74 Prozent (48 mit Zaehler).
+#
+#      Beide Werte stehen jetzt im Block: spalteMin und textHoehe.
+P.append(('zbr=tt.ausrichtung==="links"?(zsp>0?Math.max(.42,Math.min(.82,zsp/3+.08)):.82):.86',
+ 'zbr=tt.ausrichtung==="links"?(zsp>0?Math.max(BS_KACHEL.spalteMin||.42,Math.min(.82,zsp/3+.08)):.82):.86',
+ "Mindestbreite der Textspalte aus dem Block", 1))
+P.append(('{const Je=n*(jr?.48:.74);let rt=0;for(;;){',
+ '{const Je=n*(jr?(BS_KACHEL.textHoeheZaehler||.48):(BS_KACHEL.textHoehe||.74));let rt=0;for(;;){',
+ "Erlaubte Texthoehe aus dem Block", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
