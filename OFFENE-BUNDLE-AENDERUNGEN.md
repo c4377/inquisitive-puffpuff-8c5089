@@ -1411,3 +1411,36 @@ Die Weiterleitungsdateien halfen nicht: sie greifen nur, wenn der
 Browser den alten Namen neu anfragt, nicht wenn er ihn schon hat.
 
 Die Regel gilt jetzt fuer `/` und fuer `/index.html`.
+
+## 50. Fraunces statt Playfair auf dem Deckblatt
+
+    fotoSchrift        Fraunces
+    deckblattFamilie   Fraunces
+    deckblattGewicht   700   (bleibt)
+
+Fraunces ist schwerer und waermer als Playfair, mit weniger
+Strichkontrast — sie steht auf einem Foto fester und passt zu den
+warmen Toenen der Kacheln.
+
+Zwei Stellen haetten den Wechsel still verschluckt:
+
+**Der Tiefenverlauf.** Er haengt an der Liste `tiefeSchriften`, und
+die kannte Fraunces nicht. Ohne Eintrag waere der Verlauf ausgegangen
+und der Text stuende wieder auf hellem Bild — genau der Fehler aus
+Abschnitt 39. Fraunces steht jetzt drin.
+
+**Die vorgeladenen Schriften.** Die Liste, auf die die Vorschau
+wartet, stand fest im Bundle und kannte nur die alten Familien. Eine
+Schrift aus BS_KACHEL, die dort fehlt, wird nicht vorgeladen, die
+Kachel wird mit der Ersatzschrift gezeichnet — und nach Abschnitt 48
+wissen wir, was das anrichtet. Die Liste ergaenzt sich jetzt selbst
+aus dem Block:
+
+    BS_KACHEL.schriftart, .unterSchrift, .deckblattFamilie,
+    .folgeFamilie, .fotoSchrift, .schildSchrift
+
+Damit bleibt es dabei: eine Schrift wechseln heisst eine Zeile in
+BS_KACHEL aendern. Der Rest zieht nach.
+
+Die Schriftanforderung in index.html laedt Fraunces mit der Achse
+opsz (9..144) in 400 und 700.
