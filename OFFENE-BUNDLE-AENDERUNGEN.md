@@ -3516,3 +3516,28 @@ Welches Bild: gewuerfelt aus Text und Folienindex, damit verschiedene
 Tage verschiedene Bilder bekommen. Der Plan selbst wird dabei **nicht**
 veraendert; die Kachel wird nur fuer diese eine Zeichnung ergaenzt. Wer
 den Tag neu erzeugt, bekommt eine richtige Zuweisung.
+
+## 112 — Mein eigener Schutz hat die Ergaenzung blockiert
+
+In Abschnitt 111 steht die Bedingung
+
+    !t.background && textAnteil === 0 && !t.karte
+
+Das `!t.karte` sollte die **Ablauf-Karte** aussparen. Aber `karte` ist auf
+fast **jeder** Kachel gesetzt — die Fassung baut sie mit
+`karte: t.karte || "dunkel"`, und Zitat- und Kartenfolien tragen sie
+ohnehin. Damit war die Bedingung fast nie wahr und die Ergaenzung lief
+praktisch nie. Richtig ist:
+
+    t.karte !== "ablauf"
+
+**Zweiter Punkt:** die Bilderliste kam nur aus der **Bibliothek**
+(`brandImages`). Liegen die Fotos nur in den Kacheln des Plans und nicht
+in der Bibliothek, ist die Liste leer und es gibt nichts zu ergaenzen.
+Sie wird jetzt aus **beidem** gefuellt — und der Zeichner merkt sich
+zusaetzlich jedes Bild, das er sieht. Damit kann eine Kachel ohne Bild
+sich bei einer Kachel mit Bild bedienen, ganz ohne Bibliothek und ohne
+Ladevorgang.
+
+Durchgespielt mit sieben Tagen, davon vier mit `karte`: alle bekommen ein
+Bild ausser der Ablauf-Karte.

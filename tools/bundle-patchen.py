@@ -2388,17 +2388,48 @@ P.append(('Vt=(BS_KACHEL.textAnteil?((pt*37+13)%100)>=BS_KACHEL.textAnteil:',
 #      bekommt eine richtige Zuweisung.
 P.append(('Y=Array.isArray(_)?_:[];let Z=H;',
  'Y=Array.isArray(_)?_:[];'
- 'try{if(typeof window<"u")window.__bsBilder=Y.map(pe=>typeof pe=="string"?pe:(pe&&(pe.src||pe.url||pe.dataUrl))||"").filter(Boolean)}catch(zz){}'
+ 'try{if(typeof window<"u"){const zLib=Y.map(pe=>typeof pe=="string"?pe:(pe&&(pe.src||pe.url||pe.dataUrl))||"").filter(Boolean);'
+ 'const zPlan=[];H.forEach(pe=>(pe.slides||[]).forEach(ye=>{const zb=ye&&ye.background;'
+ 'if(typeof zb=="string"&&zb&&zLib.indexOf(zb)<0&&zPlan.indexOf(zb)<0)zPlan.push(zb)}));'
+ 'window.__bsBilder=zLib.concat(zPlan)}}catch(zz){}'
  'let Z=H;',
  "Die Bilderliste liegt global bereit", 1))
 P.append(('Ca=async(e,t,r,n,i={})=>{var yn,_n,Jr,xr,zr,ti,nn,_i,ki,ri;try{Pe.fabric.util.clearFabricFontCache()}catch(zz){}',
  'Ca=async(e,t,r,n,i={})=>{var yn,_n,Jr,xr,zr,ti,nn,_i,ki,ri;try{Pe.fabric.util.clearFabricFontCache()}catch(zz){}'
- 'if(!t.background&&BS_KACHEL.textAnteil===0&&!t.karte)try{'
+ 'try{if(typeof window<"u"&&typeof t.background=="string"&&t.background){'
+ 'const zL=window.__bsBilder=window.__bsBilder||[];'
+ 'if(zL.indexOf(t.background)<0)zL.push(t.background)}}catch(zz){}'
+ 'if(!t.background&&BS_KACHEL.textAnteil===0&&t.karte!=="ablauf")try{'
  'const zB=(typeof window<"u"&&window.__bsBilder)||[];'
  'if(zB.length){const zs=String(t.text||"")+"|"+String(i.slideIndex||0);let zh=0;'
  'for(let zi=0;zi<zs.length;zi+=1)zh=(zh*31+zs.charCodeAt(zi))%99991;'
  't={...t,background:zB[zh%zB.length]}}}catch(zz){}',
  "Zeichner: keine Kachel ohne Bild, wenn der Stil das verlangt", 1))
+
+# 112 — Mein eigener Schutz hat die Ergaenzung blockiert.
+#
+#      In Eintrag 111 steht die Bedingung
+#
+#          !t.background && textAnteil===0 && !t.karte
+#
+#      Das !t.karte sollte die Ablauf-Karte aussparen. Aber karte ist
+#      auf fast JEDER Kachel gesetzt — die Fassung baut sie mit
+#      karte:t.karte||"dunkel", und Zitat- und Kartenfolien tragen
+#      sie ohnehin. Damit war die Bedingung fast nie wahr und die
+#      Ergaenzung lief praktisch nie. Richtig ist
+#
+#          t.karte !== "ablauf"
+#
+#      Zweiter Punkt: die Bilderliste kam nur aus der BIBLIOTHEK
+#      (brandImages). Liegen die Fotos nur in den Kacheln des Plans
+#      und nicht in der Bibliothek, ist die Liste leer und es gibt
+#      nichts zu ergaenzen. Sie wird jetzt aus beidem gefuellt, und
+#      der Zeichner merkt sich zusaetzlich jedes Bild, das er sieht.
+#      Damit kann eine Kachel ohne Bild sich bei einer Kachel mit
+#      Bild bedienen, ganz ohne Bibliothek und ohne Ladevorgang.
+#
+#      Durchgespielt mit sieben Tagen, davon vier mit karte:
+#      alle bekommen ein Bild ausser der Ablauf-Karte.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
