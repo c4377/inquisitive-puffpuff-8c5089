@@ -290,7 +290,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'unterGewicht:"400",unterVerhaeltnis:.62,laufweite:0,'
  'folgeFamilie:"DM Serif Display",ablaufTitel:"DM Serif Display",'
  'nameSchrift:"DM Serif Display",nameGewicht:"400",nameLaufweite:60,'
- 'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:1,'
+ 'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:0,'
  'geteilt:1,geteiltAnteil:25,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
  'deckblattSchnitte:"full|full|wide|full|wide|full",'
  'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20",'
@@ -2265,6 +2265,68 @@ P.append(('if(Vt)try{Tt=await ed(Tt,He,Ze),Ze+=Tt.length}catch{}',
 #         Dunkelheit im Vorbild steckt in den FOTOS — Studio, dunkler
 #         Hintergrund, dunkle Kleidung —, nicht in der Bearbeitung.
 #         Kein Wert im Block holt das nach.
+
+# 109 — Die schwarzen Kacheln waren nicht die Textkachel-Regel.
+#       Ich habe die Verweise selbst zerschossen.
+#
+#       Carina: "Allllllles sind Fotoposts!!!!!" — und sie hat recht,
+#       meine Erklaerung von vorhin war zu bequem. Nachgesehen:
+#
+#       Beim LADEN prueft die App jede Kachel: zeigt ihr background
+#       auf ein Bild, das noch in der Bibliothek liegt? Wenn nicht,
+#       wird der Verweis geloescht ("zeigten auf geloeschte Fotos").
+#       Die Kachel ist dann schwarz.
+#
+#       Beim SPEICHERN verkleinere ich seit Eintrag 84 zu grosse
+#       Bilder (zKlein) — und schreibe sie damit als NEUE Datenadresse
+#       in die Bibliothek. Die Kacheln im Plan zeigen aber weiter auf
+#       die ALTE Adresse. Beim naechsten Laden findet die Pruefung
+#       den Verweis nicht mehr und loescht ihn.
+#
+#       Also: mein eigenes Verkleinern hat die Bilder aus dem Plan
+#       geworfen. Kein Wunder, dass "jeder Tag ein Foto" nichts
+#       geholfen hat — die Fotos waren zugewiesen und wurden beim
+#       Laden wieder entfernt.
+#
+#       Zwei Reparaturen:
+#
+#       1. Beim Speichern wandern die Verweise mit. Aus der Liste der
+#          verkleinerten Bilder wird eine Abbildung alt -> neu, und
+#          die Kacheln im Plan werden mitgezogen. Damit kann der
+#          Bruch nicht mehr entstehen.
+#
+#       2. Beim Laden wird ein Verweis, der ins Leere zeigt, ERSETZT
+#          statt geloescht — durch ein Bild aus der Bibliothek,
+#          reihum nach Tag und Folie. Nur wenn die Bibliothek leer
+#          ist, bleibt die Kachel ohne Bild. Das heilt die Plaene,
+#          die den Bruch schon haben, ohne neu erzeugen zu muessen.
+#
+#       Dazu: textAnteil 1 liess einen Tag von hundert ohne Foto,
+#       weil 0 als "nicht gesetzt" galt. Die Bedingung fragt jetzt
+#       auf !=null statt auf wahr, damit ist 0 ein gueltiger Wert:
+#
+#           textAnteil 0  ->  100 von 100 Tagen bekommen ein Foto
+#           textAnteil 1  ->   99 von 100
+#
+P.append(('const rk=await Promise.all(r.map(zKlein));let l={__packed:2,gallery:rk,days:s};',
+ 'const rk=await Promise.all(r.map(zKlein));'
+ 'const zAbb={};r.forEach((zo,zi)=>{if(typeof zo=="string"&&typeof rk[zi]=="string"&&zo!==rk[zi])zAbb[zo]=rk[zi]});'
+ 'const zTage=Object.keys(zAbb).length&&Array.isArray(s)?s.map(zt=>zt&&Array.isArray(zt.slides)'
+ '?{...zt,slides:zt.slides.map(zf=>zf&&typeof zf.background=="string"&&zAbb[zf.background]'
+ '?{...zf,background:zAbb[zf.background]}:zf)}:zt):s;'
+ 'let l={__packed:2,gallery:rk,days:zTage};',
+ "Verkleinerte Bilder: die Verweise im Plan wandern mit", 1))
+P.append(('Z=H.map(pe=>({...pe,slides:pe.slides.map(ye=>{const ue=ye&&ye.background;return typeof ue!="string"||!ue||re.has(ue)?ye:(fe++,{...ye,background:null,overlay:void 0,_autoImage:void 0})})}))',
+ 'const zListe=Array.from(re);'
+ 'Z=H.map((pe,zi)=>({...pe,slides:pe.slides.map((ye,zj)=>{const ue=ye&&ye.background;'
+ 'if(typeof ue!="string"||!ue||re.has(ue))return ye;fe++;'
+ 'return zListe.length'
+ '?{...ye,background:zListe[(zi+zj)%zListe.length],overlay:void 0,_autoImage:void 0}'
+ ':{...ye,background:null,overlay:void 0,_autoImage:void 0}})}))',
+ "Fehlender Bildverweis wird ersetzt statt geloescht", 1))
+P.append(('Vt=(BS_KACHEL.textAnteil?((pt*37+13)%100)>=BS_KACHEL.textAnteil:',
+ 'Vt=(BS_KACHEL.textAnteil!=null?((pt*37+13)%100)>=BS_KACHEL.textAnteil:',
+ "textAnteil 0 heisst jeder Tag ein Foto", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

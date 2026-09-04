@@ -3424,3 +3424,42 @@ Durchgerechnet mit Kontrast .28, .40 und .52 kommt dasselbe Foto auf
 7,6 / 10,7 / 13,5 Prozent. **Die Dunkelheit im Vorbild steckt in den
 Fotos** — Studio, dunkler Hintergrund, dunkle Kleidung —, nicht in der
 Bearbeitung. Kein Wert im Block holt das nach.
+
+## 109 — Die schwarzen Kacheln waren nicht die Textkachel-Regel
+
+**Ich habe die Verweise selbst zerschossen.**
+
+Beim **Laden** prueft die App jede Kachel: zeigt ihr `background` auf ein
+Bild, das noch in der Bibliothek liegt? Wenn nicht, wird der Verweis
+geloescht ("zeigten auf geloeschte Fotos"). Die Kachel ist dann schwarz.
+
+Beim **Speichern** verkleinere ich seit Abschnitt 84 zu grosse Bilder
+(`zKlein`) — und schreibe sie damit als **neue Datenadresse** in die
+Bibliothek. Die Kacheln im Plan zeigen aber weiter auf die **alte**
+Adresse. Beim naechsten Laden findet die Pruefung den Verweis nicht mehr
+und loescht ihn.
+
+Mein eigenes Verkleinern hat also die Bilder aus dem Plan geworfen. Kein
+Wunder, dass "jeder Tag ein Foto" nichts geholfen hat — die Fotos **waren**
+zugewiesen und wurden beim Laden wieder entfernt.
+
+### Zwei Reparaturen
+
+1. **Beim Speichern wandern die Verweise mit.** Aus der Liste der
+   verkleinerten Bilder wird eine Abbildung alt → neu, und die Kacheln im
+   Plan werden mitgezogen. Damit kann der Bruch nicht mehr entstehen.
+2. **Beim Laden wird ein Verweis ins Leere ersetzt statt geloescht** —
+   durch ein Bild aus der Bibliothek, reihum nach Tag und Folie. Nur wenn
+   die Bibliothek leer ist, bleibt die Kachel ohne Bild. Das **heilt die
+   Plaene, die den Bruch schon haben**, ohne neu erzeugen zu muessen.
+
+### Und textAnteil endlich absolut
+
+`textAnteil 1` liess einen Tag von hundert ohne Foto, weil `0` als "nicht
+gesetzt" galt. Die Bedingung fragt jetzt auf `!= null` statt auf wahr:
+
+| textAnteil | Tage mit Foto |
+|---|---|
+| **0** | **100 von 100** |
+| 1 | 99 von 100 |
+| 67 | 33 von 100 |
