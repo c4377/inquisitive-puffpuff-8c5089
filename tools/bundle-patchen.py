@@ -293,8 +293,8 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'geteilt:1,geteiltOben:.16,geteiltUnten:.62,geteiltLuft:.05,'
  'deckblattSchnitte:"full|wide|bust|wide|full|bust",'
  'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20",'
- 'versalAnteil:30,versalFamilie:"Montserrat",versalGewicht:"500",'
- 'versalLaufweite:280,versalGroesse:.060,'
+ 'versalAnteil:30,versalFamilie:"Kalam",versalGewicht:"400",'
+ 'versalLaufweite:20,versalGroesse:.060,versalZweitAnteil:1,'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,bildHeben:0,bildSpreizung:.28,'
@@ -1997,6 +1997,45 @@ P.append(('if(zGT&&rt===Lt)De=n*(BS_KACHEL.geteiltUnten||BS_KACHEL.textUnten||.8
  'if(zGT&&rt===Lt){const zU=n*(BS_KACHEL.geteiltUnten||BS_KACHEL.textUnten||.86)-(dr.length-Lt)*Et2*zF+Et2/2;'
  'De=BS_KACHEL.geteiltLuft?Math.min(De+n*BS_KACHEL.geteiltLuft,zU):zU;}',
  "Der zweite Block haengt am ersten statt an der Unterkante", 1))
+
+# 102 — Die Versalien waren die falsche Schrift. Nicht zu klein,
+#       sondern grundsaetzlich falsch.
+#
+#       Ich hatte den gesperrten Versalsatz als GROTESK gebaut:
+#       Montserrat 500 mit Laufweite 280. Carina: "Das passt null
+#       dazu, zeig das Vorbild fuer Versalien." Also die vier
+#       Versalkacheln aus ihrem Screenshot herausgeschnitten und
+#       angesehen — was ich haette tun sollen, BEVOR ich etwas baue.
+#
+#       Im Vorbild sind die Versalien keine Grotesk, sondern
+#       DIESELBE HANDSCHRIFT wie auf den anderen Kacheln, nur in
+#       Grossbuchstaben. Handgezeichnet, leicht schraeg, ungleiche
+#       Striche, kaum gesperrt. Der gesperrte Groteskblock ist das
+#       Gegenteil davon: technisch, gleichmaessig, weit auseinander.
+#
+#       Die Groessenmessung aus Eintrag 101 bleibt richtig — 0,043
+#       der Kachelbreite. Sie war nur an der falschen Schrift
+#       gemessen. Nachgerechnet fuer die Kandidaten: alle vier haben
+#       eine Versalhoehe von rund 0,72 der Schriftgroesse, also
+#       bleibt versalGroesse .060.
+#
+#           versalFamilie     Montserrat -> Kalam
+#           versalGewicht     500 -> 400
+#           versalLaufweite   280 -> 20      (fast keine)
+#           versalZweitAnteil 1               (beide Bloecke gleich gross)
+#
+#       versalZweitAnteil ist neu: im Vorbild sind der obere und der
+#       untere Block GLEICH gross, waehrend sonst zweitAnteil den
+#       zweiten Block verkleinert.
+#
+#       Sechs Handschriften am selben Foto verglichen (Montserrat
+#       gesperrt, Caveat 700, Kalam, Gloria Hallelujah, Architects
+#       Daughter, Shadows Into Light), alle auf dieselbe Versalhoehe
+#       gerechnet. Kalam kommt dem Vorbild am naechsten: gleicher
+#       Schraegstand, gleiche Strichstaerke.
+P.append(('qe2=$e?Math.round(qe*(BS_KACHEL.zweitAnteil||1)):qe',
+ 'qe2=$e?Math.round(qe*((zVS&&BS_KACHEL.versalZweitAnteil)||BS_KACHEL.zweitAnteil||1)):qe',
+ "Im Versalsatz sind beide Bloecke gleich gross", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

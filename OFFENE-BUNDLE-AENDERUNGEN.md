@@ -3214,3 +3214,37 @@ Dieselbe Zahl wie im Vorbild.
 
 Nebenbei aus derselben Messung, fuer spaeter: die Serifenzeile im
 Vorbild ist 28 bis 29 Pixel hoch, also **0,071** der Kachelbreite.
+
+## 102 — Die Versalien waren die falsche Schrift
+
+Nicht zu klein. **Grundsaetzlich falsch.**
+
+Ich hatte den gesperrten Versalsatz als **Grotesk** gebaut: Montserrat
+500 mit Laufweite 280. Dann kam: "Das passt null dazu, zeig das Vorbild
+fuer Versalien." Also die vier Versalkacheln aus dem Screenshot
+herausgeschnitten und angesehen — was ich haette tun sollen, **bevor**
+ich etwas baue.
+
+Im Vorbild sind die Versalien keine Grotesk, sondern **dieselbe
+Handschrift wie auf den anderen Kacheln, nur in Grossbuchstaben**.
+Handgezeichnet, leicht schraeg, ungleiche Striche, kaum gesperrt. Der
+gesperrte Groteskblock ist das Gegenteil davon: technisch,
+gleichmaessig, weit auseinander.
+
+Die **Groessenmessung** aus Abschnitt 101 bleibt richtig — 0,043 der
+Kachelbreite. Sie war nur an der falschen Schrift gemessen. Nachgerechnet
+fuer die Kandidaten: alle haben eine Versalhoehe von rund 0,72 der
+Schriftgroesse, also bleibt `versalGroesse` bei .060.
+
+    versalFamilie      Montserrat -> Kalam
+    versalGewicht      500 -> 400
+    versalLaufweite    280 -> 20        fast keine
+    versalZweitAnteil  1                beide Bloecke gleich gross
+
+`versalZweitAnteil` ist neu: im Vorbild sind oberer und unterer Block
+**gleich gross**, waehrend sonst `zweitAnteil` den zweiten verkleinert.
+
+Sechs Handschriften am selben Foto verglichen — Montserrat gesperrt,
+Caveat 700, Kalam, Gloria Hallelujah, Architects Daughter, Shadows Into
+Light — alle auf dieselbe Versalhoehe gerechnet. **Kalam** kommt dem
+Vorbild am naechsten: gleicher Schraegstand, gleiche Strichstaerke.
