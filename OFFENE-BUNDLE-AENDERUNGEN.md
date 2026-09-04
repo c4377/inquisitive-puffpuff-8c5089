@@ -3344,3 +3344,37 @@ Bei unveraendertem `versalGroesse` .060 waeren die Versalien 0,040 statt
 Das ist der Punkt, an dem ein Schriftwechsel im Block sonst still
 danebengeht: **die Zahl gilt fuer die Schrift, nicht fuer das Layout.**
 Wer `versalFamilie` aendert, muss `versalGroesse` nachziehen.
+
+## 107 — Warum jeder Tag dasselbe Bild bekam
+
+`ed(folien, bilder, r)` nimmt die Bilder `n[(r+d)%i]` — `r` ist der
+Startpunkt in der Bildreihe. Beim Aufbau des ganzen Plans lief `r` so:
+
+    let Ze = 0;
+    for (jeder Tag) { ed(Tt, He, Ze); Ze += Tt.length; }
+
+Der Startpunkt rueckt also um die **Zahl der Folien** weiter, gerechnet
+modulo der **Zahl der Bilder**. Ist die eine ein Vielfaches der anderen,
+ist der Rest immer null:
+
+| | Deckblattbild Tag 1 bis 12 |
+|---|---|
+| 3 Bilder, 6 Folien | 0,0,0,0,0,0,0,0,0,0,0,0 |
+| 4 Bilder, 8 Folien | 0,0,0,0,0,0,0,0,0,0,0,0 |
+| 6 Bilder, 6 Folien | 0,0,0,0,0,0,0,0,0,0,0,0 |
+| 8 Bilder, 8 Folien | 0,0,0,0,0,0,0,0,0,0,0,0 |
+| 5 Bilder, 10 Folien | 0,0,0,0,0,0,0,0,0,0,0,0 |
+
+**Jeder Tag dasselbe Deckblattbild.** Bei 5 Bildern und 6 Folien ging es
+zufaellig gut — deshalb faellt es nicht immer auf, und deshalb haben
+Ausschnitt, Ton und Saettigung (Abschnitte 96 und 103) das Problem
+verdeckt statt geloest: sie haben dasselbe Bild verschieden aussehen
+lassen.
+
+Der Startpunkt ist jetzt der **Tag** selbst:
+
+    0,1,2,0,1,2,...    nie zweimal dasselbe hintereinander,
+                       solange mehr als ein Bild da ist
+
+Das ist auch die richtige Groesse: der Wechsel gehoert an den Tag, nicht
+an die Zahl der Folien in einem Beitrag.
