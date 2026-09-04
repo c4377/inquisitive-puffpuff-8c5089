@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.042,nameDeckkraft:1,nameFarbe:"#E8836B",nameSchrift:"HelveticaNeueBrand",nameGewicht:"400",nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"Montserrat",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,folgeLage:"unten",folgeGroesseAnteil:.049,folgeMaxhoehe:.70,folgeAusrichtung:"links",textAnteil:67,fotoGroesse:44,schildGrund:"#E8836B",schildSchriftFarbe:"#241C16",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"Montserrat",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"Montserrat|Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.042,nameDeckkraft:1,nameFarbe:"#E8836B",nameSchrift:"HelveticaNeueBrand",nameGewicht:"700",nameLaufweite:-50,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"Montserrat",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,folgeLage:"unten",folgeGroesseAnteil:.049,folgeMaxhoehe:.70,folgeAusrichtung:"links",textAnteil:67,fotoGroesse:44,schildGrund:"#E8836B",schildSchriftFarbe:"#241C16",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"Montserrat",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"Montserrat|Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -1577,6 +1577,30 @@ P.append(('blk.forEach(z=>{txt(z,{left:r/2,top:y,originX:"center",originY:"cente
 P.append(('if(NA)txt(NA,{left:r/2,top:n*(K.nameUnten||.945),originX:"center",originY:"center",',
  'if(NA)txt(NA,{left:LI?r*K.rand:r/2,top:n*(K.nameUnten||.945),originX:LI?"left":"center",originY:"center",',
  "Wortmarke folgt der Ausrichtung der Kachel", 1))
+
+# 92 — Die Wortmarke fett und in der Laufweite der Marke.
+#
+#      Sie stand in 400 mit charSpacing 150, also +0,15 em gesperrt.
+#      Das war ein Rest aus der Bau-Session und passte zu nichts:
+#      der ganze uebrige Satz laeuft auf laufweite -50, also -0,05 em
+#      eng. Zwei Zeilen weit auseinander unter einem engen Satz.
+#
+#        nameGewicht    700    fett wie der betonte Block
+#        nameLaufweite  -50    dieselbe Enge wie der Rest
+#
+#      Die 150 stand an beiden Zeichenstellen hart im Code. Sie kommt
+#      jetzt aus dem Block, und der Vergleich ist ==null und nicht
+#      ||150 — sonst waere eine Laufweite von 0 stillschweigend zu
+#      150 geworden.
+P.append(('fontWeight:(BS_KACHEL.nameGewicht||"400"),charSpacing:150,fill:BS_KACHEL.nameFarbe',
+ 'fontWeight:(BS_KACHEL.nameGewicht||"400"),'
+ 'charSpacing:(BS_KACHEL.nameLaufweite==null?150:BS_KACHEL.nameLaufweite),'
+ 'fill:BS_KACHEL.nameFarbe',
+ "Laufweite der Wortmarke auf dem Foto aus dem Block", 1))
+P.append(('fontWeight:(K.nameGewicht||"400"),charSpacing:150,\nfill:K.nameFarbe||SCH',
+ 'fontWeight:(K.nameGewicht||"400"),'
+ 'charSpacing:(K.nameLaufweite==null?150:K.nameLaufweite),\nfill:K.nameFarbe||SCH',
+ "Laufweite der Wortmarke auf der Textkachel aus dem Block", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

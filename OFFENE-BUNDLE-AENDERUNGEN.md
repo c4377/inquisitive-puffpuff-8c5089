@@ -2832,3 +2832,19 @@ Alle drei greifen nur, wenn die Folie eine Rolle hat und die nicht
 Die Wortmarke rueckt mit nach links, und zwar an denselben Rand wie der
 Text (`r*rand`), nicht an einen eigenen — sonst haette die Kachel zwei
 linke Kanten.
+
+## 92 — Die Wortmarke fett und in der Laufweite der Marke
+
+Sie stand in **400** mit `charSpacing 150`, also **+0,15 em gesperrt**.
+Das war ein Rest aus der Bau-Session und passte zu nichts: der ganze
+uebrige Satz laeuft auf `laufweite -50`, also **-0,05 em eng**. Eine weit
+auseinandergezogene Zeile unter einem engen Satz.
+
+    nameGewicht    700    fett wie der betonte Block
+    nameLaufweite  -50    dieselbe Enge wie der Rest
+
+Die `150` stand an **beiden** Zeichenstellen hart im Code — auf dem Foto
+und auf der Textkachel. Sie kommt jetzt aus dem Block.
+
+Der Vergleich ist `== null` und nicht `|| 150`: sonst waere eine
+Laufweite von **0** stillschweigend wieder zu 150 geworden.
