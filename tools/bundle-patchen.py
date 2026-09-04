@@ -290,7 +290,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'folgeFamilie:"DM Serif Display",ablaufTitel:"DM Serif Display",'
  'nameSchrift:"DM Serif Display",nameGewicht:"400",nameLaufweite:60,'
  'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:8,'
- 'geteilt:1,geteiltOben:.16,'
+ 'geteilt:1,geteiltOben:.16,geteiltUnten:.62,'
  'deckblattSchnitte:"full|wide|bust|wide|full|bust",'
  'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20",'
  'versalAnteil:30,versalFamilie:"Montserrat",versalGewicht:"500",'
@@ -1903,6 +1903,24 @@ P.append(('BS_KACHEL.schriftart,BS_KACHEL.unterSchrift,BS_KACHEL.deckblattFamili
 #      liegen, reicht "Nohemi" als Wert im Block. Fehlt eine Datei,
 #      laeuft alles unveraendert weiter — eine @font-face-Regel ohne
 #      Datei tut nichts.
+
+# 99 — Der zweite Block rueckt nach oben.
+#
+#      Die geteilte Kachel aus Eintrag 95 setzte den zweiten Block auf
+#      textUnten, also .86 — die Unterkante, die fuer einen
+#      DURCHLAUFENDEN Text gedacht ist. Geteilt heisst das: Serife
+#      ganz oben, Handschrift ganz unten, dazwischen ein halbes Bild
+#      Luft. Zu weit.
+#
+#      Der zweite Block bekommt eine eigene Unterkante. Vier Werte am
+#      selben Foto angesehen: .86 (bisher, weit auseinander), .72
+#      (immer noch weit), .62 (zwei Bloecke, die zusammengehoeren),
+#      .54 (klebt und liegt im Gesicht). Genommen: .62.
+#
+#        geteiltUnten  .62
+#
+#      Faellt der Wert weg, gilt wieder textUnten — die Teilung
+#      funktioniert also weiter, auch wenn ihn jemand loescht.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

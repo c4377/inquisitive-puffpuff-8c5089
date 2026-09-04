@@ -3104,3 +3104,41 @@ kennt den Namen. Sobald die lizenzierten Dateien unter
 liegen, reicht `"Nohemi"` als Wert im Block. Fehlt eine Datei, laeuft
 alles unveraendert weiter — eine `@font-face`-Regel ohne Datei tut
 nichts.
+
+## 99 — Der zweite Block rueckt nach oben, und Roxborough CF
+
+Die geteilte Kachel aus Abschnitt 95 setzte den zweiten Block auf
+`textUnten`, also **.86** — die Unterkante, die fuer einen
+**durchlaufenden** Text gedacht ist. Geteilt heisst das: Serife ganz
+oben, Handschrift ganz unten, dazwischen ein halbes Bild Luft.
+
+Der zweite Block bekommt eine eigene Unterkante. Vier Werte am selben
+Foto angesehen:
+
+| | |
+|---|---|
+| .86 | bisher, weit auseinander |
+| .72 | immer noch weit |
+| **.62** | zwei Bloecke, die zusammengehoeren |
+| .54 | klebt und liegt im Gesicht |
+
+    geteiltUnten  .62
+
+Faellt der Wert weg, gilt wieder `textUnten` — die Teilung funktioniert
+also weiter, auch wenn ihn jemand loescht.
+
+### Roxborough CF
+
+Wie Nohemi: von Connary Fagen, kostenpflichtig, darf nicht mitgeliefert
+werden. Die drei Anmeldungen (Regular, Kursiv, Bold) stehen in beiden
+Seiten. Sobald die lizenzierten Dateien unter
+
+    site/fonts/RoxboroughCF-Regular.woff2
+    site/fonts/RoxboroughCF-Italic.woff2
+    site/fonts/RoxboroughCF-Bold.woff2
+
+liegen, reicht `"Roxborough CF"` als Wert. **Bis dahin bleibt die
+Handschrift Shadows Into Light** — eine Anmeldung ohne Datei zeichnet
+nichts, und ein Wert auf eine fehlende Schrift wuerde still auf eine
+Ersatzschrift fallen. Das waere genau die Sorte stiller Fehler, die hier
+schon dreimal Zeit gekostet hat.
