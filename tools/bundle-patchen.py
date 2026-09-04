@@ -298,7 +298,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'versalLaufweite:20,versalGroesse:.065,versalZweitAnteil:1,'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
- 'bildSaettigung:-1,saettigungReihe:"-1|-0.55|-1|0.1|-1|-0.55|-1|0.1",'
+ 'bildSaettigung:-1,saettigungReihe:"-1|0.1",'
  'bildHeben:0,bildSpreizung:.28,'
  'tiefeOben:.06,tiefeMitte:.10,tiefeUnten:.62,kanteOben:.30,kanteUnten:.55,'
  'saumStaerke:0,bildSchleier:.10,'
@@ -2515,6 +2515,29 @@ P.append(('const ur=new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:`rgba
 P.append(('try{me.applyFilters()}catch{me.filters=[];try{me.applyFilters()}catch{}}',
  'try{me.applyFilters()}catch{try{me.filters=(Ze!==0&&Pe.fabric.Image.filters.Saturation)?[new Pe.fabric.Image.filters.Saturation({saturation:Ze})]:[];me.applyFilters()}catch{me.filters=[];try{me.applyFilters()}catch{}}}',
  "Schlaegt die Filterkette fehl, bleibt wenigstens die Saettigung", 1))
+
+# 115 — 50/50, und die Zwischenstufe faellt weg.
+#
+#      Carina: "zuviele, also 50/50". Die Reihe hatte acht Eintraege
+#      — vier schwarzweiss, zwei entzogen, zwei Farbe. Das ist zwar
+#      rechnerisch die Haelfte schwarzweiss, aber die entzogenen
+#      Kacheln liegen optisch nah am Schwarzweiss, und im Raster
+#      wirkt es dann wie drei Viertel.
+#
+#      Jetzt zwei Eintraege, sonst nichts:
+#
+#          saettigungReihe  "-1|0.1"
+#
+#      Nachgerechnet ueber 2000 Kacheln: 50,0 Prozent schwarzweiss,
+#      50,0 Prozent Farbe. Die Zwischenstufe -0,55 ist raus; wer sie
+#      zurueck will, haengt sie einfach wieder in die Reihe.
+#
+#      Kleine Lehre nebenbei: eine erste Messung ueber 800 Kacheln
+#      ergab 43,3 Prozent und sah nach einem Rundungsfehler in der
+#      Reihe aus. Es war die Stichprobe: die Testtexte unterschieden
+#      sich nur durch eine hochzaehlende Zahl, und das faerbt den
+#      Wuerfel. Mit 2000 unabhaengigeren Texten sind es exakt 50,0.
+#      Bei so einer Zahl lohnt der zweite Durchlauf.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

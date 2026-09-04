@@ -3610,3 +3610,24 @@ groesstem und kleinstem Farbkanal):
 
 Die zweite Zeile ist der Punkt: auch mit **vollstaendig abgeschalteter**
 Filterkette ist die Kachel schwarzweiss.
+
+## 115 — 50/50, und die Zwischenstufe faellt weg
+
+Die Reihe hatte acht Eintraege — vier schwarzweiss, zwei entzogen, zwei
+Farbe. Rechnerisch ist das die Haelfte schwarzweiss, aber die entzogenen
+Kacheln liegen optisch nah am Schwarzweiss, und im Raster wirkt es dann
+wie drei Viertel.
+
+Jetzt zwei Eintraege, sonst nichts:
+
+    saettigungReihe  "-1|0.1"
+
+Nachgerechnet ueber 2000 Kacheln: **50,0 Prozent schwarzweiss, 50,0
+Prozent Farbe**. Die Zwischenstufe -0,55 ist raus; wer sie zurueck will,
+haengt sie einfach wieder in die Reihe.
+
+**Kleine Lehre nebenbei:** eine erste Messung ueber 800 Kacheln ergab
+43,3 Prozent und sah nach einem Rundungsfehler in der Reihe aus. Es war
+die **Stichprobe**: die Testtexte unterschieden sich nur durch eine
+hochzaehlende Zahl, und das faerbt den Wuerfel. Mit 2000 unabhaengigeren
+Texten sind es exakt 50,0. Bei so einer Zahl lohnt der zweite Durchlauf.
