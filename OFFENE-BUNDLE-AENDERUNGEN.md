@@ -3489,3 +3489,30 @@ Textkacheln bleiben Textkacheln. Durchgespielt:
 
 Ausgenommen sind Folien mit einer eigenen Karte (Ablauf) — die zeichnen
 ihr eigenes Layout und brauchen kein Foto.
+
+## 111 — Jetzt holt sich der Zeichner das Bild, nicht der Ladevorgang
+
+Dritter Anlauf, diesmal an der Stelle, an der es nicht mehr schiefgehen
+kann. Die beiden Reparaturen davor (109, 110) haengen am **Ladevorgang**,
+und der hat eine Bedingung, die ich nicht sicher beurteilen kann:
+
+    contentPlan: A.current ? re.contentPlan : Z
+
+`A.current` wird wahr, sobald irgendwer im Lauf der Sitzung einen
+`contentPlan` schreibt. Ist es beim Laden schon wahr, wird der
+**reparierte Plan Z einfach weggeworfen**. Genau das erklaert, warum
+zweimal nichts passiert ist.
+
+Statt weiter am Ladevorgang zu drehen: **der Zeichner selbst prueft es.**
+Hat die Kachel kein Bild, verlangt der Stil aber eines (`textAnteil 0`)
+und ist es keine Ablauf-Karte, holt er sich eines aus einer Liste, die
+beim Laden hinterlegt wird.
+
+Das ist unabhaengig davon, ob der Plan repariert wurde, neu erzeugt wurde
+oder aus dem Speicher kommt. **Jede Zeichnung heilt sich selbst** — auch
+der Export, weil der durch dieselbe Funktion geht.
+
+Welches Bild: gewuerfelt aus Text und Folienindex, damit verschiedene
+Tage verschiedene Bilder bekommen. Der Plan selbst wird dabei **nicht**
+veraendert; die Kachel wird nur fuer diese eine Zeichnung ergaenzt. Wer
+den Tag neu erzeugt, bekommt eine richtige Zuweisung.

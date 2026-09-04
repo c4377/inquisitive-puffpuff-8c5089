@@ -2356,6 +2356,50 @@ P.append(('Vt=(BS_KACHEL.textAnteil?((pt*37+13)%100)>=BS_KACHEL.textAnteil:',
 #      Ausgenommen sind Folien mit einer eigenen Karte (Ablauf), die
 #      zeichnen ihr eigenes Layout und brauchen kein Foto.
 
+# 111 — Jetzt holt sich der ZEICHNER das Bild, nicht der Ladevorgang.
+#
+#      Dritter Anlauf, und diesmal an der Stelle, an der es nicht
+#      mehr schiefgehen kann. Die beiden Reparaturen davor (109, 110)
+#      haengen am Ladevorgang, und der hat eine Bedingung, die ich
+#      nicht sicher beurteilen kann:
+#
+#          contentPlan: A.current ? re.contentPlan : Z
+#
+#      A.current wird wahr, sobald irgendwer im Lauf der Sitzung
+#      einen contentPlan schreibt. Ist es beim Laden schon wahr, wird
+#      der reparierte Plan Z einfach weggeworfen. Genau das erklaert,
+#      warum zweimal nichts passiert ist.
+#
+#      Statt weiter am Ladevorgang zu drehen: der Zeichner selbst
+#      prueft es. Ca bekommt die Kachel; hat sie kein Bild, der Stil
+#      verlangt aber eines (textAnteil 0) und es ist keine
+#      Ablauf-Karte, holt er sich eines aus window.__bsBilder. Die
+#      Liste wird beim Laden hinterlegt.
+#
+#      Das ist unabhaengig davon, ob der Plan repariert wurde, ob er
+#      neu erzeugt wurde oder ob er aus dem Speicher kommt. Jede
+#      Zeichnung heilt sich selbst — auch der Export, weil der durch
+#      dieselbe Funktion geht.
+#
+#      Welches Bild: gewuerfelt aus Text und Folienindex, damit
+#      verschiedene Tage verschiedene Bilder bekommen. Der Plan
+#      selbst wird dabei NICHT veraendert; die Kachel wird nur fuer
+#      diese eine Zeichnung ergaenzt. Wer den Tag neu erzeugt,
+#      bekommt eine richtige Zuweisung.
+P.append(('Y=Array.isArray(_)?_:[];let Z=H;',
+ 'Y=Array.isArray(_)?_:[];'
+ 'try{if(typeof window<"u")window.__bsBilder=Y.map(pe=>typeof pe=="string"?pe:(pe&&(pe.src||pe.url||pe.dataUrl))||"").filter(Boolean)}catch(zz){}'
+ 'let Z=H;',
+ "Die Bilderliste liegt global bereit", 1))
+P.append(('Ca=async(e,t,r,n,i={})=>{var yn,_n,Jr,xr,zr,ti,nn,_i,ki,ri;try{Pe.fabric.util.clearFabricFontCache()}catch(zz){}',
+ 'Ca=async(e,t,r,n,i={})=>{var yn,_n,Jr,xr,zr,ti,nn,_i,ki,ri;try{Pe.fabric.util.clearFabricFontCache()}catch(zz){}'
+ 'if(!t.background&&BS_KACHEL.textAnteil===0&&!t.karte)try{'
+ 'const zB=(typeof window<"u"&&window.__bsBilder)||[];'
+ 'if(zB.length){const zs=String(t.text||"")+"|"+String(i.slideIndex||0);let zh=0;'
+ 'for(let zi=0;zi<zs.length;zi+=1)zh=(zh*31+zs.charCodeAt(zi))%99991;'
+ 't={...t,background:zB[zh%zB.length]}}}catch(zz){}',
+ "Zeichner: keine Kachel ohne Bild, wenn der Stil das verlangt", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
