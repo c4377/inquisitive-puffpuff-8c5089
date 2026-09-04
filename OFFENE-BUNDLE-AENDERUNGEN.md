@@ -3178,3 +3178,39 @@ Dabei bekommt `pt` auch die Laufweite, die ihm seit dem Versalsatz
 fehlte. Sie war bisher nur in `Ht`, und `Math.max` hat das gedeckt — aber
 zwei Messungen desselben Textes, die verschiedene Dinge messen, sind eine
 Falle und keine Absicherung.
+
+## 101 — Abstand haengt am ersten Block, Versalien am Vorbild ausgemessen
+
+### Der Abstand
+
+`geteiltUnten` .62 war immer noch eine **feste Unterkante**. Bei einer
+kurzen Ueberschrift wie "Ich manifestiere." steht der erste Block bei
+.16 und der zweite bei .62 — dazwischen ein halbes Bild Luft, ganz
+gleich wie kurz die Ueberschrift ist. **Der Abstand darf nicht von der
+Kachel abhaengen, sondern vom ersten Block.**
+
+`geteiltLuft` .05 setzt den zweiten Block genau so weit unter den
+ersten. `geteiltUnten` bleibt als Deckel: passt beides zusammen nicht
+mehr, gewinnt die Unterkante.
+
+### Die Versalien waren zu klein — nachgemessen
+
+Im Screenshot des Vorbilds hat das Raster Rinnen bei x = 400 / 803 und
+y = 1025 / 1561 / 2097, eine Kachel ist also **400 breit**. Die
+Versalzeilen der Reel-Kachel sind 16 bis 17 Pixel hoch:
+
+| | Versalhoehe | Anteil der Kachelbreite |
+|---|---|---|
+| Vorbild | 17 / 400 | **0,043** |
+| bei uns | 19 / 800 | 0,024 |
+
+Gut vierzig Prozent zu klein. Die Versalhoehe von Montserrat ist rund
+0,70 der Schriftgroesse, gebraucht wird also 0,043 / 0,70 = 0,061.
+
+    versalGroesse  .034  ->  .060
+
+Gegengemessen an der eigenen Kachel: **34 Pixel auf 800 Breite = 0,043**.
+Dieselbe Zahl wie im Vorbild.
+
+Nebenbei aus derselben Messung, fuer spaeter: die Serifenzeile im
+Vorbild ist 28 bis 29 Pixel hoch, also **0,071** der Kachelbreite.

@@ -290,11 +290,11 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'folgeFamilie:"DM Serif Display",ablaufTitel:"DM Serif Display",'
  'nameSchrift:"DM Serif Display",nameGewicht:"400",nameLaufweite:60,'
  'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:8,'
- 'geteilt:1,geteiltOben:.16,geteiltUnten:.62,'
+ 'geteilt:1,geteiltOben:.16,geteiltUnten:.62,geteiltLuft:.05,'
  'deckblattSchnitte:"full|wide|bust|wide|full|bust",'
  'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20",'
  'versalAnteil:30,versalFamilie:"Montserrat",versalGewicht:"500",'
- 'versalLaufweite:280,versalGroesse:.034,'
+ 'versalLaufweite:280,versalGroesse:.060,'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,bildHeben:0,bildSpreizung:.28,'
@@ -1958,6 +1958,45 @@ P.append(('BS_KACHEL.schriftart,BS_KACHEL.unterSchrift,BS_KACHEL.deckblattFamili
 P.append(('pt=new Pe.fabric.Text(Je.map(xt=>xt.w).join(" "),{fontSize:(Ve?qe:qe2)*zF,fontFamily:Ve?Qe:QeZ,fontWeight:tt.fettNurErste&&!Ve?(BS_KACHEL.leichtGewicht||"400"):kt}),ct=Math.max(pt.width,Ht(Je,qe,!(tt.fettNurErste&&!Ve)))',
  'pt=new Pe.fabric.Text(Je.map(xt=>xt.w).join(" "),{charSpacing:zCS,fontSize:(Ve?qe:qe2)*zF,fontFamily:Ve?Qe:QeZ,fontWeight:tt.fettNurErste&&!Ve?(BS_KACHEL.leichtGewicht||"400"):kt}),ct=Math.max(pt.width,Ht(Je,(Ve?qe:qe2)*zF,!(tt.fettNurErste&&!Ve)))',
  "Die Zeile wird in ihrer eigenen Groesse gemessen", 1))
+
+# 101 — Der Abstand haengt am ersten Block, und die Versalien sind
+#       am Vorbild ausgemessen.
+#
+#       **Der Abstand.** geteiltUnten .62 war immer noch eine FESTE
+#       Unterkante. Bei einer kurzen Ueberschrift wie "Ich
+#       manifestiere." steht der erste Block bei .16 und der zweite
+#       bei .62 — dazwischen ein halbes Bild Luft, ganz gleich wie
+#       kurz die Ueberschrift ist. Der Abstand darf nicht von der
+#       Kachel abhaengen, sondern vom ersten Block.
+#
+#       geteiltLuft .05 setzt den zweiten Block genau so weit unter
+#       den ersten. geteiltUnten bleibt als Deckel: passt beides
+#       zusammen nicht mehr, gewinnt die Unterkante.
+#
+#       **Die Versalien.** Carina fragt, ob sie gegenueber dem
+#       Vorbild zu klein sind. Sie sind es. Nachgemessen im
+#       Screenshot des Vorbilds: das Raster hat Rinnen bei x=400/803
+#       und y=1025/1561/2097, eine Kachel ist also 400 breit. Die
+#       Versalzeilen der Reel-Kachel sind 16 bis 17 Pixel hoch:
+#
+#           Versalhoehe im Vorbild   17/400  = 0,043 der Breite
+#           Versalhoehe bei uns      19/800  = 0,024 der Breite
+#
+#       Also gut vierzig Prozent zu klein. Die Versalhoehe von
+#       Montserrat ist rund 0,70 der Schriftgroesse, gebraucht wird
+#       also 0,043/0,70 = 0,061.
+#
+#           versalGroesse  .034  ->  .060
+#
+#       Gegengemessen an der eigenen Kachel: 34 Pixel auf 800 Breite
+#       = 0,043. Dieselbe Zahl wie im Vorbild.
+#
+#       Nebenbei aus derselben Messung, fuer spaeter: die Serifenzeile
+#       im Vorbild ist 28 bis 29 Pixel hoch, also 0,071 der Breite.
+P.append(('if(zGT&&rt===Lt)De=n*(BS_KACHEL.geteiltUnten||BS_KACHEL.textUnten||.86)-(dr.length-Lt)*Et2*zF+Et2/2;',
+ 'if(zGT&&rt===Lt){const zU=n*(BS_KACHEL.geteiltUnten||BS_KACHEL.textUnten||.86)-(dr.length-Lt)*Et2*zF+Et2/2;'
+ 'De=BS_KACHEL.geteiltLuft?Math.min(De+n*BS_KACHEL.geteiltLuft,zU):zU;}',
+ "Der zweite Block haengt am ersten statt an der Unterkante", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
