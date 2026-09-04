@@ -3023,3 +3023,52 @@ an **vier** Stellen:
 
 Verteilung ueber dreissig Bilder nachgerechnet: **9 von 30** Versalsatz
 (30 Prozent), Ausschnitte 11/10/9, Toene 8/8/6/8.
+
+## 97 — Ganz schwarzweiss, und die Schriften ausgemessen statt geraten
+
+### Schwarzweiss macht nicht jung — Tiefe macht jung
+
+`bildSaettigung` -.55 → **-1**. Allein bringt das aber ein flaues Grau,
+und flaues Grau sieht alt aus. Was jung wirkt, ist nicht das Fehlen von
+Farbe, sondern die **Tiefe**: richtige Schwarzwerte und saubere Lichter.
+
+Die App hatte einen Kontrastwert (`contrastBoost` .07), aber nur als
+Vorgabe je Kachel und nicht im Block — dieselbe Luecke wie bei der
+Saettigung. Und dieselbe Falle: die Bedingung war `He>0`, ein negativer
+Wert waere stillschweigend gefallen. Jetzt `He!==0`.
+
+    bildSaettigung  -1     ganz schwarzweiss
+    bildSpreizung   .28    statt .07 — dafuer die Tiefe
+
+Vier Fassungen am selben Foto angesehen: -.55/.07 (bisher), -1/.07
+(**flau und grau**), -1/.28 (Tiefe, klar), -1/.28 kuehl. Genommen: -1/.28.
+
+### Die Schriften
+
+Playfair und Caveat waren Platzhalter und wurden abgelehnt. Sechs
+Paarungen am selben Foto gerendert — und **nachgemessen statt
+angeschaut**, weil das in diesem Projekt schon dreimal danebenging.
+Derselbe Satz in 40 px:
+
+| Schrift | Breite | | Schrift | Breite |
+|---|---|---|---|---|
+| Playfair Display | 323,6 | | Cormorant Garamond | 278,9 |
+| Prata | 347,5 | | Marcellus | 319,4 |
+| Bodoni Moda | 333,2 | | Italiana | 298,3 |
+
+Sechs verschiedene Breiten, also sechs wirklich geladene Schriften. Die
+drei aus der oberen Reihe **sehen** sich aehnlich, weil sie alle
+Didone-Serifen sind — das ist kein Ladefehler, und beim blossen Hinsehen
+haette ich es fuer einen gehalten.
+
+Genommen: **Prata** fuer die Serife, **Shadows Into Light** fuer die
+Handschrift. Prata ist geometrischer und weniger verspielt als Playfair,
+Shadows Into Light ist ein feiner Stift statt eines Filzstifts.
+
+### Eine Luecke in der Ladeliste
+
+Die Ladeliste der App zog bisher nur **sechs** Werte aus dem Block —
+`zweiteFamilie`, `nameSchrift`, `versalFamilie` und `ablaufTitel`
+fehlten. Bei einem Zeichner, der auf dem Canvas misst, heisst das: mit
+der Ersatzschrift gemessen, mit der richtigen gezeichnet. Alle vier
+stehen jetzt drin.

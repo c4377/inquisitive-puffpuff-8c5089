@@ -283,12 +283,12 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 # Domain, nicht am Pfad).
 DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'grundB:"#0E0D0C",schriftB:"#F2EFE9",'
- 'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
- 'deckblattGewicht:"400",zweiteFamilie:"Caveat",zweitAnteil:.62,'
- 'schriftart:"Playfair Display",unterSchrift:"Caveat",gewicht:"400",'
+ 'deckblattFamilie:"Prata",fotoSchrift:"Prata",'
+ 'deckblattGewicht:"400",zweiteFamilie:"Shadows Into Light",zweitAnteil:.62,'
+ 'schriftart:"Prata",unterSchrift:"Shadows Into Light",gewicht:"400",'
  'unterGewicht:"400",unterVerhaeltnis:.62,laufweite:0,'
- 'folgeFamilie:"Playfair Display",ablaufTitel:"Playfair Display",'
- 'nameSchrift:"Playfair Display",nameGewicht:"400",nameLaufweite:60,'
+ 'folgeFamilie:"Prata",ablaufTitel:"Prata",'
+ 'nameSchrift:"Prata",nameGewicht:"400",nameLaufweite:60,'
  'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:8,'
  'geteilt:1,geteiltOben:.16,'
  'deckblattSchnitte:"full|wide|bust|wide|full|bust",'
@@ -297,7 +297,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'versalLaufweite:280,versalGroesse:.034,'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
- 'bildSaettigung:-.55,bildHeben:0,'
+ 'bildSaettigung:-1,bildHeben:0,bildSpreizung:.28,'
  'tiefeOben:.06,tiefeMitte:.10,tiefeUnten:.62,kanteOben:.30,kanteUnten:.55,'
  'saumStaerke:0,bildSchleier:.10,'
  'nameFarbe:"#F2EFE9",schildGrund:"#F2EFE9",schildSchriftFarbe:"#171512"};')
@@ -1821,6 +1821,62 @@ P.append(('const SR=$e&&String(t.schild||"").trim()?r*((BS_KACHEL.schildGroesse|
  'if(zVS){er=String(er||"").toUpperCase();pr=String(pr||"").toUpperCase();'
  'BS_KACHEL.versalGroesse&&(qe=Math.max(c(11),Math.round(r*BS_KACHEL.versalGroesse)))}',
  "Versalsatz: Grossbuchstaben und feste Groesse", 1))
+
+# 97 — Ganz schwarzweiss, und die Schriften ausgemessen statt
+#      geraten.
+#
+#      **Schwarzweiss.** bildSaettigung -.55 -> -1. Allein bringt das
+#      aber ein flaues Grau, und flaues Grau sieht alt aus. Was jung
+#      wirkt, ist nicht das Fehlen von Farbe, sondern die Tiefe:
+#      richtige Schwarzwerte und saubere Lichter. Deshalb kommt
+#      bildSpreizung dazu.
+#
+#      Die App hatte einen Kontrastwert (contrastBoost .07), aber nur
+#      als Vorgabe je Kachel und nicht im Block — dieselbe Luecke wie
+#      bei der Saettigung. Und dieselbe Falle: die Bedingung war
+#      He>0, ein negativer Wert waere stillschweigend gefallen.
+#      Jetzt He!==0.
+#
+#        bildSaettigung  -1     ganz schwarzweiss
+#        bildSpreizung   .28    statt .07 — dafuer die Tiefe
+#
+#      Vier Fassungen am selben Foto angesehen: -.55/.07 (bisher),
+#      -1/.07 (flau und grau), -1/.28 (Tiefe, klar), -1/.28 kuehl.
+#      Genommen wurde -1/.28.
+#
+#      **Die Schriften.** Playfair und Caveat waren Platzhalter und
+#      Carina hat sie abgelehnt. Sechs Paarungen am selben Foto
+#      gerendert. Wichtig dabei, weil es in diesem Projekt schon
+#      dreimal danebengegangen ist: die Schriften wurden NACHGEMESSEN
+#      und nicht angeschaut. Derselbe Satz in 40 px:
+#
+#          Playfair Display    323,6      Cormorant Garamond  278,9
+#          Prata               347,5      Marcellus           319,4
+#          Bodoni Moda         333,2      Italiana            298,3
+#
+#      Sechs verschiedene Breiten, also sechs wirklich geladene
+#      Schriften. Die drei in der oberen Reihe SEHEN sich aehnlich,
+#      weil sie alle Didone-Serifen sind — das ist kein Ladefehler.
+#
+#      Genommen: Prata fuer die Serife, Shadows Into Light fuer die
+#      Handschrift. Prata ist geometrischer und weniger verspielt als
+#      Playfair, Shadows Into Light ist ein feiner Stift statt eines
+#      Filzstifts. Die anderen fuenf Paarungen sind einen Wert
+#      entfernt.
+#
+#      Shadows Into Light liegt als Datei im Projekt. Und die
+#      Ladeliste der App zog bisher nur sechs Werte aus dem Block —
+#      zweiteFamilie, nameSchrift, versalFamilie und ablaufTitel
+#      fehlten. Bei einem Zeichner, der auf dem Canvas misst, heisst
+#      das: mit der Ersatzschrift gemessen, mit der richtigen
+#      gezeichnet. Alle vier stehen jetzt drin.
+P.append(('const He=typeof t.contrastBoost=="number"?t.contrastBoost:.07;He>0&&',
+ 'const He=typeof BS_KACHEL.bildSpreizung=="number"?BS_KACHEL.bildSpreizung:(typeof t.contrastBoost=="number"?t.contrastBoost:.07);He!==0&&',
+ "Kontrast des Bildes aus dem Block", 1))
+P.append(('BS_KACHEL.schriftart,BS_KACHEL.unterSchrift,BS_KACHEL.deckblattFamilie,BS_KACHEL.folgeFamilie,BS_KACHEL.fotoSchrift,BS_KACHEL.schildSchrift',
+ 'BS_KACHEL.schriftart,BS_KACHEL.unterSchrift,BS_KACHEL.deckblattFamilie,BS_KACHEL.folgeFamilie,BS_KACHEL.fotoSchrift,BS_KACHEL.schildSchrift,'
+ 'BS_KACHEL.zweiteFamilie,BS_KACHEL.nameSchrift,BS_KACHEL.versalFamilie,BS_KACHEL.ablaufTitel',
+ "Vier weitere Schriften des Blocks vorladen", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
