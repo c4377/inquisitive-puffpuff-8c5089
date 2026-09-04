@@ -2463,3 +2463,23 @@ Normalfall aendert sich also nichts.
 
 Dieselbe Idee wie das `maxB` im Zeichner der Textkacheln, das es dort
 seit jeher gibt. Der Fotozweig hatte es nie.
+
+## 85. Der Saum sitzt in zwei diagonalen Ecken und ist orange-rosa
+
+Statt eines Rings rundum jetzt **zwei** radiale Verlaeufe, je einer in
+einer Ecke, und zwar in zwei diagonal gegenueberliegenden.
+
+    saumTon      232,131,107   orange-rosa, kein reines Orange
+    saumStaerke  .62           in der Ecke
+    saumMitte    .22           bei 55 Prozent des Radius
+    saumWeite    .62           Radius als Anteil der laengeren Seite
+
+Welches Eckenpaar drankommt, entscheidet dieselbe feste Streuung wie
+bei der Textlage: eine Zahl aus der Bildadresse. Gerade heisst oben
+links und unten rechts, ungerade oben rechts und unten links. Dasselbe
+Bild bekommt immer dieselben Ecken — es springt nicht bei jedem
+Zeichnen, und im Feed wechselt es von Post zu Post.
+
+Zwei Ecken statt eines Rings hat einen Nebeneffekt, der hier hilft:
+die beiden freien Ecken bleiben unberuehrt, das Bild wirkt weniger
+eingefaerbt und mehr angeleuchtet.
