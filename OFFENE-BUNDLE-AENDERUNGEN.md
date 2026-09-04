@@ -4024,3 +4024,54 @@ gesetzt und nicht `"deckblatt"`. Nach derselben Pruefung laufen schon
 `folgeStil`, `folgeFamilie`, `folgeGewicht` und `folgeLage`.
 Deckblaetter und Textkacheln bleiben unberuehrt, und ohne `folgeFuss`
 aendert sich gar nichts — der warme Feed hat den Wert nicht.
+
+## 123 — Die Fotos kommen durch
+
+*"Viel mehr sollen die durchkommen."* Kein Code, nur vier Zahlen — aber
+die richtigen.
+
+Erst gemessen, was ueberhaupt auf dem Foto liegt: die alte Kachel
+traegt vier Lagen. Die habe ich aus den Kachelbildern zurueckgerechnet
+(`beobachtet = foto·(1−a) + ton·a`) und dann Varianten daraufgelegt:
+
+| | Foto gesamt | obere Haelfte | Kontrast unterm Text (schlechteste 5 %) |
+|---|---|---|---|
+| vorher | 59,8 % | 72,9 % | 3,7:1 |
+| alles gleichmaessig runter | 76,6 % | 85,0 % | 2,4:1 |
+| **oben ganz frei, Fuss bleibt** | 74,0 % | **91,7 %** | **2,7:1** |
+
+**Der Unterschied zwischen den letzten beiden ist der Punkt.** Wer
+alles gleichmaessig herunterdreht, verliert genau dort, wo der Text
+steht. Wer nur die Lagen wegnimmt, die ueber der **ganzen** Kachel
+liegen — `bildSchleier`, `tiefeOben`, `tiefeMitte`, `kanteOben` — und
+den **Fuss** stehen laesst (`tiefeUnten .62`, `kanteUnten .55`),
+bekommt die obere Haelfte fast geschenkt.
+
+### Sackgasse: der Schatten
+
+Zuerst versucht: den Schatten der Schrift staerker machen und dafuer
+die Auflage wegnehmen. In Chromium ueber echten Text gemessen (Ring um
+die Glyphen, Grund 190):
+
+| | Kontrast |
+|---|---|
+| Deckkraft 0,50 · blur 30 (jetzt) | 2,3:1 |
+| Deckkraft 0,95 · blur 56 | 2,5:1 |
+| Deckkraft 0,80 · blur 8 | **2,6:1** |
+
+Von 0,50 auf 0,95 kauft **0,2 Stufen**. Ein weicher Schatten verteilt
+das Dunkel so duenn, dass direkt neben der Glyphe fast nichts ankommt;
+ein harter sieht aus wie eine Kontur. **Der Schatten ist hier kein
+Hebel** — deshalb gar nicht angefasst.
+
+### Geaendert
+
+| | |
+|---|---|
+| `bildSchleier` | .10 → **0** |
+| `tiefeOben` | .06 → **0** |
+| `tiefeMitte` | .10 → **0** |
+| `kanteOben` | .30 → **.06** |
+
+`tiefeUnten` und `kanteUnten` bleiben, wo sie waren: sie sind der
+Grund, auf dem die Schrift steht.

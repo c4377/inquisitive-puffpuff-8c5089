@@ -301,8 +301,8 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
  'bildSchwarzpunkt:.07,bildVignette:.6,folgeFuss:.86,textMitte:.73,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
- 'tiefeOben:.06,tiefeMitte:.10,tiefeUnten:.62,kanteOben:.30,kanteUnten:.55,'
- 'saumStaerke:0,bildSchleier:.10,'
+ 'tiefeOben:0,tiefeMitte:0,tiefeUnten:.62,kanteOben:.06,kanteUnten:.55,'
+ 'saumStaerke:0,bildSchleier:0,'
  'nameFarbe:"#F2EFE9",schildGrund:"#F2EFE9",schildSchriftFarbe:"#171512"};')
 SCHALTER = 'if(typeof window<"u"&&window.BS_STIL==="dunkel")Object.assign(BS_KACHEL,BS_DUNKEL);'
 
@@ -2964,6 +2964,52 @@ P.append(('let De=n*He-ae/2+Et/2;if(De+ae-Et/2>n*(BS_KACHEL.textUnten||.9)',
  'zFF>0&&t.folienRolle&&t.folienRolle!=="deckblatt"&&(De=n*zFF-ae+Et/2);'
  'if(De+ae-Et/2>n*(BS_KACHEL.textUnten||.9)',
  "Folgeslides haengen an der Unterkante", 1))
+
+
+# 123 — Die Fotos kommen durch. Carina: "Viel mehr sollen die
+#      durchkommen." Kein Code, nur Zahlen — aber die richtigen.
+#
+#      Erst gemessen, was ueberhaupt auf dem Foto liegt. Die alte
+#      Kachel traegt vier Lagen; ich habe sie aus den Kachelbildern
+#      zurueckgerechnet (beobachtet = foto*(1-a) + ton*a) und dann
+#      Varianten daraufgelegt:
+#
+#                                      Foto   obere    Kontrast unterm
+#                                    gesamt  Haelfte   Text (schlecht. 5 %)
+#          vorher                     59,8 %   72,9 %   10,5:1   3,7:1
+#          alles gleichmaessig runter 76,6 %   85,0 %    8,3:1   2,4:1
+#          oben ganz frei, Fuss bleibt 74,0 %  91,7 %    9,4:1   2,7:1
+#
+#      Der Unterschied zwischen den letzten beiden ist der Punkt. Wer
+#      alles gleichmaessig herunterdreht, verliert genau dort, wo der
+#      Text steht. Wer NUR die Lagen wegnimmt, die ueber der ganzen
+#      Kachel liegen (bildSchleier, tiefeOben, tiefeMitte, kanteOben)
+#      und den Fuss stehen laesst (tiefeUnten .62, kanteUnten .55),
+#      bekommt die obere Haelfte fast geschenkt: 72,9 auf 91,7
+#      Prozent, waehrend der Kontrast unterm Text kaum nachgibt.
+#
+#      SACKGASSE, weil zuerst versucht: den Schatten der Schrift
+#      staerker machen und dafuer die Auflage wegnehmen. In Chromium
+#      ueber echten Text gemessen, Ring um die Glyphen:
+#
+#          Grund 190   Deckkraft 0,50 blur 30   2,3:1
+#                      Deckkraft 0,95 blur 56   2,5:1
+#                      Deckkraft 0,80 blur  8   2,6:1
+#
+#      Von 0,50 auf 0,95 kauft 0,2 Stufen. Ein weicher Schatten
+#      verteilt das Dunkel so duenn, dass direkt neben der Glyphe fast
+#      nichts ankommt, und ein harter sieht aus wie eine Kontur.
+#      Der Schatten ist hier kein Hebel — deshalb gar nicht angefasst.
+#
+#      Geaendert sind vier Zahlen im dunklen Aufsatz:
+#
+#          bildSchleier  .10 -> 0
+#          tiefeOben     .06 -> 0
+#          tiefeMitte    .10 -> 0
+#          kanteOben     .30 -> .06
+#
+#      tiefeUnten und kanteUnten bleiben, wo sie waren: sie sind der
+#      Grund, auf dem die Schrift steht.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
