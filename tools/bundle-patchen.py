@@ -294,8 +294,8 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'geteilt:1,geteiltAnteil:25,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
  'deckblattSchnitte:"full|wide|bust|wide|full|bust",'
  'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20",'
- 'versalAnteil:30,versalFamilie:"Kalam",versalGewicht:"400",'
- 'versalLaufweite:20,versalGroesse:.060,versalZweitAnteil:1,'
+ 'versalAnteil:30,versalFamilie:"Shadows Into Light",versalGewicht:"400",'
+ 'versalLaufweite:20,versalGroesse:.065,versalZweitAnteil:1,'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,saettigungReihe:"-1|-0.55|-1|0.1|-1|-0.55",'
@@ -305,7 +305,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'nameFarbe:"#F2EFE9",schildGrund:"#F2EFE9",schildSchriftFarbe:"#171512"};')
 SCHALTER = 'if(typeof window<"u"&&window.BS_STIL==="dunkel")Object.assign(BS_KACHEL,BS_DUNKEL);'
 
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.042,nameDeckkraft:1,nameFarbe:"#E8836B",nameSchrift:"HelveticaNeueBrand",nameGewicht:"700",nameLaufweite:-50,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"Montserrat",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,folgeLage:"unten",folgeGroesseAnteil:.049,folgeMaxhoehe:.70,folgeAusrichtung:"links",textAnteil:67,fotoGroesse:44,schildGrund:"#E8836B",schildSchriftFarbe:"#241C16",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"Montserrat",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"DM Serif|Nohemi|Montserrat|Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.042,nameDeckkraft:1,nameFarbe:"#E8836B",nameSchrift:"HelveticaNeueBrand",nameGewicht:"700",nameLaufweite:-50,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"Montserrat",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,folgeLage:"unten",folgeGroesseAnteil:.049,folgeMaxhoehe:.70,folgeAusrichtung:"links",textAnteil:67,fotoGroesse:44,schildGrund:"#E8836B",schildSchriftFarbe:"#241C16",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"Montserrat",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"DM Serif|Nohemi|Shadows|Montserrat|Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', DUNKEL + KONFIG + SCHALTER + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -2170,6 +2170,30 @@ P.append(('const zGT=!!BS_KACHEL.geteilt&&$e&&tt.nurErsteZeilePlatte===!0&&Lt>0&
  'return((zh*11+3)%100)<BS_KACHEL.geteiltAnteil})():!!BS_KACHEL.geteilt)'
  '&&$e&&tt.nurErsteZeilePlatte===!0&&Lt>0&&dr.length>Lt;',
  "Die geteilte Kachel ist nur noch ein Teil der Kacheln", 1))
+
+# 106 — Eine Handschrift statt zwei.
+#
+#      Kalam war nur fuer die Versalien da; ueberall sonst — die
+#      zweite Zeile, das _Wort_ mitten im Satz — steht Shadows Into
+#      Light. Zwei Handschriften in einem Feed sind eine zu viel,
+#      und Carina will die eine. Kalam ist raus, Datei und Anmeldung
+#      geloescht.
+#
+#      Die Groesse musste dabei mit. Die Versalhoehe ist am Vorbild
+#      auf 0,043 der Kachelbreite festgelegt (Eintrag 101), und die
+#      beiden Schriften haben verschieden hohe Versalien:
+#
+#          Kalam                Versalhoehe 0,72 der Schriftgroesse
+#          Shadows Into Light   Versalhoehe 0,67
+#
+#      Bei unveraendertem versalGroesse .060 waeren die Versalien
+#      also 0,040 statt 0,043 herausgekommen, gut sieben Prozent zu
+#      klein. 0,043/0,67 = .0642, gerundet auf .065.
+#
+#      Das ist der Punkt, an dem ein Schriftwechsel im Block sonst
+#      still danebengeht: die Zahl gilt fuer die SCHRIFT, nicht fuer
+#      das Layout. Wer versalFamilie aendert, muss versalGroesse
+#      nachziehen.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

@@ -3320,3 +3320,27 @@ Nachgerechnet fuer eine bis sieben Serifenzeilen: die Luecke liegt
 zwischen 60 und 70 Pixeln, die Unterkante des zweiten Blocks zwischen
 .54 und .68 der Kachelhoehe. Nichts laeuft aus dem Bild und nichts
 ueberlappt.
+
+## 106 — Eine Handschrift statt zwei
+
+Kalam war nur fuer die Versalien da; ueberall sonst — die zweite Zeile,
+das `_Wort_` mitten im Satz — steht Shadows Into Light. Zwei
+Handschriften in einem Feed sind eine zu viel. Kalam ist raus, Datei und
+Anmeldung geloescht.
+
+**Die Groesse musste mit.** Die Versalhoehe ist am Vorbild auf 0,043 der
+Kachelbreite festgelegt (Abschnitt 101), und die beiden Schriften haben
+verschieden hohe Versalien:
+
+| | Versalhoehe (Anteil der Schriftgroesse) |
+|---|---|
+| Kalam | 0,72 |
+| Shadows Into Light | 0,67 |
+
+Bei unveraendertem `versalGroesse` .060 waeren die Versalien 0,040 statt
+0,043 herausgekommen — gut sieben Prozent zu klein. 0,043 / 0,67 =
+.0642, gerundet **.065**.
+
+Das ist der Punkt, an dem ein Schriftwechsel im Block sonst still
+danebengeht: **die Zahl gilt fuer die Schrift, nicht fuer das Layout.**
+Wer `versalFamilie` aendert, muss `versalGroesse` nachziehen.
