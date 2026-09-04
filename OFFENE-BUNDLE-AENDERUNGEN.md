@@ -3285,3 +3285,38 @@ Warum `0.1` und nicht `0` fuer "Farbe": die Bedingung am Filter ist
 `Ze!==0`, eine glatte Null wuerde den Filter ueberspringen. Das waere
 zwar dasselbe Ergebnis, aber ein Wert, der nur zufaellig funktioniert.
 0.1 gibt der Farbkachel ausserdem etwas mehr Leben.
+
+## 104 — Die zwei Bloecke sind ineinander gerutscht
+
+In Abschnitt 101 steht: "`geteiltUnten` bleibt als Deckel: passt beides
+zusammen nicht mehr, gewinnt die Unterkante." Das war als Absicherung
+gemeint und **war das Gegenteil**.
+
+`Math.min` nimmt den kleineren Wert, also den weiter **oben**. Sobald
+die Ueberschrift lang genug war, lag die feste Unterkante .62 hoeher als
+das Ende des ersten Blocks — und der zweite Block wurde **in den ersten
+hineingezogen**.
+
+Nachgerechnet, drei Handschriftzeilen, Kachel 1000 hoch:
+
+| Serifenzeilen | 1 | 2 | 3 | 4 | 5 |
+|---|---|---|---|---|---|
+| Luecke vorher | 70 | 56 | 37 | 24 | **8** |
+| Luecke jetzt | 70 | 70 | 67 | 64 | 62 |
+
+Die Luecke schrumpfte mit jeder Zeile der Ueberschrift gegen null. Bei
+vier Zeilen und einem laengeren zweiten Block ist sie durch null durch —
+genau die Kachel aus dem Screenshot.
+
+Zwei Aenderungen:
+
+1. **`Math.max(De, ...)` davor.** `De` ist das Ende des ersten Blocks;
+   der zweite kann nie darueber landen. Das ist eine Absicherung, die
+   diesen Namen verdient.
+2. **`geteiltUnten` .62 → .86.** Der Wert soll die Notbremse sein und
+   nicht die Anordnung bestimmen. Die Anordnung macht `geteiltLuft`.
+
+Nachgerechnet fuer eine bis sieben Serifenzeilen: die Luecke liegt
+zwischen 60 und 70 Pixeln, die Unterkante des zweiten Blocks zwischen
+.54 und .68 der Kachelhoehe. Nichts laeuft aus dem Bild und nichts
+ueberlappt.

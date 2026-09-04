@@ -290,7 +290,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'folgeFamilie:"DM Serif Display",ablaufTitel:"DM Serif Display",'
  'nameSchrift:"DM Serif Display",nameGewicht:"400",nameLaufweite:60,'
  'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:1,'
- 'geteilt:1,geteiltOben:.16,geteiltUnten:.62,geteiltLuft:.05,'
+ 'geteilt:1,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
  'deckblattSchnitte:"full|wide|bust|wide|full|bust",'
  'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20",'
  'versalAnteil:30,versalFamilie:"Kalam",versalGewicht:"400",'
@@ -1996,7 +1996,7 @@ P.append(('pt=new Pe.fabric.Text(Je.map(xt=>xt.w).join(" "),{fontSize:(Ve?qe:qe2
 #       im Vorbild ist 28 bis 29 Pixel hoch, also 0,071 der Breite.
 P.append(('if(zGT&&rt===Lt)De=n*(BS_KACHEL.geteiltUnten||BS_KACHEL.textUnten||.86)-(dr.length-Lt)*Et2*zF+Et2/2;',
  'if(zGT&&rt===Lt){const zU=n*(BS_KACHEL.geteiltUnten||BS_KACHEL.textUnten||.86)-(dr.length-Lt)*Et2*zF+Et2/2;'
- 'De=BS_KACHEL.geteiltLuft?Math.min(De+n*BS_KACHEL.geteiltLuft,zU):zU;}',
+ 'De=BS_KACHEL.geteiltLuft?Math.max(De,Math.min(De+n*BS_KACHEL.geteiltLuft,zU)):zU;}',
  "Der zweite Block haengt am ersten statt an der Unterkante", 1))
 
 # 102 — Die Versalien waren die falsche Schrift. Nicht zu klein,
@@ -2067,6 +2067,41 @@ P.append(('qe2=$e?Math.round(qe*(BS_KACHEL.zweitAnteil||1)):qe',
 #      Das waere zwar dasselbe Ergebnis, aber ein Wert, der nur
 #      zufaellig funktioniert. 0.1 gibt der Farbkachel ausserdem
 #      etwas mehr Leben.
+
+# 104 — Die zwei Bloecke sind ineinander gerutscht. Mein Deckel war
+#       kein Deckel, sondern ein Zug nach oben.
+#
+#       In Eintrag 101 habe ich geschrieben: "geteiltUnten bleibt als
+#       Deckel: passt beides zusammen nicht mehr, gewinnt die
+#       Unterkante." Das war als Absicherung gemeint und war das
+#       Gegenteil. Math.min nimmt den KLEINEREN Wert, also den weiter
+#       OBEN. Sobald der erste Block lang genug war, lag die feste
+#       Unterkante .62 hoeher als das Ende des ersten Blocks — und
+#       der zweite Block wurde in den ersten hineingezogen.
+#
+#       Nachgerechnet, drei Handschriftzeilen, Kachel 1000 hoch:
+#
+#           Serifenzeilen   1     2     3     4     5
+#           Luecke alt     70    56    37    24     8   Pixel
+#           Luecke neu     70    70    67    64    62   Pixel
+#
+#       Die Luecke schrumpft mit jeder Zeile der Ueberschrift gegen
+#       null. Bei Carinas Kachel (vier Zeilen, laengerer zweiter
+#       Block) ist sie durch null durch.
+#
+#       Zwei Aenderungen:
+#
+#         1. Math.max(De, ...) davor. De ist das Ende des ersten
+#            Blocks; der zweite kann nie darueber landen. Das ist
+#            eine Absicherung, die diesen Namen verdient.
+#         2. geteiltUnten .62 -> .86. Der Wert soll die Notbremse
+#            sein und nicht die Anordnung bestimmen. Die Anordnung
+#            macht geteiltLuft.
+#
+#       Nachgerechnet fuer eine bis sieben Serifenzeilen: die Luecke
+#       liegt zwischen 60 und 70 Pixeln, die Unterkante des zweiten
+#       Blocks zwischen .54 und .68 der Kachelhoehe. Nichts laeuft
+#       mehr aus dem Bild und nichts ueberlappt.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
