@@ -292,7 +292,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'nameSchrift:"DM Serif Display",nameGewicht:"400",nameLaufweite:60,'
  'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:1,'
  'geteilt:1,geteiltAnteil:25,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
- 'deckblattSchnitte:"full|wide|bust|wide|full|bust",'
+ 'deckblattSchnitte:"full|full|wide|full|wide|full",'
  'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20",'
  'versalAnteil:30,versalFamilie:"Shadows Into Light",versalGewicht:"400",'
  'versalLaufweite:20,versalGroesse:.065,versalZweitAnteil:1,'
@@ -2231,6 +2231,40 @@ P.append(('const zGT=!!BS_KACHEL.geteilt&&$e&&tt.nurErsteZeilePlatte===!0&&Lt>0&
 P.append(('if(Vt)try{Tt=await ed(Tt,He,Ze),Ze+=Tt.length}catch{}',
  'if(Vt)try{Tt=await ed(Tt,He,pt),Ze+=Tt.length}catch{}',
  "Die Bildreihe rueckt pro TAG weiter, nicht pro Folie", 1))
+
+# 108 — Warum das Vorbild anders aussieht. Beide Raster durchgemessen.
+#
+#      Frage: hat im Vorbild jeder Beitrag ein Bild? ANTWORT: ja,
+#      ausnahmslos. Gemessen ueber den Quartilsabstand der Helligkeit
+#      je Kachel — eine Flaeche hat 0, ein Foto hat Streuung. Im
+#      Vorbild liegt der kleinste Wert bei 31, bei zwoelf von zwoelf
+#      Kacheln. In Carinas Feed haben zwei von sechs gemessenen
+#      Kacheln den Wert 0: reine Flaeche, gar kein Bild. Das sind
+#      Tage aus einer alten Erzeugung; der Plan muss einmal neu
+#      gebaut werden, sonst hilft textAnteil 1 nichts.
+#
+#      Was NICHT der Unterschied ist — die Schriftgroesse:
+#          Vorbild  0,070 bis 0,072 der Kachelbreite
+#          Carina   0,066 bis 0,085
+#      Praktisch gleich.
+#
+#      Was der Unterschied IST:
+#
+#      1. Der Ausschnitt. deckblattSchnitte stand auf
+#         full|wide|bust|wide|full|bust, im Mittel 1,35-facher Zoom.
+#         Das Vorbild zoomt NICHT hinein: die Person ist klein im
+#         Bild, drumherum ist Platz, und genau dort steht der Text.
+#         Bei 1,35 bis 1,7 fuellt die Person die Kachel und der Text
+#         landet im Gesicht. Neu: full|full|wide|full|wide|full,
+#         im Mittel 1,12.
+#
+#      2. Das Schwarz. Im Vorbild liegen 44 Prozent der Kachelflaeche
+#         unter Helligkeit 40, bei Carina 30. Und das laesst sich
+#         NICHT nachstellen: durchgerechnet mit Kontrast .28, .40 und
+#         .52 kommt dasselbe Foto auf 7,6 / 10,7 / 13,5 Prozent. Die
+#         Dunkelheit im Vorbild steckt in den FOTOS — Studio, dunkler
+#         Hintergrund, dunkle Kleidung —, nicht in der Bearbeitung.
+#         Kein Wert im Block holt das nach.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
