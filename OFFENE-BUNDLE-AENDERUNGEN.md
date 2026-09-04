@@ -3378,3 +3378,49 @@ Der Startpunkt ist jetzt der **Tag** selbst:
 
 Das ist auch die richtige Groesse: der Wechsel gehoert an den Tag, nicht
 an die Zahl der Folien in einem Beitrag.
+
+## 108 — Warum das Vorbild anders aussieht. Beide Raster durchgemessen
+
+**Die Frage: hat im Vorbild jeder Beitrag ein Bild? Ja, ausnahmslos.**
+
+Gemessen ueber den Quartilsabstand der Helligkeit je Kachel — eine
+Flaeche hat 0, ein Foto hat Streuung.
+
+| | kleinster Wert | Kacheln ohne Bild |
+|---|---|---|
+| Vorbild | 31 | **0 von 12** |
+| Carina | 0 | **2 von 6** |
+
+Die zwei sind reine Flaeche, gar kein Bild. Das sind Tage aus einer
+alten Erzeugung — der Plan muss einmal neu gebaut werden, sonst hilft
+`textAnteil 1` nichts.
+
+### Was nicht der Unterschied ist: die Schriftgroesse
+
+| | Zeilenhoehe, Anteil der Kachelbreite |
+|---|---|
+| Vorbild | 0,070 – 0,072 |
+| Carina | 0,066 – 0,085 |
+
+Praktisch gleich. Daran muss nichts geaendert werden.
+
+### Was der Unterschied ist
+
+**1. Der Ausschnitt.** `deckblattSchnitte` stand auf
+`full|wide|bust|wide|full|bust` — im Mittel **1,35-facher Zoom**. Das
+Vorbild zoomt **nicht** hinein: die Person ist klein im Bild, drumherum
+ist Platz, und genau dort steht der Text. Bei 1,35 bis 1,7 fuellt die
+Person die Kachel und der Text landet im Gesicht. Neu
+`full|full|wide|full|wide|full`, im Mittel **1,12**.
+
+**2. Das Schwarz — und das laesst sich nicht nachstellen.**
+
+| | Anteil der Kachel unter Helligkeit 40 |
+|---|---|
+| Vorbild | **44 %** |
+| Carina | 30 % |
+
+Durchgerechnet mit Kontrast .28, .40 und .52 kommt dasselbe Foto auf
+7,6 / 10,7 / 13,5 Prozent. **Die Dunkelheit im Vorbild steckt in den
+Fotos** — Studio, dunkler Hintergrund, dunkle Kleidung —, nicht in der
+Bearbeitung. Kein Wert im Block holt das nach.
