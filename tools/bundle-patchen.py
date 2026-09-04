@@ -286,11 +286,12 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'deckblattFamilie:"DM Serif Display",fotoSchrift:"DM Serif Display",'
  'deckblattGewicht:"400",zweiteFamilie:"Shadows Into Light",zweitAnteil:.62,'
  'schriftart:"DM Serif Display",unterSchrift:"Shadows Into Light",gewicht:"400",'
+ 'betontGewicht:"700",handAnteil:1.15,'
  'unterGewicht:"400",unterVerhaeltnis:.62,laufweite:0,'
  'folgeFamilie:"DM Serif Display",ablaufTitel:"DM Serif Display",'
  'nameSchrift:"DM Serif Display",nameGewicht:"400",nameLaufweite:60,'
  'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:1,'
- 'geteilt:1,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
+ 'geteilt:1,geteiltAnteil:25,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
  'deckblattSchnitte:"full|wide|bust|wide|full|bust",'
  'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20",'
  'versalAnteil:30,versalFamilie:"Kalam",versalGewicht:"400",'
@@ -2102,6 +2103,73 @@ P.append(('qe2=$e?Math.round(qe*(BS_KACHEL.zweitAnteil||1)):qe',
 #       liegt zwischen 60 und 70 Pixeln, die Unterkante des zweiten
 #       Blocks zwischen .54 und .68 der Kachelhoehe. Nichts laeuft
 #       mehr aus dem Bild und nichts ueberlappt.
+
+# 105 — Das Kennzeichen des Vorbilds: Auszeichnung MITTEN im Satz.
+#
+#       Carina hat das Vorbild noch einmal geschickt. Beim Zaehlen
+#       Kachel fuer Kachel: von den neun Kacheln ohne Reel sind nur
+#       ZWEI geteilt. Die anderen sieben sind ein Block in der
+#       unteren Haelfte — und in JEDEM dieser Saetze wechselt die
+#       Schrift mitten drin:
+#
+#           Was definitiv KEINE Gruende sind     Handschrift
+#           brauchst du KEINEN GRUND             fett
+#           siehst du GANZ SCHOEN SCHEISSE aus   kursiv
+#           die ERSTE Generation, NEUANFANG      kursiv und fett
+#
+#       Das ist das Kennzeichen dieses Feeds, und ich hatte es
+#       ueberhaupt nicht. Ich habe die ganze Zeit an Anordnung und
+#       Grading gearbeitet und das Offensichtliche uebersehen.
+#
+#       Der Zeichner kann Auszeichnung je Wort laengst — die Zeile
+#       wird Wort fuer Wort gesetzt, sobald eines ausgezeichnet ist,
+#       und _t kannte *kursiv*. Es fehlten zwei Auszeichnungen und
+#       die Schrift je Wort:
+#
+#           **fett**       betontGewicht (700)
+#           *kursiv*       gab es schon
+#           _Handschrift_  handFamilie, sonst zweiteFamilie
+#
+#       handAnteil 1.15 gleicht aus, dass eine Handschrift bei
+#       gleicher Pixelzahl kleiner wirkt als eine Serife.
+#
+#       Wichtig und leicht zu uebersehen: die Auszeichnung muss beim
+#       MESSEN genauso gelten wie beim Zeichnen. Ht misst jetzt jedes
+#       Wort mit seiner eigenen Schrift, seinem Schnitt und seiner
+#       Groesse — sonst bricht die Zeile falsch um und sitzt nicht
+#       mittig. Genau der Fehler aus Eintrag 100, nur eine Ebene
+#       tiefer.
+#
+#       Und die Teilung wird zur Ausnahme: geteiltAnteil 25 statt
+#       "immer". Im Vorbild sind es zwei von neun.
+P.append((r'_t=Je=>{const rt=[];return String(Je||"").split(/(\*[^*]+\*)/).filter(Boolean).forEach(Ve=>{const pt=/^\*[^*]+\*$/.test(Ve),nr=pt?Ve.slice(1,-1):Ve;pt?nr.split(/\s+/).filter(Boolean).forEach(ct=>rt.push({w:ct,kursiv:!0})):',
+ r'_t=Je=>{const rt=[];return String(Je||"").split(/(\*\*[^*]+\*\*|\*[^*]+\*|_[^_\n]+_)/).filter(Boolean).forEach(Ve=>{'
+ r'const zf=/^\*\*[^*]+\*\*$/.test(Ve),zk=!zf&&/^\*[^*]+\*$/.test(Ve),zh=/^_[^_\n]+_$/.test(Ve),'
+ r'pt=zf||zk||zh,nr=zf?Ve.slice(2,-2):(zk||zh)?Ve.slice(1,-1):Ve;'
+ r'pt?nr.split(/\s+/).filter(Boolean).forEach(ct=>rt.push({w:ct,kursiv:zk,fett:zf,hand:zh})):',
+ "Wortzerleger: **fett**, *kursiv*, _Handschrift_", 1))
+P.append(('sr=Je=>Je.some(rt=>rt.kursiv),',
+ 'sr=Je=>Je.some(rt=>rt.kursiv||rt.fett||rt.hand),'
+ 'zwf=(xt,zg)=>xt&&xt.hand?(BS_KACHEL.handFamilie||BS_KACHEL.zweiteFamilie||zg):zg,'
+ 'zwg=(xt,zg)=>xt&&xt.fett?(BS_KACHEL.betontGewicht||"700"):zg,'
+ 'zws=(xt,zg)=>xt&&xt.hand?zg*(BS_KACHEL.handAnteil||1):zg,',
+ "Drei kleine Helfer fuer Schrift, Schnitt und Groesse je Wort", 1))
+P.append(('return Je.reduce((Vt,Tt)=>Vt+new Pe.fabric.Text(Tt.w,{...pt,fontStyle:Tt.kursiv?"italic":"normal"}).width,0)+ct*Math.max(0,Je.length-1)},',
+ 'return Je.reduce((Vt,Tt)=>Vt+new Pe.fabric.Text(Tt.w,{...pt,'
+ 'fontFamily:zwf(Tt,pt.fontFamily),fontWeight:zwg(Tt,pt.fontWeight),fontSize:zws(Tt,pt.fontSize),'
+ 'fontStyle:Tt.kursiv?"italic":"normal"}).width,0)+ct*Math.max(0,Je.length-1)},',
+ "Jedes Wort wird mit seiner eigenen Schrift gemessen", 1))
+P.append(('Ut=new Pe.fabric.Text(xt.w,{left:Vt,top:De,originX:"left",originY:"center",fontSize:(Ve?qe:qe2)*zF,fontFamily:Ve?Qe:QeZ,fontWeight:tt.fettNurErste&&!Ve?(BS_KACHEL.leichtGewicht||"400"):kt,',
+ 'Ut=new Pe.fabric.Text(xt.w,{left:Vt,top:De,originX:"left",originY:"center",charSpacing:zCS,'
+ 'fontSize:zws(xt,(Ve?qe:qe2)*zF),fontFamily:zwf(xt,Ve?Qe:QeZ),'
+ 'fontWeight:zwg(xt,tt.fettNurErste&&!Ve?(BS_KACHEL.leichtGewicht||"400"):kt),',
+ "Jedes Wort wird mit seiner eigenen Schrift gezeichnet", 1))
+P.append(('const zGT=!!BS_KACHEL.geteilt&&$e&&tt.nurErsteZeilePlatte===!0&&Lt>0&&dr.length>Lt;',
+ 'const zGT=(BS_KACHEL.geteiltAnteil?(()=>{const zs=String(t.background||"")+"|"+String(t.text||"");let zh=0;'
+ 'for(let zi=0;zi<zs.length;zi+=1)zh=(zh*31+zs.charCodeAt(zi))%99991;'
+ 'return((zh*11+3)%100)<BS_KACHEL.geteiltAnteil})():!!BS_KACHEL.geteilt)'
+ '&&$e&&tt.nurErsteZeilePlatte===!0&&Lt>0&&dr.length>Lt;',
+ "Die geteilte Kachel ist nur noch ein Teil der Kacheln", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
