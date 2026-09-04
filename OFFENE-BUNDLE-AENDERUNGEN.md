@@ -2330,3 +2330,27 @@ greift er auf alle Zeilen, ohne dass jede Zeichenstelle einzeln
 angefasst werden muss.
 
 Kacheln ohne Foto behalten ihre Farben aus dem Farbpaar.
+
+## 81. Oranger Lichtsaum am Bildrand
+
+Ein radialer Verlauf ueber dem Foto: in der Mitte durchsichtig, an den
+Raendern orange. Er gibt dem Bild Licht von aussen, statt es
+einzufaerben, und bindet die Fotokacheln farblich an die warmen
+Textkacheln.
+
+    saumTon       217,123,43
+    saumMitte     .18          bei 55 Prozent des Radius
+    saumStaerke   .62          aussen
+
+Er liegt **ueber** dem Tiefenverlauf. Anders herum waeren die Ecken
+erst abgedunkelt und dann eingefaerbt worden — das Orange soll auf dem
+fertigen Bild sitzen, nicht darunter.
+
+`saumStaerke` auf 0 schaltet ihn ab.
+
+### Verworfen: der Rahmen rundum
+
+Ein orangener Rahmen um jede Kachel wurde gebaut und im Raster
+angesehen. Einzeln sieht er ordentlich aus; zu fuenfzehnt nebeneinander
+wird jede Kachel zur Briefmarke, und die Rahmen reden mehr als die
+Inhalte. Der Saum macht dasselbe, ohne eine Kante zu ziehen.

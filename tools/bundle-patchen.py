@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,textAnteil:67,fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:1350,bildGuete:.85,bildKontrast:0,bildHelligkeit:0,ablaufTitel:"HelveticaNeueBrand",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.05,tiefeMitte:.10,tiefeUnten:.42,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,textAnteil:67,fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:1350,bildGuete:.85,bildKontrast:0,bildHelligkeit:0,ablaufTitel:"HelveticaNeueBrand",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:.05,tiefeMitte:.10,tiefeUnten:.42,saumTon:"217,123,43",saumMitte:.18,saumStaerke:.62,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -1202,6 +1202,28 @@ P.append(('Je?(er=Je[1],pr=Je[2]):(er=pr,pr="");', 'Je?(er=Je[1],pr=Je[2]):(()=>
 P.append(('Vt=(qt?!Oe(ct,pt):tS(pt))&&He.length>0',
  'Vt=(BS_KACHEL.textAnteil?((pt*37+13)%100)>=BS_KACHEL.textAnteil:(qt?!Oe(ct,pt):tS(pt)))&&He.length>0',
  "Anteil der Textkacheln aus dem Block", 1))
+
+# 81 — Der orange Lichtsaum am Rand der Fotos.
+#
+#      Ein radialer Verlauf ueber dem Bild: in der Mitte durchsichtig,
+#      an den Raendern orange. Er gibt dem Foto Licht von aussen,
+#      statt es einzufaerben, und bindet die Fotokacheln farblich an
+#      die warmen Textkacheln.
+#
+#        saumTon       217,123,43   derselbe Orangeton wie das Rad
+#        saumMitte     .18          bei 55 Prozent des Radius
+#        saumStaerke   .62          aussen
+#
+#      saumStaerke auf 0 schaltet ihn ab. Er liegt UEBER dem
+#      Tiefenverlauf, damit die Ecken nicht doppelt abgedunkelt und
+#      dann eingefaerbt werden, sondern das Orange auf dem fertigen
+#      Bild sitzt.
+#
+#      Ein Rahmen rundum wurde probiert und verworfen: im Raster
+#      stehen fuenfzehn Rahmen nebeneinander und das Bild wird zur
+#      Briefmarke.
+P.append(('${BS_KACHEL.tiefeUnten})`}]})}))}', '${BS_KACHEL.tiefeUnten})`}]})})),BS_KACHEL.saumStaerke&&e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,selectable:!1,evented:!1,fill:new Pe.fabric.Gradient({type:"radial",coords:{x1:r/2,y1:n/2,r1:Math.min(r,n)*.20,x2:r/2,y2:n/2,r2:Math.max(r,n)*.78},colorStops:[{offset:0,color:`rgba(${BS_KACHEL.saumTon},0)`},{offset:.55,color:`rgba(${BS_KACHEL.saumTon},${BS_KACHEL.saumMitte})`},{offset:1,color:`rgba(${BS_KACHEL.saumTon},${BS_KACHEL.saumStaerke})`}]})}))}',
+ "Oranger Lichtsaum am Bildrand", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
