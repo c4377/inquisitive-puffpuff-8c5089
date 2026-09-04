@@ -299,6 +299,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
+ 'bildSchwarzpunkt:.13,textMitte:.73,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
  'tiefeOben:.06,tiefeMitte:.10,tiefeUnten:.62,kanteOben:.30,kanteUnten:.55,'
  'saumStaerke:0,bildSchleier:.10,'
@@ -2580,6 +2581,102 @@ P.append(('const zSat=(()=>{try{const zl=String(BS_KACHEL.saettigungReihe||"").s
  'const zv=parseFloat(zl[((t._tag%zl.length)+zl.length)%zl.length]);if(!isNaN(zv))return zv}'
  'if(!zl.length)return null;',
  "strenger Wechsel nach Tagesnummer, Hash nur als Rueckfall", 1))
+
+
+# 117 — Nachgemessen: woran das Vorbild wirklich anders aussieht.
+#
+#      Nicht geraten, sondern die neun Kacheln aus beiden Rastern
+#      Pixel fuer Pixel verglichen (Helligkeit nach BT.709):
+#
+#                          meins   Vorbild
+#          dunkelstes Pixel    4,9      0,0
+#          p01                17,2      1,0
+#          p05                23,3      3,7
+#          Mitte (p50)        89,0     55,5
+#          Lichter (p95)     176,7    178,3
+#          Farbigkeit          8,5      8,4
+#
+#      Die Lichter sind gleich. Die Farbigkeit ist gleich. Der ganze
+#      Unterschied sitzt unten: KEINE ihrer neun Kacheln enthaelt ein
+#      einziges schwarzes Pixel, ALLE neun des Vorbilds tun es.
+#
+#      (a) Schwarzpunkt. Die Tonwertkette im Bundle haengt komplett an
+#      t.warmEditorial — fehlt das Feld, laeuft weder Kontrast noch
+#      Saettigung, das Foto geht roh durch. Und selbst wo sie laeuft,
+#      ist fabric Contrast eine Streckung um Mittelgrau: sie hebt die
+#      Lichter genauso wie sie die Tiefen senkt.
+#
+#      Gebraucht wird ein Schwarzpunkt: Tiefen auf Null, Weiss bleibt
+#      Weiss. Das ist keine Filterkette, das ist eine Zeichenoperation
+#      — eine Flaeche im Mischmodus color-burn, direkt auf dem Foto und
+#      unter allem Text. Sie kann nicht fehlschlagen (aus demselben
+#      Grund wie die Schwarzweiss-Flaeche aus 114) und sie ruehrt den
+#      Text nicht an, weil er spaeter gezeichnet wird.
+#
+#          color-burn(b, g) = 1 - (1-b)/g   mit g = 1 - bildSchwarzpunkt
+#
+#      In Chromium nachgemessen ueber alle 256 Graustufen: groesste
+#      Abweichung zur Formel 1 von 255. Weiss bleibt exakt 255.
+#
+#      bildSchwarzpunkt .13, auf ihre echten Kacheln gerechnet:
+#
+#                          vorher  nachher   Vorbild
+#          dunkelstes Pixel   4,9      0,0       0,0
+#          p01               17,2      0,0       1,0
+#          p05               23,3      0,9       3,7
+#          Mitte             89,0     63,7      55,5
+#          schwarz (<40)    19,1%    37,1%     48,5%
+#
+#      (b) Wo der Text sitzt. Der Anteil sehr heller Pixel je Zehntel
+#      der Kachelhoehe zeigt beim Vorbild zwei Baenke mit einer Luecke
+#      dazwischen, bei mir einen Schmier ueber die ganze Kachel. Je
+#      Kachel gemessen faengt der Textblock im Vorbild bei 0,58 an und
+#      endet bei 0,88 — er sitzt im unteren Drittel. Meiner sass in
+#      der Mitte, und zwar fest verdrahtet:
+#
+#          He = tt.istKarte ? .42 : ve==="oben" ? .24
+#             : ve==="unten" ? .7 : .5
+#
+#      Die .5 ist jetzt BS_KACHEL.textMitte, im dunklen Aufsatz .73 —
+#      die gemessene Mitte des Vorbilds. Geteilte Kacheln bleiben, wie
+#      sie waren, die rechnen ueber geteiltOben/geteiltUnten.
+#
+#      (c) Die Wortmarke. Im Vorbild steht auf keiner Kachel ein
+#      Handle; bei mir auf jeder, unten links — im Profil das letzte
+#      Zehntel (2,70 Prozent gegen 0,31). nameZeigen:0 schaltet sie
+#      ab. nameZeigen weg oder auf 1, und sie ist wieder da.
+#
+#      Nicht geaendert: der Bildausschnitt. Die Detaildichte ist 5,37
+#      gegen 4,59, aber die Streuung im Vorbild geht von 0,84 bis 9,12
+#      — daraus laesst sich kein Zoom ableiten. Und der Rest des
+#      Schwarzanteils (37 gegen 48 Prozent) steckt in den Fotos, nicht
+#      im Code: dunkle Raeume gegen helle graue Wand.
+
+# Kann der Browser color-burn? Einmal fragen, nicht je Kachel.
+P.append(('const BS_MISCHBAR=',
+ 'const BS_BRENNBAR=(()=>{try{const zc=document.createElement("canvas").getContext("2d");'
+ 'zc.globalCompositeOperation="color-burn";return zc.globalCompositeOperation==="color-burn"}catch(zz){return!1}})();'
+ 'const BS_MISCHBAR=',
+ "Erkennung color-burn", 1))
+
+# Der Schwarzpunkt: eine Flaeche auf dem Foto, unter allem Text.
+P.append(('zSat<=-.99&&BS_MISCHBAR&&e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:"#808080",globalCompositeOperation:"saturation",selectable:!1,evented:!1}));',
+ '(()=>{const zP=Number(BS_KACHEL.bildSchwarzpunkt)||0;if(!(zP>0)||!BS_BRENNBAR||!t.background)return;'
+ 'const zg=Math.max(0,Math.min(255,Math.round(255*(1-zP))));'
+ 'e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:`rgb(${zg},${zg},${zg})`,'
+ 'globalCompositeOperation:"color-burn",selectable:!1,evented:!1}))})();'
+ 'zSat<=-.99&&BS_MISCHBAR&&e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:"#808080",globalCompositeOperation:"saturation",selectable:!1,evented:!1}));',
+ "Schwarzpunkt als color-burn-Flaeche", 1))
+
+# Der Sitz des Textblocks war fest verdrahtet.
+P.append((':ve==="oben"?.24:ve==="unten"?.7:.5;let De=n*He-ae/2+Et/2;',
+ ':ve==="oben"?.24:ve==="unten"?.7:(BS_KACHEL.textMitte||.5);let De=n*He-ae/2+Et/2;',
+ "Sitz des Textblocks kommt aus dem Block", 1))
+
+# Die Wortmarke laesst sich abschalten.
+P.append(('tt.platten||e.add(new Pe.fabric.Text(Ze,{left:_e,top:n*(BS_KACHEL.nameUnten||.945)',
+ '(tt.platten||BS_KACHEL.nameZeigen===0)||e.add(new Pe.fabric.Text(Ze,{left:_e,top:n*(BS_KACHEL.nameUnten||.945)',
+ "Wortmarke abschaltbar", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

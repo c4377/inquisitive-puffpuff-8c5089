@@ -3670,3 +3670,88 @@ die Folien ohne Plan bauen — nimmt sie weiter den Hash-Weg aus 115. Der
 Wechsel ist damit ueberall streng, wo eine Tagesnummer da ist, und
 nirgends kaputt, wo keine ist. `saettigungWechsel:0` schaltet ihn ab und
 wuerfelt wieder.
+
+## 117 — Nachgemessen: woran das Vorbild wirklich anders aussieht
+
+Nicht geraten. Die neun Kacheln aus beiden Rastern Pixel fuer Pixel
+verglichen (Helligkeit nach BT.709):
+
+| | meins | Vorbild |
+|---|---|---|
+| dunkelstes Pixel | 4,9 | **0,0** |
+| p01 | 17,2 | **1,0** |
+| p05 | 23,3 | 3,7 |
+| Mitte (p50) | 89,0 | 55,5 |
+| Lichter (p95) | 176,7 | 178,3 |
+| Farbigkeit | 8,5 | 8,4 |
+
+**Die Lichter sind gleich. Die Farbigkeit ist gleich.** Der ganze
+Unterschied sitzt unten: keine ihrer neun Kacheln enthaelt ein einziges
+schwarzes Pixel, alle neun des Vorbilds tun es.
+
+### a) Schwarzpunkt
+
+Die Tonwertkette im Bundle haengt komplett an `t.warmEditorial` — fehlt
+das Feld, laeuft weder Kontrast noch Saettigung, das Foto geht roh
+durch. Und selbst wo sie laeuft, ist fabrics `Contrast` eine Streckung
+um Mittelgrau: sie hebt die Lichter genauso, wie sie die Tiefen senkt.
+
+Gebraucht wird ein **Schwarzpunkt**: Tiefen auf Null, Weiss bleibt
+Weiss. Das ist keine Filterkette, das ist eine Zeichenoperation — eine
+Flaeche im Mischmodus `color-burn`, direkt auf dem Foto und **unter**
+allem Text. Sie kann nicht fehlschlagen (aus demselben Grund wie die
+Schwarzweiss-Flaeche aus 114) und sie ruehrt den Text nicht an, weil er
+spaeter gezeichnet wird.
+
+    color-burn(b, g) = 1 - (1-b)/g     mit g = 1 - bildSchwarzpunkt
+
+In Chromium nachgemessen ueber alle 256 Graustufen: groesste Abweichung
+zur Formel **1 von 255**, Weiss bleibt exakt 255.
+
+`bildSchwarzpunkt .13`, auf ihre echten Kacheln gerechnet:
+
+| | vorher | nachher | Vorbild |
+|---|---|---|---|
+| dunkelstes Pixel | 4,9 | **0,0** | 0,0 |
+| p01 | 17,2 | **0,0** | 1,0 |
+| p05 | 23,3 | **0,9** | 3,7 |
+| Mitte | 89,0 | 63,7 | 55,5 |
+| schwarz (<40) | 19,1 % | 37,1 % | 48,5 % |
+
+### b) Wo der Text sitzt
+
+Der Anteil sehr heller Pixel je Zehntel der Kachelhoehe zeigt beim
+Vorbild **zwei Baenke mit einer Luecke dazwischen**, bei mir einen
+Schmier ueber die ganze Kachel:
+
+| Zehntel | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| meins | 7,3 | 3,4 | 3,9 | 1,8 | 2,0 | 4,0 | 3,9 | 2,3 | 1,4 | **2,7** |
+| Vorbild | 11,4 | 7,9 | 0,9 | **0,0** | 0,2 | 2,3 | 4,6 | 7,4 | 4,3 | **0,3** |
+
+Je Kachel gemessen faengt der Textblock im Vorbild bei **0,58** an und
+endet bei **0,88** — er sitzt im unteren Drittel und laesst die Mitte
+frei, wo das Gesicht ist. Meiner sass in der Mitte, und zwar fest
+verdrahtet:
+
+    He = tt.istKarte ? .42 : ve==="oben" ? .24 : ve==="unten" ? .7 : .5
+
+Die `.5` ist jetzt `BS_KACHEL.textMitte`, im dunklen Aufsatz **.73** —
+die gemessene Mitte des Vorbilds. Geteilte Kacheln bleiben unveraendert,
+die rechnen ueber `geteiltOben`/`geteiltUnten`.
+
+### c) Die Wortmarke
+
+Im Vorbild steht auf keiner Kachel ein Handle; bei mir auf jeder, unten
+links — im Profil oben das letzte Zehntel, 2,70 Prozent gegen 0,31.
+`nameZeigen:0` schaltet sie ab. Feld weg oder auf `1`, und sie ist
+wieder da.
+
+### Nicht geaendert: der Bildausschnitt
+
+Die Detaildichte ist 5,37 gegen 4,59 — das sieht nach mehr Zoom im
+Vorbild aus, aber die Streuung dort geht von 0,84 bis 9,12. Daraus
+laesst sich kein Zoomfaktor ableiten, und ich aendere nichts, was ich
+nicht messen kann. Der Rest des Schwarzanteils (37 gegen 48 Prozent)
+steckt ebenfalls in den Fotos, nicht im Code: dunkle Raeume gegen helle
+graue Wand.
