@@ -3142,3 +3142,39 @@ Handschrift Shadows Into Light** — eine Anmeldung ohne Datei zeichnet
 nichts, und ein Wert auf eine fehlende Schrift wuerde still auf eine
 Ersatzschrift fallen. Das waere genau die Sorte stiller Fehler, die hier
 schon dreimal Zeit gekostet hat.
+
+## 100 — Der zweite Block sass links, weil er in der falschen Groesse gemessen wurde
+
+"Es ist links lastig." Auf den Kacheln mit laengerem zweitem Block lief
+die Handschrift links aus dem Bild.
+
+Die Zeile wird mittig gesetzt ueber
+
+    Vt = r/2 - ct/2
+
+und `ct` kam aus `Math.max(pt.width, Ht(Je, qe, ...))`. `pt` misst
+richtig, naemlich mit `(Ve?qe:qe2)*zF`. **`Ht` wurde aber immer mit `qe`
+gerufen** — der Groesse des *ersten* Blocks. Der zweite Block wird in
+`zweitAnteil` gezeichnet, also in 62 Prozent, und in 100 Prozent
+gemessen. `Math.max` nimmt dann die zu grosse Zahl.
+
+    gemessene Breite    = 1 / 0,62 = 1,61 x die echte
+    Versatz nach links  = (1,61 - 1) / 2 = 31 % der Zeilenbreite
+
+| echte Zeilenbreite | Versatz nach links |
+|---|---|
+| 200 px | 61 px |
+| 300 px | 92 px |
+| 400 px | 123 px |
+
+Auf einer Kachel von 800 px. Genau das Bild aus dem Screenshot.
+
+**Warum es im warmen Feed nie aufgefallen ist:** dort steht die
+Fotokachel auf `ausrichtung "links"`, und dann gilt `Vt = _e` — `ct`
+spielt gar keine Rolle. Der Fehler war die ganze Zeit da, er brauchte nur
+eine mittig gesetzte Kachel, um sichtbar zu werden.
+
+Dabei bekommt `pt` auch die Laufweite, die ihm seit dem Versalsatz
+fehlte. Sie war bisher nur in `Ht`, und `Math.max` hat das gedeckt — aber
+zwei Messungen desselben Textes, die verschiedene Dinge messen, sind eine
+Falle und keine Absicherung.

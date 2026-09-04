@@ -1922,6 +1922,43 @@ P.append(('BS_KACHEL.schriftart,BS_KACHEL.unterSchrift,BS_KACHEL.deckblattFamili
 #      Faellt der Wert weg, gilt wieder textUnten — die Teilung
 #      funktioniert also weiter, auch wenn ihn jemand loescht.
 
+# 100 — Der zweite Block sass links, weil er in der falschen Groesse
+#       gemessen wurde.
+#
+#       Carina: "es ist links lastig". Auf den Kacheln, wo der zweite
+#       Block laenger war, lief die Handschrift links aus dem Bild.
+#
+#       Die Zeile wird mittig gesetzt ueber
+#
+#           Vt = r/2 - ct/2
+#
+#       und ct kam aus Math.max(pt.width, Ht(Je, qe, ...)). pt misst
+#       richtig, naemlich mit (Ve?qe:qe2)*zF. Ht wurde aber IMMER mit
+#       qe gerufen — der Groesse des ERSTEN Blocks. Der zweite Block
+#       wird in zweitAnteil gezeichnet, also in 62 Prozent, und in
+#       100 Prozent gemessen. Math.max nimmt dann die zu grosse Zahl.
+#
+#           gemessene Breite  = 1/0,62 = 1,61 x die echte
+#           Versatz nach links = (1,61-1)/2 = 31 % der Zeilenbreite
+#
+#       Bei einer 300 px breiten Zeile sind das 92 px auf einer
+#       Kachel von 800 px. Genau das Bild aus dem Screenshot.
+#
+#       Warum es im warmen Feed nie aufgefallen ist: dort steht die
+#       Fotokachel auf ausrichtung "links", und dann gilt Vt = _e —
+#       ct spielt gar keine Rolle. Der Fehler war die ganze Zeit da,
+#       er brauchte nur eine mittig gesetzte Kachel, um sichtbar zu
+#       werden.
+#
+#       Dabei bekommt pt auch die Laufweite, die ihm seit dem
+#       Versalsatz fehlte. Sie war bisher nur in Ht, und Math.max hat
+#       das gedeckt — aber zwei Messungen desselben Textes, die
+#       verschiedene Dinge messen, sind eine Falle und keine
+#       Absicherung.
+P.append(('pt=new Pe.fabric.Text(Je.map(xt=>xt.w).join(" "),{fontSize:(Ve?qe:qe2)*zF,fontFamily:Ve?Qe:QeZ,fontWeight:tt.fettNurErste&&!Ve?(BS_KACHEL.leichtGewicht||"400"):kt}),ct=Math.max(pt.width,Ht(Je,qe,!(tt.fettNurErste&&!Ve)))',
+ 'pt=new Pe.fabric.Text(Je.map(xt=>xt.w).join(" "),{charSpacing:zCS,fontSize:(Ve?qe:qe2)*zF,fontFamily:Ve?Qe:QeZ,fontWeight:tt.fettNurErste&&!Ve?(BS_KACHEL.leichtGewicht||"400"):kt}),ct=Math.max(pt.width,Ht(Je,(Ve?qe:qe2)*zF,!(tt.fettNurErste&&!Ve)))',
+ "Die Zeile wird in ihrer eigenen Groesse gemessen", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
