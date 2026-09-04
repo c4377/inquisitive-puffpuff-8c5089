@@ -3572,3 +3572,41 @@ Entsaettigung noch eine ColorMatrix mit `warmTone` .18 darueber
 Hinsehen sieht. Nicht angefasst, weil er auf jeder Kachel gleich liegt —
 aber der naechste Kandidat, falls das Schwarzweiss noch nicht neutral
 genug ist.
+
+## 114 — Schwarzweiss haengt nicht mehr am Bildfilter
+
+Kein einziges schwarzweisses Bild zu sehen, obwohl die Reihe
+nachweislich die Haelfte auf `-1` stellt. Die Entsaettigung lief bisher
+ueber `fabric.Image.filters.Saturation`, und dieser Weg hat eine Stelle,
+die alles still wegwirft:
+
+    try{ me.applyFilters() } catch { me.filters=[]; ... }
+
+Schlaegt `applyFilters` fehl — auf einem Telefon mit grossen Bildern
+durchaus moeglich, siehe die Safari-Abstuerze in Abschnitt 70 — werden
+**alle** Filter geloescht. Ergebnis: jedes Bild in voller Farbe, ohne
+jede Meldung.
+
+Drei Aenderungen:
+
+1. **Schwarzweiss kommt jetzt zusaetzlich ueber den Mischmodus** — eine
+   graue Flaeche mit `globalCompositeOperation: "saturation"` ueber dem
+   Bild. Eine Zeichenoperation, kein Pixelfilter: sie braucht keinen
+   zweiten Bildspeicher und kann nicht fehlschlagen.
+2. Der Mischmodus wird **einmal geprueft**. Kann der Browser ihn nicht,
+   bleibt die Flaeche weg — sonst laege ein grauer Kasten ueber dem Foto.
+3. Schlaegt die Filterkette doch fehl, wird **nicht mehr alles**
+   geworfen: der Saettigungsfilter wird allein noch einmal versucht.
+
+Nachgemessen an vier Kacheln (Farbigkeit = mittlerer Abstand zwischen
+groesstem und kleinstem Farbkanal):
+
+| | Farbigkeit |
+|---|---|
+| schwarzweiss, Filter **und** Mischmodus | 0,0 |
+| schwarzweiss, **nur** Mischmodus | **0,0** |
+| entzogen -0,55 | 11,7 |
+| Farbe 0,1 | 31,9 |
+
+Die zweite Zeile ist der Punkt: auch mit **vollstaendig abgeschalteter**
+Filterkette ist die Kachel schwarzweiss.

@@ -2464,6 +2464,58 @@ P.append(('Ca=async(e,t,r,n,i={})=>{var yn,_n,Jr,xr,zr,ti,nn,_i,ki,ri;try{Pe.fab
 #      jeder Kachel gleich liegt — aber er ist der naechste Kandidat,
 #      falls das Schwarzweiss noch nicht neutral genug ist.
 
+# 114 — Schwarzweiss haengt nicht mehr am Bildfilter.
+#
+#      Carina sieht kein einziges schwarzweisses Bild, obwohl die
+#      Reihe nachweislich die Haelfte auf -1 stellt. Die Entsaettigung
+#      lief bisher ueber fabric.Image.filters.Saturation, und dieser
+#      Weg hat eine Stelle, die alles still wegwirft:
+#
+#          try{me.applyFilters()}catch{me.filters=[];...}
+#
+#      Schlaegt applyFilters fehl — auf einem Telefon mit grossen
+#      Bildern durchaus moeglich, siehe die Safari-Abstuerze in
+#      Eintrag 70 — werden ALLE Filter geloescht. Ergebnis: jedes
+#      Bild in voller Farbe, und zwar ohne jede Meldung.
+#
+#      Drei Aenderungen, damit das nicht mehr davon abhaengt:
+#
+#      1. Schwarzweiss kommt jetzt zusaetzlich ueber den Mischmodus:
+#         eine graue Flaeche mit globalCompositeOperation
+#         "saturation" ueber dem Bild. Das ist eine Zeichenoperation,
+#         kein Pixelfilter — sie braucht keinen zweiten Bildspeicher
+#         und kann nicht fehlschlagen.
+#      2. Der Mischmodus wird einmal geprueft (BS_MISCHBAR). Kann der
+#         Browser ihn nicht, bleibt die Flaeche weg — sonst laege ein
+#         grauer Kasten ueber dem Foto.
+#      3. Schlaegt die Filterkette doch fehl, wird nicht mehr alles
+#         geworfen: der Saettigungsfilter wird allein noch einmal
+#         versucht.
+#
+#      Nachgemessen an vier Kacheln, Farbigkeit als mittlerer Abstand
+#      zwischen groesstem und kleinstem Farbkanal:
+#
+#          schwarzweiss, Filter und Mischmodus    0,0
+#          schwarzweiss, NUR Mischmodus           0,0
+#          entzogen -0,55                        11,7
+#          Farbe 0,1                             31,9
+#
+#      Die zweite Zeile ist der Punkt: auch mit vollstaendig
+#      abgeschalteter Filterkette ist die Kachel schwarzweiss.
+P.append(('if(typeof window<"u"&&window.BS_STIL==="dunkel")Object.assign(BS_KACHEL,BS_DUNKEL);',
+ 'if(typeof window<"u"&&window.BS_STIL==="dunkel")Object.assign(BS_KACHEL,BS_DUNKEL);'
+ 'const BS_MISCHBAR=(()=>{try{const zc=document.createElement("canvas").getContext("2d");'
+ 'zc.globalCompositeOperation="saturation";return zc.globalCompositeOperation==="saturation"}catch(zz){return!1}})();',
+ "Einmal pruefen, ob der Browser den Mischmodus kann", 1))
+P.append(('const ur=new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:`rgba(${zTon||"0,0,0"},${Et})`,selectable:!1});Et>0&&e.add(ur);',
+ 'zSat<=-.99&&BS_MISCHBAR&&e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:"#808080",'
+ 'globalCompositeOperation:"saturation",selectable:!1,evented:!1}));'
+ 'const ur=new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:`rgba(${zTon||"0,0,0"},${Et})`,selectable:!1});Et>0&&e.add(ur);',
+ "Schwarzweiss auch ohne Filter, ueber den Mischmodus", 1))
+P.append(('try{me.applyFilters()}catch{me.filters=[];try{me.applyFilters()}catch{}}',
+ 'try{me.applyFilters()}catch{try{me.filters=(Ze!==0&&Pe.fabric.Image.filters.Saturation)?[new Pe.fabric.Image.filters.Saturation({saturation:Ze})]:[];me.applyFilters()}catch{me.filters=[];try{me.applyFilters()}catch{}}}',
+ "Schlaegt die Filterkette fehl, bleibt wenigstens die Saettigung", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
