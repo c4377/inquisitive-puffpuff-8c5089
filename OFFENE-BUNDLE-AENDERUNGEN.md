@@ -2375,3 +2375,55 @@ Wand, heller Himmel). Dort traegt weisse Schrift nur noch ueber Saum
 und Schatten. Fuer diesen Fall in dieser Reihenfolge: `saumStaerke`
 hoeher, oder `tiefeUnten` wieder auf einen kleinen Wert wie .15 —
 nicht auf .42.
+
+## 83. Zwei Sachen an den Fotos: Schaerfe und der Umbruch
+
+### Die Bilder waren zu weich — mein Fehler aus Abschnitt 68
+
+Beim Speichern werden die Fotos verkleinert, damit der Plan in die
+IndexedDB passt. Ich hatte `bildKante` auf **1350** gesetzt, mit der
+Begruendung "das ist die Hoehe des Exports". Das war falsch gerechnet:
+
+    Vorschau auf dem Telefon   800 CSS-Pixel x 3 (Retina)  = 2400
+    Export ueber downloadImage 1080 x multiplier 2          = 2160
+
+Die Vorschau zeichnet also auf **2400** Bildpunkte. Ein 1350 Pixel
+breites Bild wird darauf um das 1,8-fache hochgerechnet — und sieht
+genau so weich aus, wie es aussah.
+
+    bildKante   1350  ->  2000
+    bildGuete   .85   ->  .82
+
+2000 deckt beide Faelle knapp ab. Die etwas niedrigere Qualitaet
+gleicht den Zuwachs teilweise aus; unterm Strich rund doppelt so viele
+Bytes wie mit 1350, aber immer noch ein Bruchteil der
+Kameraaufloesung.
+
+### Der Umbruch lief wieder ueber den Rand
+
+Ihr Fall nachgemessen: "Du kannst niemanden auf ein Niveau ziehen,"
+bei Umbruchgrenze 637 und Groesse 109. Beide Messwege — Canvas
+`measureText` und `fabric.Text.width` — ergeben dieselben Breiten
+(561, 612, 371, 376, 389) und denselben Umbruch:
+
+    Du kannst / niemanden / auf ein / Niveau / ziehen,
+
+Auf ihrem Bildschirm stand aber
+
+    Du kannst / niemanden auf ein / Niveau ziehen,
+
+"niemanden auf ein" misst rund **1030** Pixel. Das haette nie in 637
+gepasst. Beim Umbruch wurde also mit einer viel schmaleren Schrift
+gerechnet als beim Zeichnen — der Ersatzschrift aus dem
+Zeichenbreiten-Speicher.
+
+Die bisherigen Freigaben (48 und 76) haengen an Ereignissen: vor der
+Freigabe der Vorschau, und wenn der Browser mit dem Laden fertig ist.
+Beide koennen zu frueh oder zu spaet liegen, und eine einmal
+gezeichnete Kachel wird davon nicht neu gezeichnet.
+
+**Jetzt wird der Speicher am Anfang JEDER Kachel geleert.** Damit gilt
+ohne Ausnahme: gemessen wird mit derselben Schrift, mit der im selben
+Durchgang gezeichnet wird. Der Preis ist etwas Rechenzeit pro Kachel.
+Der Gewinn ist, dass diese Fehlerklasse — dreimal aufgetreten, dreimal
+anders geflickt — nicht wiederkommen kann.
