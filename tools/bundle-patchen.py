@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.042,nameDeckkraft:1,nameFarbe:"#E8836B",nameSchrift:"HelveticaNeueBrand",nameGewicht:"400",nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"Montserrat",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,folgeLage:"unten",textAnteil:67,fotoGroesse:44,schildGrund:"#E8836B",schildSchriftFarbe:"#241C16",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"Montserrat",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"Montserrat|Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.042,nameDeckkraft:1,nameFarbe:"#E8836B",nameSchrift:"HelveticaNeueBrand",nameGewicht:"400",nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"Montserrat",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,folgeLage:"unten",folgeGroesseAnteil:.070,folgeMaxhoehe:.70,folgeAusrichtung:"links",textAnteil:67,fotoGroesse:44,schildGrund:"#E8836B",schildSchriftFarbe:"#241C16",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"Montserrat",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"Montserrat|Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -1520,6 +1520,55 @@ P.append(('const ve=(()=>{const zA=(tt.fettNurErste&&!t._blurAn&&t.textAnchor&&t
  'const zR={oben:0,mitte:1,unten:2}[zL];'
  'return zG.some(zz=>Math.floor(zz/3)===zR)?zAus:zL})()',
  "Oben nur, wenn die Gesichtszonen wirklich bekannt sind", 1))
+
+# 91 — Die Textkachel ab Folie 2: so gross wie am Foto, linksbuendig.
+#
+#      Die Textkachel setzte immer aus denselben zwei Zahlen:
+#      groesseAnteil .098 als Startgroesse und maxhoehe .90 als
+#      Deckel. Auf einer Folgefolie ist das zu laut — die Fotokachel
+#      arbeitet mit einem viel engeren Deckel (textHoehe .70) und
+#      setzt ihren Fliesztext kleiner.
+#
+#      Gemessen, nicht geschaetzt. Zeilenabstand aus dem Bild geholt
+#      und durch zeile beziehungsweise fotoZeile geteilt:
+#
+#        Fotokachel Ueberschrift   ~80 px auf 800 Breite
+#        Fotokachel Fliesztext     ~60 px   (qe * zweitAnteil .75)
+#        Textkachel bisher         ~78 px
+#        Textkachel mit .070       ~56 px
+#
+#      Der Fliesztext der Fotokachel ist Helvetica, der der
+#      Folgefolie Montserrat, und Montserrat traegt bei gleicher
+#      Pixelzahl optisch dicker auf. Deshalb .070 (56 px) und nicht
+#      .075 (60 px): gerechnet gleich gross waere es einen Tick zu
+#      gross gewesen.
+#
+#        folgeGroesseAnteil  .070    Startgroesse ab Folie 2
+#        folgeMaxhoehe       .70     derselbe Deckel wie am Foto
+#        folgeAusrichtung    links   statt mittig
+#
+#      Alle drei greifen nur, wenn die Folie eine Rolle hat und die
+#      nicht "deckblatt" ist — dieselbe Weiche wie bei der Schrift in
+#      Eintrag 89. Folie 1 bleibt unangetastet.
+#
+#      Die Wortmarke rueckt mit nach links. Sie sitzt am selben Rand
+#      wie der Text (r*rand), nicht an einem eigenen — sonst haette
+#      die Kachel zwei linke Kanten.
+P.append(('let gr=r*(K.groesseAnteil||.098),ZL=[];',
+ 'const LI=FOLGE&&K.folgeAusrichtung==="links",'
+ 'GA=(FOLGE&&K.folgeGroesseAnteil)||K.groesseAnteil||.098,'
+ 'MH=(FOLGE&&K.folgeMaxhoehe)||K.maxhoehe;'
+ 'let gr=r*GA,ZL=[];',
+ "Folgetextkachel: eigene Startgroesse, Hoehe und Ausrichtung", 1))
+P.append(('if(m.h<=n*K.maxhoehe&&breiteste(m.z,gr)<=MESS)break;gr*=.95}',
+ 'if(m.h<=n*MH&&breiteste(m.z,gr)<=MESS)break;gr*=.95}',
+ "Anpassungslauf nimmt die Hoehe der Folgetextkachel", 1))
+P.append(('blk.forEach(z=>{txt(z,{left:r/2,top:y,originX:"center",originY:"center",',
+ 'blk.forEach(z=>{txt(z,{left:LI?r*K.rand:r/2,top:y,originX:LI?"left":"center",originY:"center",',
+ "Folgetextkachel linksbuendig", 1))
+P.append(('if(NA)txt(NA,{left:r/2,top:n*(K.nameUnten||.945),originX:"center",originY:"center",',
+ 'if(NA)txt(NA,{left:LI?r*K.rand:r/2,top:n*(K.nameUnten||.945),originX:LI?"left":"center",originY:"center",',
+ "Wortmarke folgt der Ausrichtung der Kachel", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

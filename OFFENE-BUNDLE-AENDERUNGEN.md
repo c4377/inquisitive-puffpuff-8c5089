@@ -2791,3 +2791,37 @@ Folgefolien in allen Faellen unten.
 **Nicht angefasst:** "mitte" ohne Analyse bleibt "mitte". Auf dem
 Deckblatt gibt es die Analyse praktisch immer, und die Folgefolien stehen
 jetzt ohnehin unten.
+
+## 91 — Textkachel ab Folie 2: so gross wie am Foto, linksbuendig
+
+Die Textkachel setzte immer aus denselben zwei Zahlen: `groesseAnteil`
+.098 als Startgroesse und `maxhoehe` .90 als Deckel. Auf einer
+Folgefolie ist das zu laut — die Fotokachel arbeitet mit einem viel
+engeren Deckel (`textHoehe` .70) und setzt ihren Fliesztext kleiner.
+
+**Gemessen, nicht geschaetzt.** Zeilenabstand aus dem gerenderten Bild
+geholt und durch `zeile` beziehungsweise `fotoZeile` geteilt:
+
+| | Schriftgroesse auf 800 Breite |
+|---|---|
+| Fotokachel, Ueberschrift | ~80 px |
+| Fotokachel, Fliesztext | **~60 px** (qe × zweitAnteil .75) |
+| Textkachel bisher | ~78 px |
+| Textkachel mit `.070` | **~56 px** |
+
+Der Fliesztext der Fotokachel ist Helvetica, der der Folgefolie
+Montserrat — und Montserrat traegt bei gleicher Pixelzahl optisch dicker
+auf. Deshalb `.070` (56 px) und nicht `.075` (60 px): rechnerisch gleich
+gross waere sichtbar einen Tick zu gross gewesen.
+
+    folgeGroesseAnteil  .070    Startgroesse ab Folie 2
+    folgeMaxhoehe       .70     derselbe Deckel wie am Foto
+    folgeAusrichtung    links   statt mittig
+
+Alle drei greifen nur, wenn die Folie eine Rolle hat und die nicht
+`deckblatt` ist — dieselbe Weiche wie bei der Schrift in Abschnitt 89.
+**Folie 1 bleibt unangetastet.**
+
+Die Wortmarke rueckt mit nach links, und zwar an denselben Rand wie der
+Text (`r*rand`), nicht an einen eigenen — sonst haette die Kachel zwei
+linke Kanten.
