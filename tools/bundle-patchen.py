@@ -299,7 +299,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
- 'bildSchwarzpunkt:.07,bildVignette:.6,textMitte:.73,nameZeigen:0,'
+ 'bildSchwarzpunkt:.07,bildVignette:.6,folgeFuss:.86,textMitte:.73,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
  'tiefeOben:.06,tiefeMitte:.10,tiefeUnten:.62,kanteOben:.30,kanteUnten:.55,'
  'saumStaerke:0,bildSchleier:.10,'
@@ -2918,6 +2918,52 @@ P.append(('colorStops:[{offset:0,color:`rgba(${zTon},${BS_KACHEL.kanteOben})`},{
  'coords:{x1:zVx,y1:zVy,r1:zVr*zVi2,x2:zVx,y2:zVy,r2:zVr},'
  'colorStops:[{offset:0,color:`rgba(${zVt},0)`},{offset:1,color:`rgba(${zVt},${zVi})`}]})}))}}catch{}',
  "Vignette als runder Verlauf", 1))
+
+
+# 122 — Die Folgeslides bekommen eine feste Unterkante. Carina: "Die
+#      Schrift der Folge slides soll besser immer auf der selben Hoehe
+#      vermutlich mittig unten sein."
+#
+#      Warum sie wandert: He ist keine Textkante, sondern die MITTE des
+#      Blocks. Auf Folgeslides ist ve gleich "unten" (folgeLage) und
+#      damit He gleich 0,7 — der Block wird auf 70 Prozent Hoehe
+#      zentriert. Wo er dann tatsaechlich endet, haengt an seiner
+#      eigenen Hoehe:
+#
+#          Unterkante = 0,7 + Zeilen * Zeilenhoehe/2
+#
+#      Bei 70 Pixel Zeilenhoehe auf 1350:
+#
+#          Zeilen   1      2      3      4      5      6
+#          unten  0,726  0,752  0,778  0,804  0,830  0,856
+#
+#      13 Prozent der Kachelhoehe Unterschied, 175 Pixel. Genau das
+#      sieht man, wenn man durch die Folien blaettert.
+#
+#      Jetzt wird auf Folgeslides die UNTERKANTE festgenagelt statt
+#      der Mitte — dieselbe Rechnung, die der textUnten-Deckel schon
+#      immer benutzt, nur als Regel statt als Ausnahme:
+#
+#          De = n * folgeFuss - ae + Et/2
+#
+#          Zeilen   1      2      3      4      5      6
+#          unten  0,860  0,860  0,860  0,860  0,860  0,860
+#
+#      folgeFuss .86, derselbe Wert wie geteiltUnten — geteilte
+#      Kacheln und Folgeslides enden damit auf einer Linie.
+#
+#      Die Bedingung ist die im Bundle ueberall gleiche: t.folienRolle
+#      gesetzt und nicht "deckblatt". Nach derselben Pruefung laufen
+#      schon folgeStil, folgeFamilie, folgeGewicht und folgeLage.
+#      Deckblaetter und Textkacheln bleiben unberuehrt, und ohne
+#      folgeFuss aendert sich gar nichts — der warme Feed hat den Wert
+#      nicht.
+
+P.append(('let De=n*He-ae/2+Et/2;if(De+ae-Et/2>n*(BS_KACHEL.textUnten||.9)',
+ 'let De=n*He-ae/2+Et/2;const zFF=Number(BS_KACHEL.folgeFuss)||0;'
+ 'zFF>0&&t.folienRolle&&t.folienRolle!=="deckblatt"&&(De=n*zFF-ae+Et/2);'
+ 'if(De+ae-Et/2>n*(BS_KACHEL.textUnten||.9)',
+ "Folgeslides haengen an der Unterkante", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

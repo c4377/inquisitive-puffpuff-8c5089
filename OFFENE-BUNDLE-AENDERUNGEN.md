@@ -3981,3 +3981,46 @@ Radiale Verlaeufe landen leicht im falschen Koordinatenraum, deshalb
 nicht auf dem eigenen Canvas geprueft, sondern im fabric der App selbst
 (5.5.2, ueber `window.fabric` in der laufenden Seite): Mitte 132,8,
 Ecke oben links 59,9, Ecke unten rechts 7,0. Sitzt.
+
+## 122 — Die Folgeslides bekommen eine feste Unterkante
+
+*"Die Schrift der Folge slides soll besser immer auf der selben Hoehe
+vermutlich mittig unten sein."*
+
+**Warum sie wandert:** `He` ist keine Textkante, sondern die **Mitte**
+des Blocks. Auf Folgeslides ist `ve` gleich `"unten"` (aus `folgeLage`)
+und damit `He` gleich **0,7** — der Block wird auf 70 Prozent Hoehe
+*zentriert*. Wo er tatsaechlich endet, haengt dann an seiner eigenen
+Hoehe:
+
+    Unterkante = 0,7 + Zeilen · Zeilenhoehe/2
+
+Bei 70 Pixel Zeilenhoehe auf 1350:
+
+| Zeilen | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|
+| Unterkante | 0,726 | 0,752 | 0,778 | 0,804 | 0,830 | **0,856** |
+
+**13 Prozent der Kachelhoehe Unterschied, 175 Pixel.** Genau das sieht
+man beim Durchblaettern.
+
+### Jetzt
+
+Auf Folgeslides wird die **Unterkante** festgenagelt statt der Mitte —
+dieselbe Rechnung, die der `textUnten`-Deckel schon immer benutzt, nur
+als Regel statt als Ausnahme:
+
+    De = n · folgeFuss − ae + Et/2
+
+| Zeilen | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|
+| Unterkante | 0,860 | 0,860 | 0,860 | 0,860 | 0,860 | 0,860 |
+
+`folgeFuss` **.86**, derselbe Wert wie `geteiltUnten` — geteilte
+Kacheln und Folgeslides enden damit auf einer Linie.
+
+Die Bedingung ist die im Bundle ueberall gleiche: `t.folienRolle`
+gesetzt und nicht `"deckblatt"`. Nach derselben Pruefung laufen schon
+`folgeStil`, `folgeFamilie`, `folgeGewicht` und `folgeLage`.
+Deckblaetter und Textkacheln bleiben unberuehrt, und ohne `folgeFuss`
+aendert sich gar nichts — der warme Feed hat den Wert nicht.
