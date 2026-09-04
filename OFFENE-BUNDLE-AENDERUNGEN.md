@@ -3541,3 +3541,34 @@ Ladevorgang.
 
 Durchgespielt mit sieben Tagen, davon vier mit `karte`: alle bekommen ein
 Bild ausser der Ablauf-Karte.
+
+## 113 — Die Haelfte schwarzweiss, und schwarzweiss heisst neutral
+
+Nachgerechnet war der Anteil **schon 50 Prozent** — die Reihe hatte drei
+von sechs auf `-1`, ueber 600 Kacheln kommen 50,2 Prozent heraus. Es
+**sah** nur nicht so aus, aus zwei Gruenden:
+
+**1. Der Rest war unausgewogen.** 33 Prozent "entzogen" (-0,55) gegen 17
+Prozent Farbe. Entzogene Farbe liest sich im Raster wie Farbe, nicht wie
+ein eigener Zustand — die gefuehlte Bilanz war ein Viertel schwarzweiss
+gegen drei Viertel bunt. Die Reihe hat jetzt acht Eintraege:
+
+    -1 | -0.55 | -1 | 0.1 | -1 | -0.55 | -1 | 0.1
+
+Gemessen ueber 600 Kacheln: **50,2 / 25,0 / 24,8 Prozent**.
+
+**2. Wichtiger: die schwarzweissen Kacheln waren gar nicht
+schwarzweiss.** Ueber jedem Bild liegt ein Farbton aus `tonReihe`, und
+der wuerfelt **unabhaengig** von der Saettigung — eine entsaettigte
+Kachel bekam so einen warmen oder violetten Schleier und war damit wieder
+getoent. Zwei Wuerfel, die einander widersprechen.
+
+Jetzt gilt: ist die Kachel auf `-1`, nimmt sie `tonNeutral` (13,13,13)
+statt eines Tons aus der Reihe. **Schwarzweiss heisst schwarzweiss.**
+
+*Anmerkung fuer spaeter:* die Filterkette der App legt nach der
+Entsaettigung noch eine ColorMatrix mit `warmTone` .18 darueber
+(R ×1,007 G ×1,004 B ×0,996). Ein Rest Waerme, den man bei genauem
+Hinsehen sieht. Nicht angefasst, weil er auf jeder Kachel gleich liegt —
+aber der naechste Kandidat, falls das Schwarzweiss noch nicht neutral
+genug ist.

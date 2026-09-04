@@ -293,12 +293,12 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:0,'
  'geteilt:1,geteiltAnteil:25,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
  'deckblattSchnitte:"full|full|wide|full|wide|full",'
- 'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20",'
+ 'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20",tonNeutral:"13,13,13",'
  'versalAnteil:30,versalFamilie:"Shadows Into Light",versalGewicht:"400",'
  'versalLaufweite:20,versalGroesse:.065,versalZweitAnteil:1,'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
- 'bildSaettigung:-1,saettigungReihe:"-1|-0.55|-1|0.1|-1|-0.55",'
+ 'bildSaettigung:-1,saettigungReihe:"-1|-0.55|-1|0.1|-1|-0.55|-1|0.1",'
  'bildHeben:0,bildSpreizung:.28,'
  'tiefeOben:.06,tiefeMitte:.10,tiefeUnten:.62,kanteOben:.30,kanteUnten:.55,'
  'saumStaerke:0,bildSchleier:.10,'
@@ -2430,6 +2430,39 @@ P.append(('Ca=async(e,t,r,n,i={})=>{var yn,_n,Jr,xr,zr,ti,nn,_i,ki,ri;try{Pe.fab
 #
 #      Durchgespielt mit sieben Tagen, davon vier mit karte:
 #      alle bekommen ein Bild ausser der Ablauf-Karte.
+
+# 113 — Die Haelfte schwarzweiss, und schwarzweiss heisst neutral.
+#
+#      Carina: "es sollten 50% schwarz weiss sein". Nachgerechnet war
+#      der Anteil schon 50 — die Reihe hatte drei von sechs auf -1,
+#      und ueber 600 Kacheln kommen 50,2 Prozent heraus. Es SAH nur
+#      nicht so aus, aus zwei Gruenden:
+#
+#      1. Der Rest war unausgewogen: 33 Prozent "entzogen" (-0,55)
+#         gegen 17 Prozent Farbe. Entzogene Farbe liest sich im
+#         Raster wie Farbe, nicht wie ein eigener Zustand. Die
+#         gefuehlte Bilanz war also ein Viertel schwarzweiss gegen
+#         drei Viertel bunt. Die Reihe hat jetzt acht Eintraege:
+#         vier mal -1, zwei mal -0,55, zwei mal 0,1 — gemessen
+#         50,2 / 25,0 / 24,8 Prozent.
+#
+#      2. Wichtiger: die schwarzweissen Kacheln waren gar nicht
+#         schwarzweiss. Ueber jedem Bild liegt ein Farbton aus
+#         tonReihe, und der wuerfelt UNABHAENGIG von der Saettigung —
+#         eine entsaettigte Kachel bekam so einen warmen oder
+#         violetten Schleier und war damit wieder getoent. Zwei
+#         Wuerfel, die einander widersprechen.
+#
+#         Jetzt gilt: ist die Kachel auf -1, nimmt sie tonNeutral
+#         (13,13,13) statt eines Tons aus der Reihe. Schwarzweiss
+#         heisst schwarzweiss.
+#
+#      Anmerkung fuer spaeter: die Filterkette der App legt nach der
+#      Entsaettigung noch eine ColorMatrix mit warmTone .18 darueber
+#      (R x1,007 G x1,004 B x0,996). Das ist ein Rest Waerme, den man
+#      bei genauem Hinsehen noch sieht. Nicht angefasst, weil er auf
+#      jeder Kachel gleich liegt — aber er ist der naechste Kandidat,
+#      falls das Schwarzweiss noch nicht neutral genug ist.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
