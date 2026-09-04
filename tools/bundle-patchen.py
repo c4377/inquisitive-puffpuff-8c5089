@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"Montserrat",unterSchrift:"Montserrat",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.042,nameDeckkraft:.55,nameSchrift:"Montserrat",nameGewicht:"400",nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"Montserrat",zweiteFamilie:"Montserrat",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,textAnteil:67,fotoGroesse:44,schildGrund:"#E8836B",schildSchriftFarbe:"#241C16",schildSchrift:"Montserrat",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"Montserrat",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"Montserrat|Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.042,nameDeckkraft:.55,nameSchrift:"HelveticaNeueBrand",nameGewicht:"400",nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"Montserrat",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,textAnteil:67,fotoGroesse:44,schildGrund:"#E8836B",schildSchriftFarbe:"#241C16",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"Montserrat",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"Montserrat|Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -1386,14 +1386,38 @@ P.append(('fontSize:Math.round(qe*.42),fontFamily:"OpenSansBrand",fill:"rgba(255
  'charSpacing:150,fill:`rgba(255,255,255,${BS_KACHEL.nameDeckkraft||.55})`',
  "Wortmarke der Fotokachel aus dem Block statt aus der Ueberschrift", 1))
 
-# 89 — Montserrat statt Helvetica Neue, sonst nichts.
+# 89 — Montserrat auf den Folgefolien, Helvetica Neue auf Folie 1.
 #
-#      Sieben Werte im Block standen auf HelveticaNeueBrand:
-#      schriftart, unterSchrift, folgeFamilie, zweiteFamilie,
-#      schildSchrift, ablaufTitel, nameSchrift. Alle sieben stehen
-#      jetzt auf Montserrat. Fraunces bleibt, wo Fraunces war
-#      (fotoSchrift, deckblattFamilie) — die Fotokachel aendert sich
-#      nur in der Unterzeile, im Schild und in der Wortmarke.
+#      Sieben Werte im Block standen auf HelveticaNeueBrand. Zwei
+#      davon gehoeren den Folgefolien und stehen jetzt auf Montserrat:
+#
+#        folgeFamilie   die Folien 2 und weiter
+#        ablaufTitel    die Ablauf-Folien, die immer Folgefolien sind
+#
+#      Die anderen fuenf gehoeren Folie 1 und bleiben Helvetica Neue:
+#      schriftart, unterSchrift, zweiteFamilie, schildSchrift und
+#      nameSchrift. Fraunces bleibt, wo Fraunces war (fotoSchrift,
+#      deckblattFamilie).
+#
+#      **Die Wortmarke bleibt ueberall Helvetica**, auch auf den
+#      Folgefolien. Sie ist eine Marke und keine Textschrift; wenn sie
+#      zwischen Folie 1 und Folie 2 desselben Beitrags die Schrift
+#      wechselt, liest sich das wie ein Fehler.
+#
+#      Zwei Stellen konnten die Regel nicht sehen und mussten sie
+#      lernen — sonst waere eine Folgefolie halb Montserrat gewesen:
+#
+#        1. Die zweite Zeile auf einer Fotokachel kam immer aus
+#           zweiteFamilie, egal ob Deckblatt oder Folgefolie. Auf
+#           einer Folgefolie mit Bild stand dann die Ueberschrift in
+#           Montserrat und die Zeile darunter in Helvetica.
+#        2. Die Fassung "marke" nahm immer schriftart. Eine
+#           Folgefolie ohne Bild blieb dadurch Helvetica.
+#
+#      Beide lesen jetzt die Rolle der Folie. Die Rolle steht schon
+#      im Zeichner (Je.rolle beziehungsweise t.folienRolle) und hat
+#      genau drei Werte: deckblatt, inhalt, abschluss — die
+#      Ablauf-Fassung rechnet oben im selben Zeichner damit.
 #
 #      Die Regeln bleiben unangetastet: laufweite -50, zeile 1.02,
 #      groesseAnteil .098, gewicht 300, unterGewicht 700. Montserrat
@@ -1420,6 +1444,15 @@ P.append(('fontSize:Math.round(qe*.42),fontFamily:"OpenSansBrand",fill:"rgba(255
 #
 #      Nicht angefasst: folgeStil "montserrat". Das ist der Name
 #      eines Layouts, keine Schrift.
+
+P.append(('QeZ=$e?(BS_KACHEL.zweiteFamilie||Qe):Qe',
+ 'QeZ=$e?((t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeFamilie)'
+ '||BS_KACHEL.zweiteFamilie||Qe):Qe',
+ "Zweite Zeile auf dem Foto folgt der Rolle der Folie", 1))
+P.append(('const FAM=ix=>ix===0?K.schriftart:(K.unterSchrift||K.schriftart);',
+ 'const FOLGE=!!(Je.rolle&&Je.rolle!=="deckblatt")&&!!K.folgeFamilie;\n'
+ 'const FAM=ix=>FOLGE?K.folgeFamilie:(ix===0?K.schriftart:(K.unterSchrift||K.schriftart));',
+ "Textkachel in der Fassung marke folgt der Rolle der Folie", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

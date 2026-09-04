@@ -2655,16 +2655,40 @@ Das ist derselbe Fehler wie bei `klar.html` in Abschnitt 87: die
 Pruefseite zeigte etwas anderes als die App, und das faellt nur auf, wenn
 man hinsieht statt zu lesen.
 
-## 89 — Montserrat statt Helvetica Neue
+## 89 — Montserrat auf den Folgefolien, Helvetica Neue auf Folie 1
 
-Sieben Werte im Block standen auf `HelveticaNeueBrand`:
+Sieben Werte im Block standen auf `HelveticaNeueBrand`. Zwei davon
+gehoeren den **Folgefolien** und stehen jetzt auf Montserrat:
 
-    schriftart  unterSchrift  folgeFamilie  zweiteFamilie
-    schildSchrift  ablaufTitel  nameSchrift
+    folgeFamilie   die Folien 2 und weiter
+    ablaufTitel    die Ablauf-Folien, die immer Folgefolien sind
 
-Alle sieben stehen jetzt auf **Montserrat**. Fraunces bleibt, wo Fraunces
-war (`fotoSchrift`, `deckblattFamilie`) — an der Fotokachel aendern sich
-nur die Unterzeile, das Schild und die Wortmarke.
+Die anderen fuenf gehoeren **Folie 1** und bleiben Helvetica Neue:
+`schriftart`, `unterSchrift`, `zweiteFamilie`, `schildSchrift`,
+`nameSchrift`. Fraunces bleibt, wo Fraunces war (`fotoSchrift`,
+`deckblattFamilie`).
+
+**Die Wortmarke bleibt ueberall Helvetica**, auch auf den Folgefolien.
+Sie ist eine Marke und keine Textschrift — wechselt sie zwischen Folie 1
+und Folie 2 desselben Beitrags die Schrift, liest sich das wie ein
+Fehler.
+
+### Zwei Stellen konnten die Regel nicht sehen
+
+Sonst waere eine Folgefolie halb Montserrat gewesen:
+
+1. **Die zweite Zeile auf einer Fotokachel** kam immer aus
+   `zweiteFamilie`, egal ob Deckblatt oder Folgefolie. Auf einer
+   Folgefolie mit Bild haette die Ueberschrift in Montserrat gestanden
+   und die Zeile darunter in Helvetica.
+2. **Die Fassung "marke"** nahm immer `schriftart`. Eine Folgefolie ohne
+   Bild waere dadurch Helvetica geblieben.
+
+Beide lesen jetzt die **Rolle der Folie**. Die steht laengst im Zeichner
+(`Je.rolle` beziehungsweise `t.folienRolle`) und hat genau drei Werte:
+`deckblatt`, `inhalt`, `abschluss` — die Ablauf-Fassung rechnet oben im
+selben Zeichner schon damit. Angesehen mit `rolle:"deckblatt"` gegen
+`rolle:"inhalt"` an derselben Kachel.
 
 **Die Regeln bleiben unangetastet:** `laufweite -50`, `zeile 1.02`,
 `groesseAnteil .098`, `gewicht 300`, `unterGewicht 700`. Montserrat ist
