@@ -2514,3 +2514,82 @@ zugewiesen werden, sonst bleiben sie weich.
 Fuenf Abstufungen von Creme bis Espresso als Grundfarben der
 Textkacheln. Gebaut wurde es nie, nur gezeigt. Bleibt bei den zwei
 Farbpaaren.
+
+## 87 — "Tag 8 ist perfekt, der Rest ist mit overlay blass"
+
+Der Unterschied liegt nicht am Bild, nicht an der Ecke und nicht an der
+Schaerfe, sondern an **einem Wert, der auf der Kachel gespeichert ist**.
+
+Ueber jedem Foto liegen fuenf Ebenen. Vier davon sind auf jeder Kachel
+gleich: die Filterkette der App (Kontrast .07, Saettigung .3, Aufhellung
+.13), die warme Lasur, der Kantenverlauf oben und unten, der Saum in den
+zwei Ecken. Die fuenfte — das flache Abdunkeln — ist es nicht:
+
+    t.overlay gesetzt        ->  genau dieser Wert
+    editorialDark            ->  0
+    bildVerblasst            ->  .55
+    sonst                    ->  .05
+
+Und die **automatische Bildzuweisung schreibt jeder Folie ein overlay
+mit**: `.2`, wenn die Bildanalyse geklappt hat, sonst `.25`. Eine Kachel,
+deren Bild nicht ueber die Zuweisung kam, hat kein overlay und landet bei
+`.05`. Das ist Tag 8.
+
+Gemessen im Vollaufbau (`tools/.pruefen/schleier.html`, dasselbe Foto,
+alle fuenf Ebenen, Bildmitte):
+
+| flaches Abdunkeln | Mittel | Streuung | hellstes |
+|---|---|---|---|
+| .05 (Tag 8) | 143 | **24.1** | 187 |
+| .20 (auto) | 132 | 20.4 | 167 |
+| .25 (auto) | 128 | **19.2** | 162 |
+| .55 (Folgefolie) | 104 | **11.9** | 125 |
+
+Ein Fuenftel Kontrast weg und die Lichter um 25 Stufen gedeckelt — genau
+das sieht man als blass.
+
+**Der Umbau:** der Wert kommt jetzt aus dem Block, nicht mehr von der
+Kachel.
+
+    bildSchleier              .05   Deckel fuer jede Fotokachel
+    bildSchleierWiederholung  .28   Folgefolie, die das Bild erbt
+
+`bildSchleier` deckelt: keine Kachel kann dunkler verschleiert werden als
+der Block erlaubt, weniger darf sie. Damit ist es egal, was die
+Zuweisung einmal gespeichert hat.
+
+Die `.55` ist **kein Versehen**: sie gehoert zu einer Folgefolie, die das
+Bild des Deckblatts noch einmal zeigt (`bildVerblasst` wird nur wahr, wenn
+die Folie keinen eigenen Hintergrund hat und den des Deckblatts erbt).
+Ohne Abdunkeln waere sie eine Wiederholung statt eines Hintergrunds.
+Angesehen in `tools/.pruefen/wiederholung.html`, Text in der Mitte, also
+ohne Hilfe vom Kantenverlauf: bei .55 ist das Bild fast weg, bei .20 ist
+es so stark wie das Deckblatt, bei **.28** kommt es durch und die weisse
+Fraunces traegt noch.
+
+Der Weichzeichner-Pfad bleibt ausgenommen. Dort traegt die `.42` den Text
+ueber dem unscharfen Bild.
+
+**Absichtlich nicht angefasst:** Lasur, Kantenverlauf und Filterkette.
+Die liegen auf *jeder* Kachel, auch auf Tag 8 — und Tag 8 ist perfekt.
+Was auf Tag 8 gleich ist, kann nicht die Ursache sein. `kanteOben` und
+`kanteUnten` stehen trotzdem jetzt im Block, damit der Kantenverlauf
+spaeter an einer Stelle aenderbar ist; die Werte sind unveraendert
+(.34 / .40).
+
+### Zwei Dinge zur Arbeitsweise
+
+**Die Vergleichsseite von gestern war unvollstaendig.** `klar.html` hat
+nur Bild, Tiefenverlauf und Saum gezeichnet — das flache Abdunkeln, die
+Lasur und den Kantenverlauf nicht. Deshalb sah der Saum-Vergleich sauber
+aus, waehrend die App weiter blass war. `schleier.html` zeichnet jetzt
+alle fuenf Ebenen.
+
+**karten146 ist ein Delta auf karten145, kein voller Durchlauf.** Der
+unveraenderte Drop, auf den Eintrag 1 von `bundle-patchen.py` zeigt
+(`rgba(18,16,14,0.16)`), liegt nicht mehr auf der Platte; ein voller
+Durchlauf bricht dort ab. Die vier Ersetzungen wurden einzeln auf
+"genau einmal" geprueft und danach aus der gebauten Datei wieder
+herausgegriffen, und die Datei wurde als ES-Modul auf Syntax geprueft.
+`bundle-patchen.py` traegt Eintrag 87 trotzdem, damit der naechste Drop
+ihn wieder mitbekommt.

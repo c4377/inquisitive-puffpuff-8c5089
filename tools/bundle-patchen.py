@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,textAnteil:67,fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,ablaufTitel:"HelveticaNeueBrand",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,textAnteil:67,fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"HelveticaNeueBrand",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -405,10 +405,10 @@ P.append(('const ur=new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:`rgba
  "Warme Lasur ueber dem Bild", 1))
 
 P.append(('colorStops:[{offset:0,color:"rgba(0,0,0,0.30)"},{offset:.18,color:"rgba(0,0,0,0.0)"},{offset:.82,color:"rgba(0,0,0,0.0)"},{offset:1,color:"rgba(0,0,0,0.35)"}]',
- 'colorStops:[{offset:0,color:`rgba(${BS_KACHEL.bildTon},0.34)`},'
+ 'colorStops:[{offset:0,color:`rgba(${BS_KACHEL.bildTon},${BS_KACHEL.kanteOben})`},'
  '{offset:.18,color:`rgba(${BS_KACHEL.bildTon},0.0)`},'
  '{offset:.82,color:`rgba(${BS_KACHEL.bildTon},0.0)`},'
- '{offset:1,color:`rgba(${BS_KACHEL.bildTon},0.40)`}]',
+ '{offset:1,color:`rgba(${BS_KACHEL.bildTon},${BS_KACHEL.kanteUnten})`}]',
  "Kantenverlauf warm statt schwarz", 1))
 
 # 35 — Der Tiefenverlauf gilt fuer alle feinen Schriften, nicht nur
@@ -1278,6 +1278,59 @@ P.append(('Ca=async(e,t,r,n,i={})=>{var yn,_n,Jr,xr,zr,ti,nn,_i,ki,ri;',
  'Ca=async(e,t,r,n,i={})=>{var yn,_n,Jr,xr,zr,ti,nn,_i,ki,ri;'
  'try{Pe.fabric.util.clearFabricFontCache()}catch(zz){}',
  "Speicher vor jeder Kachel leeren", 1))
+
+# 87 — Der flache Schleier ueber dem Foto haengt nicht mehr an der Kachel.
+#
+#      Carina: "Tag 8 ist perfekt der Rest ist mit overlay blass."
+#      Gemessen im Vollaufbau (tools/.pruefen/schleier.html, gleiches
+#      Foto, alle fuenf Ebenen):
+#
+#        Et=.05   Mittel 143   Streuung 24.1   hellstes 187
+#        Et=.20   Mittel 132   Streuung 20.4   hellstes 167
+#        Et=.25   Mittel 128   Streuung 19.2   hellstes 162
+#        Et=.55   Mittel 104   Streuung 11.9   hellstes 125
+#
+#      Ein Fuenftel Kontrast weg, die Lichter um 25 Stufen gedeckelt —
+#      genau das sieht sie als "blass".
+#
+#      Woher der Unterschied kommt: die automatische Bildzuweisung
+#      schreibt jeder Folie ein overlay mit (hK gibt .2 zurueck, wenn
+#      die Bildanalyse geklappt hat, sonst .25). Der Zeichner liest
+#      das als t.overlay und dunkelt damit ab. Eine Kachel, deren Bild
+#      NICHT ueber die Zuweisung kam, hat kein overlay und landet beim
+#      Vorgabewert .05 — das ist Tag 8. Der Unterschied ist also nicht
+#      das Bild und nicht die Ecke, sondern ein gespeicherter Wert.
+#
+#      bildSchleier deckelt ihn. Kein Foto kann dunkler verschleiert
+#      werden als der Block erlaubt; wer weniger will, darf weniger.
+#      Der Weichzeichner-Pfad bleibt ausgenommen: dort traegt die .42
+#      den Text ueber dem unscharfen Bild, und ohne sie waere er weg.
+#
+#      Zweiter Fall: bildVerblasst=.55. Das ist KEIN Versehen, sondern
+#      eine Folgefolie, die das Bild des Deckblatts noch einmal zeigt
+#      ($l wird nur wahr, wenn die Folie keinen eigenen Hintergrund
+#      hat und den des Deckblatts erbt). Die .55 sorgt dafuer, dass
+#      sie als Hintergrund liest und nicht als Wiederholung. Sie wird
+#      deshalb nicht gedeckelt, sondern bekommt einen eigenen Wert.
+#      Angesehen in tools/.pruefen/wiederholung.html, Text in der
+#      Mitte, also ohne Hilfe vom Kantenverlauf: bei .55 ist das Bild
+#      fast weg, bei .20 ist es so stark wie das Deckblatt selbst,
+#      bei .28 kommt es durch und die weisse Fraunces traegt noch.
+#      Darum bildSchleierWiederholung:.28.
+#
+#      Absichtlich NICHT angefasst: die warme Lasur, der Kantenverlauf
+#      und die Filterkette der App (contrastBoost .07, satBoost .3,
+#      hellBoost .13). Die liegen auf JEDER Kachel, auch auf Tag 8 —
+#      und Tag 8 nennt sie perfekt. Was auf Tag 8 gleich ist, ist
+#      nicht die Ursache. kanteOben und kanteUnten stehen jetzt
+#      trotzdem im Block, damit der Kantenverlauf spaeter an einer
+#      Stelle aenderbar ist; die Werte sind unveraendert.
+P.append(('t.bildVerblasst===!0?Et=.55:Et=dr?.42:.05;',
+ 't.bildVerblasst===!0?Et=.55:Et=dr?.42:.05;'
+ 'dr||(t.bildVerblasst===!0'
+ '?typeof BS_KACHEL.bildSchleierWiederholung=="number"&&(Et=BS_KACHEL.bildSchleierWiederholung)'
+ ':typeof BS_KACHEL.bildSchleier=="number"&&(Et=Math.min(Et,BS_KACHEL.bildSchleier)));',
+ "Flacher Schleier kommt aus dem Block", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
