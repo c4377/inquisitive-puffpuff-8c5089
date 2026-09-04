@@ -2903,3 +2903,32 @@ brauchen Code:
    Handschrift, mit Luft dazwischen. Heute fliessen beide Bloecke als
    einer.
 2. **Gesperrter Versalsatz** auf den Reel-Covern.
+
+## 94 — Der Umschalter als Menue
+
+Adressen eintippen ist keine Bedienung. Der Wechsel zwischen den zwei
+Feeds haengt jetzt als kleines Schildchen unten rechts in der App:
+**Warm | Dunkel**.
+
+Er liegt in `site/stil-schalter.js` und haengt **neben** der App am
+`body`, nicht in ihr. React verwaltet nur `#root` — damit kann das
+Schildchen nicht verschwinden, wenn die App neu zeichnet, und es ist
+auf jeder Seite da, auch auf `/content-planner`, wo der Pfad das
+`/dunkel` laengst verloren hat.
+
+**Warum ein Klick nicht reicht, nur den Wert zu setzen:** die Pfadregel
+aus Abschnitt 93 gilt weiter. Auf `/` wuerde sie den gerade gesetzten
+Wert beim Neuladen sofort wieder loeschen, auf `/dunkel/` sofort wieder
+setzen. Der Schalter muss also mitwandern:
+
+| steht auf | Klick | geht nach |
+|---|---|---|
+| `/` | Dunkel | `/dunkel/` |
+| `/dunkel/` | Warm | `/` |
+| `/content-planner` | beides | bleibt, laedt neu |
+
+Die sechs Faelle sind in node durchgerechnet, nicht angenommen.
+
+Eine Datei, ein Ort. `netlify.toml` bekommt fuer sie dieselbe
+Nicht-Zwischenspeichern-Regel wie die index.html, sonst haengt beim
+naechsten Umbau eine alte Fassung im Browser.
