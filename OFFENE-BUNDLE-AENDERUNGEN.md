@@ -2354,3 +2354,24 @@ Ein orangener Rahmen um jede Kachel wurde gebaut und im Raster
 angesehen. Einzeln sieht er ordentlich aus; zu fuenfzehnt nebeneinander
 wird jede Kachel zur Briefmarke, und die Rahmen reden mehr als die
 Inhalte. Der Saum macht dasselbe, ohne eine Kante zu ziehen.
+
+## 82. Der Tiefenverlauf faellt weg, der Saum bleibt
+
+    tiefeOben    .05  ->  0
+    tiefeMitte   .10  ->  0
+    tiefeUnten   .42  ->  0
+
+Zwei Verlaeufe uebereinander sind einer zu viel: der Tiefenverlauf
+dunkelt ab, der Saum faerbt ein, und zusammen nehmen sie dem Bild
+genau das Licht, wegen dem der Saum da ist.
+
+Der Saum uebernimmt die Aufgabe des Tiefenverlaufs mit, weil er zu
+allen Raendern hin dichter wird — auch nach unten, wo der Text steht.
+Dazu kommt der Schatten, den der Zeichner ohnehin setzt, sobald keine
+Flaeche unter dem Text liegt.
+
+**Wo es kippen kann:** ein Foto, das unten links sehr hell ist (weisse
+Wand, heller Himmel). Dort traegt weisse Schrift nur noch ueber Saum
+und Schatten. Fuer diesen Fall in dieser Reihenfolge: `saumStaerke`
+hoeher, oder `tiefeUnten` wieder auf einen kleinen Wert wie .15 —
+nicht auf .42.
