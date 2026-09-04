@@ -3755,3 +3755,57 @@ laesst sich kein Zoomfaktor ableiten, und ich aendere nichts, was ich
 nicht messen kann. Der Rest des Schwarzanteils (37 gegen 48 Prozent)
 steckt ebenfalls in den Fotos, nicht im Code: dunkle Raeume gegen helle
 graue Wand.
+
+## 118 — Die Farbbremse
+
+*"Die farbigen Bilder sind vom grading zu weit weg von normalen Farben."*
+
+Stimmt, und der Grund steckt in 117. `color-burn` rechnet **je Kanal**:
+
+    out_c = 1 - (1 - b_c) / g
+
+Jeder Kanal bekommt seinen eigenen Schwarzpunkt. Der dunkelste Kanal
+faellt weiter als der hellste — der Abstand zwischen den Kanaelen
+waechst, und **der Abstand zwischen den Kanaelen ist die Saettigung**.
+Auf einer Schwarzweisskachel passiert nichts, alle drei Kanaele sind
+gleich. Auf einer Farbkachel drueckt es die Farbe hoch.
+
+In Chromium ueber ihre fuenf Farbkacheln gemessen:
+
+| | Saettigung |
+|---|---|
+| ohne alles | 0,160 |
+| nur Schwarzpunkt | **0,248** (plus 55 %) |
+
+### Die Bremse
+
+Eine zweite Flaeche direkt hinter dem Schwarzpunkt: Mischmodus
+`saturation`, halbdurchsichtiges Mittelgrau. Volldeckend waere sie
+Schwarzweiss; mit Alpha mischt sie linear zwischen "gebrannt" und
+"gebrannt und grau" — eine Entsaettigung mit Regler.
+
+| Bremse | Saettigung | |
+|---|---|---|
+| 0,20 | 0,209 | |
+| 0,30 | 0,186 | ungefaehr das Niveau des Vorbilds (0,196) |
+| **0,42** | **0,160** | genau der Ausgangswert |
+
+`.42` gewaehlt: nicht "sieht besser aus", sondern der gemessene Wert,
+der die Saettigung exakt dahin zurueckbringt, wo sie vor dem
+Schwarzpunkt war.
+
+### Sie kostet nichts
+
+| Bremse | Mittel | schwarz | dunkelstes |
+|---|---|---|---|
+| 0,00 | 76,0 | 35,9 % | 0,0 |
+| 0,20 | 76,1 | 35,9 % | 0,0 |
+| 0,42 | 76,1 | 35,9 % | 0,0 |
+
+Bei jeder Stufe identisch: die Bremse ruehrt nur die Saettigung an,
+nicht den Ton. Der Farbton verschiebt sich um hoechstens **2 Grad** —
+unsichtbar.
+
+Sie haengt am Schwarzpunkt (steht in derselben Klammer, hinter
+demselben `return`) und laeuft nicht auf Schwarzweisskacheln, wo es
+nichts zu bremsen gibt. **Kein Schwarzpunkt, keine Bremse.**

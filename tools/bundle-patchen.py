@@ -299,7 +299,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
- 'bildSchwarzpunkt:.13,textMitte:.73,nameZeigen:0,'
+ 'bildSchwarzpunkt:.13,bildFarbBremse:.42,textMitte:.73,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
  'tiefeOben:.06,tiefeMitte:.10,tiefeUnten:.62,kanteOben:.30,kanteUnten:.55,'
  'saumStaerke:0,bildSchleier:.10,'
@@ -2677,6 +2677,57 @@ P.append((':ve==="oben"?.24:ve==="unten"?.7:.5;let De=n*He-ae/2+Et/2;',
 P.append(('tt.platten||e.add(new Pe.fabric.Text(Ze,{left:_e,top:n*(BS_KACHEL.nameUnten||.945)',
  '(tt.platten||BS_KACHEL.nameZeigen===0)||e.add(new Pe.fabric.Text(Ze,{left:_e,top:n*(BS_KACHEL.nameUnten||.945)',
  "Wortmarke abschaltbar", 1))
+
+
+# 118 — Die Farbbremse. Carina: "die farbigen Bilder sind vom grading
+#      zu weit weg von normalen Farben."
+#
+#      Sie hat recht, und der Grund steckt in 117. color-burn rechnet
+#      je Kanal:
+#
+#          out_c = 1 - (1 - b_c) / g
+#
+#      Jeder Kanal bekommt seinen eigenen Schwarzpunkt. Der dunkelste
+#      Kanal faellt weiter als der hellste — der Abstand dazwischen
+#      waechst, und der Abstand zwischen den Kanaelen IST die
+#      Saettigung. Auf einer Schwarzweisskachel passiert nichts (alle
+#      drei Kanaele sind gleich), auf einer Farbkachel drueckt es die
+#      Farbe hoch.
+#
+#      In Chromium ueber ihre fuenf Farbkacheln gemessen:
+#
+#          ohne alles          0,160
+#          nur Schwarzpunkt    0,248     das ist plus 55 Prozent
+#
+#      Die Bremse ist eine zweite Flaeche direkt hinter dem
+#      Schwarzpunkt: Mischmodus saturation, halbdurchsichtiges
+#      Mittelgrau. Volldeckend waere sie Schwarzweiss, mit Alpha
+#      mischt sie linear zwischen "gebrannt" und "gebrannt und grau"
+#      — also eine Entsaettigung mit Regler.
+#
+#          Bremse 0,20   0,209
+#          Bremse 0,30   0,186     ungefaehr das Niveau des Vorbilds
+#          Bremse 0,42   0,160     genau der Ausgangswert
+#
+#      .42 gewaehlt: nicht "sieht besser aus", sondern der gemessene
+#      Wert, der die Saettigung exakt dahin zurueckbringt, wo sie vor
+#      dem Schwarzpunkt war.
+#
+#      Sie kostet nichts. Mittel 76,1, Schwarzanteil 35,9 Prozent,
+#      dunkelstes Pixel 0,0 — bei jeder Bremsstufe identisch. Die
+#      Bremse ruehrt nur die Saettigung an, nicht den Ton. Der
+#      Farbton verschiebt sich um hoechstens 2 Grad, unsichtbar.
+#
+#      Sie haengt am Schwarzpunkt (steht in derselben Klammer, hinter
+#      demselben return) und laeuft nicht auf Schwarzweisskacheln, wo
+#      es nichts zu bremsen gibt. Kein Schwarzpunkt, keine Bremse.
+
+P.append(('globalCompositeOperation:"color-burn",selectable:!1,evented:!1}))})();',
+ 'globalCompositeOperation:"color-burn",selectable:!1,evented:!1}));'
+ 'const zBr=Number(BS_KACHEL.bildFarbBremse)||0;'
+ 'zBr>0&&BS_MISCHBAR&&!(zSat<=-.99)&&e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,'
+ 'fill:`rgba(128,128,128,${zBr})`,globalCompositeOperation:"saturation",selectable:!1,evented:!1}))})();',
+ "Farbbremse hinter dem Schwarzpunkt", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
