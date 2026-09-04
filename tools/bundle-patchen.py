@@ -289,7 +289,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'unterGewicht:"400",unterVerhaeltnis:.62,laufweite:0,'
  'folgeFamilie:"DM Serif Display",ablaufTitel:"DM Serif Display",'
  'nameSchrift:"DM Serif Display",nameGewicht:"400",nameLaufweite:60,'
- 'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:8,'
+ 'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:1,'
  'geteilt:1,geteiltOben:.16,geteiltUnten:.62,geteiltLuft:.05,'
  'deckblattSchnitte:"full|wide|bust|wide|full|bust",'
  'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20",'
@@ -297,7 +297,8 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'versalLaufweite:20,versalGroesse:.060,versalZweitAnteil:1,'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
- 'bildSaettigung:-1,bildHeben:0,bildSpreizung:.28,'
+ 'bildSaettigung:-1,saettigungReihe:"-1|-0.55|-1|0.1|-1|-0.55",'
+ 'bildHeben:0,bildSpreizung:.28,'
  'tiefeOben:.06,tiefeMitte:.10,tiefeUnten:.62,kanteOben:.30,kanteUnten:.55,'
  'saumStaerke:0,bildSchleier:.10,'
  'nameFarbe:"#F2EFE9",schildGrund:"#F2EFE9",schildSchriftFarbe:"#171512"};')
@@ -2036,6 +2037,36 @@ P.append(('if(zGT&&rt===Lt)De=n*(BS_KACHEL.geteiltUnten||BS_KACHEL.textUnten||.8
 P.append(('qe2=$e?Math.round(qe*(BS_KACHEL.zweitAnteil||1)):qe',
  'qe2=$e?Math.round(qe*((zVS&&BS_KACHEL.versalZweitAnteil)||BS_KACHEL.zweitAnteil||1)):qe',
  "Im Versalsatz sind beide Bloecke gleich gross", 1))
+
+# 103 — Jede Kachel ein Bild, und die Farbe wechselt.
+#
+#      **Jede Kachel ein Bild.** textAnteil ist der Anteil der Tage
+#      OHNE Foto. Er stand auf 8. Auf 0 darf er nicht: 0 ist falsch
+#      im Sinne von JavaScript und schaltet die alte Regel wieder
+#      ein (Eintrag 78). Also 1 — das trifft genau den einen Tag von
+#      hundert, an dem die Reihe (pt*37+13)%100 den Wert 0 hat.
+#      Praktisch: jede Kachel ein Bild.
+#
+#      **Der Farbwechsel.** bildSaettigung war EIN Wert fuer alle.
+#      saettigungReihe macht daraus eine Reihe, gewuerfelt aus Bild
+#      und Text wie Ausschnitt und Ton:
+#
+#          -1     schwarzweiss
+#          -0.55  entzogene Farbe
+#          0.1    Farbe
+#
+#      Die Reihe "-1|-0.55|-1|0.1|-1|-0.55" ergibt ueber 300 Kacheln
+#      145 schwarzweiss, 101 entzogen, 54 Farbe — also knapp die
+#      Haelfte schwarzweiss, ein Drittel entzogen, Farbe als Akzent.
+#      So liegt es auch im Vorbild. Nachgerechnet ausserdem: keine
+#      zwei Farbkacheln nebeneinander und keine zwei uebereinander
+#      im Dreierraster.
+#
+#      Warum 0.1 und nicht 0 fuer "Farbe": die Bedingung am Filter
+#      ist Ze!==0, eine glatte Null wuerde den Filter ueberspringen.
+#      Das waere zwar dasselbe Ergebnis, aber ein Wert, der nur
+#      zufaellig funktioniert. 0.1 gibt der Farbkachel ausserdem
+#      etwas mehr Leben.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

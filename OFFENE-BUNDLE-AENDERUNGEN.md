@@ -3248,3 +3248,40 @@ Sechs Handschriften am selben Foto verglichen — Montserrat gesperrt,
 Caveat 700, Kalam, Gloria Hallelujah, Architects Daughter, Shadows Into
 Light — alle auf dieselbe Versalhoehe gerechnet. **Kalam** kommt dem
 Vorbild am naechsten: gleicher Schraegstand, gleiche Strichstaerke.
+
+## 103 — Jede Kachel ein Bild, und die Farbe wechselt
+
+### Jede Kachel ein Bild
+
+`textAnteil` ist der Anteil der Tage **ohne** Foto. Er stand auf 8. Auf
+**0** darf er nicht: 0 ist im Sinne von JavaScript falsch und schaltet
+die alte Regel wieder ein (Abschnitt 78). Also **1** — das trifft genau
+den einen Tag von hundert, an dem die Reihe `(pt*37+13)%100` den Wert 0
+hat. Praktisch: jede Kachel ein Bild.
+
+### Der Farbwechsel
+
+`bildSaettigung` war **ein** Wert fuer alle. `saettigungReihe` macht
+daraus eine Reihe, gewuerfelt aus Bild und Text wie Ausschnitt und Ton:
+
+    -1      schwarzweiss
+    -0.55   entzogene Farbe
+    0.1     Farbe
+
+Die Reihe `-1|-0.55|-1|0.1|-1|-0.55` ergibt ueber 300 Kacheln:
+
+| | |
+|---|---|
+| schwarzweiss | 145 |
+| entzogen | 101 |
+| Farbe | 54 |
+
+Knapp die Haelfte schwarzweiss, ein Drittel entzogen, Farbe als Akzent —
+so liegt es auch im Vorbild. Nachgerechnet ausserdem: **keine zwei
+Farbkacheln nebeneinander und keine zwei uebereinander** im
+Dreierraster.
+
+Warum `0.1` und nicht `0` fuer "Farbe": die Bedingung am Filter ist
+`Ze!==0`, eine glatte Null wuerde den Filter ueberspringen. Das waere
+zwar dasselbe Ergebnis, aber ein Wert, der nur zufaellig funktioniert.
+0.1 gibt der Farbkachel ausserdem etwas mehr Leben.
