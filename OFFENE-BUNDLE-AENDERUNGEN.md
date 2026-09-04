@@ -3863,3 +3863,72 @@ Faellt der Mischmodus `color` aus, bleibt es beim Brennen je Kanal
 
 Die **Mitteltoene**: 5,10 gegen 13,89 beim Vorbild, ueber das Doppelte.
 Das sind Fotos in warmem Licht gegen Fotos an einer grauen Wand.
+
+## 120 — Die Mitteltoene
+
+Buntheit in CIELAB, je Helligkeitsband:
+
+| | gesamt | L 0-25 | L 25-50 | L 50-75 | L 75+ |
+|---|---|---|---|---|---|
+| meins (karten180) | 5,95 | **5,19** | 8,47 | 4,21 | 3,40 |
+| Vorbild | 7,09 | **4,20** | 12,34 | 13,89 | 1,78 |
+
+Zwei Sachen stehen da. Die Mitteltoene fehlen — und **die Tiefen sind
+bei mir bunter als beim Vorbild**. Ein globaler Saettigungsschub macht
+es also schlimmer, nicht besser. Nachgerechnet mit der Formel von
+`fabric.Image.filters.Saturation`:
+
+| | gesamt | L 0-25 | L 25-50 | L 50-75 |
+|---|---|---|---|---|
+| global 0,45 | 8,55 | **7,97** | 12,48 | 5,71 |
+| Vorbild | 7,09 | **4,20** | 12,34 | 13,89 |
+
+Die Mitteltoene treffen, aber die Tiefen schiessen auf fast das
+Doppelte des Vorbilds.
+
+### Ein Fenster statt eines Reglers ueber allem
+
+| Helligkeit | |
+|---|---|
+| bis 50 | nichts |
+| 50 – 75 | Rampe hinein |
+| 75 – 170 | voll |
+| 170 – 225 | Rampe hinaus |
+| ab 225 | nichts |
+
+Die Grenzen sind CIELAB **L 25** und **L 75**, in 8-Bit umgerechnet.
+
+| | gesamt | L 0-25 | L 25-50 | L 50-75 |
+|---|---|---|---|---|
+| **Fenster 0,20** | **6,91** | 5,71 | 10,22 | 5,11 |
+| Vorbild | 7,09 | 4,20 | 12,34 | 13,89 |
+
+Gesamtbuntheit **auf zwei Prozent am Vorbild**, und die Tiefen bewegen
+sich kaum (5,19 → 5,71).
+
+### Wo es sitzt
+
+Die Farbschicht aus 119 wird ohnehin schon ein zweites Mal gezeichnet.
+Sie traegt **nur Farbton und Saettigung** — die Zeichnung steckt in der
+Helligkeit darunter. Farbe braucht also wenig Aufloesung, deshalb wird
+nur eine kleine Kopie durchgerechnet (`bildFarbKante`, 640 Pixel lange
+Kante): rund eine halbe Million Pixel statt vier Millionen. Dasselbe
+Prinzip, nach dem JPEG und Video die Farbe unterabtasten.
+
+Faellt der Pixeldurchlauf aus (`getImageData` auf einer verunreinigten
+Flaeche), faengt die innere Klammer das ab und die Farbschicht wird
+unveraendert gezeichnet — dann fehlt der Mitteltonschub, aber nichts
+ist kaputt.
+
+### Was nicht geht: L 50-75
+
+5,11 gegen 13,89. Nachgesehen, woraus dieses Band bei ihr besteht:
+
+| | Anteil praktisch neutraler Pixel (C* < 3) |
+|---|---|
+| meins | **71,9 %** |
+| Vorbild | 9,9 % |
+
+Das ist die **graue Wand**. Saettigung multipliziert vorhandene
+Buntheit, und null mal irgendwas bleibt null. Grau laesst sich nicht
+saettigen, nur einfaerben — und das waere kein Grading mehr.

@@ -299,7 +299,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
- 'bildSchwarzpunkt:.13,textMitte:.73,nameZeigen:0,'
+ 'bildSchwarzpunkt:.13,bildMitteltoene:.2,textMitte:.73,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
  'tiefeOben:.06,tiefeMitte:.10,tiefeUnten:.62,kanteOben:.30,kanteUnten:.55,'
  'saumStaerke:0,bildSchleier:.10,'
@@ -2731,11 +2731,28 @@ P.append(('const BS_BRENNBAR=',
 P.append(('globalCompositeOperation:"color-burn",selectable:!1,evented:!1}))})();',
  'globalCompositeOperation:"color-burn",selectable:!1,evented:!1}));'
  'if(BS_KACHEL.bildFarbNeutral!==0&&BS_FARBMISCH&&!(zSat<=-.99))try{'
- 'const zel=me.getElement&&me.getElement();'
- 'zel&&e.add(new Pe.fabric.Image(zel,{originX:"center",originY:"center",left:me.left,top:me.top,'
- 'scaleX:me.scaleX,scaleY:me.scaleY,globalCompositeOperation:"color",selectable:!1,evented:!1}))'
- '}catch(zz){}})();',
- "Schwarzpunkt farbneutral: Helligkeit gebrannt, Farbe vom Original", 1))
+ 'const zel=me.getElement&&me.getElement();if(zel){'
+ 'let zq=zel,zf=1;const zM=Number(BS_KACHEL.bildMitteltoene)||0;'
+ 'if(zM>0)try{const zKa=Number(BS_KACHEL.bildFarbKante)||640;'
+ 'zf=Math.min(1,zKa/Math.max(zel.width||1,zel.height||1));'
+ 'const zc=document.createElement("canvas");'
+ 'zc.width=Math.max(1,Math.round((zel.width||1)*zf));'
+ 'zc.height=Math.max(1,Math.round((zel.height||1)*zf));'
+ 'const zx=zc.getContext("2d",{willReadFrequently:!0});'
+ 'zx.drawImage(zel,0,0,zc.width,zc.height);'
+ 'const zd=zx.getImageData(0,0,zc.width,zc.height),za=zd.data;'
+ 'for(let zi=0;zi<za.length;zi+=4){const zr=za[zi],zgn=za[zi+1],zbl=za[zi+2];'
+ 'const zlu=.2126*zr+.7152*zgn+.0722*zbl;let zw;'
+ 'if(zlu<=50||zlu>=225)zw=0;else if(zlu<75)zw=(zlu-50)/25;else if(zlu<=170)zw=1;else zw=(225-zlu)/55;'
+ 'if(zw<=0)continue;const zn=-zM*zw,zmx=Math.max(zr,zgn,zbl);'
+ 'if(zmx!==zr)za[zi]=Math.max(0,Math.min(255,zr+(zmx-zr)*zn));'
+ 'if(zmx!==zgn)za[zi+1]=Math.max(0,Math.min(255,zgn+(zmx-zgn)*zn));'
+ 'if(zmx!==zbl)za[zi+2]=Math.max(0,Math.min(255,zbl+(zmx-zbl)*zn));}'
+ 'zx.putImageData(zd,0,0);zq=zc}catch(zz){zq=zel;zf=1}'
+ 'e.add(new Pe.fabric.Image(zq,{originX:"center",originY:"center",left:me.left,top:me.top,'
+ 'scaleX:me.scaleX/zf,scaleY:me.scaleY/zf,globalCompositeOperation:"color",selectable:!1,evented:!1}))'
+ '}}catch(zz){}})();',
+ "Farbschicht: Helligkeit gebrannt, Farbe vom Original, Mitteltonfenster", 1))
 
 
 # 119 — Die Bremse aus 118 war falsch, und zwar weil ich im falschen
@@ -2786,6 +2803,63 @@ P.append(('globalCompositeOperation:"color-burn",selectable:!1,evented:!1}))})()
 #      Mitteltoene. 5,10 gegen 13,89 beim Vorbild, ueber das Doppelte.
 #      Das sind Fotos in warmem Licht gegen Fotos an einer grauen
 #      Wand.
+
+
+# 120 — Die Mitteltoene. Carina: "Ja mach die Mitteltoene 0.2".
+#
+#      Buntheit in CIELAB, je Helligkeitsband:
+#
+#                            gesamt  L0-25  L25-50  L50-75  L75+
+#          meins (karten180)   5,95   5,19    8,47    4,21   3,40
+#          Vorbild             7,09   4,20   12,34   13,89   1,78
+#
+#      Zwei Sachen stehen da. Die Tiefen sind bei mir BUNTER als beim
+#      Vorbild (5,19 gegen 4,20) — ein globaler Saettigungsschub macht
+#      es also schlimmer, nicht besser. Nachgerechnet mit der Formel
+#      von fabric.Image.filters.Saturation:
+#
+#                          gesamt  L0-25  L25-50  L50-75
+#          global 0,45       8,55   7,97   12,48    5,71
+#
+#      Die Mitteltoene treffen (12,48 gegen 12,34), aber die Tiefen
+#      schiessen auf fast das Doppelte des Vorbilds. Deshalb ein
+#      Fenster ueber der Helligkeit statt eines Reglers ueber allem:
+#
+#          bis 50      nichts
+#          50 bis 75   Rampe hinein
+#          75 bis 170  voll
+#          170 bis 225 Rampe hinaus
+#          ab 225      nichts
+#
+#      Die Grenzen sind CIELAB L 25 und L 75, in 8-Bit umgerechnet.
+#
+#                          gesamt  L0-25  L25-50  L50-75
+#          Fenster 0,20      6,91   5,71   10,22    5,11
+#          Vorbild           7,09   4,20   12,34   13,89
+#
+#      Gesamtbuntheit 6,91 gegen 7,09 — auf zwei Prozent am Vorbild,
+#      und die Tiefen bewegen sich kaum (5,19 auf 5,71).
+#
+#      WO ES SITZT. Die Farbschicht aus 119 wird ohnehin schon ein
+#      zweites Mal gezeichnet. Sie traegt nur Farbton und Saettigung,
+#      die Zeichnung steckt in der Helligkeit darunter — Farbe braucht
+#      also wenig Aufloesung. Deshalb wird nur eine kleine Kopie
+#      durchgerechnet (bildFarbKante, 640 Pixel lange Kante): rund
+#      eine halbe Million Pixel statt vier Millionen. Dasselbe
+#      Prinzip, nach dem JPEG und Video die Farbe unterabtasten.
+#
+#      Faellt der Pixeldurchlauf aus (getImageData auf einer
+#      verunreinigten Flaeche), faengt die innere Klammer das ab und
+#      die Farbschicht wird unveraendert gezeichnet — dann fehlt der
+#      Mitteltonschub, aber nichts ist kaputt.
+#
+#      WAS NICHT GEHT: L50-75, 5,11 gegen 13,89. Nachgesehen, woraus
+#      dieses Band bei ihr besteht: 71,9 Prozent der Pixel darin sind
+#      praktisch neutral (C* unter 3), beim Vorbild nur 9,9 Prozent.
+#      Das ist die graue Wand. Saettigung multipliziert vorhandene
+#      Buntheit, und null mal irgendwas bleibt null. Grau laesst sich
+#      nicht saettigen, nur einfaerben — und das waere kein Grading
+#      mehr.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
