@@ -285,6 +285,12 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'grundB:"#0E0D0C",schriftB:"#F2EFE9",'
  'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
  'deckblattGewicht:"400",zweiteFamilie:"Caveat",zweitAnteil:.62,'
+ 'schriftart:"Playfair Display",unterSchrift:"Caveat",gewicht:"400",'
+ 'unterGewicht:"400",unterVerhaeltnis:.62,laufweite:0,'
+ 'folgeFamilie:"Playfair Display",ablaufTitel:"Playfair Display",'
+ 'nameSchrift:"Playfair Display",nameGewicht:"400",nameLaufweite:60,'
+ 'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:8,'
+ 'geteilt:1,geteiltOben:.16,'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-.55,bildHeben:0,'
@@ -1674,6 +1680,45 @@ P.append(('$e&&(tt.nurErsteZeilePlatte=!0,tt.fettNurErste=!0,BS_KACHEL.fotoSchri
  'BS_KACHEL.fotoAusrichtung&&(tt.ausrichtung=BS_KACHEL.fotoAusrichtung),'
  'BS_KACHEL.fotoSchriftFarbe&&(tt.schriftFarbe=BS_KACHEL.fotoSchriftFarbe)',
  "Ausrichtung der Fotokachel aus dem Block", 1))
+
+# 95 — Die geteilte Kachel, und der Aufsatz war loechrig.
+#
+#      **Loechrig.** Der Aufsatz aus Eintrag 93 hat nur die
+#      Fotokachel umgestellt. Die Textkacheln, die Folgefolien und
+#      der Ablauf lasen weiter schriftart, unterSchrift, folgeFamilie
+#      und ablaufTitel — und die standen im Grundstil auf Montserrat.
+#      Im dunklen Feed stand also die Haelfte in Grotesk. Alle vier
+#      stehen jetzt im Aufsatz, dazu die Wortmarke (Serife, nicht
+#      fett, wieder gesperrt statt eng — sie ist hier ein leiser
+#      Absender und kein Akzent).
+#
+#      textAnteil 67 -> 8. Im Vorbild ist praktisch jede Kachel ein
+#      Foto; 67 hiess zwei Drittel Textkacheln. Der Grundstil behaelt
+#      seine 67.
+#
+#      **Die Teilung.** Im Vorbild steht die Frage oben in der Serife
+#      und die Antwort unten in der Handschrift, dazwischen atmet das
+#      Bild. Bisher flossen beide Bloecke als einer: eine Hoehe, eine
+#      Lage, alles zusammen.
+#
+#      Der Zeichner kennt die Grenze laengst — Lt ist die Zahl der
+#      Zeilen des ersten Blocks, danach wird kleiner und leichter
+#      gesetzt. Es fehlte nur, De an dieser Grenze neu zu setzen:
+#
+#        rt === 0    ->  oben bei geteiltOben
+#        rt === Lt   ->  so weit unten, dass der zweite Block genau
+#                        auf textUnten endet
+#
+#      Zwei Zeilen in der Zeichenschleife, kein zweiter Weg. Sie
+#      greifen nur, wenn geteilt gesetzt ist UND es eine Fotokachel
+#      mit zwei Bloecken ist — der Grundstil merkt nichts davon.
+P.append(('dr.forEach((Je,rt)=>{if(!Je.length){De+=tt.engZeilen?qe*.92:Et;return}',
+ 'const zGT=!!BS_KACHEL.geteilt&&$e&&tt.nurErsteZeilePlatte===!0&&Lt>0&&dr.length>Lt;'
+ 'dr.forEach((Je,rt)=>{'
+ 'if(zGT&&rt===0)De=n*(BS_KACHEL.geteiltOben||.16)+Et/2;'
+ 'if(zGT&&rt===Lt)De=n*(BS_KACHEL.textUnten||.86)-(dr.length-Lt)*Et2*zF+Et2/2;'
+ 'if(!Je.length){De+=tt.engZeilen?qe*.92:Et;return}',
+ "Geteilte Kachel: erster Block oben, zweiter unten", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

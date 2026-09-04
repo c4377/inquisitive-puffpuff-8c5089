@@ -2932,3 +2932,37 @@ Die sechs Faelle sind in node durchgerechnet, nicht angenommen.
 Eine Datei, ein Ort. `netlify.toml` bekommt fuer sie dieselbe
 Nicht-Zwischenspeichern-Regel wie die index.html, sonst haengt beim
 naechsten Umbau eine alte Fassung im Browser.
+
+## 95 — Die geteilte Kachel, und der Aufsatz war loechrig
+
+### Loechrig
+
+Der Aufsatz aus Abschnitt 93 hat nur die **Fotokachel** umgestellt. Die
+Textkacheln, die Folgefolien und der Ablauf lasen weiter `schriftart`,
+`unterSchrift`, `folgeFamilie` und `ablaufTitel` — und die standen im
+Grundstil auf Montserrat. Im dunklen Feed stand also die Haelfte in
+Grotesk. Alle vier stehen jetzt im Aufsatz.
+
+Dazu die Wortmarke: Serife, nicht fett, wieder gesperrt statt eng. Sie
+ist hier ein leiser Absender und kein Akzent.
+
+`textAnteil` 67 → **8**. Im Vorbild ist praktisch jede Kachel ein Foto;
+67 hiess zwei Drittel Textkacheln. Der Grundstil behaelt seine 67.
+
+### Die Teilung
+
+Im Vorbild steht die **Frage oben in der Serife** und die **Antwort
+unten in der Handschrift**, dazwischen atmet das Bild. Bisher flossen
+beide Bloecke als einer: eine Hoehe, eine Lage, alles zusammen.
+
+Der Zeichner kennt die Grenze laengst — `Lt` ist die Zahl der Zeilen des
+ersten Blocks, danach wird kleiner und leichter gesetzt. Es fehlte nur,
+`De` an dieser Grenze neu zu setzen:
+
+    rt === 0     ->  oben bei geteiltOben
+    rt === Lt    ->  so weit unten, dass der zweite Block
+                     genau auf textUnten endet
+
+**Zwei Zeilen in der Zeichenschleife, kein zweiter Weg.** Sie greifen
+nur, wenn `geteilt` gesetzt ist UND es eine Fotokachel mit zwei Bloecken
+ist — der Grundstil merkt nichts davon.
