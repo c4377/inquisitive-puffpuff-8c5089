@@ -4075,3 +4075,51 @@ Hebel** — deshalb gar nicht angefasst.
 
 `tiefeUnten` und `kanteUnten` bleiben, wo sie waren: sie sind der
 Grund, auf dem die Schrift steht.
+
+## 124 — Ein weicher Fleck unter dem Text, damit der Fuss weg kann
+
+*"Text geht jetzt unter das ist bloed also bitte unter dem Text blurred
+shadow und bitte weniger Schwarzwerden."*
+
+Beides zusammen geht nur, wenn das Dunkel **dorthin wandert, wo der
+Text steht**, statt ueber der halben Kachel zu liegen. Der Fuss aus 123
+(`tiefeUnten .62`, `kanteUnten .55`) deckt die untere Haelfte ab — egal
+ob dort drei Zeilen stehen oder sechs.
+
+### Ausmessen statt rechnen
+
+Nach dem Zeichnen des Textes wird sein **tatsaechlicher Kasten**
+ausgemessen (`getBoundingRect` ueber alle Objekte, die seit `zIdx`
+dazugekommen sind) und ein weicher ovaler Verlauf genau darum gelegt —
+mit `insertAt` an Stelle `zIdx`, also **unter** den Text und **ueber**
+das Foto.
+
+Das Ausmessen ist hier nicht Bequemlichkeit: bei geteilten Kacheln
+springt `De` mitten in der Schleife (`geteiltOben`/`geteiltUnten`), und
+der Zweittext haengt noch hinten dran. Der Kasten kennt das Ergebnis,
+eine Formel vorher nicht.
+
+Der Verlauf ist ein Kreis, den `gradientTransform` zur Ellipse zieht:
+`[rx,0,0,ry,cx,cy]` auf `coords r1 0, r2 1`. Die Stufen bilden eine
+Glaettung nach (1 · .84 · .5 · .16 · 0), damit keine Kante sichtbar
+wird.
+
+### Gemessen ueber alle neun Kacheln
+
+| | Foto gesamt | obere Haelfte | Kontrast unterm Text |
+|---|---|---|---|
+| karten183 | 59,8 % | 72,9 % | 3,7:1 |
+| karten184 | 74,0 % | 91,7 % | **2,7:1** |
+| **jetzt** | **75,3 %** | **92,3 %** | **3,8:1** |
+
+Der Fuss faellt von .62 auf **.12** und von .55 auf **.15** — und der
+Text steht **trotzdem besser da als vor allem hier**, weil das Dunkel
+jetzt dort liegt, wo er ist.
+
+In fabric 5.5.2 der laufenden App nachgeprueft: `insertAt` gibt es, und
+die Ellipse sitzt auf dem gemessenen Kasten (Helligkeit Textmitte 21,
+Bild oben 161).
+
+`bildTextFleck 0` schaltet ihn ab. `bildTextFleckLuft` (.15 der Hoehe)
+und `bildTextFleckBreite` (.20 der Breite) sagen, wie weit er ueber den
+Text hinausreicht.

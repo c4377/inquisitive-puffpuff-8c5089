@@ -299,9 +299,9 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
- 'bildSchwarzpunkt:.07,bildVignette:.6,folgeFuss:.86,textMitte:.73,nameZeigen:0,'
+ 'bildSchwarzpunkt:.07,bildVignette:.6,bildTextFleck:.85,folgeFuss:.86,textMitte:.73,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
- 'tiefeOben:0,tiefeMitte:0,tiefeUnten:.62,kanteOben:.06,kanteUnten:.55,'
+ 'tiefeOben:0,tiefeMitte:0,tiefeUnten:.12,kanteOben:.06,kanteUnten:.15,'
  'saumStaerke:0,bildSchleier:0,'
  'nameFarbe:"#F2EFE9",schildGrund:"#F2EFE9",schildSchriftFarbe:"#171512"};')
 SCHALTER = 'if(typeof window<"u"&&window.BS_STIL==="dunkel")Object.assign(BS_KACHEL,BS_DUNKEL);'
@@ -3010,6 +3010,79 @@ P.append(('let De=n*He-ae/2+Et/2;if(De+ae-Et/2>n*(BS_KACHEL.textUnten||.9)',
 #
 #      tiefeUnten und kanteUnten bleiben, wo sie waren: sie sind der
 #      Grund, auf dem die Schrift steht.
+
+
+# 124 — Ein weicher Fleck unter dem Text, damit der Fuss weg kann.
+#      Carina: "Text geht jetzt unter das ist bloed also bitte unter
+#      dem Text blurred shadow und bitte weniger Schwarzwerden."
+#
+#      Beides zusammen geht nur, wenn das Dunkel dorthin wandert, wo
+#      der Text steht, statt ueber der halben Kachel zu liegen. Der
+#      Fuss aus 123 (tiefeUnten .62, kanteUnten .55) deckt die untere
+#      Haelfte ab, egal ob dort drei Zeilen stehen oder sechs.
+#
+#      Neu: nach dem Zeichnen des Textes wird sein tatsaechlicher
+#      Kasten ausgemessen — ueber getBoundingRect aller Objekte, die
+#      seit zIdx dazugekommen sind — und ein weicher ovaler Verlauf
+#      genau darum gelegt. Mit insertAt an die Stelle zIdx, also UNTER
+#      den Text und UEBER das Foto.
+#
+#      Ausmessen statt rechnen ist hier wichtig: bei geteilten Kacheln
+#      springt De mitten in der Schleife (geteiltOben/geteiltUnten),
+#      und der Zweittext haengt noch hinten dran. Der Kasten kennt das
+#      Ergebnis, die Formel vorher nicht.
+#
+#      Der Verlauf ist ein Kreis, den gradientTransform zur Ellipse
+#      zieht: [rx,0,0,ry,cx,cy] auf coords r1 0, r2 1. Die Stufen
+#      bilden eine Glaettung nach (1, .84, .5, .16, 0), damit keine
+#      Kante sichtbar wird.
+#
+#      Ueber alle neun Kacheln gemessen:
+#
+#                              Foto  obere    Kontrast unterm
+#                            gesamt Haelfte   Text (schlecht. 5 %)
+#          karten183          59,8 %  72,9 %        3,7:1
+#          karten184          74,0 %  91,7 %        2,7:1
+#          jetzt              75,3 %  92,3 %        3,8:1
+#
+#      Der Fuss faellt von .62 auf .12 und von .55 auf .15 — und der
+#      Text steht trotzdem besser da als vor allem hier, weil das
+#      Dunkel jetzt dort liegt, wo er ist.
+#
+#      In fabric 5.5.2 der laufenden App nachgeprueft: insertAt gibt
+#      es, und die Ellipse sitzt auf dem gemessenen Kasten
+#      (Helligkeit Textmitte 21, Bild oben 161).
+#
+#      bildTextFleck 0 schaltet ihn ab. bildTextFleckLuft (.15 von der
+#      Hoehe) und bildTextFleckBreite (.20 von der Breite) sagen, wie
+#      weit er ueber den Text hinausreicht.
+
+P.append(('const zGT=(BS_KACHEL.geteiltAnteil?',
+ 'const zIdx=e.getObjects().length;const zGT=(BS_KACHEL.geteiltAnteil?',
+ "Startpunkt des Textes merken", 1))
+
+P.append((',De+=ur})),(tt.platten||BS_KACHEL.nameZeigen===0)||e.add(',
+ ',De+=ur})),(()=>{try{const zTF=Number(BS_KACHEL.bildTextFleck)||0;if(!(zTF>0)||!t.background)return;'
+ 'const zo=e.getObjects().slice(zIdx);if(!zo.length)return;'
+ 'let zx1=1/0,zy1=1/0,zx2=-1/0,zy2=-1/0;'
+ 'zo.forEach(zq=>{try{const zb=zq.getBoundingRect(!0,!0);'
+ 'zx1=Math.min(zx1,zb.left);zy1=Math.min(zy1,zb.top);'
+ 'zx2=Math.max(zx2,zb.left+zb.width);zy2=Math.max(zy2,zb.top+zb.height)}catch(zz){}});'
+ 'if(!(zx2>zx1&&zy2>zy1))return;'
+ 'const zcx=(zx1+zx2)/2,zcy=(zy1+zy2)/2,'
+ 'zrx=(zx2-zx1)/2+r*(BS_KACHEL.bildTextFleckBreite==null?.20:BS_KACHEL.bildTextFleckBreite),'
+ 'zry=(zy2-zy1)/2+n*(BS_KACHEL.bildTextFleckLuft==null?.15:BS_KACHEL.bildTextFleckLuft),'
+ 'zt=zTon||"0,0,0";'
+ 'e.insertAt(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,selectable:!1,evented:!1,'
+ 'fill:new Pe.fabric.Gradient({type:"radial",coords:{x1:0,y1:0,r1:0,x2:0,y2:0,r2:1},'
+ 'gradientTransform:[zrx,0,0,zry,zcx,zcy],'
+ 'colorStops:[{offset:0,color:`rgba(${zt},${zTF})`},'
+ '{offset:.25,color:`rgba(${zt},${zTF*.84})`},'
+ '{offset:.5,color:`rgba(${zt},${zTF*.5})`},'
+ '{offset:.75,color:`rgba(${zt},${zTF*.16})`},'
+ '{offset:1,color:`rgba(${zt},0)`}]})}),zIdx)}catch(zz){}})(),'
+ '(tt.platten||BS_KACHEL.nameZeigen===0)||e.add(',
+ "weicher Fleck unter dem Text", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
