@@ -2483,3 +2483,34 @@ Zeichnen, und im Feed wechselt es von Post zu Post.
 Zwei Ecken statt eines Rings hat einen Nebeneffekt, der hier hilft:
 die beiden freien Ecken bleiben unberuehrt, das Bild wirkt weniger
 eingefaerbt und mehr angeleuchtet.
+
+## 86. Das Bild soll durchkommen
+
+    saumStaerke   .62  ->  .30
+    saumMitte     .22  ->  .08
+    saumWeite     .62  ->  .58
+    bildKante    2000  -> 2400
+    bildGuete     .82  ->  .84
+
+**Der Saum** war halb deckend in der Ecke — das ist kein Lichtschein
+mehr, das ist eine Einfaerbung. Bei .30 liegt er als Hauch auf dem
+Bild, und die Mitte bleibt praktisch unberuehrt (.08 statt .22).
+
+**Die Schaerfe** hat eine harte Grenze, die nicht im Zeichner liegt,
+sondern im Speicher: die Vorschau zeichnet auf einem Telefon mit
+dreifacher Pixeldichte auf **2400** Bildpunkte. Ein Foto, das kleiner
+gespeichert ist, wird hochgerechnet, und keine Einstellung im Zeichner
+holt das zurueck.
+
+    bildKante 2400 = genau die Breite, auf die die Vorschau zeichnet
+
+**Wichtig:** das gilt nur fuer Fotos, die ab jetzt gespeichert werden.
+Was mit bildKante 1350 abgelegt wurde (Abschnitte 68 bis 83), ist auf
+1350 heruntergerechnet und bleibt es. Diese Bilder muessen neu
+zugewiesen werden, sonst bleiben sie weich.
+
+## Verworfen: das Orange-Rad
+
+Fuenf Abstufungen von Creme bis Espresso als Grundfarben der
+Textkacheln. Gebaut wurde es nie, nur gezeigt. Bleibt bei den zwei
+Farbpaaren.
