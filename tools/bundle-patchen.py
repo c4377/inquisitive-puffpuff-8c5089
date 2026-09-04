@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.018,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,textAnteil:67,fotoGroesse:44,schildGrund:"#A57F55",schildSchriftFarbe:"#FFFFFF",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"HelveticaNeueBrand",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.042,nameDeckkraft:.55,nameSchrift:"HelveticaNeueBrand",nameGewicht:"400",nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,textAnteil:67,fotoGroesse:44,schildGrund:"#E8836B",schildSchriftFarbe:"#241C16",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"HelveticaNeueBrand",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -1331,6 +1331,60 @@ P.append(('t.bildVerblasst===!0?Et=.55:Et=dr?.42:.05;',
  '?typeof BS_KACHEL.bildSchleierWiederholung=="number"&&(Et=BS_KACHEL.bildSchleierWiederholung)'
  ':typeof BS_KACHEL.bildSchleier=="number"&&(Et=Math.min(Et,BS_KACHEL.bildSchleier)));',
  "Flacher Schleier kommt aus dem Block", 1))
+
+# 88 — Das Schild in Orange-Rosa, und die Wortmarke auf JEDER Kachel.
+#
+#      **Das Schild.** Es war beige-tan (#A57F55) mit weisser Schrift,
+#      also 3,6:1 — schon unter der Grenze fuer kleine Schrift, und
+#      es hatte mit dem Saum in den Ecken nichts zu tun. Jetzt ist es
+#      derselbe Ton wie der Saum, 232,131,107 = #E8836B, damit die
+#      Kachel EINE Akzentfarbe hat statt zweier.
+#
+#      Weiss auf diesem Orange-Rosa waere 2,7:1 und matscht (angesehen
+#      in tools/.pruefen/schildfarbe.html, vier Varianten am selben
+#      Foto). Espresso #241C16 darauf sind 6,3:1 und stehen scharf.
+#      Ein dunkleres Orange, das Weiss tragen wuerde (#C9614B, 4,3:1),
+#      liest sich rot statt rosa. Also helles Schild, dunkle Schrift.
+#
+#      **Die Wortmarke.** Sie wurde an zwei Stellen im Code gezeichnet
+#      und war deshalb zweimal etwas anderes:
+#
+#        Fotokachel   qe*.42 gross (haengt an der Ueberschrift!),
+#                     OpenSansBrand — das ist OpenSans-BOLD, eine
+#                     dritte Schrift neben Helvetica und Fraunces
+#        Textkachel   r*.018 gross, also ein Viertel davon, mittig
+#                     direkt unter dem Text statt an fester Stelle,
+#                     Deckkraft .5
+#
+#      Auf der Fotokachel war sie damit auch noch von der Laenge der
+#      Ueberschrift abhaengig: kurze Ueberschrift, grosse Wortmarke.
+#      Genau der Fehler, den Eintrag 70 fuer die POSITION schon
+#      behoben hat — fuer die GROESSE stand er noch offen.
+#
+#      Jetzt kommen beide aus denselben vier Werten:
+#
+#        nameAnteil     .042   Anteil der Kachelbreite, feste Groesse
+#        nameDeckkraft  .55
+#        nameSchrift    HelveticaNeueBrand
+#        nameGewicht    400
+#
+#      .042 ist gemessen: die Fotokachel zeichnete die Wortmarke bei
+#      diesem Text 34 Pixel hoch auf 800 Breite. Die Fotokachel bleibt
+#      also so gross wie sie war, nur haengt sie nicht mehr an der
+#      Ueberschrift, und die Textkachel zieht nach.
+P.append(('if(NA)txt(NA,{left:r/2,top:y-gr*K.zeile+gr*K.nameAbstand,originX:"center",originY:"center",\n'
+ 'fontSize:NG,fontFamily:K.unterSchrift||K.schriftart,fontWeight:"500",charSpacing:150,\n'
+ 'fill:SCH,opacity:.5,maxB:MAXB});',
+ 'if(NA)txt(NA,{left:r/2,top:n*(K.nameUnten||.945),originX:"center",originY:"center",\n'
+ 'fontSize:NG,fontFamily:K.nameSchrift||K.unterSchrift||K.schriftart,'
+ 'fontWeight:(K.nameGewicht||"400"),charSpacing:150,\n'
+ 'fill:SCH,opacity:(K.nameDeckkraft||.55),maxB:MAXB});',
+ "Wortmarke der Textkachel an dieselbe feste Stelle", 1))
+P.append(('fontSize:Math.round(qe*.42),fontFamily:"OpenSansBrand",fill:"rgba(255,255,255,0.55)"',
+ 'fontSize:Math.round(r*(BS_KACHEL.nameAnteil||.042)),'
+ 'fontFamily:BS_KACHEL.nameSchrift||"OpenSansBrand",fontWeight:(BS_KACHEL.nameGewicht||"400"),'
+ 'charSpacing:150,fill:`rgba(255,255,255,${BS_KACHEL.nameDeckkraft||.55})`',
+ "Wortmarke der Fotokachel aus dem Block statt aus der Ueberschrift", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

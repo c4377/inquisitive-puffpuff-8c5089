@@ -2593,3 +2593,64 @@ Durchlauf bricht dort ab. Die vier Ersetzungen wurden einzeln auf
 herausgegriffen, und die Datei wurde als ES-Modul auf Syntax geprueft.
 `bundle-patchen.py` traegt Eintrag 87 trotzdem, damit der naechste Drop
 ihn wieder mitbekommt.
+
+## 88 — Schild in Orange-Rosa, Wortmarke auf jeder Kachel
+
+### Das Schild
+
+Es war beige-tan `#A57F55` mit weisser Schrift — **3,6:1**, schon unter
+der Grenze fuer kleine Schrift, und farblich ohne Bezug zum Saum in den
+Ecken. Jetzt ist es **derselbe Ton wie der Saum**, `232,131,107` =
+`#E8836B`. Damit hat die Kachel eine Akzentfarbe statt zweier.
+
+Vier Varianten am selben Foto angesehen
+(`tools/.pruefen/schildfarbe.html`):
+
+| Schild | Schrift | Kontrast | |
+|---|---|---|---|
+| `#A57F55` | weiss | 3,6:1 | heute, ohne Bezug zum Saum |
+| **`#E8836B`** | **Espresso `#241C16`** | **6,3:1** | steht scharf, gleiche Farbe wie der Saum |
+| `#E8836B` | weiss | 2,7:1 | matscht |
+| `#C9614B` | weiss | 4,3:1 | liest sich rot, nicht rosa |
+
+Also helles Schild, dunkle Schrift.
+
+### Die Wortmarke
+
+Sie wurde an **zwei Stellen im Code** gezeichnet und war deshalb zweimal
+etwas anderes:
+
+| | Groesse | Schrift | Ort |
+|---|---|---|---|
+| Fotokachel | `qe*.42` — haengt an der Ueberschrift | OpenSansBrand (= OpenSans **Bold**) | fest bei .945 |
+| Textkachel | `r*.018` — ein Viertel davon | Helvetica 500 | direkt unter dem Text |
+
+Auf der Fotokachel hing die Groesse damit an der Laenge der Ueberschrift:
+kurze Ueberschrift, grosse Wortmarke. Genau der Fehler, den Abschnitt 70
+fuer die **Position** schon behoben hat — fuer die **Groesse** stand er
+noch offen. Und OpenSans war eine dritte Schrift neben Helvetica und
+Fraunces, die sonst nirgends vorkommt.
+
+Jetzt kommen beide aus denselben vier Werten:
+
+    nameAnteil     .042   Anteil der Kachelbreite, feste Groesse
+    nameDeckkraft  .55
+    nameSchrift    HelveticaNeueBrand
+    nameGewicht    400
+
+`.042` ist gemessen und nicht gewaehlt: die Fotokachel zeichnete die
+Wortmarke bei diesem Text 34 Pixel hoch auf 800 Breite. Die Fotokachel
+bleibt also so gross wie sie war, sie haengt nur nicht mehr an der
+Ueberschrift — und die Textkachel zieht nach.
+
+### Noch ein Loch in der Pruefseite
+
+Die erste Fassung sah aus, als waere die Wortmarke der Textkachel eine
+**Serife**. War sie nicht: `tools/kachel-pruefen.py` laedt die Schriften
+vor dem Zeichnen, und Gewicht **500 fehlte in der Liste** — Helvetica
+Medium war nicht da, also fiel der Browser auf eine Serife zurueck. Die
+App registriert 500 sehr wohl. 500 steht jetzt in der Ladeliste.
+
+Das ist derselbe Fehler wie bei `klar.html` in Abschnitt 87: die
+Pruefseite zeigte etwas anderes als die App, und das faellt nur auf, wenn
+man hinsieht statt zu lesen.
