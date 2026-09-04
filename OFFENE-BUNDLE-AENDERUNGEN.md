@@ -2814,9 +2814,16 @@ Montserrat — und Montserrat traegt bei gleicher Pixelzahl optisch dicker
 auf. Deshalb `.070` (56 px) und nicht `.075` (60 px): rechnerisch gleich
 gross waere sichtbar einen Tick zu gross gewesen.
 
-    folgeGroesseAnteil  .070    Startgroesse ab Folie 2
+    folgeGroesseAnteil  .049    Startgroesse ab Folie 2
     folgeMaxhoehe       .70     derselbe Deckel wie am Foto
     folgeAusrichtung    links   statt mittig
+
+**Nachtrag:** `.070` war immer noch zu gross, gewuenscht waren 30 Prozent
+weniger. `.070 × 0,7 = .049`. Nachgemessen am gebauten Bundle ueber den
+Zeilenabstand: **57 px vorher, 40 px nachher**, Faktor 0,70 — die 30
+Prozent sind wirklich 30 Prozent und nicht bloss eine kleinere Zahl im
+Block. Der Fliesztext ist damit deutlich kleiner als am Foto; das ist
+Absicht, eine Folgefolie soll ruhiger sein als das Deckblatt.
 
 Alle drei greifen nur, wenn die Folie eine Rolle hat und die nicht
 `deckblatt` ist — dieselbe Weiche wie bei der Schrift in Abschnitt 89.
