@@ -1633,6 +1633,14 @@ P.append(('fontWeight:(K.nameGewicht||"400"),charSpacing:150,\nfill:K.nameFarbe|
 #      weil Module verzoegert ausgefuehrt werden — sonst laege der
 #      Wert noch nicht vor, wenn der Block angelegt wird.
 #
+#      Und er MERKT sich die Wahl. Die App setzt ihre eigenen
+#      Adressen (/content-planner und so weiter, React Router ohne
+#      basename) und verliert dabei das "/dunkel" aus dem Pfad. Ohne
+#      das Merken waere der Zwilling nach dem ersten Klick und einem
+#      Neuladen wieder hell. Regel: /dunkel/... schaltet dunkel und
+#      merkt es, / schaltet zurueck, alles andere behaelt das
+#      Gemerkte. Durchgerechnet fuer sechs Faelle in node.
+#
 #      Die Seite im Unterordner laedt dieselben Dateien ueber
 #      ABSOLUTE Pfade (/assets/, /fonts/), sonst suchte sie unter
 #      /dunkel/assets/. Und in netlify.toml und _redirects steht die

@@ -2863,6 +2863,13 @@ Drei Dinge, die sonst schiefgegangen waeren:
 - Der Schalter steht als gewoehnliches `<script>` **vor** dem Modul.
   Module werden verzoegert ausgefuehrt; stuende er danach, laege der
   Wert noch nicht vor, wenn der Block angelegt wird.
+- Der Schalter **merkt sich die Wahl**. Die App setzt ihre eigenen
+  Adressen (`/content-planner` und so weiter, React Router ohne
+  `basename`) und verliert dabei das `/dunkel` aus dem Pfad. Ohne das
+  Merken waere der Zwilling nach dem ersten Klick und einem Neuladen
+  wieder hell. Regel: `/dunkel/...` schaltet dunkel und merkt es, `/`
+  schaltet zurueck, alles andere behaelt das Gemerkte. Sechs Faelle in
+  node durchgerechnet.
 - Die Seite im Unterordner laedt dieselben Dateien ueber **absolute**
   Pfade (`/assets/`, `/fonts/`), sonst suchte sie unter
   `/dunkel/assets/`.
