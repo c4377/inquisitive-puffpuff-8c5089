@@ -2966,3 +2966,60 @@ ersten Blocks, danach wird kleiner und leichter gesetzt. Es fehlte nur,
 **Zwei Zeilen in der Zeichenschleife, kein zweiter Weg.** Sie greifen
 nur, wenn `geteilt` gesetzt ist UND es eine Fotokachel mit zwei Bloecken
 ist — der Grundstil merkt nichts davon.
+
+## 96 — Gesperrter Versalsatz, und drei Wuerfel, damit die Fotos reichen
+
+Wenn fast jede Kachel ein Foto ist, sieht man dasselbe Bild alle paar
+Tage wieder. Drei Dinge wechseln jetzt je Kachel — und alle drei
+wuerfeln aus **Bild UND Text**:
+
+    String(t.background) + "|" + String(t.text)
+
+Nicht nur aus dem Bild. Sonst bekaeme dasselbe Foto an jedem Tag
+denselben Ausschnitt und denselben Ton, und der ganze Aufwand waere
+umsonst. Nachgerechnet — dasselbe Foto mit vier Texten:
+
+| Text | Ausschnitt | Ton |
+|---|---|---|
+| Sich zu trennen ist ok | wide | 26,20,16 |
+| Eine Frage die du heute … | full | 12,16,20 |
+| Nein es ist nicht normal | bust | 12,16,20 |
+| Drei Dinge die du nicht … | wide | 26,20,16 |
+
+### 1. Der Ausschnitt — den Wechsel gab es laengst
+
+`Ye` kennt `full, wide, bust, lower, close, face` mit Zoom 1 bis 2,3,
+und `et` dreht ihn durch. Nur war er an den **Folienindex** gebunden,
+und das Deckblatt stand hart auf `"full"`: Zoom 1, mittig, immer.
+Deshalb sah im Raster jede Kachel gleich gerahmt aus.
+
+`deckblattSchnitte` gibt dem Deckblatt eine eigene Reihe. Absichtlich
+**ohne** `face` und `close` (Zoom 1,85 bis 2,3) — das ist fuer eine
+Kachel im Raster zu nah. Ein von Hand gesetzter Ausschnitt
+(`imageLocked`) gewinnt weiterhin.
+
+### 2. Der Ton
+
+`tonReihe` gibt vier fast schwarze Toene, warm bis kuehl bis violett.
+Der gewuerfelte Ton geht in **alle drei** Ebenen ueber dem Bild: flaches
+Abdunkeln, Kantenverlauf, Tiefenverlauf. Er wird **einmal** oben in der
+Kachel bestimmt, damit die drei Ebenen nicht auseinanderlaufen.
+
+### 3. Der Versalsatz
+
+`versalAnteil` Prozent der Fotokacheln werden zu Grossbuchstaben in
+Montserrat 500, weit gesperrt und klein — die Reel-Cover im Vorbild.
+
+Dabei fehlte etwas Grundsaetzliches: **der Zeichner konnte gar keine
+Laufweite auf dem Foto.** `charSpacing` stand weder beim Zeichnen noch
+beim Messen. Und es reicht nicht, es beim Zeichnen zu setzen — dann
+bricht der Umbruch zu spaet um und der Text laeuft raus. Es steht jetzt
+an **vier** Stellen:
+
+    Ht    misst die Zeilenbreite   -> davon haengt der Umbruch ab
+    Tt    zeichnet die Zeile
+    zF    die Notbremse
+    PB    die Plattenbreite
+
+Verteilung ueber dreissig Bilder nachgerechnet: **9 von 30** Versalsatz
+(30 Prozent), Ausschnitte 11/10/9, Toene 8/8/6/8.

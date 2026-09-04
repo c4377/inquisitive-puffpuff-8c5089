@@ -291,6 +291,10 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'nameSchrift:"Playfair Display",nameGewicht:"400",nameLaufweite:60,'
  'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:8,'
  'geteilt:1,geteiltOben:.16,'
+ 'deckblattSchnitte:"full|wide|bust|wide|full|bust",'
+ 'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20",'
+ 'versalAnteil:30,versalFamilie:"Montserrat",versalGewicht:"500",'
+ 'versalLaufweite:280,versalGroesse:.034,'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-.55,bildHeben:0,'
@@ -1719,6 +1723,104 @@ P.append(('dr.forEach((Je,rt)=>{if(!Je.length){De+=tt.engZeilen?qe*.92:Et;return
  'if(zGT&&rt===Lt)De=n*(BS_KACHEL.textUnten||.86)-(dr.length-Lt)*Et2*zF+Et2/2;'
  'if(!Je.length){De+=tt.engZeilen?qe*.92:Et;return}',
  "Geteilte Kachel: erster Block oben, zweiter unten", 1))
+
+# 96 — Gesperrter Versalsatz, und drei Wuerfel, damit die Fotos
+#      reichen.
+#
+#      Wenn fast jede Kachel ein Foto ist, sieht man dasselbe Bild
+#      alle paar Tage wieder. Drei Dinge wechseln jetzt je Kachel.
+#      Alle drei wuerfeln aus BILD **und** TEXT:
+#
+#          String(t.background) + "|" + String(t.text)
+#
+#      Nicht nur aus dem Bild — sonst bekaeme dasselbe Foto an jedem
+#      Tag denselben Ausschnitt und denselben Ton, und der ganze
+#      Aufwand waere umsonst. Nachgerechnet: dasselbe Foto mit vier
+#      Texten ergibt vier verschiedene Ausschnitte und Toene.
+#
+#      **1. Der Ausschnitt.** Den Wechsel gab es laengst — Ye kennt
+#      full, wide, bust, lower, close, face mit Zoom 1 bis 2,3, und
+#      et dreht ihn durch. Nur war er an den FOLIENINDEX gebunden und
+#      das Deckblatt stand hart auf "full": Zoom 1, mittig, immer.
+#      Deshalb sah im Raster jede Kachel gleich gerahmt aus.
+#      deckblattSchnitte gibt dem Deckblatt eine eigene Reihe.
+#      Absichtlich ohne face und close (Zoom 1,85 bis 2,3) — das ist
+#      fuer eine Kachel im Raster zu nah.
+#      Ein von Hand gesetzter Ausschnitt (imageLocked) gewinnt
+#      weiterhin, daran wurde nichts geaendert.
+#
+#      **2. Der Ton.** tonReihe gibt vier fast schwarze Toene, warm
+#      bis kuehl bis violett. Der gewuerfelte Ton geht in alle drei
+#      Ebenen ueber dem Bild: flaches Abdunkeln, Kantenverlauf,
+#      Tiefenverlauf. Er wird EINMAL oben in der Kachel bestimmt,
+#      damit die drei Ebenen nicht auseinanderlaufen.
+#
+#      **3. Der Versalsatz.** versalAnteil Prozent der Fotokacheln
+#      werden zu Grossbuchstaben in Montserrat 500, weit gesperrt und
+#      klein — die Reel-Cover im Vorbild.
+#
+#      Dabei fehlte etwas Grundsaetzliches: der Zeichner konnte gar
+#      keine Laufweite auf dem Foto. charSpacing stand weder beim
+#      Zeichnen noch beim Messen. Es reicht nicht, es beim Zeichnen
+#      zu setzen — dann bricht der Umbruch zu spaet um und der Text
+#      laeuft raus. Deshalb steht es jetzt an vier Stellen:
+#
+#          Ht    misst die Zeilenbreite  -> davon haengt der Umbruch
+#          Tt    zeichnet die Zeile
+#          zF    die Notbremse
+#          PB    die Plattenbreite
+#
+#      Verteilung ueber dreissig Bilder nachgerechnet: 9 von 30
+#      Versalsatz (30 Prozent), Ausschnitte 11/10/9, Toene 8/8/6/8.
+P.append(('Ca=async(e,t,r,n,i={})=>{var yn,_n,Jr,xr,zr,ti,nn,_i,ki,ri;try{Pe.fabric.util.clearFabricFontCache()}catch(zz){}',
+ 'Ca=async(e,t,r,n,i={})=>{var yn,_n,Jr,xr,zr,ti,nn,_i,ki,ri;try{Pe.fabric.util.clearFabricFontCache()}catch(zz){}'
+ 'const zTon=(()=>{try{const zl=String(BS_KACHEL.tonReihe||"").split("|").filter(Boolean);'
+ 'if(!zl.length)return BS_KACHEL.bildTon;'
+ 'const zs=String(t.background||"")+"|"+String(t.text||"");let zh=0;'
+ 'for(let zi=0;zi<zs.length;zi+=1)zh=(zh*31+zs.charCodeAt(zi))%99991;'
+ 'return zl[(zh*13+7)%zl.length]}catch(zz){return BS_KACHEL.bildTon}})();',
+ "Farbton je Kachel aus der tonReihe", 1))
+P.append(('fill:`rgba(${BS_KACHEL.bildTon||"0,0,0"},${Et})`', 'fill:`rgba(${zTon||"0,0,0"},${Et})`',
+ "Flaches Abdunkeln im Ton der Kachel", 1))
+P.append(('lt=Ye[Qe===0?"full":et[Qe%et.length]]',
+ 'zDS=(()=>{try{const zl=String(BS_KACHEL.deckblattSchnitte||"").split("|").filter(Boolean);'
+ 'if(!zl.length)return"full";'
+ 'const zs=String(t.background||"")+"|"+String(t.text||"");let zh=0;'
+ 'for(let zi=0;zi<zs.length;zi+=1)zh=(zh*31+zs.charCodeAt(zi))%99991;'
+ 'return zl[(zh*5+3)%zl.length]}catch(zz){return"full"}})(),'
+ 'lt=Ye[Qe===0?zDS:et[Qe%et.length]]',
+ "Deckblatt bekommt wechselnde Bildausschnitte", 1))
+P.append(('$e&&t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeGewicht&&(kt=BS_KACHEL.folgeGewicht);const br=(Je,rt)=>{',
+ '$e&&t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeGewicht&&(kt=BS_KACHEL.folgeGewicht);'
+ 'const zVS=(()=>{try{if(!$e||!BS_KACHEL.versalAnteil)return!1;'
+ 'const zs=String(t.background||"")+"|"+String(t.text||"");let zh=0;'
+ 'for(let zi=0;zi<zs.length;zi+=1)zh=(zh*31+zs.charCodeAt(zi))%99991;'
+ 'return((zh*7+11)%100)<BS_KACHEL.versalAnteil}catch(zz){return!1}})();'
+ 'const zCS=zVS?(BS_KACHEL.versalLaufweite||0):(BS_KACHEL.fotoLaufweite||0);'
+ 'zVS&&BS_KACHEL.versalFamilie&&(Qe=BS_KACHEL.versalFamilie);'
+ 'zVS&&BS_KACHEL.versalGewicht&&(kt=BS_KACHEL.versalGewicht);'
+ 'const br=(Je,rt)=>{',
+ "Versalsatz: Entscheidung, Schrift, Gewicht, Laufweite", 1))
+P.append(('Ht=(Je,rt,Ve)=>{const pt={fontSize:rt,fontFamily:Ve?Qe:(BS_KACHEL.zweiteFamilie||Qe),fontWeight:Ve?kt:"400"};',
+ 'Ht=(Je,rt,Ve)=>{const pt={fontSize:rt,fontFamily:Ve?Qe:((zVS&&BS_KACHEL.versalFamilie)||BS_KACHEL.zweiteFamilie||Qe),fontWeight:Ve?kt:"400",charSpacing:zCS};',
+ "Laufweite beim Messen der Zeilen", 1))
+P.append(('const Tt=(xt,rr,Ut)=>new Pe.fabric.Text(xt,{left:Ut,top:De,originX:"left",originY:"center",fontSize:(Ve?qe:qe2)*zF,fontFamily:Ve?Qe:QeZ,',
+ 'const Tt=(xt,rr,Ut)=>new Pe.fabric.Text(xt,{left:Ut,top:De,originX:"left",originY:"center",charSpacing:zCS,fontSize:(Ve?qe:qe2)*zF,fontFamily:Ve?Qe:QeZ,',
+ "Laufweite beim Zeichnen der Zeile", 1))
+P.append(('const zp=new Pe.fabric.Text(zz.map(zx=>zx.w).join(" "),{fontSize:zie?qe:qe2,fontFamily:zie?Qe:QeZ,',
+ 'const zp=new Pe.fabric.Text(zz.map(zx=>zx.w).join(" "),{charSpacing:zCS,fontSize:zie?qe:qe2,fontFamily:zie?Qe:QeZ,',
+ "Laufweite in der Notbremse", 1))
+P.append(('const p2=new Pe.fabric.Text(zz.map(xx=>xx.w).join(" "),{fontSize:qe,fontFamily:Qe,fontWeight:kt});',
+ 'const p2=new Pe.fabric.Text(zz.map(xx=>xx.w).join(" "),{charSpacing:zCS,fontSize:qe,fontFamily:Qe,fontWeight:kt});',
+ "Laufweite bei der Plattenbreite", 1))
+P.append(('QeZ=$e?((t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeFamilie)||BS_KACHEL.zweiteFamilie||Qe):Qe',
+ 'QeZ=$e?((zVS&&BS_KACHEL.versalFamilie)||(t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeFamilie)||BS_KACHEL.zweiteFamilie||Qe):Qe',
+ "Zweiter Block folgt dem Versalsatz", 1))
+P.append(('const SR=$e&&String(t.schild||"").trim()?r*((BS_KACHEL.schildGroesse||.03)*(BS_KACHEL.schildHoehe||2)+(BS_KACHEL.schildAbstand||.034)):0;',
+ 'const SR=$e&&String(t.schild||"").trim()?r*((BS_KACHEL.schildGroesse||.03)*(BS_KACHEL.schildHoehe||2)+(BS_KACHEL.schildAbstand||.034)):0;'
+ 'if(zVS){er=String(er||"").toUpperCase();pr=String(pr||"").toUpperCase();'
+ 'BS_KACHEL.versalGroesse&&(qe=Math.max(c(11),Math.round(r*BS_KACHEL.versalGroesse)))}',
+ "Versalsatz: Grossbuchstaben und feste Groesse", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
