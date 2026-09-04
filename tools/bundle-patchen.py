@@ -299,7 +299,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
- 'bildSchwarzpunkt:.13,bildFarbBremse:.42,textMitte:.73,nameZeigen:0,'
+ 'bildSchwarzpunkt:.13,textMitte:.73,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
  'tiefeOben:.06,tiefeMitte:.10,tiefeUnten:.62,kanteOben:.30,kanteUnten:.55,'
  'saumStaerke:0,bildSchleier:.10,'
@@ -2722,12 +2722,70 @@ P.append(('tt.platten||e.add(new Pe.fabric.Text(Ze,{left:_e,top:n*(BS_KACHEL.nam
 #      demselben return) und laeuft nicht auf Schwarzweisskacheln, wo
 #      es nichts zu bremsen gibt. Kein Schwarzpunkt, keine Bremse.
 
+P.append(('const BS_BRENNBAR=',
+ 'const BS_FARBMISCH=(()=>{try{const zc=document.createElement("canvas").getContext("2d");'
+ 'zc.globalCompositeOperation="color";return zc.globalCompositeOperation==="color"}catch(zz){return!1}})();'
+ 'const BS_BRENNBAR=',
+ "Erkennung Mischmodus color", 1))
+
 P.append(('globalCompositeOperation:"color-burn",selectable:!1,evented:!1}))})();',
  'globalCompositeOperation:"color-burn",selectable:!1,evented:!1}));'
- 'const zBr=Number(BS_KACHEL.bildFarbBremse)||0;'
- 'zBr>0&&BS_MISCHBAR&&!(zSat<=-.99)&&e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,'
- 'fill:`rgba(128,128,128,${zBr})`,globalCompositeOperation:"saturation",selectable:!1,evented:!1}))})();',
- "Farbbremse hinter dem Schwarzpunkt", 1))
+ 'if(BS_KACHEL.bildFarbNeutral!==0&&BS_FARBMISCH&&!(zSat<=-.99))try{'
+ 'const zel=me.getElement&&me.getElement();'
+ 'zel&&e.add(new Pe.fabric.Image(zel,{originX:"center",originY:"center",left:me.left,top:me.top,'
+ 'scaleX:me.scaleX,scaleY:me.scaleY,globalCompositeOperation:"color",selectable:!1,evented:!1}))'
+ '}catch(zz){}})();',
+ "Schwarzpunkt farbneutral: Helligkeit gebrannt, Farbe vom Original", 1))
+
+
+# 119 — Die Bremse aus 118 war falsch, und zwar weil ich im falschen
+#      Raum gemessen habe. Carina: "Neeeeeein das ist viel zu flach."
+#
+#      118 hat die Saettigung als (max-min)/max gemessen, HSV. Diese
+#      Zahl steigt schon dadurch, dass ein Pixel dunkler wird — sie
+#      sagt nichts darueber, wie bunt etwas AUSSIEHT. In CIELAB, wo
+#      Buntheit das ist, was das Auge Buntheit nennt (C* = Wurzel aus
+#      a*^2 + b*^2), sehen dieselben Bilder so aus:
+#
+#                              Buntheit  L0-25  L25-50  L50-75  L75+
+#          roh                    6,14    4,58    8,11    5,10   3,31
+#          Schwarzpunkt je Kanal  6,90    6,06    9,77    4,90   3,92
+#          plus Bremse .42        3,98    3,56    5,57    2,79   2,32
+#          Vorbild                7,09    4,20   12,34   13,89   1,78
+#
+#      Der Schwarzpunkt hebt die Buntheit um 12 Prozent. Die Bremse
+#      hat 35 Prozent weggenommen. Ich habe also fuenfmal so stark
+#      gegengesteuert wie noetig — in HSV sah das nach plus 75 Prozent
+#      aus, und ich habe der Zahl geglaubt statt dem Bild.
+#
+#      Der Fehler dahinter: eine oertliche Ursache global behandelt.
+#      color-burn rechnet je Kanal und multipliziert die Kanal-
+#      abstaende mit 1/g. In den Tiefen macht das viel (4,58 auf
+#      6,06), in den Mitteltoenen nichts (5,10 auf 4,90). Eine
+#      Entsaettigung ueber die ganze Kachel trifft dafuer alles
+#      gleichmaessig und raeumt genau dort ab, wo das Bild lebt:
+#      Mitteltoene 5,10 auf 2,79.
+#
+#      Richtig ist, den Schwarzpunkt gar nicht erst auf die Farbe
+#      wirken zu lassen. Nach der Brennflaeche wird dasselbe Foto ein
+#      zweites Mal gezeichnet, im Mischmodus color: der nimmt Farbton
+#      und Saettigung von der Quelle und die Helligkeit vom Untergrund.
+#      Ergebnis: gebrannte Helligkeit, unveraenderte Farbe.
+#
+#          Schwarzpunkt farbneutral  5,95   5,19   8,47   4,21   3,40
+#
+#      6,14 vorher, 5,95 nachher — drei Prozent. Und die Tiefen
+#      bleiben, wo sie sein sollen: p05 1,7, Schwarzanteil 36,0
+#      Prozent, dunkelstes Pixel 0.
+#
+#      Faellt der Mischmodus color aus, bleibt es beim Brennen je
+#      Kanal (BS_FARBMISCH); der Schwarzpunkt geht dabei nie verloren.
+#      bildFarbNeutral:0 schaltet die Rueckholung ab.
+#
+#      Bleibt eine Sache, die der Code nicht loesen kann: die
+#      Mitteltoene. 5,10 gegen 13,89 beim Vorbild, ueber das Doppelte.
+#      Das sind Fotos in warmem Licht gegen Fotos an einer grauen
+#      Wand.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

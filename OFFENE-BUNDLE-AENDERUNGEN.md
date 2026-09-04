@@ -3809,3 +3809,57 @@ unsichtbar.
 Sie haengt am Schwarzpunkt (steht in derselben Klammer, hinter
 demselben `return`) und laeuft nicht auf Schwarzweisskacheln, wo es
 nichts zu bremsen gibt. **Kein Schwarzpunkt, keine Bremse.**
+
+## 119 — Die Bremse war falsch. Ich hab im falschen Raum gemessen
+
+*"Neeeeeein das ist viel zu flach."*
+
+118 hat Saettigung als `(max-min)/max` gemessen — HSV. **Diese Zahl
+steigt schon dadurch, dass ein Pixel dunkler wird.** Sie sagt nichts
+darueber, wie bunt etwas *aussieht*. In CIELAB, wo Buntheit das ist,
+was das Auge Buntheit nennt (C* = √(a*² + b*²)), sehen dieselben
+Bilder so aus:
+
+| | Buntheit | L 0-25 | L 25-50 | L 50-75 | L 75+ |
+|---|---|---|---|---|---|
+| roh | 6,14 | 4,58 | 8,11 | 5,10 | 3,31 |
+| Schwarzpunkt je Kanal | 6,90 | 6,06 | 9,77 | 4,90 | 3,92 |
+| **plus Bremse .42** | **3,98** | 3,56 | 5,57 | **2,79** | 2,32 |
+| Vorbild | 7,09 | 4,20 | 12,34 | **13,89** | 1,78 |
+
+Der Schwarzpunkt hebt die Buntheit um **12 Prozent**. Die Bremse hat
+**35 Prozent** weggenommen. Ich habe fuenfmal so stark gegengesteuert
+wie noetig — in HSV sah es nach plus 75 Prozent aus, und ich habe der
+Zahl geglaubt statt dem Bild.
+
+### Der Fehler dahinter: eine oertliche Ursache global behandelt
+
+`color-burn` rechnet je Kanal und multipliziert die Kanalabstaende mit
+`1/g`. In den **Tiefen** macht das viel (4,58 → 6,06), in den
+**Mitteltoenen** nichts (5,10 → 4,90). Eine Entsaettigung ueber die
+ganze Kachel trifft dagegen alles gleichmaessig und raeumt genau dort
+ab, wo das Bild lebt: Mitteltoene 5,10 → 2,79.
+
+### Richtig: den Schwarzpunkt gar nicht erst auf die Farbe wirken lassen
+
+Nach der Brennflaeche wird dasselbe Foto **ein zweites Mal** gezeichnet,
+im Mischmodus `color`. Der nimmt **Farbton und Saettigung von der
+Quelle** und die **Helligkeit vom Untergrund**. Ergebnis: gebrannte
+Helligkeit, unveraenderte Farbe.
+
+| | Buntheit | L 0-25 | L 25-50 | L 50-75 | L 75+ |
+|---|---|---|---|---|---|
+| roh | 6,14 | 4,58 | 8,11 | 5,10 | 3,31 |
+| **Schwarzpunkt farbneutral** | **5,95** | 5,19 | 8,47 | 4,21 | 3,40 |
+
+Drei Prozent Unterschied. Und die Tiefen bleiben, wo sie sein sollen:
+p05 **1,7**, Schwarzanteil **36,0 %**, dunkelstes Pixel **0**.
+
+Faellt der Mischmodus `color` aus, bleibt es beim Brennen je Kanal
+(`BS_FARBMISCH`) — der Schwarzpunkt geht nie verloren.
+`bildFarbNeutral:0` schaltet die Rueckholung ab.
+
+### Was der Code nicht loesen kann
+
+Die **Mitteltoene**: 5,10 gegen 13,89 beim Vorbild, ueber das Doppelte.
+Das sind Fotos in warmem Licht gegen Fotos an einer grauen Wand.
