@@ -3932,3 +3932,52 @@ ist kaputt.
 Das ist die **graue Wand**. Saettigung multipliziert vorhandene
 Buntheit, und null mal irgendwas bleibt null. Grau laesst sich nicht
 saettigen, nur einfaerben — und das waere kein Grading mehr.
+
+## 121 — Weniger Schwarzpunkt, dafuer eine Vignette
+
+*"Nein zurueck und lieber weniger schwarzpunkt und mehr Vignette."*
+
+Der Mitteltonschub aus 120 ist wieder aus — `bildMitteltoene` steht
+nicht mehr im Aufsatz; der Code dafuer bleibt und schlaeft bei 0.
+
+### Es gab gar keine Vignette
+
+Nachgesehen, was ueberhaupt da war: `kanteOben` und `kanteUnten` sind
+**ein senkrechter Verlauf**, oben 0 → 0,18 und unten 0,82 → 1. Die
+Seiten und die Ecken werden gar nicht dunkler. Darum lagen ihre Ecken
+bei 69 und die des Vorbilds bei 49.
+
+Neu ist ein **runder** Verlauf (fabric `Gradient`, `type: radial`),
+Mittelpunkt leicht oberhalb der Kachelmitte, damit das Gesicht offen
+bleibt:
+
+| | | |
+|---|---|---|
+| `bildVignette` | Deckkraft am Rand | .6 |
+| `bildVignetteInnen` | ab wo er anfaengt | .45 |
+| `bildVignetteWeite` | Radius, mal laengere Kante | .72 |
+| `bildVignetteMitte` | Hoehe des Mittelpunkts | .45 |
+
+### Ueber alle neun Kacheln gemessen
+
+| | Ecken | Mitte | p05 | dunkelstes |
+|---|---|---|---|---|
+| Punkt .13, keine Vignette | 36,1 | 84,3 | 3,3 | 0,0 |
+| **Punkt .07, Vignette .6** | **32,8** | **93,5** | 8,8 | 0,0 |
+| Vorbild | 41,3 | 83,8 | 5,4 | 0,0 |
+
+**Die Ecken werden dunkler und die Mitte gleichzeitig heller.** Das ist
+der ganze Unterschied zwischen Vignette und Schwarzpunkt: der
+Schwarzpunkt zieht alles nach unten, die Vignette nimmt nur den Rand
+und laesst das Motiv stehen. Verhaeltnis Mitte zu Ecken **2,34 vorher,
+2,85 jetzt**.
+
+Der Schwarzpunkt bleibt drin, nur schwaecher — das dunkelste Pixel ist
+weiterhin 0.
+
+### Nachgeprueft im echten fabric
+
+Radiale Verlaeufe landen leicht im falschen Koordinatenraum, deshalb
+nicht auf dem eigenen Canvas geprueft, sondern im fabric der App selbst
+(5.5.2, ueber `window.fabric` in der laufenden Seite): Mitte 132,8,
+Ecke oben links 59,9, Ecke unten rechts 7,0. Sitzt.

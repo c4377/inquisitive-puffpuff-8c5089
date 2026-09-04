@@ -299,7 +299,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
- 'bildSchwarzpunkt:.13,bildMitteltoene:.2,textMitte:.73,nameZeigen:0,'
+ 'bildSchwarzpunkt:.07,bildVignette:.6,textMitte:.73,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
  'tiefeOben:.06,tiefeMitte:.10,tiefeUnten:.62,kanteOben:.30,kanteUnten:.55,'
  'saumStaerke:0,bildSchleier:.10,'
@@ -2860,6 +2860,64 @@ P.append(('globalCompositeOperation:"color-burn",selectable:!1,evented:!1}))})()
 #      Buntheit, und null mal irgendwas bleibt null. Grau laesst sich
 #      nicht saettigen, nur einfaerben — und das waere kein Grading
 #      mehr.
+
+
+# 121 — Weniger Schwarzpunkt, dafuer eine Vignette. Carina: "Nein
+#      zurueck und lieber weniger schwarzpunkt und mehr Vignette."
+#
+#      Der Mitteltonschub aus 120 ist wieder aus (bildMitteltoene
+#      steht nicht mehr im Aufsatz; der Code dafuer bleibt, er
+#      schlaeft bei 0).
+#
+#      Erst nachgesehen, was ueberhaupt an Vignette da war: nichts
+#      Rundes. kanteOben und kanteUnten sind EIN senkrechter Verlauf,
+#      oben 0 bis 0,18 und unten 0,82 bis 1. Die Seiten und die Ecken
+#      werden gar nicht dunkler. Darum lagen ihre Ecken bei 69, die
+#      des Vorbilds bei 49.
+#
+#      Neu ist ein runder Verlauf (fabric Gradient, type radial),
+#      Mittelpunkt leicht oberhalb der Kachelmitte, damit das Gesicht
+#      offen bleibt:
+#
+#          bildVignette        Deckkraft am Rand         .6
+#          bildVignetteInnen   ab wo er anfaengt         .45
+#          bildVignetteWeite   Radius, mal laengere Kante .72
+#          bildVignetteMitte   Hoehe des Mittelpunkts    .45
+#
+#      Ueber alle neun Kacheln gemessen:
+#
+#                                  Ecken  Mitte  p05  dunkelstes
+#          Punkt .13, keine Vig     36,1   84,3  3,3        0,0
+#          Punkt .07, Vignette .6   32,8   93,5  8,8        0,0
+#          Vorbild                  41,3   83,8  5,4        0,0
+#
+#      Die Ecken werden dunkler UND die Mitte heller — das ist der
+#      Unterschied zwischen Vignette und Schwarzpunkt. Der Schwarzpunkt
+#      zieht alles nach unten, die Vignette nimmt nur den Rand und
+#      laesst das Motiv stehen. Verhaeltnis Mitte zu Ecken 2,34 vorher,
+#      2,85 jetzt.
+#
+#      Der Schwarzpunkt bleibt drin, nur schwaecher: das dunkelste
+#      Pixel ist weiter 0.
+#
+#      Nachgeprueft im echten fabric der App (5.5.2, ueber window.
+#      fabric in der laufenden Seite), weil radiale Verlaeufe leicht
+#      im falschen Koordinatenraum landen: Mitte 132,8, Ecke oben
+#      links 59,9, Ecke unten rechts 7,0. Sitzt.
+
+P.append(('colorStops:[{offset:0,color:`rgba(${zTon},${BS_KACHEL.kanteOben})`},{offset:.18,color:`rgba(${zTon},0.0)`},'
+ '{offset:.82,color:`rgba(${zTon},0.0)`},{offset:1,color:`rgba(${zTon},${BS_KACHEL.kanteUnten})`}]})});e.add(ve)}catch{}',
+ 'colorStops:[{offset:0,color:`rgba(${zTon},${BS_KACHEL.kanteOben})`},{offset:.18,color:`rgba(${zTon},0.0)`},'
+ '{offset:.82,color:`rgba(${zTon},0.0)`},{offset:1,color:`rgba(${zTon},${BS_KACHEL.kanteUnten})`}]})});e.add(ve)}catch{}'
+ 'try{const zVi=Number(BS_KACHEL.bildVignette)||0;if(zVi>0){'
+ 'const zVr=Math.max(r,n)*(Number(BS_KACHEL.bildVignetteWeite)||.72),'
+ 'zVx=r/2,zVy=n*(Number(BS_KACHEL.bildVignetteMitte)||.45),'
+ 'zVi2=Number(BS_KACHEL.bildVignetteInnen)||.45,zVt=zTon||"0,0,0";'
+ 'e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,selectable:!1,evented:!1,'
+ 'fill:new Pe.fabric.Gradient({type:"radial",'
+ 'coords:{x1:zVx,y1:zVy,r1:zVr*zVi2,x2:zVx,y2:zVy,r2:zVr},'
+ 'colorStops:[{offset:0,color:`rgba(${zVt},0)`},{offset:1,color:`rgba(${zVt},${zVi})`}]})}))}}catch{}',
+ "Vignette als runder Verlauf", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
