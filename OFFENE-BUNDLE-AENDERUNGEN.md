@@ -3072,3 +3072,35 @@ Die Ladeliste der App zog bisher nur **sechs** Werte aus dem Block —
 fehlten. Bei einem Zeichner, der auf dem Canvas misst, heisst das: mit
 der Ersatzschrift gemessen, mit der richtigen gezeichnet. Alle vier
 stehen jetzt drin.
+
+## 98 — DM Serif Display, und ein vorbereiteter Platz fuer Nohemi
+
+**DM Serif Display** loest Prata ab (das wiederum Playfair abgeloest
+hatte). Nachgemessen wie immer, derselbe Satz in 40 px:
+
+| Schrift | Breite |
+|---|---|
+| DM Serif Display | 312,8 |
+| Prata | 347,5 |
+| Playfair Display | 323,6 |
+
+Drei Breiten, drei wirklich geladene Schriften. DM Serif Display ist
+deutlich fetter und kompakter als die beiden anderen — es traegt also
+mehr Text auf gleicher Breite. Regular und Kursiv liegen im Projekt.
+
+### Nohemi
+
+Sie liegt **nicht** im Projekt. Nohemi ist von Pangram Pangram und fuer
+den kommerziellen Gebrauch kostenpflichtig; sie mitzuliefern hiesse, die
+Lizenz zu unterlaufen. Was geht, ist alles andere vorzubereiten: die vier
+Anmeldungen (300/400/500/700) stehen in beiden Seiten, `tiefeSchriften`
+kennt den Namen. Sobald die lizenzierten Dateien unter
+
+    site/fonts/Nohemi-Light.woff2
+    site/fonts/Nohemi-Regular.woff2
+    site/fonts/Nohemi-Medium.woff2
+    site/fonts/Nohemi-Bold.woff2
+
+liegen, reicht `"Nohemi"` als Wert im Block. Fehlt eine Datei, laeuft
+alles unveraendert weiter — eine `@font-face`-Regel ohne Datei tut
+nichts.
