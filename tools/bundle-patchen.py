@@ -298,7 +298,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'versalLaufweite:20,versalGroesse:.065,versalZweitAnteil:1,'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
- 'bildSaettigung:-1,saettigungReihe:"-1|0.1",'
+ 'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
  'bildHeben:0,bildSpreizung:.28,'
  'tiefeOben:.06,tiefeMitte:.10,tiefeUnten:.62,kanteOben:.30,kanteUnten:.55,'
  'saumStaerke:0,bildSchleier:.10,'
@@ -2538,6 +2538,48 @@ P.append(('try{me.applyFilters()}catch{me.filters=[];try{me.applyFilters()}catch
 #      sich nur durch eine hochzaehlende Zahl, und das faerbt den
 #      Wuerfel. Mit 2000 unabhaengigeren Texten sind es exakt 50,0.
 #      Bei so einer Zahl lohnt der zweite Durchlauf.
+
+
+# 116 — "50/50 !!! Also immer wechseln." Nicht die Haelfte im Mittel,
+#      sondern abwechselnd: Tag 1 Farbe, Tag 2 schwarzweiss, Tag 3
+#      Farbe. Der Wuerfel aus 115 trifft die Haelfte auf 2000 Kacheln
+#      genau, aber im sichtbaren Ausschnitt — neun Kacheln auf dem
+#      Schirm — liegen dann eben doch mal vier schwarzweisse
+#      nebeneinander. Zufall sieht nicht aus wie Wechsel.
+#
+#      Der Zeichner wusste bisher nicht, der wievielte Tag er ist. Die
+#      Vorschau reicht ihm nur {slideIndex, totalSlides, scale,
+#      globalBrandName, typography}. Die Tagesnummer liegt eine Ebene
+#      hoeher: im Raster als ae.day, beim Laden als re.day. Also wird
+#      sie an beiden Stellen auf die Folie gestempelt (_tag) und im
+#      Zeichner gelesen — dann ist es kein Wuerfeln mehr, sondern
+#      zl[tag % zl.length].
+#
+#      Kennt eine Kachel ihren Tag nicht (Ausgabewege, die Folien ohne
+#      Plan bauen), faellt sie auf den Hash-Weg aus 115 zurueck. Der
+#      Wechsel ist damit ueberall dort streng, wo eine Tagesnummer da
+#      ist, und nirgends kaputt, wo keine ist.
+#
+#      Nachgerechnet ueber 14 Tage: Tag 1 Farbe, Tag 2 schwarzweiss,
+#      ... Tag 14 schwarzweiss — 7 von 14, lueckenlos abwechselnd.
+
+# Die Tagesnummer wandert beim Laden auf jede Folie.
+P.append(('const H=(Array.isArray(S)?S:[]).filter(re=>re&&typeof re=="object").map(re=>({...re,slides:Array.isArray(re.slides)?re.slides.filter(Boolean):[]})).filter(re=>re.slides.length>0)',
+ 'const H=(Array.isArray(S)?S:[]).filter(re=>re&&typeof re=="object").map(re=>({...re,slides:Array.isArray(re.slides)?re.slides.filter(Boolean).map(ye=>typeof re.day=="number"?{...ye,_tag:re.day}:ye):[]})).filter(re=>re.slides.length>0)',
+ "Tagesnummer beim Laden auf jede Folie stempeln", 1))
+
+# Das Raster gibt die Tagesnummer mit.
+P.append(('v.jsx(uG,{data:{...Ze,slideNumber:void 0},brandName:At}',
+ 'v.jsx(uG,{data:{...Ze,slideNumber:void 0,_tag:ae.day},brandName:At}',
+ "Raster reicht die Tagesnummer an die Kachel durch", 1))
+
+# Kennt die Kachel ihren Tag, wird streng abgewechselt statt gewuerfelt.
+P.append(('const zSat=(()=>{try{const zl=String(BS_KACHEL.saettigungReihe||"").split("|").filter(zx=>zx!=="");if(!zl.length)return null;',
+ 'const zSat=(()=>{try{const zl=String(BS_KACHEL.saettigungReihe||"").split("|").filter(zx=>zx!=="");'
+ 'if(BS_KACHEL.saettigungWechsel&&zl.length&&typeof t._tag=="number"){'
+ 'const zv=parseFloat(zl[((t._tag%zl.length)+zl.length)%zl.length]);if(!isNaN(zv))return zv}'
+ 'if(!zl.length)return null;',
+ "strenger Wechsel nach Tagesnummer, Hash nur als Rueckfall", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

@@ -3631,3 +3631,42 @@ haengt sie einfach wieder in die Reihe.
 die **Stichprobe**: die Testtexte unterschieden sich nur durch eine
 hochzaehlende Zahl, und das faerbt den Wuerfel. Mit 2000 unabhaengigeren
 Texten sind es exakt 50,0. Bei so einer Zahl lohnt der zweite Durchlauf.
+
+## 116 — Nicht die Haelfte im Mittel, sondern abwechselnd
+
+"50/50 !!! Also immer wechseln." Der Wuerfel aus 115 trifft die Haelfte
+auf 2000 Kacheln exakt — aber im sichtbaren Ausschnitt, neun Kacheln auf
+dem Schirm, liegen dann eben doch mal vier schwarzweisse nebeneinander.
+Zufall sieht nicht aus wie Wechsel.
+
+**Warum es vorher nicht anders ging:** der Zeichner wusste nicht, der
+wievielte Tag er ist. Die Vorschau reicht ihm nur `{slideIndex,
+totalSlides, scale, globalBrandName, typography}` — kein Datum, keine
+Nummer. Deshalb musste er wuerfeln.
+
+Die Tagesnummer liegt eine Ebene hoeher, an zwei Stellen:
+
+| Stelle | Feld |
+|---|---|
+| Raster, beim Zeichnen einer Kachel | `ae.day` |
+| Laden des Plans, beim Aufraeumen | `re.day` |
+
+An beiden wird sie jetzt auf die Folie gestempelt (`_tag`), und der
+Zeichner liest sie:
+
+    zl[((t._tag % zl.length) + zl.length) % zl.length]
+
+Kein Wuerfeln mehr, sondern ein Zeiger, der bei jedem Tag um eins
+weiterrueckt. Zwei Eintraege in der Reihe heissen: strenger Wechsel.
+
+    saettigungReihe    "-1|0.1"
+    saettigungWechsel  1
+
+Nachgerechnet ueber 14 Tage: Tag 1 Farbe, Tag 2 schwarzweiss, Tag 3
+Farbe … Tag 14 schwarzweiss — **7 von 14, lueckenlos abwechselnd**.
+
+**Der Rueckfall bleibt.** Kennt eine Kachel ihren Tag nicht — Ausgabewege,
+die Folien ohne Plan bauen — nimmt sie weiter den Hash-Weg aus 115. Der
+Wechsel ist damit ueberall streng, wo eine Tagesnummer da ist, und
+nirgends kaputt, wo keine ist. `saettigungWechsel:0` schaltet ihn ab und
+wuerfelt wieder.
