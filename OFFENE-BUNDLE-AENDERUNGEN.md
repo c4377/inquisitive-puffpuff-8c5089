@@ -2427,3 +2427,39 @@ ohne Ausnahme: gemessen wird mit derselben Schrift, mit der im selben
 Durchgang gezeichnet wird. Der Preis ist etwas Rechenzeit pro Kachel.
 Der Gewinn ist, dass diese Fehlerklasse — dreimal aufgetreten, dreimal
 anders geflickt — nicht wiederkommen kann.
+
+## 84. Nichts wird mehr abgeschnitten — eine Notbremse statt einer Erklaerung
+
+Dreimal habe ich die Ursache gesucht und dreimal etwas repariert, was
+es nicht war:
+
+    48   Zeichenbreiten-Speicher vor der Freigabe der Vorschau leeren
+    76   zusaetzlich global, wenn der Browser fertig geladen hat
+    83   zusaetzlich am Anfang jeder Kachel
+
+Es kam trotzdem wieder. Und die Rechnung sagt weiterhin, dass es
+passen muesste: bei Umbruchgrenze 637 und Groesse 109 messen Canvas
+und Fabric identisch, und der Umbruch faellt richtig aus.
+
+Deshalb jetzt keine weitere Ursachensuche, sondern eine **Garantie im
+Zeichner**:
+
+    zF = Platz zwischen den Raendern / breiteste gezeichnete Zeile
+         (hoechstens 1)
+
+Vor dem Zeichnen wird jede Zeile so gemessen, wie sie gezeichnet wird
+— dieselbe Familie, dasselbe Gewicht, dieselbe Groesse. Ist die
+breiteste breiter als der Platz, wird der **ganze Block** mit
+demselben Faktor verkleinert. Gleichmaessig, damit nicht einzelne
+Zeilen kleiner werden als andere (der Fehler aus Abschnitt 45).
+
+Warum das trägt, auch wenn die Ursache unbekannt bleibt: Messung und
+Zeichnung liegen im selben Durchgang. Selbst wenn die Schrift in
+diesem Moment die falsche ist, ist sie es fuer beide. Eine Zeile kann
+danach rechnerisch nicht mehr ueber den Rand ragen.
+
+`zF` ist 1, sobald die Anpassungsschleife ihre Arbeit getan hat — im
+Normalfall aendert sich also nichts.
+
+Dieselbe Idee wie das `maxB` im Zeichner der Textkacheln, das es dort
+seit jeher gibt. Der Fotozweig hatte es nie.

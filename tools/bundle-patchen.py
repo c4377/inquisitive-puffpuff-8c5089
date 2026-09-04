@@ -812,21 +812,33 @@ P.append(('Et=qe*(tt.engZeilen?1.17:$e?(BS_KACHEL.fotoZeile||1.3):1.06)',
  'Et=qe*(tt.engZeilen?1.17:$e?(BS_KACHEL.fotoZeile||1.3):1.06),'
  'qe2=$e?Math.round(qe*(BS_KACHEL.zweitAnteil||1)):qe,'
  'Et2=$e?qe2*(BS_KACHEL.fotoZeile||1.3):Et,'
- 'QeZ=$e?(BS_KACHEL.zweiteFamilie||Qe):Qe',
+ 'QeZ=$e?(BS_KACHEL.zweiteFamilie||Qe):Qe,'
+ # Notbremse: keine Zeile darf breiter sein als der Platz zwischen
+ # den Raendern. Wenn doch, wird der ganze Block gleichmaessig
+ # verkleinert — gleichmaessig, damit die Zeilen nicht
+ # unterschiedlich gross werden.
+ 'zF=$e?(()=>{try{let zmx=0;'
+ 'for(let zi=0;zi<dr.length;zi+=1){const zz=dr[zi];if(!zz||!zz.length)continue;'
+ 'const zie=tt.nurErsteZeilePlatte&&zi<Lt;'
+ 'const zp=new Pe.fabric.Text(zz.map(zx=>zx.w).join(" "),{fontSize:zie?qe:qe2,'
+ 'fontFamily:zie?Qe:QeZ,fontWeight:tt.fettNurErste&&!zie?(BS_KACHEL.leichtGewicht||"400"):kt});'
+ 'zmx=Math.max(zmx,zp.width)}'
+ 'const zpl=r*(1-2*(BS_KACHEL.fotoRand||.09));'
+ 'return zmx>zpl?zpl/zmx:1}catch(zz){return 1}})():1',
  "Groesse, Zeilenhoehe und Familie des zweiten Blocks", 1))
 P.append(('ae=dr.reduce((zs,zz)=>zs+(zz.length?Et:tt.engZeilen?qe*.92:Et),0)',
- 'ae=dr.reduce((zs,zz,ii)=>zs+(zz.length?(tt.nurErsteZeilePlatte&&ii>=Lt?Et2:Et):tt.engZeilen?qe*.92:Et),0)',
+ 'ae=dr.reduce((zs,zz,ii)=>zs+(zz.length?(tt.nurErsteZeilePlatte&&ii>=Lt?Et2:Et)*zF:(tt.engZeilen?qe*.92:Et)*zF),0)',
  "Gesamthoehe zaehlt den zweiten Block in seiner Zeilenhoehe", 1))
-P.append(('De+=Et}),Zt.length&&', 'De+=(Ve?Et:Et2)}),Zt.length&&',
+P.append(('De+=Et}),Zt.length&&', 'De+=(Ve?Et:Et2)*zF}),Zt.length&&',
  "Zeilenvorschub des zweiten Blocks", 1))
 P.append(('pt=new Pe.fabric.Text(Je.map(xt=>xt.w).join(" "),{fontSize:qe,fontFamily:Qe,fontWeight:',
- 'pt=new Pe.fabric.Text(Je.map(xt=>xt.w).join(" "),{fontSize:Ve?qe:qe2,fontFamily:Ve?Qe:QeZ,fontWeight:',
+ 'pt=new Pe.fabric.Text(Je.map(xt=>xt.w).join(" "),{fontSize:(Ve?qe:qe2)*zF,fontFamily:Ve?Qe:QeZ,fontWeight:',
  "Zeilenbreite in der Familie und Groesse des Blocks", 1))
 P.append(('const Tt=(xt,rr,Ut)=>new Pe.fabric.Text(xt,{left:Ut,top:De,originX:"left",originY:"center",fontSize:qe,fontFamily:Qe,fontWeight:',
- 'const Tt=(xt,rr,Ut)=>new Pe.fabric.Text(xt,{left:Ut,top:De,originX:"left",originY:"center",fontSize:Ve?qe:qe2,fontFamily:Ve?Qe:QeZ,fontWeight:',
+ 'const Tt=(xt,rr,Ut)=>new Pe.fabric.Text(xt,{left:Ut,top:De,originX:"left",originY:"center",fontSize:(Ve?qe:qe2)*zF,fontFamily:Ve?Qe:QeZ,fontWeight:',
  "Zeichnen in der Familie und Groesse des Blocks", 1))
 P.append(('Ut=new Pe.fabric.Text(xt.w,{left:Vt,top:De,originX:"left",originY:"center",fontSize:qe,fontFamily:Qe,fontWeight:',
- 'Ut=new Pe.fabric.Text(xt.w,{left:Vt,top:De,originX:"left",originY:"center",fontSize:Ve?qe:qe2,fontFamily:Ve?Qe:QeZ,fontWeight:',
+ 'Ut=new Pe.fabric.Text(xt.w,{left:Vt,top:De,originX:"left",originY:"center",fontSize:(Ve?qe:qe2)*zF,fontFamily:Ve?Qe:QeZ,fontWeight:',
  "Dasselbe im Zweig mit kursiven Woertern", 1))
 
 # 65 — Auf Fotos gewinnt jetzt ihre Einstellung, nicht die Automatik.
