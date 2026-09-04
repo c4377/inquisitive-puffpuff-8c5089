@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.042,nameDeckkraft:.55,nameSchrift:"HelveticaNeueBrand",nameGewicht:"400",nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"Montserrat",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,textAnteil:67,fotoGroesse:44,schildGrund:"#E8836B",schildSchriftFarbe:"#241C16",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"Montserrat",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"Montserrat|Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.042,nameDeckkraft:1,nameFarbe:"#E8836B",nameSchrift:"HelveticaNeueBrand",nameGewicht:"400",nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"Montserrat",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,folgeLage:"unten",textAnteil:67,fotoGroesse:44,schildGrund:"#E8836B",schildSchriftFarbe:"#241C16",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"Montserrat",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"Montserrat|Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -1453,6 +1453,73 @@ P.append(('const FAM=ix=>ix===0?K.schriftart:(K.unterSchrift||K.schriftart);',
  'const FOLGE=!!(Je.rolle&&Je.rolle!=="deckblatt")&&!!K.folgeFamilie;\n'
  'const FAM=ix=>FOLGE?K.folgeFamilie:(ix===0?K.schriftart:(K.unterSchrift||K.schriftart));',
  "Textkachel in der Fassung marke folgt der Rolle der Folie", 1))
+
+# 90 — Die Wortmarke in Orange-Rosa, und der Text der Folgefolien
+#      geht nach unten.
+#
+#      **Die Farbe.** Die Wortmarke war weiss auf dem Foto und
+#      Textfarbe auf der Textkachel — zwei Farben fuer dieselbe Marke,
+#      und keine davon die Akzentfarbe. Jetzt steht sie im Block:
+#
+#        nameFarbe      #E8836B   derselbe Ton wie Saum und Schild
+#        nameDeckkraft  1         voll, weil der Ton sonst wegkippt
+#
+#      Auf der Creme-Kachel sind das 2,4:1. Fuer Lesetext waere das zu
+#      wenig; fuer eine Wortmarke, die man nicht liest sondern
+#      wiedererkennt, ist es richtig — und mit .55 Deckkraft, wie
+#      vorher, waere sie fast verschwunden. Auf dem Foto steht sie
+#      ueber dem Kantenverlauf unten und traegt.
+#
+#      **Die Textlage.** Die Lage wuerfelt aus dem Bildnamen zwischen
+#      oben, mitte und unten. Der Schutz davor, dass der Text auf
+#      einem Gesicht landet, fragte t._autoImage.faceZones — und das
+#      gibt es nur, wenn das Bild durch die automatische Zuweisung
+#      gelaufen ist. Eine Folgefolie, die das Bild des Deckblatts
+#      erbt, hat es NICHT. Dort hiess "keine Gesichtszonen bekannt"
+#      bisher "also kein Gesicht im Weg", und der Text landete oben
+#      im Gesicht.
+#
+#      Zwei Aenderungen:
+#
+#        1. folgeLage "unten" — die Folgefolien wuerfeln gar nicht
+#           mehr, der Text steht unten. Leerer Wert schaltet das
+#           Wuerfeln dort wieder ein.
+#        2. "oben" wird nur noch genommen, wenn die Gesichtszonen
+#           WIRKLICH bekannt sind (Array vorhanden). Ist nichts
+#           bekannt, faellt es auf unten zurueck. Unbekannt heisst
+#           jetzt vorsichtig statt sorglos.
+#
+#      Nachgerechnet, nicht geraten: die Lage-Funktion aus dem
+#      gebauten Bundle in node laufen lassen, neun Bildnamen, drei
+#      Wissensstaende. Ergebnis fuer die Namen, die "oben" wuerfeln:
+#      ohne Analyse -> unten, Analyse ohne Gesicht -> oben, Gesicht
+#      oben -> unten. Folgefolien in allen Faellen unten.
+#
+#      Nicht angefasst: "mitte" ohne Analyse bleibt "mitte". Auf dem
+#      Deckblatt gibt es die Analyse praktisch immer, und die
+#      Folgefolien stehen jetzt ohnehin unten.
+P.append(('fill:`rgba(255,255,255,${BS_KACHEL.nameDeckkraft||.55})`,selectable:!1})),Le()',
+ 'fill:BS_KACHEL.nameFarbe||"#FFFFFF",opacity:(BS_KACHEL.nameDeckkraft||.55),'
+ 'selectable:!1})),Le()',
+ "Wortmarke der Fotokachel in der Blockfarbe", 1))
+P.append(('fill:SCH,opacity:(K.nameDeckkraft||.55),maxB:MAXB});',
+ 'fill:K.nameFarbe||SCH,opacity:(K.nameDeckkraft||.55),maxB:MAXB});',
+ "Wortmarke der Textkachel in der Blockfarbe", 1))
+P.append(('const ve=(()=>{const zA=(tt.fettNurErste&&!t._blurAn&&t.textAnchor&&t.textAnchor.row&&{top:"oben",mid:"mitte",bottom:"unten"}[t.textAnchor.row])||"";if(t.textLage)return t.textLage;if(!BS_KACHEL.lagenWechsel)return zA||($e?"unten":"mitte");const zs=String(t.background||t.text||"");let zh=0;for(let zi=0;zi<zs.length;zi++)zh=(zh*31+zs.charCodeAt(zi))%99991;const zL=["unten","mitte","oben"][zh%3];const zG=(!t._blurAn&&t._autoImage&&t._autoImage.faceZones)||[];const zR={oben:0,mitte:1,unten:2}[zL];return zG.some(zz=>Math.floor(zz/3)===zR)?(zA||($e?"unten":"mitte")):zL})()',
+ 'const ve=(()=>{const zA=(tt.fettNurErste&&!t._blurAn&&t.textAnchor&&t.textAnchor.row&&{top:"oben",mid:"mitte",bottom:"unten"}[t.textAnchor.row])||"";'
+ 'if(t.textLage)return t.textLage;'
+ 'const zAus=zA||($e?"unten":"mitte");'
+ 'if(t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeLage)return BS_KACHEL.folgeLage;'
+ 'if(!BS_KACHEL.lagenWechsel)return zAus;'
+ 'const zs=String(t.background||t.text||"");let zh=0;'
+ 'for(let zi=0;zi<zs.length;zi++)zh=(zh*31+zs.charCodeAt(zi))%99991;'
+ 'const zL=["unten","mitte","oben"][zh%3];'
+ 'const zW=!t._blurAn&&t._autoImage&&Array.isArray(t._autoImage.faceZones);'
+ 'if(zL==="oben"&&!zW)return zAus;'
+ 'const zG=(zW&&t._autoImage.faceZones)||[];'
+ 'const zR={oben:0,mitte:1,unten:2}[zL];'
+ 'return zG.some(zz=>Math.floor(zz/3)===zR)?zAus:zL})()',
+ "Oben nur, wenn die Gesichtszonen wirklich bekannt sind", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

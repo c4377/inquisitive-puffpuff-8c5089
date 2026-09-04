@@ -2740,3 +2740,54 @@ dort deckelt der Anpassungslauf die Hoehe vorher (`maxhoehe`,
 Ablauf-Auszeichnung in den Ablauf-Weg geschoben hat und der auf den
 allgemeinen Weg zurueckgefallen ist. Nicht repariert, weil nicht kaputt —
 aber notiert.
+
+## 90 — Wortmarke in Orange-Rosa, Text der Folgefolien nach unten
+
+### Die Farbe
+
+Die Wortmarke war **weiss** auf dem Foto und **Textfarbe** auf der
+Textkachel — zwei Farben fuer dieselbe Marke, und keine davon die
+Akzentfarbe. Jetzt steht sie im Block:
+
+    nameFarbe      #E8836B   derselbe Ton wie Saum und Schild
+    nameDeckkraft  1         voll, sonst kippt der Ton weg
+
+Auf der Creme-Kachel sind das **2,4:1**. Fuer Lesetext waere das zu
+wenig; fuer eine Wortmarke, die man nicht liest sondern wiedererkennt,
+ist es richtig — und mit den alten .55 Deckkraft waere sie fast
+verschwunden. Auf dem Foto steht sie ueber dem Kantenverlauf unten und
+traegt.
+
+### Die Textlage — warum der Text im Gesicht landete
+
+Die Lage wuerfelt aus dem Bildnamen zwischen oben, mitte und unten. Der
+Schutz davor, dass der Text auf einem Gesicht landet, fragte
+`t._autoImage.faceZones` — **und das gibt es nur, wenn das Bild durch die
+automatische Zuweisung gelaufen ist.** Eine Folgefolie, die das Bild des
+Deckblatts erbt, hat es nicht. Dort hiess "keine Gesichtszonen bekannt"
+bisher "also kein Gesicht im Weg", und der Text landete oben im Gesicht.
+
+Zwei Aenderungen:
+
+1. **`folgeLage "unten"`** — die Folgefolien wuerfeln gar nicht mehr, der
+   Text steht unten. Ein leerer Wert schaltet das Wuerfeln dort wieder
+   ein.
+2. **"oben" nur bei echtem Wissen** — es wird nur genommen, wenn die
+   Gesichtszonen wirklich bekannt sind (Array vorhanden). Ist nichts
+   bekannt, faellt es auf unten zurueck. Unbekannt heisst jetzt
+   vorsichtig statt sorglos.
+
+Nachgerechnet statt geraten: die Lage-Funktion aus dem **gebauten**
+Bundle in node laufen lassen, neun Bildnamen, drei Wissensstaende.
+
+| Wuerfel sagt | ohne Analyse | Analyse, kein Gesicht | Gesicht oben |
+|---|---|---|---|
+| oben | **unten** | oben | **unten** |
+| mitte | mitte | mitte | mitte |
+| unten | unten | unten | unten |
+
+Folgefolien in allen Faellen unten.
+
+**Nicht angefasst:** "mitte" ohne Analyse bleibt "mitte". Auf dem
+Deckblatt gibt es die Analyse praktisch immer, und die Folgefolien stehen
+jetzt ohnehin unten.
