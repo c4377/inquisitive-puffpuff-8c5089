@@ -3463,3 +3463,29 @@ gesetzt" galt. Die Bedingung fragt jetzt auf `!= null` statt auf wahr:
 | **0** | **100 von 100** |
 | 1 | 99 von 100 |
 | 67 | 33 von 100 |
+
+## 110 — Die Reparatur reparierte nur die Haelfte
+
+In Abschnitt 109 habe ich beim Laden einen **kaputten** Bildverweis
+ersetzt statt geloescht. Nur: die schwarzen Kacheln hatten **gar keinen**
+Verweis. Sie stammen aus einer Erzeugung, in der `textAnteil` noch 67
+oder 8 war — dort waren sie **absichtlich** Textkacheln. Ein Verweis, der
+nie da war, kann nicht kaputt sein, und meine Reparatur hat sie nicht
+angefasst.
+
+Jetzt gibt es zwei Faelle:
+
+| Zustand der Kachel | was passiert |
+|---|---|
+| Verweis da, zeigt ins Leere | **ersetzen** (immer) |
+| gar kein Verweis | **ergaenzen** (nur wenn `textAnteil` 0 ist) |
+
+Die Bedingung ist genau der Wert, der ohnehin sagt "jeder Tag bekommt ein
+Foto". Im warmen Stil steht er auf 67 — dort wird nichts ergaenzt und die
+Textkacheln bleiben Textkacheln. Durchgespielt:
+
+    textAnteil  0  ->  jede Folie bekommt ein Bild
+    textAnteil 67  ->  nur der kaputte Verweis wird ersetzt
+
+Ausgenommen sind Folien mit einer eigenen Karte (Ablauf) — die zeichnen
+ihr eigenes Layout und brauchen kein Foto.

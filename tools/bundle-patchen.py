@@ -2319,14 +2319,42 @@ P.append(('const rk=await Promise.all(r.map(zKlein));let l={__packed:2,gallery:r
 P.append(('Z=H.map(pe=>({...pe,slides:pe.slides.map(ye=>{const ue=ye&&ye.background;return typeof ue!="string"||!ue||re.has(ue)?ye:(fe++,{...ye,background:null,overlay:void 0,_autoImage:void 0})})}))',
  'const zListe=Array.from(re);'
  'Z=H.map((pe,zi)=>({...pe,slides:pe.slides.map((ye,zj)=>{const ue=ye&&ye.background;'
- 'if(typeof ue!="string"||!ue||re.has(ue))return ye;fe++;'
- 'return zListe.length'
- '?{...ye,background:zListe[(zi+zj)%zListe.length],overlay:void 0,_autoImage:void 0}'
- ':{...ye,background:null,overlay:void 0,_autoImage:void 0}})}))',
- "Fehlender Bildverweis wird ersetzt statt geloescht", 1))
+ 'const zHat=typeof ue=="string"&&!!ue;'
+ 'if(zHat&&re.has(ue))return ye;'
+ 'const zNeu=zListe.length?zListe[(zi+zj)%zListe.length]:null;'
+ 'if(zHat){fe++;return{...ye,background:zNeu,overlay:void 0,_autoImage:void 0}}'
+ 'if(zNeu&&BS_KACHEL.textAnteil===0&&!(ye&&ye.karte)){fe++;return{...ye,background:zNeu,overlay:void 0,_autoImage:void 0}}'
+ 'return ye})}))',
+ "Fehlendes Bild wird ergaenzt, kaputter Verweis ersetzt", 1))
 P.append(('Vt=(BS_KACHEL.textAnteil?((pt*37+13)%100)>=BS_KACHEL.textAnteil:',
  'Vt=(BS_KACHEL.textAnteil!=null?((pt*37+13)%100)>=BS_KACHEL.textAnteil:',
  "textAnteil 0 heisst jeder Tag ein Foto", 1))
+
+# 110 — Die Reparatur reparierte nur die Haelfte.
+#
+#      In Eintrag 109 habe ich beim Laden einen KAPUTTEN Bildverweis
+#      ersetzt statt geloescht. Nur: die schwarzen Kacheln bei Carina
+#      hatten gar keinen Verweis. Sie stammen aus einer Erzeugung, in
+#      der textAnteil noch 67 oder 8 war — dort waren sie ABSICHTLICH
+#      Textkacheln. Ein Verweis, der nie da war, kann nicht kaputt
+#      sein, und meine Reparatur hat sie nicht angefasst.
+#
+#      Jetzt gibt es zwei Faelle:
+#
+#          Verweis da, zeigt ins Leere   -> ersetzen  (immer)
+#          gar kein Verweis              -> ergaenzen (nur wenn
+#                                           textAnteil 0 ist)
+#
+#      Die Bedingung ist genau der Wert, der ohnehin sagt "jeder Tag
+#      bekommt ein Foto". Im warmen Stil steht er auf 67, dort wird
+#      nichts ergaenzt und die Textkacheln bleiben Textkacheln.
+#      Durchgespielt:
+#
+#          textAnteil  0  ->  jede Folie bekommt ein Bild
+#          textAnteil 67  ->  nur der kaputte Verweis wird ersetzt
+#
+#      Ausgenommen sind Folien mit einer eigenen Karte (Ablauf), die
+#      zeichnen ihr eigenes Layout und brauchen kein Foto.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
