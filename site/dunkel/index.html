@@ -3,11 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Visual Branding App</title>
+    <title>Visual Branding App — Stil dunkel</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=Syne:wght@600;700&family=Archivo:wght@400;500&family=Playfair:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Fraunces:opsz,wght@9..144,400;9..144,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700;1,800&family=Poppins:wght@300;400;500;600&family=Caveat:wght@400;500;600;700&family=La+Belle+Aurore&family=Courier+Prime:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&family=Anton&family=Archivo+Black&family=Sacramento&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="./assets/index-B5karten154.js"></script>
+    <!-- Der Zwilling. Dieselbe App, dieselben Dateien, derselbe Plan
+         (IndexedDB haengt an der Domain, nicht am Pfad) — nur ein
+         anderer Aufsatz auf dem Block. Dieses Skript laeuft VOR dem
+         Modul, weil Module verzoegert ausgefuehrt werden. -->
+    <script>window.BS_STIL="dunkel";</script>
+    <script type="module" crossorigin src="/assets/index-B5karten154.js"></script>
     <!-- Montserrat liegt hier im Projekt, nicht bei Google. Der Zeichner misst
          Texte auf dem Canvas und braucht die Schrift sofort; ueber das Netz
          geladen waere sie beim ersten Bild manchmal noch nicht da. Alle
@@ -18,16 +23,16 @@
            Marke - haette ueber das Netz kommen muessen und waere beim ersten
            Zeichnen manchmal noch nicht da gewesen. Mit der Variablen kann
            kein Schnitt mehr fehlen. -->
-      @font-face{font-family:Montserrat;src:url(./fonts/Montserrat-Variable.woff2) format("woff2");font-weight:100 900;font-style:normal;font-display:block}
-      @font-face{font-family:"Bodoni Moda";src:url(./fonts/BodoniModa-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
-      @font-face{font-family:"Bodoni Moda";src:url(./fonts/BodoniModa-Bold.woff2) format("woff2");font-weight:700;font-style:normal;font-display:block}
-      @font-face{font-family:Prata;src:url(./fonts/Prata-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
-      @font-face{font-family:Italiana;src:url(./fonts/Italiana-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
-      @font-face{font-family:Marcellus;src:url(./fonts/Marcellus-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
-      @font-face{font-family:"Cormorant Garamond";src:url(./fonts/CormorantGaramond-Light.woff2) format("woff2");font-weight:300;font-style:normal;font-display:block}
-      @font-face{font-family:"Cormorant Garamond";src:url(./fonts/CormorantGaramond-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
+      @font-face{font-family:Montserrat;src:url(/fonts/Montserrat-Variable.woff2) format("woff2");font-weight:100 900;font-style:normal;font-display:block}
+      @font-face{font-family:"Bodoni Moda";src:url(/fonts/BodoniModa-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
+      @font-face{font-family:"Bodoni Moda";src:url(/fonts/BodoniModa-Bold.woff2) format("woff2");font-weight:700;font-style:normal;font-display:block}
+      @font-face{font-family:Prata;src:url(/fonts/Prata-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
+      @font-face{font-family:Italiana;src:url(/fonts/Italiana-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
+      @font-face{font-family:Marcellus;src:url(/fonts/Marcellus-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
+      @font-face{font-family:"Cormorant Garamond";src:url(/fonts/CormorantGaramond-Light.woff2) format("woff2");font-weight:300;font-style:normal;font-display:block}
+      @font-face{font-family:"Cormorant Garamond";src:url(/fonts/CormorantGaramond-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
     </style>
-    <link rel="stylesheet" crossorigin href="./assets/index-DOWuwd9i.css">
+    <link rel="stylesheet" crossorigin href="/assets/index-DOWuwd9i.css">
   </head>
   <body>
     <div id="root"></div>

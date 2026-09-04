@@ -9,6 +9,12 @@
   # und der wuerde die App aus dem veralteten src/ neu bauen.
   command = ""
 
+# Der Zwilling zuerst, sonst schluckt ihn die Regel darunter.
+[[redirects]]
+  from = "/dunkel/*"
+  to = "/dunkel/index.html"
+  status = 200
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -24,6 +30,16 @@
 # im Browser haengen. Beide Pfade brauchen die Regel.
 [[headers]]
   for = "/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/dunkel/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/dunkel/index.html"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 

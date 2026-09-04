@@ -276,8 +276,25 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
+# Der zweite Stil. Er ersetzt den Grundstil nicht, er liegt als
+# Aufsatz darueber: site/dunkel/index.html setzt window.BS_STIL und
+# der Block wird nach dem Anlegen ueberschrieben. Ein Bundle, zwei
+# Feeds, dieselben Bilder und derselbe Plan (IndexedDB haengt an der
+# Domain, nicht am Pfad).
+DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
+ 'grundB:"#0E0D0C",schriftB:"#F2EFE9",'
+ 'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
+ 'deckblattGewicht:"400",zweiteFamilie:"Caveat",zweitAnteil:.62,'
+ 'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
+ 'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
+ 'bildSaettigung:-.55,bildHeben:0,'
+ 'tiefeOben:.06,tiefeMitte:.10,tiefeUnten:.62,kanteOben:.30,kanteUnten:.55,'
+ 'saumStaerke:0,bildSchleier:.10,'
+ 'nameFarbe:"#F2EFE9",schildGrund:"#F2EFE9",schildSchriftFarbe:"#171512"};')
+SCHALTER = 'if(typeof window<"u"&&window.BS_STIL==="dunkel")Object.assign(BS_KACHEL,BS_DUNKEL);'
+
 KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.042,nameDeckkraft:1,nameFarbe:"#E8836B",nameSchrift:"HelveticaNeueBrand",nameGewicht:"700",nameLaufweite:-50,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"Montserrat",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,folgeLage:"unten",folgeGroesseAnteil:.049,folgeMaxhoehe:.70,folgeAusrichtung:"links",textAnteil:67,fotoGroesse:44,schildGrund:"#E8836B",schildSchriftFarbe:"#241C16",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"Montserrat",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"Montserrat|Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
-P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
+P.append(('function t6(e,t){', DUNKEL + KONFIG + SCHALTER + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
 # 25 — Die Alltagskacheln bekommen eine eigene Fassung "marke" und
@@ -1601,6 +1618,54 @@ P.append(('fontWeight:(K.nameGewicht||"400"),charSpacing:150,\nfill:K.nameFarbe|
  'fontWeight:(K.nameGewicht||"400"),'
  'charSpacing:(K.nameLaufweite==null?150:K.nameLaufweite),\nfill:K.nameFarbe||SCH',
  "Laufweite der Wortmarke auf der Textkachel aus dem Block", 1))
+
+# 93 — Der Zwilling: ein Bundle, zwei Feeds.
+#
+#      Carina moechte den Stil eines anderen Accounts ausprobieren,
+#      ohne ihren eigenen Feed dafuer aufzugeben. Weil ALLES aus
+#      einem flachen Objekt liest, kostet das keinen zweiten Zeichner
+#      und keine zweite App:
+#
+#        site/index.html          setzt nichts       -> Grundstil
+#        site/dunkel/index.html   window.BS_STIL     -> Aufsatz
+#
+#      Der Schalter steht als gewoehnliches <script> VOR dem Modul,
+#      weil Module verzoegert ausgefuehrt werden — sonst laege der
+#      Wert noch nicht vor, wenn der Block angelegt wird.
+#
+#      Die Seite im Unterordner laedt dieselben Dateien ueber
+#      ABSOLUTE Pfade (/assets/, /fonts/), sonst suchte sie unter
+#      /dunkel/assets/. Und in netlify.toml und _redirects steht die
+#      Regel fuer /dunkel/* VOR der Sammelregel /* — sonst schluckt
+#      die den Zwilling.
+#
+#      IndexedDB haengt an der Domain und nicht am Pfad: beide Feeds
+#      sehen denselben Plan und dieselben Bilder. Das ist Absicht —
+#      derselbe Inhalt in zwei Anzuegen.
+#
+#      Die Form von BS_KACHEL bleibt ein Objektliteral, damit
+#      kachel-pruefen.py den Block weiter herausschneiden kann. Der
+#      Aufsatz kommt davor, der Schalter dahinter.
+#
+#      Drei Werte konnten den Aufsatz noch nicht bedienen und stehen
+#      jetzt auch im Block:
+#
+#        bildSaettigung   die App HOB die Saettigung um .3; fuer den
+#                         fast schwarzweissen Look muss sie unter
+#                         null. Die Bedingung war Ze>0 und liesz
+#                         negative Werte stillschweigend fallen.
+#        bildHeben        die milchige Aufhellung um .13
+#        fotoAusrichtung  mittig statt links, an EINER Stelle gesetzt
+#                         statt an sechs Vergleichen geaendert
+P.append(('const De=typeof t.hellBoost=="number"?t.hellBoost:.13,Ze=typeof t.satBoost=="number"?t.satBoost:.3;Ze>0&&',
+ 'const De=typeof BS_KACHEL.bildHeben=="number"?BS_KACHEL.bildHeben:(typeof t.hellBoost=="number"?t.hellBoost:.13),'
+ 'Ze=typeof BS_KACHEL.bildSaettigung=="number"?BS_KACHEL.bildSaettigung:(typeof t.satBoost=="number"?t.satBoost:.3);Ze!==0&&',
+ "Saettigung und Aufhellung des Bildes aus dem Block", 1))
+P.append(('$e&&(tt.nurErsteZeilePlatte=!0,tt.fettNurErste=!0,BS_KACHEL.fotoSchriftFarbe&&(tt.schriftFarbe=BS_KACHEL.fotoSchriftFarbe)',
+ '$e&&(tt.nurErsteZeilePlatte=!0,tt.fettNurErste=!0,'
+ 'BS_KACHEL.fotoAusrichtung&&(tt.ausrichtung=BS_KACHEL.fotoAusrichtung),'
+ 'BS_KACHEL.fotoSchriftFarbe&&(tt.schriftFarbe=BS_KACHEL.fotoSchriftFarbe)',
+ "Ausrichtung der Fotokachel aus dem Block", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

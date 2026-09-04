@@ -2848,3 +2848,51 @@ und auf der Textkachel. Sie kommt jetzt aus dem Block.
 
 Der Vergleich ist `== null` und nicht `|| 150`: sonst waere eine
 Laufweite von **0** stillschweigend wieder zu 150 geworden.
+
+## 93 — Der Zwilling: ein Bundle, zwei Feeds
+
+Ein zweiter Stil zum Ausprobieren, ohne den eigenen Feed dafuer
+aufzugeben. Weil **alles** aus einem flachen Objekt liest, kostet das
+keinen zweiten Zeichner und keine zweite App:
+
+    site/index.html          setzt nichts        -> Grundstil
+    site/dunkel/index.html   window.BS_STIL      -> Aufsatz BS_DUNKEL
+
+Drei Dinge, die sonst schiefgegangen waeren:
+
+- Der Schalter steht als gewoehnliches `<script>` **vor** dem Modul.
+  Module werden verzoegert ausgefuehrt; stuende er danach, laege der
+  Wert noch nicht vor, wenn der Block angelegt wird.
+- Die Seite im Unterordner laedt dieselben Dateien ueber **absolute**
+  Pfade (`/assets/`, `/fonts/`), sonst suchte sie unter
+  `/dunkel/assets/`.
+- In `netlify.toml` **und** `_redirects` steht die Regel fuer
+  `/dunkel/*` **vor** der Sammelregel `/*` — sonst schluckt die den
+  Zwilling.
+
+**IndexedDB haengt an der Domain, nicht am Pfad**: beide Feeds sehen
+denselben Plan und dieselben Bilder. Das ist Absicht — derselbe Inhalt
+in zwei Anzuegen.
+
+Die Form von `BS_KACHEL` bleibt ein Objektliteral, damit
+`kachel-pruefen.py` den Block weiter herausschneiden kann. Der Aufsatz
+steht davor, der Schalter dahinter.
+
+### Drei Werte, die der Aufsatz noch nicht bedienen konnte
+
+| | |
+|---|---|
+| `bildSaettigung` | Die App **hob** die Saettigung um .3. Fuer den fast schwarzweissen Look muss sie unter null — und die Bedingung war `Ze>0`, die liess negative Werte stillschweigend fallen. |
+| `bildHeben` | Die milchige Aufhellung um .13 |
+| `fotoAusrichtung` | Mittig statt links. An **einer** Stelle gesetzt, statt sechs Vergleiche zu aendern. |
+
+### Was noch fehlt
+
+Der Aufsatz macht Farbe, Grading, Schrift und Ausrichtung. Die zwei
+Dinge, die den Vorbild-Feed wirklich ausmachen, sind Anordnung und
+brauchen Code:
+
+1. **Geteilte Kachel** — Frage oben in Serife, Antwort unten in
+   Handschrift, mit Luft dazwischen. Heute fliessen beide Bloecke als
+   einer.
+2. **Gesperrter Versalsatz** auf den Reel-Covern.
