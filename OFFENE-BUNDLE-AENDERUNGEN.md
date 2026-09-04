@@ -2654,3 +2654,65 @@ App registriert 500 sehr wohl. 500 steht jetzt in der Ladeliste.
 Das ist derselbe Fehler wie bei `klar.html` in Abschnitt 87: die
 Pruefseite zeigte etwas anderes als die App, und das faellt nur auf, wenn
 man hinsieht statt zu lesen.
+
+## 89 — Montserrat statt Helvetica Neue
+
+Sieben Werte im Block standen auf `HelveticaNeueBrand`:
+
+    schriftart  unterSchrift  folgeFamilie  zweiteFamilie
+    schildSchrift  ablaufTitel  nameSchrift
+
+Alle sieben stehen jetzt auf **Montserrat**. Fraunces bleibt, wo Fraunces
+war (`fotoSchrift`, `deckblattFamilie`) — an der Fotokachel aendern sich
+nur die Unterzeile, das Schild und die Wortmarke.
+
+**Die Regeln bleiben unangetastet:** `laufweite -50`, `zeile 1.02`,
+`groesseAnteil .098`, `gewicht 300`, `unterGewicht 700`. Montserrat ist
+breiter als Helvetica Neue, also bricht der Anpassungslauf frueher um und
+die Zeilen fallen anders — dieselbe Regel, ein anderes Ergebnis. Das ist
+das gewuenschte Verhalten und kein Grund, an den Zahlen zu drehen.
+
+### Die Schriftdatei war die eigentliche Arbeit
+
+Im Projekt lagen nur zwei feste Schnitte: `Montserrat-Regular` (400) und
+`Montserrat-Bold` (700). Der Schnitt der Marke ist aber **Light 300** —
+der haette ueber Google kommen muessen. Bei einer Schrift, die der
+Zeichner auf dem Canvas **ausmisst**, ist das genau die Falle, die in
+diesem Projekt schon dreimal zugeschnappt ist: gemessen wird mit der
+Ersatzschrift, gezeichnet mit der richtigen, und der Text steht ueber dem
+Rand. Die index.html sagt das sogar selbst in einem Kommentar — nur fehlte
+300 trotzdem.
+
+Jetzt liegt **eine** Datei im Projekt:
+
+    fonts/Montserrat-Variable.woff2   font-weight: 100 900, font-display: block
+
+Alle Schnitte aus einer Datei, 35 KB statt 37 KB fuer die zwei festen.
+Kein Schnitt kann mehr fehlen. Die beiden festen Dateien sind raus.
+Nachgesehen und bestaetigt: 100/300/400/500/700 zeichnen wirklich
+unterschiedlich (`tools/.pruefen/wtest.html`).
+
+Nachgesehen, weil es haette klemmen koennen, hat aber nicht:
+
+- Die App laedt Montserrat ohnehin in 700/600/400/300/100 vor.
+- `Ct()` ersetzt Montserrat durch Helvetica — aber nur auf dem
+  **allgemeinen** Zeichenweg. Die Fassung "marke", die Fotokachel und der
+  Ablauf lesen ihre Schrift direkt aus dem Block und gehen da nicht durch.
+- `tiefeSchriften` kennt Montserrat jetzt, damit der Tiefenverlauf greift,
+  wenn eine Folgefolie in Montserrat auf einem Foto steht.
+- `folgeStil:"montserrat"` ist der Name eines **Layouts**, keine Schrift.
+  Nicht angefasst.
+
+### Ein Fund, der nicht von hier kommt
+
+Beim Gegenlesen mit `--fassung ablauf` ueberschrieb die Wortmarke den
+Text. Nachgemessen: das passiert in **karten147 genauso** und hat mit der
+Schrift nichts zu tun. Ursache ist der Fall aus Abschnitt 56 — passt der
+Textblock nicht in das Band zwischen `.10` und `textUnten`, greifen beide
+Klammern und die untere gewinnt, der Text laeuft nach unten hinaus. In
+der Fassung "marke" und auf der Fotokachel kann das nicht passieren:
+dort deckelt der Anpassungslauf die Hoehe vorher (`maxhoehe`,
+`textHoehe`). Der Fall entstand nur, weil die Pruefseite einen Text ohne
+Ablauf-Auszeichnung in den Ablauf-Weg geschoben hat und der auf den
+allgemeinen Weg zurueckgefallen ist. Nicht repariert, weil nicht kaputt —
+aber notiert.

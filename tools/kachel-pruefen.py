@@ -54,6 +54,7 @@ SEITE = """<!doctype html><html><head><meta charset="utf-8">
 @font-face{font-family:Inter;src:url(fonts/Inter-700.woff2) format("woff2");font-weight:700}
 @font-face{font-family:Marcellus;src:url(fonts/Marcellus-Regular.woff2) format("woff2");font-weight:400}
 @font-face{font-family:Prata;src:url(fonts/Prata-Regular.woff2) format("woff2");font-weight:400}
+@font-face{font-family:Montserrat;src:url(fonts/Montserrat-Variable.woff2) format("woff2");font-weight:100 900;font-style:normal;font-display:block}
 __KANDIDATEN__
 body{margin:10px;background:#2a2a2a}
 #lage{position:fixed;right:12px;top:12px;color:#ddd;font:13px monospace;white-space:pre-wrap;max-width:320px}
@@ -67,7 +68,8 @@ __KONFIG__
   try {
     await Promise.all(['200 40px "HelveticaNeueBrand"','300 40px "HelveticaNeueBrand"','400 40px "HelveticaNeueBrand"','500 40px "HelveticaNeueBrand"','700 40px "HelveticaNeueBrand"',
       '400 40px "Playfair Display"','700 40px "PoppinsBold"','400 40px "ArchivoBlack"',
-      '400 40px "Anton"','400 40px "AspektaBrand"','700 40px "AspektaBrand"','400 40px "Inter"','700 40px "Inter"','400 40px "Marcellus"', __MEHRLADEN__].map(f => document.fonts.load(f)));
+      '400 40px "Anton"','400 40px "AspektaBrand"','700 40px "AspektaBrand"','400 40px "Inter"','700 40px "Inter"','400 40px "Marcellus"',
+      '300 40px "Montserrat"','400 40px "Montserrat"','500 40px "Montserrat"','700 40px "Montserrat"', __MEHRLADEN__].map(f => document.fonts.load(f)));
     const Pe = { fabric: window.fabric };
     const e = new fabric.StaticCanvas('cv');
     const r = __BREITE__, n = __HOEHE__, d = __SCALE__, h = 0.8;

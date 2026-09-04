@@ -276,7 +276,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 #        maxhoehe          hoechstens so viel Hoehe darf der Text
 #        deckblattSchrift  Schrift der ersten Fotoslide
 #        deckblattGroesse  Groesse der ersten Fotoslide
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.042,nameDeckkraft:.55,nameSchrift:"HelveticaNeueBrand",nameGewicht:"400",nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"HelveticaNeueBrand",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,textAnteil:67,fotoGroesse:44,schildGrund:"#E8836B",schildSchriftFarbe:"#241C16",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"HelveticaNeueBrand",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"Montserrat",unterSchrift:"Montserrat",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.042,nameDeckkraft:.55,nameSchrift:"Montserrat",nameGewicht:"400",nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"Montserrat",zweiteFamilie:"Montserrat",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,textAnteil:67,fotoGroesse:44,schildGrund:"#E8836B",schildSchriftFarbe:"#241C16",schildSchrift:"Montserrat",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"Montserrat",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"Montserrat|Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', KONFIG + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -1385,6 +1385,41 @@ P.append(('fontSize:Math.round(qe*.42),fontFamily:"OpenSansBrand",fill:"rgba(255
  'fontFamily:BS_KACHEL.nameSchrift||"OpenSansBrand",fontWeight:(BS_KACHEL.nameGewicht||"400"),'
  'charSpacing:150,fill:`rgba(255,255,255,${BS_KACHEL.nameDeckkraft||.55})`',
  "Wortmarke der Fotokachel aus dem Block statt aus der Ueberschrift", 1))
+
+# 89 — Montserrat statt Helvetica Neue, sonst nichts.
+#
+#      Sieben Werte im Block standen auf HelveticaNeueBrand:
+#      schriftart, unterSchrift, folgeFamilie, zweiteFamilie,
+#      schildSchrift, ablaufTitel, nameSchrift. Alle sieben stehen
+#      jetzt auf Montserrat. Fraunces bleibt, wo Fraunces war
+#      (fotoSchrift, deckblattFamilie) — die Fotokachel aendert sich
+#      nur in der Unterzeile, im Schild und in der Wortmarke.
+#
+#      Die Regeln bleiben unangetastet: laufweite -50, zeile 1.02,
+#      groesseAnteil .098, gewicht 300, unterGewicht 700. Montserrat
+#      ist breiter als Helvetica Neue, also bricht der Anpassungslauf
+#      frueher um — dieselbe Regel, ein anderes Ergebnis. Das ist
+#      genau das gewuenschte Verhalten und kein Nachjustieren wert.
+#
+#      **Die Schriftdatei.** Im Projekt lagen nur zwei feste Schnitte
+#      (Montserrat-Regular 400 und Montserrat-Bold 700). Der Schnitt
+#      der Marke ist aber **Light 300**, und der haette ueber Google
+#      kommen muessen — bei einer Schrift, die der Zeichner auf dem
+#      Canvas ausmisst, ist das genau die Falle, die schon dreimal
+#      zugeschnappt ist (gemessen mit der Ersatzschrift, gezeichnet
+#      mit der richtigen). Deshalb liegt jetzt EINE Datei im Projekt,
+#      Montserrat-Variable.woff2, angemeldet fuer 100 bis 900 mit
+#      font-display:block. Kein Schnitt kann mehr fehlen, und die
+#      zwei festen Dateien sind raus.
+#
+#      Nachgesehen: die App laedt Montserrat ohnehin schon in
+#      700/600/400/300/100 vor, und Montserrat steht in ihrer Liste
+#      bekannter Schriften. tiefeSchriften kennt es jetzt auch, damit
+#      der Tiefenverlauf greift, wenn eine Folgefolie in Montserrat
+#      auf einem Foto steht.
+#
+#      Nicht angefasst: folgeStil "montserrat". Das ist der Name
+#      eines Layouts, keine Schrift.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
