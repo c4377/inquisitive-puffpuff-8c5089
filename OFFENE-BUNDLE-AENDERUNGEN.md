@@ -4690,3 +4690,38 @@ In Chromium durchgespielt: Datenbank mit drei Bildern gefuellt, Seite
 zeichnet drei runde Bilder (Mitte 138, Rand 105 — die Vignette sitzt),
 Regler stehen auf 20 / 115 / 36, keine Seitenfehler. Der Menuepunkt
 fuehrt von `/dunkel/` sauber auf die Seite.
+
+## 138 — Der Punkt wandert ins Menue
+
+*"Doch bitte ins Menue"*
+
+Das Menue steht im Bundle als flache Liste:
+
+    a=[{path:"/",icon:b3,label:"Dashboard"}, … ,
+       {path:"/brand-settings",icon:ux,label:"Settings"}]
+
+Sie wird an **zwei** Stellen gezeichnet — die breite Leiste und das
+aufgeklappte Menue auf schmalen Schirmen. Beide bauen einen
+**Router**-Verweis (`Qa` mit `to:`). Fuer `/profilbilder/` waere das
+falsch: die Seite ist keine Route der App, der Router faende nichts und
+zeigte eine leere Flaeche.
+
+Deshalb traegt der neue Eintrag `extern:!0`, und beide Zeichenstellen
+entscheiden danach:
+
+    v.jsxs(h.extern?"a":Qa, {[h.extern?"href":"to"]: h.path, …
+
+Ein echter Verweis mit `href` statt eines Router-Ziels — ein richtiger
+Seitenwechsel, der auch die Regel in der `netlify.toml` durchlaeuft.
+
+Das Icon ist `hx`, dasselbe wie bei Worksheets. Die Icons kommen aus
+einem anderen Bundle-Stueck und sind hier nur als kurze Namen sichtbar;
+einen neuen haette ich nicht hereinholen koennen, ohne den Import
+anzufassen.
+
+Die Pille aus 137 am `body` ist wieder weg — zwei Wege zur selben Seite
+sind einer zu viel.
+
+In Chromium in beiden Breiten geprueft: breit steht der Eintrag als
+`<a href="/profilbilder/">` in der Leiste, schmal im aufgeklappten
+Menue, beide sichtbar, keine Seitenfehler.

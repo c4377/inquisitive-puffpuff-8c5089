@@ -3654,6 +3654,53 @@ P.append(('const zGT=(BS_KACHEL.geteiltAnteil?(()=>{const zs=String(t.background
 #      Editor dasselbe steht wie im Raster. Ein Tageswechsel wuerde
 #      genau das wieder aufgeben.
 
+
+# 138 — Der Punkt wandert ins Menue. Carina: "Doch bitte ins Menue".
+#
+#      Das Menue steht im Bundle als flache Liste:
+#
+#          a=[{path:"/",icon:b3,label:"Dashboard"}, ... ,
+#             {path:"/brand-settings",icon:ux,label:"Settings"}]
+#
+#      Sie wird an ZWEI Stellen gezeichnet — einmal die breite Leiste,
+#      einmal das aufgeklappte Menue auf schmalen Schirmen. Beide bauen
+#      einen Router-Verweis (Qa mit to:). Fuer /profilbilder/ waere das
+#      falsch: die Seite ist keine Route der App, der Router faende
+#      nichts und zeigte eine leere Flaeche.
+#
+#      Deshalb traegt der neue Eintrag extern:!0, und beide
+#      Zeichenstellen entscheiden danach:
+#
+#          v.jsxs(h.extern?"a":Qa,{[h.extern?"href":"to"]:h.path, ...
+#
+#      Ein echter Verweis mit href statt eines Router-Ziels — ein
+#      richtiger Seitenwechsel, der auch die Regel in der netlify.toml
+#      durchlaeuft.
+#
+#      Das Icon ist hx, dasselbe wie bei Worksheets. Die Icons kommen
+#      aus einem anderen Bundle-Stueck und sind hier nur als kurze
+#      Namen sichtbar; einen neuen haette ich nicht hereinholen
+#      koennen, ohne den Import anzufassen.
+#
+#      Die Pille aus 137 am body ist wieder weg — zwei Wege zur selben
+#      Seite sind einer zu viel.
+#
+#      In Chromium in beiden Breiten geprueft: breit steht der Eintrag
+#      als <a href="/profilbilder/"> in der Leiste, schmal im
+#      aufgeklappten Menue, beide sichtbar, keine Seitenfehler.
+
+P.append(('{path:"/brand-settings",icon:ux,label:"Settings"}]',
+ '{path:"/profilbilder/",icon:hx,label:"Profilbilder",extern:!0},{path:"/brand-settings",icon:ux,label:"Settings"}]',
+ "Menueeintrag Profilbilder", 1))
+
+P.append(('v.jsxs(Qa,{to:h.path,className:`flex items-center space-x-2 px-3 py-2',
+ 'v.jsxs(h.extern?"a":Qa,{[h.extern?"href":"to"]:h.path,className:`flex items-center space-x-2 px-3 py-2',
+ "breite Ansicht: externer Eintrag als echter Verweis", 1))
+
+P.append(('v.jsxs(Qa,{to:h.path,onClick:u,className:`flex items-center space-x-4 px-4 py-4',
+ 'v.jsxs(h.extern?"a":Qa,{[h.extern?"href":"to"]:h.path,onClick:u,className:`flex items-center space-x-4 px-4 py-4',
+ "schmale Ansicht: externer Eintrag als echter Verweis", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
