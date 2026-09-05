@@ -283,13 +283,13 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 # Domain, nicht am Pfad).
 DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'grundB:"#0E0D0C",schriftB:"#F2EFE9",'
- 'deckblattFamilie:"DM Serif Display",fotoSchrift:"DM Serif Display",'
+ 'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
  'deckblattGewicht:"400",deckblattGroesse:74.8,fotoGroesse:48.4,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.62,'
- 'schriftart:"DM Serif Display",unterSchrift:"Shadows Into Light",gewicht:"400",'
+ 'schriftart:"Playfair Display",unterSchrift:"Shadows Into Light",gewicht:"400",'
  'betontGewicht:"700",handAnteil:1.15,handGroesse:1.0909,'
- 'unterGewicht:"400",unterVerhaeltnis:.62,laufweite:0,'
- 'folgeFamilie:"DM Serif Display",ablaufTitel:"DM Serif Display",'
- 'nameSchrift:"DM Serif Display",nameGewicht:"400",nameLaufweite:60,'
+ 'unterGewicht:"400",unterVerhaeltnis:.62,laufweite:0,fotoLaufweite:-20,'
+ 'folgeFamilie:"Playfair Display",ablaufTitel:"Playfair Display",'
+ 'nameSchrift:"Playfair Display",nameGewicht:"400",nameLaufweite:60,'
  'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:0,'
  'geteilt:1,geteiltAnteil:25,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
  'deckblattSchnitte:"full|full|wide|full|wide|full",'
@@ -3772,6 +3772,45 @@ P.append(('v.jsxs(Qa,{to:h.path,onClick:u,className:`flex items-center space-x-4
 #      Auf den Folgeslides waechst der zweite Block mit — dort steht
 #      keine Handschrift, sondern folgeFamilie, also die Serife
 #      selbst. 27,3 auf 30,0, dieselben 10 Prozent.
+
+
+# 141 — Playfair Display statt DM Serif, eng gestellt. Carina hat aus
+#      den Proben "Playfair 20" gewaehlt, also die erste Enger-Stufe.
+#
+#      Sechs Felder im Aufsatz tragen die Serife und wechseln alle
+#      mit: deckblattFamilie, fotoSchrift, schriftart, folgeFamilie,
+#      ablaufTitel, nameSchrift.
+#
+#      DIE ENGSTELLUNG STEHT WOANDERS, ALS MAN DENKT. laufweite gilt
+#      nicht fuer Fotokacheln — die lesen fotoLaufweite:
+#
+#          zCS = zVS ? versalLaufweite : fotoLaufweite
+#
+#      Das Feld gab es noch gar nicht, also stand dort 0. Jetzt -20.
+#      Nebenwirkung: zCS gilt auch fuer den zweiten Block, die
+#      Handschrift wird also mit 2 Prozent enger gesetzt. Bei -20 ist
+#      das kaum zu sehen; wer es trennen will, braucht ein eigenes
+#      Feld.
+#
+#      ZWEI FALLEN GEPRUEFT, bevor umgestellt:
+#
+#      1. tiefeSchriften. Der Verlauf unten haengt an
+#         new RegExp(BS_KACHEL.tiefeSchriften).test(Qe). Die Liste
+#         enthaelt "Playfair" — der Verlauf bleibt also an. Haette sie
+#         nur "DM Serif" enthalten, waere mit der Schrift das ganze
+#         Band verschwunden.
+#      2. /Playfair/.test(Qe) && (kt="400") setzt das Gewicht hart auf
+#         400. Steht aber vor der Zeile, die deckblattGewicht
+#         anwendet — das gewinnt weiter.
+#
+#      Und Playfair war NUR ueber den Google-Link da, wie Montserrat
+#      in 139. Fuer eine Schrift, mit der der Zeichner rechnet, ist das
+#      zu spaet. Jetzt liegt sie als variable Datei im Projekt (400 bis
+#      900, 38 kB, SIL Open Font License).
+#
+#      Im Browser nachgemessen: vier Playfair-Schnitte angemeldet, 58
+#      Schriften gesamt, und Playfair zeichnet andere Pixel als die
+#      Ersatzschrift.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

@@ -27,7 +27,7 @@
          seine eigene Tagesnummer und nimmt sonst den Wert oben. */
       var g=JSON.parse(localStorage.getItem("BS_SCHWARZ_TAG")||"null");
       if(g&&typeof g==="object")window.BS_SCHWARZ_TAG=g;}catch(e){}</script>
-    <script type="module" crossorigin src="/assets/index-B5karten200.js"></script>
+    <script type="module" crossorigin src="/assets/index-B5karten201.js"></script>
     <!-- Montserrat liegt hier im Projekt, nicht bei Google. Der Zeichner misst
          Texte auf dem Canvas und braucht die Schrift sofort; ueber das Netz
          geladen waere sie beim ersten Bild manchmal noch nicht da. Alle
@@ -72,6 +72,12 @@
          gewoehnliche Zeichen, verschluckt sich und wirft die naechste
          Regel gleich mit weg. Genau daran hing Montserrat jahrelang. */
       @font-face{font-family:"Nothing You Could Do";src:url(/fonts/NothingYouCouldDo.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
+      /* Playfair Display, variabel von 400 bis 900. SIL Open Font License,
+         Lizenztext liegt daneben. Liegt aus demselben Grund hier wie die
+         anderen: der Zeichner misst Texte auf dem Canvas. Playfair kam
+         bisher nur ueber den Google-Link — fuer eine Schrift, mit der
+         gerechnet wird, ist das zu spaet. */
+      @font-face{font-family:"Playfair Display";src:url(/fonts/PlayfairDisplay-Variable.woff2) format("woff2");font-weight:400 900;font-style:normal;font-display:block}
       @font-face{font-family:Prata;src:url(/fonts/Prata-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
       @font-face{font-family:Italiana;src:url(/fonts/Italiana-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
       @font-face{font-family:Marcellus;src:url(/fonts/Marcellus-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}

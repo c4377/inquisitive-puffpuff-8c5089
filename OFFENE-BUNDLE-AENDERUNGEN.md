@@ -4802,3 +4802,45 @@ Deshalb `handGroesse` von 1.2 auf **1.0909**, also durch 1,1 geteilt:
 Auf den Folgeslides waechst der zweite Block mit — dort steht keine
 Handschrift, sondern `folgeFamilie`, also die Serife selbst: 27,3 → 30,0,
 dieselben 10 Prozent.
+
+## 141 — Playfair Display statt DM Serif, eng gestellt
+
+Aus den Proben gewaehlt: **Playfair, Stufe −20**.
+
+Sechs Felder im Aufsatz tragen die Serife und wechseln alle mit:
+`deckblattFamilie`, `fotoSchrift`, `schriftart`, `folgeFamilie`,
+`ablaufTitel`, `nameSchrift`.
+
+### Die Engstellung steht woanders, als man denkt
+
+`laufweite` gilt **nicht** fuer Fotokacheln — die lesen
+`fotoLaufweite`:
+
+    zCS = zVS ? versalLaufweite : fotoLaufweite
+
+Das Feld gab es noch gar nicht, also stand dort 0. Jetzt **−20**.
+
+*Nebenwirkung:* `zCS` gilt auch fuer den zweiten Block, die Handschrift
+wird also 2 Prozent enger gesetzt. Bei −20 kaum zu sehen; wer es
+trennen will, braucht ein eigenes Feld.
+
+### Zwei Fallen, vor dem Umstellen geprueft
+
+1. **`tiefeSchriften`.** Der Verlauf unten haengt an
+   `new RegExp(BS_KACHEL.tiefeSchriften).test(Qe)`. Die Liste enthaelt
+   „Playfair" — der Verlauf bleibt an. Haette sie nur „DM Serif"
+   enthalten, waere mit der Schrift **das ganze Band verschwunden**.
+2. **`/Playfair/.test(Qe) && (kt="400")`** setzt das Gewicht hart auf
+   400 — steht aber *vor* der Zeile, die `deckblattGewicht` anwendet.
+   Das gewinnt weiter.
+
+### Und wieder eine Schrift, die nur bei Google lag
+
+Playfair war **nur** ueber den Google-Link da, wie Montserrat in 139.
+Fuer eine Schrift, mit der der Zeichner rechnet, ist das zu spaet. Jetzt
+liegt sie als variable Datei im Projekt (400–900, 38 kB, SIL Open Font
+License).
+
+Im Browser nachgemessen: vier Playfair-Schnitte angemeldet, 58
+Schriften gesamt, und Playfair zeichnet andere Pixel als die
+Ersatzschrift.
