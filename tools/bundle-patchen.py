@@ -299,10 +299,10 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
- 'bildSchwarzpunkt:.07,bildVignette:.6,bildTextFleck:.85,folgeFuss:.86,textMitte:.73,nameZeigen:0,'
+ 'bildSchwarzpunkt:.07,bildVignette:.6,folgeFuss:.86,textMitte:.73,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
- 'tiefeOben:0,tiefeMitte:0,tiefeUnten:.12,kanteOben:.06,kanteUnten:.15,'
- 'saumStaerke:0,bildSchleier:0,'
+ 'tiefeOben:.06,tiefeMitte:.10,tiefeUnten:.62,kanteOben:.30,kanteUnten:.55,'
+ 'saumStaerke:0,bildSchleier:.10,'
  'nameFarbe:"#F2EFE9",schildGrund:"#F2EFE9",schildSchriftFarbe:"#171512"};')
 SCHALTER = 'if(typeof window<"u"&&window.BS_STIL==="dunkel")Object.assign(BS_KACHEL,BS_DUNKEL);'
 
@@ -3057,32 +3057,37 @@ P.append(('let De=n*He-ae/2+Et/2;if(De+ae-Et/2>n*(BS_KACHEL.textUnten||.9)',
 #      Hoehe) und bildTextFleckBreite (.20 von der Breite) sagen, wie
 #      weit er ueber den Text hinausreicht.
 
-P.append(('const zGT=(BS_KACHEL.geteiltAnteil?',
- 'const zIdx=e.getObjects().length;const zGT=(BS_KACHEL.geteiltAnteil?',
- "Startpunkt des Textes merken", 1))
 
-P.append((',De+=ur})),(tt.platten||BS_KACHEL.nameZeigen===0)||e.add(',
- ',De+=ur})),(()=>{try{const zTF=Number(BS_KACHEL.bildTextFleck)||0;if(!(zTF>0)||!t.background)return;'
- 'const zo=e.getObjects().slice(zIdx);if(!zo.length)return;'
- 'let zx1=1/0,zy1=1/0,zx2=-1/0,zy2=-1/0;'
- 'zo.forEach(zq=>{try{const zb=zq.getBoundingRect(!0,!0);'
- 'zx1=Math.min(zx1,zb.left);zy1=Math.min(zy1,zb.top);'
- 'zx2=Math.max(zx2,zb.left+zb.width);zy2=Math.max(zy2,zb.top+zb.height)}catch(zz){}});'
- 'if(!(zx2>zx1&&zy2>zy1))return;'
- 'const zcx=(zx1+zx2)/2,zcy=(zy1+zy2)/2,'
- 'zrx=(zx2-zx1)/2+r*(BS_KACHEL.bildTextFleckBreite==null?.20:BS_KACHEL.bildTextFleckBreite),'
- 'zry=(zy2-zy1)/2+n*(BS_KACHEL.bildTextFleckLuft==null?.15:BS_KACHEL.bildTextFleckLuft),'
- 'zt=zTon||"0,0,0";'
- 'e.insertAt(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,selectable:!1,evented:!1,'
- 'fill:new Pe.fabric.Gradient({type:"radial",coords:{x1:0,y1:0,r1:0,x2:0,y2:0,r2:1},'
- 'gradientTransform:[zrx,0,0,zry,zcx,zcy],'
- 'colorStops:[{offset:0,color:`rgba(${zt},${zTF})`},'
- '{offset:.25,color:`rgba(${zt},${zTF*.84})`},'
- '{offset:.5,color:`rgba(${zt},${zTF*.5})`},'
- '{offset:.75,color:`rgba(${zt},${zTF*.16})`},'
- '{offset:1,color:`rgba(${zt},0)`}]})}),zIdx)}catch(zz){}})(),'
- '(tt.platten||BS_KACHEL.nameZeigen===0)||e.add(',
- "weicher Fleck unter dem Text", 1))
+
+# 125 — Zurueck auf den Stand von 183. Carina: "Ok nein zurueck zu vor
+#      2 Aenderungen oder 3."
+#
+#      Zwei zurueck heisst 183, drei zurueck heisst 182. Der
+#      Unterschied zwischen beiden ist folgeFuss — die feste
+#      Unterkante auf den Folgeslides aus 122, die sie selbst
+#      angefragt hat. Also 183: die beiden Schritte an der Auflage
+#      fallen weg, die feste Hoehe bleibt.
+#
+#      Damit sind wieder da:
+#
+#          bildSchleier  .10        (war 0)
+#          tiefeOben     .06        (war 0)
+#          tiefeMitte    .10        (war 0)
+#          tiefeUnten    .62        (war .12)
+#          kanteOben     .30        (war .06)
+#          kanteUnten    .55        (war .15)
+#
+#      Und wieder weg ist der weiche Fleck unter dem Text samt seinem
+#      zIdx-Merker. Der Code dafuer steht nicht mehr im Bundle; er ist
+#      in 124 vollstaendig aufgeschrieben, falls er zurueckkommen soll.
+#
+#      Geblieben ist alles bis 183: Schwarzpunkt .07, Farbschicht,
+#      Vignette .6, Textsitz .73, folgeFuss .86, keine Wortmarke.
+#
+#      Gemacht als neue Datei karten186 mit dem Inhalt von 183, nicht
+#      als Rueckbau: die alten Namen bleiben Weiterleitungen, und
+#      niemand faengt sich eine weisse Seite ein, weil sein Browser
+#      noch die alte index.html im Speicher hat.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

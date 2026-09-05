@@ -4123,3 +4123,35 @@ Bild oben 161).
 `bildTextFleck 0` schaltet ihn ab. `bildTextFleckLuft` (.15 der Hoehe)
 und `bildTextFleckBreite` (.20 der Breite) sagen, wie weit er ueber den
 Text hinausreicht.
+
+## 125 — Zurueck auf den Stand von 183
+
+*"Ok nein zurueck zu vor 2 Aenderungen oder 3."*
+
+Zwei zurueck heisst **183**, drei zurueck heisst 182. Der Unterschied
+zwischen beiden ist `folgeFuss` — die feste Unterkante auf den
+Folgeslides aus 122, die sie selbst angefragt hat. Also **183**: die
+beiden Schritte an der Auflage fallen weg, die feste Hoehe bleibt.
+
+Wieder da:
+
+| | jetzt | war |
+|---|---|---|
+| `bildSchleier` | .10 | 0 |
+| `tiefeOben` | .06 | 0 |
+| `tiefeMitte` | .10 | 0 |
+| `tiefeUnten` | .62 | .12 |
+| `kanteOben` | .30 | .06 |
+| `kanteUnten` | .55 | .15 |
+
+Wieder weg ist der **weiche Fleck unter dem Text** samt seinem
+`zIdx`-Merker. Der Code steht nicht mehr im Bundle — er ist in 124
+vollstaendig aufgeschrieben, falls er zurueckkommen soll.
+
+Geblieben ist alles bis 183: Schwarzpunkt .07, Farbschicht, Vignette
+.6, Textsitz .73, `folgeFuss` .86, keine Wortmarke.
+
+**Als neue Datei, nicht als Rueckbau.** `karten186` traegt den Inhalt
+von 183; die alten Namen bleiben Weiterleitungen. So faengt sich
+niemand eine weisse Seite ein, weil sein Browser noch die alte
+index.html im Speicher hat.
