@@ -286,9 +286,9 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
  'deckblattGewicht:"400",deckblattGroesse:86,fotoGroesse:55.7,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.62,'
  'schriftart:"Playfair Display",unterSchrift:"Shadows Into Light",gewicht:"400",'
- 'betontGewicht:"700",handAnteil:1.15,handGroesse:0.9486,'
+ 'betontGewicht:"700",handAnteil:1.15,handGroesse:0.9486,folgeZweitHand:1,'
  'unterGewicht:"400",unterVerhaeltnis:.62,laufweite:0,fotoLaufweite:-20,'
- 'folgeFamilie:"DM Serif Display",ablaufTitel:"Playfair Display",'
+ 'folgeFamilie:"Playfair Display",ablaufTitel:"Playfair Display",'
  'nameSchrift:"Playfair Display",nameGewicht:"400",nameLaufweite:60,'
  'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:0,'
  'geteilt:1,geteiltAnteil:25,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
@@ -3877,6 +3877,50 @@ P.append(('v.jsxs(Qa,{to:h.path,onClick:u,className:`flex items-center space-x-4
 #      Wer die alte Hoehe zurueck will, setzt fotoGroesse auf 59,0.
 #      Nicht von selbst gemacht: sie hat nach der Schrift gefragt,
 #      nicht nach der Groesse.
+
+
+# 144 — Folgeslides wieder Playfair, und die Handschrift auch dort im
+#      zweiten Teil. Carina: "Ok nein zurueck auf Playfair und mehr
+#      Einsatz der Handschrift im 2. Teil".
+#
+#      Erstes: folgeFamilie zurueck auf Playfair Display, 143 also
+#      wieder rueckgaengig.
+#
+#      Zweites: der zweite Block trug auf Folgeslides bisher die
+#      Serife, nicht die Handschrift. Das steckt in QeZ:
+#
+#          QeZ = (zVS && versalFamilie)
+#             || (folienRolle && folienRolle!=="deckblatt" && folgeFamilie)
+#             || zweiteFamilie
+#
+#      Der mittlere Zweig faengt Folgeslides ab, bevor zweiteFamilie
+#      drankommt. folgeZweitHand:1 laesst ihn ins Leere laufen, dann
+#      faellt es auf zweiteFamilie durch — Nothing You Could Do, wie
+#      auf dem Deckblatt.
+#
+#      DAZU GEHOERT die Groesse: handGroesse ist seit 140/142 die
+#      Gegenrechnung, die die Handschrift stehen laesst, waehrend die
+#      Serife waechst. Sie war auf Folgeslides bewusst ausgeschaltet,
+#      weil dort keine Handschrift stand. Jetzt steht dort welche,
+#      also gilt sie auch dort — sonst waere sie die einzige Stelle
+#      ohne die Gegenrechnung.
+#
+#      In node durchgerechnet:
+#
+#          Deckblatt      zweiter Block  Nothing You Could Do   51
+#          Folgeslide     zweiter Block  Nothing You Could Do   33
+#          Versalkachel   zweiter Block  Shadows Into Light     82
+#
+#      Die Versalkacheln bleiben also unberuehrt: dort greift der
+#      erste Zweig, versalFamilie.
+
+P.append(('QeZ=$e?((zVS&&BS_KACHEL.versalFamilie)||(t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeFamilie)||BS_KACHEL.zweiteFamilie||Qe):Qe',
+ 'QeZ=$e?((zVS&&BS_KACHEL.versalFamilie)||(BS_KACHEL.folgeZweitHand?!1:(t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeFamilie))||BS_KACHEL.zweiteFamilie||Qe):Qe',
+ "zweiter Block auf Folgeslides wird Handschrift", 1))
+
+P.append(('*((zVS||!(t.folienRolle&&t.folienRolle!=="deckblatt"))?(Number(BS_KACHEL.handGroesse)||1):1)):qe',
+ '*((zVS||BS_KACHEL.folgeZweitHand||!(t.folienRolle&&t.folienRolle!=="deckblatt"))?(Number(BS_KACHEL.handGroesse)||1):1)):qe',
+ "handGroesse gilt dort mit", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

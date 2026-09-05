@@ -4911,3 +4911,42 @@ werden damit optisch etwas kleiner als eben noch:
 
 Wer die alte Hoehe zurueck will, setzt `fotoGroesse` auf **59,0**. Nicht
 von selbst gemacht: gefragt war nach der Schrift, nicht nach der Groesse.
+
+## 144 — Folgeslides wieder Playfair, und die Handschrift auch dort im zweiten Teil
+
+*"Ok nein zurueck auf Playfair und mehr Einsatz der Handschrift im 2.
+Teil"*
+
+**Erstes:** `folgeFamilie` zurueck auf Playfair Display — 143 ist damit
+rueckgaengig.
+
+**Zweites:** der zweite Block trug auf Folgeslides bisher die **Serife**,
+nicht die Handschrift. Das steckt in `QeZ`:
+
+    QeZ = (zVS && versalFamilie)
+       || (folienRolle && folienRolle!=="deckblatt" && folgeFamilie)
+       || zweiteFamilie
+
+Der **mittlere Zweig** faengt Folgeslides ab, bevor `zweiteFamilie`
+drankommt. `folgeZweitHand:1` laesst ihn ins Leere laufen, dann faellt
+es auf `zweiteFamilie` durch — Nothing You Could Do, wie auf dem
+Deckblatt.
+
+### Dazu gehoert die Groesse
+
+`handGroesse` ist seit 140/142 die Gegenrechnung, die die Handschrift
+stehen laesst, waehrend die Serife waechst. Sie war auf Folgeslides
+bewusst **ausgeschaltet**, weil dort keine Handschrift stand. Jetzt
+steht dort welche, also gilt sie auch dort — sonst waere das die einzige
+Stelle ohne die Gegenrechnung.
+
+In node durchgerechnet:
+
+| | zweiter Block | Groesse |
+|---|---|---|
+| Deckblatt | Nothing You Could Do | 51 |
+| **Folgeslide** | **Nothing You Could Do** | **33** |
+| Versalkachel | Shadows Into Light | 82 |
+
+Die Versalkacheln bleiben unberuehrt: dort greift der erste Zweig,
+`versalFamilie`.
