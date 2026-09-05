@@ -4516,3 +4516,39 @@ In Chromium durchgespielt: frisch zeigt der Regler 20 % und im Speicher
 steht nichts; mit ihrer alten 0,2 zeigt er ebenfalls 20 und nichts
 springt; auf 20 gestellt loescht den Eintrag; auf 60 speichert 0.6.
 Keine Seitenfehler.
+
+## 134 — Die Handschrift 20 Prozent groesser
+
+Die Handschrift steht an **zwei** Stellen im Bild, und beide haengen an
+einer anderen Zahl:
+
+| | |
+|---|---|
+| zweiter Block auf dem Deckblatt | `qe · zweitAnteil` (.62) |
+| Versalkacheln, ganze Kachel | `r · versalGroesse` (.065) |
+
+**An `zweitAnteil` zu drehen waere falsch gewesen:** dieselbe Zahl
+bestimmt auch den zweiten Block auf den **Folgeslides**, und der ist
+keine Handschrift, sondern `folgeFamilie` — die Serife. Die haette dann
+mit vergroessert.
+
+Deshalb ein eigener Faktor `handGroesse` (1.2), der nur greift, wo auch
+wirklich Handschrift steht. Die Bedingung ist dieselbe, nach der weiter
+unten die Schriftfamilie gewaehlt wird:
+
+    zVS || !(t.folienRolle && t.folienRolle !== "deckblatt")
+
+Also: Versalkachel, oder Deckblatt beziehungsweise gar keine Rolle.
+Nachgerechnet:
+
+| | vorher | nachher |
+|---|---|---|
+| Deckblatt, zweiter Block | 62 | **74** |
+| ohne `folienRolle` | 62 | **74** |
+| Folgeslide (DM Serif) | 62 | 62 — **bleibt** |
+| Versalkachel | 100 | **120** |
+| `versalGroesse` | .065 | **.078** |
+
+`handAnteil` (1.15) bleibt, wie es ist: das ist das Verhaeltnis
+einzelner handgeschriebener Woerter zum Text um sie herum, kein
+absolutes Mass. Waechst der Text, wachsen sie mit.

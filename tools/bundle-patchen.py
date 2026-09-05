@@ -286,7 +286,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'deckblattFamilie:"DM Serif Display",fotoSchrift:"DM Serif Display",'
  'deckblattGewicht:"400",zweiteFamilie:"Shadows Into Light",zweitAnteil:.62,'
  'schriftart:"DM Serif Display",unterSchrift:"Shadows Into Light",gewicht:"400",'
- 'betontGewicht:"700",handAnteil:1.15,'
+ 'betontGewicht:"700",handAnteil:1.15,handGroesse:1.2,'
  'unterGewicht:"400",unterVerhaeltnis:.62,laufweite:0,'
  'folgeFamilie:"DM Serif Display",ablaufTitel:"DM Serif Display",'
  'nameSchrift:"DM Serif Display",nameGewicht:"400",nameLaufweite:60,'
@@ -3523,6 +3523,49 @@ P.append(('if(typeof window<"u"&&window.BS_STIL==="dunkel")Object.assign(BS_KACH
  'if(typeof window<"u"&&window.BS_STIL==="dunkel")Object.assign(BS_KACHEL,BS_DUNKEL);'
  'try{if(typeof window<"u"){const zg=Number(BS_KACHEL.schwarzGrund);window.BS_GRUND=isFinite(zg)&&zg>=0?zg:1}}catch(zz){}',
  "Grundwert fuer den Regler hinterlegen", 1))
+
+
+# 134 — Die Handschrift 20 Prozent groesser. Carina: "Okay jetzt das
+#      Handwritten noch 20% groesser".
+#
+#      Die Handschrift steht an zwei Stellen im Bild, und beide haengen
+#      an einer anderen Zahl:
+#
+#          zweiter Block auf dem Deckblatt   qe * zweitAnteil (.62)
+#          Versalkacheln, ganze Kachel       r * versalGroesse (.065)
+#
+#      An zweitAnteil zu drehen waere falsch gewesen: dieselbe Zahl
+#      bestimmt auch den zweiten Block auf den FOLGESLIDES, und der ist
+#      keine Handschrift, sondern folgeFamilie — die Serife. Die haette
+#      dann mit vergroessert.
+#
+#      Deshalb ein eigener Faktor handGroesse (1.2), der nur greift,
+#      wo auch wirklich Handschrift steht. Die Bedingung ist dieselbe,
+#      nach der weiter unten die Schriftfamilie gewaehlt wird:
+#
+#          zVS || !(t.folienRolle && t.folienRolle !== "deckblatt")
+#
+#      Also: Versalkachel, oder Deckblatt beziehungsweise gar keine
+#      Rolle. Nachgerechnet:
+#
+#          Deckblatt, zweiter Block   62 -> 74
+#          ohne folienRolle           62 -> 74
+#          Folgeslide (DM Serif)      62 -> 62     bleibt
+#          Versalkachel              100 -> 120
+#          versalGroesse            .065 -> .078
+#
+#      handAnteil (1.15) bleibt, wie es ist: das ist das Verhaeltnis
+#      einzelner handgeschriebener Woerter zum Text um sie herum, kein
+#      absolutes Mass. Waechst der Text, wachsen sie mit.
+
+P.append(('BS_KACHEL.versalGroesse&&(qe=Math.max(c(11),Math.round(r*BS_KACHEL.versalGroesse)))',
+ 'BS_KACHEL.versalGroesse&&(qe=Math.max(c(11),Math.round(r*BS_KACHEL.versalGroesse*(Number(BS_KACHEL.handGroesse)||1))))',
+ "Versalgroesse mal handGroesse", 1))
+
+P.append(('qe2=$e?Math.round(qe*((zVS&&BS_KACHEL.versalZweitAnteil)||BS_KACHEL.zweitAnteil||1)):qe',
+ 'qe2=$e?Math.round(qe*((zVS&&BS_KACHEL.versalZweitAnteil)||BS_KACHEL.zweitAnteil||1)'
+ '*((zVS||!(t.folienRolle&&t.folienRolle!=="deckblatt"))?(Number(BS_KACHEL.handGroesse)||1):1)):qe',
+ "zweiter Block mal handGroesse, nur wo er Handschrift ist", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
