@@ -49,11 +49,19 @@
    * Erst bei "change", nicht bei "input": sonst laedt die Seite
    * waehrend des Schiebens bei jedem Pixel neu.
    */
+  /* Der Grundwert steht im Block des Zeichners (schwarzGrund) und wird
+   * von dort als window.BS_GRUND hinterlegt. Hier steht er bewusst
+   * nicht noch einmal — sonst gaebe es zwei Wahrheiten. */
+  function grund() {
+    var v = parseFloat(typeof window !== "undefined" ? window.BS_GRUND : NaN);
+    return isFinite(v) && v >= 0 ? v : 1;
+  }
+
   function schwarzJetzt() {
     try {
       var v = parseFloat(localStorage.getItem("BS_SCHWARZ"));
-      return isFinite(v) && v >= 0 ? v : 1;
-    } catch (e) { return 1; }
+      return isFinite(v) && v >= 0 ? v : grund();
+    } catch (e) { return grund(); }
   }
 
   /* Die Ausnahmen je Tag. Ein flaches Objekt {"47": 0.5}, das die
@@ -81,7 +89,7 @@
   function schwarzSetzen(v) {
     try {
       if (gewaehlt == null) {
-        if (Math.abs(v - 1) < 0.001) localStorage.removeItem("BS_SCHWARZ");
+        if (Math.abs(v - grund()) < 0.001) localStorage.removeItem("BS_SCHWARZ");
         else localStorage.setItem("BS_SCHWARZ", String(v));
       } else {
         var m = tageJetzt();

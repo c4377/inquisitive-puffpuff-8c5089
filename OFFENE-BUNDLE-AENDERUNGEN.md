@@ -4474,3 +4474,45 @@ Anzeige auf „Tag 47"; Regler auf 40 speichert `{"47":0.4}`; nach dem
 Neuladen steht `window.BS_SCHWARZ_TAG` so in der Seite und der Regler
 zeigt wieder 40 %. „alle" schaltet ohne Neuladen zurueck und laesst die
 Ausnahme stehen. Keine Seitenfehler.
+
+## 133 — Das Grundoverlay steht auf 20 Prozent
+
+*"Ich seh wenn ich den neuen Schalter auf 20% stell sind viele super und
+die paar die nicht gehen wuerden einen schwaerzeren Helferbalken kriegen
+also bitte stell die Grundoverlay auf 20% verstellbar und dann pro
+Kachel verstellbar und oben und unten schwarz vinette."*
+
+Sie hat den Wert selbst gefunden. Bleibt nur, ihn zur Vorgabe zu machen,
+ohne dass sich bei ihr etwas ruckt.
+
+### Was ich nicht gemacht habe
+
+Die Zahlen im Block mit 0,2 durchmultiplizieren. Dann waere ihre
+**gespeicherte 0,2** auf die neuen Zahlen gefallen und sie saehe
+ploetzlich **4 Prozent** — dasselbe mit jeder Ausnahme je Kachel. Eine
+Wanderung dafuer zu bauen waere Arbeit fuer einen Fehler, den man auch
+weglassen kann.
+
+### Stattdessen
+
+`schwarzGrund: .2` im Aufsatz, und `zSw` faellt darauf zurueck, wenn
+nichts gespeichert ist. Ihre 0,2 bedeutet damit **genau dasselbe** wie
+die neue Vorgabe — es ruckt nichts.
+
+Der Regler haengt am body und kennt `BS_KACHEL` nicht. Damit die Zahl
+nicht zweimal im Projekt steht, hinterlegt der Zeichner sie direkt nach
+dem Aufsatz als `window.BS_GRUND`, und der Regler liest sie dort.
+
+„Standard" heisst im Regler jetzt **der Grundwert**: schiebt man auf 20
+%, faellt der gespeicherte Eintrag raus, statt als Ausnahme
+stehenzubleiben.
+
+Pro Kachel verstellbar war schon da (132), die Baender oben und unten
+auch (131/132). Sie folgen dem Regler mit — sind bei 20 % also genau der
+**Helferbalken**: fuer eine einzelne Kachel hochdrehen und der Balken
+wird schwaerzer.
+
+In Chromium durchgespielt: frisch zeigt der Regler 20 % und im Speicher
+steht nichts; mit ihrer alten 0,2 zeigt er ebenfalls 20 und nichts
+springt; auf 20 gestellt loescht den Eintrag; auf 60 speichert 0.6.
+Keine Seitenfehler.

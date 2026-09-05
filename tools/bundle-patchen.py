@@ -299,7 +299,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
- 'bildSchwarzpunkt:.07,bildVignette:.6,textGrundZiel:4,textGrundMax:1.8,auflageReihe:"1|0.2|0.65|0.35",vignetteReihe:"1|0|0.55|0.25",auflageWechsel:1,folgeFuss:.86,lagenReihe:"unten",textMitte:.58,textLageUnten:.80,textMesseOben:.60,nameZeigen:0,'
+ 'bildSchwarzpunkt:.07,bildVignette:.6,schwarzGrund:.2,textGrundZiel:4,textGrundMax:1.8,auflageReihe:"1|0.2|0.65|0.35",vignetteReihe:"1|0|0.55|0.25",auflageWechsel:1,folgeFuss:.86,lagenReihe:"unten",textMitte:.58,textLageUnten:.80,textMesseOben:.60,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
  'tiefeOben:.55,tiefeKnickOben:.16,tiefeMitte:.08,tiefeKnick:.60,tiefeKnickUnten:.999,tiefeUnten:.85,kanteOben:0,kanteUnten:0,'
  'saumStaerke:0,bildSchleier:.06,'
@@ -3353,7 +3353,8 @@ P.append(('const zSaat=String(t.background||"")+"|"+String(t.text||"");',
  'const zSw=(()=>{try{if(typeof window>"u")return 1;'
  'const zk=window.BS_SCHWARZ_TAG;'
  'if(zk&&typeof t._tag=="number"){const ze=parseFloat(zk[String(t._tag)]);if(isFinite(ze)&&ze>=0)return ze}'
- 'const zv=parseFloat(window.BS_SCHWARZ);return isFinite(zv)&&zv>=0?zv:1}catch(zz){return 1}})();'
+ 'const zv=parseFloat(window.BS_SCHWARZ);if(isFinite(zv)&&zv>=0)return zv;'
+ 'const zg=Number(BS_KACHEL.schwarzGrund);return isFinite(zg)&&zg>=0?zg:1}catch(zz){return 1}})();'
  'const zSaat=String(t.background||"")+"|"+String(t.text||"");',
  "zSw: der Regler, je Tag oder allgemein", 1))
 
@@ -3476,6 +3477,52 @@ P.append(('const zSt=[[0,Number(BS_KACHEL.tiefeOben)||0],',
  'const zSt=[[0,Number(BS_KACHEL.tiefeOben)||0],'
  '[BS_KACHEL.tiefeKnickOben==null?0:Number(BS_KACHEL.tiefeKnickOben),Number(BS_KACHEL.tiefeMitte)||0],',
  "Rampe oben auch in der Messung", 1))
+
+
+# 133 — Das Grundoverlay steht auf 20 Prozent. Carina: "Ich seh wenn
+#      ich den neuen Schalter auf 20% stell sind viele super und die
+#      paar die nicht gehen wuerden einen schwaerzeren Helferbalken
+#      kriegen also bitte stell die Grundoverlay auf 20% verstellbar
+#      und dann pro Kachel verstellbar und oben und unten schwarz
+#      vinette."
+#
+#      Sie hat den Wert selbst gefunden. Bleibt nur, ihn zur Vorgabe
+#      zu machen, ohne dass sich bei ihr etwas ruckt.
+#
+#      NICHT gemacht: die Zahlen im Block mit 0,2 durchmultiplizieren.
+#      Dann waere ihre gespeicherte 0,2 auf die neuen Zahlen gefallen
+#      und sie saehe ploetzlich 4 Prozent — und dasselbe waere mit
+#      jeder Ausnahme je Kachel passiert. Eine Wanderung dafuer zu
+#      bauen waere Arbeit fuer einen Fehler, den man auch weglassen
+#      kann.
+#
+#      Stattdessen: schwarzGrund .2 im Aufsatz, und zSw faellt darauf
+#      zurueck, wenn nichts gespeichert ist. Ihre 0,2 bedeutet damit
+#      genau dasselbe wie die neue Vorgabe — es ruckt nichts.
+#
+#      Der Regler haengt am body und kennt BS_KACHEL nicht. Damit die
+#      Zahl nicht zweimal im Projekt steht, hinterlegt der Zeichner
+#      sie direkt nach dem Aufsatz als window.BS_GRUND, und der Regler
+#      liest sie dort.
+#
+#      "Standard" heisst im Regler jetzt der Grundwert: schiebt man
+#      auf 20 Prozent, faellt der gespeicherte Eintrag raus, statt als
+#      Ausnahme stehenzubleiben.
+#
+#      Pro Kachel verstellbar war schon da (132), die Baender oben und
+#      unten auch (132/131). Sie folgen dem Regler mit, sind also bei
+#      20 Prozent der Helferbalken, den sie meint: fuer eine einzelne
+#      Kachel hochdrehen und der Balken wird schwaerzer.
+#
+#      In Chromium durchgespielt: frisch zeigt der Regler 20 Prozent
+#      und im Speicher steht nichts; mit ihrer alten 0,2 zeigt er
+#      ebenfalls 20 und nichts springt; auf 20 gestellt loescht den
+#      Eintrag; auf 60 speichert 0.6. Keine Seitenfehler.
+
+P.append(('if(typeof window<"u"&&window.BS_STIL==="dunkel")Object.assign(BS_KACHEL,BS_DUNKEL);',
+ 'if(typeof window<"u"&&window.BS_STIL==="dunkel")Object.assign(BS_KACHEL,BS_DUNKEL);'
+ 'try{if(typeof window<"u"){const zg=Number(BS_KACHEL.schwarzGrund);window.BS_GRUND=isFinite(zg)&&zg>=0?zg:1}}catch(zz){}',
+ "Grundwert fuer den Regler hinterlegen", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
