@@ -4770,3 +4770,35 @@ Alle vier Kommentare sind jetzt CSS-Kommentare. Nachgemessen auf beiden
 Seiten: 57 Schriften, keine fehlt, und Montserrat, Shadows Into Light
 und Nothing You Could Do zeichnen jeweils andere Pixel als die
 Ersatzschrift.
+
+## 140 — DM Serif 10 Prozent groesser, Handschrift bleibt
+
+Die zwei Groessen standen bisher **nur im warmen Grundblock**:
+
+| | | |
+|---|---|---|
+| `deckblattGroesse` | 68 | die erste Folie |
+| `fotoGroesse` | 44 | die Folgeslides |
+
+Sie im **Aufsatz** zu setzen statt im Grundblock ist der ganze Punkt —
+sonst waere der warme Feed mitgewachsen. Jetzt **74,8** und **48,4**.
+
+### Die Gegenrechnung
+
+Die Handschrift ist kein eigenes Mass, sondern ein **Anteil an der
+Serife**:
+
+    Unterzeile = deckblattGroesse · zweitAnteil · handGroesse
+
+Ohne Gegenrechnung waere sie um dieselben 10 Prozent mitgewachsen — und
+ihre Groesse ist zwei Schritte vorher selbst gewaehlt worden (134).
+Deshalb `handGroesse` von 1.2 auf **1.0909**, also durch 1,1 geteilt:
+
+| | Serife | Handschrift |
+|---|---|---|
+| vorher | 68,0 | 50,6 |
+| nachher | **74,8** | **50,6** |
+
+Auf den Folgeslides waechst der zweite Block mit — dort steht keine
+Handschrift, sondern `folgeFamilie`, also die Serife selbst: 27,3 → 30,0,
+dieselben 10 Prozent.

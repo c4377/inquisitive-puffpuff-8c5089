@@ -284,9 +284,9 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'grundB:"#0E0D0C",schriftB:"#F2EFE9",'
  'deckblattFamilie:"DM Serif Display",fotoSchrift:"DM Serif Display",'
- 'deckblattGewicht:"400",zweiteFamilie:"Nothing You Could Do",zweitAnteil:.62,'
+ 'deckblattGewicht:"400",deckblattGroesse:74.8,fotoGroesse:48.4,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.62,'
  'schriftart:"DM Serif Display",unterSchrift:"Shadows Into Light",gewicht:"400",'
- 'betontGewicht:"700",handAnteil:1.15,handGroesse:1.2,'
+ 'betontGewicht:"700",handAnteil:1.15,handGroesse:1.0909,'
  'unterGewicht:"400",unterVerhaeltnis:.62,laufweite:0,'
  'folgeFamilie:"DM Serif Display",ablaufTitel:"DM Serif Display",'
  'nameSchrift:"DM Serif Display",nameGewicht:"400",nameLaufweite:60,'
@@ -3742,6 +3742,36 @@ P.append(('v.jsxs(Qa,{to:h.path,onClick:u,className:`flex items-center space-x-4
 #      auf beiden Seiten: 57 Schriften, keine fehlt, und Montserrat,
 #      Shadows Into Light und Nothing You Could Do zeichnen jeweils
 #      andere Pixel als die Ersatzschrift.
+
+
+# 140 — DM Serif 10 Prozent groesser, Handschrift bleibt.
+#
+#      Die zwei Groessen standen bisher nur im warmen Grundblock:
+#
+#          deckblattGroesse 68   die erste Folie
+#          fotoGroesse      44   die Folgeslides
+#
+#      Sie im Aufsatz zu setzen statt im Grundblock ist der ganze
+#      Punkt — sonst waere der warme Feed mitgewachsen. Jetzt 74,8 und
+#      48,4.
+#
+#      DIE GEGENRECHNUNG. Die Handschrift ist kein eigenes Mass,
+#      sondern ein Anteil an der Serife:
+#
+#          Unterzeile = deckblattGroesse * zweitAnteil * handGroesse
+#
+#      Ohne Gegenrechnung waere sie um dieselben 10 Prozent
+#      mitgewachsen — und ihre Groesse hat Carina zwei Schritte vorher
+#      selbst gewaehlt (134). Deshalb handGroesse von 1.2 auf 1.0909,
+#      also durch 1,1 geteilt. Nachgerechnet:
+#
+#                          Serife   Handschrift
+#          vorher            68,0        50,6
+#          nachher           74,8        50,6
+#
+#      Auf den Folgeslides waechst der zweite Block mit — dort steht
+#      keine Handschrift, sondern folgeFamilie, also die Serife
+#      selbst. 27,3 auf 30,0, dieselben 10 Prozent.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
