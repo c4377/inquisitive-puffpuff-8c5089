@@ -299,7 +299,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
- 'bildSchwarzpunkt:.07,bildVignette:.6,textGrundZiel:4,textGrundMax:1.8,auflageReihe:"1|0.2|0.65|0.35",vignetteReihe:"1|0|0.55|0.25",auflageWechsel:1,folgeFuss:.86,lagenReihe:"unten|mitte",textMitte:.58,textLageUnten:.80,textMesseOben:.52,nameZeigen:0,'
+ 'bildSchwarzpunkt:.07,bildVignette:.6,textGrundZiel:4,textGrundMax:1.8,auflageReihe:"1|0.2|0.65|0.35",vignetteReihe:"1|0|0.55|0.25",auflageWechsel:1,folgeFuss:.86,lagenReihe:"unten",textMitte:.58,textLageUnten:.80,textMesseOben:.52,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
  'tiefeOben:0,tiefeMitte:0,tiefeKnick:.52,tiefeKnickUnten:.68,tiefeUnten:.45,kanteOben:.16,kanteUnten:.35,'
  'saumStaerke:0,bildSchleier:.06,'
@@ -3309,6 +3309,59 @@ P.append(('He=tt.istKarte?.42:ve==="oben"?.24:ve==="unten"?.7:(BS_KACHEL.textMit
  'He=tt.istKarte?.42:ve==="oben"?(BS_KACHEL.textLageOben||.24):'
  've==="unten"?(BS_KACHEL.textLageUnten||.7):(BS_KACHEL.textMitte||.5)',
  "Lagenhoehen aus dem Block", 1))
+
+
+# 130 — Alles unten, und ein Regler fuer das Schwarz. Carina: "Da sind
+#      welche zu hoch platziere alle unten und ich stell sie hoeher
+#      wenn's geht aber das schwarz ist manchmal zu stark kannst du
+#      mich das auch einstellen lassen."
+#
+#      Erstes: lagenReihe von "unten|mitte" auf "unten". In node ueber
+#      600 Kacheln: 600 unten. Auch eine Kachel mit textLage "oben"
+#      oder "mitte" landet unten, weil die Klammer aus 129 alles auf
+#      die erlaubte Liste zieht. Der warme Feed hat keine lagenReihe
+#      und bleibt, wie er war.
+#
+#      Zweites: ein Regler. Die Kacheln liegen als fertige Canvas da —
+#      eine Zahl im Block zu aendern zeichnet nichts neu. Also merkt
+#      der Regler den Wert und laedt die Seite neu; die index.html
+#      reicht ihn VOR dem Modul als window.BS_SCHWARZ weiter (der
+#      Zeichner liest ihn schon bei der ersten Kachel), und im
+#      Zeichner multipliziert zSw beides:
+#
+#          zVig  = Reihenwert * zSw
+#          zAuf  = ... * zSw     ganz zuletzt
+#
+#      "Ganz zuletzt" ist wichtig: die Messung aus 128 hebt zAuf an,
+#      damit der Text lesbar bleibt. Stuende der Regler davor, koennte
+#      sie ihn ueberstimmen und der Regler waere auf hellen Fotos
+#      wirkungslos. So gewinnt immer die Handeinstellung — auf 0
+#      Prozent liegt gar nichts mehr auf dem Foto, auch wenn der Text
+#      dann verschwindet. Das ist ihre Entscheidung, nicht meine.
+#
+#      Der Regler haengt wie der Stil-Schalter am body, nicht in der
+#      React-App, und reagiert auf "change" statt "input" — sonst
+#      wuerde die Seite waehrend des Schiebens bei jedem Pixel neu
+#      laden.
+#
+#      In Chromium durchgespielt: Regler da, Startwert 100 Prozent,
+#      nach dem Schieben auf 60 steht 0.6 im Speicher, window.
+#      BS_SCHWARZ ist 0.6 und der Regler zeigt wieder 60 Prozent.
+#      Zurueck auf 100 loescht den Eintrag. Keine Seitenfehler.
+
+P.append(('const zSaat=String(t.background||"")+"|"+String(t.text||"");',
+ 'const zSw=(()=>{try{const zv=parseFloat(typeof window<"u"?window.BS_SCHWARZ:NaN);'
+ 'return isFinite(zv)&&zv>=0?zv:1}catch(zz){return 1}})();'
+ 'const zSaat=String(t.background||"")+"|"+String(t.text||"");',
+ "zSw: der Regler", 1))
+
+P.append(('const zVig=(()=>{const zv=BS_REIHE(BS_KACHEL.vignetteReihe,BS_KACHEL.auflageWechsel,t._tag,zSaat+"|v");return zv==null?1:zv})();',
+ 'const zVig=(()=>{const zv=BS_REIHE(BS_KACHEL.vignetteReihe,BS_KACHEL.auflageWechsel,t._tag,zSaat+"|v");return (zv==null?1:zv)*zSw})();',
+ "Vignette folgt dem Regler", 1))
+
+P.append(('if(zN>zAuf)zAuf=zN}}}catch(zz){}const ur=new Pe.fabric.Rect(',
+ 'if(zN>zAuf)zAuf=zN}}}catch(zz){}zAuf*=zSw;const ur=new Pe.fabric.Rect(',
+ "Auflage folgt dem Regler, nach der Messung", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

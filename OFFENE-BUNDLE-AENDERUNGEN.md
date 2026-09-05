@@ -4328,3 +4328,44 @@ sind jetzt Felder:
 faengt bei `tiefeKnick` .52 an, und was darueber liegt, kann kein Faktor
 abdunkeln — die Suche aus 128 wuerde dann bei jeder helleren Kachel am
 Anschlag landen, statt zu messen.
+
+## 130 — Alles unten, und ein Regler fuer das Schwarz
+
+*"Da sind welche zu hoch platziere alle unten und ich stell sie hoeher
+wenn's geht aber das schwarz ist manchmal zu stark kannst du mich das
+auch einstellen lassen."*
+
+### Alles unten
+
+`lagenReihe` von `"unten|mitte"` auf `"unten"`. In node ueber 600
+Kacheln: **600 unten**. Auch eine Kachel mit `textLage:"oben"` oder
+`"mitte"` landet unten, weil die Klammer aus 129 alles auf die erlaubte
+Liste zieht. Der warme Feed hat keine `lagenReihe` und bleibt, wie er
+war.
+
+### Der Regler
+
+Die Kacheln liegen als **fertige Canvas** da — eine Zahl im Block zu
+aendern zeichnet nichts neu. Also merkt der Regler den Wert und laedt
+die Seite neu; die `index.html` reicht ihn **vor** dem Modul als
+`window.BS_SCHWARZ` weiter (der Zeichner liest ihn schon bei der ersten
+Kachel), und im Zeichner multipliziert `zSw` beides:
+
+    zVig = Reihenwert · zSw
+    zAuf = …          · zSw     ganz zuletzt
+
+**„Ganz zuletzt" ist der Punkt.** Die Messung aus 128 hebt `zAuf` an,
+damit der Text lesbar bleibt. Stuende der Regler davor, koennte sie ihn
+ueberstimmen und der Regler waere auf hellen Fotos wirkungslos. So
+gewinnt immer die Handeinstellung — auf 0 % liegt gar nichts mehr auf
+dem Foto, auch wenn der Text dann verschwindet. Das ist deine
+Entscheidung, nicht meine.
+
+Der Regler haengt wie der Stil-Schalter **am body**, nicht in der
+React-App, und reagiert auf `change` statt `input` — sonst wuerde die
+Seite waehrend des Schiebens bei jedem Pixel neu laden.
+
+In Chromium durchgespielt: Regler da, Startwert 100 %, nach dem
+Schieben auf 60 steht `0.6` im Speicher, `window.BS_SCHWARZ` ist 0.6
+und der Regler zeigt wieder 60 %. Zurueck auf 100 loescht den Eintrag.
+Keine Seitenfehler.
