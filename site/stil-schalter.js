@@ -56,12 +56,59 @@
     } catch (e) { return 1; }
   }
 
+  /* Die Ausnahmen je Tag. Ein flaches Objekt {"47": 0.5}, das die
+   * index.html vor dem Modul als window.BS_SCHWARZ_TAG weiterreicht;
+   * der Zeichner sucht darin seine eigene Tagesnummer (_tag) und
+   * nimmt sonst den allgemeinen Wert. */
+  function tageJetzt() {
+    try { return JSON.parse(localStorage.getItem("BS_SCHWARZ_TAG") || "{}") || {}; }
+    catch (e) { return {}; }
+  }
+
+  /* Welche Kachel gerade gewaehlt ist, ueberlebt das Neuladen —
+   * sonst muesste man nach jeder Reglerbewegung wieder antippen. */
+  var gewaehlt = (function () {
+    try { var v = parseInt(localStorage.getItem("BS_SCHWARZ_WAHL"), 10);
+          return isFinite(v) ? v : null; } catch (e) { return null; }
+  })();
+
+  function standJetzt() {
+    if (gewaehlt == null) return schwarzJetzt();
+    var m = tageJetzt(), v = parseFloat(m[String(gewaehlt)]);
+    return isFinite(v) && v >= 0 ? v : schwarzJetzt();
+  }
+
   function schwarzSetzen(v) {
     try {
-      if (Math.abs(v - 1) < 0.001) localStorage.removeItem("BS_SCHWARZ");
-      else localStorage.setItem("BS_SCHWARZ", String(v));
+      if (gewaehlt == null) {
+        if (Math.abs(v - 1) < 0.001) localStorage.removeItem("BS_SCHWARZ");
+        else localStorage.setItem("BS_SCHWARZ", String(v));
+      } else {
+        var m = tageJetzt();
+        if (Math.abs(v - schwarzJetzt()) < 0.001) delete m[String(gewaehlt)];
+        else m[String(gewaehlt)] = v;
+        if (Object.keys(m).length) localStorage.setItem("BS_SCHWARZ_TAG", JSON.stringify(m));
+        else localStorage.removeItem("BS_SCHWARZ_TAG");
+      }
     } catch (e) {}
     location.reload();
+  }
+
+  /* Welche Kachel wurde angetippt? Die Nummer steht als "Tag 47" im
+   * Schildchen der Kachel. Von der angetippten Stelle nach oben
+   * gehen und im ersten Vorfahren, der so ein Schildchen enthaelt,
+   * die Nummer lesen — das ist die Kachel. Findet sich keine, bleibt
+   * die Auswahl, wie sie war. */
+  function tagAus(el) {
+    for (var n = 0; el && n < 8; el = el.parentElement, n++) {
+      if (!el.querySelectorAll) continue;
+      var k = el.querySelectorAll("*");
+      for (var i = 0; i < k.length && i < 80; i++) {
+        var m = /^\s*Tag\s+(\d+)\s*$/.exec(k[i].textContent || "");
+        if (m) return parseInt(m[1], 10);
+      }
+    }
+    return null;
   }
 
   function bauen() {
@@ -84,7 +131,10 @@
       'box-shadow:0 2px 12px rgba(0,0,0,.28);opacity:.55;transition:opacity .15s;' +
       'color:rgba(255,255,255,.72);font:600 12px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}' +
       '#bs-schwarz:hover{opacity:1}' +
-      '#bs-schwarz input{width:104px;accent-color:#E8836B;margin:0}' +
+      '#bs-schwarz input{width:96px;accent-color:#E8836B;margin:0}' +
+      '#bs-schwarz button{border:0;cursor:pointer;border-radius:999px;padding:4px 9px;' +
+      'color:rgba(255,255,255,.72);background:rgba(255,255,255,.12);font:inherit}' +
+      '#bs-schwarz button[data-an="ja"]{background:#E8836B;color:#241C16}' +
       '#bs-schwarz span{min-width:34px;text-align:right;font-variant-numeric:tabular-nums}';
     document.head.appendChild(css);
 
@@ -108,6 +158,11 @@
     var titel = document.createElement("label");
     titel.textContent = "Schwarz";
     titel.setAttribute("for", "bs-schwarz-regler");
+    var fuer = document.createElement("button");
+    fuer.type = "button";
+    fuer.id = "bs-schwarz-fuer";
+    fuer.textContent = "alle";
+    fuer.title = "Kachel antippen, dann gilt der Regler nur fuer die. Hier klicken zurueck auf alle.";
     var eingabe = document.createElement("input");
     eingabe.id = "bs-schwarz-regler";
     eingabe.type = "range";
@@ -119,10 +174,35 @@
     wert.textContent = eingabe.value + "%";
     eingabe.addEventListener("input", function () { wert.textContent = eingabe.value + "%"; });
     eingabe.addEventListener("change", function () { schwarzSetzen(parseInt(eingabe.value, 10) / 100); });
+    fuer.addEventListener("click", function () { waehlen(null); });
     reg.appendChild(titel);
+    reg.appendChild(fuer);
     reg.appendChild(eingabe);
     reg.appendChild(wert);
     document.body.appendChild(reg);
+
+    function waehlen(tag) {
+      gewaehlt = tag;
+      try {
+        if (tag == null) localStorage.removeItem("BS_SCHWARZ_WAHL");
+        else localStorage.setItem("BS_SCHWARZ_WAHL", String(tag));
+      } catch (e) {}
+      fuer.textContent = tag == null ? "alle" : "Tag " + tag;
+      fuer.setAttribute("data-an", tag == null ? "nein" : "ja");
+      var v = Math.round(standJetzt() * 100);
+      eingabe.value = String(v);
+      wert.textContent = v + "%";
+    }
+    waehlen(gewaehlt);
+
+    /* Nur zuhoeren, nichts abfangen: capture, damit es auch ankommt,
+     * wenn die App den Klick selbst verarbeitet, und ohne
+     * preventDefault, damit die Kachel trotzdem aufgeht. */
+    document.addEventListener("click", function (ev) {
+      if (reg.contains(ev.target) || box.contains(ev.target)) return;
+      var tag = tagAus(ev.target);
+      if (tag != null) waehlen(tag);
+    }, true);
   }
 
   if (document.readyState === "loading") {

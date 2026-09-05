@@ -4419,3 +4419,58 @@ Nachgerechnet ueber die neun Kacheln: schlechtester Kontrast unterm Text
 **4,1:1** (vorher 5,2:1), Mittel 8,2:1. Das Band ist deutlich staerker
 und der Text bleibt trotzdem gut lesbar, weil beides jetzt an derselben
 Stelle sitzt.
+
+## 132 — Schwarz je Kachel, und ein Band auch oben
+
+*"Schwarz pro Bild und bitte oben unten schwarz wie Julia"*
+
+### Oben
+
+In 131 hatte ich gemessen, dass das Vorbild oben **kein** Band hat — die
+obersten 24 Zeilen liegen bei den hellen Fotos auf 129, 143, 209; dort
+ist es das Foto selbst, das dunkel ist. Sie will es trotzdem, und das
+ist ihre Entscheidung. Der Messwert steht in 131, falls es wieder weg
+soll.
+
+Der Verlauf hat jetzt **fuenf** Stufen statt vier:
+
+| Offset | Wert | |
+|---|---|---|
+| 0 | `tiefeOben` | .55 |
+| `tiefeKnickOben` .16 | `tiefeMitte` | .08 |
+| `tiefeKnick` .60 | `tiefeMitte` | .08 |
+| `tiefeKnickUnten` .999 | `tiefeUnten` | .85 |
+| 1 | `tiefeUnten` | .85 |
+
+`kanteOben` faellt auf **0** — sonst lagen zwei Rampen uebereinander und
+die Oberkante haette 1−(1−.55)(1−.16) = **.62** statt .55. Ein Regler,
+nicht zwei.
+
+Die neue Stufe muss **an zwei Stellen** stehen: im gezeichneten Verlauf
+**und** in `zSt`, dem Modell, mit dem die Messung aus 128 sucht. Stuenden
+sie auseinander, wuerde die Messung mit einem Verlauf rechnen, den es
+nicht gibt.
+
+### Schwarz je Kachel
+
+`window.BS_SCHWARZ_TAG` ist ein flaches Objekt, `{"47":0.4}`. Der
+Zeichner sucht darin seine eigene Tagesnummer (`t._tag`, seit 116 auf
+jeder Folie) und faellt sonst auf den allgemeinen Wert zurueck.
+
+Die Bedienung sitzt im selben Schildchen wie der Stil-Schalter, **am
+body**, nicht in der React-App. Welche Kachel gemeint ist, liest sie aus
+dem DOM: von der angetippten Stelle nach oben gehen und im ersten
+Vorfahren, der ein Schildchen `"Tag 47"` enthaelt, die Nummer nehmen.
+Der Zuhoerer laeuft in der **capture**-Phase und ruft **kein**
+`preventDefault` — die Kachel geht trotzdem auf, er hoert nur mit.
+
+Die Auswahl ueberlebt das Neuladen (`BS_SCHWARZ_WAHL`), sonst muesste
+man nach jeder Reglerbewegung wieder antippen. Steht der Regler wieder
+auf dem allgemeinen Wert, faellt der Eintrag raus statt als Ausnahme
+stehenzubleiben.
+
+In Chromium durchgespielt: Klick auf eine Kachel mit „Tag 47" setzt die
+Anzeige auf „Tag 47"; Regler auf 40 speichert `{"47":0.4}`; nach dem
+Neuladen steht `window.BS_SCHWARZ_TAG` so in der Seite und der Regler
+zeigt wieder 40 %. „alle" schaltet ohne Neuladen zurueck und laesst die
+Ausnahme stehen. Keine Seitenfehler.

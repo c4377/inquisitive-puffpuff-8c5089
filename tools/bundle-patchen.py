@@ -301,7 +301,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
  'bildSchwarzpunkt:.07,bildVignette:.6,textGrundZiel:4,textGrundMax:1.8,auflageReihe:"1|0.2|0.65|0.35",vignetteReihe:"1|0|0.55|0.25",auflageWechsel:1,folgeFuss:.86,lagenReihe:"unten",textMitte:.58,textLageUnten:.80,textMesseOben:.60,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
- 'tiefeOben:0,tiefeMitte:.08,tiefeKnick:.60,tiefeKnickUnten:.999,tiefeUnten:.85,kanteOben:.16,kanteUnten:0,'
+ 'tiefeOben:.55,tiefeKnickOben:.16,tiefeMitte:.08,tiefeKnick:.60,tiefeKnickUnten:.999,tiefeUnten:.85,kanteOben:0,kanteUnten:0,'
  'saumStaerke:0,bildSchleier:.06,'
  'nameFarbe:"#F2EFE9",schildGrund:"#F2EFE9",schildSchriftFarbe:"#171512"};')
 SCHALTER = 'if(typeof window<"u"&&window.BS_STIL==="dunkel")Object.assign(BS_KACHEL,BS_DUNKEL);'
@@ -3350,10 +3350,12 @@ P.append(('He=tt.istKarte?.42:ve==="oben"?.24:ve==="unten"?.7:(BS_KACHEL.textMit
 #      Zurueck auf 100 loescht den Eintrag. Keine Seitenfehler.
 
 P.append(('const zSaat=String(t.background||"")+"|"+String(t.text||"");',
- 'const zSw=(()=>{try{const zv=parseFloat(typeof window<"u"?window.BS_SCHWARZ:NaN);'
- 'return isFinite(zv)&&zv>=0?zv:1}catch(zz){return 1}})();'
+ 'const zSw=(()=>{try{if(typeof window>"u")return 1;'
+ 'const zk=window.BS_SCHWARZ_TAG;'
+ 'if(zk&&typeof t._tag=="number"){const ze=parseFloat(zk[String(t._tag)]);if(isFinite(ze)&&ze>=0)return ze}'
+ 'const zv=parseFloat(window.BS_SCHWARZ);return isFinite(zv)&&zv>=0?zv:1}catch(zz){return 1}})();'
  'const zSaat=String(t.background||"")+"|"+String(t.text||"");',
- "zSw: der Regler", 1))
+ "zSw: der Regler, je Tag oder allgemein", 1))
 
 P.append(('const zVig=(()=>{const zv=BS_REIHE(BS_KACHEL.vignetteReihe,BS_KACHEL.auflageWechsel,t._tag,zSaat+"|v");return zv==null?1:zv})();',
  'const zVig=(()=>{const zv=BS_REIHE(BS_KACHEL.vignetteReihe,BS_KACHEL.auflageWechsel,t._tag,zSaat+"|v");return (zv==null?1:zv)*zSw})();',
@@ -3412,6 +3414,68 @@ P.append(('if(zN>zAuf)zAuf=zN}}}catch(zz){}const ur=new Pe.fabric.Rect(',
 #      unterm Text 4,1:1 (vorher 5,2:1), Mittel 8,2:1. Das Band ist
 #      deutlich staerker und der Text bleibt trotzdem gut lesbar,
 #      weil beides jetzt an derselben Stelle sitzt.
+
+
+# 132 — Schwarz je Kachel, und ein Band auch oben. Carina: "Schwarz
+#      pro Bild und bitte oben unten schwarz wie Julia".
+#
+#      OBEN. Ich hatte in 131 gemessen, dass das Vorbild oben KEIN
+#      Band hat (oberste 24 Zeilen: 129, 143, 209 bei den hellen
+#      Fotos) — dort ist es das Foto selbst, das dunkel ist. Sie will
+#      es trotzdem, und das ist ihre Entscheidung; der Messwert steht
+#      in 131, falls sie es wieder abschalten will.
+#
+#      Der Verlauf hat jetzt fuenf Stufen statt vier:
+#
+#          0                 tiefeOben       .55
+#          tiefeKnickOben    tiefeMitte      .08   bei .16
+#          tiefeKnick        tiefeMitte      .08   bei .60
+#          tiefeKnickUnten   tiefeUnten      .85   bei .999
+#          1                 tiefeUnten      .85
+#
+#      kanteOben faellt auf 0 — sonst lagen zwei Rampen uebereinander
+#      und die Oberkante haette 1-(1-.55)(1-.16) = .62 statt .55.
+#      Ein Regler, nicht zwei.
+#
+#      Die neue Stufe muss AN ZWEI STELLEN stehen: im gezeichneten
+#      Verlauf und in zSt, dem Modell, mit dem die Messung aus 128
+#      sucht. Stuenden sie auseinander, wuerde die Messung mit einem
+#      Verlauf rechnen, den es nicht gibt.
+#
+#      SCHWARZ JE KACHEL. window.BS_SCHWARZ_TAG ist ein flaches
+#      Objekt, {"47":0.4}. Der Zeichner sucht darin seine eigene
+#      Tagesnummer (t._tag, seit 116 auf jeder Folie) und faellt sonst
+#      auf den allgemeinen Wert zurueck.
+#
+#      Die Bedienung sitzt im selben Schildchen wie der Stil-Schalter,
+#      am body, nicht in der React-App. Welche Kachel gemeint ist,
+#      liest sie aus dem DOM: von der angetippten Stelle nach oben
+#      gehen und im ersten Vorfahren, der ein Schildchen "Tag 47"
+#      enthaelt, die Nummer nehmen. Der Zuhoerer laeuft in der
+#      capture-Phase und ruft kein preventDefault — die Kachel geht
+#      trotzdem auf, er hoert nur mit.
+#
+#      Die Auswahl ueberlebt das Neuladen (BS_SCHWARZ_WAHL), sonst
+#      muesste man nach jeder Reglerbewegung wieder antippen. Steht
+#      der Regler wieder auf dem allgemeinen Wert, faellt der Eintrag
+#      raus statt als Ausnahme stehenzubleiben.
+#
+#      In Chromium durchgespielt: Klick auf eine Kachel mit "Tag 47"
+#      setzt die Anzeige auf "Tag 47", Regler auf 40 speichert
+#      {"47":0.4}, nach dem Neuladen steht window.BS_SCHWARZ_TAG so in
+#      der Seite und der Regler zeigt wieder 40 Prozent. "alle"
+#      schaltet ohne Neuladen zurueck und laesst die Ausnahme stehen.
+#      Keine Seitenfehler.
+
+P.append(('{offset:(BS_KACHEL.tiefeKnick==null?.45:BS_KACHEL.tiefeKnick),color:`rgba(${zTon},${BS_KACHEL.tiefeMitte*zAuf})`},',
+ '{offset:(BS_KACHEL.tiefeKnickOben==null?0:BS_KACHEL.tiefeKnickOben),color:`rgba(${zTon},${BS_KACHEL.tiefeMitte*zAuf})`},'
+ '{offset:(BS_KACHEL.tiefeKnick==null?.45:BS_KACHEL.tiefeKnick),color:`rgba(${zTon},${BS_KACHEL.tiefeMitte*zAuf})`},',
+ "Rampe oben im Verlauf", 1))
+
+P.append(('const zSt=[[0,Number(BS_KACHEL.tiefeOben)||0],',
+ 'const zSt=[[0,Number(BS_KACHEL.tiefeOben)||0],'
+ '[BS_KACHEL.tiefeKnickOben==null?0:Number(BS_KACHEL.tiefeKnickOben),Number(BS_KACHEL.tiefeMitte)||0],',
+ "Rampe oben auch in der Messung", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
