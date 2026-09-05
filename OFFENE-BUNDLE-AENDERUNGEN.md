@@ -4155,3 +4155,49 @@ Geblieben ist alles bis 183: Schwarzpunkt .07, Farbschicht, Vignette
 von 183; die alten Namen bleiben Weiterleitungen. So faengt sich
 niemand eine weisse Seite ein, weil sein Browser noch die alte
 index.html im Speicher hat.
+
+## 126 — Nicht jede Kachel gleich
+
+*"Ich glaube sowas brauchen wir ja aber nicht fuer alle. Also ich sehe
+ein paar die sind geil aber die kommen nur wenn daneben was ist mit
+overlay und ohne Vignette oder so."*
+
+Das ist keine Zahl, das ist ein **Rhythmus**. Eine offene Kachel wirkt
+offen, weil neben ihr eine geschlossene liegt. Bisher bekam jede
+dieselbe Auflage.
+
+Zwei Reihen, **getrennt** — weil sie „mit overlay und ohne Vignette"
+als eigene Kombination genannt hat:
+
+| | | |
+|---|---|---|
+| `auflageReihe` | `"1\|0.2\|0.65\|0.35"` | mal `bildSchleier`, `tiefe*`, `kante*` |
+| `vignetteReihe` | `"1\|0\|0.55\|0.25"` | mal `bildVignette` |
+| `auflageWechsel` | `1` | nach Tagesnummer |
+
+### Vier Eintraege, nicht drei
+
+Drei waere die Spaltenzahl des Rasters — dann stuende in jeder Spalte
+immer derselbe Wert und es gaebe **senkrechte Streifen**. Vier ist
+teilerfremd zu drei, der Rhythmus laeuft diagonal:
+
+|  |  |  |
+|---|---|---|
+| T1 A 0.2 | T2 A 0.65 | T3 A 0.35 |
+| T4 A 1 | T5 A 0.2 | T6 A 0.65 |
+| T7 A 0.35 | T8 A 1 | T9 A 0.2 |
+
+Jede Spalte traegt alle vier Staerken, und neben jeder offenen Kachel
+liegt eine geschlossene.
+
+### Nebenwirkung, absichtlich
+
+`saettigungReihe` hat zwei Eintraege, `auflageReihe` vier — das laeuft
+im Gleichtakt. Die **Farbkacheln bekommen immer die leichte Auflage**,
+die **Schwarzweisskacheln immer die schwere**. Sieht gut aus (offen und
+farbig gegen geschlossen und grau), ist aber eine feste Kopplung. Ein
+fuenfter Eintrag in einer der beiden Reihen loest sie.
+
+`BS_REIHE` ist die Mechanik aus 116, jetzt als eigene Funktion:
+Tagesnummer wenn vorhanden, sonst Hash. Ohne Reihe im Aufsatz kommt 1
+zurueck und nichts aendert sich — **der warme Feed bleibt unberuehrt**.

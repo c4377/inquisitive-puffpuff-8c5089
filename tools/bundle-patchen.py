@@ -299,7 +299,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
- 'bildSchwarzpunkt:.07,bildVignette:.6,folgeFuss:.86,textMitte:.73,nameZeigen:0,'
+ 'bildSchwarzpunkt:.07,bildVignette:.6,auflageReihe:"1|0.2|0.65|0.35",vignetteReihe:"1|0|0.55|0.25",auflageWechsel:1,folgeFuss:.86,textMitte:.73,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
  'tiefeOben:.06,tiefeMitte:.10,tiefeUnten:.62,kanteOben:.30,kanteUnten:.55,'
  'saumStaerke:0,bildSchleier:.10,'
@@ -3088,6 +3088,80 @@ P.append(('let De=n*He-ae/2+Et/2;if(De+ae-Et/2>n*(BS_KACHEL.textUnten||.9)',
 #      als Rueckbau: die alten Namen bleiben Weiterleitungen, und
 #      niemand faengt sich eine weisse Seite ein, weil sein Browser
 #      noch die alte index.html im Speicher hat.
+
+
+# 126 — Nicht jede Kachel gleich. Carina: "Ich glaube sowas brauchen
+#      wir ja aber nicht fuer alle. Also ich sehe ein paar die sind
+#      geil aber die kommen nur wenn daneben was ist mit overlay und
+#      ohne Vignette oder so."
+#
+#      Das ist keine Zahl, das ist ein Rhythmus. Eine offene Kachel
+#      wirkt offen, weil neben ihr eine geschlossene liegt. Bisher
+#      bekam jede dieselbe Auflage.
+#
+#      Zwei Reihen, getrennt, weil sie "mit overlay und ohne Vignette"
+#      als eigene Kombination genannt hat:
+#
+#          auflageReihe    "1|0.2|0.65|0.35"   mal bildSchleier,
+#                                              tiefe*, kante*
+#          vignetteReihe   "1|0|0.55|0.25"     mal bildVignette
+#          auflageWechsel  1                   nach Tagesnummer
+#
+#      Vier Eintraege, nicht drei. Drei waere die Spaltenzahl des
+#      Rasters — dann stuende in jeder Spalte immer derselbe Wert und
+#      es gaebe senkrechte Streifen. Vier ist teilerfremd zu drei, der
+#      Rhythmus laeuft diagonal:
+#
+#          T 1 A0.2   T 2 A0.65  T 3 A0.35
+#          T 4 A1     T 5 A0.2   T 6 A0.65
+#          T 7 A0.35  T 8 A1     T 9 A0.2
+#
+#      Jede Spalte traegt alle vier Staerken. Neben jeder offenen
+#      Kachel liegt eine geschlossene.
+#
+#      NEBENWIRKUNG, absichtlich: saettigungReihe hat zwei Eintraege,
+#      auflageReihe vier. Das laeuft im Gleichtakt — die Farbkacheln
+#      bekommen immer die leichte Auflage, die Schwarzweisskacheln
+#      immer die schwere. Sieht gut aus (offen und farbig gegen
+#      geschlossen und grau), ist aber eine feste Kopplung. Ein
+#      fuenfter Eintrag in einer der beiden Reihen loest sie.
+#
+#      BS_REIHE ist die Mechanik aus 116, jetzt als eigene Funktion:
+#      Tagesnummer wenn vorhanden, sonst Hash. Ohne Reihe im Aufsatz
+#      kommt 1 zurueck und nichts aendert sich — der warme Feed
+#      bleibt unberuehrt.
+
+P.append(('const BS_MISCHBAR=',
+ 'const BS_REIHE=(zl,zw,zt,zs)=>{try{const za=String(zl||"").split("|").filter(zx=>zx!=="");'
+ 'if(!za.length)return null;'
+ 'if(zw&&typeof zt=="number"){const zv=parseFloat(za[((zt%za.length)+za.length)%za.length]);return isNaN(zv)?null:zv}'
+ 'const zq=String(zs||"");let zh=0;for(let zi=0;zi<zq.length;zi+=1)zh=(zh*31+zq.charCodeAt(zi))%99991;'
+ 'const zv=parseFloat(za[(zh*7+5)%za.length]);return isNaN(zv)?null:zv}catch(zz){return null}};'
+ 'const BS_MISCHBAR=',
+ "BS_REIHE: eine Reihe je Kachel lesen", 1))
+
+P.append(('}catch(zz){return BS_KACHEL.bildTon}})();',
+ '}catch(zz){return BS_KACHEL.bildTon}})();'
+ 'const zSaat=String(t.background||"")+"|"+String(t.text||"");'
+ 'const zAuf=(()=>{const zv=BS_REIHE(BS_KACHEL.auflageReihe,BS_KACHEL.auflageWechsel,t._tag,zSaat);return zv==null?1:zv})();'
+ 'const zVig=(()=>{const zv=BS_REIHE(BS_KACHEL.vignetteReihe,BS_KACHEL.auflageWechsel,t._tag,zSaat+"|v");return zv==null?1:zv})();',
+ "zAuf und zVig je Kachel", 1))
+
+P.append(('fill:`rgba(${zTon||"0,0,0"},${Et})`,selectable:!1});',
+ 'fill:`rgba(${zTon||"0,0,0"},${Et*zAuf})`,selectable:!1});',
+ "Schleier mal zAuf", 1))
+
+P.append(('colorStops:[{offset:0,color:`rgba(${zTon},${BS_KACHEL.tiefeOben})`},{offset:.45,color:`rgba(${zTon},${BS_KACHEL.tiefeMitte})`},{offset:1,color:`rgba(${zTon},${BS_KACHEL.tiefeUnten})`}]',
+ 'colorStops:[{offset:0,color:`rgba(${zTon},${BS_KACHEL.tiefeOben*zAuf})`},{offset:.45,color:`rgba(${zTon},${BS_KACHEL.tiefeMitte*zAuf})`},{offset:1,color:`rgba(${zTon},${BS_KACHEL.tiefeUnten*zAuf})`}]',
+ "Tiefe mal zAuf", 1))
+
+P.append(('colorStops:[{offset:0,color:`rgba(${zTon},${BS_KACHEL.kanteOben})`},{offset:.18,color:`rgba(${zTon},0.0)`},{offset:.82,color:`rgba(${zTon},0.0)`},{offset:1,color:`rgba(${zTon},${BS_KACHEL.kanteUnten})`}]',
+ 'colorStops:[{offset:0,color:`rgba(${zTon},${BS_KACHEL.kanteOben*zAuf})`},{offset:.18,color:`rgba(${zTon},0.0)`},{offset:.82,color:`rgba(${zTon},0.0)`},{offset:1,color:`rgba(${zTon},${BS_KACHEL.kanteUnten*zAuf})`}]',
+ "Kante mal zAuf", 1))
+
+P.append(('const zVi=Number(BS_KACHEL.bildVignette)||0;',
+ 'const zVi=(Number(BS_KACHEL.bildVignette)||0)*zVig;',
+ "Vignette mal zVig", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
