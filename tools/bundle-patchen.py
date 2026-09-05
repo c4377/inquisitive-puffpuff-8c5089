@@ -299,9 +299,9 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
- 'bildSchwarzpunkt:.07,bildVignette:.6,textGrundZiel:4,textGrundMax:1.8,auflageReihe:"1|0.2|0.65|0.35",vignetteReihe:"1|0|0.55|0.25",auflageWechsel:1,folgeFuss:.86,lagenReihe:"unten",textMitte:.58,textLageUnten:.80,textMesseOben:.52,nameZeigen:0,'
+ 'bildSchwarzpunkt:.07,bildVignette:.6,textGrundZiel:4,textGrundMax:1.8,auflageReihe:"1|0.2|0.65|0.35",vignetteReihe:"1|0|0.55|0.25",auflageWechsel:1,folgeFuss:.86,lagenReihe:"unten",textMitte:.58,textLageUnten:.80,textMesseOben:.60,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
- 'tiefeOben:0,tiefeMitte:0,tiefeKnick:.52,tiefeKnickUnten:.68,tiefeUnten:.45,kanteOben:.16,kanteUnten:.35,'
+ 'tiefeOben:0,tiefeMitte:.08,tiefeKnick:.60,tiefeKnickUnten:.999,tiefeUnten:.85,kanteOben:.16,kanteUnten:0,'
  'saumStaerke:0,bildSchleier:.06,'
  'nameFarbe:"#F2EFE9",schildGrund:"#F2EFE9",schildSchriftFarbe:"#171512"};')
 SCHALTER = 'if(typeof window<"u"&&window.BS_STIL==="dunkel")Object.assign(BS_KACHEL,BS_DUNKEL);'
@@ -3362,6 +3362,56 @@ P.append(('const zVig=(()=>{const zv=BS_REIHE(BS_KACHEL.vignetteReihe,BS_KACHEL.
 P.append(('if(zN>zAuf)zAuf=zN}}}catch(zz){}const ur=new Pe.fabric.Rect(',
  'if(zN>zAuf)zAuf=zN}}}catch(zz){}zAuf*=zSw;const ur=new Pe.fabric.Rect(',
  "Auflage folgt dem Regler, nach der Messung", 1))
+
+
+# 131 — Nachgemessen: unten ja, oben nein. Carina: "Ich glaube bei ihr
+#      ist oben und unten schwarzes Band."
+#
+#      Unten stimmt, oben nicht. Zeilenmedian je Kachel des Vorbilds,
+#      damit die Schrift nicht dazwischenfunkt, ueber die zwoelf
+#      sichtbaren Kacheln:
+#
+#          unterste 24 Zeilen   Mittel 5 bis 38, meist unter 30
+#          oberste 24 Zeilen    Kachel 1: 129, Kachel 2: 143,
+#                               Kachel 9: 209
+#
+#      Jede Kachel wird unten dunkel, keine einzige hat oben etwas,
+#      das nicht das Foto selbst waere. Die dunklen Oberkanten (3, 4,
+#      5, 6, 8) sind dunkle Fotos.
+#
+#      Und es ist kein Band mit Kante, sondern ein Verlauf. Kachel 1
+#      auf den letzten 60 Zeilen: 32, 29, 25, 21, 16, 12, 5, 3, 3, 3.
+#
+#      Ueber die sieben Kacheln, deren Foto dort hell genug ist, um
+#      den Abfall ueberhaupt zu sehen, auf den Wert bei 0,72
+#      bezogen — das ist die noetige Deckkraft:
+#
+#          Anteil  0,70  0,75  0,80  0,84  0,88  0,92  0,96  0,98
+#          Alpha   0,00  0,06  0,22  0,33  0,52  0,66  0,75  0,79
+#
+#      Also: bis etwa 0,73 nichts, dann fast gerade auf ~0,80 an der
+#      Unterkante. Unser Fuss lief flacher und begann frueher — bei
+#      0,75 lagen wir schon auf 0,45, wo das Vorbild 0,06 hat, und an
+#      der Unterkante nur auf 0,64.
+#
+#      Vier Zahlen, kein Code:
+#
+#          tiefeKnick       .52 -> .60     mit tiefeMitte .08 als
+#                                          kleinem Sockel, damit die
+#                                          erste Textzeile nicht voellig
+#                                          nackt steht
+#          tiefeKnickUnten  .68 -> .999    eine gerade Rampe statt
+#                                          Plateau
+#          tiefeUnten       .45 -> .85
+#          kanteUnten       .35 -> 0       die Rampe macht das allein
+#
+#      textMesseOben wandert mit, .52 auf .60: die Messung aus 128
+#      darf nur dort suchen, wo der Verlauf ueberhaupt wirkt.
+#
+#      Nachgerechnet ueber die neun Kacheln: schlechtester Kontrast
+#      unterm Text 4,1:1 (vorher 5,2:1), Mittel 8,2:1. Das Band ist
+#      deutlich staerker und der Text bleibt trotzdem gut lesbar,
+#      weil beides jetzt an derselben Stelle sitzt.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

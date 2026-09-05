@@ -4369,3 +4369,53 @@ In Chromium durchgespielt: Regler da, Startwert 100 %, nach dem
 Schieben auf 60 steht `0.6` im Speicher, `window.BS_SCHWARZ` ist 0.6
 und der Regler zeigt wieder 60 %. Zurueck auf 100 loescht den Eintrag.
 Keine Seitenfehler.
+
+## 131 — Nachgemessen: unten ja, oben nein
+
+*"Ich glaube bei ihr ist oben und unten schwarzes Band."*
+
+**Unten stimmt, oben nicht.** Zeilenmedian je Kachel des Vorbilds
+(Median, damit die Schrift nicht dazwischenfunkt), ueber die zwoelf
+sichtbaren Kacheln:
+
+| | |
+|---|---|
+| unterste 24 Zeilen | Mittel **5 bis 38**, meist unter 30 |
+| oberste 24 Zeilen | Kachel 1: **129**, Kachel 2: **143**, Kachel 9: **209** |
+
+Jede Kachel wird unten dunkel, **keine einzige** hat oben etwas, das
+nicht das Foto selbst waere. Die dunklen Oberkanten (Kacheln 3, 4, 5, 6,
+8) sind dunkle Fotos.
+
+### Und es ist kein Band mit Kante, sondern ein Verlauf
+
+Kachel 1 auf den letzten 60 Zeilen: 32, 29, 25, 21, 16, 12, 5, 3, 3, 3.
+
+Ueber die sieben Kacheln, deren Foto dort hell genug ist, um den Abfall
+ueberhaupt zu sehen — bezogen auf den Wert bei 0,72, also die noetige
+Deckkraft:
+
+| Anteil | 0,70 | 0,75 | 0,80 | 0,84 | 0,88 | 0,92 | 0,96 | 0,98 |
+|---|---|---|---|---|---|---|---|---|
+| Alpha | 0,00 | 0,06 | 0,22 | 0,33 | 0,52 | 0,66 | 0,75 | **0,79** |
+
+Bis etwa 0,73 nichts, dann fast gerade auf ~0,80 an der Unterkante.
+Unser Fuss lief **flacher und begann frueher**: bei 0,75 lagen wir schon
+auf 0,45, wo das Vorbild 0,06 hat — und an der Unterkante nur auf 0,64.
+
+### Vier Zahlen, kein Code
+
+| | von | auf | |
+|---|---|---|---|
+| `tiefeKnick` | .52 | **.60** | mit `tiefeMitte` .08 als kleinem Sockel, damit die erste Textzeile nicht voellig nackt steht |
+| `tiefeKnickUnten` | .68 | **.999** | eine gerade Rampe statt Plateau |
+| `tiefeUnten` | .45 | **.85** | |
+| `kanteUnten` | .35 | **0** | die Rampe macht das allein |
+
+`textMesseOben` wandert mit, .52 auf .60: die Messung aus 128 darf nur
+dort suchen, wo der Verlauf ueberhaupt wirkt.
+
+Nachgerechnet ueber die neun Kacheln: schlechtester Kontrast unterm Text
+**4,1:1** (vorher 5,2:1), Mittel 8,2:1. Das Band ist deutlich staerker
+und der Text bleibt trotzdem gut lesbar, weil beides jetzt an derselben
+Stelle sitzt.
