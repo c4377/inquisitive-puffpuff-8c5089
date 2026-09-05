@@ -284,7 +284,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'grundB:"#0E0D0C",schriftB:"#F2EFE9",'
  'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
- 'deckblattGewicht:"400",deckblattGroesse:86,fotoGroesse:55.7,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.62,'
+ 'deckblattGewicht:"400",deckblattGroesse:86,fotoGroesse:55.7,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.651,'
  'schriftart:"Playfair Display",unterSchrift:"Shadows Into Light",gewicht:"400",'
  'betontGewicht:"700",handAnteil:1.15,handGroesse:0.9486,folgeZweitHand:1,'
  'unterGewicht:"400",unterVerhaeltnis:.62,laufweite:0,fotoLaufweite:-20,'
@@ -3921,6 +3921,33 @@ P.append(('QeZ=$e?((zVS&&BS_KACHEL.versalFamilie)||(t.folienRolle&&t.folienRolle
 P.append(('*((zVS||!(t.folienRolle&&t.folienRolle!=="deckblatt"))?(Number(BS_KACHEL.handGroesse)||1):1)):qe',
  '*((zVS||BS_KACHEL.folgeZweitHand||!(t.folienRolle&&t.folienRolle!=="deckblatt"))?(Number(BS_KACHEL.handGroesse)||1):1)):qe',
  "handGroesse gilt dort mit", 1))
+
+
+# 145 — Die Unterteile fuenf Prozent groesser. Carina: "Noch Groesse
+#      auch die Unterteile ca 5% mehr".
+#
+#      Zwei Zahlen kaemen dafuer in Frage, und nur eine ist richtig.
+#
+#      handGroesse waere falsch: sie skaliert seit 134 auch die
+#      Versalkacheln, denn dort steht
+#      versalGroesse * handGroesse. Die ganze Kachel waere
+#      mitgewachsen, obwohl nur die Unterteile gemeint waren.
+#
+#      zweitAnteil trifft genau: er gilt fuer den zweiten Block auf
+#      Deckblatt und Folgeslide. Auf Versalkacheln gewinnt in
+#      derselben Zeile versalZweitAnteil (1), die bleiben also
+#      unberuehrt.
+#
+#          .62 -> .651
+#
+#      Nachgerechnet:
+#
+#                            vorher  nachher
+#          Deckblatt           50,6     53,1   +4,9 %
+#          Folgeslide          32,8     34,4   +4,9 %
+#          Versalkachel        94,9     94,9   unveraendert
+#
+#      Die Kopfzeilen bleiben, wo sie sind: 86 und 55,7.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

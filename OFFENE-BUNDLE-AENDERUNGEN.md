@@ -4950,3 +4950,25 @@ In node durchgerechnet:
 
 Die Versalkacheln bleiben unberuehrt: dort greift der erste Zweig,
 `versalFamilie`.
+
+## 145 — Die Unterteile fuenf Prozent groesser
+
+Zwei Zahlen kaemen dafuer in Frage, und nur eine ist richtig.
+
+**`handGroesse` waere falsch:** sie skaliert seit 134 auch die
+Versalkacheln, denn dort steht `versalGroesse · handGroesse`. Die ganze
+Kachel waere mitgewachsen, obwohl nur die Unterteile gemeint waren.
+
+**`zweitAnteil` trifft genau:** er gilt fuer den zweiten Block auf
+Deckblatt und Folgeslide. Auf Versalkacheln gewinnt in derselben Zeile
+`versalZweitAnteil` (1) — die bleiben unberuehrt.
+
+    .62 → .651
+
+| | vorher | nachher | |
+|---|---|---|---|
+| Deckblatt | 50,6 | **53,1** | +4,9 % |
+| Folgeslide | 32,8 | **34,4** | +4,9 % |
+| Versalkachel | 94,9 | 94,9 | unveraendert |
+
+Die Kopfzeilen bleiben, wo sie sind: 86 und 55,7.
