@@ -284,7 +284,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'grundB:"#0E0D0C",schriftB:"#F2EFE9",'
  'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
- 'deckblattGewicht:"400",deckblattGroesse:86,fotoGroesse:55.7,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.651,'
+ 'deckblattGewicht:"400",deckblattGroesse:98.9,fotoGroesse:64.1,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.651,'
  'schriftart:"Playfair Display",unterSchrift:"Shadows Into Light",gewicht:"400",'
  'betontGewicht:"700",handAnteil:1.15,handGroesse:0.9486,folgeZweitHand:1,'
  'unterGewicht:"400",unterVerhaeltnis:.62,laufweite:0,fotoLaufweite:-20,'
@@ -3948,6 +3948,47 @@ P.append(('*((zVS||!(t.folienRolle&&t.folienRolle!=="deckblatt"))?(Number(BS_KAC
 #          Versalkachel        94,9     94,9   unveraendert
 #
 #      Die Kopfzeilen bleiben, wo sie sind: 86 und 55,7.
+
+
+# 146 — Noch einmal 15 Prozent, Kopf und Unterzeile zusammen. Carina
+#      hat die App neben eine Vorlage gehalten: "Nein so gross".
+#
+#      Beide Bilder ausgemessen, Zeilenabstand als Mass (der ist
+#      sauber zu finden, die Glyphenbreite nicht — auf ihrem Foto ist
+#      die Wand fast so hell wie die Schrift):
+#
+#                        Kopf   Unterzeile   Verhaeltnis
+#          App          109,5        56,5         0,516
+#          Vorlage       48,5        25,0         0,515
+#
+#      Das VERHAELTNIS stimmt also schon, auf ein Tausendstel. Es geht
+#      nur um die Groesse im Ganzen. Und die haengt davon ab, worauf
+#      man bezieht:
+#
+#                        auf die Hoehe   auf die Breite
+#          App                  7,90 %          9,86 %
+#          Vorlage              9,08 %         12,31 %
+#          Faktor                1,149           1,252
+#
+#      Die Vorlage hat 394 zu 534, also 0,738 — weder 4:5 noch 3:4.
+#      Ein Ausschnitt. Deshalb sind beide Bezuege angreifbar, und ich
+#      habe den KLEINEREN genommen: 15 Prozent statt 25.
+#
+#      Nicht mit dem Zeilenumbruch zu erklaeren: beide brechen den
+#      Satz gleich (3 Zeilen Kopf, 5 Zeilen Unterzeile). Das spricht
+#      dafuer, dass sich das Verhaeltnis Schrift zu Textspalte kaum
+#      unterscheidet — noch ein Grund, vorsichtig zu sein.
+#
+#          deckblattGroesse  86  -> 98,9
+#          fotoGroesse     55,7  -> 64,1
+#
+#      zweitAnteil und handGroesse bleiben, damit die Unterzeile
+#      diesmal MITWAECHST: 53,1 auf 61,1. Sie hat beides gemeint.
+#
+#      VORBEHALT: der Zeichner verkleinert, bis der Block in textHoehe
+#      und in die Textspalte passt. Wo dieser Deckel schon greift,
+#      aendert die Zahl nichts — dann waere textHoehe oder der
+#      Seitenrand der Hebel, nicht die Schriftgroesse.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

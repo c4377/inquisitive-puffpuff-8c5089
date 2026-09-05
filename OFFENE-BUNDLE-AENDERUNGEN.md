@@ -4972,3 +4972,44 @@ Deckblatt und Folgeslide. Auf Versalkacheln gewinnt in derselben Zeile
 | Versalkachel | 94,9 | 94,9 | unveraendert |
 
 Die Kopfzeilen bleiben, wo sie sind: 86 und 55,7.
+
+## 146 — Noch einmal 15 Prozent, Kopf und Unterzeile zusammen
+
+Beide Bilder ausgemessen, **Zeilenabstand** als Mass — der ist sauber zu
+finden, die Glyphenbreite nicht: auf ihrem Foto ist die Wand fast so
+hell wie die Schrift.
+
+| | Kopf | Unterzeile | Verhaeltnis |
+|---|---|---|---|
+| App | 109,5 | 56,5 | **0,516** |
+| Vorlage | 48,5 | 25,0 | **0,515** |
+
+**Das Verhaeltnis stimmt schon** — auf ein Tausendstel. Es geht nur um
+die Groesse im Ganzen. Und die haengt davon ab, worauf man bezieht:
+
+| | auf die Hoehe | auf die Breite |
+|---|---|---|
+| App | 7,90 % | 9,86 % |
+| Vorlage | 9,08 % | 12,31 % |
+| **Faktor** | **1,149** | **1,252** |
+
+Die Vorlage hat 394 zu 534, also **0,738** — weder 4:5 noch 3:4, also
+ein Ausschnitt. Deshalb sind beide Bezuege angreifbar, und ich habe den
+**kleineren** genommen: 15 statt 25 Prozent.
+
+Dafuer spricht noch etwas: beide brechen den Satz **gleich** (3 Zeilen
+Kopf, 5 Zeilen Unterzeile). Wenn sich Schrift zu Textspalte um 25
+Prozent unterschiede, waeren die Umbrueche kaum identisch.
+
+| | von | auf |
+|---|---|---|
+| `deckblattGroesse` | 86 | **98,9** |
+| `fotoGroesse` | 55,7 | **64,1** |
+
+`zweitAnteil` und `handGroesse` bleiben — die Unterzeile **waechst
+diesmal mit**: 53,1 → 61,1.
+
+**Vorbehalt:** der Zeichner verkleinert, bis der Block in `textHoehe`
+und in die Textspalte passt. Wo dieser Deckel schon greift, aendert die
+Zahl nichts — dann waere `textHoehe` oder der Seitenrand der Hebel, nicht
+die Schriftgroesse.
