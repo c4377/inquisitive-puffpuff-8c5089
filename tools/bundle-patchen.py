@@ -284,7 +284,7 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'grundB:"#0E0D0C",schriftB:"#F2EFE9",'
  'deckblattFamilie:"DM Serif Display",fotoSchrift:"DM Serif Display",'
- 'deckblattGewicht:"400",zweiteFamilie:"Shadows Into Light",zweitAnteil:.62,'
+ 'deckblattGewicht:"400",zweiteFamilie:"Nothing You Could Do",zweitAnteil:.62,'
  'schriftart:"DM Serif Display",unterSchrift:"Shadows Into Light",gewicht:"400",'
  'betontGewicht:"700",handAnteil:1.15,handGroesse:1.2,'
  'unterGewicht:"400",unterVerhaeltnis:.62,laufweite:0,'
@@ -3700,6 +3700,48 @@ P.append(('v.jsxs(Qa,{to:h.path,className:`flex items-center space-x-2 px-3 py-2
 P.append(('v.jsxs(Qa,{to:h.path,onClick:u,className:`flex items-center space-x-4 px-4 py-4',
  'v.jsxs(h.extern?"a":Qa,{[h.extern?"href":"to"]:h.path,onClick:u,className:`flex items-center space-x-4 px-4 py-4',
  "schmale Ansicht: externer Eintrag als echter Verweis", 1))
+
+
+# 139 — Andere Handschrift fuer die Unterzeile. Carina hat aus zwoelf
+#      Proben "Nothing You Could Do" gewaehlt.
+#
+#      Es sind zwei getrennte Felder, deshalb ging es ohne Umbau:
+#
+#          zweiteFamilie   die Unterzeile unter der Serife, und ueber
+#                          handFamilie||zweiteFamilie auch einzelne
+#                          handgeschriebene Woerter mitten im Satz
+#          versalFamilie   die Versalkacheln — bleibt Shadows Into Light
+#
+#      Die Datei liegt im Projekt, nicht bei Google: der Zeichner MISST
+#      Texte auf dem Canvas, und ueber das Netz geladen waere die
+#      Schrift beim ersten Bild manchmal noch nicht da. zweiteFamilie
+#      steht ohnehin schon in der Vorlade-Liste des Bundles, es war
+#      also nur die Datei und eine Zeile @font-face.
+#
+#      DABEI EINEN ALTEN FEHLER GEFUNDEN. Die neue Schrift war
+#      angemeldet, wurde aber nicht benutzt — im Browser gemessen:
+#      dieselben Pixel wie die Ersatzschrift. Grund: ich hatte den
+#      Kommentar davor als HTML-Kommentar geschrieben, und der steht
+#      in einem <style>-Block. Fuer den CSS-Parser ist der Text
+#      zwischen den Klammern gewoehnlicher Unsinn; er verschluckt sich
+#      und wirft die naechste Regel gleich mit weg.
+#
+#      In den beiden index.html standen VIER solcher Kommentare, und
+#      der erste sass direkt vor Montserrat. Nachgezaehlt, welche
+#      erklaerten Familien der Browser wirklich kennt:
+#
+#          vorher   53 Schriften, es fehlte: Montserrat
+#          nachher  57 Schriften, es fehlt: keine
+#
+#      Montserrat ist die Schrift der Folgeslides im warmen Feed. Sie
+#      kam bisher ueber den Google-Link, deshalb ist es nie
+#      aufgefallen — die oertliche Datei, wegen der sie ueberhaupt hier
+#      liegt, hat nie gegriffen. Jetzt schon.
+#
+#      Alle vier Kommentare sind jetzt CSS-Kommentare. Nachgemessen
+#      auf beiden Seiten: 57 Schriften, keine fehlt, und Montserrat,
+#      Shadows Into Light und Nothing You Could Do zeichnen jeweils
+#      andere Pixel als die Ersatzschrift.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

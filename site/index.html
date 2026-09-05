@@ -27,41 +27,51 @@
          seine eigene Tagesnummer und nimmt sonst den Wert oben. */
       var g=JSON.parse(localStorage.getItem("BS_SCHWARZ_TAG")||"null");
       if(g&&typeof g==="object")window.BS_SCHWARZ_TAG=g;}catch(e){}</script>
-    <script type="module" crossorigin src="./assets/index-B5karten198.js"></script>
+    <script type="module" crossorigin src="./assets/index-B5karten199.js"></script>
     <!-- Montserrat liegt hier im Projekt, nicht bei Google. Der Zeichner misst
          Texte auf dem Canvas und braucht die Schrift sofort; ueber das Netz
          geladen waere sie beim ersten Bild manchmal noch nicht da. Alle
          anderen Schriften der App liegen aus demselben Grund unter /fonts. -->
     <style>
-      <!-- EINE Datei fuer alle Schnitte von 100 bis 900. Vorher lagen hier
+      /* EINE Datei fuer alle Schnitte von 100 bis 900. Vorher lagen hier
            nur 400 und 700 als feste Schnitte; Light 300 - der Schnitt der
            Marke - haette ueber das Netz kommen muessen und waere beim ersten
            Zeichnen manchmal noch nicht da gewesen. Mit der Variablen kann
-           kein Schnitt mehr fehlen. -->
+           kein Schnitt mehr fehlen. */
       @font-face{font-family:Montserrat;src:url(./fonts/Montserrat-Variable.woff2) format("woff2");font-weight:100 900;font-style:normal;font-display:block}
       @font-face{font-family:"Bodoni Moda";src:url(./fonts/BodoniModa-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
       @font-face{font-family:"Bodoni Moda";src:url(./fonts/BodoniModa-Bold.woff2) format("woff2");font-weight:700;font-style:normal;font-display:block}
       @font-face{font-family:"DM Serif Display";src:url(./fonts/DMSerifDisplay-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
       @font-face{font-family:"DM Serif Display";src:url(./fonts/DMSerifDisplay-Italic.woff2) format("woff2");font-weight:400;font-style:italic;font-display:block}
-      <!-- Roxborough CF. Wie Nohemi: von Connary Fagen, kostenpflichtig,
+      /* Roxborough CF. Wie Nohemi: von Connary Fagen, kostenpflichtig,
            darf nicht mitgeliefert werden. Anmeldung steht, es fehlt nur
            die Datei. Solange keine da ist, bleibt die Handschrift
-           Shadows Into Light und es aendert sich nichts. -->
+           Shadows Into Light und es aendert sich nichts. */
       @font-face{font-family:"Roxborough CF";src:url(./fonts/RoxboroughCF-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
       @font-face{font-family:"Roxborough CF";src:url(./fonts/RoxboroughCF-Italic.woff2) format("woff2");font-weight:400;font-style:italic;font-display:block}
       @font-face{font-family:"Roxborough CF";src:url(./fonts/RoxboroughCF-Bold.woff2) format("woff2");font-weight:700;font-style:normal;font-display:block}
-      <!-- Nohemi. Die Dateien liegen NICHT im Projekt: Nohemi ist von
+      /* Nohemi. Die Dateien liegen NICHT im Projekt: Nohemi ist von
            Pangram Pangram und fuer den kommerziellen Gebrauch
            kostenpflichtig, ich darf sie nicht mitliefern. Sobald die
            lizenzierten Dateien unter diesen Namen in site/fonts/
            liegen, greift die Schrift von selbst — die Anmeldung steht
            schon hier, es fehlt nur die Datei. Solange keine da ist,
-           laeuft alles unveraendert weiter. -->
+           laeuft alles unveraendert weiter. */
       @font-face{font-family:Nohemi;src:url(./fonts/Nohemi-Light.woff2) format("woff2");font-weight:300;font-style:normal;font-display:block}
       @font-face{font-family:Nohemi;src:url(./fonts/Nohemi-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
       @font-face{font-family:Nohemi;src:url(./fonts/Nohemi-Medium.woff2) format("woff2");font-weight:500;font-style:normal;font-display:block}
       @font-face{font-family:Nohemi;src:url(./fonts/Nohemi-Bold.woff2) format("woff2");font-weight:700;font-style:normal;font-display:block}
       @font-face{font-family:"Shadows Into Light";src:url(./fonts/ShadowsIntoLight.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
+      /* Nothing You Could Do von Kimberly Geswein, SIL Open Font License
+         (Lizenztext liegt daneben). Liegt hier im Projekt und nicht bei
+         Google, weil der Zeichner Texte auf dem Canvas MISST: ueber das
+         Netz geladen waere die Schrift beim ersten Bild manchmal noch
+         nicht da und er wuerde mit der Ersatzschrift rechnen.
+         Alle Kommentare hier sind CSS-Kommentare. HTML-Kommentare gehen
+         in einem style-Block schief: der CSS-Parser liest ihren Text als
+         gewoehnliche Zeichen, verschluckt sich und wirft die naechste
+         Regel gleich mit weg. Genau daran hing Montserrat jahrelang. */
+      @font-face{font-family:"Nothing You Could Do";src:url(./fonts/NothingYouCouldDo.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
       @font-face{font-family:Prata;src:url(./fonts/Prata-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
       @font-face{font-family:Italiana;src:url(./fonts/Italiana-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
       @font-face{font-family:Marcellus;src:url(./fonts/Marcellus-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
