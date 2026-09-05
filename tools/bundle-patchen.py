@@ -299,7 +299,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
- 'bildSchwarzpunkt:.07,bildVignette:.6,auflageReihe:"1|0.2|0.65|0.35",vignetteReihe:"1|0|0.55|0.25",auflageWechsel:1,folgeFuss:.86,textMitte:.73,nameZeigen:0,'
+ 'bildSchwarzpunkt:.07,bildVignette:.6,textGrundZiel:4,textGrundMax:1.8,auflageReihe:"1|0.2|0.65|0.35",vignetteReihe:"1|0|0.55|0.25",auflageWechsel:1,folgeFuss:.86,textMitte:.73,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
  'tiefeOben:0,tiefeMitte:0,tiefeKnick:.52,tiefeKnickUnten:.68,tiefeUnten:.45,kanteOben:.16,kanteUnten:.35,'
  'saumStaerke:0,bildSchleier:.06,'
@@ -3143,7 +3143,7 @@ P.append(('const BS_MISCHBAR=',
 P.append(('}catch(zz){return BS_KACHEL.bildTon}})();',
  '}catch(zz){return BS_KACHEL.bildTon}})();'
  'const zSaat=String(t.background||"")+"|"+String(t.text||"");'
- 'const zAuf=(()=>{const zv=BS_REIHE(BS_KACHEL.auflageReihe,BS_KACHEL.auflageWechsel,t._tag,zSaat);return zv==null?1:zv})();'
+ 'let zAuf=(()=>{const zv=BS_REIHE(BS_KACHEL.auflageReihe,BS_KACHEL.auflageWechsel,t._tag,zSaat);return zv==null?1:zv})();'
  'const zVig=(()=>{const zv=BS_REIHE(BS_KACHEL.vignetteReihe,BS_KACHEL.auflageWechsel,t._tag,zSaat+"|v");return zv==null?1:zv})();',
  "zAuf und zVig je Kachel", 1))
 
@@ -3209,6 +3209,54 @@ P.append(('const zVi=Number(BS_KACHEL.bildVignette)||0;',
 #      In fabric 5.5.2 der laufenden App nachgemessen, ob vier Stufen
 #      mit eigenen Offsets so fallen wie gerechnet — bei 0,52 noch
 #      255, bei 0,60 dann 200 (gerechnet 201), ab 0,68 konstant 146.
+
+
+# 128 — Die Auflage richtet sich nach dem Foto. Carina: "Es gibt hier
+#      einige die passen aber es gibt welche da geht der Text unter
+#      wegen den Farben und der fehlenden Tiefe."
+#
+#      Der Rhythmus aus 126 wuerfelt die Staerke nach der Tagesnummer
+#      — er weiss nichts darueber, WAS auf dem Foto liegt. Auf einer
+#      hellen Wand mit Faktor 0,2 steht weisse Schrift auf 1,2:1. Das
+#      ist die Ursache, nicht die Zahl.
+#
+#      Jetzt wird vor dem Zeichnen nachgesehen. Auf einer 96 Pixel
+#      breiten Miniatur wird das Band, in dem der Text landet
+#      (textMesseOben .55 bis textMesseUnten .92, mittlere 80 Prozent
+#      der Breite), durch den Schwarzpunkt gerechnet, und dann sucht
+#      eine Halbierung den KLEINSTEN Faktor, bei dem das 95. Quantil
+#      des Bandes noch textGrundZiel (4:1) gegen Weiss haelt.
+#
+#      Gerechnet wird mit genau der Verlaufsform, die spaeter
+#      gezeichnet wird — dieselben vier Stufen, dieselbe Kante. Keine
+#      Naeherung ueber einen Mittelwert: bei einem Verlauf, der erst
+#      bei 0,52 anfaengt, sagt ein Mittelwert nichts ueber die obere
+#      Textzeile.
+#
+#      zAuf = max(Rhythmus, gemessen). Der Rhythmus bleibt also die
+#      Untergrenze fuer dunkle Fotos, und helle bekommen so viel, wie
+#      sie brauchen. textGrundMax 1.8 deckelt nach oben.
+#
+#      Ueber die neun Kacheln, mit aus den Kachelbildern
+#      zurueckgerechneten Fotos:
+#
+#                          schlechteste  Mittel  mittlerer Faktor
+#          nur Rhythmus         1,2:1     2,7:1        0,55
+#          mit Messung          2,7:1     4,5:1        1,22
+#
+#      Der Messblock laeuft in einer eigenen Klammer mit try/catch:
+#      schlaegt getImageData fehl, bleibt es beim Rhythmus. Ohne
+#      textGrundZiel im Aufsatz passiert gar nichts.
+#
+#      In Chromium mit genau diesem Block gegen die neun Bilder
+#      laufen lassen: keine Fehler, Faktoren monoton, dunkle Kacheln
+#      bleiben beim Rhythmus (k1 0,20 bleibt 0,20), helle steigen
+#      (k5 0,20 auf 1,17).
+
+P.append(('const ur=new Pe.fabric.Rect(',
+ 'try{const zZiel=Number(BS_KACHEL.textGrundZiel)||0;if(zZiel>0&&t.background){const zel=me.getElement&&me.getElement();if(zel&&zel.width){const zbr=96,zsk=Math.min(1,zbr/Math.max(zel.width,zel.height));const zc=document.createElement("canvas");zc.width=Math.max(8,Math.round(zel.width*zsk));zc.height=Math.max(8,Math.round(zel.height*zsk));const zx=zc.getContext("2d",{willReadFrequently:!0});zx.drawImage(zel,0,0,zc.width,zc.height);const zo=Math.floor(zc.height*(BS_KACHEL.textMesseOben==null?.55:BS_KACHEL.textMesseOben)),zu=Math.min(zc.height,Math.ceil(zc.height*(BS_KACHEL.textMesseUnten==null?.92:BS_KACHEL.textMesseUnten))),zli=Math.floor(zc.width*.1),zbre=Math.max(1,Math.ceil(zc.width*.8));const zdd=zx.getImageData(zli,zo,zbre,Math.max(1,zu-zo)).data;const zPu=Number(BS_KACHEL.bildSchwarzpunkt)||0,zgg=1-zPu;const zTa=String(zTon||"13,13,13").split(",").map(zv2=>parseFloat(zv2)||0);const zTl=.2126*(zTa[0]||13)+.7152*(zTa[1]||13)+.0722*(zTa[2]||13);const zPk=[],zYy=[];for(let zi=0,zj=0;zi<zdd.length;zi+=4,zj++){let zL=.2126*zdd[zi]+.7152*zdd[zi+1]+.0722*zdd[zi+2];if(zPu>0)zL=255*Math.max(0,Math.min(1,1-Math.min(1,(1-zL/255)/zgg)));zPk.push(zL);zYy.push((zo+Math.floor(zj/zbre))/zc.height)}const zSt=[[0,Number(BS_KACHEL.tiefeOben)||0],[BS_KACHEL.tiefeKnick==null?.45:Number(BS_KACHEL.tiefeKnick),Number(BS_KACHEL.tiefeMitte)||0],[BS_KACHEL.tiefeKnickUnten==null?.999:Number(BS_KACHEL.tiefeKnickUnten),Number(BS_KACHEL.tiefeUnten)||0],[1,Number(BS_KACHEL.tiefeUnten)||0]];const zIp=zy=>{for(let zi=1;zi<zSt.length;zi+=1){if(zy<=zSt[zi][0]){const zx0=zSt[zi-1][0],zy0=zSt[zi-1][1],zx1=zSt[zi][0],zy1=zSt[zi][1];return zx1===zx0?zy1:zy0+(zy1-zy0)*(zy-zx0)/(zx1-zx0)}}return zSt[zSt.length-1][1]};const zSchl=Number(BS_KACHEL.bildSchleier)||0,zKo=Number(BS_KACHEL.kanteOben)||0,zKu=Number(BS_KACHEL.kanteUnten)||0;const zAl=(zy,zf)=>{const zt2=zIp(zy)*zf,zk2=zy<=.18?zKo*zf*(1-zy/.18):(zy>=.82?zKu*zf*((zy-.82)/.18):0);return 1-(1-zSchl*zf)*(1-zt2)*(1-zk2)};const zQu=BS_KACHEL.textGrundQuantil==null?.95:Number(BS_KACHEL.textGrundQuantil);const zKn=zf=>{const zA2=[];for(let zi=0;zi<zPk.length;zi+=1){const za=zAl(zYy[zi],zf);zA2.push(zPk[zi]*(1-za)+zTl*za)}zA2.sort((za,zb)=>za-zb);const zv=zA2[Math.floor((zA2.length-1)*zQu)]/255,zY=zv<=.04045?zv/12.92:Math.pow((zv+.055)/1.055,2.4);return 1.05/(zY+.05)};const zMx=Number(BS_KACHEL.textGrundMax)||1.8;let zN=0;if(zKn(0)<zZiel){if(zKn(zMx)<zZiel)zN=zMx;else{let zlo=0,zhi=zMx;for(let zi=0;zi<16;zi+=1){const zm=(zlo+zhi)/2;zKn(zm)>=zZiel?zhi=zm:zlo=zm}zN=zhi}}if(zN>zAuf)zAuf=zN}}}catch(zz){}'
+ 'const ur=new Pe.fabric.Rect(',
+ "Grund unterm Text messen und die Auflage anheben", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

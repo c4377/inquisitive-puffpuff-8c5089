@@ -4249,3 +4249,47 @@ den Rest zu senken:
 In fabric 5.5.2 der laufenden App nachgemessen, ob vier Stufen mit
 eigenen Offsets so fallen wie gerechnet: bei 0,52 noch 255, bei 0,60
 dann 200 (gerechnet 201), ab 0,68 konstant 146.
+
+## 128 — Die Auflage richtet sich nach dem Foto
+
+*"Es gibt hier einige die passen aber es gibt welche da geht der Text
+unter wegen den Farben und der fehlenden Tiefe."*
+
+Der Rhythmus aus 126 setzt die Staerke nach der **Tagesnummer** — er
+weiss nichts darueber, **was** auf dem Foto liegt. Auf einer hellen Wand
+mit Faktor 0,2 steht weisse Schrift auf **1,2:1**. Das ist die Ursache,
+nicht die Zahl.
+
+### Vor dem Zeichnen nachsehen
+
+Auf einer 96 Pixel breiten Miniatur wird das Band, in dem der Text
+landet (`textMesseOben` .55 bis `textMesseUnten` .92, mittlere 80 % der
+Breite), durch den Schwarzpunkt gerechnet. Dann sucht eine Halbierung
+den **kleinsten** Faktor, bei dem das 95. Quantil des Bandes noch
+`textGrundZiel` (4:1) gegen Weiss haelt.
+
+Gerechnet wird mit **genau der Verlaufsform, die spaeter gezeichnet
+wird** — dieselben vier Stufen, dieselbe Kante. Kein Mittelwert: bei
+einem Verlauf, der erst bei 0,52 anfaengt, sagt ein Mittelwert nichts
+ueber die obere Textzeile.
+
+    zAuf = max(Rhythmus, gemessen)
+
+Der Rhythmus bleibt die **Untergrenze** fuer dunkle Fotos, helle
+bekommen so viel wie sie brauchen, `textGrundMax` 1.8 deckelt nach oben.
+
+### Gemessen ueber die neun Kacheln
+
+| | schlechteste | Mittel | mittlerer Faktor |
+|---|---|---|---|
+| nur Rhythmus | **1,2:1** | 2,7:1 | 0,55 |
+| mit Messung | **2,7:1** | 4,5:1 | 1,22 |
+
+Der Messblock laeuft in einer eigenen Klammer mit `try`/`catch`:
+schlaegt `getImageData` fehl, bleibt es beim Rhythmus. Ohne
+`textGrundZiel` im Aufsatz passiert gar nichts — der warme Feed bleibt
+unberuehrt.
+
+In Chromium mit genau diesem Block gegen die neun Bilder laufen lassen:
+keine Fehler, Faktoren monoton, dunkle Kacheln bleiben beim Rhythmus
+(k1 0,20 bleibt 0,20), helle steigen (k5 0,20 auf 1,17).
