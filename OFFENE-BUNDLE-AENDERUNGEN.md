@@ -5013,3 +5013,36 @@ diesmal mit**: 53,1 → 61,1.
 und in die Textspalte passt. Wo dieser Deckel schon greift, aendert die
 Zahl nichts — dann waere `textHoehe` oder der Seitenrand der Hebel, nicht
 die Schriftgroesse.
+
+## 147 — Der Rahmen war der Deckel, nicht die Schriftgroesse
+
+*„Es ist zu klein — der erlaubte Frame wirkt zu klein."* Damit hat sie den
+Vorbehalt aus 146 bestaetigt. Also nachgemessen, welche der Bremsen
+wirklich greift:
+
+| Bremse | Wert | ergibt |
+|---|---|---|
+| Textspalte `zbr` (mittig, fest verdrahtet) | .86 minus `umbruchRand` 12 | **83,6 %** der Kachelbreite |
+| Hoehe `textHoehe` | .70 | selten bindend |
+| zweiter Deckel `zF` = `r*(1-2*fotoRand)` | fotoRand .09 | **82 %** |
+
+**Es ist die Breite.** Und der zweite Deckel lag mit 82 Prozent sogar noch
+unter der Umbruchspalte — er hat den fertigen Block also nochmal
+geschrumpft, nach dem Umbruch.
+
+Die **laengste Zeile der Vorlage misst 86,3 %** der Kachelbreite. Mehr,
+als der Rahmen ueberhaupt zuliess. Die Schrift *konnte* nicht so gross
+werden, egal welche Zahl in `deckblattGroesse` steht.
+
+Damit die Spalte ueberhaupt einstellbar ist, liest `zbr` jetzt
+`spalteBreit` statt der festen `.86`. Der warme Feed hat den Wert nicht
+und faellt auf `.86` zurueck — dort aendert sich nichts.
+
+| | von | auf |
+|---|---|---|
+| `spalteBreit` | — (fest .86) | **.93** → Umbruchspalte 83,6 → 90,6 % |
+| `fotoRand` | .09 | **.035** → zweiter Deckel 82 → 93 % |
+| `textHoehe` | .70 | **.80** → damit die Hoehe nicht neu bremst |
+
+Wirksam **82 → 90,6 Prozent**, gut 10 Prozent mehr Platz bei gleichem
+Umbruch — zusaetzlich zu den 15 Prozent aus 146.

@@ -299,7 +299,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
- 'bildSchwarzpunkt:.07,bildVignette:.6,schwarzGrund:.2,textGrundZiel:4,textGrundMax:1.8,auflageReihe:"1|0.2|0.65|0.35",vignetteReihe:"1|0|0.55|0.25",auflageWechsel:1,folgeFuss:.86,lagenReihe:"unten",textMitte:.58,textLageUnten:.80,textMesseOben:.60,nameZeigen:0,'
+ 'bildSchwarzpunkt:.07,bildVignette:.6,schwarzGrund:.2,textGrundZiel:4,textGrundMax:1.8,auflageReihe:"1|0.2|0.65|0.35",vignetteReihe:"1|0|0.55|0.25",auflageWechsel:1,folgeFuss:.86,lagenReihe:"unten",spalteBreit:.93,fotoRand:.035,textHoehe:.80,textMitte:.58,textLageUnten:.80,textMesseOben:.60,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
  'tiefeOben:.55,tiefeKnickOben:.16,tiefeMitte:.08,tiefeKnick:.60,tiefeKnickUnten:.999,tiefeUnten:.85,kanteOben:0,kanteUnten:0,'
  'saumStaerke:0,bildSchleier:.06,'
@@ -613,8 +613,9 @@ P.append(('const y=["Playfair Display","Instrument Serif","Syne","Archivo","Mont
 #
 #      Beide Werte stehen jetzt im Block: spalteMin und textHoehe.
 P.append(('zbr=tt.ausrichtung==="links"?(zsp>0?Math.max(.42,Math.min(.82,zsp/3+.08)):.82):.86',
- 'zbr=tt.ausrichtung==="links"?(zsp>0?Math.max(BS_KACHEL.spalteMin||.42,Math.min(.82,zsp/3+.08)):.82):.86',
- "Mindestbreite der Textspalte aus dem Block", 1))
+ 'zbr=tt.ausrichtung==="links"?(zsp>0?Math.max(BS_KACHEL.spalteMin||.42,Math.min(.82,zsp/3+.08)):.82):'
+ '(BS_KACHEL.spalteBreit||.86)',
+ "Breite der Textspalte aus dem Block (min und max)", 1))
 P.append(('{const Je=n*(jr?.48:.74);let rt=0;for(;;){',
  'const SR=$e&&String(t.schild||"").trim()?r*((BS_KACHEL.schildGroesse||.03)*(BS_KACHEL.schildHoehe||2)'
  '+(BS_KACHEL.schildAbstand||.034)):0;'
@@ -3989,6 +3990,36 @@ P.append(('*((zVS||!(t.folienRolle&&t.folienRolle!=="deckblatt"))?(Number(BS_KAC
 #      und in die Textspalte passt. Wo dieser Deckel schon greift,
 #      aendert die Zahl nichts — dann waere textHoehe oder der
 #      Seitenrand der Hebel, nicht die Schriftgroesse.
+
+# 147  Der Rahmen war der Deckel, nicht die Schriftgroesse
+#
+#      "Es ist zu klein - der erlaubte Frame wirkt zu klein." Sie hat
+#      damit den Vorbehalt aus 146 bestaetigt. Nachgemessen, welche der
+#      beiden Bremsen wirklich greift:
+#
+#      1. Die Textspalte. zbr war fuer mittigen Satz fest .86, davon
+#         geht umbruchRand 12 ab: rund 83,6 Prozent der Kachelbreite.
+#      2. Die Hoehe. textHoehe .70 mal Zeilenzahl.
+#      3. Ein zweiter Deckel danach: zF verkleinert den fertigen Block
+#         auf r*(1-2*fotoRand), fotoRand .09 — also 82 Prozent.
+#
+#      Es ist die BREITE. Der zweite Deckel lag mit 82 Prozent sogar
+#      noch unter der Spalte, hat den Block also nochmal geschrumpft.
+#      Die laengste Zeile der Vorlage misst 86,3 Prozent der
+#      Kachelbreite — mehr, als der Rahmen ueberhaupt zuliess. Die
+#      Schrift KONNTE nicht so gross werden, egal welche Zahl in
+#      deckblattGroesse steht.
+#
+#      Damit die Spalte einstellbar wird, liest zbr jetzt spalteBreit
+#      statt der festen .86. Der warme Feed hat den Wert nicht und
+#      faellt auf .86 zurueck — dort aendert sich nichts.
+#
+#          spalteBreit  (neu)  .93   Umbruchspalte 83,6 -> 90,6 %
+#          fotoRand     .09 -> .035  zweiter Deckel  82  -> 93 %
+#          textHoehe    .70 -> .80   damit die Hoehe nicht neu bremst
+#
+#      Wirksam also 82 -> 90,6 Prozent, gut 10 Prozent mehr Platz bei
+#      gleichem Umbruch — zusaetzlich zu den 15 Prozent aus 146.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
