@@ -294,7 +294,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'geteilt:1,geteiltAnteil:25,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
  'deckblattSchnitte:"full|full|wide|full|wide|full",'
  'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20",tonNeutral:"13,13,13",'
- 'versalAnteil:30,versalFamilie:"Shadows Into Light",versalGewicht:"400",'
+ 'versalAnteil:15,versalFamilie:"Shadows Into Light",versalGewicht:"400",'
  'versalLaufweite:20,versalGroesse:.065,versalZweitAnteil:1,'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
@@ -3620,6 +3620,39 @@ P.append(('const zVS=(()=>{try{if(!$e||!BS_KACHEL.versalAnteil)return!1;const zs
 P.append(('const zGT=(BS_KACHEL.geteiltAnteil?(()=>{const zs=String(t.background||"")+"|"+String(t.text||"");',
  'const zGT=(BS_KACHEL.geteiltAnteil?(()=>{const zs=String(t.text||"");',
  "Teilung haengt am Text, nicht am Bild", 1))
+
+
+# 136 — Weniger Handschrift, mehr Serife. Carina: "Verteilst du bitte
+#      mehr dm serif als die Handschrift danke".
+#
+#      Die Handschrift uebernimmt eine ganze Kachel nur an einer
+#      Stelle: versalAnteil entscheidet, ob eine Fotokachel in
+#      Versalien gesetzt wird (versalFamilie, Shadows Into Light)
+#      statt in DM Serif. Sonst ist die Handschrift immer nur der
+#      zweite Block unter der Serifenzeile.
+#
+#      Der Regler tut, was draufsteht — 4000 Texte durchgerechnet:
+#
+#          versalAnteil 30 -> 31,6 %
+#          versalAnteil 20 -> 21,4 %
+#          versalAnteil 15 -> 16,2 %
+#          versalAnteil 10 -> 10,6 %
+#
+#      Und auf ihren achtzehn echten Saetzen aus den Screenshots:
+#
+#          30 -> 5 von 18      15 -> 3 von 18
+#
+#      Warum es nach mehr aussah: der alte Hash lief noch ueber die
+#      Bildadresse (bis 135), und in dem Raster, das sie zuletzt
+#      geschickt hat, lagen sechs von neun Versalkacheln nebeneinander.
+#      Ein Wuerfel verteilt nicht gleichmaessig, er verteilt zufaellig.
+#
+#      Auf 15 gesetzt. NICHT auf einen Wechsel nach Tagesnummer
+#      umgestellt, obwohl das die Verteilung im Raster garantieren
+#      wuerde: 135 hat die Entscheidung gerade erst an den Text
+#      gehaengt, damit sie sich beim Bildwechsel nicht aendert und im
+#      Editor dasselbe steht wie im Raster. Ein Tageswechsel wuerde
+#      genau das wieder aufgeben.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

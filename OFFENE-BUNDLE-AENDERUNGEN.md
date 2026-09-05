@@ -4601,3 +4601,39 @@ Alles andere ist inzwischen tagesgebunden (`saettigungWechsel`,
 **Einmalige Nebenwirkung:** welche Kacheln Versalien bekommen und welche
 geteilt werden, wuerfelt sich einmal neu. Die Verteilung bleibt (30 und
 25 Prozent), aber es trifft andere.
+
+## 136 — Weniger Handschrift, mehr Serife
+
+*"Verteilst du bitte mehr dm serif als die Handschrift danke"*
+
+Die Handschrift uebernimmt eine **ganze** Kachel nur an einer Stelle:
+`versalAnteil` entscheidet, ob eine Fotokachel in Versalien gesetzt wird
+(`versalFamilie`, Shadows Into Light) statt in DM Serif. Sonst ist die
+Handschrift immer nur der zweite Block unter der Serifenzeile.
+
+Der Regler tut, was draufsteht — 4000 Texte durchgerechnet:
+
+| `versalAnteil` | Anteil |
+|---|---|
+| 30 | 31,6 % |
+| 20 | 21,4 % |
+| **15** | **16,2 %** |
+| 10 | 10,6 % |
+
+Auf ihren achtzehn echten Saetzen aus den Screenshots: **30 → 5 von 18**,
+**15 → 3 von 18**.
+
+### Warum es nach mehr aussah
+
+Der alte Hash lief noch ueber die **Bildadresse** (bis 135), und in dem
+Raster, das sie zuletzt geschickt hat, lagen **sechs von neun**
+Versalkacheln nebeneinander. Ein Wuerfel verteilt nicht gleichmaessig,
+er verteilt zufaellig.
+
+### Was ich nicht gemacht habe
+
+Auf einen Wechsel nach Tagesnummer umstellen, obwohl das die Verteilung
+im Raster garantieren wuerde. 135 hat die Entscheidung **gerade erst**
+an den Text gehaengt, damit sie sich beim Bildwechsel nicht aendert und
+im Editor dasselbe steht wie im Raster. Ein Tageswechsel wuerde genau
+das wieder aufgeben.
