@@ -4201,3 +4201,51 @@ fuenfter Eintrag in einer der beiden Reihen loest sie.
 `BS_REIHE` ist die Mechanik aus 116, jetzt als eigene Funktion:
 Tagesnummer wenn vorhanden, sonst Hash. Ohne Reihe im Aufsatz kommt 1
 zurueck und nichts aendert sich — **der warme Feed bleibt unberuehrt**.
+
+## 127 — Die Auflage faengt erst beim Text an
+
+*"Nicht vor dem Text das overlay."*
+
+Erst nachgesehen, ob wirklich etwas **vor** dem Text liegt: **nein.**
+Alle `e.add`-Aufrufe zwischen Textschleife und `renderAll` sind Text
+selbst; die Platte je Zeile steht davor, nicht danach, und auf
+Fotokacheln laeuft sie ohnehin nicht. Die Reihenfolge stimmt.
+
+Gemeint ist also: der Verlauf **faengt oberhalb des Textes an**. Der
+Text sitzt ab 0,58 — der Verlauf lief seit **0,45** und verdunkelte ein
+Stueck Bild, das gar keine Schrift traegt.
+
+### Vier Stufen statt drei
+
+| Offset | Wert | |
+|---|---|---|
+| 0 | `tiefeOben` | 0 |
+| `tiefeKnick` .52 | `tiefeMitte` | 0 |
+| `tiefeKnickUnten` .68 | `tiefeUnten` | .45 |
+| 1 | `tiefeUnten` | .45 |
+
+Bis 52 % gar nichts, bis 68 % aufsteigen, danach stehen bleiben. Ohne
+die beiden neuen Felder bleibt es bei drei Stufen (.45 und .999 als
+Vorgabe) — **der warme Feed merkt nichts**.
+
+### Auf beiden Seiten besser, kein Tausch
+
+| | Foto gesamt | ueber dem Text | Kontrast unterm Text |
+|---|---|---|---|
+| vorher | 59,8 % | 72,9 % | 3,7:1 |
+| **jetzt** | **68,0 %** | **85,6 %** | **3,8:1** |
+
+Weil dieselbe Menge Dunkel jetzt dort liegt, wo sie gebraucht wird,
+statt ueber die halbe Kachel verteilt zu sein. Dadurch war Luft, auch
+den Rest zu senken:
+
+| | von | auf |
+|---|---|---|
+| `bildSchleier` | .10 | .06 |
+| `kanteOben` | .30 | .16 |
+| `kanteUnten` | .55 | .35 |
+| `tiefeUnten` | .62 | .45 |
+
+In fabric 5.5.2 der laufenden App nachgemessen, ob vier Stufen mit
+eigenen Offsets so fallen wie gerechnet: bei 0,52 noch 255, bei 0,60
+dann 200 (gerechnet 201), ab 0,68 konstant 146.

@@ -301,8 +301,8 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
  'bildSchwarzpunkt:.07,bildVignette:.6,auflageReihe:"1|0.2|0.65|0.35",vignetteReihe:"1|0|0.55|0.25",auflageWechsel:1,folgeFuss:.86,textMitte:.73,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
- 'tiefeOben:.06,tiefeMitte:.10,tiefeUnten:.62,kanteOben:.30,kanteUnten:.55,'
- 'saumStaerke:0,bildSchleier:.10,'
+ 'tiefeOben:0,tiefeMitte:0,tiefeKnick:.52,tiefeKnickUnten:.68,tiefeUnten:.45,kanteOben:.16,kanteUnten:.35,'
+ 'saumStaerke:0,bildSchleier:.06,'
  'nameFarbe:"#F2EFE9",schildGrund:"#F2EFE9",schildSchriftFarbe:"#171512"};')
 SCHALTER = 'if(typeof window<"u"&&window.BS_STIL==="dunkel")Object.assign(BS_KACHEL,BS_DUNKEL);'
 
@@ -3152,8 +3152,11 @@ P.append(('fill:`rgba(${zTon||"0,0,0"},${Et})`,selectable:!1});',
  "Schleier mal zAuf", 1))
 
 P.append(('colorStops:[{offset:0,color:`rgba(${zTon},${BS_KACHEL.tiefeOben})`},{offset:.45,color:`rgba(${zTon},${BS_KACHEL.tiefeMitte})`},{offset:1,color:`rgba(${zTon},${BS_KACHEL.tiefeUnten})`}]',
- 'colorStops:[{offset:0,color:`rgba(${zTon},${BS_KACHEL.tiefeOben*zAuf})`},{offset:.45,color:`rgba(${zTon},${BS_KACHEL.tiefeMitte*zAuf})`},{offset:1,color:`rgba(${zTon},${BS_KACHEL.tiefeUnten*zAuf})`}]',
- "Tiefe mal zAuf", 1))
+ 'colorStops:[{offset:0,color:`rgba(${zTon},${BS_KACHEL.tiefeOben*zAuf})`},'
+ '{offset:(BS_KACHEL.tiefeKnick==null?.45:BS_KACHEL.tiefeKnick),color:`rgba(${zTon},${BS_KACHEL.tiefeMitte*zAuf})`},'
+ '{offset:(BS_KACHEL.tiefeKnickUnten==null?.999:BS_KACHEL.tiefeKnickUnten),color:`rgba(${zTon},${BS_KACHEL.tiefeUnten*zAuf})`},'
+ '{offset:1,color:`rgba(${zTon},${BS_KACHEL.tiefeUnten*zAuf})`}]',
+ "Tiefe mal zAuf, mit zwei Knicken", 1))
 
 P.append(('colorStops:[{offset:0,color:`rgba(${zTon},${BS_KACHEL.kanteOben})`},{offset:.18,color:`rgba(${zTon},0.0)`},{offset:.82,color:`rgba(${zTon},0.0)`},{offset:1,color:`rgba(${zTon},${BS_KACHEL.kanteUnten})`}]',
  'colorStops:[{offset:0,color:`rgba(${zTon},${BS_KACHEL.kanteOben*zAuf})`},{offset:.18,color:`rgba(${zTon},0.0)`},{offset:.82,color:`rgba(${zTon},0.0)`},{offset:1,color:`rgba(${zTon},${BS_KACHEL.kanteUnten*zAuf})`}]',
@@ -3162,6 +3165,50 @@ P.append(('colorStops:[{offset:0,color:`rgba(${zTon},${BS_KACHEL.kanteOben})`},{
 P.append(('const zVi=Number(BS_KACHEL.bildVignette)||0;',
  'const zVi=(Number(BS_KACHEL.bildVignette)||0)*zVig;',
  "Vignette mal zVig", 1))
+
+
+# 127 — Die Auflage faengt erst beim Text an. Carina: "Nicht vor dem
+#      Text das overlay."
+#
+#      Erst nachgesehen, ob wirklich etwas VOR dem Text liegt: nein.
+#      Alle e.add-Aufrufe zwischen Textschleife und renderAll sind
+#      Text selbst; die Platte je Zeile steht davor, nicht danach, und
+#      auf Fotokacheln laeuft sie ohnehin nicht (ge). Die Reihenfolge
+#      stimmt.
+#
+#      Gemeint ist also: der Verlauf faengt oberhalb des Textes an.
+#      Der Text sitzt ab 0,58; der Verlauf lief seit 0,45 — er
+#      verdunkelt also ein Stueck Bild, das gar keine Schrift traegt.
+#
+#      Der Verlauf hatte drei Stufen (0 / 0,45 / 1) und stieg von der
+#      Mitte bis zur Unterkante linear an. Jetzt vier:
+#
+#          0                 tiefeOben        0
+#          tiefeKnick        tiefeMitte       0     bei .52
+#          tiefeKnickUnten   tiefeUnten     .45     bei .68
+#          1                 tiefeUnten     .45
+#
+#      Also: bis 52 Prozent gar nichts, bis 68 Prozent aufsteigen,
+#      danach stehen bleiben. Ohne die beiden neuen Felder bleibt es
+#      bei drei Stufen (.45 und .999 als Vorgabe), der warme Feed
+#      merkt nichts.
+#
+#      Das ist auf BEIDEN Seiten besser, nicht ein Tausch:
+#
+#                          Foto  ueber dem   Kontrast unterm
+#                        gesamt   Text       Text (schlecht. 5 %)
+#          vorher         59,8 %   72,9 %          3,7:1
+#          jetzt          68,0 %   85,6 %          3,8:1
+#
+#      Weil dieselbe Menge Dunkel jetzt dort liegt, wo sie gebraucht
+#      wird, statt ueber die halbe Kachel verteilt zu sein. Dadurch
+#      war Luft, auch den Rest zu senken: bildSchleier .10 auf .06,
+#      kanteOben .30 auf .16, kanteUnten .55 auf .35, tiefeUnten .62
+#      auf .45.
+#
+#      In fabric 5.5.2 der laufenden App nachgemessen, ob vier Stufen
+#      mit eigenen Offsets so fallen wie gerechnet — bei 0,52 noch
+#      255, bei 0,60 dann 200 (gerechnet 201), ab 0,68 konstant 146.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
