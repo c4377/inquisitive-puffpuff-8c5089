@@ -4552,3 +4552,52 @@ Nachgerechnet:
 `handAnteil` (1.15) bleibt, wie es ist: das ist das Verhaeltnis
 einzelner handgeschriebener Woerter zum Text um sie herum, kein
 absolutes Mass. Waechst der Text, wachsen sie mit.
+
+## 135 — Das Bild darf den Satz nicht mehr umwerfen
+
+*"Wenn ich das Bild aendere soll die gesetzte Schrift aber gleich
+bleiben gerade hat es sich geaendert ploetzlich nach dem neuen Bild auf
+1. slide."*
+
+**Ursache:** fast jede Entscheidung im Zeichner haengt an einem Hash,
+und der Hash lief ueber
+
+    String(t.background||"") + "|" + String(t.text||"")
+
+Also ueber die **Bildadresse**. Neues Bild, neuer Hash, neue
+Entscheidung — und zwei davon sind Satz, nicht Bild:
+
+| | |
+|---|---|
+| `zVS` | Versalien oder Serife (`versalAnteil` 30) |
+| `zGT` | geteilte Kachel (`geteiltAnteil` 25) |
+
+Beide lesen jetzt nur noch `String(t.text||"")`. **Der Text ist die
+Identitaet der Kachel, das Bild ist austauschbar.**
+
+### Warum nicht `t._tag`
+
+Die Tagesnummer waere noch stabiler, steht aber nicht sicher auf einer
+frisch angelegten Folie im Einzelansicht-Editor — nur auf den Kacheln
+des Rasters und auf geladenen Plaenen. Dann saehe dieselbe Kachel im
+Raster anders aus als im Editor: ein schlimmerer Fehler als der, den wir
+beheben.
+
+In node gegengerechnet, vier Bildadressen bei gleichem Text: vorher
+sprang „geteilt" zwischen ja und nein, jetzt steht bei allen vieren
+dasselbe.
+
+### Was weiter am Bild haengt, mit Absicht
+
+| | |
+|---|---|
+| `zDS` | der **Ausschnitt** — ein neues Foto braucht seinen eigenen Anschnitt |
+| `zTon` | der **Farbton** — eine Einfaerbung des Fotos, kein Satz |
+
+Alles andere ist inzwischen tagesgebunden (`saettigungWechsel`,
+`auflageWechsel`) oder abgeschaltet (`saumStaerke` 0, `lagenReihe` nur
+„unten") und aendert sich ohnehin nicht mehr.
+
+**Einmalige Nebenwirkung:** welche Kacheln Versalien bekommen und welche
+geteilt werden, wuerfelt sich einmal neu. Die Verteilung bleibt (30 und
+25 Prozent), aber es trifft andere.
