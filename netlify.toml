@@ -15,6 +15,14 @@
   to = "/dunkel/index.html"
   status = 200
 
+# Die Profilbilder sind eine eigene Seite, keine Route der App.
+# Ohne diese Regel schluckt die Auffangregel darunter den Pfad und es
+# kaeme die App zurueck statt der Seite.
+[[redirects]]
+  from = "/profilbilder/*"
+  to = "/profilbilder/index.html"
+  status = 200
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -30,6 +38,11 @@
 # im Browser haengen. Beide Pfade brauchen die Regel.
 [[headers]]
   for = "/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/profilbilder/*"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 

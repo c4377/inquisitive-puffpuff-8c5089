@@ -143,7 +143,14 @@
       '#bs-schwarz button{border:0;cursor:pointer;border-radius:999px;padding:4px 9px;' +
       'color:rgba(255,255,255,.72);background:rgba(255,255,255,.12);font:inherit}' +
       '#bs-schwarz button[data-an="ja"]{background:#E8836B;color:#241C16}' +
-      '#bs-schwarz span{min-width:34px;text-align:right;font-variant-numeric:tabular-nums}';
+      '#bs-schwarz span{min-width:34px;text-align:right;font-variant-numeric:tabular-nums}' +
+      '#bs-profilbilder{position:fixed;right:14px;bottom:100px;z-index:2147483000;' +
+      'padding:7px 13px;border-radius:999px;text-decoration:none;' +
+      'background:rgba(20,18,16,.72);backdrop-filter:blur(6px);' +
+      'box-shadow:0 2px 12px rgba(0,0,0,.28);opacity:.55;transition:opacity .15s;' +
+      'color:rgba(255,255,255,.72);font:600 12px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}' +
+      '#bs-profilbilder:hover{opacity:1}' +
+      '@media print{#bs-profilbilder{display:none}}';
     document.head.appendChild(css);
 
     var box = document.createElement("div");
@@ -159,6 +166,15 @@
       b.addEventListener("click", function () { waehle(paar[0]); });
       box.appendChild(b);
     });
+    /* Der Weg zu den Profilbildern. Auch der haengt hier und nicht im
+     * Menue der App: dort kaeme man nur mit einem Eingriff in React
+     * hinein, und das Schildchen ist ohnehin auf jeder Seite da. */
+    var mehr = document.createElement("a");
+    mehr.id = "bs-profilbilder";
+    mehr.href = "/profilbilder/";
+    mehr.textContent = "Profilbilder";
+    document.body.appendChild(mehr);
+
     document.body.appendChild(box);
 
     var reg = document.createElement("div");

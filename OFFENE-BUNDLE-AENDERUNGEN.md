@@ -4637,3 +4637,56 @@ im Raster garantieren wuerde. 135 hat die Entscheidung **gerade erst**
 an den Text gehaengt, damit sie sich beim Bildwechsel nicht aendert und
 im Editor dasselbe steht wie im Raster. Ein Tageswechsel wuerde genau
 das wieder aufgeben.
+
+## 137 — Profilbilder
+
+*"Rendere mir bitte an einem neuen Menüpunkt profilbilder Danke"*
+
+Eine **eigene Seite** unter `/profilbilder/`, keine Erweiterung der
+React-App. Sie liest dieselbe Datenbank und zeichnet mit dem blossen
+Canvas — damit kann hier nichts kaputtgehen, was am Plan haengt, und der
+Zeichner der Kacheln bleibt unberuehrt.
+
+| | |
+|---|---|
+| Datenbank | `BrandStudioDB`, Store `assets`, Schluessel `brand_images` |
+| Eintraege | entweder blosse Adressen oder Objekte mit `src`/`url`/`dataUrl` |
+| ausgeblendet | `brandSettings.imageMeta[…].disabled` wird beachtet, wie in der App |
+
+Die Verbindung wird nach dem Lesen **geschlossen** — bliebe sie offen,
+blockierte sie jede spaetere Version-Aenderung der App.
+
+### Der Menuepunkt
+
+Das Menue der App ist React; dort haette ich eingreifen muessen.
+Stattdessen haengt der Punkt im selben Schildchen wie der
+Stil-Schalter, am `body`. Das ist ohnehin auf **jeder** Seite da, auch
+auf `/content-planner`, wo der Pfad das „/dunkel" laengst verloren hat.
+
+### Die Regel in netlify.toml
+
+Ohne eigene Regel schluckt die Auffangregel `/* → /index.html` den Pfad
+und es kaeme die App zurueck statt der Seite. Dieselbe Falle wie bei
+`/dunkel` — deshalb dieselbe Loesung, und sie steht **vor** der
+Auffangregel.
+
+### Drei Regler
+
+| | |
+|---|---|
+| **Schwarz** | derselbe `BS_SCHWARZ` wie im Feed — was hier eingestellt wird, gilt auch dort |
+| **Zoom** | wie nah der Ausschnitt geht (Vorgabe 115 %) |
+| **Höhe** | wo der Ausschnitt sitzt; 35 % trifft bei stehenden Fotos meist das Gesicht |
+
+Antippen laedt das Bild als PNG mit 640 × 640 herunter (Instagram nimmt
+320, 640 bleibt beim Skalieren scharf).
+
+**Die Tonwerte stehen in der Seite noch einmal** — Schwarzpunkt .07,
+Vignette .60, Ton 13,13,13. Wer sie im dunklen Aufsatz aendert, muss sie
+hier mitaendern; dafuer haengt die Seite an keiner Bundle-Version und
+ueberlebt jeden Drop.
+
+In Chromium durchgespielt: Datenbank mit drei Bildern gefuellt, Seite
+zeichnet drei runde Bilder (Mitte 138, Rand 105 — die Vignette sitzt),
+Regler stehen auf 20 / 115 / 36, keine Seitenfehler. Der Menuepunkt
+fuehrt von `/dunkel/` sauber auf die Seite.
