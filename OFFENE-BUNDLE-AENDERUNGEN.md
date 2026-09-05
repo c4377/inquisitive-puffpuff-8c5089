@@ -4844,3 +4844,38 @@ License).
 Im Browser nachgemessen: vier Playfair-Schnitte angemeldet, 58
 Schriften gesamt, und Playfair zeichnet andere Pixel als die
 Ersatzschrift.
+
+## 142 — Playfair groesser
+
+Vorher nachgemessen, statt der eigenen Vermutung zu glauben. Ich hatte
+in 141 geschrieben, Playfair sei „zarter und wirkt kleiner". Bei 100 px
+im Browser:
+
+| | Playfair | DM Serif |
+|---|---|---|
+| Versalhoehe H | **71** | 67 |
+| Mittellaenge x | **53** | 49 |
+| Zeilenbreite | 1735 | 1702 |
+
+**Playfair ist groesser als DM Serif, nicht kleiner** — um sechs Prozent
+in der Versalhoehe. Was leichter wirkt, sind die duenneren Striche.
+Haette ich auf gleiche Versalhoehe „korrigiert", waere die Schrift
+kleiner geworden — das Gegenteil des Auftrags.
+
+Deshalb ein echter Schritt statt einer Korrektur: **plus 15 Prozent.**
+
+| | von | auf |
+|---|---|---|
+| `deckblattGroesse` | 74,8 | **86** |
+| `fotoGroesse` | 48,4 | **55,7** |
+| `handGroesse` | 1,0909 | **0,9486** (durch 1,15 geteilt) |
+
+Die Handschrift bleibt damit wieder stehen: 50,6 vorher und nachher.
+Gegenueber dem Anfang der Reihe (DM Serif bei 68) ist die Versalhoehe
+jetzt **34 Prozent** groesser.
+
+**Grenze, die man kennen sollte:** der Zeichner verkleinert in einer
+Schleife, bis der Block in `textHoehe` (.74 der Kachelhoehe) und in die
+Breite passt. Bei langen Texten ist die Groesse also schon vorher
+gedeckelt und diese Zahl aendert dort nichts — sie wirkt auf kurze
+Saetze.

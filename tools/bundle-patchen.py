@@ -284,9 +284,9 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'grundB:"#0E0D0C",schriftB:"#F2EFE9",'
  'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
- 'deckblattGewicht:"400",deckblattGroesse:74.8,fotoGroesse:48.4,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.62,'
+ 'deckblattGewicht:"400",deckblattGroesse:86,fotoGroesse:55.7,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.62,'
  'schriftart:"Playfair Display",unterSchrift:"Shadows Into Light",gewicht:"400",'
- 'betontGewicht:"700",handAnteil:1.15,handGroesse:1.0909,'
+ 'betontGewicht:"700",handAnteil:1.15,handGroesse:0.9486,'
  'unterGewicht:"400",unterVerhaeltnis:.62,laufweite:0,fotoLaufweite:-20,'
  'folgeFamilie:"Playfair Display",ablaufTitel:"Playfair Display",'
  'nameSchrift:"Playfair Display",nameGewicht:"400",nameLaufweite:60,'
@@ -3811,6 +3811,41 @@ P.append(('v.jsxs(Qa,{to:h.path,onClick:u,className:`flex items-center space-x-4
 #      Im Browser nachgemessen: vier Playfair-Schnitte angemeldet, 58
 #      Schriften gesamt, und Playfair zeichnet andere Pixel als die
 #      Ersatzschrift.
+
+
+# 142 — Playfair groesser. Carina: "Groesser Playfair".
+#
+#      Vorher nachgemessen, statt der eigenen Vermutung zu glauben:
+#      ich hatte in 141 geschrieben, Playfair sei "zarter und wirkt
+#      kleiner". Bei 100 px im Browser:
+#
+#                        Playfair   DM Serif
+#          Versalhoehe H      71        67
+#          Mittellaenge x     53        49
+#          Zeilenbreite     1735      1702
+#
+#      Playfair ist also GROESSER als DM Serif, nicht kleiner — um
+#      sechs Prozent in der Versalhoehe. Was leichter wirkt, sind die
+#      duenneren Striche, nicht die Groesse. Haette ich auf gleiche
+#      Versalhoehe "korrigiert", waere die Schrift kleiner geworden,
+#      also das Gegenteil des Auftrags.
+#
+#      Deshalb ein echter Schritt statt einer Korrektur: plus 15
+#      Prozent.
+#
+#          deckblattGroesse  74,8 -> 86
+#          fotoGroesse       48,4 -> 55,7
+#          handGroesse    1,0909 -> 0,9486   (durch 1,15 geteilt)
+#
+#      Die Handschrift bleibt damit wieder stehen: 50,6 vorher und
+#      nachher. Gegenueber dem Anfang der Reihe (DM Serif bei 68) ist
+#      die Versalhoehe jetzt 34 Prozent groesser.
+#
+#      GRENZE, die man kennen sollte: der Zeichner verkleinert in einer
+#      Schleife, bis der Block in textHoehe (.74 der Kachelhoehe) und
+#      in die Breite passt. Bei langen Texten ist die Groesse also
+#      schon vorher gedeckelt und diese Zahl aendert dort nichts — sie
+#      wirkt auf kurze Saetze.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
