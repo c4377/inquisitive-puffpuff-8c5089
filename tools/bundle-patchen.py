@@ -299,7 +299,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'fotoAusrichtung:"mitte",fotoSchriftFarbe:"#FFFFFF",'
  'bildTon:"14,13,12",waerme:0,waermeTon:"14,13,12",'
  'bildSaettigung:-1,saettigungReihe:"-1|0.1",saettigungWechsel:1,'
- 'bildSchwarzpunkt:.07,bildVignette:.6,textGrundZiel:4,textGrundMax:1.8,auflageReihe:"1|0.2|0.65|0.35",vignetteReihe:"1|0|0.55|0.25",auflageWechsel:1,folgeFuss:.86,textMitte:.73,nameZeigen:0,'
+ 'bildSchwarzpunkt:.07,bildVignette:.6,textGrundZiel:4,textGrundMax:1.8,auflageReihe:"1|0.2|0.65|0.35",vignetteReihe:"1|0|0.55|0.25",auflageWechsel:1,folgeFuss:.86,lagenReihe:"unten|mitte",textMitte:.58,textLageUnten:.80,textMesseOben:.52,nameZeigen:0,'
  'bildHeben:0,bildSpreizung:.28,'
  'tiefeOben:0,tiefeMitte:0,tiefeKnick:.52,tiefeKnickUnten:.68,tiefeUnten:.45,kanteOben:.16,kanteUnten:.35,'
  'saumStaerke:0,bildSchleier:.06,'
@@ -3257,6 +3257,58 @@ P.append(('const ur=new Pe.fabric.Rect(',
  'try{const zZiel=Number(BS_KACHEL.textGrundZiel)||0;if(zZiel>0&&t.background){const zel=me.getElement&&me.getElement();if(zel&&zel.width){const zbr=96,zsk=Math.min(1,zbr/Math.max(zel.width,zel.height));const zc=document.createElement("canvas");zc.width=Math.max(8,Math.round(zel.width*zsk));zc.height=Math.max(8,Math.round(zel.height*zsk));const zx=zc.getContext("2d",{willReadFrequently:!0});zx.drawImage(zel,0,0,zc.width,zc.height);const zo=Math.floor(zc.height*(BS_KACHEL.textMesseOben==null?.55:BS_KACHEL.textMesseOben)),zu=Math.min(zc.height,Math.ceil(zc.height*(BS_KACHEL.textMesseUnten==null?.92:BS_KACHEL.textMesseUnten))),zli=Math.floor(zc.width*.1),zbre=Math.max(1,Math.ceil(zc.width*.8));const zdd=zx.getImageData(zli,zo,zbre,Math.max(1,zu-zo)).data;const zPu=Number(BS_KACHEL.bildSchwarzpunkt)||0,zgg=1-zPu;const zTa=String(zTon||"13,13,13").split(",").map(zv2=>parseFloat(zv2)||0);const zTl=.2126*(zTa[0]||13)+.7152*(zTa[1]||13)+.0722*(zTa[2]||13);const zPk=[],zYy=[];for(let zi=0,zj=0;zi<zdd.length;zi+=4,zj++){let zL=.2126*zdd[zi]+.7152*zdd[zi+1]+.0722*zdd[zi+2];if(zPu>0)zL=255*Math.max(0,Math.min(1,1-Math.min(1,(1-zL/255)/zgg)));zPk.push(zL);zYy.push((zo+Math.floor(zj/zbre))/zc.height)}const zSt=[[0,Number(BS_KACHEL.tiefeOben)||0],[BS_KACHEL.tiefeKnick==null?.45:Number(BS_KACHEL.tiefeKnick),Number(BS_KACHEL.tiefeMitte)||0],[BS_KACHEL.tiefeKnickUnten==null?.999:Number(BS_KACHEL.tiefeKnickUnten),Number(BS_KACHEL.tiefeUnten)||0],[1,Number(BS_KACHEL.tiefeUnten)||0]];const zIp=zy=>{for(let zi=1;zi<zSt.length;zi+=1){if(zy<=zSt[zi][0]){const zx0=zSt[zi-1][0],zy0=zSt[zi-1][1],zx1=zSt[zi][0],zy1=zSt[zi][1];return zx1===zx0?zy1:zy0+(zy1-zy0)*(zy-zx0)/(zx1-zx0)}}return zSt[zSt.length-1][1]};const zSchl=Number(BS_KACHEL.bildSchleier)||0,zKo=Number(BS_KACHEL.kanteOben)||0,zKu=Number(BS_KACHEL.kanteUnten)||0;const zAl=(zy,zf)=>{const zt2=zIp(zy)*zf,zk2=zy<=.18?zKo*zf*(1-zy/.18):(zy>=.82?zKu*zf*((zy-.82)/.18):0);return 1-(1-zSchl*zf)*(1-zt2)*(1-zk2)};const zQu=BS_KACHEL.textGrundQuantil==null?.95:Number(BS_KACHEL.textGrundQuantil);const zKn=zf=>{const zA2=[];for(let zi=0;zi<zPk.length;zi+=1){const za=zAl(zYy[zi],zf);zA2.push(zPk[zi]*(1-za)+zTl*za)}zA2.sort((za,zb)=>za-zb);const zv=zA2[Math.floor((zA2.length-1)*zQu)]/255,zY=zv<=.04045?zv/12.92:Math.pow((zv+.055)/1.055,2.4);return 1.05/(zY+.05)};const zMx=Number(BS_KACHEL.textGrundMax)||1.8;let zN=0;if(zKn(0)<zZiel){if(zKn(zMx)<zZiel)zN=zMx;else{let zlo=0,zhi=zMx;for(let zi=0;zi<16;zi+=1){const zm=(zlo+zhi)/2;zKn(zm)>=zZiel?zhi=zm:zlo=zm}zN=zhi}}if(zN>zAuf)zAuf=zN}}}catch(zz){}'
  'const ur=new Pe.fabric.Rect(',
  "Grund unterm Text messen und die Auflage anheben", 1))
+
+
+# 129 — Nur noch zwei Lagen. Carina: "Text nur mehr entweder mittig
+#      oder unten."
+#
+#      Woher "oben" kam: lagenWechsel wuerfelt aus einer im Code fest
+#      verdrahteten Liste.
+#
+#          const zL=["unten","mitte","oben"][zh%3]
+#
+#      Die Liste ist jetzt lagenReihe, im dunklen Aufsatz
+#      "unten|mitte". Dazu eine Klammer um das ganze ve, die auch von
+#      aussen gesetzte Lagen (t.textLage, t.textAnchor.row) auf die
+#      erlaubten zieht — sonst kaeme "oben" durch die Hintertuer.
+#
+#      In node ueber 600 Kacheln: 302 unten, 298 mitte, 0 oben. Eine
+#      Kachel mit textLage "oben" landet auf mitte. Ohne lagenReihe
+#      (warmer Feed) bleibt alles wie es war, auch "oben".
+#
+#      ZWEITE HAELFTE, sonst waere es keine Aenderung: die beiden
+#      Lagen lagen praktisch aufeinander. "unten" stand fest im Code
+#      auf .7, "mitte" kam aus textMitte und war seit 178 auf .73 —
+#      drei Hundertstel Unterschied, im Bild nicht zu sehen. Beide
+#      sind jetzt Felder:
+#
+#          textLageUnten  .80    Block etwa .72 bis .88
+#          textMitte      .58    Block etwa .50 bis .66
+#
+#      textMesseOben wandert von .55 auf .52. Nicht hoeher: der
+#      Verlauf faengt bei tiefeKnick .52 an, und was darueber liegt,
+#      kann kein Faktor abdunkeln — die Suche aus 128 wuerde dann bei
+#      jeder helleren Kachel am Anschlag landen, statt zu messen.
+
+P.append(('const zL=["unten","mitte","oben"][zh%3];',
+ 'const zLl=String(BS_KACHEL.lagenReihe||"unten|mitte|oben").split("|").filter(zx=>zx!=="");'
+ 'const zL=zLl[zh%zLl.length];',
+ "Lagen kommen aus lagenReihe", 1))
+
+P.append(('const ve=(()=>{const zA=(tt.fettNurErste',
+ 'const ve=(zv=>{try{const zLe=String(BS_KACHEL.lagenReihe||"").split("|").filter(zx=>zx!=="");'
+ 'if(!zLe.length||zLe.indexOf(zv)>=0)return zv;'
+ 'return zLe.indexOf("mitte")>=0?"mitte":zLe[0]}catch(zz){return zv}})((()=>{const zA=(tt.fettNurErste',
+ "erlaubte Lagen erzwingen (Anfang)", 1))
+
+P.append(('return zG.some(zz=>Math.floor(zz/3)===zR)?zAus:zL})(),He=tt.istKarte?',
+ 'return zG.some(zz=>Math.floor(zz/3)===zR)?zAus:zL})()),He=tt.istKarte?',
+ "erlaubte Lagen erzwingen (Ende)", 1))
+
+P.append(('He=tt.istKarte?.42:ve==="oben"?.24:ve==="unten"?.7:(BS_KACHEL.textMitte||.5)',
+ 'He=tt.istKarte?.42:ve==="oben"?(BS_KACHEL.textLageOben||.24):'
+ 've==="unten"?(BS_KACHEL.textLageUnten||.7):(BS_KACHEL.textMitte||.5)',
+ "Lagenhoehen aus dem Block", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

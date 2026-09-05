@@ -4293,3 +4293,38 @@ unberuehrt.
 In Chromium mit genau diesem Block gegen die neun Bilder laufen lassen:
 keine Fehler, Faktoren monoton, dunkle Kacheln bleiben beim Rhythmus
 (k1 0,20 bleibt 0,20), helle steigen (k5 0,20 auf 1,17).
+
+## 129 — Nur noch zwei Lagen
+
+*"Text nur mehr entweder mittig oder unten."*
+
+Woher „oben" kam: `lagenWechsel` wuerfelt aus einer **im Code fest
+verdrahteten** Liste.
+
+    const zL = ["unten","mitte","oben"][zh % 3]
+
+Die Liste ist jetzt `lagenReihe`, im dunklen Aufsatz `"unten|mitte"`.
+Dazu eine Klammer um das ganze `ve`, die auch **von aussen gesetzte**
+Lagen (`t.textLage`, `t.textAnchor.row`) auf die erlaubten zieht —
+sonst kaeme „oben" durch die Hintertuer.
+
+In node ueber 600 Kacheln: **302 unten, 298 mitte, 0 oben.** Eine
+Kachel mit `textLage:"oben"` landet auf mitte. Ohne `lagenReihe` (warmer
+Feed) bleibt alles wie es war, auch „oben".
+
+### Zweite Haelfte, sonst waere es keine Aenderung
+
+Die beiden Lagen lagen **praktisch aufeinander**: „unten" stand fest im
+Code auf **.7**, „mitte" kam aus `textMitte` und war seit 178 auf
+**.73** — drei Hundertstel Unterschied, im Bild nicht zu sehen. Beide
+sind jetzt Felder:
+
+| | | Block etwa |
+|---|---|---|
+| `textLageUnten` | .80 | .72 – .88 |
+| `textMitte` | .58 | .50 – .66 |
+
+`textMesseOben` wandert von .55 auf **.52**. Nicht hoeher: der Verlauf
+faengt bei `tiefeKnick` .52 an, und was darueber liegt, kann kein Faktor
+abdunkeln — die Suche aus 128 wuerde dann bei jeder helleren Kachel am
+Anschlag landen, statt zu messen.
