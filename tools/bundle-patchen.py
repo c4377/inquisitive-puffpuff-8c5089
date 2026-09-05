@@ -288,7 +288,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
  'schriftart:"Playfair Display",unterSchrift:"Shadows Into Light",gewicht:"400",'
  'betontGewicht:"700",handAnteil:1.15,handGroesse:0.9486,'
  'unterGewicht:"400",unterVerhaeltnis:.62,laufweite:0,fotoLaufweite:-20,'
- 'folgeFamilie:"Playfair Display",ablaufTitel:"Playfair Display",'
+ 'folgeFamilie:"DM Serif Display",ablaufTitel:"Playfair Display",'
  'nameSchrift:"Playfair Display",nameGewicht:"400",nameLaufweite:60,'
  'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:0,'
  'geteilt:1,geteiltAnteil:25,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
@@ -3846,6 +3846,37 @@ P.append(('v.jsxs(Qa,{to:h.path,onClick:u,className:`flex items-center space-x-4
 #      in die Breite passt. Bei langen Texten ist die Groesse also
 #      schon vorher gedeckelt und diese Zahl aendert dort nichts — sie
 #      wirkt auf kurze Saetze.
+
+
+# 143 — Folgeslides bleiben bei DM Serif. Carina: "Fuer die folgeslides
+#      faende ich jetzt schoener wenn es hier dennoch dm serif ist
+#      oder?"
+#
+#      Ein Feld: folgeFamilie zurueck auf DM Serif Display. Das
+#      Deckblatt bleibt Playfair, ebenso schriftart, ablaufTitel,
+#      fotoSchrift und nameSchrift — sie hat ausdruecklich nur die
+#      Folgeslides gemeint.
+#
+#      Es trifft dort beides, Kopfzeile und zweiten Block: QeZ liest
+#      auf Folgeslides ebenfalls folgeFamilie.
+#
+#      GEPRUEFT, damit nichts anderes mitkippt: der Verlauf unten
+#      haengt an new RegExp(tiefeSchriften).test(Qe), und Qe ist auf
+#      Folgeslides jetzt "DM Serif Display". Die Liste enthaelt sowohl
+#      "DM Serif" als auch "Playfair" — der Verlauf bleibt auf beiden
+#      Folienarten an.
+#
+#      GROESSE, unangetastet: Playfair traegt bei gleicher Punktgroesse
+#      sechs Prozent mehr Versalhoehe (71 gegen 67 bei 100 px, in 142
+#      gemessen). Die Folgeslides werden damit optisch etwas kleiner
+#      als vorher:
+#
+#          fotoGroesse 55,7 mit Playfair   Versalhoehe 39,5
+#          fotoGroesse 55,7 mit DM Serif   Versalhoehe 37,3
+#
+#      Wer die alte Hoehe zurueck will, setzt fotoGroesse auf 59,0.
+#      Nicht von selbst gemacht: sie hat nach der Schrift gefragt,
+#      nicht nach der Groesse.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

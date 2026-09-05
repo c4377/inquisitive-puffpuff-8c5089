@@ -4879,3 +4879,35 @@ Schleife, bis der Block in `textHoehe` (.74 der Kachelhoehe) und in die
 Breite passt. Bei langen Texten ist die Groesse also schon vorher
 gedeckelt und diese Zahl aendert dort nichts — sie wirkt auf kurze
 Saetze.
+
+## 143 — Folgeslides bleiben bei DM Serif
+
+*"Fuer die folgeslides faende ich jetzt schoener wenn es hier dennoch dm
+serif ist oder?"*
+
+Ein Feld: `folgeFamilie` zurueck auf DM Serif Display. Das Deckblatt
+bleibt Playfair, ebenso `schriftart`, `ablaufTitel`, `fotoSchrift` und
+`nameSchrift` — gemeint waren ausdruecklich nur die Folgeslides.
+
+Es trifft dort **beides**, Kopfzeile und zweiten Block: `QeZ` liest auf
+Folgeslides ebenfalls `folgeFamilie`.
+
+### Geprueft, damit nichts anderes mitkippt
+
+Der Verlauf unten haengt an `new RegExp(tiefeSchriften).test(Qe)`, und
+`Qe` ist auf Folgeslides jetzt „DM Serif Display". Die Liste enthaelt
+**beide** Namen — der Verlauf bleibt auf beiden Folienarten an.
+
+### Groesse, unangetastet
+
+Playfair traegt bei gleicher Punktgroesse sechs Prozent mehr
+Versalhoehe (71 gegen 67 bei 100 px, in 142 gemessen). Die Folgeslides
+werden damit optisch etwas kleiner als eben noch:
+
+| `fotoGroesse` 55,7 | Versalhoehe |
+|---|---|
+| mit Playfair | 39,5 |
+| mit DM Serif | **37,3** |
+
+Wer die alte Hoehe zurueck will, setzt `fotoGroesse` auf **59,0**. Nicht
+von selbst gemacht: gefragt war nach der Schrift, nicht nach der Groesse.
