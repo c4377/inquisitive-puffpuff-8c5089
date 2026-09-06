@@ -281,8 +281,8 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 # der Block wird nach dem Anlegen ueberschrieben. Ein Bundle, zwei
 # Feeds, dieselben Bilder und derselbe Plan (IndexedDB haengt an der
 # Domain, nicht am Pfad).
-DUNKEL = ('const BS_DUNKEL={grundA:"#4F5347",schriftA:"#FFFFFF",'
- 'grundB:"#4F5347",schriftB:"#FFFFFF",'
+DUNKEL = ('const BS_DUNKEL={grundA:"#2B2C2E",schriftA:"#E7C9B4",'
+ 'grundB:"#2B2C2E",schriftB:"#E7C9B4",'
  'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
  'deckblattGewicht:"400",deckblattGroesse:98.9,fotoGroesse:64.1,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.651,'
  'schriftart:"Playfair",unterSchrift:"Playfair",name:"",zeile:.95,absatz:.30,'
@@ -4113,6 +4113,16 @@ P.append(('const BL=B0.length>1?B0:(()=>{const t2=teile(B0[0]||"");return t2[1]?
  'const BL=B0.length>1?B0:(BS_KACHEL.kachelEinBlock?[B0[0]||""]:'
  '(()=>{const t2=teile(B0[0]||"");return t2[1]?[t2[0],t2[1]]:[B0[0]||""]})());',
  "Textkachel: ein durchlaufender Block statt Kopf und Unterzeile", 1))
+
+# 151  Textkachel: Anthrazit mit Hautfarbe
+#
+#      Nur zwei Werte, kein Code.
+#
+#          grundA/grundB      #4F5347 -> #2B2C2E   Anthrazit
+#          schriftA/schriftB  #FFFFFF -> #E7C9B4   Hautton
+#
+#      Kontrast gerechnet, nicht geschaetzt: 8,93 zu 1. Auch fuer eine
+#      duenne 300er Playfair reichlich (AAA braucht 7 zu 1).
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

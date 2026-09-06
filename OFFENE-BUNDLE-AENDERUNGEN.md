@@ -5148,3 +5148,15 @@ Nachgemessen im gerenderten Bild, Zeilenabstand in Pixeln:
 Und der Umbruch ist Wort fuer Wort derselbe. Uebrig bleiben genau die
 Unterschiede, die sie wollte: olivgrau statt creme, weiss statt blaugrau,
 Playfair 300 statt Display 400.
+
+## 151 — Textkachel: Anthrazit mit Hautfarbe
+
+Nur zwei Werte, kein Code.
+
+| | von | auf |
+|---|---|---|
+| `grundA` / `grundB` | #4F5347 | **#2B2C2E** (Anthrazit) |
+| `schriftA` / `schriftB` | #FFFFFF | **#E7C9B4** (Hautton) |
+
+Kontrast gerechnet, nicht geschaetzt: **8,93 : 1**. Auch fuer eine duenne
+300er Playfair reichlich — AAA braucht 7 : 1.
