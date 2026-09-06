@@ -285,10 +285,10 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#2B2C2E",schriftA:"#E8B48C",'
  'grundB:"#2B2C2E",schriftB:"#E8B48C",'
  'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
  'deckblattGewicht:"400",deckblattGroesse:98.9,fotoGroesse:64.1,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.651,'
- 'schriftart:"Playfair",unterSchrift:"Playfair",name:"",zeile:.95,absatz:.30,'
- 'kachelEinBlock:1,rand:.11,mitte:.50,maxhoehe:.46,groesseAnteil:.115,gewicht:"300",'
+ 'schriftart:"Playfair",unterSchrift:"Playfair",name:"",zeile:.95,absatz:0,'
+ 'kachelEinBlock:1,kachelSatzUmbruch:1,rand:.11,mitte:.50,maxhoehe:.46,groesseAnteil:.115,gewicht:"300",'
  'betontGewicht:"700",handAnteil:1.15,handGroesse:0.9486,folgeZweitHand:1,'
- 'unterGewicht:"300",unterVerhaeltnis:.62,laufweite:-35,fotoLaufweite:-20,'
+ 'unterGewicht:"300",unterVerhaeltnis:1,laufweite:-35,fotoLaufweite:-20,'
  'folgeFamilie:"Playfair Display",ablaufTitel:"Playfair Display",'
  'nameSchrift:"Playfair Display",nameGewicht:"400",nameLaufweite:60,'
  'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:28,'
@@ -4110,9 +4110,9 @@ P.append(('qt=(It||!Oe(st,ut))&&ae.length>0;',
 #      genau die Unterschiede, die sie wollte: olivgrau statt creme,
 #      weiss statt blaugrau, Playfair 300 statt Display 400.
 P.append(('const BL=B0.length>1?B0:(()=>{const t2=teile(B0[0]||"");return t2[1]?[t2[0],t2[1]]:[B0[0]||""]})();',
- 'const BL=B0.length>1?B0:(BS_KACHEL.kachelEinBlock?[B0[0]||""]:'
- '(()=>{const t2=teile(B0[0]||"");return t2[1]?[t2[0],t2[1]]:[B0[0]||""]})());',
- "Textkachel: ein durchlaufender Block statt Kopf und Unterzeile", 1))
+ 'const zSatz=zx=>{const zr=[];let za="";String(zx||"").split(/\\s+/).filter(Boolean).forEach(zw=>{za=za?za+" "+zw:zw;if(/[.!?\\u2026]["\\u00bb\\u201d)\\u2019]?$/.test(zw)){zr.push(za);za=""}});if(za)zr.push(za);return zr.length?zr:[String(zx||"")]};const BL=BS_KACHEL.kachelSatzUmbruch?B0.reduce((za,zb)=>za.concat(zSatz(zb)),[]):(B0.length>1?B0:(BS_KACHEL.kachelEinBlock?[B0[0]||""]:'
+ '(()=>{const t2=teile(B0[0]||"");return t2[1]?[t2[0],t2[1]]:[B0[0]||""]})()));',
+ "Textkachel: Umbruch am Satzende statt Kopf und Unterzeile", 1))
 
 # 151  Textkachel: Anthrazit mit Hautfarbe
 #
@@ -4136,6 +4136,25 @@ P.append(('const BL=B0.length>1?B0:(()=>{const t2=teile(B0[0]||"");return t2[1]?
 #      Weiter Richtung ihrer Terrakotta (#E8836B, Saettigung 54) waere
 #      moeglich, dort faellt der Kontrast aber auf 5,25 — fuer eine
 #      duenne 300er Playfair zu wenig.
+
+# 153  Umbruch am Satzende
+#
+#      "Breche bei Texten beim Punkt bitte um." kachelSatzUmbruch
+#      zerlegt den Text in Saetze und setzt jeden Satz als eigenen
+#      Block — der Zeichner bricht zwischen Bloecken ohnehin um.
+#
+#      Erkannt wird ein Satzende an einem Wort, das auf . ! ? oder …
+#      endet, auch mit Anfuehrung oder Klammer dahinter. Bewusst OHNE
+#      Lookbehind im regulaeren Ausdruck: das laeuft auch dort, wo die
+#      neuere Syntax fehlt.
+#
+#      Damit die Saetze nicht wie Kopf und Unterzeile aussehen:
+#
+#          unterVerhaeltnis  .62 -> 1     alle Saetze gleich gross
+#          absatz            .30 -> 0     ein Umbruch, keine Luft
+#
+#      Zwei echte Leerzeilen im Text bleiben zwei Bloecke, und jeder
+#      davon wird zusaetzlich an seinen Satzenden gebrochen.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

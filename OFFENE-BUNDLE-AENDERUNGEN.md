@@ -5175,3 +5175,25 @@ immer noch ueber AAA (7 : 1).
 Weiter Richtung ihrer Terrakotta (#E8836B, Saettigung 54) waere moeglich,
 dort faellt der Kontrast aber auf 5,25 — fuer eine duenne 300er Playfair
 zu wenig.
+
+## 153 — Umbruch am Satzende
+
+*„Breche bei Texten beim Punkt bitte um."*
+
+`kachelSatzUmbruch` zerlegt den Text in Saetze und setzt jeden Satz als
+eigenen Block — zwischen Bloecken bricht der Zeichner ohnehin um.
+
+Erkannt wird ein Satzende an einem Wort, das auf `.` `!` `?` oder `…`
+endet, auch mit Anfuehrung oder Klammer dahinter. Bewusst **ohne
+Lookbehind** im regulaeren Ausdruck: das laeuft auch dort, wo die neuere
+Syntax fehlt.
+
+Damit die Saetze nicht wie Kopf und Unterzeile aussehen:
+
+| | von | auf |
+|---|---|---|
+| `unterVerhaeltnis` | .62 | **1** — alle Saetze gleich gross |
+| `absatz` | .30 | **0** — ein Umbruch, keine Luft |
+
+Zwei echte Leerzeilen im Text bleiben zwei Bloecke, und jeder davon wird
+zusaetzlich an seinen Satzenden gebrochen.
