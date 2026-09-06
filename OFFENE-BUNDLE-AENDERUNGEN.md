@@ -5160,3 +5160,18 @@ Nur zwei Werte, kein Code.
 
 Kontrast gerechnet, nicht geschaetzt: **8,93 : 1**. Auch fuer eine duenne
 300er Playfair reichlich — AAA braucht 7 : 1.
+
+## 152 — Der Hautton wird orangener
+
+| | von | auf |
+|---|---|---|
+| `schriftA` / `schriftB` | #E7C9B4 | **#E8B48C** |
+
+Gerechnet statt geschaetzt. Der **Farbton bleibt** (HSV 25 → 26 Grad), die
+**Saettigung** geht von 22 auf **40 Prozent** — also wirklich orangener,
+nicht nur dunkler. Kontrast auf dem Anthrazit 8,93 → **7,55 : 1**, damit
+immer noch ueber AAA (7 : 1).
+
+Weiter Richtung ihrer Terrakotta (#E8836B, Saettigung 54) waere moeglich,
+dort faellt der Kontrast aber auf 5,25 — fuer eine duenne 300er Playfair
+zu wenig.

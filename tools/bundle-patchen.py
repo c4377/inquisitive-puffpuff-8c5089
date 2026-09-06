@@ -281,8 +281,8 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 # der Block wird nach dem Anlegen ueberschrieben. Ein Bundle, zwei
 # Feeds, dieselben Bilder und derselbe Plan (IndexedDB haengt an der
 # Domain, nicht am Pfad).
-DUNKEL = ('const BS_DUNKEL={grundA:"#2B2C2E",schriftA:"#E7C9B4",'
- 'grundB:"#2B2C2E",schriftB:"#E7C9B4",'
+DUNKEL = ('const BS_DUNKEL={grundA:"#2B2C2E",schriftA:"#E8B48C",'
+ 'grundB:"#2B2C2E",schriftB:"#E8B48C",'
  'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
  'deckblattGewicht:"400",deckblattGroesse:98.9,fotoGroesse:64.1,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.651,'
  'schriftart:"Playfair",unterSchrift:"Playfair",name:"",zeile:.95,absatz:.30,'
@@ -4123,6 +4123,19 @@ P.append(('const BL=B0.length>1?B0:(()=>{const t2=teile(B0[0]||"");return t2[1]?
 #
 #      Kontrast gerechnet, nicht geschaetzt: 8,93 zu 1. Auch fuer eine
 #      duenne 300er Playfair reichlich (AAA braucht 7 zu 1).
+
+# 152  Der Hautton wird orangener
+#
+#          schriftA/schriftB  #E7C9B4 -> #E8B48C
+#
+#      Gerechnet statt geschaetzt. Der Farbton bleibt gleich (HSV 25
+#      auf 26 Grad), die Saettigung geht von 22 auf 40 Prozent — also
+#      wirklich orangener, nicht nur dunkler. Kontrast auf dem
+#      Anthrazit 8,93 -> 7,55 zu 1, damit immer noch ueber AAA (7).
+#
+#      Weiter Richtung ihrer Terrakotta (#E8836B, Saettigung 54) waere
+#      moeglich, dort faellt der Kontrast aber auf 5,25 — fuer eine
+#      duenne 300er Playfair zu wenig.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
