@@ -5258,3 +5258,38 @@ hineinsaet, dessen Saat wird ueberschrieben — die Bibliothek war dann leer
 und **jeder** Tag wurde zur Textkachel, in jeder Fassung. Das sah zuerst
 wie ein Fehler in der neuen Regel aus und war einer im Pruefstand. Erst
 saeen, wenn die App steht.
+
+## 156 — Der Takt muss beim ZEICHNEN entschieden werden
+
+Sie hat einen Abzug ihres echten Feeds geschickt: Textkacheln auf Tag 1,
+2, 5, 7, 9, 10 — **sechs von zehn**, kein Takt. *„Ne."*
+
+**Grund:** 155 aendert nur, was beim **Import** und beim **„neu
+generieren"** entschieden wird. Ihr Plan liegt aber laengst gespeichert
+da, und dort steht bei jeder Folie fest, ob ein Bild dranhaengt. Der
+Zeichner nimmt einfach das Gespeicherte. Alte Folien ohne Bild wurden
+Textkacheln, egal in welchem Takt.
+
+Jetzt entscheidet der **Zeichner** selbst: Rest 0 bei Teilung von
+(Tagesnummer − 1) durch `textJede` heisst Textkachel — dann wird ein
+gespeichertes Bild fuer die Anzeige weggelassen. Sonst Fotokachel; fehlt
+das Bild, holt er eins aus der Bibliothek. **Nichts davon wird in den Plan
+zurueckgeschrieben** — es ist eine Anzeigeregel, keine Datenaenderung.
+
+**Zuerst falsch, und das ist die Lehre:** der erste Versuch hatte die
+Bedingung `!t.karte` — nur Kacheln ohne Kartenart. Der Plan-Normierer
+vergibt aber **jeder** Kachel eine, `"hell"` oder `"stein"` im Wechsel.
+Damit lief die Regel nie, und mein Pruefgitter sah genauso aus wie ihr
+Abzug. Erst mit der Bedingung auf leer, `"hell"` oder `"stein"` — und ohne
+`reminderArt`, damit Quotes, Ablauf und Reminder ihre eigene Fassung
+behalten — stimmte es.
+
+Gitter mit zehn Tagen, Bilder absichtlich krumm verteilt (nur 3, 4, 6, 8
+hatten eines gespeichert):
+
+| | Textkacheln auf |
+|---|---|
+| vorher | 1, 2, 5, 7, 9, 10 |
+| **nachher** | **1, 5, 9** |
+
+Tag 2, 7 und 10 haben ihr Bild aus der Bibliothek bekommen.

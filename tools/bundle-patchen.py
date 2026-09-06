@@ -2402,12 +2402,16 @@ P.append(('Ca=async(e,t,r,n,i={})=>{var yn,_n,Jr,xr,zr,ti,nn,_i,ki,ri;try{Pe.fab
  'try{if(typeof window<"u"&&typeof t.background=="string"&&t.background){'
  'const zL=window.__bsBilder=window.__bsBilder||[];'
  'if(zL.indexOf(t.background)<0)zL.push(t.background)}}catch(zz){}'
- 'if(!t.background&&BS_KACHEL.textAnteil===0&&t.karte!=="ablauf")try{'
- 'const zB=(typeof window<"u"&&window.__bsBilder)||[];'
- 'if(zB.length){const zs=String(t.text||"")+"|"+String(i.slideIndex||0);let zh=0;'
- 'for(let zi=0;zi<zs.length;zi+=1)zh=(zh*31+zs.charCodeAt(zi))%99991;'
- 't={...t,background:zB[zh%zB.length]}}}catch(zz){}',
- "Zeichner: keine Kachel ohne Bild, wenn der Stil das verlangt", 1))
+ '(()=>{try{const zBil=()=>{const zB=(typeof window<"u"&&window.__bsBilder)||[];if(!zB.length)return null;'
+ 'const zs=String(t.text||"")+"|"+String(typeof t._tag=="number"?t._tag:(i.slideIndex||0));let zh=0;'
+ 'for(let zi=0;zi<zs.length;zi+=1)zh=(zh*31+zs.charCodeAt(zi))%99991;return zB[zh%zB.length]};'
+ 'const zJ=Number(BS_KACHEL.textJede)||0;const zKa=String(t.karte||"");'
+ 'if(zJ>0&&typeof t._tag=="number"&&(zKa===""||zKa==="hell"||zKa==="stein")&&!t.reminderArt){'
+ 'if(((((t._tag-1)%zJ)+zJ)%zJ)===0){if(t.background)t={...t,background:null,overlay:void 0,_autoImage:void 0};return}'
+ 'if(!t.background){const zn=zBil();if(zn)t={...t,background:zn}}return}'
+ 'if(!t.background&&BS_KACHEL.textAnteil===0&&t.karte!=="ablauf"){const zn=zBil();if(zn)t={...t,background:zn}}'
+ '}catch(zz){}})();',
+ "Zeichner: Takt aus textJede, sonst keine Kachel ohne Bild", 1))
 
 # 112 — Mein eigener Schutz hat die Ergaenzung blockiert.
 #
@@ -4192,6 +4196,41 @@ P.append(('qt=(It||(BS_KACHEL.textAnteil!=null?((ut*37+13)%100)>=BS_KACHEL.textA
  'qt=(It||(BS_KACHEL.textJede?(ut%BS_KACHEL.textJede)!==0:BS_KACHEL.textAnteil!=null?'
  '((ut*37+13)%100)>=BS_KACHEL.textAnteil:!Oe(st,ut)))&&ae.length>0;',
  "Neu generieren schlaegt denselben Takt", 1))
+
+# 156  Der Takt muss beim ZEICHNEN entschieden werden
+#
+#      Sie hat einen Bildschirmabzug ihres echten Feeds geschickt:
+#      Textkacheln auf Tag 1, 2, 5, 7, 9, 10 — sechs von zehn, kein
+#      Takt. "Ne."
+#
+#      Grund: 155 aendert nur, was beim IMPORT und beim "neu
+#      generieren" entschieden wird. Ihr Plan liegt aber laengst
+#      gespeichert da, und dort steht bei jeder Folie fest, ob ein Bild
+#      dranhaengt. Der Zeichner nimmt einfach das, was gespeichert ist.
+#      Alte Folien ohne Bild wurden also Textkacheln, egal in welchem
+#      Takt.
+#
+#      Jetzt entscheidet der Zeichner selbst: Rest 0 bei Teilung der
+#      Tagesnummer minus eins durch textJede heisst Textkachel — dann
+#      wird ein gespeichertes Bild fuer die Anzeige weggelassen. Sonst
+#      Fotokachel — fehlt das Bild, holt er eins aus der Bibliothek.
+#      Nichts davon wird in den Plan zurueckgeschrieben.
+#
+#      NACHGESTELLT UND ZUERST FALSCH: der erste Versuch hatte die
+#      Bedingung "!t.karte" — also nur Kacheln ohne Kartenart. Der
+#      Plan-Normierer vergibt aber JEDER Kachel eine, "hell" oder
+#      "stein" im Wechsel. Damit lief die Regel nie, und das Gitter sah
+#      genauso aus wie auf ihrem Abzug. Erst mit der Bedingung auf
+#      leer, "hell" oder "stein" — und ohne reminderArt, damit Quotes,
+#      Ablauf und Reminder ihre eigene Fassung behalten — stimmte es.
+#
+#      Gitter mit zehn Tagen, Bilder absichtlich krumm verteilt
+#      (nur 3, 4, 6, 8 hatten eines gespeichert):
+#
+#          vorher   Text auf 1, 2, 5, 7, 9, 10
+#          nachher  Text auf 1, 5, 9
+#
+#      Tag 2, 7 und 10 haben ihr Bild aus der Bibliothek bekommen.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
