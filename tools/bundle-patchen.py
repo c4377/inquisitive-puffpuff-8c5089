@@ -281,8 +281,8 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 # der Block wird nach dem Anlegen ueberschrieben. Ein Bundle, zwei
 # Feeds, dieselben Bilder und derselbe Plan (IndexedDB haengt an der
 # Domain, nicht am Pfad).
-DUNKEL = ('const BS_DUNKEL={grundA:"#2B2C2E",schriftA:"#E8B48C",'
- 'grundB:"#2B2C2E",schriftB:"#E8B48C",'
+DUNKEL = ('const BS_DUNKEL={grundA:"#1B1E23",schriftA:"#DCC9B0",'
+ 'grundB:"#1B1E23",schriftB:"#DCC9B0",'
  'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
  'deckblattGewicht:"400",deckblattGroesse:98.9,fotoGroesse:64.1,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.651,'
  'schriftart:"Playfair",unterSchrift:"Playfair",name:"",zeile:.95,absatz:0,'
@@ -4231,6 +4231,23 @@ P.append(('qt=(It||(BS_KACHEL.textAnteil!=null?((ut*37+13)%100)>=BS_KACHEL.textA
 #          nachher  Text auf 1, 5, 9
 #
 #      Tag 2, 7 und 10 haben ihr Bild aus der Bibliothek bekommen.
+
+# 157  Farbwelt "Tinte / Sand" fuer die Textkachel
+#
+#          grundA/grundB      #2B2C2E -> #1B1E23
+#          schriftA/schriftB  #E8B48C -> #DCC9B0
+#
+#      Kontrast 7,55 -> 10,37 zu 1. Der Grund hat denselben kuehlen
+#      Kern wie die Schwarzweissfotos, der Sandton bleibt warm genug,
+#      damit es nicht klinisch wird.
+#
+#      Aus sechs gerechneten Farbwelten ausgewaehlt. Die zweite
+#      Empfehlung — "Papier / Tinte" fuer die 30-Schritt-Serie — ist
+#      hinfaellig: die Serie ist aus ihrem Plan raus. Sie stand nur
+#      noch in site/captions.json, und das ist ein Archiv vom
+#      3. September, kein Abbild des laufenden Plans. MERKE: fuer
+#      Aussagen ueber ihren Content zaehlt der Plan im Browser, nicht
+#      die Datei im Projekt.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

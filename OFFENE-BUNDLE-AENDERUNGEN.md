@@ -5293,3 +5293,23 @@ hatten eines gespeichert):
 | **nachher** | **1, 5, 9** |
 
 Tag 2, 7 und 10 haben ihr Bild aus der Bibliothek bekommen.
+
+## 157 — Farbwelt „Tinte / Sand" fuer die Textkachel
+
+| | von | auf |
+|---|---|---|
+| `grundA` / `grundB` | #2B2C2E | **#1B1E23** |
+| `schriftA` / `schriftB` | #E8B48C | **#DCC9B0** |
+
+Kontrast **7,55 → 10,37 : 1**. Der Grund hat denselben kuehlen Kern wie
+die Schwarzweissfotos, der Sandton bleibt warm genug, damit es nicht
+klinisch wird.
+
+Ausgewaehlt aus sechs gerechneten Farbwelten. Die zweite Empfehlung —
+„Papier / Tinte" fuer die 30-Schritt-Serie — ist hinfaellig: **die Serie
+ist aus ihrem Plan raus.** Sie stand nur noch in `site/captions.json`,
+einem Archiv vom 3. September, nicht im laufenden Plan.
+
+**Merke:** fuer Aussagen ueber ihren Content zaehlt der Plan im Browser,
+nicht die Datei im Projekt. Zwei meiner sechs Layoutkonzepte (Der Schritt,
+Die Aufgabe) hingen an dieser Serie und sind damit gegenstandslos.
