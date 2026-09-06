@@ -5113,3 +5113,38 @@ Summe der Helligkeit:
   Knopf, mit dem bestehende Tage ihre Textkacheln zurueckbekommen: bei
   `textAnteil:0` hat der Zeichner jeder bildlosen Kachel ein Foto
   aufgezwungen — und das Laden hat es sogar in den Plan geschrieben.
+
+## 150 — „Mehr wie die Quotes"
+
+Beide nebeneinander gerendert und die Zeilenabstaende **im Bild
+ausgemessen**, statt zu raten. Der Unterschied war nicht die Groesse,
+sondern der **Umbruch**: der Zeichner zerlegt einen einzelnen Absatz
+automatisch in Kopf und Unterzeile (`teile()`). Deshalb brach unsere
+Kachel am Satzende um, das Zitat nicht — und weil beide Haelften
+*getrennt* umbrechen, blieben die Zeilen kurz und die Schrift klein.
+
+`kachelEinBlock` schaltet diese Zerlegung ab. Steht die Zahl nicht im
+Block, bleibt alles wie bisher — der warme Feed sieht nichts davon. Zwei
+echte Absaetze im Text werden weiterhin als zwei Bloecke gesetzt, nur das
+*automatische* Zerlegen entfaellt.
+
+Dazu der Satzspiegel des Zitats:
+
+| | von | auf |
+|---|---|---|
+| `rand` | .0885 | **.11** (Spalte 82 → 78 %) |
+| `mitte` | .575 | **.50** |
+| `maxhoehe` | .90 | **.46** (Zitat deckelt bei .44) |
+| `groesseAnteil` | .098 | **.115** |
+| `absatz` | .45 | **.30** |
+
+Nachgemessen im gerenderten Bild, Zeilenabstand in Pixeln:
+
+| | Zeilen | Abstand |
+|---|---|---|
+| Zitat | 5 | 43 |
+| Textkachel | 5 | **44** |
+
+Und der Umbruch ist Wort fuer Wort derselbe. Uebrig bleiben genau die
+Unterschiede, die sie wollte: olivgrau statt creme, weiss statt blaugrau,
+Playfair 300 statt Display 400.

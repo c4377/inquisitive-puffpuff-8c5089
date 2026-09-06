@@ -285,7 +285,8 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#4F5347",schriftA:"#FFFFFF",'
  'grundB:"#4F5347",schriftB:"#FFFFFF",'
  'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
  'deckblattGewicht:"400",deckblattGroesse:98.9,fotoGroesse:64.1,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.651,'
- 'schriftart:"Playfair",unterSchrift:"Playfair",name:"",zeile:.95,absatz:.45,gewicht:"300",'
+ 'schriftart:"Playfair",unterSchrift:"Playfair",name:"",zeile:.95,absatz:.30,'
+ 'kachelEinBlock:1,rand:.11,mitte:.50,maxhoehe:.46,groesseAnteil:.115,gewicht:"300",'
  'betontGewicht:"700",handAnteil:1.15,handGroesse:0.9486,folgeZweitHand:1,'
  'unterGewicht:"300",unterVerhaeltnis:.62,laufweite:-35,fotoLaufweite:-20,'
  'folgeFamilie:"Playfair Display",ablaufTitel:"Playfair Display",'
@@ -4076,6 +4077,42 @@ P.append(('["200","400","500","700"]','["200","300","400","500","700"]',
 P.append(('qt=(It||!Oe(st,ut))&&ae.length>0;',
  'qt=(It||(BS_KACHEL.textAnteil!=null?((ut*37+13)%100)>=BS_KACHEL.textAnteil:!Oe(st,ut)))&&ae.length>0;',
  "Neu generieren folgt textAnteil wie der Import", 1))
+
+# 150  "Mehr wie die Quotes"
+#
+#      Beide nebeneinander gerendert und die Zeilenabstaende im Bild
+#      ausgemessen, statt zu raten. Der Unterschied war nicht die
+#      Groesse, sondern der UMBRUCH: der Zeichner zerlegt einen
+#      einzelnen Absatz automatisch in Kopf und Unterzeile (teile()).
+#      Deshalb brach unsere Kachel am Satzende um, das Zitat nicht —
+#      und weil beide Haelften getrennt umbrechen, blieben Zeilen kurz
+#      und die Schrift klein.
+#
+#      kachelEinBlock schaltet diese Zerlegung ab. Steht die Zahl
+#      nicht im Block, bleibt alles wie bisher — der warme Feed sieht
+#      nichts davon. Zwei echte Absaetze im Text werden weiterhin als
+#      zwei Bloecke gesetzt, nur das automatische Zerlegen entfaellt.
+#
+#      Dazu der Satzspiegel des Zitats:
+#
+#          rand           .0885 -> .11    Spalte 82 -> 78 Prozent
+#          mitte          .575  -> .50    sitzt wie das Zitat
+#          maxhoehe       .90   -> .46    Zitat deckelt bei .44
+#          groesseAnteil  .098  -> .115   Startgroesse
+#          absatz         .45   -> .30
+#
+#      Nachgemessen im gerenderten Bild, Zeilenabstand in Pixeln:
+#
+#          Zitat        5 Zeilen, Abstand 43
+#          Textkachel   5 Zeilen, Abstand 44
+#
+#      Und der Umbruch ist Wort fuer Wort derselbe. Uebrig bleiben
+#      genau die Unterschiede, die sie wollte: olivgrau statt creme,
+#      weiss statt blaugrau, Playfair 300 statt Display 400.
+P.append(('const BL=B0.length>1?B0:(()=>{const t2=teile(B0[0]||"");return t2[1]?[t2[0],t2[1]]:[B0[0]||""]})();',
+ 'const BL=B0.length>1?B0:(BS_KACHEL.kachelEinBlock?[B0[0]||""]:'
+ '(()=>{const t2=teile(B0[0]||"");return t2[1]?[t2[0],t2[1]]:[B0[0]||""]})());',
+ "Textkachel: ein durchlaufender Block statt Kopf und Unterzeile", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
