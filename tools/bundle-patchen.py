@@ -281,16 +281,16 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 # der Block wird nach dem Anlegen ueberschrieben. Ein Bundle, zwei
 # Feeds, dieselben Bilder und derselbe Plan (IndexedDB haengt an der
 # Domain, nicht am Pfad).
-DUNKEL = ('const BS_DUNKEL={grundA:"#171512",schriftA:"#F2EFE9",'
- 'grundB:"#0E0D0C",schriftB:"#F2EFE9",'
+DUNKEL = ('const BS_DUNKEL={grundA:"#4F5347",schriftA:"#FFFFFF",'
+ 'grundB:"#4F5347",schriftB:"#FFFFFF",'
  'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
  'deckblattGewicht:"400",deckblattGroesse:98.9,fotoGroesse:64.1,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.651,'
- 'schriftart:"Playfair Display",unterSchrift:"Shadows Into Light",gewicht:"400",'
+ 'schriftart:"Playfair",unterSchrift:"Playfair",name:"",zeile:.95,absatz:.45,gewicht:"300",'
  'betontGewicht:"700",handAnteil:1.15,handGroesse:0.9486,folgeZweitHand:1,'
- 'unterGewicht:"400",unterVerhaeltnis:.62,laufweite:0,fotoLaufweite:-20,'
+ 'unterGewicht:"300",unterVerhaeltnis:.62,laufweite:-35,fotoLaufweite:-20,'
  'folgeFamilie:"Playfair Display",ablaufTitel:"Playfair Display",'
  'nameSchrift:"Playfair Display",nameGewicht:"400",nameLaufweite:60,'
- 'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:0,'
+ 'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:28,'
  'geteilt:1,geteiltAnteil:25,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
  'deckblattSchnitte:"full|full|wide|full|wide|full",'
  'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20",tonNeutral:"13,13,13",'
@@ -4020,6 +4020,62 @@ P.append(('*((zVS||!(t.folienRolle&&t.folienRolle!=="deckblatt"))?(Number(BS_KAC
 #
 #      Wirksam also 82 -> 90,6 Prozent, gut 10 Prozent mehr Platz bei
 #      gleichem Umbruch — zusaetzlich zu den 15 Prozent aus 146.
+
+# 149  Textkacheln zurueck im dunklen Zwilling
+#
+#      "Baue dort wieder Textkacheln, bitte Farben olivgrau und weisse
+#      Schrift duenne Playfair sehr eng in Abstand und Zeile also wie
+#      die Quotes."
+#
+#      Erst nachgesehen, WER die Textkachel ueberhaupt zeichnet. Eine
+#      Sonde im Zeichner: die Kachel kommt als karte:"hell" herein und
+#      wird von der Fassung "marke" gemalt — nicht von dem Zweig, an
+#      dem wir den ganzen Abend gearbeitet haben. Das ist wichtig,
+#      weil dieser Zeichner schon vollstaendig aus dem Block liest:
+#
+#          grundA/schriftA   Grund und Schrift der Textkachel
+#          schriftart        Familie des ersten Blocks
+#          unterSchrift      Familie des zweiten Blocks
+#          gewicht           Schnitt oben, unterGewicht unten
+#          laufweite         Laufweite (charSpacing)
+#          zeile / absatz    Zeilenabstand und Absatzluft
+#          name              Wortmarke unten, leer heisst keine
+#
+#      Es brauchte also fast keinen Code, nur Werte. gewicht,
+#      laufweite, zeile, absatz, groesseAnteil, maxhoehe, rand und
+#      mitte werden ausschliesslich hier gelesen (K = BS_KACHEL, das
+#      Kuerzel steht genau einmal im Bundle) — Fotokacheln lesen
+#      deckblattGroesse, fotoLaufweite, fotoZeile. Die Fotokacheln
+#      bleiben also unberuehrt.
+#
+#      DUENN: Playfair Display faengt bei 400 an, duenner geht nicht.
+#      Die Familie "Playfair" (die neuere, ohne Display) hat 300.
+#      Deshalb liegt sie jetzt selbst gehostet in site/fonts/ und ihr
+#      @font-face steht nur in site/dunkel/index.html. Gemessen, 80px,
+#      gleicher Satz, Tinte als Summe der Helligkeit:
+#
+#          Playfair Display 400   Tinte 9235   Breite 632
+#          Playfair 400           Tinte 6351   Breite 572
+#          Playfair 300           Tinte 5965   Breite 572
+#          Playfair 300, -35      Tinte 5964   Breite 524
+#
+#      Also 35 Prozent weniger Tinte und 17 Prozent schmaler als
+#      vorher. Das ist ein echtes Duenn, kein gefuehltes.
+#
+#      Zwei Code-Aenderungen bleiben:
+#        - der Schnitt 300 muss mit vorgeladen werden, sonst misst der
+#          Zeichner den falschen (er misst auf dem Canvas),
+#        - "neu generieren" entschied ueber Foto oder Text mit einer
+#          eigenen Regel; jetzt folgt es textAnteil wie der Import.
+#          Sonst gaebe es keinen Knopf, mit dem bestehende Tage die
+#          Textkacheln zurueckbekommen: bei textAnteil 0 hat der
+#          Zeichner jeder bildlosen Kachel ein Foto aufgezwungen und
+#          das Laden hat es sogar in den Plan geschrieben.
+P.append(('["200","400","500","700"]','["200","300","400","500","700"]',
+ "Schnitt 300 wird mit vorgeladen", 1))
+P.append(('qt=(It||!Oe(st,ut))&&ae.length>0;',
+ 'qt=(It||(BS_KACHEL.textAnteil!=null?((ut*37+13)%100)>=BS_KACHEL.textAnteil:!Oe(st,ut)))&&ae.length>0;',
+ "Neu generieren folgt textAnteil wie der Import", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

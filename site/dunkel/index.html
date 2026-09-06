@@ -27,7 +27,7 @@
          seine eigene Tagesnummer und nimmt sonst den Wert oben. */
       var g=JSON.parse(localStorage.getItem("BS_SCHWARZ_TAG")||"null");
       if(g&&typeof g==="object")window.BS_SCHWARZ_TAG=g;}catch(e){}</script>
-    <script type="module" crossorigin src="/assets/index-B5karten207.js"></script>
+    <script type="module" crossorigin src="/assets/index-B5karten208.js"></script>
     <!-- Montserrat liegt hier im Projekt, nicht bei Google. Der Zeichner misst
          Texte auf dem Canvas und braucht die Schrift sofort; ueber das Netz
          geladen waere sie beim ersten Bild manchmal noch nicht da. Alle
@@ -78,6 +78,11 @@
          bisher nur ueber den Google-Link — fuer eine Schrift, mit der
          gerechnet wird, ist das zu spaet. */
       @font-face{font-family:"Playfair Display";src:url(/fonts/PlayfairDisplay-Variable.woff2) format("woff2");font-weight:400 900;font-style:normal;font-display:block}
+      /* Playfair (nicht Playfair Display), variabel von 300 bis 900.
+         SIL Open Font License, Lizenztext liegt daneben. Playfair
+         Display faengt erst bei 400 an — fuer die duennen Textkacheln
+         braucht es diese Familie. Nur hier im dunklen Zwilling. */
+      @font-face{font-family:Playfair;src:url(/fonts/Playfair-Variable.woff2) format("woff2");font-weight:300 900;font-style:normal;font-display:block}
       @font-face{font-family:Prata;src:url(/fonts/Prata-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
       @font-face{font-family:Italiana;src:url(/fonts/Italiana-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
       @font-face{font-family:Marcellus;src:url(/fonts/Marcellus-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}

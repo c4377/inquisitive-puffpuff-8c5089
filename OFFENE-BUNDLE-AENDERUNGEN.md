@@ -5046,3 +5046,70 @@ und faellt auf `.86` zurueck — dort aendert sich nichts.
 
 Wirksam **82 → 90,6 Prozent**, gut 10 Prozent mehr Platz bei gleichem
 Umbruch — zusaetzlich zu den 15 Prozent aus 146.
+
+## 149 — Textkacheln zurueck im dunklen Zwilling
+
+*„Baue dort wieder Textkacheln, bitte Farben olivgrau und weisse Schrift
+duenne Playfair sehr eng in Abstand und Zeile also wie die Quotes."*
+
+Erst nachgesehen, **wer** die Textkachel ueberhaupt zeichnet. Eine Sonde
+im Zeichner: die Kachel kommt als `karte:"hell"` herein und wird von der
+Fassung **`"marke"`** gemalt — nicht von dem Zweig, an dem wir den ganzen
+Abend gearbeitet haben. Das ist die gute Nachricht, denn dieser Zeichner
+liest bereits alles aus dem Block:
+
+| Wert | wofuer |
+|---|---|
+| `grundA` / `schriftA` | Grund und Schrift der Textkachel |
+| `schriftart` / `unterSchrift` | Familie erster / zweiter Block |
+| `gewicht` / `unterGewicht` | Schnitt oben / unten |
+| `laufweite` | Laufweite |
+| `zeile` / `absatz` | Zeilenabstand und Absatzluft |
+| `name` | Wortmarke unten — leer heisst keine |
+
+Es brauchte also fast keinen Code, nur Werte. `gewicht`, `laufweite`,
+`zeile`, `absatz`, `groesseAnteil`, `maxhoehe`, `rand` und `mitte` werden
+**ausschliesslich hier** gelesen (`K = BS_KACHEL`, das Kuerzel steht genau
+einmal im Bundle). Fotokacheln lesen `deckblattGroesse`, `fotoLaufweite`,
+`fotoZeile` — sie bleiben unberuehrt.
+
+### Duenn heisst eine andere Familie
+
+Playfair **Display** faengt bei 400 an, duenner geht nicht. Die Familie
+**Playfair** (die neuere, ohne Display) hat 300. Sie liegt jetzt selbst
+gehostet in `site/fonts/`, ihr `@font-face` steht **nur** in
+`site/dunkel/index.html`. Gemessen bei 80 px, gleicher Satz, Tinte als
+Summe der Helligkeit:
+
+| | Tinte | Breite |
+|---|---|---|
+| Playfair Display 400 | 9235 | 632 |
+| Playfair 400 | 6351 | 572 |
+| **Playfair 300** | **5965** | **572** |
+| Playfair 300, Laufweite −35 | 5964 | **524** |
+
+**35 % weniger Tinte, 17 % schmaler** als vorher. Ein echtes Duenn.
+
+### Die Werte
+
+| | von | auf |
+|---|---|---|
+| `grundA` / `grundB` | #171512 / #0E0D0C | **#4F5347** (olivgrau) |
+| `schriftA` / `schriftB` | #F2EFE9 | **#FFFFFF** |
+| `schriftart` / `unterSchrift` | Playfair Display / Shadows | **Playfair** |
+| `gewicht` / `unterGewicht` | 400 | **300** |
+| `laufweite` | 0 | **−35** |
+| `zeile` | 1.02 | **0.95** |
+| `absatz` | .55 | **.45** |
+| `name` | carinaannaprav | **leer** |
+| `textAnteil` | 0 | **28** |
+
+### Zwei Code-Aenderungen bleiben
+
+- Der **Schnitt 300 muss mit vorgeladen** werden, sonst misst der Zeichner
+  den falschen — er misst auf dem Canvas.
+- **„Neu generieren"** entschied ueber Foto oder Text mit einer eigenen
+  Regel; jetzt folgt es `textAnteil` wie der Import. Sonst gaebe es keinen
+  Knopf, mit dem bestehende Tage ihre Textkacheln zurueckbekommen: bei
+  `textAnteil:0` hat der Zeichner jeder bildlosen Kachel ein Foto
+  aufgezwungen — und das Laden hat es sogar in den Plan geschrieben.
