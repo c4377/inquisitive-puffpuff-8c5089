@@ -291,7 +291,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#2B2C2E",schriftA:"#E8B48C",'
  'unterGewicht:"300",unterVerhaeltnis:1,laufweite:-35,fotoLaufweite:-20,'
  'folgeFamilie:"Playfair Display",ablaufTitel:"Playfair Display",'
  'nameSchrift:"Playfair Display",nameGewicht:"400",nameLaufweite:60,'
- 'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:28,'
+ 'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:28,textJede:4,'
  'geteilt:1,geteiltAnteil:25,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
  'deckblattSchnitte:"full|full|wide|full|wide|full",'
  'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20",tonNeutral:"13,13,13",'
@@ -4155,6 +4155,43 @@ P.append(('const BL=B0.length>1?B0:(()=>{const t2=teile(B0[0]||"");return t2[1]?
 #
 #      Zwei echte Leerzeilen im Text bleiben zwei Bloecke, und jeder
 #      davon wird zusaetzlich an seinen Satzenden gebrochen.
+
+# 155  Alle 4 Posts eine Textkachel
+#
+#      textAnteil war ein ANTEIL: 28 Prozent, per Hash verteilt. Das
+#      ergibt mal drei Fotos hintereinander, mal zwei Textkacheln
+#      nebeneinander. Sie wollte einen Takt, keinen Wuerfel — wie
+#      damals beim strengen Wechsel schwarzweiss/farbig.
+#
+#      textJede zaehlt stattdessen: Rest 0 bei Teilung durch 4 heisst
+#      Textkachel, alles andere Foto. An zwei Stellen, damit Import und
+#      "neu generieren" denselben Takt schlagen. Steht textJede nicht
+#      im Block, gilt weiter textAnteil — der warme Grundblock merkt
+#      also nichts.
+#
+#      Nachgemessen im Browser, Import von zwoelf Tagen, protokolliert
+#      wurde die Entscheidung je Tag (Index, Foto?, Bilder im Pool):
+#
+#          [0,false,4] [1,true,4] [2,true,4]  [3,true,4]
+#          [4,false,4] [5,true,4] [6,true,4]  [7,true,4]
+#          [8,false,4] [9,true,4] [10,true,4] [11,true,4]
+#
+#      Also genau 0, 4, 8 — jeder vierte Post, drei von zwoelf.
+#
+#      MERKE fuer den naechsten Test: die App schreibt ihren eigenen
+#      Stand in die Datenbank zurueck, sobald sie geladen hat. Wer
+#      Bilder VOR dem Laden hineinsaet, dessen Saat wird ueberschrieben
+#      — die Bibliothek war dann leer und JEDER Tag wurde zur
+#      Textkachel, in jeder Fassung. Erst saeen, wenn die App steht.
+
+P.append(('(BS_KACHEL.textAnteil!=null?((pt*37+13)%100)>=BS_KACHEL.textAnteil:(qt?!Oe(ct,pt):tS(pt)))',
+ '(BS_KACHEL.textJede?(pt%BS_KACHEL.textJede)!==0:BS_KACHEL.textAnteil!=null?'
+ '((pt*37+13)%100)>=BS_KACHEL.textAnteil:(qt?!Oe(ct,pt):tS(pt)))',
+ "Import: jeder vierte Post wird Textkachel", 1))
+P.append(('qt=(It||(BS_KACHEL.textAnteil!=null?((ut*37+13)%100)>=BS_KACHEL.textAnteil:!Oe(st,ut)))&&ae.length>0;',
+ 'qt=(It||(BS_KACHEL.textJede?(ut%BS_KACHEL.textJede)!==0:BS_KACHEL.textAnteil!=null?'
+ '((ut*37+13)%100)>=BS_KACHEL.textAnteil:!Oe(st,ut)))&&ae.length>0;',
+ "Neu generieren schlaegt denselben Takt", 1))
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

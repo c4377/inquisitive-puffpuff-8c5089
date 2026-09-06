@@ -5228,3 +5228,33 @@ Nachgesehen im Browser, mit einem Profil, in dem zuletzt *warm* gemerkt war:
 `BS_DUNKEL` wird damit **immer** ueber `BS_KACHEL` gelegt. Die warmen Werte
 im Grundblock bleiben als Rueckfallebene stehen, sie sind ab jetzt aber
 ohne Wirkung.
+
+## 155 — Alle 4 Posts eine Textkachel
+
+`textAnteil` war ein **Anteil**: 28 Prozent, per Hash verteilt. Das ergibt
+mal drei Fotos hintereinander, mal zwei Textkacheln nebeneinander. Sie
+wollte einen **Takt**, keinen Wuerfel — wie damals beim strengen Wechsel
+schwarzweiss/farbig.
+
+`textJede` zaehlt stattdessen: Rest 0 bei Teilung durch 4 heisst
+Textkachel, alles andere Foto. An **zwei** Stellen, damit Import und
+„neu generieren" denselben Takt schlagen. Steht `textJede` nicht im Block,
+gilt weiter `textAnteil`.
+
+Nachgemessen im Browser, Import von zwoelf Tagen, protokolliert wurde die
+Entscheidung je Tag *(Index, Foto?, Bilder im Pool)*:
+
+```
+[0,false,4]  [1,true,4]  [2,true,4]   [3,true,4]
+[4,false,4]  [5,true,4]  [6,true,4]   [7,true,4]
+[8,false,4]  [9,true,4]  [10,true,4]  [11,true,4]
+```
+
+Genau 0, 4, 8 — **jeder vierte Post**, drei von zwoelf.
+
+**Merke fuer den naechsten Test:** die App schreibt ihren eigenen Stand in
+die Datenbank zurueck, sobald sie geladen hat. Wer Bilder *vor* dem Laden
+hineinsaet, dessen Saat wird ueberschrieben — die Bibliothek war dann leer
+und **jeder** Tag wurde zur Textkachel, in jeder Fassung. Das sah zuerst
+wie ein Fehler in der neuen Regel aus und war einer im Pruefstand. Erst
+saeen, wenn die App steht.
