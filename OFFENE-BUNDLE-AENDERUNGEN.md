@@ -5197,3 +5197,34 @@ Damit die Saetze nicht wie Kopf und Unterzeile aussehen:
 
 Zwei echte Leerzeilen im Text bleiben zwei Bloecke, und jeder davon wird
 zusaetzlich an seinen Satzenden gebrochen.
+
+## 154 — Der warme Feed ist weg, dunkel gilt ueberall
+
+Der warme Feed war zugleich die **Auffangdatei der ganzen Seite**
+(`/*` → `/index.html`). Ihn einfach zu loeschen haette jede Adresse ausser
+`/dunkel/…` auf 404 geschickt, die Startseite eingeschlossen. Deshalb ist
+er nicht geloescht, sondern **ersetzt**: die Wurzel ist jetzt der dunkle
+Feed.
+
+- `site/index.html` ist die Fassung aus `site/dunkel/` — mit der
+  `@font-face` fuer Playfair 300, die der warmen fehlte.
+- Die **Pfadregel ist entfallen**. Sie schaltete `/` zurueck auf den
+  Grundstil; genau das haette die Wurzel wieder hell gemacht. Jetzt steht
+  dort `localStorage.setItem("BS_STIL","dunkel")` — dunkel gilt auf jeder
+  Route und auch in einem alten Tab, in dem noch der Grundstil gemerkt war.
+- `/dunkel/…` bleibt als zweite Adresse bestehen und zeigt dasselbe.
+- Die **Warm|Dunkel-Pille** in `stil-schalter.js` ist raus, der
+  Schwarz-Regler bleibt und ruecht in die Ecke nach.
+
+Nachgesehen im Browser, mit einem Profil, in dem zuletzt *warm* gemerkt war:
+
+| | |
+|---|---|
+| `BS_STIL` auf `/` | dunkel |
+| Warm-Dunkel-Pille | nicht mehr da |
+| Schwarz-Regler | da |
+| nach Klick in den Editor | dunkel |
+
+`BS_DUNKEL` wird damit **immer** ueber `BS_KACHEL` gelegt. Die warmen Werte
+im Grundblock bleiben als Rueckfallebene stehen, sie sind ab jetzt aber
+ohne Wirkung.
