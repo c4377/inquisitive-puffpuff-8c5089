@@ -8,6 +8,17 @@
  * Der Warm-Dunkel-Umschalter stand frueher hier daneben. Es gibt nur
  * noch einen Feed, den dunklen, also ist er weg. Die Pfadregel in der
  * index.html ist ebenfalls entfallen: dunkel gilt immer.
+ *
+ * Er ist zugeklappt, bis man ihn braucht. Offen ist er 300 Pixel breit
+ * und lag damit staendig auf einer Kachel, auf der Blaetterleiste oder
+ * auf der Speicherzeile im Editor. Zugeklappt ist er ein Griff von 42
+ * Pixeln, der nur den Wert zeigt. Ob er offen oder zu ist, merkt sich
+ * der Browser (BS_SCHWARZ_OFFEN) — nach dem Neuladen steht er wieder
+ * so da, wie sie ihn verlassen hat.
+ *
+ * Er steht links unten, nicht mehr rechts: rechts unten sitzt der
+ * Hilfeknopf der App (fixed bottom-4 right-4), die beiden lagen
+ * uebereinander.
  */
 (function () {
   /* Der Schwarz-Regler.
@@ -95,12 +106,25 @@
     var css = document.createElement("style");
     css.textContent =
       '@media print{#bs-schwarz{display:none}}' +
-      '#bs-schwarz{position:fixed;right:14px;bottom:14px;z-index:2147483000;' +
+      '#bs-schwarz{position:fixed;left:10px;bottom:10px;z-index:2147483000;' +
       'display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;' +
       'background:rgba(20,18,16,.72);backdrop-filter:blur(6px);' +
       'box-shadow:0 2px 12px rgba(0,0,0,.28);opacity:.55;transition:opacity .15s;' +
       'color:rgba(255,255,255,.72);font:600 12px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}' +
       '#bs-schwarz:hover{opacity:1}' +
+      /* Zugeklappt: nur der Griff, alles andere ist weg — nicht bloss
+         durchsichtig, sondern ohne Platzbedarf, sonst faengt die Ecke
+         weiter Klicks ab, die der Kachel gehoeren. */
+      '#bs-schwarz.bs-zu{gap:0;padding:0;background:none;box-shadow:none;' +
+      'backdrop-filter:none;opacity:.42}' +
+      '#bs-schwarz.bs-zu:hover{opacity:1}' +
+      '#bs-schwarz.bs-zu>*{display:none}' +
+      '#bs-schwarz.bs-zu>#bs-schwarz-griff{display:block}' +
+      '#bs-schwarz-griff{border:0;cursor:pointer;border-radius:999px;' +
+      'padding:6px 10px;color:rgba(255,255,255,.8);background:rgba(20,18,16,.72);' +
+      'backdrop-filter:blur(6px);box-shadow:0 2px 10px rgba(0,0,0,.28);' +
+      'font:600 11px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;' +
+      'font-variant-numeric:tabular-nums}' +
       '#bs-schwarz input{width:96px;accent-color:#E8836B;margin:0}' +
       '#bs-schwarz button{border:0;cursor:pointer;border-radius:999px;padding:4px 9px;' +
       'color:rgba(255,255,255,.72);background:rgba(255,255,255,.12);font:inherit}' +
@@ -110,6 +134,10 @@
 
     var reg = document.createElement("div");
     reg.id = "bs-schwarz";
+    var griff = document.createElement("button");
+    griff.type = "button";
+    griff.id = "bs-schwarz-griff";
+    griff.title = "Schwarz einstellen";
     var titel = document.createElement("label");
     titel.textContent = "Schwarz";
     titel.setAttribute("for", "bs-schwarz-regler");
@@ -130,11 +158,29 @@
     eingabe.addEventListener("input", function () { wert.textContent = eingabe.value + "%"; });
     eingabe.addEventListener("change", function () { schwarzSetzen(parseInt(eingabe.value, 10) / 100); });
     fuer.addEventListener("click", function () { waehlen(null); });
+    reg.appendChild(griff);
     reg.appendChild(titel);
     reg.appendChild(fuer);
     reg.appendChild(eingabe);
     reg.appendChild(wert);
     document.body.appendChild(reg);
+
+    /* Auf- und zuklappen. Der Griff zeigt zugeklappt den Wert, damit
+     * man auch ohne Aufklappen sieht, worauf sie steht. */
+    function offenJetzt() {
+      try { return localStorage.getItem("BS_SCHWARZ_OFFEN") === "1"; }
+      catch (e) { return false; }
+    }
+    function klappen(auf) {
+      reg.classList.toggle("bs-zu", !auf);
+      griff.textContent = auf ? "\u00d7" : (eingabe.value + "%");
+      griff.title = auf ? "Zuklappen" : "Schwarz einstellen \u2014 steht auf " + eingabe.value + "%";
+      try {
+        if (auf) localStorage.setItem("BS_SCHWARZ_OFFEN", "1");
+        else localStorage.removeItem("BS_SCHWARZ_OFFEN");
+      } catch (e) {}
+    }
+    griff.addEventListener("click", function () { klappen(reg.classList.contains("bs-zu")); });
 
     function waehlen(tag) {
       gewaehlt = tag;
@@ -147,8 +193,10 @@
       var v = Math.round(standJetzt() * 100);
       eingabe.value = String(v);
       wert.textContent = v + "%";
+      if (reg.classList.contains("bs-zu")) griff.textContent = v + "%";
     }
     waehlen(gewaehlt);
+    klappen(offenJetzt());
 
     /* Nur zuhoeren, nichts abfangen: capture, damit es auch ankommt,
      * wenn die App den Klick selbst verarbeitet, und ohne
