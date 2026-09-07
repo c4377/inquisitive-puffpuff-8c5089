@@ -5444,3 +5444,27 @@ groesser.
 
 Kontrast **8,00 : 1**. #241C16 ist die Farbe ihres urspruenglichen warmen
 Feeds — die einzige Farbwelt mit eigener Geschichte.
+
+## 163 — Die Textkachel wird umgedreht
+
+Fuenfmal hintereinander „andere Farben", und fuenfmal war meine Antwort
+derselbe Bauplan: **dunkler Grund, warme Schrift.**
+
+```
+#171512 / #F2EFE9     #4F5347 / #FFFFFF
+#2B2C2E / #E7C9B4     #2B2C2E / #E8B48C
+#1B1E23 / #DCC9B0     #241C16 / #E9A473
+```
+
+Statt den siebten Braunton zu suchen, kippt jetzt das Prinzip: **heller
+Grund, dunkle Schrift.**
+
+| | von | auf |
+|---|---|---|
+| `grundA` / `grundB` | #241C16 | **#EDE7DE** Papier |
+| `schriftA` / `schriftB` | #E9A473 | **#241C16** Espresso als Tinte |
+
+Kontrast **13,64 : 1**. Die Palette bleibt ihre, nur die Rollen tauschen.
+Im Raster ist das der eigentliche Gewinn: alle Fotokacheln sind dunkel,
+jede siebte ist jetzt hell — damit wird sie zur **Pause** statt zum
+naechsten Bild.

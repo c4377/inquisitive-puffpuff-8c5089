@@ -281,8 +281,8 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 # der Block wird nach dem Anlegen ueberschrieben. Ein Bundle, zwei
 # Feeds, dieselben Bilder und derselbe Plan (IndexedDB haengt an der
 # Domain, nicht am Pfad).
-DUNKEL = ('const BS_DUNKEL={grundA:"#241C16",schriftA:"#E9A473",'
- 'grundB:"#241C16",schriftB:"#E9A473",'
+DUNKEL = ('const BS_DUNKEL={grundA:"#EDE7DE",schriftA:"#241C16",'
+ 'grundB:"#EDE7DE",schriftB:"#241C16",'
  'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
  'deckblattGewicht:"400",deckblattGroesse:98.9,fotoGroesse:64.1,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.651,'
  'schriftart:"Cormorant Garamond",unterSchrift:"Cormorant Garamond",name:"",zeile:.95,absatz:0,'
@@ -4393,6 +4393,26 @@ P.append(('l(),n&&(n.slides=i.length>0?i:["Inhalt..."],t.push(n)),t}',
 #
 #      Kontrast 8,00 zu 1. #241C16 ist die Farbe ihres urspruenglichen
 #      warmen Feeds — die einzige Farbwelt mit eigener Geschichte.
+
+# 163  Die Textkachel wird umgedreht
+#
+#      Fuenfmal hintereinander "andere Farben", und fuenfmal war meine
+#      Antwort derselbe Bauplan: dunkler Grund, warme Schrift.
+#
+#          #171512 / #F2EFE9    #4F5347 / #FFFFFF
+#          #2B2C2E / #E7C9B4    #2B2C2E / #E8B48C
+#          #1B1E23 / #DCC9B0    #241C16 / #E9A473
+#
+#      Statt den siebten Braunton zu suchen, kippt jetzt das Prinzip:
+#      heller Grund, dunkle Schrift.
+#
+#          grundA/grundB      #241C16 -> #EDE7DE   Papier
+#          schriftA/schriftB  #E9A473 -> #241C16   Espresso als TINTE
+#
+#      Kontrast 13,64 zu 1. Die Palette bleibt ihre, nur die Rollen
+#      tauschen. Und im Raster ist das der eigentliche Gewinn: alle
+#      Fotokacheln sind dunkel, jede siebte Kachel ist jetzt hell —
+#      damit wird sie zur Pause statt zum naechsten Bild.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
