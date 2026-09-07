@@ -283,13 +283,13 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 # Domain, nicht am Pfad).
 DUNKEL = ('const BS_DUNKEL={grundA:"#FFFFFF",schriftA:"#000000",'
  'grundB:"#FFFFFF",schriftB:"#000000",'
- 'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
+ 'deckblattFamilie:"Italiana",fotoSchrift:"Italiana",'
  'deckblattGewicht:"400",deckblattGroesse:98.9,fotoGroesse:64.1,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.651,'
- 'schriftart:"Cormorant Garamond",unterSchrift:"Cormorant Garamond",name:"",zeile:.95,absatz:0,'
- 'kachelEinBlock:1,kachelSatzUmbruch:1,rand:.11,mitte:.50,maxhoehe:.46,groesseAnteil:.115,gewicht:"300",'
+ 'schriftart:"Italiana",unterSchrift:"Italiana",name:"",zeile:.95,absatz:0,'
+ 'kachelEinBlock:1,kachelSatzUmbruch:1,rand:.11,mitte:.50,maxhoehe:.46,groesseAnteil:.115,gewicht:"400",'
  'betontGewicht:"700",handAnteil:1.15,handGroesse:0.9486,folgeZweitHand:1,'
- 'unterGewicht:"300",unterVerhaeltnis:1,laufweite:-35,fotoLaufweite:-20,'
- 'folgeFamilie:"Playfair Display",ablaufTitel:"Playfair Display",'
+ 'unterGewicht:"400",unterVerhaeltnis:1,laufweite:-35,fotoLaufweite:-20,'
+ 'folgeFamilie:"Italiana",ablaufTitel:"Italiana",'
  'nameSchrift:"Playfair Display",nameGewicht:"400",nameLaufweite:60,'
  'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:28,textJede:7,'
  'geteilt:1,geteiltAnteil:25,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
@@ -4428,6 +4428,37 @@ P.append(('l(),n&&(n.slides=i.length>0?i:["Inhalt..."],t.push(n)),t}',
 #      MERKE: sechs Vorschlaege in Folge, die alle im selben Schema
 #      lagen, waren sechs verlorene Runden. Eine Frage mit Optionen,
 #      die sich grundsaetzlich unterscheiden, hat es in einer geklaert.
+
+# 165  Italiana statt Cormorant, und auf den Folien dieselbe
+#
+#      "Schoen die Schrift aber das hat schon wer exakt so und deshalb
+#      bitte eine andere und auf den slides die gleiche."
+#
+#      Cormorant Garamond ist tatsaechlich ueberall — sie hat recht.
+#      Aus der Messtabelle von 162 die naechstliegende gesucht: es
+#      zaehlt die BREITE, denn die entscheidet ueber den Umbruch.
+#
+#          Cormorant Garamond 300  Breite 465  Versalhoehe 73
+#          Italiana 400            Breite 471  Versalhoehe 75   +1,3 %
+#          Marcellus 400           Breite 520                  +11,8 %
+#          Bodoni Moda 400         Breite 534                  +14,8 %
+#          Prata 400               Breite 571                  +22,8 %
+#
+#      Italiana liegt 1,3 Prozent daneben, alle anderen zweistellig.
+#      Also Italiana — fein, hoher Kontrast, deutlich seltener.
+#
+#      Und diesmal ueberall dieselbe: schriftart, unterSchrift,
+#      deckblattFamilie, fotoSchrift, folgeFamilie, ablaufTitel.
+#      Vorher stand auf den Folien noch Playfair Display.
+#
+#      VORHER GEPRUEFT, weil es hier schon einmal fast schiefging:
+#      tiefeSchriften enthaelt "Italiana". Stuende sie nicht drin,
+#      waere mit dem Schriftwechsel das dunkle Band unter dem Text
+#      lautlos verschwunden.
+#
+#      Italiana hat nur den Schnitt 400, deshalb gewicht und
+#      unterGewicht von 300 auf 400. Fett ausgezeichnete Woerter
+#      (**Wort**) haben damit keinen echten fetten Schnitt mehr.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

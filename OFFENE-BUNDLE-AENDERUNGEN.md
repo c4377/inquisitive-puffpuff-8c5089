@@ -5485,3 +5485,35 @@ Kontrast **21,00 : 1** — das Maximum. Kein Beige, keine Waerme.
 **Merke:** sechs Vorschlaege in Folge, die alle im selben Schema lagen,
 waren sechs verlorene Runden. Eine Frage mit Optionen, die sich
 grundsaetzlich unterscheiden, hat es in einer geklaert.
+
+## 165 — Italiana statt Cormorant, und auf den Folien dieselbe
+
+*„Schoen die Schrift aber das hat schon wer exakt so und deshalb bitte eine
+andere und auf den slides die gleiche."*
+
+Cormorant Garamond ist tatsaechlich ueberall — sie hat recht. Aus der
+Messtabelle von 162 die naechstliegende gesucht, und es zaehlt die
+**Breite**, denn die entscheidet ueber den Umbruch:
+
+| Familie | Breite | Abweichung |
+|---|---|---|
+| Cormorant Garamond 300 | 465 | — |
+| **Italiana 400** | **471** | **+1,3 %** |
+| Marcellus 400 | 520 | +11,8 % |
+| Bodoni Moda 400 | 534 | +14,8 % |
+| Prata 400 | 571 | +22,8 % |
+
+Italiana liegt 1,3 Prozent daneben, alle anderen zweistellig. Also
+Italiana — fein, hoher Kontrast, deutlich seltener.
+
+Und diesmal **ueberall dieselbe**: `schriftart`, `unterSchrift`,
+`deckblattFamilie`, `fotoSchrift`, `folgeFamilie`, `ablaufTitel`. Vorher
+stand auf den Folien noch Playfair Display.
+
+**Vorher geprueft, weil es hier schon einmal fast schiefging:**
+`tiefeSchriften` enthaelt „Italiana". Stuende sie nicht drin, waere mit dem
+Schriftwechsel das dunkle Band unter dem Text lautlos verschwunden.
+
+Italiana hat nur den Schnitt 400, deshalb `gewicht` und `unterGewicht` von
+300 auf 400. Fett ausgezeichnete Woerter (`**Wort**`) haben damit keinen
+echten fetten Schnitt mehr.
