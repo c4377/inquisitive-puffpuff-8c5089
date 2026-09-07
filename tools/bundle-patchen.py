@@ -2402,16 +2402,12 @@ P.append(('Ca=async(e,t,r,n,i={})=>{var yn,_n,Jr,xr,zr,ti,nn,_i,ki,ri;try{Pe.fab
  'try{if(typeof window<"u"&&typeof t.background=="string"&&t.background){'
  'const zL=window.__bsBilder=window.__bsBilder||[];'
  'if(zL.indexOf(t.background)<0)zL.push(t.background)}}catch(zz){}'
- '(()=>{try{const zBil=()=>{const zB=(typeof window<"u"&&window.__bsBilder)||[];if(!zB.length)return null;'
+ '(()=>{try{if(!t.background&&BS_KACHEL.textAnteil===0&&t.karte!=="ablauf"){'
+ 'const zB=(typeof window<"u"&&window.__bsBilder)||[];if(!zB.length)return;'
  'const zs=String(t.text||"")+"|"+String(typeof t._tag=="number"?t._tag:(i.slideIndex||0));let zh=0;'
- 'for(let zi=0;zi<zs.length;zi+=1)zh=(zh*31+zs.charCodeAt(zi))%99991;return zB[zh%zB.length]};'
- 'const zJ=Number(BS_KACHEL.textJede)||0;const zKa=String(t.karte||"");'
- 'if(zJ>0&&typeof t._tag=="number"&&(zKa===""||zKa==="hell"||zKa==="stein")&&!t.reminderArt){'
- 'if(((((t._tag-1)%zJ)+zJ)%zJ)===0){if(t.background)t={...t,background:null,overlay:void 0,_autoImage:void 0};return}'
- 'if(!t.background){const zn=zBil();if(zn)t={...t,background:zn}}return}'
- 'if(!t.background&&BS_KACHEL.textAnteil===0&&t.karte!=="ablauf"){const zn=zBil();if(zn)t={...t,background:zn}}'
- '}catch(zz){}})();',
- "Zeichner: Takt aus textJede, sonst keine Kachel ohne Bild", 1))
+ 'for(let zi=0;zi<zs.length;zi+=1)zh=(zh*31+zs.charCodeAt(zi))%99991;'
+ 't={...t,background:zB[zh%zB.length]}}}catch(zz){}})();',
+ "Zeichner: keine Kachel ohne Bild, wenn der Stil das verlangt", 1))
 
 # 112 — Mein eigener Schutz hat die Ergaenzung blockiert.
 #
@@ -4510,6 +4506,35 @@ P.append(('l(),n&&(n.slides=i.length>0?i:["Inhalt..."],t.push(n)),t}',
 #      Damit stehen im dunklen Feed zwei Serifen nebeneinander:
 #      Playfair Display auf allen Fotos, Marcellus auf jeder siebten
 #      Kachel. Das ist gewollt — die Textkachel soll sich absetzen.
+
+# 168  Ein geoeffneter Post darf sich nicht veraendern
+#
+#      "Wenn ich einen Post oeffne soll der so bleiben wie er aussah
+#      nicht ploetzlich Textkachel werden."
+#
+#      Ursache: seit 156 hat der ZEICHNER ueber den Takt entschieden,
+#      bei jedem Zeichnen neu. Eine gespeicherte Fotokachel, deren
+#      Tagesnummer auf den Takt fiel, wurde beim Zeichnen ihres Bildes
+#      beraubt — im Gitter wie im Editor. Wer sie oeffnete, sah etwas
+#      anderes als das, was im Plan steht.
+#
+#      Damals war das die richtige Antwort auf eine andere Frage: der
+#      Takt sollte ohne "neu generieren" sofort im Gitter sichtbar
+#      sein. Der Preis war, dass die Anzeige nicht mehr dem Plan
+#      entspricht — und der Preis ist zu hoch.
+#
+#      Der Zeichner entscheidet jetzt gar nichts mehr ueber den Takt.
+#      Er zeichnet, was im Plan steht. Der Takt wird beim IMPORT und
+#      beim NEU GENERIEREN in den Plan geschrieben (die beiden Stellen
+#      aus 155) und bleibt dort stehen, auch wenn sie eine Kachel von
+#      Hand aendert.
+#
+#      Geprueft: Plan mit 14 Tagen, alle mit gespeichertem Foto. Tag 1
+#      faellt auf den Takt. Vorher wurde er beim Oeffnen zur
+#      Textkachel, jetzt zeigen Gitter und Editor dasselbe Foto.
+#
+#      FOLGE FUER SIE: der Takt greift erst nach einem Klick auf "neu
+#      generieren". Was jetzt im Plan steht, bleibt so, wie es ist.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

@@ -5568,3 +5568,29 @@ Playfair Display, die neue Schrift gilt **nur der Textkachel**.
 Damit stehen im dunklen Feed zwei Serifen nebeneinander: Playfair Display
 auf allen Fotos, Marcellus auf jeder siebten Kachel. Das ist gewollt — die
 Textkachel soll sich absetzen.
+
+## 168 — Ein geoeffneter Post darf sich nicht veraendern
+
+*„Wenn ich einen Post oeffne soll der so bleiben wie er aussah, nicht
+ploetzlich Textkachel werden."*
+
+**Ursache:** seit 156 hat der **Zeichner** ueber den Takt entschieden — bei
+jedem Zeichnen neu. Eine gespeicherte Fotokachel, deren Tagesnummer auf den
+Takt fiel, wurde beim Zeichnen ihres Bildes beraubt. Wer sie oeffnete, sah
+etwas anderes als das, was im Plan steht.
+
+Damals war das die richtige Antwort auf eine *andere* Frage: der Takt
+sollte ohne „neu generieren" sofort im Gitter sichtbar sein. Der Preis war,
+dass die Anzeige nicht mehr dem Plan entspricht — und der Preis ist zu hoch.
+
+Der Zeichner entscheidet jetzt **gar nichts** mehr ueber den Takt. Er
+zeichnet, was im Plan steht. Der Takt wird beim **Import** und beim **neu
+generieren** in den Plan geschrieben und bleibt dort stehen, auch wenn sie
+eine Kachel von Hand aendert.
+
+**Geprueft:** Plan mit 14 Tagen, alle mit gespeichertem Foto. Tag 1 faellt
+auf den Takt. Vorher wurde er beim Oeffnen zur Textkachel — jetzt zeigen
+Gitter und Editor dasselbe Foto.
+
+**Folge:** der Takt greift erst nach einem Klick auf „neu generieren". Was
+jetzt im Plan steht, bleibt wie es ist.
