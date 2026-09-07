@@ -291,7 +291,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#1B1E23",schriftA:"#DCC9B0",'
  'unterGewicht:"300",unterVerhaeltnis:1,laufweite:-35,fotoLaufweite:-20,'
  'folgeFamilie:"Playfair Display",ablaufTitel:"Playfair Display",'
  'nameSchrift:"Playfair Display",nameGewicht:"400",nameLaufweite:60,'
- 'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:28,textJede:4,'
+ 'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:28,textJede:4,textBlur:20,'
  'geteilt:1,geteiltAnteil:25,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
  'deckblattSchnitte:"full|full|wide|full|wide|full",'
  'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20",tonNeutral:"13,13,13",'
@@ -2407,7 +2407,8 @@ P.append(('Ca=async(e,t,r,n,i={})=>{var yn,_n,Jr,xr,zr,ti,nn,_i,ki,ri;try{Pe.fab
  'for(let zi=0;zi<zs.length;zi+=1)zh=(zh*31+zs.charCodeAt(zi))%99991;return zB[zh%zB.length]};'
  'const zJ=Number(BS_KACHEL.textJede)||0;const zKa=String(t.karte||"");'
  'if(zJ>0&&typeof t._tag=="number"&&(zKa===""||zKa==="hell"||zKa==="stein")&&!t.reminderArt){'
- 'if(((((t._tag-1)%zJ)+zJ)%zJ)===0){if(t.background)t={...t,background:null,overlay:void 0,_autoImage:void 0};return}'
+ 'if(((((t._tag-1)%zJ)+zJ)%zJ)===0){let zb=t.background;if(!zb)zb=zBil();'
+ 'if(zb)t={...t,background:zb,blur:Math.max(Number(t.blur)||0,Number(BS_KACHEL.textBlur)||20)};return}'
  'if(!t.background){const zn=zBil();if(zn)t={...t,background:zn}}return}'
  'if(!t.background&&BS_KACHEL.textAnteil===0&&t.karte!=="ablauf"){const zn=zBil();if(zn)t={...t,background:zn}}'
  '}catch(zz){}})();',
@@ -4248,6 +4249,31 @@ P.append(('qt=(It||(BS_KACHEL.textAnteil!=null?((ut*37+13)%100)>=BS_KACHEL.textA
 #      3. September, kein Abbild des laufenden Plans. MERKE: fuer
 #      Aussagen ueber ihren Content zaehlt der Plan im Browser, nicht
 #      die Datei im Projekt.
+
+# 158  Die Textkachel wird ein weichgezeichnetes Foto
+#
+#      "Mach die Textkacheln komplett blurred Foto mit weisser
+#      Schrift." Damit dreht sich die Regel aus 156 um: der vierte Tag
+#      bekommt jetzt ein Bild, statt seines beraubt zu werden.
+#
+#          vorher   Takttag -> background auf null, flacher Farbgrund
+#          nachher  Takttag -> Bild behalten oder eins holen,
+#                              dazu blur = textBlur (20)
+#
+#      Der Zeichner rechnet blur/40, gedeckelt bei 0,5 — 20 ist also
+#      das Maximum, das der Filter hergibt. Und weil die Kachel nun ein
+#      Bild hat, laeuft sie durch den Fotozweig: Schrift wird
+#      fotoSchriftFarbe, und die steht im dunklen Block auf #FFFFFF.
+#      Die weisse Schrift kommt also von selbst, ohne zweite Regel.
+#
+#      GEPRUEFT MIT EINEM SCHARFEN TESTBILD: ein glatter Verlauf haette
+#      nichts gezeigt, weichgezeichnet sieht er aus wie vorher. Erst
+#      mit einem Raster aus harten Linien war zu sehen, dass die
+#      Unschaerfe wirklich greift — Tag 1, 5 und 9 loesen sich auf, die
+#      anderen sieben bleiben scharf.
+#
+#      Die Farbwelt Tinte/Sand aus 157 wird damit nur noch dort
+#      sichtbar, wo gar kein Bild da ist. Die Werte bleiben stehen.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

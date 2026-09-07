@@ -5313,3 +5313,30 @@ einem Archiv vom 3. September, nicht im laufenden Plan.
 **Merke:** fuer Aussagen ueber ihren Content zaehlt der Plan im Browser,
 nicht die Datei im Projekt. Zwei meiner sechs Layoutkonzepte (Der Schritt,
 Die Aufgabe) hingen an dieser Serie und sind damit gegenstandslos.
+
+## 158 — Die Textkachel wird ein weichgezeichnetes Foto
+
+*„Mach die Textkacheln komplett blurred Foto mit weisser Schrift."*
+
+Damit dreht sich die Regel aus 156 um: der vierte Tag bekommt jetzt ein
+Bild, statt seines beraubt zu werden.
+
+| | Takttag |
+|---|---|
+| vorher | `background` auf null, flacher Farbgrund |
+| **nachher** | Bild behalten oder eins holen, dazu `blur = textBlur` (20) |
+
+Der Zeichner rechnet `blur/40`, gedeckelt bei 0,5 — **20 ist also das
+Maximum**, das der Filter hergibt. Und weil die Kachel jetzt ein Bild hat,
+laeuft sie durch den Fotozweig: die Schrift nimmt `fotoSchriftFarbe`, und
+die steht im dunklen Block auf `#FFFFFF`. **Die weisse Schrift kommt von
+selbst**, ohne zweite Regel.
+
+**Geprueft mit einem scharfen Testbild.** Der glatte Farbverlauf, mit dem
+ich sonst teste, haette nichts gezeigt — weichgezeichnet sieht er aus wie
+vorher. Erst ein Raster aus harten Linien machte sichtbar, dass die
+Unschaerfe wirklich greift: Tag 1, 5 und 9 loesen sich auf, die anderen
+sieben bleiben scharf.
+
+Die Farbwelt Tinte/Sand aus 157 wird damit nur noch dort sichtbar, wo gar
+kein Bild vorhanden ist. Die Werte bleiben stehen.
