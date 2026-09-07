@@ -283,13 +283,13 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 # Domain, nicht am Pfad).
 DUNKEL = ('const BS_DUNKEL={grundA:"#FFFFFF",schriftA:"#000000",'
  'grundB:"#FFFFFF",schriftB:"#000000",'
- 'deckblattFamilie:"Italiana",fotoSchrift:"Italiana",'
+ 'deckblattFamilie:"Marcellus",fotoSchrift:"Marcellus",'
  'deckblattGewicht:"400",deckblattGroesse:98.9,fotoGroesse:64.1,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.651,'
- 'schriftart:"Italiana",unterSchrift:"Italiana",name:"",zeile:.95,absatz:0,'
+ 'schriftart:"Marcellus",unterSchrift:"Marcellus",name:"",zeile:.95,absatz:0,'
  'kachelEinBlock:1,kachelSatzUmbruch:1,rand:.11,mitte:.50,maxhoehe:.46,groesseAnteil:.115,gewicht:"400",'
  'betontGewicht:"700",handAnteil:1.15,handGroesse:0.9486,folgeZweitHand:1,'
  'unterGewicht:"400",unterVerhaeltnis:1,laufweite:-35,fotoLaufweite:-20,'
- 'folgeFamilie:"Italiana",ablaufTitel:"Italiana",'
+ 'folgeFamilie:"Marcellus",ablaufTitel:"Marcellus",'
  'nameSchrift:"Playfair Display",nameGewicht:"400",nameLaufweite:60,'
  'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:28,textJede:7,'
  'geteilt:1,geteiltAnteil:25,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
@@ -4459,6 +4459,37 @@ P.append(('l(),n&&(n.slides=i.length>0?i:["Inhalt..."],t.push(n)),t}',
 #      Italiana hat nur den Schnitt 400, deshalb gewicht und
 #      unterGewicht von 300 auf 400. Fett ausgezeichnete Woerter
 #      (**Wort**) haben damit keinen echten fetten Schnitt mehr.
+
+# 166  Italiana war unlesbar — Marcellus
+#
+#      "Das kann niemand lesen die Schrift." Stimmt. Ich hatte Italiana
+#      allein nach der BREITE ausgesucht, damit der Umbruch gleich
+#      bleibt, und die Lesbarkeit gar nicht geprueft. Italiana ist eine
+#      Zierschrift, keine Textschrift.
+#
+#      Also nachgemessen, was ich beim ersten Mal haette messen sollen:
+#      "Handeln" bei 100 px, Tintendeckung pro Flaeche als Mass fuer
+#      Substanz.
+#
+#          DM Serif Display    0,381
+#          Marcellus           0,258
+#          Prata               0,249
+#          Playfair Display    0,244
+#          Bodoni Moda         0,232
+#          Italiana            0,191
+#          Cormorant Garamond  0,167
+#
+#      Italiana liegt fast am Ende — und schlimmer als der Wert sind
+#      ihre Formen: sehr offen, ungleichmaessiger Strichkontrast, auf
+#      eine Zeile im Feed nicht ausgelegt.
+#
+#      Marcellus: 35 Prozent mehr Deckung als Italiana, konventionelle
+#      roemische Formen, und immer noch selten. Sie laeuft 11 Prozent
+#      breiter, der Zeichner faengt das ueber die Anpassungsschleife ab.
+#
+#      LEHRE: Breite entscheidet ueber den Umbruch, Deckung und Form
+#      entscheiden ueber die Lesbarkeit. Ich hatte nur das Erste
+#      gemessen.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

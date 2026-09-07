@@ -5517,3 +5517,34 @@ Schriftwechsel das dunkle Band unter dem Text lautlos verschwunden.
 Italiana hat nur den Schnitt 400, deshalb `gewicht` und `unterGewicht` von
 300 auf 400. Fett ausgezeichnete Woerter (`**Wort**`) haben damit keinen
 echten fetten Schnitt mehr.
+
+## 166 — Italiana war unlesbar, jetzt Marcellus
+
+*„Das kann niemand lesen die Schrift."* Stimmt. Ich hatte Italiana allein
+nach der **Breite** ausgesucht, damit der Umbruch gleich bleibt, und die
+Lesbarkeit gar nicht geprueft. Italiana ist eine Zierschrift, keine
+Textschrift.
+
+Also nachgemessen, was ich beim ersten Mal haette messen sollen:
+„Handeln" bei 100 px, **Tintendeckung pro Flaeche** als Mass fuer Substanz.
+
+| Schrift | Deckung |
+|---|---|
+| DM Serif Display | 0,381 |
+| **Marcellus** | **0,258** |
+| Prata | 0,249 |
+| Playfair Display | 0,244 |
+| Bodoni Moda | 0,232 |
+| Italiana | 0,191 |
+| Cormorant Garamond | 0,167 |
+
+Italiana liegt fast am Ende — und schlimmer als der Wert sind ihre Formen:
+sehr offen, ungleichmaessiger Strichkontrast, auf eine Zeile im Feed nicht
+ausgelegt.
+
+Marcellus hat **35 % mehr Deckung** als Italiana, konventionelle roemische
+Formen, und ist immer noch selten. Sie laeuft 11 % breiter; das faengt die
+Anpassungsschleife des Zeichners ab.
+
+**Lehre:** die Breite entscheidet ueber den Umbruch, Deckung und Form
+entscheiden ueber die Lesbarkeit. Ich hatte nur das Erste gemessen.
