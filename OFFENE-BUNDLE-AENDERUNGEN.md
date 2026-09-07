@@ -5594,3 +5594,44 @@ Gitter und Editor dasselbe Foto.
 
 **Folge:** der Takt greift erst nach einem Klick auf „neu generieren". Was
 jetzt im Plan steht, bleibt wie es ist.
+
+## 169 — Der Feed wird blaetterbar
+
+*„Habe 197 Posts drinnen und scrolle ich zu Tag 1 kommt white screen.
+Koennen wir den Feed blaetterbar machen damit der load sich aufteilt."*
+
+**Ursache, gemessen:** die faule Gitterkachel `uG` setzt ihren Beobachter
+**einmal** und trennt ihn dann wieder:
+
+```js
+new IntersectionObserver(a=>{a.some(u=>u.isIntersecting)&&(s(!0),o.disconnect())},{rootMargin:r})
+```
+
+Was einmal gesehen wurde, bleibt gezeichnet — fuer immer. Wer bis Tag 1
+scrollt, hat am Ende **197 gezeichnete Kacheln gleichzeitig** im Speicher,
+jede mit ihrem eigenen Bild in voller Aufloesung. Irgendwann gibt der
+Browser auf: weisse Seite.
+
+**Warum blaettern und nicht freigeben.** Ich haette den Beobachter auch
+wieder anhaengen koennen, damit Kacheln beim Herausscrollen frei werden.
+Dann flackert der Feed beim Zurueckscrollen, und die Obergrenze bleibt der
+laengste Bildschirm — bei 197 Tagen waere sie irgendwann wieder erreicht.
+Blaettern ist die ehrlichere Grenze: 30 Tage sind 30 Tage, egal wie lange
+jemand scrollt.
+
+**Was neu ist**
+
+- **30 Tage je Seite**, einstellbar ueber `BS_KACHEL.seiteGross`.
+- Eine Leiste **ueber und unter** dem Gitter: `‹ Neuer` · *Seite 1 von 7 ·
+  197 Tage* · `Aelter ›`. Bei bis zu 30 Tagen erscheint sie gar nicht.
+- Seitenwechsel scrollt nach oben.
+- **„Gehe zu Tag …" blaettert mit:** liegt der Tag auf einer anderen Seite,
+  wird erst umgeblaettert und dann gesprungen.
+
+**Geprueft** mit 197 Tagen, alle mit Foto:
+
+| | vorher | nachher |
+|---|---|---|
+| Kacheln auf einer Seite | 197 | **30** |
+| Leiste | — | „Seite 1 von 7 · 197 Tage" |
+| „Aelter" | — | Seite 2, beginnt bei Tag 167, kein Fehler |

@@ -307,7 +307,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#FFFFFF",schriftA:"#000000",'
  'nameFarbe:"#F2EFE9",schildGrund:"#F2EFE9",schildSchriftFarbe:"#171512"};')
 SCHALTER = 'if(typeof window<"u"&&window.BS_STIL==="dunkel")Object.assign(BS_KACHEL,BS_DUNKEL);'
 
-KONFIG = 'const BS_KACHEL={grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.042,nameDeckkraft:1,nameFarbe:"#E8836B",nameSchrift:"HelveticaNeueBrand",nameGewicht:"700",nameLaufweite:-50,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"Montserrat",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,folgeLage:"unten",folgeGroesseAnteil:.049,folgeMaxhoehe:.70,folgeAusrichtung:"links",textAnteil:67,fotoGroesse:44,schildGrund:"#E8836B",schildSchriftFarbe:"#241C16",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"Montserrat",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"DM Serif|Nohemi|Shadows|Montserrat|Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
+KONFIG = 'const BS_KACHEL={seiteGross:30,grundA:"#F6F2EB",schriftA:"#241C16",grundB:"#4A3B30",schriftB:"#FFFFFF",schriftart:"HelveticaNeueBrand",unterSchrift:"HelveticaNeueBrand",unterVerhaeltnis:1,gewicht:"300",leichtGewicht:"300",unterGewicht:"700",groesseAnteil:.098,enge:1,laufweite:-50,zeile:1.02,absatz:.55,rand:.0885,mitte:.575,maxhoehe:.90,name:"carinaannaprav",nameAnteil:.042,nameDeckkraft:1,nameFarbe:"#E8836B",nameSchrift:"HelveticaNeueBrand",nameGewicht:"700",nameLaufweite:-50,nameAbstand:1.9,fotoSchrift:"Fraunces",deckblattFamilie:"Fraunces",deckblattGewicht:"700",deckblattGroesse:68,spalteMin:.82,textHoehe:.70,textHoeheZaehler:.50,textUnten:.86,nameUnten:.945,umbruchRand:12,fotoZeile:0.98,folgeStil:"montserrat",folgeFamilie:"Montserrat",zweiteFamilie:"HelveticaNeueBrand",zweitAnteil:.75,teilungAb:52,fotoSchriftFarbe:"#FFFFFF",bandAuf:0,folgeGewicht:"700",weichAnteil:0,lagenWechsel:1,folgeLage:"unten",folgeGroesseAnteil:.049,folgeMaxhoehe:.70,folgeAusrichtung:"links",textAnteil:67,fotoGroesse:44,schildGrund:"#E8836B",schildSchriftFarbe:"#241C16",schildSchrift:"HelveticaNeueBrand",schildGewicht:"400",schildGroesse:.030,schildLaufweite:6,schildPolster:.9,schildHoehe:2.0,schildAbstand:.034,schildRundung:.004,schildNeigung:-3,bildKante:2400,bildGuete:.84,bildKontrast:0,bildHelligkeit:0,bildSchleier:.05,bildSchleierWiederholung:.28,kanteOben:.34,kanteUnten:.40,ablaufTitel:"Montserrat",ablaufTitelGewicht:"700",ablaufTiefeOben:.30,ablaufTiefeMitte:.22,ablaufTiefeUnten:.42,bildTon:"74,58,44",waermeTon:"150,112,76",waerme:.07,tiefeOben:0,tiefeMitte:0,tiefeUnten:0,saumTon:"232,131,107",saumMitte:.08,saumStaerke:.30,saumWeite:.58,tiefeSchriften:"DM Serif|Nohemi|Shadows|Montserrat|Fraunces|Playfair|Marcellus|Prata|Italiana|Cormorant|Bodoni|Inter|Aspekta|Helvetica"};'
 P.append(('function t6(e,t){', DUNKEL + KONFIG + SCHALTER + 'function t6(e,t){',
  "Konfigurationsblock BS_KACHEL ganz oben", 1))
 
@@ -4535,6 +4535,88 @@ P.append(('l(),n&&(n.slides=i.length>0?i:["Inhalt..."],t.push(n)),t}',
 #
 #      FOLGE FUER SIE: der Takt greift erst nach einem Klick auf "neu
 #      generieren". Was jetzt im Plan steht, bleibt so, wie es ist.
+
+# 169 — Feed blaetterbar: 30 Tage je Seite
+# a) Seitenzustand im Gitter
+P.append((
+ '[ee,Ae]=ce.useState(0),$=ae=>{F.current.push',
+ '[ee,Ae]=ce.useState(0),'
+ '[zSei,zSetzSei]=ce.useState(0),'
+ 'zProSeite=Math.max(6,Number(BS_KACHEL.seiteGross)||30),'
+ 'zAlleTage=[...i].reverse(),'
+ 'zAnzSeiten=Math.max(1,Math.ceil(zAlleTage.length/zProSeite)),'
+ 'zSeiteJetzt=Math.min(Math.max(0,zSei),zAnzSeiten-1),'
+ 'zSeitenTage=zAlleTage.slice(zSeiteJetzt*zProSeite,zSeiteJetzt*zProSeite+zProSeite),'
+ 'zGeh=zn=>{zSetzSei(Math.min(zAnzSeiten-1,Math.max(0,zn)));'
+ 'try{window.scrollTo({top:0,behavior:"smooth"})}catch(zz){}},'
+ 'zBlaetter=zPos=>zAnzSeiten<=1?null:v.jsxs("div",'
+ '{className:"flex items-center justify-center gap-3 py-4",children:['
+ 'v.jsx("button",{onClick:()=>zGeh(zSeiteJetzt-1),disabled:zSeiteJetzt<=0,'
+ 'className:"px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-700 '
+ 'text-xs font-bold hover:bg-gray-50 disabled:opacity-40",children:"‹ Neuer"}),'
+ 'v.jsxs("span",{className:"text-xs text-gray-500",children:'
+ '["Seite ",zSeiteJetzt+1," von ",zAnzSeiten," · ",zAlleTage.length," Tage"]}),'
+ 'v.jsx("button",{onClick:()=>zGeh(zSeiteJetzt+1),disabled:zSeiteJetzt>=zAnzSeiten-1,'
+ 'className:"px-3 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-700 '
+ 'text-xs font-bold hover:bg-gray-50 disabled:opacity-40",children:"Älter ›"})]},zPos),'
+ '$=ae=>{F.current.push',
+ "Seitenzustand + Blaetterleiste", 1))
+
+# b) "Gehe zu Tag" blaettert auf die richtige Seite, bevor es springt
+P.append((
+ 'ht=(ae,_e=!1)=>{const ve=typeof document',
+ 'ht=(ae,_e=!1)=>{const zIx=zAlleTage.findIndex(zx=>zx&&zx.day===ae);'
+ 'if(zIx>=0){const zZs=Math.floor(zIx/zProSeite);'
+ 'if(zZs!==zSeiteJetzt){zSetzSei(zZs);setTimeout(()=>ht(ae,_e),90);return}}'
+ 'const ve=typeof document',
+ "Sprung blaettert mit", 1))
+
+# c) Gitter zeigt nur die aktuelle Seite, Leiste oben davor
+P.append((
+ ':v.jsx(v.Fragment,{children:v.jsx("div",{className:"grid grid-cols-3 gap-[2px]",'
+ 'children:[...i].reverse().map((ae,_e)=>{',
+ ':v.jsxs(v.Fragment,{children:[zBlaetter("o"),'
+ 'v.jsx("div",{className:"grid grid-cols-3 gap-[2px]",'
+ 'children:zSeitenTage.map((ae,_e)=>{',
+ "Gitter nur eine Seite", 1))
+
+# d) Leiste unten — und die Klammerbilanz des Fragments
+P.append((
+ ']},`day-${ae.day}-${_e}`)})})})',
+ ']},`day-${ae.day}-${_e}`)})}),zBlaetter("u")]})',
+ "Blaetterleiste unten", 1))
+
+# 169  Feed blaetterbar
+#
+#      "Habe 197 Posts drinnen und scrolle ich zu Tag 1 kommt white
+#      screen. Koennen wir den Feed blaetterbar machen damit der load
+#      sich aufteilt."
+#
+#      URSACHE, gemessen: die faule Gitterkachel uG setzt ihren
+#      Beobachter EINMAL und trennt ihn dann:
+#
+#          new IntersectionObserver(a=>{a.some(u=>u.isIntersecting)
+#            &&(s(!0),o.disconnect())},{rootMargin:r})
+#
+#      Was einmal gesehen wurde, bleibt gezeichnet. Wer bis Tag 1
+#      scrollt, hat am Ende 197 gezeichnete Kacheln gleichzeitig im
+#      Speicher — jede mit ihrem eigenen Bild in voller Aufloesung.
+#      Irgendwann gibt der Browser auf: weisse Seite.
+#
+#      Ich haette den Beobachter auch wieder anhaengen koennen, damit
+#      Kacheln beim Herausscrollen frei werden. Dann flackert der Feed
+#      beim Zurueckscrollen, und die Obergrenze bleibt der laengste
+#      Bildschirm. Blaettern ist die ehrlichere Grenze: 30 Tage sind
+#      30 Tage, egal wie lange jemand scrollt.
+#
+#      30 Tage je Seite, einstellbar ueber BS_KACHEL.seiteGross.
+#      Leiste oben und unten, "Gehe zu Tag ..." blaettert mit.
+#
+#      GEPRUEFT mit 197 Tagen, alle mit Foto:
+#          vorher   197 Kacheln auf einer Seite
+#          nachher   30 Kacheln, "Seite 1 von 7 · 197 Tage"
+#          "Aelter" -> Seite 2, beginnt bei Tag 167, kein Fehler
+#
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
