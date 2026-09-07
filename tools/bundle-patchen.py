@@ -4275,6 +4275,49 @@ P.append(('qt=(It||(BS_KACHEL.textAnteil!=null?((ut*37+13)%100)>=BS_KACHEL.textA
 #      Die Farbwelt Tinte/Sand aus 157 wird damit nur noch dort
 #      sichtbar, wo gar kein Bild da ist. Die Werte bleiben stehen.
 
+# 159  Caption im Bulk-Import: alles, nicht nur die erste Zeile
+#
+#      "Wenn ich dir im bulk import was gebe und da steht caption:
+#      schreib das in die caption nicht auf den slide."
+#
+#      Der Leser kannte "caption:" bereits — aber nur EINE Zeile
+#      davon. Jede weitere Zeile fiel in den Folienpuffer, und ihre
+#      Captions haben Absaetze. Ergebnis: der halbe Bildtext stand auf
+#      der Folie.
+#
+#      Jetzt schaltet "caption:" einen Sammelmodus ein. Alle folgenden
+#      Zeilen gehen in die Caption, bis wieder "Tag N" oder "Slide N"
+#      kommt. Leerzeilen bleiben dabei erhalten — sie werden sonst
+#      ganz oben verworfen, und damit waeren die Absaetze weg.
+#
+#      Nebenbei mitgenommen: "Caption :" mit Leerzeichen wird jetzt
+#      auch erkannt (vorher haette substring(8) den Text angeschnitten),
+#      und die fertige Caption wird am Ende getrimmt.
+#
+#      GEPRUEFT ohne Browser: die Leserfunktion aus beiden Bundles
+#      herausgeloest und denselben Text hindurchgeschickt.
+#
+#          karten217  Slide 2 = "…meine Nummer.\nIch hab das monatel…"
+#                     Caption = nur der erste Absatz
+#          karten218  Slide 2 = "…meine Nummer."
+#                     Caption = alle drei Absaetze, mit Leerzeilen
+P.append(('let n=null,i=[],s=[];const l=()=>{',
+ 'let n=null,i=[],s=[],zKap=!1;const l=()=>{',
+ "Bulk-Import: Sammelmodus fuer die Caption", 1))
+P.append(('return r.forEach(o=>{const a=o.trim();if(!a)return;const u=a.match(/^(?:Tag|Day|Woche)',
+ 'return r.forEach(o=>{const a=o.trim();'
+ 'if(zKap){if(!/^(?:Tag|Day|Woche)\\s*\\d/i.test(a)&&!/^(?:Slide|Folie|Bild|Page)\\s*\\d/i.test(a)){'
+ 'if(n)n.caption=n.caption?n.caption+`\\n`+a:a;return}zKap=!1}'
+ 'if(!a)return;const u=a.match(/^(?:Tag|Day|Woche)',
+ "Bulk-Import: alle Zeilen nach caption: gehoeren zur Caption", 1))
+P.append(('if(a.toLowerCase().startsWith("caption:")){n&&(n.caption=a.substring(8).trim());return}',
+ 'if(/^caption\\s*:/i.test(a)){if(n){n.caption=a.replace(/^caption\\s*:/i,"").trim();zKap=!0}return}',
+ "Bulk-Import: caption: schaltet den Sammelmodus ein", 1))
+P.append(('l(),n&&(n.slides=i.length>0?i:["Inhalt..."],t.push(n)),t}',
+ 'l(),n&&(n.slides=i.length>0?i:["Inhalt..."],t.push(n)),'
+ 't.map(zx=>(zx.caption=String(zx.caption||"").trim(),zx))}',
+ "Bulk-Import: Leerzeilen am Ende der Caption abschneiden", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

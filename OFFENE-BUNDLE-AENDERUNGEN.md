@@ -5340,3 +5340,29 @@ sieben bleiben scharf.
 
 Die Farbwelt Tinte/Sand aus 157 wird damit nur noch dort sichtbar, wo gar
 kein Bild vorhanden ist. Die Werte bleiben stehen.
+
+## 159 — Caption im Bulk-Import: alles, nicht nur die erste Zeile
+
+*„Wenn ich dir im bulk import was gebe und da steht caption: schreib das
+in die caption nicht auf den slide."*
+
+Der Leser kannte `caption:` bereits — aber nur **eine Zeile** davon. Jede
+weitere Zeile fiel in den Folienpuffer, und ihre Captions haben Absaetze.
+Ergebnis: der halbe Bildtext stand auf der Folie.
+
+Jetzt schaltet `caption:` einen **Sammelmodus** ein. Alle folgenden Zeilen
+gehen in die Caption, bis wieder `Tag N` oder `Slide N` kommt. **Leerzeilen
+bleiben dabei erhalten** — sie werden sonst ganz oben verworfen, und damit
+waeren die Absaetze weg.
+
+Nebenbei mitgenommen: `Caption :` mit Leerzeichen wird jetzt auch erkannt
+(vorher haette `substring(8)` den Text angeschnitten), und die fertige
+Caption wird am Ende getrimmt.
+
+**Geprueft ohne Browser** — die Leserfunktion aus beiden Bundles
+herausgeloest und denselben Text hindurchgeschickt:
+
+| | Slide 2 | Caption |
+|---|---|---|
+| karten217 | `"…meine Nummer.\nIch hab das monatel…"` | nur der erste Absatz |
+| **karten218** | `"…meine Nummer."` | alle drei Absaetze, mit Leerzeilen |
