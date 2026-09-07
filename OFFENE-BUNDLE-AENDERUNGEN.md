@@ -5413,3 +5413,34 @@ Gerendert mit 14 Tagen, alle mit gespeichertem Foto: Textkacheln auf
 **Offen, ausdruecklich von ihr:** wie die Textkachel selbst aussieht. Sie
 steht jetzt in Tinte/Sand da — das ist der Stand aus 157 und keine
 Entscheidung.
+
+## 162 — Andere Farben, andere Serife fuer die Textkachel
+
+Erst die sieben selbst gehosteten Serifen gegeneinander **gemessen**:
+100 px, derselbe Satz „Hxn Zahlen", Versalhoehe und Tinte auf dem Canvas
+gezaehlt.
+
+| Familie | Versalhoehe | Breite | Tinte |
+|---|---|---|---|
+| Playfair 300 *(bisher)* | 63 | 464 | 5957 |
+| **Cormorant Garamond 300** | **73** | **465** | **4808** |
+| Bodoni Moda 400 | 75 | 534 | 8750 |
+| Marcellus 400 | 73 | 520 | 9243 |
+| Prata 400 | 81 | 571 | 11291 |
+| Italiana 400 | 75 | 471 | 6128 |
+| DM Serif Display 400 | 71 | 509 | 12545 |
+
+Cormorant Garamond 300 ist die einzige, die **breitengleich** zu Playfair
+ist (465 zu 464). Damit bleibt der Umbruch Wort fuer Wort derselbe und
+`groesseAnteil` muss nicht nachgezogen werden. Dabei ist sie **16 % hoeher**
+in den Versalien und traegt **19 % weniger Tinte** — feiner *und* optisch
+groesser.
+
+| | von | auf |
+|---|---|---|
+| `schriftart` / `unterSchrift` | Playfair | **Cormorant Garamond** |
+| `grundA` / `grundB` | #1B1E23 | **#241C16** Espresso |
+| `schriftA` / `schriftB` | #DCC9B0 | **#E9A473** Apricot |
+
+Kontrast **8,00 : 1**. #241C16 ist die Farbe ihres urspruenglichen warmen
+Feeds — die einzige Farbwelt mit eigener Geschichte.

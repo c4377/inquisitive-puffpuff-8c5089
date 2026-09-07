@@ -281,11 +281,11 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 # der Block wird nach dem Anlegen ueberschrieben. Ein Bundle, zwei
 # Feeds, dieselben Bilder und derselbe Plan (IndexedDB haengt an der
 # Domain, nicht am Pfad).
-DUNKEL = ('const BS_DUNKEL={grundA:"#1B1E23",schriftA:"#DCC9B0",'
- 'grundB:"#1B1E23",schriftB:"#DCC9B0",'
+DUNKEL = ('const BS_DUNKEL={grundA:"#241C16",schriftA:"#E9A473",'
+ 'grundB:"#241C16",schriftB:"#E9A473",'
  'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
  'deckblattGewicht:"400",deckblattGroesse:98.9,fotoGroesse:64.1,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.651,'
- 'schriftart:"Playfair",unterSchrift:"Playfair",name:"",zeile:.95,absatz:0,'
+ 'schriftart:"Cormorant Garamond",unterSchrift:"Cormorant Garamond",name:"",zeile:.95,absatz:0,'
  'kachelEinBlock:1,kachelSatzUmbruch:1,rand:.11,mitte:.50,maxhoehe:.46,groesseAnteil:.115,gewicht:"300",'
  'betontGewicht:"700",handAnteil:1.15,handGroesse:0.9486,folgeZweitHand:1,'
  'unterGewicht:"300",unterVerhaeltnis:1,laufweite:-35,fotoLaufweite:-20,'
@@ -4366,6 +4366,33 @@ P.append(('l(),n&&(n.slides=i.length>0?i:["Inhalt..."],t.push(n)),t}',
 #      OFFEN, ausdruecklich von ihr: wie die Textkachel selbst
 #      aussieht. Sie steht jetzt in Tinte/Sand da, das ist der Stand
 #      aus 157 und keine Entscheidung.
+
+# 162  Andere Farben, andere Serife fuer die Textkachel
+#
+#      Erst die sieben selbst gehosteten Serifen gegeneinander
+#      gemessen: 100 px, derselbe Satz "Hxn Zahlen", Versalhoehe und
+#      Tinte auf dem Canvas gezaehlt.
+#
+#          Playfair 300           Versalhoehe 63  Breite 464  Tinte  5957
+#          Cormorant Garamond 300 Versalhoehe 73  Breite 465  Tinte  4808
+#          Bodoni Moda 400        Versalhoehe 75  Breite 534  Tinte  8750
+#          Marcellus 400          Versalhoehe 73  Breite 520  Tinte  9243
+#          Prata 400              Versalhoehe 81  Breite 571  Tinte 11291
+#          Italiana 400           Versalhoehe 75  Breite 471  Tinte  6128
+#          DM Serif Display 400   Versalhoehe 71  Breite 509  Tinte 12545
+#
+#      Cormorant Garamond 300 ist die einzige, die BREITENGLEICH zu
+#      Playfair ist (465 zu 464). Damit bleibt der Umbruch Wort fuer
+#      Wort derselbe, und groesseAnteil muss nicht nachgezogen werden.
+#      Dabei ist sie 16 Prozent hoeher in den Versalien und traegt 19
+#      Prozent weniger Tinte — also feiner UND optisch groesser.
+#
+#          schriftart/unterSchrift  Playfair -> Cormorant Garamond
+#          grundA/grundB    #1B1E23 -> #241C16   Espresso
+#          schriftA/schriftB #DCC9B0 -> #E9A473  Apricot
+#
+#      Kontrast 8,00 zu 1. #241C16 ist die Farbe ihres urspruenglichen
+#      warmen Feeds — die einzige Farbwelt mit eigener Geschichte.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
