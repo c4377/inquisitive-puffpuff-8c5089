@@ -291,7 +291,7 @@ DUNKEL = ('const BS_DUNKEL={grundA:"#1B1E23",schriftA:"#DCC9B0",'
  'unterGewicht:"300",unterVerhaeltnis:1,laufweite:-35,fotoLaufweite:-20,'
  'folgeFamilie:"Playfair Display",ablaufTitel:"Playfair Display",'
  'nameSchrift:"Playfair Display",nameGewicht:"400",nameLaufweite:60,'
- 'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:28,textJede:4,textBlur:20,'
+ 'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:28,textJede:7,'
  'geteilt:1,geteiltAnteil:25,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
  'deckblattSchnitte:"full|full|wide|full|wide|full",'
  'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20",tonNeutral:"13,13,13",'
@@ -2407,8 +2407,7 @@ P.append(('Ca=async(e,t,r,n,i={})=>{var yn,_n,Jr,xr,zr,ti,nn,_i,ki,ri;try{Pe.fab
  'for(let zi=0;zi<zs.length;zi+=1)zh=(zh*31+zs.charCodeAt(zi))%99991;return zB[zh%zB.length]};'
  'const zJ=Number(BS_KACHEL.textJede)||0;const zKa=String(t.karte||"");'
  'if(zJ>0&&typeof t._tag=="number"&&(zKa===""||zKa==="hell"||zKa==="stein")&&!t.reminderArt){'
- 'if(((((t._tag-1)%zJ)+zJ)%zJ)===0){let zb=t.background;if(!zb)zb=zBil();'
- 'if(zb)t={...t,background:zb,blur:Math.max(Number(t.blur)||0,Number(BS_KACHEL.textBlur)||20)};return}'
+ 'if(((((t._tag-1)%zJ)+zJ)%zJ)===0){if(t.background)t={...t,background:null,overlay:void 0,_autoImage:void 0};return}'
  'if(!t.background){const zn=zBil();if(zn)t={...t,background:zn}}return}'
  'if(!t.background&&BS_KACHEL.textAnteil===0&&t.karte!=="ablauf"){const zn=zBil();if(zn)t={...t,background:zn}}'
  '}catch(zz){}})();',
@@ -4346,6 +4345,27 @@ P.append(('l(),n&&(n.slides=i.length>0?i:["Inhalt..."],t.push(n)),t}',
 #
 #      LEHRE: ein einziger Testfall beweist nur, dass der eine Fall
 #      geht. Bei einem Parser gehoert eine Tabelle von Formen dazu.
+
+# 161  Weichzeichner raus, Takt auf 7
+#
+#      "Vergiss das blurred, mach einfach nur Foto Kacheln mal und
+#      vielleicht alle 7 eine Textkachel und die muessen wir noch
+#      ausbaldovern."
+#
+#      Damit faellt 158 wieder weg: die Taktkachel bekommt kein Bild
+#      mehr aufgedraengt, sondern gibt ihres ab und ist wieder eine
+#      echte Textkachel. Und der Takt geht von 4 auf 7.
+#
+#          textJede  4 -> 7
+#          textBlur  entfaellt
+#
+#      Gerendert mit 14 Tagen, alle mit gespeichertem Foto:
+#      Textkacheln auf Tag 1 und Tag 8, die uebrigen zwoelf Fotos,
+#      alle scharf.
+#
+#      OFFEN, ausdruecklich von ihr: wie die Textkachel selbst
+#      aussieht. Sie steht jetzt in Tinte/Sand da, das ist der Stand
+#      aus 157 und keine Entscheidung.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

@@ -5393,3 +5393,23 @@ alle zehn Eingabeformen gruen.
 
 **Lehre:** ein einziger Testfall beweist nur, dass der eine Fall geht. Bei
 einem Parser gehoert eine Tabelle von Formen dazu.
+
+## 161 — Weichzeichner raus, Takt auf 7
+
+*„Vergiss das blurred, mach einfach nur Foto Kacheln mal und vielleicht
+alle 7 eine Textkachel und die muessen wir noch ausbaldovern."*
+
+Damit faellt 158 wieder weg: die Taktkachel bekommt kein Bild mehr
+aufgedraengt, sondern gibt ihres ab und ist wieder eine echte Textkachel.
+
+| | von | auf |
+|---|---|---|
+| `textJede` | 4 | **7** |
+| `textBlur` | 20 | **entfaellt** |
+
+Gerendert mit 14 Tagen, alle mit gespeichertem Foto: Textkacheln auf
+**Tag 1 und Tag 8**, die uebrigen zwoelf Fotos, alle scharf.
+
+**Offen, ausdruecklich von ihr:** wie die Textkachel selbst aussieht. Sie
+steht jetzt in Tinte/Sand da — das ist der Stand aus 157 und keine
+Entscheidung.
