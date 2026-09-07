@@ -4306,7 +4306,7 @@ P.append(('let n=null,i=[],s=[];const l=()=>{',
  "Bulk-Import: Sammelmodus fuer die Caption", 1))
 P.append(('return r.forEach(o=>{const a=o.trim();if(!a)return;const u=a.match(/^(?:Tag|Day|Woche)',
  'return r.forEach(o=>{const a=o.trim();'
- 'if(zKap){if(!/^(?:Tag|Day|Woche)\\s*\\d/i.test(a)&&!/^(?:Slide|Folie|Bild|Page)\\s*\\d/i.test(a)){'
+ 'if(zKap){if(!/^(?:Tag|Day|Woche|Slide|Folie|Bild|Page)\\s*\\d+\\s*[:.\\-\\u2013\\u2014]/i.test(a)){'
  'if(n)n.caption=n.caption?n.caption+`\\n`+a:a;return}zKap=!1}'
  'if(!a)return;const u=a.match(/^(?:Tag|Day|Woche)',
  "Bulk-Import: alle Zeilen nach caption: gehoeren zur Caption", 1))
@@ -4317,6 +4317,35 @@ P.append(('l(),n&&(n.slides=i.length>0?i:["Inhalt..."],t.push(n)),t}',
  'l(),n&&(n.slides=i.length>0?i:["Inhalt..."],t.push(n)),'
  't.map(zx=>(zx.caption=String(zx.caption||"").trim(),zx))}',
  "Bulk-Import: Leerzeilen am Ende der Caption abschneiden", 1))
+
+# 160  "Du schreibst den Teil immer noch auf die slide"
+#
+#      Sie hatte recht, 159 war zu kurz gesprungen. Ich habe den Leser
+#      diesmal nicht mit EINEM Beispiel geprueft, sondern mit zehn
+#      Eingabeformen. Zwei sind durchgefallen — und beide betreffen
+#      genau ihre Texte:
+#
+#          Caption enthaelt "Woche 1 war anstrengend."  -> LECK
+#          Caption enthaelt "Bild 2 zeigt es."          -> LECK
+#
+#      Der Sammelmodus endete an JEDER Zeile, die mit Tag, Day, Woche,
+#      Slide, Folie, Bild oder Page plus Ziffer beginnt. In Prosa
+#      passiert das staendig. Der Rest der Caption landete dann auf
+#      einer Folie — genau ihr Befund.
+#
+#      Der Unterschied zwischen Ueberschrift und Prosa ist das
+#      Trennzeichen: eine echte Ueberschrift heisst "Tag 41: Titel",
+#      Prosa heisst "Woche 1 war anstrengend". Der Sammelmodus endet
+#      jetzt nur noch, wenn nach der Ziffer ein : . - oder Gedanken-
+#      strich folgt. Fuer den normalen Zeilenleser bleibt die alte,
+#      grosszuegige Regel — dort ist sie richtig.
+#
+#      NACHGEPRUEFT mit vier ECHTEN Captions aus captions.json (1815
+#      Zeichen): alle vier vollstaendig in der Caption, alle Folien
+#      sauber. Und alle zehn Eingabeformen gruen.
+#
+#      LEHRE: ein einziger Testfall beweist nur, dass der eine Fall
+#      geht. Bei einem Parser gehoert eine Tabelle von Formen dazu.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,

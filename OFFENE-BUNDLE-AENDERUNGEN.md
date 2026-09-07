@@ -5366,3 +5366,30 @@ herausgeloest und denselben Text hindurchgeschickt:
 |---|---|---|
 | karten217 | `"…meine Nummer.\nIch hab das monatel…"` | nur der erste Absatz |
 | **karten218** | `"…meine Nummer."` | alle drei Absaetze, mit Leerzeilen |
+
+## 160 — „Du schreibst den Teil immer noch auf die slide"
+
+Sie hatte recht, 159 war zu kurz gesprungen. Ich habe den Leser diesmal
+nicht mit **einem** Beispiel geprueft, sondern mit **zehn Eingabeformen**.
+Zwei sind durchgefallen — und beide betreffen genau ihre Texte:
+
+| Eingabe | vorher |
+|---|---|
+| Caption enthaelt „Woche 1 war anstrengend." | **Leck** — Rest wandert auf eine Folie |
+| Caption enthaelt „Bild 2 zeigt es." | **Leck** — Rest wandert auf eine Folie |
+
+Der Sammelmodus endete an **jeder** Zeile, die mit Tag, Day, Woche, Slide,
+Folie, Bild oder Page plus Ziffer beginnt. In Prosa passiert das staendig.
+
+Der Unterschied zwischen Ueberschrift und Prosa ist das **Trennzeichen**:
+eine echte Ueberschrift heisst `Tag 41: Titel`, Prosa heisst „Woche 1 war
+anstrengend". Der Sammelmodus endet jetzt nur noch, wenn nach der Ziffer
+ein `:` `.` `-` oder Gedankenstrich folgt. Fuer den normalen Zeilenleser
+bleibt die alte, grosszuegige Regel — dort ist sie richtig.
+
+**Nachgeprueft mit vier echten Captions** aus `captions.json` (1815
+Zeichen): alle vier vollstaendig in der Caption, alle Folien sauber. Und
+alle zehn Eingabeformen gruen.
+
+**Lehre:** ein einziger Testfall beweist nur, dass der eine Fall geht. Bei
+einem Parser gehoert eine Tabelle von Formen dazu.
