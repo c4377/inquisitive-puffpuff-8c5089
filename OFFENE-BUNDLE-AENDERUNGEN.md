@@ -5468,3 +5468,20 @@ Kontrast **13,64 : 1**. Die Palette bleibt ihre, nur die Rollen tauschen.
 Im Raster ist das der eigentliche Gewinn: alle Fotokacheln sind dunkel,
 jede siebte ist jetzt hell — damit wird sie zur **Pause** statt zum
 naechsten Bild.
+
+## 164 — Schwarz auf Weiss, hart
+
+Nach sechs Paletten und einer Umkehrung habe ich aufgehoert zu raten und
+**gefragt** — mit vier Richtungen, die sich in der *Art* unterscheiden,
+nicht im Farbton. Ihre Wahl: hart.
+
+| | von | auf |
+|---|---|---|
+| `grundA` / `grundB` | #EDE7DE | **#FFFFFF** |
+| `schriftA` / `schriftB` | #241C16 | **#000000** |
+
+Kontrast **21,00 : 1** — das Maximum. Kein Beige, keine Waerme.
+
+**Merke:** sechs Vorschlaege in Folge, die alle im selben Schema lagen,
+waren sechs verlorene Runden. Eine Frage mit Optionen, die sich
+grundsaetzlich unterscheiden, hat es in einer geklaert.

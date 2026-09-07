@@ -281,8 +281,8 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 # der Block wird nach dem Anlegen ueberschrieben. Ein Bundle, zwei
 # Feeds, dieselben Bilder und derselbe Plan (IndexedDB haengt an der
 # Domain, nicht am Pfad).
-DUNKEL = ('const BS_DUNKEL={grundA:"#EDE7DE",schriftA:"#241C16",'
- 'grundB:"#EDE7DE",schriftB:"#241C16",'
+DUNKEL = ('const BS_DUNKEL={grundA:"#FFFFFF",schriftA:"#000000",'
+ 'grundB:"#FFFFFF",schriftB:"#000000",'
  'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
  'deckblattGewicht:"400",deckblattGroesse:98.9,fotoGroesse:64.1,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.651,'
  'schriftart:"Cormorant Garamond",unterSchrift:"Cormorant Garamond",name:"",zeile:.95,absatz:0,'
@@ -4413,6 +4413,21 @@ P.append(('l(),n&&(n.slides=i.length>0?i:["Inhalt..."],t.push(n)),t}',
 #      tauschen. Und im Raster ist das der eigentliche Gewinn: alle
 #      Fotokacheln sind dunkel, jede siebte Kachel ist jetzt hell —
 #      damit wird sie zur Pause statt zum naechsten Bild.
+
+# 164  Schwarz auf Weiss, hart
+#
+#      Nach sechs Paletten und einer Umkehrung habe ich aufgehoert zu
+#      raten und gefragt — mit vier Richtungen, die sich in der ART
+#      unterscheiden, nicht im Farbton. Ihre Wahl: hart.
+#
+#          grundA/grundB      #EDE7DE -> #FFFFFF
+#          schriftA/schriftB  #241C16 -> #000000
+#
+#      Kontrast 21,00 zu 1, das Maximum. Kein Beige, keine Waerme.
+#
+#      MERKE: sechs Vorschlaege in Folge, die alle im selben Schema
+#      lagen, waren sechs verlorene Runden. Eine Frage mit Optionen,
+#      die sich grundsaetzlich unterscheiden, hat es in einer geklaert.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
