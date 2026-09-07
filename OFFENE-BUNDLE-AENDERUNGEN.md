@@ -5548,3 +5548,23 @@ Anpassungsschleife des Zeichners ab.
 
 **Lehre:** die Breite entscheidet ueber den Umbruch, Deckung und Form
 entscheiden ueber die Lesbarkeit. Ich hatte nur das Erste gemessen.
+
+## 167 — Playfair bleibt auf den Fotos
+
+*„Auf den Fotos sollte Playfair bleiben wie gehabt !!!!"*
+
+Ich hatte in 165 „auf den slides die gleiche" so gelesen, dass **ueberall**
+dieselbe Schrift stehen soll. Gemeint war: die Fotokacheln behalten
+Playfair Display, die neue Schrift gilt **nur der Textkachel**.
+
+| | von | auf |
+|---|---|---|
+| `deckblattFamilie` | Marcellus | **Playfair Display** |
+| `fotoSchrift` | Marcellus | **Playfair Display** |
+| `folgeFamilie` | Marcellus | **Playfair Display** |
+| `ablaufTitel` | Marcellus | **Playfair Display** |
+| `schriftart` / `unterSchrift` | Marcellus | *bleibt* (Textkachel) |
+
+Damit stehen im dunklen Feed zwei Serifen nebeneinander: Playfair Display
+auf allen Fotos, Marcellus auf jeder siebten Kachel. Das ist gewollt — die
+Textkachel soll sich absetzen.

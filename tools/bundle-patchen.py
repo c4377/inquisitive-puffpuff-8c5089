@@ -283,13 +283,13 @@ P.append(('let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?P
 # Domain, nicht am Pfad).
 DUNKEL = ('const BS_DUNKEL={grundA:"#FFFFFF",schriftA:"#000000",'
  'grundB:"#FFFFFF",schriftB:"#000000",'
- 'deckblattFamilie:"Marcellus",fotoSchrift:"Marcellus",'
+ 'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",'
  'deckblattGewicht:"400",deckblattGroesse:98.9,fotoGroesse:64.1,zweiteFamilie:"Nothing You Could Do",zweitAnteil:.651,'
  'schriftart:"Marcellus",unterSchrift:"Marcellus",name:"",zeile:.95,absatz:0,'
  'kachelEinBlock:1,kachelSatzUmbruch:1,rand:.11,mitte:.50,maxhoehe:.46,groesseAnteil:.115,gewicht:"400",'
  'betontGewicht:"700",handAnteil:1.15,handGroesse:0.9486,folgeZweitHand:1,'
  'unterGewicht:"400",unterVerhaeltnis:1,laufweite:-35,fotoLaufweite:-20,'
- 'folgeFamilie:"Marcellus",ablaufTitel:"Marcellus",'
+ 'folgeFamilie:"Playfair Display",ablaufTitel:"Playfair Display",'
  'nameSchrift:"Playfair Display",nameGewicht:"400",nameLaufweite:60,'
  'nameAnteil:.030,folgeAusrichtung:"mitte",textAnteil:28,textJede:7,'
  'geteilt:1,geteiltAnteil:25,geteiltOben:.16,geteiltUnten:.86,geteiltLuft:.05,'
@@ -4490,6 +4490,26 @@ P.append(('l(),n&&(n.slides=i.length>0?i:["Inhalt..."],t.push(n)),t}',
 #      LEHRE: Breite entscheidet ueber den Umbruch, Deckung und Form
 #      entscheiden ueber die Lesbarkeit. Ich hatte nur das Erste
 #      gemessen.
+
+# 167  Playfair bleibt auf den Fotos
+#
+#      "Auf den Fotos sollte Playfair bleiben wie gehabt !!!!"
+#
+#      Ich hatte in 165 "auf den slides die gleiche" so gelesen, dass
+#      ueberall dieselbe Schrift stehen soll. Gemeint war das Gegenteil
+#      der Wirkung: die Fotokacheln behalten Playfair Display, die neue
+#      Schrift gilt nur der Textkachel.
+#
+#          deckblattFamilie  Marcellus -> Playfair Display
+#          fotoSchrift       Marcellus -> Playfair Display
+#          folgeFamilie      Marcellus -> Playfair Display
+#          ablaufTitel       Marcellus -> Playfair Display
+#          schriftart        Marcellus  (Textkachel, bleibt)
+#          unterSchrift      Marcellus  (Textkachel, bleibt)
+#
+#      Damit stehen im dunklen Feed zwei Serifen nebeneinander:
+#      Playfair Display auf allen Fotos, Marcellus auf jeder siebten
+#      Kachel. Das ist gewollt — die Textkachel soll sich absetzen.
 
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
