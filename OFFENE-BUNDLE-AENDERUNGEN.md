@@ -5635,3 +5635,23 @@ jemand scrollt.
 | Kacheln auf einer Seite | 197 | **30** |
 | Leiste | — | „Seite 1 von 7 · 197 Tage" |
 | „Aelter" | — | Seite 2, beginnt bei Tag 167, kein Fehler |
+
+## 170 — Blaettern wieder raus
+
+*„Bau das Blöttern wieder aus."*
+
+Die vier Ersetzungen aus 169 sind ersatzlos gestrichen, ebenso
+`seiteGross` in der Konfiguration. **karten229 ist Zeichen fuer Zeichen
+karten227**, nur das Versionsschild ist anders — geprueft, nicht
+behauptet.
+
+**Damit ist die weisse Seite zurueck.** Sie kam nicht vom fehlenden
+Blaettern, sondern von `uG`: der Beobachter feuert einmal und trennt sich
+dann, was einmal gesehen wurde bleibt gezeichnet. Bei 197 Tagen sind das
+am Ende 197 gezeichnete Kacheln gleichzeitig.
+
+Blaettern war eine von zwei moeglichen Antworten darauf. Die andere: den
+Beobachter wieder anhaengen, damit Kacheln beim Herausscrollen frei
+werden. Der Feed bleibt dann eine einzige lange Bahn, ohne Leiste, ohne
+Seiten. Preis: beim Zurueckscrollen wird neu gezeichnet, das kann kurz
+flackern. Steht bereit, falls die weisse Seite wiederkommt.
