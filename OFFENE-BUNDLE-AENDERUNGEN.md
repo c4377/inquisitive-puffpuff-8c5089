@@ -5806,3 +5806,42 @@ Wortgrenzen dazu, damit nichts hineinrutscht, was zufällig so aussieht.
 | Zitat ohne Kennung | alter Weg, Wortvergleich |
 
 4 Platzhalter im Plan, 3 von 4 zugeordnet.
+
+## 175 — Warum der Screenshot nicht kam
+
+*„Es stehen zuerst die Kürzel dort und sind dann weg, aka ok erkannt — aber
+das Bild des Screenshots kommt dann nicht."*
+
+Nachgestellt mit einem Server, der die JSON-Schnittstelle mit CORS
+ausliefert, die **Bilder aber ohne**: leere Kachel, kein Foto, kein
+Screenshot. Ihr Symptom, Punkt für Punkt.
+
+Der Zeichner lädt Bilder mit `crossOrigin:"anonymous"`. Fehlt die Freigabe,
+scheitert das Laden. Und jetzt der eigentliche Fehler:
+
+> `fabric.Image.fromURL` liefert dann **kein `null`, sondern ein Bild mit
+> `width` 0.**
+
+Der bestehende Code prüft nur `if(!me) return` — ein Bild der Breite 0
+rutscht durch. Danach rechnet er `r*scale/me.width` = **Unendlich**, die
+weiße Platte bekommt `NaN` als Breite, und nichts wird sichtbar. Kein
+Fehler, keine Meldung, nur eine leere Kachel.
+
+**Reparatur:** der Ladeversuch wird eine eigene Funktion, dann
+
+1. Versuch mit `crossOrigin:"anonymous"` — und die **Breite** wird geprüft
+2. schlägt der fehl: noch einmal **ohne** `crossOrigin`
+
+**Preis, ehrlich:** ein ohne `crossOrigin` geladenes Bild macht den Canvas
+„unrein". Solche Kacheln lassen sich nicht mehr in ein Bild umwandeln —
+gemessen: 1 von 4 statt 4 von 4. Sie behalten ihren Canvas (mehr Speicher),
+und **„Alle in Fotos" kann sie nicht exportieren**. Die eigentliche Heilung
+ist die CORS-Freigabe am Supabase-Bucket. Der zweite Versuch ist das Netz,
+nicht die Kur.
+
+**Geprüft, beide Richtungen:**
+
+| | vorher | nachher |
+|---|---|---|
+| Bucket ohne CORS | leere Kacheln | Screenshot ist da |
+| Bucket mit CORS | 34 % rot / 60 % blau | unverändert — kein Rückschritt |

@@ -4801,6 +4801,56 @@ P.append((
 #          Zitat ohne Kennung      -> alter Weg, Wortvergleich
 #      4 Platzhalter im Plan, 3 von 4 zugeordnet.
 
+# 175 — Der Screenshot wurde stillschweigend nicht gezeichnet
+P.append((
+ 'Ae=ge=>new Promise(Fe=>{if(!ge)return Fe(!1);Pe.fabric.Image.fromURL(ge,me=>{if(!me)return Fe(!1);if(t.overlayIsScreenshot){',
+ 'Ae=ge=>new Promise(Fe=>{if(!ge)return Fe(!1);const zMal=me=>{if(t.overlayIsScreenshot){',
+ 'Zeichnen des Screenshots als eigene Funktion', 1))
+
+P.append((
+ 'e.add(me),Fe(!0)},{crossOrigin:"anonymous"})}),$=typeof t.background=="string"',
+ 'e.add(me),Fe(!0)};Pe.fabric.Image.fromURL(ge,zm=>{if(zm&&zm.width>0)return zMal(zm);Pe.fabric.Image.fromURL(ge,zn=>{zn&&zn.width>0?zMal(zn):Fe(!1)},{crossOrigin:null})},{crossOrigin:"anonymous"})}),$=typeof t.background=="string"',
+ 'Zweiter Ladeversuch ohne CORS', 1))
+
+# 175  Warum der Screenshot nicht kam
+#
+#      "Es stehen zuerst die Kuerzel dort und sind dann weg, aka ok
+#      erkannt — aber das Bild des Screenshots kommt dann nicht."
+#
+#      Genau nachgestellt: Server, der die JSON-Schnittstelle mit CORS
+#      ausliefert, die BILDER aber ohne. Ergebnis: leere Kachel, kein
+#      Foto, kein Screenshot. Ihr Symptom, Punkt fuer Punkt.
+#
+#      Der Zeichner laedt Bilder mit crossOrigin:"anonymous". Fehlt die
+#      Freigabe, scheitert das Laden. Und jetzt der eigentliche Fehler:
+#
+#          fabric.Image.fromURL liefert dann KEIN null, sondern ein
+#          Bild mit width 0.
+#
+#      Der bestehende Code prueft nur "if(!me) return" — ein Bild der
+#      Breite 0 rutscht durch. Danach rechnet er
+#      "r*scale/me.width" = Unendlich, die weisse Platte bekommt NaN
+#      als Breite, und es wird gar nichts sichtbar. Kein Fehler, keine
+#      Meldung, nur eine leere Kachel.
+#
+#      REPARATUR: Ladeversuch als eigene Funktion, dann
+#        1. Versuch mit crossOrigin "anonymous" — Breite pruefen
+#        2. schlaegt der fehl: noch einmal OHNE crossOrigin
+#      Damit wird das Bild sichtbar, auch wenn der Bucket keine
+#      Freigabe schickt.
+#
+#      PREIS, ehrlich: ein ohne crossOrigin geladenes Bild macht den
+#      Canvas "unrein". Solche Kacheln lassen sich nicht mehr in ein
+#      Bild umwandeln — gemessen: 1 von 4 statt 4 von 4. Sie behalten
+#      ihren Canvas (mehr Speicher) und "Alle in Fotos" kann sie nicht
+#      exportieren. Die eigentliche Heilung ist die CORS-Freigabe am
+#      Supabase-Bucket. Der zweite Versuch ist das Netz, nicht die Kur.
+#
+#      GEPRUEFT, beide Richtungen:
+#          ohne CORS  vorher leere Kacheln -> nachher Screenshot da
+#          mit  CORS  34% rot / 60% blau auf Tag 1, unveraendert wie
+#                     vor der Aenderung, also kein Rueckschritt
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
