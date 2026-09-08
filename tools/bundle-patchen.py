@@ -5311,6 +5311,60 @@ P.append((
 #      "3 verschiedene Fotos — 0 in der Bibliothek, 3 im Plan
 #      verwendet", ZIP enthaelt drei Dateien, alle Viertel 0.0.
 
+# 186 — Nicht die Rohfotos, sondern die fertigen Kacheln in 9:16
+P.append((
+ 'const zFotos=(()=>{try{const zL=(Array.isArray(e.brandImages)?e.brandImages:[]).map(zx=>typeof zx=="string"?zx:(zx&&(zx.src||zx.url||zx.dataUrl))||"").filter(zx=>zx&&zx.length>5);const zP=[];(Array.isArray(e.contentPlan)?e.contentPlan:[]).forEach(zt=>(Array.isArray(zt.slides)?zt.slides:[]).forEach(zs2=>{const zb=zs2&&zs2.background;if(typeof zb=="string"&&zb.length>5)zP.push(zb)}));const zW=(typeof window<"u"&&Array.isArray(window.__bsBilder))?window.__bsBilder.filter(zx=>typeof zx=="string"&&zx.length>5):[];const zU=[...new Set([...zL,...zP,...zW])];return{lib:new Set(zL).size,plan:new Set(zP).size,liste:zU}}catch(zz){return{lib:0,plan:0,liste:[]}}})();const zStoryExport=async()=>{if(zSLauft)return;zSSetzLauft(!0),zSSetzStand("Fotos werden gesammelt \\u2026");try{const zListe=zFotos.liste;if(!zListe.length){zSSetzStand("Keine Fotos in der Bibliothek gefunden."),zSSetzLauft(!1);return}const zZip=new Dl,zOrd=zZip.folder("Stories_9_16");let zOk=0;const zLad=zu=>new Promise(zr=>{const za=new Image;za.crossOrigin="anonymous";za.onload=()=>zr(za);za.onerror=()=>{const zb2=new Image;zb2.onload=()=>zr(zb2);zb2.onerror=()=>zr(null);zb2.src=zu};za.src=zu});for(let zi=0;zi<zListe.length;zi+=1){zSSetzStand("Schneide "+(zi+1)+" von "+zListe.length+" \\u2026");try{const zim=await zLad(zListe[zi]);if(!zim||!zim.width||!zim.height)continue;const zc=document.createElement("canvas");zc.width=1080,zc.height=1920;const zx=zc.getContext("2d");zx.fillStyle="#000",zx.fillRect(0,0,1080,1920);try{zx.filter="grayscale(1)"}catch(zz){}const zf=Math.max(1080/zim.width,1920/zim.height),zw=zim.width*zf,zh=zim.height*zf;zx.drawImage(zim,(1080-zw)/2,(1920-zh)/2,zw,zh);try{zx.filter="none"}catch(zz){}try{const zid=zx.getImageData(0,0,1080,1920),zdd=zid.data;let zbunt=0;for(let zq=0;zq<zdd.length;zq+=4e3)if(Math.max(zdd[zq],zdd[zq+1],zdd[zq+2])-Math.min(zdd[zq],zdd[zq+1],zdd[zq+2])>8){zbunt=1;break}if(zbunt){for(let zq=0;zq<zdd.length;zq+=4){const zg=(zdd[zq]*.2126+zdd[zq+1]*.7152+zdd[zq+2]*.0722)|0;zdd[zq]=zg,zdd[zq+1]=zg,zdd[zq+2]=zg}zx.putImageData(zid,0,0)}}catch(zz){}const zbl=await new Promise(zr=>{try{zc.toBlob(zr,"image/jpeg",.92)}catch(zz){zr(null)}});zbl&&zbl.size>2e3&&(zOrd.file("Story-"+String(zi+1).padStart(3,"0")+".jpg",zbl),zOk+=1)}catch(zfe){console.warn("Story-Export: ein Foto ging nicht",zfe)}}if(!zOk){zSSetzStand("Kein Foto liess sich zeichnen."),zSSetzLauft(!1);return}zSSetzStand("ZIP wird gepackt \\u2026");const zBlob=await zZip.generateAsync({type:"blob"});ls.saveAs(zBlob,"BrandStudio-Stories-9-16.zip");zSSetzStand(zOk+" von "+zListe.length+" Fotos als ZIP geladen.")}catch(zz){zSSetzStand("Fehlgeschlagen: "+String(zz&&zz.message?zz.message:zz).slice(0,90))}zSSetzLauft(!1)};',
+ 'const zFotos=(()=>{try{const zA=[];(Array.isArray(e.contentPlan)?e.contentPlan:[]).forEach(zt=>(Array.isArray(zt.slides)?zt.slides:[]).forEach((zs2,zk2)=>{const zb=zs2&&zs2.background;if(typeof zb=="string"&&zb.length>5)zA.push({tag:zt.day,nr:zk2+1,slide:zs2})}));return zA}catch(zz){return[]}})();const zSchnitt=zu=>new Promise(zr=>{try{const za=new Image;za.crossOrigin="anonymous";const zfertig=zi2=>{try{if(!zi2||!zi2.width)return zr(zu);const zc2=document.createElement("canvas");zc2.width=1080,zc2.height=1920;const zx2=zc2.getContext("2d");const zf2=Math.max(1080/zi2.width,1920/zi2.height),zw2=zi2.width*zf2,zh2=zi2.height*zf2;zx2.drawImage(zi2,(1080-zw2)/2,(1920-zh2)/2,zw2,zh2);zr(zc2.toDataURL("image/jpeg",.95))}catch(zz){zr(zu)}};za.onload=()=>zfertig(za);za.onerror=()=>{const zb2=new Image;zb2.onload=()=>zfertig(zb2);zb2.onerror=()=>zr(zu);zb2.src=zu};za.src=zu}catch(zz){zr(zu)}});const zStoryExport=async(zMitText)=>{if(zSLauft)return;zSSetzLauft(!0),zSSetzStand("Wird gezeichnet \\u2026");try{if(!zFotos.length){zSSetzStand("Keine Kachel mit Foto gefunden."),zSSetzLauft(!1);return}const zZip=new Dl,zOrd=zZip.folder(zMitText?"Stories_9_16_mit_Text":"Stories_9_16_ohne_Text");let zOk=0;for(let zi=0;zi<zFotos.length;zi+=1){const zE=zFotos[zi];zSSetzStand("Zeichne "+(zi+1)+" von "+zFotos.length+" \\u2026");const zc=document.createElement("canvas");zc.width=1080,zc.height=1920,zc.style.display="none";document.body.appendChild(zc);const zk=new Pe.fabric.StaticCanvas(zc,{width:1080,height:1920,enableRetinaScaling:!1});try{const zBg=await zSchnitt(zE.slide.background);const zD={...zE.slide,background:zBg,format:"9:16",visualElements:zE.slide.visualElements||[],_tag:zE.tag};if(!zMitText){zD.text="",zD.secondaryText="",zD.footerText="",zD.label="",zD.cta="",zD.statement=""}await Ca(zk,zD,1080,1920,{slideIndex:zE.nr-1,totalSlides:1,scale:1080/400,globalBrandName:zMitText?(((e.currentBrandConfig||{}).brandText)||""):"",typography:(e.currentBrandConfig||{}).typography});const zd=zk.toDataURL({format:"jpeg",quality:.92,multiplier:1});if(zd&&zd.length>2e3){const zbl=await(await fetch(zd)).blob();zbl&&zbl.size>2e3&&(zOrd.file("Tag"+String(zE.tag).padStart(3,"0")+"_Slide"+zE.nr+".jpg",zbl),zOk+=1)}}catch(zfe){console.warn("Story-Export: eine Kachel ging nicht",zfe)}finally{try{zk.dispose()}catch(zz){}zc.parentNode&&zc.parentNode.removeChild(zc)}}if(!zOk){zSSetzStand("Keine Kachel liess sich zeichnen."),zSSetzLauft(!1);return}zSSetzStand("ZIP wird gepackt \\u2026");const zBlob=await zZip.generateAsync({type:"blob"});ls.saveAs(zBlob,zMitText?"Stories-9-16-mit-Text.zip":"Stories-9-16-ohne-Text.zip");zSSetzStand(zOk+" von "+zFotos.length+" Kacheln als ZIP geladen.")}catch(zz){zSSetzStand("Fehlgeschlagen: "+String(zz&&zz.message?zz.message:zz).slice(0,90))}zSSetzLauft(!1)};',
+ 'Export durch den echten Zeichner, 9:16', 1))
+
+P.append((
+ 'v.jsx("div",{className:"text-[11px] text-gray-500 mt-0.5",children:zSStand||(zFotos.liste.length+" verschiedene Fotos \\u2014 "+zFotos.lib+" in der Bibliothek, "+zFotos.plan+" im Plan verwendet. 1080\\u00d71920, Zoom-Schnitt, schwarzwei\\u00df, als ein ZIP.")})]}),v.jsx("button",{onClick:zStoryExport,disabled:zSLauft,className:"px-4 py-2.5 rounded-lg bg-gray-900 text-white text-xs font-bold disabled:opacity-40 whitespace-nowrap",children:zSLauft?"L\\u00e4uft \\u2026":"Als ZIP laden"})]}),',
+ 'v.jsx("div",{className:"text-[11px] text-gray-500 mt-0.5",children:zSStand||(zFotos.length+" Kacheln mit Foto \\u2014 dieselben Bilder wie im Feed, gezeichnet auf 1080\\u00d71920 statt 4:5.")})]}),v.jsxs("div",{className:"flex gap-2",children:[v.jsx("button",{onClick:()=>zStoryExport(!0),disabled:zSLauft,className:"px-4 py-2.5 rounded-lg bg-gray-900 text-white text-xs font-bold disabled:opacity-40 whitespace-nowrap",children:zSLauft?"L\\u00e4uft \\u2026":"Mit Text"}),v.jsx("button",{onClick:()=>zStoryExport(!1),disabled:zSLauft,className:"px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-800 text-xs font-bold disabled:opacity-40 whitespace-nowrap",children:"Nur Foto"})]})]}),',
+ 'Zwei Knoepfe: mit Text und nur Foto', 1))
+
+# 186  Es sind die fertigen Kacheln, nicht die Rohfotos
+#
+#      "Jedes Mal, wenn du meinen Feed kreierst, entscheidest DU
+#      schwarzweiss, entscheidest DU, wie viel. Du erstellst da
+#      literally neue Bilder. Und genau diese Bilder will ich nur eben
+#      im anderen Format."
+#
+#      Damit war 184 der falsche Weg: dort habe ich den Zeichner
+#      umgangen und die Rohfotos selbst beschnitten und entsaettigt.
+#      Herausgekommen waeren Fotos — sie will die KACHELN.
+#
+#      Jetzt laeuft der Export wieder durch Ca, den echten Zeichner,
+#      nur eben auf 1080x1920. Alles, was der Zeichner entscheidet
+#      (Schwarzweiss, Schleier, Vignette, Korn, Schrift, Lage), kommt
+#      damit automatisch mit — es ist dieselbe Kachel im anderen
+#      Format.
+#
+#      DREI DINGE MUSSTEN DAFUER STIMMEN:
+#
+#      1. KEINE BALKEN. Ca legt bei format:"9:16" das Foto hinein
+#         statt es zu fuellen. Deshalb wird das Foto VORHER auf
+#         1080x1920 fuellend geschnitten (Math.max-Faktor, mittig) und
+#         das Ergebnis als background uebergeben. Fuer Ca ist es dann
+#         schon 9:16, also kein Rand.
+#      2. KEIN RETINA-VIERTEL. Der Export-Canvas wird mit
+#         enableRetinaScaling:!1 angelegt. Damit ist der Canvas genau
+#         1080x1920 und nicht 2160x3840.
+#      3. NICHTS SELBST ENTSAETTIGEN. Die Farbentscheidung gehoert dem
+#         Zeichner. Meine Luminanzschleife ist raus.
+#
+#      ZWEI KNOEPFE, weil "die Bilder" beides heissen kann:
+#          Mit Text  — die Kachel wie im Feed, samt Schrift und Name
+#          Nur Foto  — dieselbe Kachel, aber text/secondaryText/
+#                      footerText/label/cta/statement geleert
+#      Dateinamen: Tag007_Slide1.jpg, damit die Zuordnung bleibt.
+#
+#      GEPRUEFT: Testplan mit drei Fotokacheln. "Mit Text" ergibt
+#      1080x1920 mit der Schrift unten, "Nur Foto" dieselbe Kachel ohne
+#      Schrift, in beiden Faellen schwarze Balken oben 0 Prozent, unten
+#      0 Prozent. Die Farbigkeit bleibt die des Zeichners — im
+#      Testrechner farbig, weil dort weder BS_MISCHBAR noch ihre
+#      Kachelwerte greifen.
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

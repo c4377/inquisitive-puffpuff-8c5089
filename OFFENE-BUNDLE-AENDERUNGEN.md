@@ -6174,3 +6174,44 @@ nicht laden.
 **Geprüft:** Testplan mit drei Fotos und leerer Bibliothek zeigt „3
 verschiedene Fotos — 0 in der Bibliothek, 3 im Plan verwendet", ZIP enthält
 drei Dateien, alle Viertel 0.0.
+
+## 186 — Es sind die fertigen Kacheln, nicht die Rohfotos
+
+*„Jedes Mal, wenn du meinen Feed kreierst, entscheidest **du** schwarzweiß,
+entscheidest **du**, wie viel. Du erstellst da literally neue Bilder. Und
+genau diese Bilder will ich nur eben im anderen Format."*
+
+Damit war 184 der falsche Weg: dort habe ich den Zeichner **umgangen** und
+die Rohfotos selbst beschnitten und entsättigt. Herausgekommen wären Fotos
+— sie will die **Kacheln**.
+
+Jetzt läuft der Export wieder durch `Ca`, den echten Zeichner, nur eben auf
+1080 × 1920. Alles, was der Zeichner entscheidet — Schwarzweiß, Schleier,
+Vignette, Korn, Schrift, Lage — kommt damit automatisch mit. Es ist
+dieselbe Kachel im anderen Format.
+
+**Drei Dinge mussten dafür stimmen:**
+
+1. **Keine Balken.** `Ca` legt bei `format:"9:16"` das Foto *hinein* statt
+   es zu füllen. Deshalb wird das Foto **vorher** auf 1080 × 1920 füllend
+   geschnitten (`Math.max`-Faktor, mittig) und das Ergebnis als
+   `background` übergeben. Für `Ca` ist es dann schon 9:16 — kein Rand.
+2. **Kein Retina-Viertel.** Der Export-Canvas wird mit
+   `enableRetinaScaling:false` angelegt, ist also genau 1080 × 1920 statt
+   2160 × 3840.
+3. **Nichts selbst entsättigen.** Die Farbentscheidung gehört dem Zeichner.
+   Meine Luminanzschleife ist raus.
+
+**Zwei Knöpfe**, weil „die Bilder" beides heißen kann:
+
+| Knopf | was drin ist |
+|---|---|
+| **Mit Text** | die Kachel wie im Feed, samt Schrift und Name |
+| **Nur Foto** | dieselbe Kachel, aber `text`, `secondaryText`, `footerText`, `label`, `cta`, `statement` geleert |
+
+Dateinamen `Tag007_Slide1.jpg`, damit die Zuordnung bleibt.
+
+**Geprüft:** Testplan mit drei Fotokacheln. „Mit Text" ergibt 1080 × 1920
+mit der Schrift unten, „Nur Foto" dieselbe Kachel ohne Schrift — in beiden
+Fällen schwarze Balken oben 0 %, unten 0 %. Die Farbigkeit bleibt die des
+Zeichners.
