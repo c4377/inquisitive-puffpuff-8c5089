@@ -5073,6 +5073,41 @@ P.append((
 #          12 Konfigurationen vorher = nachher
 #          12 Kacheln = 12 Zeichnungen, 0 Canvas im DOM
 
+# 180 — Textkachel auf Bodoni Moda
+P.append((
+ 'schriftart:"Marcellus",unterSchrift:"Marcellus"',
+ 'schriftart:"Bodoni Moda",unterSchrift:"Bodoni Moda"',
+ 'Textkachel auf Bodoni Moda', 1))
+
+# 180  Textkachel auf Bodoni Moda
+#
+#      "Marcellus und Playfair finde ich zu unterschiedlich." — stimmt,
+#      und der Grund ist benennbar: Playfair ist eine Didone, duenne
+#      Haarstriche gegen dicke Grundstriche. Marcellus ist eine
+#      roemische Kapitalis, fast gleichmaessig dick. Zwei Welten.
+#
+#      Verglichen wurden Playfair Display, Prata, Bodoni Moda,
+#      DM Serif Display und Marcellus, gerendert mit den echten
+#      Schriftdateien im selben Satz und derselben Groesse:
+#
+#          Playfair Display  dieselbe Stimme wie das Foto
+#          Prata             gleiche Welt, etwas fester
+#          Bodoni Moda       mehr Kontrast, eleganter, feinere Haare
+#          DM Serif Display  viel zu schwer, wirkt fett
+#          Marcellus         flacher Kontrast, andere Welt
+#
+#      Sie hat Bodoni Moda gewaehlt. Nur schriftart und unterSchrift
+#      wechseln; Playfair bleibt auf Fotos, Deckblatt, Folgeslides,
+#      Name und Ablauf.
+#
+#      Bodoni steht in tiefeSchriften, das dunkle Band unter dem Text
+#      bleibt also erhalten. Die Schriftdateien liegen als
+#      BodoniModa-Regular (400) und -Bold (700) vor.
+#
+#      MOEGLICHE NACHBESSERUNG: Bodonis Haarstriche koennen auf dem
+#      Handy duenn werden. Falls ja, gewicht von "400" auf "500" oder
+#      "600" — das ist ein Wort.
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

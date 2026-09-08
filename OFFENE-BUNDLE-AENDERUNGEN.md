@@ -5995,3 +5995,33 @@ des Rennens behoben hat: die Kette war schon vergiftet.
 | dauerhafter Fehler | genau 4 Versuche, dann die Meldung, keine Schleife |
 | 12 Konfigurationen | vorher = nachher |
 | Speicher | 12 Kacheln = 12 Zeichnungen, 0 Canvas im DOM |
+
+## 180 — Textkachel auf Bodoni Moda
+
+*„Marcellus und Playfair finde ich zu unterschiedlich."*
+
+Stimmt, und der Grund ist benennbar: **Playfair ist eine Didone** — dünne
+Haarstriche gegen dicke Grundstriche. **Marcellus ist eine römische
+Kapitalis**, fast gleichmäßig dick. Nebeneinander sieht das nicht nach zwei
+Rollen aus, sondern nach zwei Absendern.
+
+Verglichen wurden fünf Schriften, gerendert mit den echten Schriftdateien,
+gleicher Satz, gleiche Größe:
+
+| Schrift | Wirkung neben Playfair |
+|---|---|
+| Playfair Display | dieselbe Stimme wie das Foto |
+| Prata | gleiche Welt, etwas fester |
+| **Bodoni Moda** | mehr Kontrast, eleganter, feinere Haarstriche |
+| DM Serif Display | viel zu schwer, wirkt fett gesetzt |
+| Marcellus (bisher) | flacher Kontrast, andere Welt |
+
+Gewählt: **Bodoni Moda**. Nur `schriftart` und `unterSchrift` wechseln —
+Playfair bleibt auf Fotos, Deckblatt, Folgeslides, Name und Ablauf.
+
+`Bodoni` steht in `tiefeSchriften`, das dunkle Band unter dem Text bleibt
+also erhalten. Die Dateien liegen als `BodoniModa-Regular` (400) und
+`-Bold` (700) vor.
+
+**Mögliche Nachbesserung:** Bodonis Haarstriche können auf dem Handy dünn
+werden. Falls ja, `gewicht` von `"400"` auf `"500"` oder `"600"` — ein Wort.
