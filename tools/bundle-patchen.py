@@ -4938,6 +4938,69 @@ P.append((
 #      GEPRUEFT: Fehler kuenstlich ausgeloest, Kachel zeigt gross und
 #      lesbar "Diese Kachel kam nicht durch" mit dem deutschen Satz.
 
+# 178 — Jeder Ausgang des Zeichners zeichnet den Screenshot
+P.append((
+ 'fill:"rgba(247,244,239,0.75)",selectable:!1})),e.renderAll();return}',
+ 'fill:"rgba(247,244,239,0.75)",selectable:!1})),t.overlayImage&&await Ae(t.overlayImage).catch(()=>{}),e.renderAll();return}',
+ 'Ausgang 1: Deckblatt', 1))
+
+P.append((
+ 'if(wt(Ab,t.text)){e.renderAll();return}',
+ 'if(wt(Ab,t.text)){t.overlayImage&&await Ae(t.overlayImage).catch(()=>{}),e.renderAll();return}',
+ 'Ausgang 2: Karte auf dem Foto', 1))
+
+P.append((
+ 'wt(Ye,t.text))){e.renderAll();return}',
+ 'wt(Ye,t.text))){t.overlayImage&&await Ae(t.overlayImage).catch(()=>{}),e.renderAll();return}',
+ 'Ausgang 3: Karte auf Farbgrund', 1))
+
+P.append((
+ 'opacity:(BS_KACHEL.nameDeckkraft||.55),selectable:!1})),Le(),e.renderAll();return}',
+ 'opacity:(BS_KACHEL.nameDeckkraft||.55),selectable:!1})),Le(),t.overlayImage&&await Ae(t.overlayImage).catch(()=>{}),e.renderAll();return}',
+ 'Ausgang 4: Name unten', 1))
+
+P.append((
+ 'if(!jt&&!_t&&!ar){e.renderAll();return}',
+ 'if(!jt&&!_t&&!ar){t.overlayImage&&await Ae(t.overlayImage).catch(()=>{}),e.renderAll();return}',
+ 'Ausgang 5: nichts zu setzen', 1))
+
+P.append((
+ 'Pe.fabric.Image.fromURL(ge,zn=>{zn&&zn.width>0?zMal(zn):Fe(!1)},{crossOrigin:null})',
+ 'Pe.fabric.Image.fromURL(ge,zn=>{if(zn&&zn.width>0)return zMal(zn);try{const zb=r*.72,zh2=zb*.46,zx=r/2,zy=n/2;e.add(new Pe.fabric.Rect({left:zx,top:zy,originX:"center",originY:"center",width:zb,height:zh2,rx:14*d,ry:14*d,fill:"#FFF3F3",stroke:"#B00020",strokeWidth:2*d,selectable:!1}));e.add(new Pe.fabric.Textbox("Screenshot konnte nicht geladen werden",{left:zx-zb/2,top:zy-zh2*.30,width:zb,fontSize:r*.038,fontFamily:"Helvetica",fontWeight:"700",fill:"#B00020",textAlign:"center",lineHeight:1.2,selectable:!1}));e.add(new Pe.fabric.Textbox(String(ge).slice(-40),{left:zx-zb/2,top:zy+zh2*.04,width:zb,fontSize:r*.026,fontFamily:"Helvetica",fill:"#7A0016",textAlign:"center",lineHeight:1.25,selectable:!1}))}catch(zz){}Fe(!1)},{crossOrigin:null})',
+ 'Sichtbare Meldung, wenn der Screenshot nicht ladbar ist', 1))
+
+# 178  Jeder Ausgang zeichnet den Screenshot, und Scheitern wird sichtbar
+#
+#      "Geht nicht ums Erkennen, sondern dass es der Zeichner zeichnet!!!"
+#
+#      Nachgezaehlt: der Zeichner hat 21 Ausgaenge. 16 zeichnen den
+#      Screenshot vor dem Verlassen, 5 nicht — darunter die beiden
+#      Karten-Ausgaenge (Karte auf dem Foto, Karte auf Farbgrund).
+#      Diese Luecke ist jetzt geschlossen: 21 von 21.
+#
+#      EHRLICH: in einer Matrix aus 12 Konfigurationen (karte hell /
+#      stein / keine, mit und ohne Foto, mit und ohne Text) aendert das
+#      NICHTS — vorher wie nachher wird der Screenshot ueberall
+#      gezeichnet. Auch der Durchlauf mit ihrem echten Plan (100 Tage,
+#      619 Slides, 103 Platzhalter, 52 Zuordnungen) zeigt die
+#      Screenshots auf den Kacheln. Ihr Fall ist hier also nicht
+#      nachstellbar; die Luecke war trotzdem real und ist zu.
+#
+#      DESHALB ZUSAETZLICH: ein stilles Scheitern wird sichtbar. Wenn
+#      beide Ladeversuche fehlschlagen (mit und ohne CORS), zeichnet
+#      die Kachel jetzt einen rot umrandeten Kasten:
+#
+#          "Screenshot konnte nicht geladen werden"
+#          <die letzten 40 Zeichen der Adresse>
+#
+#      Damit steht auf der Kachel, ob der Zeichner es gar nicht erst
+#      versucht hat (nichts zu sehen) oder ob das Bild nicht kommt
+#      (Kasten mit Adresse). Das trennt die beiden Faelle endlich.
+#
+#      GEPRUEFT: kaputte Adresse -> Kasten mit Adresse; gute Adresse
+#      daneben -> Screenshot. Keine Veraenderung an den 12
+#      Konfigurationen.
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

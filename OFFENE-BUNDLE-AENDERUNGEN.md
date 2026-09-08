@@ -5917,3 +5917,34 @@ zum Nachsehen da ist.
 
 **Geprüft:** Fehler künstlich ausgelöst, die Kachel zeigt groß und lesbar
 „Diese Kachel kam nicht durch" mit dem deutschen Satz darunter.
+
+## 178 — Jeder Ausgang des Zeichners zeichnet den Screenshot
+
+*„Geht nicht ums Erkennen, sondern dass es der Zeichner zeichnet!!!"*
+
+Nachgezählt: der Zeichner hat **21 Ausgänge**. 16 zeichnen den Screenshot
+vor dem Verlassen, **5 nicht** — darunter die beiden Karten-Ausgänge (Karte
+auf dem Foto, Karte auf Farbgrund). Diese Lücke ist zu: **21 von 21**.
+
+**Ehrlich:** in einer Matrix aus 12 Konfigurationen (`karte` hell / stein /
+keine × mit und ohne Foto × mit und ohne Text) ändert das **nichts** —
+vorher wie nachher wird der Screenshot überall gezeichnet. Auch der
+Durchlauf mit ihrem echten Plan (100 Tage, 619 Slides, 103 Platzhalter,
+52 Zuordnungen) zeigt die Screenshots auf den Kacheln. Ihr Fall ist hier
+nicht nachstellbar; die Lücke war trotzdem real und ist geschlossen.
+
+**Deshalb zusätzlich: stilles Scheitern wird sichtbar.** Wenn beide
+Ladeversuche fehlschlagen (mit und ohne CORS), zeichnet die Kachel jetzt
+einen rot umrandeten Kasten:
+
+```
+Screenshot konnte nicht geladen werden
+…die letzten 40 Zeichen der Adresse
+```
+
+Damit steht auf der Kachel, ob der Zeichner es gar nicht erst versucht hat
+(nichts zu sehen) oder ob das Bild nicht ankommt (Kasten mit Adresse). Das
+trennt die beiden Fälle endlich.
+
+**Geprüft:** kaputte Adresse → Kasten mit Adresse; gute Adresse daneben →
+Screenshot. Keine Veränderung an den 12 Konfigurationen.
