@@ -6114,3 +6114,33 @@ kein doppeltes Halten.
 
 **Geprüft:** drei Fotos, ZIP unverändert lesbar, jede Datei 1080 × 1920,
 Farbigkeit 0.0, 13–18 KB je Bild.
+
+## 184 — Ein Viertel schwarzweiß, Balken statt Schnitt
+
+Ihr Bild aus dem Export: das **obere linke Viertel** war schwarzweiß, der
+Rest farbig. Dazu schwarze Balken oben und unten statt eines Zoom-Schnitts.
+
+**Zwei Ursachen, beide meine.**
+
+1. **Retina.** fabric legt den Canvas mit `devicePixelRatio` an — auf ihrem
+   iPhone also 2160 × 3840. Meine Umrechnung las und schrieb
+   `getImageData(0,0,1080,1920)`: **genau ein Viertel, oben links.** Deshalb
+   war nur dieses Viertel grau. Im Testrechner mit Pixelverhältnis 1 war es
+   nie zu sehen.
+2. **Balken.** Ich habe den Feed-Zeichner `Ca` mit `format:"9:16"` benutzt.
+   Der legt bei 9:16 das Bild **hinein** statt es zu füllen, Rest schwarz.
+   „Auf Zoom geschnitten" war es damit nie.
+
+**Reparatur:** der Export benutzt `Ca` gar nicht mehr. Er lädt das Bild
+selbst, legt einen Canvas mit genau 1080 × 1920 an (kein Retina, weil selbst
+erzeugt), rechnet den Füllfaktor `Math.max(1080/w, 1920/h)`, zeichnet mittig
+— das ist der Zoom-Schnitt — und entsättigt **zweifach abgesichert**:
+`ctx.filter="grayscale(1)"` beim Zeichnen, danach eine Stichprobe über die
+Pixel und, falls doch Farbe drin ist, die Luminanzschleife über die ganze
+Fläche.
+
+**Folge:** der Feed-Look (Schleier, Vignette, Korn) ist im Export nicht mehr
+drin. Es ist das reine Foto — schwarzweiß, gefüllt.
+
+**Geprüft:** drei Fotos, jede Datei 1080 × 1920, Farbigkeit in **allen vier
+Vierteln 0.0**, schwarze Balken oben 0 %, unten 0 %.

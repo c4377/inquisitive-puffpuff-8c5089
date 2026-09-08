@@ -5224,6 +5224,47 @@ P.append((
 #      GEPRUEFT: drei Fotos, ZIP unveraendert lesbar, jede Datei
 #      1080x1920, Farbigkeit 0.0, 13-18 KB je Bild.
 
+# 184 — Story-Export: oben links schwarzweiss, der Rest farbig
+P.append((
+ 'const zZip=new Dl,zOrd=zZip.folder("Stories_9_16");let zOk=0;for(let zi=0;zi<zListe.length;zi+=1){zSSetzStand("Zeichne "+(zi+1)+" von "+zListe.length+" \\u2026");const zc=document.createElement("canvas");zc.width=1080,zc.height=1920,zc.style.display="none";document.body.appendChild(zc);const zk=new Pe.fabric.StaticCanvas(zc,{width:1080,height:1920});try{await Ca(zk,{background:zListe[zi],text:"",format:"9:16",visualElements:[],satBoost:-1},1080,1920,{slideIndex:0,totalSlides:1,scale:1080/400,globalBrandName:""});let zd="";try{const zx2=zc.getContext("2d"),zim=zx2.getImageData(0,0,1080,1920),zdd=zim.data;for(let zq=0;zq<zdd.length;zq+=4){const zg=(zdd[zq]*.2126+zdd[zq+1]*.7152+zdd[zq+2]*.0722)|0;zdd[zq]=zg,zdd[zq+1]=zg,zdd[zq+2]=zg}zx2.putImageData(zim,0,0);zd=zc.toDataURL("image/jpeg",.92)}catch(zsw){zd=zk.toDataURL({format:"jpeg",quality:.92,multiplier:1})}if(zd&&zd.length>2e3){const zbl=await(await fetch(zd)).blob();zbl&&zbl.size>2e3&&(zOrd.file("Story-"+String(zi+1).padStart(3,"0")+".jpg",zbl),zOk+=1)}}catch(zf){console.warn("Story-Export: ein Foto ging nicht",zf)}finally{try{zk.dispose()}catch(zz){}zc.parentNode&&zc.parentNode.removeChild(zc)}}',
+ 'const zZip=new Dl,zOrd=zZip.folder("Stories_9_16");let zOk=0;const zLad=zu=>new Promise(zr=>{const za=new Image;za.crossOrigin="anonymous";za.onload=()=>zr(za);za.onerror=()=>{const zb2=new Image;zb2.onload=()=>zr(zb2);zb2.onerror=()=>zr(null);zb2.src=zu};za.src=zu});for(let zi=0;zi<zListe.length;zi+=1){zSSetzStand("Schneide "+(zi+1)+" von "+zListe.length+" \\u2026");try{const zim=await zLad(zListe[zi]);if(!zim||!zim.width||!zim.height)continue;const zc=document.createElement("canvas");zc.width=1080,zc.height=1920;const zx=zc.getContext("2d");zx.fillStyle="#000",zx.fillRect(0,0,1080,1920);try{zx.filter="grayscale(1)"}catch(zz){}const zf=Math.max(1080/zim.width,1920/zim.height),zw=zim.width*zf,zh=zim.height*zf;zx.drawImage(zim,(1080-zw)/2,(1920-zh)/2,zw,zh);try{zx.filter="none"}catch(zz){}try{const zid=zx.getImageData(0,0,1080,1920),zdd=zid.data;let zbunt=0;for(let zq=0;zq<zdd.length;zq+=4e3)if(Math.max(zdd[zq],zdd[zq+1],zdd[zq+2])-Math.min(zdd[zq],zdd[zq+1],zdd[zq+2])>8){zbunt=1;break}if(zbunt){for(let zq=0;zq<zdd.length;zq+=4){const zg=(zdd[zq]*.2126+zdd[zq+1]*.7152+zdd[zq+2]*.0722)|0;zdd[zq]=zg,zdd[zq+1]=zg,zdd[zq+2]=zg}zx.putImageData(zid,0,0)}}catch(zz){}const zbl=await new Promise(zr=>{try{zc.toBlob(zr,"image/jpeg",.92)}catch(zz){zr(null)}});zbl&&zbl.size>2e3&&(zOrd.file("Story-"+String(zi+1).padStart(3,"0")+".jpg",zbl),zOk+=1)}catch(zfe){console.warn("Story-Export: ein Foto ging nicht",zfe)}}',
+ 'Export schneidet und entsaettigt selbst', 1))
+
+# 184  Ein Viertel schwarzweiss, Balken statt Schnitt
+#
+#      Ihr Bild aus dem Export: das obere linke VIERTEL war
+#      schwarzweiss, der Rest farbig. Dazu schwarze Balken oben und
+#      unten statt eines Zoom-Schnitts.
+#
+#      ZWEI URSACHEN, beide meine.
+#
+#      1. RETINA. fabric legt den Canvas mit devicePixelRatio an, auf
+#         ihrem iPhone also 2160x3840. Meine Umrechnung las und schrieb
+#         getImageData(0,0,1080,1920) — genau ein Viertel, oben links.
+#         Deshalb war nur dieses Viertel grau. Im Testrechner mit
+#         Pixelverhaeltnis 1 war es nie zu sehen.
+#
+#      2. BALKEN. Ich habe den Feed-Zeichner Ca mit format:"9:16"
+#         benutzt. Der legt bei 9:16 das Bild HINEIN statt es zu
+#         fuellen, Rest schwarz. "Auf Zoom geschnitten" war es damit
+#         nie.
+#
+#      REPARATUR: der Export benutzt Ca gar nicht mehr. Er laedt das
+#      Bild selbst, legt einen Canvas mit genau 1080x1920 an (kein
+#      Retina, weil selbst erzeugt), rechnet den Fuellfaktor
+#      Math.max(1080/w, 1920/h), zeichnet mittig — das ist der
+#      Zoom-Schnitt — und entsaettigt zweifach abgesichert:
+#      ctx.filter="grayscale(1)" beim Zeichnen, danach eine Stichprobe
+#      ueber die Pixel und, falls doch Farbe drin ist, die
+#      Luminanzschleife ueber die ganze Flaeche.
+#
+#      FOLGE: der Feed-Look (Schleier, Vignette, Korn) ist im Export
+#      nicht mehr drin. Es ist das reine Foto, schwarzweiss, gefuellt.
+#
+#      GEPRUEFT: drei Fotos, jede Datei 1080x1920, Farbigkeit in ALLEN
+#      VIER VIERTELN 0.0, schwarze Balken oben 0 Prozent, unten 0
+#      Prozent.
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
