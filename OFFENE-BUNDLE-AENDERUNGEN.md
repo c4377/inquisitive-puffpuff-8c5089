@@ -5776,3 +5776,33 @@ Neuzeichnen aus. Der Canvas wird danach wie bisher abgeräumt.
 | nachher | 9739 → 7995 Byte, der Screenshot steht da |
 | Schleife? | 12 Kacheln = 12 Zeichnungen, 8 Sekunden später immer noch 12 |
 | Speicher | 0 Canvas im DOM, 12 Kachelbilder — wie vorher |
+
+## 174 — Die Kennung allein macht eine Slide zum Platzhalter
+
+*„Der Check soll auf die Id gehen, jetzt gehst du in dem Kasten immer noch
+über den Text???"*
+
+Berechtigt. Die Kennungsprüfung aus 172 schlägt zwar jede Ähnlichkeit —
+aber sie kam nur zum Zug, wenn die Slide **überhaupt** als Platzhalter
+erkannt wurde, und dafür verlangte `q$` das Wort „Screenshot". Eine Slide,
+in der nur `S-PXQPF` stand, war unsichtbar. Der Text blieb also der
+Türhüter, obwohl die Kennung entscheiden sollte.
+
+Jetzt: **steht irgendwo im Slide-Text eine Kennung, ist die Slide ein
+Platzhalter — und die Kennung ist der Suchtext.** Alles andere in der Zeile
+wird ignoriert, Groß- und Kleinschreibung egal. Ohne Kennung läuft der
+alte Weg über das Zitat unverändert weiter.
+
+Wortgrenzen dazu, damit nichts hineinrutscht, was zufällig so aussieht.
+
+**Geprüft** im Browser, Bibliothek mit einem Screenshot `S-RLFHP`:
+
+| Slide-Text | Ergebnis |
+|---|---|
+| `S-RLFHP` | **1,00 · Kennung gefunden** |
+| `s-rlfhp` | **1,00 · Kennung gefunden** |
+| `Screenshot: S-RLFHP` | **1,00 · Kennung gefunden** |
+| `Die S-Klasse von Mercedes.` | gar kein Platzhalter |
+| Zitat ohne Kennung | alter Weg, Wortvergleich |
+
+4 Platzhalter im Plan, 3 von 4 zugeordnet.

@@ -4751,6 +4751,56 @@ P.append((
 #          12 Kacheln = 12 Zeichnungen, 8 Sekunden spaeter immer noch 12
 #          0 Canvas im DOM, 12 Kachelbilder
 
+# 174 — Die Kennung allein macht eine Slide zum Platzhalter
+P.append((
+ 'q$=e=>{if(!e||typeof e!="string")return null;const t=e.trim();if(!/screenshot/i.test(t))return null;',
+ 'q$=e=>{if(!e||typeof e!="string")return null;const t=e.trim();const zk=t.toUpperCase().match(/\\bS-[0-9A-Z]{5}\\b/);if(zk)return zk[0];if(!/screenshot/i.test(t))return null;',
+ 'Kennung allein genuegt', 1))
+
+P.append((
+ 'zCode=zu=>{const zm=String(zu||"").toUpperCase().match(/S-[0-9A-Z]{5}/);return zm?zm[0]:null},',
+ 'zCode=zu=>{const zm=String(zu||"").toUpperCase().match(/\\bS-[0-9A-Z]{5}\\b/);return zm?zm[0]:null},',
+ 'Kennung mit Wortgrenzen', 1))
+
+P.append((
+ 'children:"[SCREENSHOT — …]"}),"-Platzhalter im aktuellen Plan gefunden. Füge sie per Bulk Import ein, z.\xa0B.:"',
+ 'children:"S-XXXXX"}),"-Kennung und kein „Screenshot“ im Plan gefunden. Schreib die Kennung aus der Liste unten in die Slide, z.\xa0B.:"',
+ 'Hinweistext', 1))
+
+P.append((
+ 'children:\'[SCREENSHOT — "Btw: 30 Anmeldungen für den Workshop"]\'',
+ 'children:"Slide 2: S-PXQPF"',
+ 'Beispiel', 1))
+
+# 174  Die Kennung allein genuegt
+#
+#      "Der Check soll auf die Id gehen, jetzt gehst du in dem Kasten
+#      immer noch ueber den Text???"
+#
+#      Berechtigt. Die Kennungspruefung aus 172 schlaegt zwar jede
+#      Aehnlichkeit — aber sie kam nur zum Zug, wenn die Slide ueber-
+#      haupt als Platzhalter erkannt wurde, und dafuer verlangte q$ das
+#      Wort "Screenshot". Eine Slide, in der nur "S-PXQPF" stand, war
+#      unsichtbar. Der Text blieb also der Tuerhueter, obwohl die
+#      Kennung entscheiden sollte.
+#
+#      Jetzt: steht irgendwo im Slide-Text eine Kennung, ist die Slide
+#      ein Platzhalter und die Kennung IST der Suchtext. Alles andere
+#      in der Zeile wird ignoriert. Gross- und Kleinschreibung egal.
+#      Ohne Kennung laeuft der alte Weg ueber das Zitat unveraendert
+#      weiter.
+#
+#      Wortgrenzen dazu, damit nichts hineinrutscht, was zufaellig so
+#      aussieht: "Die S-Klasse von Mercedes." ist kein Platzhalter.
+#
+#      GEPRUEFT im Browser, Bibliothek mit einem Screenshot S-RLFHP:
+#          "S-RLFHP"               -> 1,00  Kennung gefunden
+#          "s-rlfhp"               -> 1,00  Kennung gefunden
+#          "Screenshot: S-RLFHP"   -> 1,00  Kennung gefunden
+#          "Die S-Klasse von ..."  -> gar kein Platzhalter
+#          Zitat ohne Kennung      -> alter Weg, Wortvergleich
+#      4 Platzhalter im Plan, 3 von 4 zugeordnet.
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
