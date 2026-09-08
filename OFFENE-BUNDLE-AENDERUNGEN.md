@@ -5845,3 +5845,47 @@ nicht die Kur.
 |---|---|---|
 | Bucket ohne CORS | leere Kacheln | Screenshot ist da |
 | Bucket mit CORS | 34 % rot / 60 % blau | unverändert — kein Rückschritt |
+
+## 176 — Rosa Fehlerkacheln
+
+Auf der Kachel stand:
+
+```
+Zeichnen fehlgeschlagen
+null is not an object (evaluating '…clearRect')
+```
+
+`clearRect` auf einem Canvas, den es nicht mehr gibt. Das ist **eine Folge
+von 173**: seitdem wird der Canvas bei jeder Inhaltsänderung abgeräumt und
+neu gebaut.
+
+Der Zeichen-Effekt merkt sich seinen Canvas beim Start:
+
+```js
+const p = a.current;
+f.current = f.current.then(async () => {
+  if (w === c.current && a.current) return Ca(p, e, …)   // prüft a, malt auf p
+});
+```
+
+Die Prüfung fragt „gibt es überhaupt einen Canvas", gezeichnet wird aber
+auf das gemerkte `p`. Wurde zwischen Einreihen und Ausführen der Canvas
+ausgetauscht, ist `a.current` der **neue** und `p` der abgeräumte alte.
+`Ca` ruft darauf `clear()` → der Zeichenkontext ist `null` → Ausnahme →
+rosa Kachel.
+
+Bei ihr fällt das auf, weil ~100 Kacheln lange zeichnen und Änderungen
+mitten hinein fallen. Im Test mit 9 schnellen Kacheln war es nicht zu
+provozieren.
+
+**Zwei Zeilen:**
+
+1. `a.current === p` statt `a.current` — nie auf einen Canvas zeichnen, der
+   nicht mehr der aktuelle ist. Der übersprungene Lauf ist nicht verloren:
+   der Effekt läuft mit dem neuen Canvas ohnehin erneut.
+2. Im `catch` zuerst prüfen, ob `p` noch aktuell ist. Ein
+   Lebenszyklus-Rennen soll keine Fehlerkachel malen.
+
+**Geprüft:** Screenshot auf Foto und Textkachel unverändert (34 % rot /
+60 % blau), „Platzieren" aktualisiert die Kachel weiter (9739 → 7995 Byte),
+12 Kacheln gezeichnet, keine Schleife, 0 Canvas im DOM.

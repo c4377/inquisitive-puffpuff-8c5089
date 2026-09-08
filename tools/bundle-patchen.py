@@ -4851,6 +4851,55 @@ P.append((
 #          mit  CORS  34% rot / 60% blau auf Tag 1, unveraendert wie
 #                     vor der Aenderung, also kein Rueckschritt
 
+# 176 — Rosa Fehlerkacheln: gezeichnet auf einen Canvas, den es nicht mehr gibt
+P.append((
+ 'f.current=f.current.then(async()=>{var b;if(w===c.current&&a.current)return Ca(p,e,g,m,{',
+ 'f.current=f.current.then(async()=>{var b;if(w===c.current&&a.current===p)return Ca(p,e,g,m,{',
+ 'Nur auf den aktuellen Canvas zeichnen', 1))
+
+P.append((
+ '.catch(b=>{console.error("renderSlide failed:",b);try{p.clear(),p.backgroundColor="#FFE9E9"',
+ '.catch(b=>{if(a.current!==p)return;console.error("renderSlide failed:",b);try{p.clear(),p.backgroundColor="#FFE9E9"',
+ 'Keine Fehlerkachel bei veraltetem Canvas', 1))
+
+# 176  Rosa Fehlerkacheln
+#
+#      Auf der Kachel stand: "Zeichnen fehlgeschlagen /
+#      null is not an object (evaluating '...clearRect')".
+#
+#      clearRect auf einem Canvas, den es nicht mehr gibt. Und das ist
+#      eine Folge von 173: seitdem wird der Canvas bei jeder
+#      Inhaltsaenderung abgeraeumt und neu gebaut.
+#
+#      Der Zeichen-Effekt merkt sich seinen Canvas beim Start:
+#
+#          const p = a.current;
+#          f.current = f.current.then(async () => {
+#            if (w === c.current && a.current) return Ca(p, e, ...)  })
+#
+#      Die Pruefung fragt "gibt es ueberhaupt einen Canvas", gezeichnet
+#      wird aber auf das gemerkte p. Wenn zwischen Einreihen und
+#      Ausfuehren der Canvas ausgetauscht wurde, ist a.current der NEUE
+#      und p der abgeraeumte alte. Ca ruft darauf clear() -> der
+#      Zeichenkontext ist null -> Ausnahme -> rosa Kachel.
+#
+#      Bei ihr faellt das auf, weil ~100 Kacheln lange zeichnen und
+#      Aenderungen mitten hinein fallen. Im Test mit 9 schnellen
+#      Kacheln war es nicht zu provozieren.
+#
+#      ZWEI ZEILEN:
+#        1. a.current === p statt a.current — nie auf einen Canvas
+#           zeichnen, der nicht mehr der aktuelle ist. Der uebersprungene
+#           Lauf ist nicht verloren: der Effekt laeuft mit dem neuen
+#           Canvas ohnehin erneut.
+#        2. im catch zuerst pruefen, ob p noch aktuell ist. Ein
+#           Lebenszyklus-Rennen soll keine Fehlerkachel malen.
+#
+#      GEPRUEFT: Screenshot auf Foto und Textkachel unveraendert
+#      (34% rot / 60% blau), "Platzieren" aktualisiert die Kachel weiter
+#      (9739 -> 7995 Byte), 12 Kacheln gezeichnet, keine Schleife,
+#      0 Canvas im DOM.
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
