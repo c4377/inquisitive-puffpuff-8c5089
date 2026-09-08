@@ -6025,3 +6025,44 @@ also erhalten. Die Dateien liegen als `BodoniModa-Regular` (400) und
 
 **Mögliche Nachbesserung:** Bodonis Haarstriche können auf dem Handy dünn
 werden. Falls ja, `gewicht` von `"400"` auf `"500"` oder `"600"` — ein Wort.
+
+## 181 — Kein Versalien-Wechsel auf dem Cover, nur noch eine Handschrift
+
+*„Es sind immer noch 2 Handschriften, ich will diesen Versalien-Wechsel
+nicht auf dem Cover — da gibt's keine Versalien-Schrift auf den Covers."*
+
+Im Zeichner stand:
+
+```js
+const zVS = (() => {
+  if (!$e || !BS_KACHEL.versalAnteil) return false;   // $e = Kachel hat ein Foto
+  let zh = 0; for (…) zh = (zh*31 + charCode) % 99991;
+  return ((zh*7 + 11) % 100) < BS_KACHEL.versalAnteil;   // 15
+})();
+zVS && versalFamilie && (Qe = versalFamilie);
+```
+
+Auf **jeder** Fotokachel — Cover eingeschlossen — wurde per Hash über den
+Text gewürfelt, und bei 15 von 100 die **ganze Schrift** auf *Shadows Into
+Light* umgestellt, dazu Laufweite 20. Nicht nach Rolle, nicht nach Inhalt:
+nach Zufall. Genau daher kam der Eindruck, der Account sei uneinig — der
+Blick sucht eine Regel und findet keine.
+
+```
+versalAnteil    15  ->  0
+versalFamilie   "Shadows Into Light"  ->  ""
+```
+
+Damit ist auch die zweite Handschrift weg. Übrig bleiben **drei Schriften
+mit je einer Rolle**:
+
+| Schrift | Rolle |
+|---|---|
+| **Playfair Display** | Deckblatt, Foto, Folgeslides, Name, Ablauf — *die Aussage* |
+| **Bodoni Moda** | nur die Textkachel — *die Pause* |
+| **Nothing You Could Do** | nur `_markierte_` Wörter — *der Nachsatz* |
+
+**Offen geblieben:** `schildSchrift` steht weiter auf dem Grundwert
+HelveticaNeueBrand und `folgeStil` auf `"montserrat"`. Beides betrifft nur
+Kleinkram (Schildchen, Versalienstil auf Folgeslides) und war nicht Teil
+der Ansage.

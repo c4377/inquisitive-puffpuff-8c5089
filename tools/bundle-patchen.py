@@ -5108,6 +5108,56 @@ P.append((
 #      Handy duenn werden. Falls ja, gewicht von "400" auf "500" oder
 #      "600" — das ist ein Wort.
 
+# 181 — Kein Versalien-Wechsel auf dem Cover, nur noch eine Handschrift
+P.append((
+ 'versalAnteil:15',
+ 'versalAnteil:0',
+ 'Kein Versalien-Wechsel mehr', 1))
+
+P.append((
+ 'versalFamilie:"Shadows Into Light"',
+ 'versalFamilie:""',
+ 'Zweite Handschrift raus', 1))
+
+# 181  Der zufaellige Versalien-Wechsel ist weg
+#
+#      "Es sind immer noch 2 Handschriften, ich will diesen
+#      Versalien-Wechsel nicht auf dem Cover, da gibt's keine
+#      Versalien-Schrift auf den Covers."
+#
+#      Im Zeichner stand:
+#
+#          const zVS = (() => {
+#            if (!$e || !BS_KACHEL.versalAnteil) return false;
+#            let zh = 0; for (...) zh = (zh*31 + charCode) % 99991;
+#            return ((zh*7+11) % 100) < BS_KACHEL.versalAnteil;  // 15
+#          })();
+#          zVS && versalFamilie && (Qe = versalFamilie);
+#
+#      Auf JEDER Fotokachel — Cover eingeschlossen — wurde per Hash
+#      ueber den Text gewuerfelt, und bei 15 von 100 wurde die ganze
+#      Schrift auf "Shadows Into Light" umgestellt, dazu Laufweite 20.
+#      Nicht nach Rolle, nicht nach Inhalt: nach Zufall. Genau daher
+#      kam der Eindruck, der Account sei uneinig — der Blick sucht eine
+#      Regel und findet keine.
+#
+#          versalAnteil   15 -> 0     der Wechsel feuert nie mehr
+#          versalFamilie  "Shadows Into Light" -> ""
+#
+#      Damit ist auch die zweite Handschrift weg. Uebrig bleiben DREI
+#      Schriften mit je einer Rolle:
+#
+#          Playfair Display      Deckblatt, Foto, Folgeslides, Name,
+#                                Ablauf — die Aussage
+#          Bodoni Moda           nur die Textkachel — die Pause
+#          Nothing You Could Do  nur mit _Unterstrichen_ markierte
+#                                Woerter — der Nachsatz
+#
+#      OFFEN GEBLIEBEN: schildSchrift steht weiter auf dem Grundwert
+#      HelveticaNeueBrand, und folgeStil auf "montserrat". Beides
+#      betrifft nur Kleinkram (Schildchen, Versalienstil auf
+#      Folgeslides) und war nicht Teil ihrer Ansage.
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
