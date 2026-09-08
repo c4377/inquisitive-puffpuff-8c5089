@@ -4900,6 +4900,44 @@ P.append((
 #      (9739 -> 7995 Byte), 12 Kacheln gezeichnet, keine Schleife,
 #      0 Canvas im DOM.
 
+# 177 — Die Fehlerkachel spricht Deutsch
+P.append((
+ 'const B=String(b&&b.message?b.message:b).slice(0,140);p.add(new Pe.fabric.Text("Zeichnen fehlgeschlagen",{left:20,top:20,fontSize:22,fontFamily:"Helvetica",fill:"#B00020",selectable:!1})),p.add(new Pe.fabric.Textbox(B,{left:20,top:56,width:Math.max(120,g-40),fontSize:15,fontFamily:"Helvetica",fill:"#7A0016",selectable:!1})),p.renderAll()',
+ 'const B=(zm=>{if(/null is not an object|Cannot read propert|of null|of undefined|undefined is not an object/i.test(zm))return "Die Kachel wurde neu gebaut, w\\u00e4hrend sie noch gezeichnet hat. Beim n\\u00e4chsten Zeichnen ist sie wieder da.";if(/SecurityError|tainted|cross-origin|crossorigin|insecure/i.test(zm))return "Ein Bild ist nicht freigegeben. In Supabase beim Bucket die Herkunft dieser Seite erlauben.";if(/load|network|fetch|Failed to|ERR_/i.test(zm))return "Ein Bild konnte nicht geladen werden. Adresse pr\\u00fcfen oder den Screenshot neu hochladen.";if(/quota|memory|allocation|out of/i.test(zm))return "Der Speicher ist voll. Weniger Tage offen halten und neu laden.";return "Unerwarteter Fehler. Die genaue Meldung steht in der Entwicklerkonsole:\\n"+zm.slice(0,90);})(String(b&&b.message?b.message:b));p.add(new Pe.fabric.Textbox("Diese Kachel kam nicht durch",{left:g*.08,top:m*.30,width:g*.84,fontSize:g*.055,fontFamily:"Helvetica",fontWeight:"700",fill:"#B00020",textAlign:"center",lineHeight:1.2,selectable:!1})),p.add(new Pe.fabric.Textbox(B,{left:g*.08,top:m*.42,width:g*.84,fontSize:g*.040,fontFamily:"Helvetica",fill:"#7A0016",textAlign:"center",lineHeight:1.35,selectable:!1})),p.renderAll()',
+ 'Fehlerkachel spricht Deutsch', 1))
+
+# 177  Die Fehlerkachel spricht Deutsch
+#
+#      "Null is not an object - na geh bitte schreib gescheit."
+#
+#      Zu Recht. Die Fehlerkachel hat die rohe Browsermeldung
+#      hingeschrieben, in Englisch, in 15 Pixeln, hinter dem Tag-Schild.
+#      Das sagt ihr nichts.
+#
+#      Jetzt: die Meldung wird uebersetzt, gross und mittig gesetzt.
+#
+#          null/undefined-Zugriff -> "Die Kachel wurde neu gebaut,
+#            waehrend sie noch gezeichnet hat. Beim naechsten Zeichnen
+#            ist sie wieder da."
+#          SecurityError/tainted  -> "Ein Bild ist nicht freigegeben.
+#            In Supabase beim Bucket die Herkunft dieser Seite erlauben."
+#          Ladefehler             -> "Ein Bild konnte nicht geladen
+#            werden. Adresse pruefen oder neu hochladen."
+#          Speicher               -> "Der Speicher ist voll. Weniger
+#            Tage offen halten und neu laden."
+#          alles andere           -> kurzer Hinweis plus die ersten 90
+#            Zeichen der Originalmeldung, damit nichts verloren geht.
+#
+#      Ueberschrift "Zeichnen fehlgeschlagen" -> "Diese Kachel kam nicht
+#      durch". Schrift von 22 auf g*0.055 (also 44 statt 22 auf einer
+#      800er Flaeche), Text von 15 auf g*0.040, beides zentriert und auf
+#      30 bzw. 42 Prozent Hoehe — weg vom Tag-Schild.
+#
+#      Die technische Meldung geht weiter per console.error hinaus.
+#
+#      GEPRUEFT: Fehler kuenstlich ausgeloest, Kachel zeigt gross und
+#      lesbar "Diese Kachel kam nicht durch" mit dem deutschen Satz.
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

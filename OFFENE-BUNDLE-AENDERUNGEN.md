@@ -5889,3 +5889,31 @@ provozieren.
 **Geprüft:** Screenshot auf Foto und Textkachel unverändert (34 % rot /
 60 % blau), „Platzieren" aktualisiert die Kachel weiter (9739 → 7995 Byte),
 12 Kacheln gezeichnet, keine Schleife, 0 Canvas im DOM.
+
+## 177 — Die Fehlerkachel spricht Deutsch
+
+*„Null is not an object — na geh bitte schreib gescheit."*
+
+Zu Recht. Die Fehlerkachel hat die rohe Browsermeldung hingeschrieben:
+englisch, 15 Pixel groß, halb hinter dem Tag-Schild. Das sagt ihr nichts.
+
+Jetzt wird übersetzt, groß und mittig gesetzt:
+
+| Was passiert ist | Was auf der Kachel steht |
+|---|---|
+| `null`/`undefined`-Zugriff | „Die Kachel wurde neu gebaut, während sie noch gezeichnet hat. Beim nächsten Zeichnen ist sie wieder da." |
+| `SecurityError` / tainted | „Ein Bild ist nicht freigegeben. In Supabase beim Bucket die Herkunft dieser Seite erlauben." |
+| Ladefehler | „Ein Bild konnte nicht geladen werden. Adresse prüfen oder den Screenshot neu hochladen." |
+| Speicher | „Der Speicher ist voll. Weniger Tage offen halten und neu laden." |
+| alles andere | kurzer Hinweis **plus** die ersten 90 Zeichen der Originalmeldung, damit nichts verloren geht |
+
+Überschrift „Zeichnen fehlgeschlagen" → **„Diese Kachel kam nicht durch"**.
+Schrift von 22 auf `g*0.055` (44 statt 22 auf einer 800er Fläche), Text von
+15 auf `g*0.040`, beides zentriert und auf 30 bzw. 42 Prozent Höhe — weg
+vom Tag-Schild.
+
+Die technische Meldung geht weiterhin per `console.error` hinaus, damit sie
+zum Nachsehen da ist.
+
+**Geprüft:** Fehler künstlich ausgelöst, die Kachel zeigt groß und lesbar
+„Diese Kachel kam nicht durch" mit dem deutschen Satz darunter.
