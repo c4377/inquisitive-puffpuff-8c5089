@@ -5948,3 +5948,50 @@ trennt die beiden Fälle endlich.
 
 **Geprüft:** kaputte Adresse → Kasten mit Adresse; gute Adresse daneben →
 Screenshot. Keine Veränderung an den 12 Konfigurationen.
+
+## 179 — Ein Fehlschlag hat die Kachel für immer vergiftet
+
+*„Geht. Es steht manchmal nur, es konnte nicht gezeichnet werden und käme
+beim nächsten Mal."*
+
+Das war **meine eigene Meldung aus 177 — und sie war eine Lüge.** Die Kachel
+kam nicht beim nächsten Mal. Grund:
+
+```js
+f.current = f.current.then(async () => { … })
+```
+
+Der Zeichner reiht seine Läufe in eine Kette. Scheitert ein Glied, ist
+`f.current` ein **abgelehntes** Versprechen — und jedes spätere `.then()`
+darauf wird übersprungen. **Ab dem ersten Fehler zeichnet diese Kachel nie
+wieder.** Sie malt nur noch die Fehlermeldung, bei jedem Anlauf.
+
+Das erklärt auch, warum die rosa Kacheln blieben, obwohl 176 die Ursache
+des Rennens behoben hat: die Kette war schon vergiftet.
+
+**Reparatur, zwei Teile:**
+
+1. **Lauf und Kette trennen.**
+   ```js
+   const zLauf = f.current.then(async () => {…});
+   f.current   = zLauf.catch(() => {});          // Kette bleibt heil
+   Promise.resolve(zLauf).then(…).catch(…)        // Fehler wird trotzdem behandelt
+   ```
+   Reihenfolge bleibt, Fehlerbehandlung bleibt — aber die Kette trägt nie
+   eine Ablehnung weiter.
+
+2. **Beim Lebenszyklus-Rennen wird wirklich noch einmal gezeichnet**, statt
+   es nur zu behaupten: bis zu **drei** weitere Versuche über einen Zähler
+   in den Abhängigkeiten, nach einem gelungenen Zeichnen zurückgesetzt. Erst
+   wenn auch die drei scheitern, erscheint die Meldung — und die sagt jetzt
+   die Wahrheit: *„hat sich nach drei weiteren Versuchen nicht erholt. Seite
+   neu laden."*
+
+**Geprüft**, Fehler künstlich erzwungen:
+
+| Prüfung | Ergebnis |
+|---|---|
+| zwei Fehlschläge, dann klappt es | normale Kachel |
+| dauerhafter Fehler | genau 4 Versuche, dann die Meldung, keine Schleife |
+| 12 Konfigurationen | vorher = nachher |
+| Speicher | 12 Kacheln = 12 Zeichnungen, 0 Canvas im DOM |

@@ -5001,6 +5001,78 @@ P.append((
 #      daneben -> Screenshot. Keine Veraenderung an den 12
 #      Konfigurationen.
 
+# 179 — Ein Fehlschlag hat die Kachel fuer immer vergiftet
+P.append((
+ 'zVor=ce.useRef(""),[zNeu,zSetzNeu]=ce.useState(0);',
+ 'zVor=ce.useRef(""),zVers=ce.useRef(0),[zNeu,zSetzNeu]=ce.useState(0);',
+ 'Zaehler fuer Wiederholungen', 1))
+
+P.append((
+ 'Promise.resolve(f.current).then(()=>{if(i&&a.current)try{const b=a.current.toDataURL({format:"jpeg",quality:.85,multiplier:.5});',
+ 'Promise.resolve(f.current).then(()=>{zVers.current=0;if(i&&a.current)try{const b=a.current.toDataURL({format:"jpeg",quality:.85,multiplier:.5});',
+ 'Nach Erfolg zuruecksetzen', 1))
+
+P.append((
+ '.catch(b=>{if(a.current!==p)return;console.error("renderSlide failed:",b);',
+ '.catch(b=>{if(a.current!==p)return;const zM=String(b&&b.message?b.message:b);if(/null is not an object|Cannot read propert|of null|of undefined|undefined is not an object/i.test(zM)&&zVers.current<3){zVers.current+=1;zSetzNeu(zx=>zx+1);return}console.error("renderSlide failed:",b);',
+ 'Statt Meldung: noch einmal zeichnen', 1))
+
+P.append((
+ 'f.current=f.current.then(async()=>{var b;',
+ 'const zLauf=f.current.then(async()=>{var b;',
+ 'Lauf getrennt von der Kette', 1))
+
+P.append((
+ 'typography})}),Promise.resolve(f.current).then(()=>{zVers.current=0;',
+ 'typography})});f.current=zLauf.catch(()=>{}),Promise.resolve(zLauf).then(()=>{zVers.current=0;',
+ 'Kette bleibt sauber, Fehler wird trotzdem behandelt', 1))
+
+P.append((
+ 'return "Die Kachel wurde neu gebaut, w\\u00e4hrend sie noch gezeichnet hat. Beim n\\u00e4chsten Zeichnen ist sie wieder da.";',
+ 'return "Die Kachel wurde beim Zeichnen unterbrochen und hat sich nach drei weiteren Versuchen nicht erholt. Seite neu laden.";',
+ 'Meldung stimmt jetzt: Versuche sind erschoepft', 1))
+
+# 179  Ein Fehlschlag hat die Kachel fuer immer vergiftet
+#
+#      "Geht. Es steht manchmal nur, es konnte nicht gezeichnet werden
+#      und kaeme beim naechsten Mal."
+#
+#      Meine eigene Meldung aus 177 — und sie war eine Luege. Die
+#      Kachel kam NICHT beim naechsten Mal. Grund:
+#
+#          f.current = f.current.then(async () => { ... })
+#
+#      Der Zeichner reiht seine Laeufe in eine Kette. Scheitert ein
+#      Glied, ist f.current ein ABGELEHNTES Versprechen — und jedes
+#      spaetere .then() darauf wird uebersprungen. Ab dem ersten Fehler
+#      zeichnet diese Kachel nie wieder. Sie malt nur noch die
+#      Fehlermeldung, bei jedem Anlauf.
+#
+#      Das erklaert auch, warum die rosa Kacheln blieben, obwohl 176
+#      die Ursache des Rennens behoben hat: die Kette war vergiftet.
+#
+#      REPARATUR, zwei Teile:
+#        1. Lauf und Kette trennen:
+#             const zLauf = f.current.then(async () => {...});
+#             f.current  = zLauf.catch(() => {});
+#             Promise.resolve(zLauf).then(...).catch(...)
+#           Reihenfolge bleibt, Fehlerbehandlung bleibt, aber die Kette
+#           traegt nie eine Ablehnung weiter.
+#        2. Beim Lebenszyklus-Rennen wird wirklich noch einmal
+#           gezeichnet statt es nur zu behaupten: bis zu DREI weitere
+#           Versuche ueber einen Zaehler in den Abhaengigkeiten, nach
+#           einem gelungenen Zeichnen zurueckgesetzt. Erst wenn auch
+#           die drei scheitern, erscheint die Meldung — und die sagt
+#           jetzt die Wahrheit: "hat sich nach drei weiteren Versuchen
+#           nicht erholt. Seite neu laden."
+#
+#      GEPRUEFT, Fehler kuenstlich erzwungen:
+#          zwei Fehlschlaege, dann klappt es -> normale Kachel
+#          dauerhafter Fehler -> genau 4 Versuche, dann die Meldung,
+#            keine Schleife
+#          12 Konfigurationen vorher = nachher
+#          12 Kacheln = 12 Zeichnungen, 0 Canvas im DOM
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
