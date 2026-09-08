@@ -5730,3 +5730,49 @@ Screenshots:
 | Zuordnung | 2 von 3, „Platzieren" wird aktiv |
 | Kopieren | Zeilen liegen in der Zwischenablage |
 | OCR-Lauf ohne Ergebnis | Texte vorher = Texte nachher |
+
+## 173 — Eine Kachel, die einmal ein Bild war, konnte sich nie mehr ändern
+
+*„Der Screenshot taucht eben nicht auf trotz Match."*
+
+Nachgestellt: Treffer per Kennung, „Platzieren" gedrückt, der Plan steht
+in der Datenbank korrekt mit `overlayImage` — und die Kachel zeigt weiter
+den alten Text. **Nach dem Neuladen ist der Screenshot da.**
+
+**Ursache**, mit Sonden im laufenden Bundle eingekreist. Das Gitter liefert
+die neuen Daten (Sonde: `ov:ja`), `uG` und `XV` rendern sich neu — aber der
+Zeichen-Effekt lief nie wieder:
+
+```js
+useEffect(()=>{
+  if(!o.current) return;                      // kein <canvas> im DOM
+  const p = new fabric.StaticCanvas(o.current, …);
+  return a.current = p, () => { p.dispose(); a.current = null }
+}, [A]);                                      // A = das fertige Bild
+```
+
+`A` ist das fertige Bild. Sobald es da ist, rendert die Komponente ein
+`<img>` **statt** des `<canvas>`. Dieser Effekt läuft dann noch einmal,
+räumt den Canvas ab und setzt `a.current = null` — und findet kein
+`o.current` mehr, um einen neuen zu bauen. Ab da bricht der Zeichen-Effekt
+bei `if(!p) return` sofort ab.
+
+Eine Kachel konnte sich also **nie wieder ändern**, sobald sie einmal ein
+Bild erzeugt hatte. Das betraf nicht nur Screenshots, sondern jede
+Änderung am Plan.
+
+**Reparatur:** die Kachel merkt sich einen Fingerabdruck ihres Inhalts
+(JSON, lange Zeichenketten auf Länge + Anfang gekürzt, damit ein
+data-Bild das nicht teuer macht). Ändert er sich, wird `A` auf `null`
+gesetzt — der `<canvas>` kommt zurück, der Effekt baut ihn neu — und ein
+Zähler in den Abhängigkeiten des Zeichen-Effekts löst genau **ein**
+Neuzeichnen aus. Der Canvas wird danach wie bisher abgeräumt.
+
+**Geprüft** im Browser:
+
+| | Ergebnis |
+|---|---|
+| vorher | Bild vor und nach „Platzieren" Byte für Byte gleich |
+| nachher | 9739 → 7995 Byte, der Screenshot steht da |
+| Schleife? | 12 Kacheln = 12 Zeichnungen, 8 Sekunden später immer noch 12 |
+| Speicher | 0 Canvas im DOM, 12 Kachelbilder — wie vorher |

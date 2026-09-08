@@ -4698,6 +4698,59 @@ P.append((
 #          Kopieren legt die Zeilen in die Zwischenablage
 #          OCR-Lauf ohne Ergebnis: Texte vorher = Texte nachher
 
+# 173 — Eine Kachel, die einmal ein Bild war, konnte sich nie mehr aendern
+P.append((
+ 'const{brandSettings:l}=In(),o=ce.useRef(null),a=ce.useRef(null),[u,d]=ce.useState(!1),[A,h]=ce.useState(null),c=ce.useRef(0),f=ce.useRef(Promise.resolve());return ce.useEffect(',
+ 'const{brandSettings:l}=In(),o=ce.useRef(null),a=ce.useRef(null),[u,d]=ce.useState(!1),[A,h]=ce.useState(null),c=ce.useRef(0),f=ce.useRef(Promise.resolve()),zFing=(()=>{try{return JSON.stringify(e,(zk,zv)=>typeof zv=="string"&&zv.length>64?zv.length+":"+zv.slice(0,24):zv)}catch(zz){return""}})(),zVor=ce.useRef(""),[zNeu,zSetzNeu]=ce.useState(0);ce.useEffect(()=>{if(zVor.current&&zVor.current!==zFing){h(null),zSetzNeu(zx=>zx+1)}zVor.current=zFing},[zFing]);return ce.useEffect(',
+ 'Kachel merkt sich ihren Inhalt', 1))
+
+P.append((
+ '},[e,u,n]),v.jsx("div",{className:"bs-canvas-fit',
+ '},[e,u,n,zNeu]),v.jsx("div",{className:"bs-canvas-fit',
+ 'Zeichnen nach Inhaltswechsel', 1))
+
+# 173  Die Kachel konnte sich nie mehr aendern
+#
+#      "Der Screenshot taucht eben nicht auf trotz Match."
+#
+#      Nachgestellt: Treffer per Kennung, "Platzieren" gedrueckt, Plan
+#      in der Datenbank korrekt mit overlayImage — und die Kachel zeigt
+#      weiter den alten Text. Nach dem Neuladen ist der Screenshot da.
+#
+#      URSACHE, mit Sonden im laufenden Bundle eingekreist. Das Gitter
+#      liefert die neuen Daten (Sonde: "ov:ja"), uG und XV zeichnen sich
+#      neu — aber der ZEICHEN-EFFEKT lief nie wieder. Der Grund:
+#
+#          useEffect(()=>{ if(!o.current) return;
+#            const p=new fabric.StaticCanvas(o.current,...);
+#            return a.current=p, ()=>{ p.dispose(); a.current=null } },[A])
+#
+#      A ist das fertige Bild. Sobald es da ist, rendert die Komponente
+#      ein <img> STATT des <canvas>. Dieser Effekt laeuft dann noch
+#      einmal, raeumt den Canvas ab und setzt a.current=null — und
+#      findet kein o.current mehr, um einen neuen zu bauen. Ab da bricht
+#      der Zeichen-Effekt bei "if(!p) return" sofort ab.
+#
+#      Eine Kachel konnte sich also nie wieder aendern, sobald sie
+#      einmal ein Bild erzeugt hatte. Nur ein Neuladen half. Das betraf
+#      nicht nur Screenshots, sondern jede Aenderung am Plan.
+#
+#      REPARATUR: die Kachel merkt sich einen Fingerabdruck ihres
+#      Inhalts (JSON, lange Zeichenketten auf Laenge+Anfang gekuerzt,
+#      damit ein data-Bild das nicht teuer macht). Aendert er sich,
+#      wird A auf null gesetzt — der <canvas> kommt zurueck, der
+#      Effekt baut ihn neu — und ein Zaehler in den Abhaengigkeiten des
+#      Zeichen-Effekts loest genau ein Neuzeichnen aus.
+#
+#      Der Canvas wird danach wie bisher wieder abgeraeumt. Kein
+#      Mehrverbrauch an Speicher, keine Schleife.
+#
+#      GEPRUEFT im Browser:
+#          vorher   Bild vor und nach "Platzieren" Byte fuer Byte gleich
+#          nachher  9739 Byte -> 7995 Byte, der Screenshot steht da
+#          12 Kacheln = 12 Zeichnungen, 8 Sekunden spaeter immer noch 12
+#          0 Canvas im DOM, 12 Kachelbilder
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
