@@ -5365,6 +5365,52 @@ P.append((
 #      Testrechner farbig, weil dort weder BS_MISCHBAR noch ihre
 #      Kachelwerte greifen.
 
+# 187 — Helle und dunkle Fotos abwechseln, statt sie zu haeufen
+P.append((
+ 'ed=async(e,t=[],r=0)=>{const n=await AK(t);if(n.length===0)return e;',
+ 'ed=async(e,t=[],r=0)=>{const zMisch=zn=>{try{if(!Array.isArray(zn)||zn.length<4)return zn;const zhell=zx=>{try{const zb=zx&&zx.zoneBrightness;if(Array.isArray(zb)&&zb.length){let zsu=0,zza=0;for(let zi=0;zi<zb.length;zi+=1){const zv=Number(zb[zi]);isFinite(zv)&&(zsu+=zv,zza+=1)}return zza?zsu/zza:128}if(zb&&typeof zb=="object"){const zw=Object.values(zb).map(Number).filter(zv=>isFinite(zv));if(zw.length)return zw.reduce((za,zb2)=>za+zb2,0)/zw.length}return 128}catch(zz){return 128}};const zs=[...zn].sort((za,zb2)=>(zhell(za)-zhell(zb2))||String((za||{}).src||"").localeCompare(String((zb2||{}).src||"")));const zm=Math.ceil(zs.length/2),zd=zs.slice(0,zm),zl=zs.slice(zm),zo=[];for(let zi=0;zi<zm;zi+=1){zd[zi]&&zo.push(zd[zi]),zl[zi]&&zo.push(zl[zi])}return zo.length===zn.length?zo:zn}catch(zz){return zn}};const n=zMisch(await AK(t));if(n.length===0)return e;',
+ 'Helle und dunkle Fotos abwechseln', 1))
+
+# 187  Tag 1 bis 20 nicht nur schwarze Blazer
+#
+#      "Kannst du ueber die Fotos schauen, dass bei Tag 1 bis 20 nicht
+#      nur Fotos mit schwarzen Blazern sind? Das macht den Feed
+#      einheitlich, und dann kommen weiter oben erst die mit den blauen
+#      Bildern."
+#
+#      URSACHE: die Zuordnung ist rein sequentiell. In ed() steht
+#
+#          l = Array.from({length: s}, (u,d) => n[(r+d) % i])
+#
+#      also nimmt Tag r das Bild mit Index r. Die Reihenfolge des Pools
+#      IST die Reihenfolge des Feeds. Wer die Blazerbilder zusammen
+#      hochlaedt, bekommt zwanzig Blazertage am Stueck.
+#
+#      Der Zeichner misst die Helligkeit jedes Fotos ohnehin schon
+#      (zoneBrightness aus AK). Diese Zahl wird jetzt benutzt:
+#
+#          nach mittlerer Helligkeit sortieren
+#          in zwei Haelften teilen — dunkel und hell
+#          abwechselnd austeilen: dunkel, hell, dunkel, hell ...
+#
+#      Bei Gleichstand entscheidet die Bildadresse, damit die
+#      Reihenfolge bei jedem Aufruf dieselbe ist — ed() wird pro Tag
+#      erneut aufgerufen, eine zufaellige Mischung wuerde Tage
+#      kollidieren lassen.
+#
+#      Da der dunkle Feed schwarzweiss ist, ist "dunkel gegen hell"
+#      genau der Unterschied, den sie sieht: Blazer gegen Jeans.
+#
+#      GEPRUEFT isoliert mit 20 dunklen und 20 hellen Bildern:
+#          vorher  Tag 1-20: DDDDDDDDDDDDDDDDDDDD
+#          nachher Tag 1-20: DHDHDHDHDHDHDHDHDHDH
+#          alle 40 Bilder noch da, zweiter Lauf identisch
+#
+#      GREIFT ERST BEIM NEU ZUORDNEN: der bestehende Plan bleibt, wie
+#      er ist. Erst "Neu laden" (Bilder neu zuordnen) oder ein neuer
+#      Import verteilt nach der neuen Ordnung. Gesperrte Tage bleiben
+#      unberuehrt.
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

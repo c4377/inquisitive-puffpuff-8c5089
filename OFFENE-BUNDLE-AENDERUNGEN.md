@@ -6215,3 +6215,46 @@ Dateinamen `Tag007_Slide1.jpg`, damit die Zuordnung bleibt.
 mit der Schrift unten, „Nur Foto" dieselbe Kachel ohne Schrift — in beiden
 Fällen schwarze Balken oben 0 %, unten 0 %. Die Farbigkeit bleibt die des
 Zeichners.
+
+## 187 — Tag 1 bis 20 nicht nur schwarze Blazer
+
+*„Kannst du über die Fotos schauen, dass bei Tag 1 bis 20 nicht nur Fotos
+mit schwarzen Blazern sind? Das macht den Feed einheitlich, und dann kommen
+weiter oben erst die mit den blauen Bildern."*
+
+**Ursache:** die Zuordnung ist rein sequentiell. In `ed()` steht
+
+```js
+l = Array.from({length: s}, (u,d) => n[(r+d) % i])
+```
+
+Tag `r` nimmt also das Bild mit Index `r`. **Die Reihenfolge des Pools ist
+die Reihenfolge des Feeds.** Wer die Blazerbilder zusammen hochlädt, bekommt
+zwanzig Blazertage am Stück.
+
+Der Zeichner misst die Helligkeit jedes Fotos ohnehin schon
+(`zoneBrightness` aus `AK`). Diese Zahl wird jetzt benutzt:
+
+1. nach mittlerer Helligkeit sortieren
+2. in zwei Hälften teilen — dunkel und hell
+3. **abwechselnd austeilen:** dunkel, hell, dunkel, hell …
+
+Bei Gleichstand entscheidet die Bildadresse, damit die Reihenfolge bei jedem
+Aufruf dieselbe ist — `ed()` wird pro Tag erneut aufgerufen, eine zufällige
+Mischung würde Tage kollidieren lassen.
+
+Da der Feed schwarzweiß ist, ist „dunkel gegen hell" genau der Unterschied,
+den sie sieht: Blazer gegen Jeans.
+
+**Geprüft** isoliert mit 20 dunklen und 20 hellen Bildern:
+
+```
+vorher  Tag 1–20: DDDDDDDDDDDDDDDDDDDD
+nachher Tag 1–20: DHDHDHDHDHDHDHDHDHDH
+```
+
+Alle 40 Bilder noch da, zweiter Lauf identisch.
+
+**Greift erst beim Neuzuordnen:** der bestehende Plan bleibt, wie er ist.
+Erst „Neu laden" (Bilder neu zuordnen) oder ein neuer Import verteilt nach
+der neuen Ordnung. Gesperrte Tage bleiben unberührt.
