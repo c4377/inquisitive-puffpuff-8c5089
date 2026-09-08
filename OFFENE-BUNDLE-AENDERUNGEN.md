@@ -6097,3 +6097,20 @@ sie arbeitet. Ein ZIP, das am Handy entsteht, muss über Dateien/iCloud auf
 den Laptop. Am Laptop selbst wäre die Bibliothek leer — außer die Bilder
 liegen auch im Supabase-Pool, dann genügen dort dieselben zwei
 Supabase-Werte, ganz ohne Konto.
+
+## 183 — Der Export soll auch mit 200 Fotos am Handy durchhalten
+
+Sie macht den Export am Handy und schiebt das ZIP dann auf den Laptop
+(Weg A). Damit hängt alles an Safaris Speicher.
+
+Bisher ging jedes Bild als **Base64-Zeichenkette** ins ZIP. Base64 bläht um
+ein Drittel auf, und JSZip hält alles bis zum Packen im Speicher. Bei 200
+Fotos à ~250 KB wären das rund 50 MB echte Daten, aber 67 MB als
+Zeichenketten — zusätzlich zum späteren Blob. Genau daran stirbt Safari.
+
+Jetzt wird die Daten-URL sofort in einen **Blob** verwandelt (derselbe Weg,
+den „Alle in Fotos" schon nimmt) und der Blob ins ZIP gelegt. Kein Base64,
+kein doppeltes Halten.
+
+**Geprüft:** drei Fotos, ZIP unverändert lesbar, jede Datei 1080 × 1920,
+Farbigkeit 0.0, 13–18 KB je Bild.

@@ -5200,6 +5200,30 @@ P.append((
 #      Supabase-Pool, dann genuegen dort dieselben zwei
 #      Supabase-Werte, ganz ohne Konto.
 
+# 183 — ZIP-Eintraege als Blob statt Base64
+P.append((
+ 'zd&&zd.length>2e3&&(zOrd.file("Story-"+String(zi+1).padStart(3,"0")+".jpg",zd.split(",")[1],{base64:!0}),zOk+=1)',
+ 'if(zd&&zd.length>2e3){const zbl=await(await fetch(zd)).blob();zbl&&zbl.size>2e3&&(zOrd.file("Story-"+String(zi+1).padStart(3,"0")+".jpg",zbl),zOk+=1)}',
+ 'ZIP-Eintraege als Blob statt Base64', 1))
+
+# 183  Der Export soll auch mit 200 Fotos am Handy durchhalten
+#
+#      Sie macht den Export am Handy und schiebt das ZIP dann auf den
+#      Laptop (Weg A). Damit haengt es an Safaris Speicher.
+#
+#      Bisher ging jedes Bild als BASE64-Zeichenkette in das ZIP. Base64
+#      blaeht um ein Drittel auf, und JSZip haelt alles bis zum Packen
+#      im Speicher. Bei 200 Fotos zu je etwa 250 KB waeren das rund 50 MB
+#      echte Daten, aber 67 MB als Zeichenketten — zusaetzlich zum
+#      spaeteren Blob. Genau daran stirbt Safari.
+#
+#      Jetzt wird die Daten-URL sofort in einen Blob verwandelt
+#      (derselbe Weg, den "Alle in Fotos" schon nimmt) und der Blob ins
+#      ZIP gelegt. Kein Base64, kein doppeltes Halten.
+#
+#      GEPRUEFT: drei Fotos, ZIP unveraendert lesbar, jede Datei
+#      1080x1920, Farbigkeit 0.0, 13-18 KB je Bild.
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
