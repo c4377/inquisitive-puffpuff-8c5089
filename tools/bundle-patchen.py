@@ -4602,6 +4602,102 @@ P.append((
 #      Der Dialog meldete "3 von 4 zugeordnet" — die 0,00-Zeile ist
 #      genau die fehlende.
 
+# 172 — Kennung je Screenshot, neuer OCR-Lauf, Treffer per Kennung
+P.append((
+ '}},async uploadScreenshot(e){',
+ '}},async updateScreenshotOcr({url:e,ocrText:t}){try{if(!Kr||!e)return{ok:!1,error:"Keine Supabase-Verbindung"};const{error:n}=await Kr.from("screenshot_library").update({ocr_text:t||""}).eq("url",e);return n?(console.error("OCR-Nachtrag fehlgeschlagen:",n),{ok:!1,error:n.message||"Nicht gespeichert"}):{ok:!0,error:null}}catch(n){return{ok:!1,error:(n==null?void 0:n.message)||"Unbekannter Fehler"}}},async uploadScreenshot(e){',
+ 'Supabase: OCR-Text nachtragen', 1))
+
+P.append((
+ 'rG=.45,zPruefung=',
+ 'rG=.45,zKennung=zu=>{const zs=String(zu||"");if(!zs)return"S-00000";let zh=5381;for(let zi=0;zi<zs.length;zi+=1)zh=(zh*33^zs.charCodeAt(zi))>>>0;let zc=zh.toString(36).toUpperCase();while(zc.length<5)zc="0"+zc;return"S-"+zc.slice(-5)},zCode=zu=>{const zm=String(zu||"").toUpperCase().match(/S-[0-9A-Z]{5}/);return zm?zm[0]:null},zPruefung=',
+ 'Kennung aus der Adresse', 1))
+
+P.append((
+ 'ZC=(e,t)=>{const r={};return e.forEach(n=>{let i=null;',
+ 'ZC=(e,t)=>{const r={};return e.forEach(n=>{const zk=zCode(n.matchText);if(zk){const zf=t.find(zx=>zx.kennung===zk);if(zf){r[n.id]={screenshotId:zf.id,score:1,perKennung:!0};return}}let i=null;',
+ 'Kennung schlaegt Aehnlichkeit', 1))
+
+P.append((
+ 'zPruefung=(e,t)=>e.map(n=>{let zb=null;',
+ 'zPruefung=(e,t)=>e.map(n=>{const zk=zCode(n.matchText),zkf=zk?t.find(zx=>zx.kennung===zk):null;if(zk)return{id:n.id,wert:zkf?1:0,treffer:!!zkf,kennung:zk,wo:(zx=>zx.length>1?"Tag "+zx[0]+" \\u00b7 Slide "+(Number(zx[1])+1):String(n.id||""))(String(n.id||"").split("_")),suchtext:n.matchText||"",naechster:zkf?"Kennung gefunden":"Kennung "+zk+" gibt es in der Bibliothek nicht"};let zb=null;',
+ 'Kennung in der Pruefliste', 1))
+
+P.append((
+ '[f,p]=ce.useState(null),g=ce.useRef(null);',
+ '[f,p]=ce.useState(null),[zMeld,zSetzMeld]=ce.useState(""),g=ce.useRef(null);',
+ 'Meldezeile', 1))
+
+P.append((
+ 'const T=B.map((j,R)=>({id:`lib_${R}`,dataUrl:j.url,ocrText:j.ocrText,progress:1,fromLibrary:!0}));',
+ 'const T=B.map((j,R)=>({id:`lib_${R}`,dataUrl:j.url,ocrText:j.ocrText,progress:1,fromLibrary:!0,kennung:zKennung(j.url)}));',
+ 'Kennung an jede Bibliothekskachel', 1))
+
+P.append((
+ 'R.dataUrl=I,s(F=>F.map(ee=>ee.id===j?{...ee,dataUrl:I}:ee))',
+ 'R.dataUrl=I,R.kennung=zKennung(I),s(F=>F.map(ee=>ee.id===j?{...ee,dataUrl:I,kennung:zKennung(I)}:ee))',
+ 'Kennung an frisch hochgeladene', 1))
+
+P.append((
+ 'v.jsxs("button",{onClick:()=>{var b;return(b=g.current)==null?void 0:b.click()},disabled:l,',
+ 'i.length>0&&v.jsxs("div",{className:"flex gap-2",children:[v.jsx("button",{onClick:()=>{const zt=i.map(zx=>(zx.kennung||"?")+"\\t"+String(zx.ocrText||"").replace(/\\s+/g," ").trim()).join("\\n");let zo=!1;try{const ze=document.createElement("textarea");ze.value=zt;ze.style.position="fixed";ze.style.opacity="0";document.body.appendChild(ze);ze.select();zo=document.execCommand("copy");document.body.removeChild(ze)}catch(zz){}try{navigator.clipboard&&navigator.clipboard.writeText(zt).then(()=>zSetzMeld(i.length+" Kennungen kopiert"),()=>{})}catch(zz){}zSetzMeld(zo||navigator.clipboard?i.length+" Kennungen kopiert":"Kopieren ging nicht")},className:"flex-1 py-2 rounded-lg border border-gray-200 bg-white text-xs font-bold text-gray-700 hover:bg-gray-50",children:"Kennungen + Text kopieren"}),v.jsx("button",{onClick:zNeuOcr,disabled:l,className:"flex-1 py-2 rounded-lg border border-purple-200 bg-white text-xs font-bold text-purple-700 hover:bg-purple-50 disabled:opacity-40",children:l?"OCR läuft…":"OCR neu einlesen"})]}),zMeld&&v.jsx("div",{className:"text-xs text-gray-500",children:zMeld}),v.jsxs("button",{onClick:()=>{var b;return(b=g.current)==null?void 0:b.click()},disabled:l,',
+ 'Knoepfe kopieren + OCR neu', 1))
+
+P.append((
+ 'v.jsx("div",{className:"flex-1 min-w-0",children:b.progress<1?',
+ 'v.jsxs("div",{className:"flex-1 min-w-0",children:[v.jsx("p",{className:"text-[10px] font-mono font-bold text-purple-700",children:b.kennung||""}),b.progress<1?',
+ 'Kennung in der Liste (auf)', 1))
+
+P.append((
+ 'children:b.ocrText.slice(0,60)||"(kein Text erkannt)"})})]},b.id))',
+ 'children:b.ocrText.slice(0,60)||"(kein Text erkannt)"})]})]},b.id))',
+ 'Kennung in der Liste (zu)', 1))
+
+P.append((
+ 'const m=async b=>{const B=Array.from(b||[]);',
+ 'const zNeuOcr=async()=>{o(!0),zSetzMeld("");let zn=0,zf=0;for(const zit of i){if(!zit.fromLibrary)continue;s(K=>K.map(F=>F.id===zit.id?{...F,progress:0}:F));const zt=await tG(zit.dataUrl,zp=>{s(K=>K.map(F=>F.id===zit.id?{...F,progress:zp}:F))});s(K=>K.map(F=>F.id===zit.id?{...F,ocrText:zt||F.ocrText,progress:1}:F));if(zt){zn+=1;const zr=await au.updateScreenshotOcr({url:zit.dataUrl,ocrText:zt});zr.ok||(zf+=1)}else zf+=1;zSetzMeld(zn+" neu gelesen"+(zf?", "+zf+" ohne Text":""))}s(K=>(u(ZC(r,K)),K)),o(!1),zSetzMeld(zn+" von "+i.length+" neu eingelesen"+(zf?", "+zf+" ohne Ergebnis":""))},m=async b=>{const B=Array.from(b||[]);',
+ 'OCR neu einlesen', 1))
+
+# 172  Kennung je Screenshot und ein neuer OCR-Lauf
+#
+#      "Baue mir eine Kennung die den Screenshot labelt und mach einen
+#      erneuten OCR Scan moeglich. Dann kann ich die Labels mit dem OCR
+#      Scan dem Content weitergeben und es passt besser zusammen."
+#
+#      Der aehnlichkeitsbasierte Abgleich hat bei ihr 0 von 61 Platz-
+#      haltern getroffen. Statt an der Schwelle zu drehen, bekommt jeder
+#      Screenshot eine feste KENNUNG, und die schlaegt jede Aehnlichkeit.
+#
+#      KENNUNG: djb2-xor ueber die Bildadresse, 5 Stellen Base36,
+#      "S-PXQPF". Sie haengt nur an der Adresse — nicht an Reihenfolge,
+#      nicht an einer laufenden Nummer. Ein geloeschter Screenshot
+#      verschiebt also keine andere Kennung. Bei 131 Bildern liegt die
+#      Wahrscheinlichkeit einer Doppelung bei rund 0,014 Prozent.
+#
+#      ABGLEICH: steht "S-PXQPF" im Platzhaltertext, wird genau der
+#      Screenshot genommen, Wert 1,00, ohne Wortvergleich. Sonst laeuft
+#      der alte Weg weiter. Die Pruefliste aus 171 zeigt bei einer
+#      Kennung, die es nicht gibt, genau das an.
+#
+#      OCR NEU EINLESEN: laeuft ueber alle Bilder der Bibliothek,
+#      schreibt den Text per update in screenshot_library zurueck.
+#      WICHTIG: ein leeres Ergebnis ueberschreibt nichts — weder in
+#      Supabase noch in der Anzeige. Ein fehlgeschlagener Lauf kann also
+#      keine vorhandenen Texte vernichten.
+#
+#      KENNUNGEN + TEXT KOPIEREN: legt "S-PXQPF<Tab>OCR-Text" je Zeile
+#      in die Zwischenablage. Damit kann sie beim Schreiben des Plans
+#      direkt die Kennung in die Slide setzen.
+#
+#      GEPRUEFT im Browser gegen eine nachgebaute Bibliothek mit drei
+#      Screenshots:
+#          Kennungen S-PXQPC / S-PXQPF / S-PXQPE, alle verschieden
+#          "Screenshot: S-PXQPF" -> 1,00, "Kennung gefunden"
+#          "Screenshot: S-XXXXX" -> 0,00, "gibt es in der Bibliothek nicht"
+#          2 von 3 zugeordnet, "Platzieren" wird aktiv
+#          Kopieren legt die Zeilen in die Zwischenablage
+#          OCR-Lauf ohne Ergebnis: Texte vorher = Texte nachher
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

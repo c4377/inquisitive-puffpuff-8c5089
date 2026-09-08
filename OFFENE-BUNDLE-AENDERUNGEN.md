@@ -5688,3 +5688,45 @@ unberuehrt.
 **Geprueft** im Browser gegen eine nachgebaute Bibliothek mit drei
 Screenshots und vier Platzhaltern: der Dialog meldete „3 von 4
 zugeordnet", und die 0,00-Zeile war genau der fehlende.
+
+## 172 — Kennung je Screenshot, neuer OCR-Lauf, Treffer per Kennung
+
+*„Baue mir eine Kennung die den Screenshot labelt und mach einen erneuten
+OCR Scan möglich. Dann kann ich die Labels mit dem OCR Scan dem Content
+weitergeben und es passt besser zusammen."*
+
+Der ähnlichkeitsbasierte Abgleich hat bei ihr **0 von 61** Platzhaltern
+getroffen. Statt an der Schwelle zu drehen, bekommt jeder Screenshot eine
+feste **Kennung** — und die schlägt jede Ähnlichkeit.
+
+**Kennung.** `djb2-xor` über die Bildadresse, 5 Stellen Base36: `S-PXQPF`.
+Sie hängt nur an der Adresse — nicht an der Reihenfolge, nicht an einer
+laufenden Nummer. Ein gelöschter Screenshot verschiebt also keine andere
+Kennung. Bei 131 Bildern liegt die Wahrscheinlichkeit einer Doppelung bei
+rund 0,014 Prozent.
+
+**Abgleich.** Steht `S-PXQPF` im Platzhaltertext, wird genau der
+Screenshot genommen — Wert 1,00, ohne Wortvergleich. Sonst läuft der alte
+Weg weiter. Die Prüfliste aus 171 zeigt bei einer Kennung, die es nicht
+gibt, genau das an.
+
+**OCR neu einlesen.** Läuft über alle Bilder der Bibliothek und schreibt
+den Text per `update` in `screenshot_library` zurück. **Ein leeres
+Ergebnis überschreibt nichts** — weder in Supabase noch in der Anzeige.
+Ein fehlgeschlagener Lauf kann also keine vorhandenen Texte vernichten.
+
+**Kennungen + Text kopieren.** Legt `S-PXQPF<Tab>OCR-Text` je Zeile in die
+Zwischenablage. Damit kann sie beim Schreiben des Plans direkt die Kennung
+in die Slide setzen — statt zu hoffen, dass ein Zitat genau trifft.
+
+**Geprüft** im Browser gegen eine nachgebaute Bibliothek mit drei
+Screenshots:
+
+| Prüfung | Ergebnis |
+|---|---|
+| Kennungen | `S-PXQPC` / `S-PXQPF` / `S-PXQPE` — alle verschieden |
+| `Screenshot: S-PXQPF` | 1,00 · „Kennung gefunden" |
+| `Screenshot: S-XXXXX` | 0,00 · „gibt es in der Bibliothek nicht" |
+| Zuordnung | 2 von 3, „Platzieren" wird aktiv |
+| Kopieren | Zeilen liegen in der Zwischenablage |
+| OCR-Lauf ohne Ergebnis | Texte vorher = Texte nachher |
