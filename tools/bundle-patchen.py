@@ -4562,6 +4562,46 @@ P.append(('l(),n&&(n.slides=i.length>0?i:["Inhalt..."],t.push(n)),t}',
 #      eine einzige lange Bahn. Preis: beim Zurueckscrollen wird neu
 #      gezeichnet, das kann kurz flackern.
 
+# 171 — Screenshot-Zuordnung: zeigen, warum etwas nicht trifft
+# a) Pruefliste: fuer JEDEN Platzhalter der beste Wert, auch unter der Schwelle
+P.append((
+ 'rG=.45,ZC=(e,t)=>{',
+ 'rG=.45,zPruefung=(e,t)=>e.map(n=>{let zb=null;t.forEach(zs=>{const zl=eG(n.matchText,zs.ocrText);(!zb||zl>zb.score)&&(zb={score:zl,ocr:zs.ocrText||""})});const zw=zb?zb.score:0,zt=String(n.id||"").split("_");return{id:n.id,wert:zw,treffer:zw>=rG,wo:zt.length>1?"Tag "+zt[0]+" \\u00b7 Slide "+(Number(zt[1])+1):String(n.id||""),suchtext:n.matchText||"",naechster:zb&&zb.ocr?zb.ocr.replace(/\\s+/g," ").trim().slice(0,80):""}}).sort((zx,zy)=>zx.wert-zy.wert),ZC=(e,t)=>{',
+ "Pruefliste zPruefung", 1))
+
+# b) Die Liste in den Dialog, unter den gruenen Kasten
+P.append((
+ 'zugeordnet."]})]})}),r.length>0&&v.jsxs("div",{className:"sticky bottom-0',
+ 'zugeordnet."]}),i.length>0&&v.jsxs("details",{className:"bg-gray-50 border border-gray-200 rounded-xl p-3",children:[v.jsxs("summary",{className:"cursor-pointer text-xs font-bold text-gray-700",children:["Warum trifft etwas nicht? (",r.length," Platzhalter, Schwelle ",rG,")"]}),v.jsx("div",{className:"mt-3 space-y-2",children:zPruefung(r,i).map(zx=>v.jsxs("div",{className:"flex gap-2 items-start text-xs",children:[v.jsx("span",{className:"font-mono shrink-0 w-9 text-right font-bold "+(zx.treffer?"text-green-700":"text-red-600"),children:zx.wert.toFixed(2)}),v.jsxs("span",{className:"flex-1 min-w-0",children:[v.jsxs("span",{className:"block text-gray-800",children:[v.jsx("span",{className:"text-gray-400",children:zx.wo}),"  ",zx.suchtext||"(leer)"]}),v.jsx("span",{className:"block text-gray-500 truncate",children:zx.naechster?"n\\u00e4chster: "+zx.naechster:"kein Screenshot in der Bibliothek"})]})]},zx.id))})]})]})}),r.length>0&&v.jsxs("div",{className:"sticky bottom-0',
+ "Pruefliste im Dialog", 1))
+
+# 171  Warum trifft ein Screenshot nicht?
+#
+#      Sie hat 131 Screenshots in der Bibliothek und 61 Platzhalter im
+#      Plan, und die Zuordnung greift nicht bei allen. Bisher stand im
+#      Dialog nur "X von N zugeordnet" — welche und warum nicht, blieb
+#      im Dunkeln, und die Schwelle von 0,45 ist von aussen unsichtbar.
+#
+#      Der Dialog zeigt jetzt eine aufklappbare Liste, schlechtester
+#      Wert zuerst: Wert, Tag und Slide, der Suchtext, und der Anfang
+#      des OCR-Textes des Screenshots, der am naechsten dran war.
+#
+#      Damit ist die Frage beantwortbar, ohne zu raten: 0,00 mit einem
+#      passenden "naechster" heisst, der Suchtext beschreibt, statt zu
+#      zitieren. 1,00 bei einem einzigen kurzen Wort heisst, der
+#      Suchtext ist zu unspezifisch und trifft irgendeinen.
+#
+#      Nur eine Anzeige — die Zuordnung selbst (ZC, rG) ist unberuehrt.
+#
+#      GEPRUEFT im Browser gegen eine nachgebaute Bibliothek mit drei
+#      Screenshots und vier Platzhaltern:
+#          0.00  Tag 1 · Slide 3  DM von einer Kundin
+#          1.00  Tag 1 · Slide 2  seit unserem Gespraech schlafe ich...
+#          1.00  Tag 2 · Slide 1  30 Anmeldungen fuer den Workshop
+#          1.00  Tag 2 · Slide 2  Schlaf
+#      Der Dialog meldete "3 von 4 zugeordnet" — die 0,00-Zeile ist
+#      genau die fehlende.
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

@@ -5655,3 +5655,36 @@ Beobachter wieder anhaengen, damit Kacheln beim Herausscrollen frei
 werden. Der Feed bleibt dann eine einzige lange Bahn, ohne Leiste, ohne
 Seiten. Preis: beim Zurueckscrollen wird neu gezeichnet, das kann kurz
 flackern. Steht bereit, falls die weisse Seite wiederkommt.
+
+## 171 — Warum trifft ein Screenshot nicht?
+
+131 Screenshots in der Bibliothek, 61 Platzhalter im Plan — und die
+Zuordnung greift nicht bei allen. Im Dialog stand bisher nur *„X von N
+zugeordnet"*. Welche fehlen und warum, blieb im Dunkeln; die Schwelle von
+`0,45` ist von aussen unsichtbar.
+
+Der Dialog zeigt jetzt eine aufklappbare Liste, **schlechtester Wert
+zuerst**:
+
+```
+0.00   Tag 1 · Slide 3   DM von einer Kundin
+       naechster: Carina ich muss dir das schreiben seit unserem …
+1.00   Tag 2 · Slide 1   30 Anmeldungen fuer den Workshop
+       naechster: Btw 30 Anmeldungen fuer den Workshop sind schon da
+```
+
+Damit ist die Frage ohne Raten beantwortbar:
+
+- **0,00 und der „naechster" passt inhaltlich** → der Suchtext
+  *beschreibt*, statt zu *zitieren*. („DM von einer Kundin" steht nicht im
+  Bild.)
+- **1,00 bei einem einzigen kurzen Wort** → der Suchtext ist zu
+  unspezifisch und trifft irgendeinen Screenshot.
+- **Alle 0,00 und „kein Screenshot"** → die Bibliothek ist leer.
+
+Nur eine Anzeige. Die Zuordnung selbst (`ZC`, Schwelle `rG`) ist
+unberuehrt.
+
+**Geprueft** im Browser gegen eine nachgebaute Bibliothek mit drei
+Screenshots und vier Platzhaltern: der Dialog meldete „3 von 4
+zugeordnet", und die 0,00-Zeile war genau der fehlende.
