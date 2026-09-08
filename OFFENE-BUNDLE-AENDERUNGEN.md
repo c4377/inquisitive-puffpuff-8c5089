@@ -6144,3 +6144,33 @@ drin. Es ist das reine Foto — schwarzweiß, gefüllt.
 
 **Geprüft:** drei Fotos, jede Datei 1080 × 1920, Farbigkeit in **allen vier
 Vierteln 0.0**, schwarze Balken oben 0 %, unten 0 %.
+
+## 185 — Der Export sagt vorher, wie viele es sein sollten
+
+Nach dem ersten Lauf kamen 59 Bilder heraus und die Frage: *„Aber wieviele
+sollten kommen?"* Darauf konnte ich nur raten — ihre Bibliothek liegt in
+ihrem Browser.
+
+Jetzt rechnet die App es aus und schreibt es hin, **bevor** man drückt:
+
+> 59 verschiedene Fotos — 43 in der Bibliothek, 31 im Plan verwendet.
+
+Gezählt wird aus zwei Quellen, getrennt und dann vereinigt:
+
+| Quelle | was |
+|---|---|
+| `brandImages` | die Bibliothek (Zeichenketten oder Objekte mit `src`/`url`/`dataUrl`) |
+| `contentPlan` | jedes `background` aus jeder Slide |
+| `window.__bsBilder` | als drittes Netz, falls etwas nur dort hängt |
+
+Doppelte Adressen zählen einmal — deshalb ist die Summe der beiden Zahlen
+größer als die Gesamtzahl, wenn ein Foto in der Bibliothek liegt **und** im
+Plan verwendet wird.
+
+Der Export nimmt **genau diese Liste**. Damit ist die Zahl davor dieselbe
+wie die danach, und eine Abweichung heißt wirklich: dieses Foto ließ sich
+nicht laden.
+
+**Geprüft:** Testplan mit drei Fotos und leerer Bibliothek zeigt „3
+verschiedene Fotos — 0 in der Bibliothek, 3 im Plan verwendet", ZIP enthält
+drei Dateien, alle Viertel 0.0.

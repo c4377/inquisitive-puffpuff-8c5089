@@ -5265,6 +5265,52 @@ P.append((
 #      VIER VIERTELN 0.0, schwarze Balken oben 0 Prozent, unten 0
 #      Prozent.
 
+# 185 — Der Export sagt vorher, wie viele es sein sollten
+P.append((
+ 'const[zSLauft,zSSetzLauft]=ce.useState(!1),[zSStand,zSSetzStand]=ce.useState("");',
+ 'const[zSLauft,zSSetzLauft]=ce.useState(!1),[zSStand,zSSetzStand]=ce.useState("");const zFotos=(()=>{try{const zL=(Array.isArray(e.brandImages)?e.brandImages:[]).map(zx=>typeof zx=="string"?zx:(zx&&(zx.src||zx.url||zx.dataUrl))||"").filter(zx=>zx&&zx.length>5);const zP=[];(Array.isArray(e.contentPlan)?e.contentPlan:[]).forEach(zt=>(Array.isArray(zt.slides)?zt.slides:[]).forEach(zs2=>{const zb=zs2&&zs2.background;if(typeof zb=="string"&&zb.length>5)zP.push(zb)}));const zW=(typeof window<"u"&&Array.isArray(window.__bsBilder))?window.__bsBilder.filter(zx=>typeof zx=="string"&&zx.length>5):[];const zU=[...new Set([...zL,...zP,...zW])];return{lib:new Set(zL).size,plan:new Set(zP).size,liste:zU}}catch(zz){return{lib:0,plan:0,liste:[]}}})();',
+ 'Fotos aus Bibliothek und Plan getrennt zaehlen', 1))
+
+P.append((
+ 'const zRoh=(typeof window<"u"&&window.__bsBilder)||[];const zListe=[...new Set(zRoh.filter(zx=>typeof zx=="string"&&zx.length>5))];',
+ 'const zListe=zFotos.liste;',
+ 'Export nimmt die gezaehlte Liste', 1))
+
+P.append((
+ 'children:zSStand||"Jedes Foto aus deiner Bibliothek: 1080\\u00d71920, Zoom-Schnitt, Bildlook wie im Feed \\u2014 als ein ZIP zum Ablegen in einen Ordner."',
+ 'children:zSStand||(zFotos.liste.length+" verschiedene Fotos \\u2014 "+zFotos.lib+" in der Bibliothek, "+zFotos.plan+" im Plan verwendet. 1080\\u00d71920, Zoom-Schnitt, schwarzwei\\u00df, als ein ZIP.")',
+ 'Aufschluesselung statt Werbetext', 1))
+
+# 185  Wie viele sollten kommen?
+#
+#      Nach dem ersten Lauf kamen 59 Bilder heraus und die Frage:
+#      "Aber wieviele sollten kommen?" Darauf konnte ich nur raten,
+#      weil ihre Bibliothek in ihrem Browser liegt.
+#
+#      Jetzt rechnet die App es aus und schreibt es hin, BEVOR man
+#      drueckt:
+#
+#          "59 verschiedene Fotos — 43 in der Bibliothek,
+#           31 im Plan verwendet."
+#
+#      Gezaehlt wird aus zwei Quellen, getrennt und dann vereinigt:
+#          brandImages   die Bibliothek (Zeichenketten oder Objekte
+#                        mit src/url/dataUrl)
+#          contentPlan   jedes background aus jeder Slide
+#          window.__bsBilder als drittes Netz, falls etwas nur dort
+#                        haengt
+#      Doppelte Adressen zaehlen einmal — deshalb ist die Summe der
+#      beiden Zahlen groesser als die Gesamtzahl, wenn ein Foto in der
+#      Bibliothek liegt UND im Plan verwendet wird.
+#
+#      Der Export nimmt genau diese Liste. Damit ist die Zahl davor und
+#      die Zahl danach dieselbe, und eine Abweichung heisst wirklich:
+#      dieses Foto liess sich nicht laden.
+#
+#      GEPRUEFT: Testplan mit drei Fotos und leerer Bibliothek zeigt
+#      "3 verschiedene Fotos — 0 in der Bibliothek, 3 im Plan
+#      verwendet", ZIP enthaelt drei Dateien, alle Viertel 0.0.
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
