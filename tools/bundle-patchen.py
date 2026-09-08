@@ -5158,6 +5158,48 @@ P.append((
 #      betrifft nur Kleinkram (Schildchen, Versalienstil auf
 #      Folgeslides) und war nicht Teil ihrer Ansage.
 
+# 182 — Alle Fotos als Story 9:16 herunterladen
+P.append((
+ 'finally{o(!1)}}};return e.currentBrandConfig?v.jsxs("div",{className:"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-32",children:[',
+ 'finally{o(!1)}}};const[zSLauft,zSSetzLauft]=ce.useState(!1),[zSStand,zSSetzStand]=ce.useState("");const zStoryExport=async()=>{if(zSLauft)return;zSSetzLauft(!0),zSSetzStand("Fotos werden gesammelt \\u2026");try{const zRoh=(typeof window<"u"&&window.__bsBilder)||[];const zListe=[...new Set(zRoh.filter(zx=>typeof zx=="string"&&zx.length>5))];if(!zListe.length){zSSetzStand("Keine Fotos in der Bibliothek gefunden."),zSSetzLauft(!1);return}const zZip=new Dl,zOrd=zZip.folder("Stories_9_16");let zOk=0;for(let zi=0;zi<zListe.length;zi+=1){zSSetzStand("Zeichne "+(zi+1)+" von "+zListe.length+" \\u2026");const zc=document.createElement("canvas");zc.width=1080,zc.height=1920,zc.style.display="none";document.body.appendChild(zc);const zk=new Pe.fabric.StaticCanvas(zc,{width:1080,height:1920});try{await Ca(zk,{background:zListe[zi],text:"",format:"9:16",visualElements:[],satBoost:-1},1080,1920,{slideIndex:0,totalSlides:1,scale:1080/400,globalBrandName:""});let zd="";try{const zx2=zc.getContext("2d"),zim=zx2.getImageData(0,0,1080,1920),zdd=zim.data;for(let zq=0;zq<zdd.length;zq+=4){const zg=(zdd[zq]*.2126+zdd[zq+1]*.7152+zdd[zq+2]*.0722)|0;zdd[zq]=zg,zdd[zq+1]=zg,zdd[zq+2]=zg}zx2.putImageData(zim,0,0);zd=zc.toDataURL("image/jpeg",.92)}catch(zsw){zd=zk.toDataURL({format:"jpeg",quality:.92,multiplier:1})}zd&&zd.length>2e3&&(zOrd.file("Story-"+String(zi+1).padStart(3,"0")+".jpg",zd.split(",")[1],{base64:!0}),zOk+=1)}catch(zf){console.warn("Story-Export: ein Foto ging nicht",zf)}finally{try{zk.dispose()}catch(zz){}zc.parentNode&&zc.parentNode.removeChild(zc)}}if(!zOk){zSSetzStand("Kein Foto liess sich zeichnen."),zSSetzLauft(!1);return}zSSetzStand("ZIP wird gepackt \\u2026");const zBlob=await zZip.generateAsync({type:"blob"});ls.saveAs(zBlob,"BrandStudio-Stories-9-16.zip");zSSetzStand(zOk+" von "+zListe.length+" Fotos als ZIP geladen.")}catch(zz){zSSetzStand("Fehlgeschlagen: "+String(zz&&zz.message?zz.message:zz).slice(0,90))}zSSetzLauft(!1)};return e.currentBrandConfig?v.jsxs("div",{className:"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-32",children:[v.jsxs("div",{className:"mb-6 rounded-2xl border border-gray-200 bg-white p-4 flex flex-col sm:flex-row sm:items-center gap-3",children:[v.jsxs("div",{className:"flex-1 min-w-0",children:[v.jsx("div",{className:"text-sm font-bold text-gray-900",children:"Alle Fotos als Story (9:16)"}),v.jsx("div",{className:"text-[11px] text-gray-500 mt-0.5",children:zSStand||"Jedes Foto aus deiner Bibliothek: 1080\\u00d71920, Zoom-Schnitt, Bildlook wie im Feed \\u2014 als ein ZIP zum Ablegen in einen Ordner."})]}),v.jsx("button",{onClick:zStoryExport,disabled:zSLauft,className:"px-4 py-2.5 rounded-lg bg-gray-900 text-white text-xs font-bold disabled:opacity-40 whitespace-nowrap",children:zSLauft?"L\\u00e4uft \\u2026":"Als ZIP laden"})]}),',
+ 'Story-Export: alle Fotos 9:16 als ZIP', 1))
+
+# 182  Alle Fotos als Story (9:16) als ein ZIP
+#
+#      "Legst du mir unter Stories alle Fotos auf Zoom geschnitten,
+#      schwarzweiss, wie du sie im Feed nutzt, aber 9:16 rein zum
+#      Download auf den Laptop?"
+#
+#      Auf der Stories-Seite oben ein Block mit einem Knopf. Er nimmt
+#      jedes Foto aus window.__bsBilder (Bibliothek plus alle im Plan
+#      verwendeten Bilder, doppelte raus), zeichnet es einzeln mit dem
+#      ECHTEN Zeichner Ca auf 1080x1920 und packt alles per JSZip in
+#      ein ZIP mit dem Ordner Stories_9_16.
+#
+#      Weil Ca benutzt wird, ist der Bildlook derselbe wie im Feed:
+#      Zoom-Schnitt auf 9:16, Schleier, Vignette, Korn. Kein Text, kein
+#      Name (globalBrandName leer).
+#
+#      SCHWARZWEISS WIRD GERECHNET, NICHT GEHOFFT. Der Zeichner
+#      entsaettigt ueber einen Rechteck mit
+#      globalCompositeOperation:"saturation" — und das haengt an
+#      BS_MISCHBAR, also daran, ob der Browser diesen Mischmodus kann.
+#      Im Test kam es farbig heraus. Deshalb rechnet der Export die
+#      Luminanz jetzt selbst ueber getImageData (0.2126/0.7152/0.0722)
+#      und faellt nur bei einem "unreinen" Canvas auf den alten Weg
+#      zurueck.
+#
+#      GEPRUEFT: drei Fotos im Pool, ZIP mit drei Dateien, jede
+#      1080x1920, Farbigkeit 0.0 (vorher 253), Helligkeit 54 — genau
+#      die Luminanz von reinem Rot. Also echtes Schwarzweiss.
+#
+#      ZUM LAPTOP: die Bibliothek liegt in der IndexedDB des Browsers,
+#      in dem sie arbeitet. Ein ZIP, das am Handy entsteht, muss ueber
+#      Dateien/iCloud auf den Laptop. Am Laptop selbst waere die
+#      Bibliothek leer — ausser die Bilder liegen auch im
+#      Supabase-Pool, dann genuegen dort dieselben zwei
+#      Supabase-Werte, ganz ohne Konto.
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

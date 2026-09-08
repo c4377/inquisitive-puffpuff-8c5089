@@ -6066,3 +6066,34 @@ mit je einer Rolle**:
 HelveticaNeueBrand und `folgeStil` auf `"montserrat"`. Beides betrifft nur
 Kleinkram (Schildchen, Versalienstil auf Folgeslides) und war nicht Teil
 der Ansage.
+
+## 182 — Alle Fotos als Story (9:16) als ein ZIP
+
+*„Legst du mir unter Stories alle Fotos auf Zoom geschnitten, schwarzweiß,
+wie du sie im Feed nutzt, aber 9:16 — rein zum Download auf den Laptop?"*
+
+Auf der Stories-Seite oben ein Block mit einem Knopf. Er nimmt **jedes Foto
+aus `window.__bsBilder`** (Bibliothek plus alle im Plan verwendeten Bilder,
+Doppelte raus), zeichnet jedes einzeln mit dem **echten Zeichner `Ca`** auf
+1080 × 1920 und packt alles per JSZip in ein ZIP mit dem Ordner
+`Stories_9_16`.
+
+Weil `Ca` benutzt wird, ist der Bildlook derselbe wie im Feed: Zoom-Schnitt
+auf 9:16, Schleier, Vignette, Korn. Kein Text, kein Name.
+
+**Schwarzweiß wird gerechnet, nicht gehofft.** Der Zeichner entsättigt über
+ein Rechteck mit `globalCompositeOperation:"saturation"` — das hängt an
+`BS_MISCHBAR`, also daran, ob der Browser diesen Mischmodus kann. Im Test
+kam es **farbig** heraus. Deshalb rechnet der Export die Luminanz jetzt
+selbst über `getImageData` (0.2126 / 0.7152 / 0.0722) und fällt nur bei
+einem „unreinen" Canvas auf den alten Weg zurück.
+
+**Geprüft:** drei Fotos im Pool, ZIP mit drei Dateien, jede 1080 × 1920,
+Farbigkeit **0.0** (vorher 253), Helligkeit 54 — genau die Luminanz von
+reinem Rot. Also echtes Schwarzweiß.
+
+**Zum Laptop:** die Bibliothek liegt in der IndexedDB des Browsers, in dem
+sie arbeitet. Ein ZIP, das am Handy entsteht, muss über Dateien/iCloud auf
+den Laptop. Am Laptop selbst wäre die Bibliothek leer — außer die Bilder
+liegen auch im Supabase-Pool, dann genügen dort dieselben zwei
+Supabase-Werte, ganz ohne Konto.
