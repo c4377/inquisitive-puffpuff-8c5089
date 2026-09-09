@@ -6258,3 +6258,39 @@ Alle 40 Bilder noch da, zweiter Lauf identisch.
 **Greift erst beim Neuzuordnen:** der bestehende Plan bleibt, wie er ist.
 Erst „Neu laden" (Bilder neu zuordnen) oder ein neuer Import verteilt nach
 der neuen Ordnung. Gesperrte Tage bleiben unberührt.
+
+## 188 — Die weiße Seite bei 112 Tagen
+
+*„Wenn ich von Tag 112 nach Tag 1 scrolle, kommt bei Tag 20 ein white
+screen."*
+
+Das ist die Ursache aus **169**, die seit dem Ausbau des Blätterns (**170**)
+wieder offen war. Die faule Gitterkachel `uG` hat ihren Beobachter beim
+ersten Sichtkontakt getrennt:
+
+```js
+if (i) return;                                  // schon einmal sichtbar
+… a.some(isIntersecting) && (s(!0), o.disconnect())
+```
+
+Was einmal gesehen wurde, blieb gezeichnet. Wer durchscrollt, hält am Ende
+**alle** Kacheln gleichzeitig im Speicher.
+
+Jetzt der zweite Weg, den 170 schon aufgeschrieben hatte: **der Beobachter
+bleibt dran.** Kommt eine Kachel in Sicht, wird sie gezeichnet; verlässt sie
+den Bereich, wird sie nach **1200 ms** wieder freigegeben. Die Verzögerung
+verhindert Flattern beim schnellen Vorbeiscrollen und beim kurzen
+Zurückwischen. Der `rootMargin` von 600 px bleibt — rund drei Bildschirme
+bleiben geladen, damit beim normalen Scrollen nichts grau aufblitzt.
+
+**Geprüft** mit 112 Tagen, Fenster 420 × 850, einmal komplett durchgescrollt:
+
+| | gezeichnete Kacheln | Platzhalter |
+|---|---|---|
+| karten246 | **112** | 0 |
+| karten247 | **25** | 87 |
+
+Die sichtbaren Kacheln sind gezeichnet, keine grauen Löcher.
+
+**Preis:** beim Zurückscrollen wird neu gezeichnet, das kann kurz grau
+aufblitzen. Dafür gibt es keine Obergrenze mehr, ab der die Seite stirbt.

@@ -5411,6 +5411,46 @@ P.append((
 #      Import verteilt nach der neuen Ordnung. Gesperrte Tage bleiben
 #      unberuehrt.
 
+# 188 — Kacheln beim Rausscrollen wieder freigeben
+P.append((
+ 'uG=({data:e,brandName:t,rootMargin:r="600px"})=>{const n=ce.useRef(null),[i,s]=ce.useState(!1);return ce.useEffect(()=>{if(i)return;const l=n.current;if(!l)return;if(typeof IntersectionObserver>"u"){s(!0);return}const o=new IntersectionObserver(a=>{a.some(u=>u.isIntersecting)&&(s(!0),o.disconnect())},{rootMargin:r});return o.observe(l),()=>o.disconnect()},[i,r]),',
+ 'uG=({data:e,brandName:t,rootMargin:r="600px"})=>{const n=ce.useRef(null),[i,s]=ce.useState(!1);return ce.useEffect(()=>{const l=n.current;if(!l)return;if(typeof IntersectionObserver>"u"){s(!0);return}let zVerz=null;const o=new IntersectionObserver(a=>{const zSicht=a.some(u=>u.isIntersecting);if(zSicht){zVerz&&(clearTimeout(zVerz),zVerz=null),s(zv=>zv||!0)}else{zVerz&&clearTimeout(zVerz),zVerz=setTimeout(()=>{zVerz=null,s(zv=>zv?!1:zv)},1200)}},{rootMargin:r});return o.observe(l),()=>{zVerz&&clearTimeout(zVerz),o.disconnect()}},[r]),',
+ 'Kacheln beim Rausscrollen wieder freigeben', 1))
+
+# 188  Die weisse Seite bei 112 Tagen
+#
+#      "Wenn ich von Tag 112 nach Tag 1 scrolle, kommt bei Tag 20 ein
+#      white screen."
+#
+#      Das ist die Ursache aus 169, die seit dem Ausbau des Blaetterns
+#      (170) wieder offen war. Die faule Gitterkachel uG hat ihren
+#      Beobachter beim ersten Sichtkontakt getrennt:
+#
+#          if (i) return;                       // schon sichtbar gewesen
+#          ... a.some(isIntersecting) && (s(!0), o.disconnect())
+#
+#      Was einmal gesehen wurde, blieb gezeichnet. Wer durchscrollt,
+#      haelt am Ende ALLE Kacheln gleichzeitig im Speicher.
+#
+#      Jetzt der zweite Weg, den 170 schon aufgeschrieben hatte: der
+#      Beobachter bleibt dran. Kommt eine Kachel in Sicht, wird sie
+#      gezeichnet; verlaesst sie den Bereich, wird sie nach 1200 ms
+#      wieder freigegeben. Die Verzoegerung verhindert Flattern beim
+#      schnellen Vorbeiscrollen und beim kurzen Zurueckwischen.
+#
+#      Der rootMargin von 600px bleibt: rund drei Bildschirme bleiben
+#      geladen, damit beim normalen Scrollen nichts grau aufblitzt.
+#
+#      GEPRUEFT mit 112 Tagen, Fenster 420x850, einmal komplett
+#      durchgescrollt:
+#          karten246  112 gezeichnete Kacheln, 0 Platzhalter
+#          karten247   25 gezeichnete Kacheln, 87 Platzhalter
+#      Die sichtbaren Kacheln sind gezeichnet, keine grauen Loecher.
+#
+#      PREIS: beim Zurueckscrollen wird neu gezeichnet. Das kann kurz
+#      grau aufblitzen. Dafuer gibt es keine Obergrenze mehr, ab der
+#      die Seite stirbt.
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
