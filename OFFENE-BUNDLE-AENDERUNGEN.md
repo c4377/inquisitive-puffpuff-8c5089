@@ -6405,3 +6405,47 @@ Hook-Zeile aus dem eigenen Tag**, 100 Kacheln ohne Seitenfehler.
 **Greift erst beim erneuten Platzieren:** schon gesetzte Screenshots haben
 noch keine Hook-Zeile — dafür einmal „Platzieren" drücken. Das Einpassen ins
 Format gilt sofort.
+
+## 191 — Der Haken gehört der Folie, nicht dem Nachbarn
+
+*„Stop, du nimmst den Text auf Slide 2 und schreibst ihn zum Screenshot — nein,
+es wird dort eigener Text stehen und Slide 2 bleibt Slide 2."*
+
+**190 war falsch.** Es hat sich die Hook-Zeile von der nächsten Folie geliehen.
+Damit stand dieselbe Zeile zweimal im Karussell, und Folie 2 hat ihren eigenen
+Zweck verloren.
+
+Jetzt kommt der Haken **nur** aus dem Text der Screenshot-Folie selbst.
+
+### So schreibst du es im Import
+
+Der Bulk-Import sammelt alle Zeilen unter einer `Slide N:`-Überschrift zu
+**einer** Folie. Haken und Kennung dürfen also einfach untereinander stehen:
+
+```
+Tag 2: BEWEIS – Menschen reagieren auf klare Impulse
+Slide 1: Das ist die Reaktion einer Kundin auf einen klaren Impuls.
+[Screenshot S-R52ZN]
+Slide 2: Du musst nicht jeden Post mit maximalem Mehrwert vollpacken.
+Slide 3: Du brauchst einen Gedanken, der etwas auslöst.
+```
+
+`zEigen()` nimmt den Folientext, wirft je Zeile die Klammer, die Kennung und
+ein führendes „Screenshot" weg und behält, was an echten Wörtern übrig bleibt.
+Ist der Rest selbst wieder ein Platzhalter (`q$` erkennt ihn, etwa
+„Beweis-Screenshot aus deiner Sammlung"), gilt er nicht als Haken.
+
+Steht auf der Folie nur die Kennung, bleibt der Screenshot ohne Zeile.
+**Nichts wird geborgt.**
+
+`zTauglich` und `zHaken` aus 190 fallen weg.
+
+### Geprüft
+
+| | Folie | Ergebnis |
+|---|---|---|
+| Tag 1 | Haken + Kennung auf einer Folie | Haken steht auf der Kachel |
+| Tag 2 | nur Kennung, Erklärung auf Folie 2 | kein Haken, Folie 2 unverändert |
+
+4 Folien vorher, 4 Folien nachher. Am echten 100-Tage-Plan: 52 Screenshots
+platziert, keine geborgten Zeilen mehr.

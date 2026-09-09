@@ -5590,6 +5590,53 @@ P.append((
  'const zSauber=zx=>String(zx||"").replace(/\\*/g,"").replace(/\\s+/g," ").trim(),zTauglich=zs=>{if(!zs)return"";const zt=zSauber(zs.text);return!zt||q$(zs.text)?"":zt},zKurz=zt=>zt.length<=120?zt:zt.slice(0,117).replace(/\\s+\\S*$/,"")+"…",zHaken=(ot,ut)=>{try{const zs=ot.slides||[];for(let zi=ut+1;zi<zs.length;zi+=1){const zt=zTauglich(zs[zi]);if(zt)return zKurz(zt)}for(let zi=ut-1;zi>=0;zi-=1){const zt=zTauglich(zs[zi]);if(zt)return zKurz(zt)}const zT=zSauber(ot.title).replace(/^[^–—-]{2,24}[–—-]\\s*/,"");return zT?zKurz(zT):""}catch(zz){return""}};const He=(e.contentPlan||[]).map(ot=>({...ot,slides:(ot.slides||[]).map((dt,ut)=>{const st=`${ot.day}_${ut}`;return _e[st]?{...dt,overlayImage:_e[st],overlayIsScreenshot:!0,overlayImageScale:.8,overlayImageRounded:!1,overlayImageX:0,overlayImageY:0,overlayHook:zSauber(dt.overlayHook)||zHaken(ot,ut),text:"",_wasScreenshot:!0}:dt})}));',
  'Beim Platzieren die Hook-Zeile aus dem Tag mitnehmen', 1))
 
+# 191  Der Haken gehoert der Folie, nicht dem Nachbarn
+#
+#      "Stop, du nimmst den Text auf Slide 2 und schreibst ihn zum
+#      Screenshot - nein, es wird dort eigener Text stehen und Slide 2
+#      bleibt Slide 2."
+#
+#      190 hat sich die Hook-Zeile von der naechsten Folie geliehen.
+#      Das war falsch: die Zeile stand dann zweimal im Karussell, und
+#      Folie 2 hat ihren eigenen Zweck verloren.
+#
+#      Jetzt kommt der Haken NUR aus dem Text der Screenshot-Folie
+#      selbst. Der Bulk-Import sammelt ohnehin alle Zeilen unter einer
+#      "Slide N:"-Ueberschrift zu einer Folie - Haken und Kennung
+#      duerfen also einfach untereinander stehen:
+#
+#          Slide 1: Das ist die Reaktion einer Kundin auf einen
+#                   klaren Impuls.
+#          [Screenshot S-R52ZN]
+#
+#      zEigen() nimmt den Folientext, wirft je Zeile die Klammer, die
+#      Kennung und ein fuehrendes "Screenshot" weg und behaelt, was an
+#      echten Woertern uebrig bleibt. Ist der Rest selbst wieder ein
+#      Platzhalter (q$ erkennt ihn, z.B. "Beweis-Screenshot aus deiner
+#      Sammlung"), gilt er nicht als Haken.
+#
+#      Steht auf der Folie nur die Kennung, bleibt der Screenshot ohne
+#      Zeile. Nichts wird geborgt.
+#
+#      zTauglich und zHaken aus 190 fallen weg.
+#
+#      GEPRUEFT mit zwei Tagen:
+#          Tag 1  Haken + Kennung auf einer Folie -> Haken steht da
+#          Tag 2  nur Kennung, Erklaerung auf Folie 2 -> kein Haken,
+#                 Folie 2 unveraendert
+#      4 Folien vorher, 4 Folien nachher. Am echten Plan: 52
+#      Screenshots platziert, keine geborgten Zeilen mehr.
+
+P.append((
+ 'const zSauber=zx=>String(zx||"").replace(/\\*/g,"").replace(/\\s+/g," ").trim(),zTauglich=zs=>{if(!zs)return"";const zt=zSauber(zs.text);return!zt||q$(zs.text)?"":zt},zKurz=zt=>zt.length<=120?zt:zt.slice(0,117).replace(/\\s+\\S*$/,"")+"…",zHaken=(ot,ut)=>{try{const zs=ot.slides||[];for(let zi=ut+1;zi<zs.length;zi+=1){const zt=zTauglich(zs[zi]);if(zt)return zKurz(zt)}for(let zi=ut-1;zi>=0;zi-=1){const zt=zTauglich(zs[zi]);if(zt)return zKurz(zt)}const zT=zSauber(ot.title).replace(/^[^–—-]{2,24}[–—-]\\s*/,"");return zT?zKurz(zT):""}catch(zz){return""}};',
+ 'const zSauber=zx=>String(zx||"").replace(/\\*/g,"").replace(/\\s+/g," ").trim(),zKurz=zt=>zt.length<=120?zt:zt.slice(0,117).replace(/\\s+\\S*$/,"")+"…",zEigen=zt=>{try{const zr=String(zt||"").split(/\\r?\\n/).map(zz=>{let zc=String(zz).replace(/\\[[^\\]]*\\]/g," ").replace(/\\bS-[0-9A-Z]{5}\\b/ig," ");zc=zc.replace(/^\\s*screenshot\\s*[:\\u2013\\u2014-]?\\s*/i," ");return zSauber(zc)}).filter(zz=>/[a-zA-ZÀ-ÿ]{2}/.test(zz)),zt2=zSauber(zr.join(" "));return zt2&&!q$(zt2)?zKurz(zt2):""}catch(zz){return""}};',
+ 'Haken kommt aus dem eigenen Text der Folie, nicht vom Nachbarn', 1))
+
+P.append((
+ 'overlayHook:zSauber(dt.overlayHook)||zHaken(ot,ut)',
+ 'overlayHook:zSauber(dt.overlayHook)||zEigen(dt.text)',
+ 'Kein Text mehr von der naechsten Folie holen', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
