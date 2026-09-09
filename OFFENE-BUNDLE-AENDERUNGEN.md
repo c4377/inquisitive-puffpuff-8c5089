@@ -6294,3 +6294,44 @@ Die sichtbaren Kacheln sind gezeichnet, keine grauen Löcher.
 
 **Preis:** beim Zurückscrollen wird neu gezeichnet, das kann kurz grau
 aufblitzen. Dafür gibt es keine Obergrenze mehr, ab der die Seite stirbt.
+
+## 189 — `carinaannaprav` steht wieder auf allen Posts
+
+Der Name stand nur noch auf den **Textkacheln**. Auf den **Fotokacheln** war
+er weg — durch einen Schalter, den der dunkle Feed selbst gesetzt hatte:
+
+```js
+(tt.platten || BS_KACHEL.nameZeigen === 0) || e.add(Name)
+```
+
+`BS_DUNKEL` trug `nameZeigen:0`, also nie. Der Schalter ist wieder an.
+
+**Dazu die Angleichung.** Der Name wurde an zwei Stellen gezeichnet, in zwei
+verschiedenen Schriften:
+
+| | Schrift | Größe | Höhe | Laufweite |
+|---|---|---|---|---|
+| Textkachel (Kartenzeichner) | PoppinsBold | `c(14)` | .905 | 140 |
+| Fotokachel (Gitterzeichner) | Playfair Display | .030 | .945 | 60 |
+
+Für denselben Namen. Jetzt beide gleich — PoppinsBold, Höhe .905,
+Laufweite 140, `rgba(246,241,230,0.55)`.
+
+Rechnerisch entspräche `c(14)` einem Anteil von `.0104`, im Gitter sah der
+Name damit aber halb so groß aus wie auf der Textkachel — die Kartenkacheln
+zeichnen auf einer anderen Fläche. Nachgemessen und auf **.026** gesetzt:
+gleich breit.
+
+**Geprüft** mit einer Foto- und einer Textkachel nebeneinander:
+
+| | Fotokachel | Textkachel |
+|---|---|---|
+| karten247 | — | `carinaannaprav` |
+| karten248 | `carinaannaprav` | `carinaannaprav` |
+
+Der echte 100-Tage-Plan zeichnet unverändert: dieselben Kartenkacheln wie in
+247, byte-gleicher Schnappschuss.
+
+**Nebenbefund:** `BS_KACHEL.name` wird nirgends gelesen. Der Name steht an
+zwei Stellen fest im Bundle. Wenn er einmal wechseln soll, sind das zwei
+Stellen, nicht ein Schalter.

@@ -5451,6 +5451,50 @@ P.append((
 #      grau aufblitzen. Dafuer gibt es keine Obergrenze mehr, ab der
 #      die Seite stirbt.
 
+# 189  "carinaannaprav sollte noch auf den Posts stehen"
+#
+#      Der Name stand nur noch auf den Textkacheln. Auf den Fotokacheln
+#      war er weg, und zwar durch einen Schalter, den der dunkle Feed
+#      selbst gesetzt hat:
+#
+#          (tt.platten || BS_KACHEL.nameZeigen === 0) || e.add(Name)
+#
+#      BS_DUNKEL trug nameZeigen:0 - also nie. Der Schalter geht wieder
+#      an.
+#
+#      Dazu die Angleichung: auf den Textkacheln zeichnet der
+#      Kartenzeichner den Namen in PoppinsBold, Laufweite 140, auf
+#      Hoehe .905, in rgba(246,241,230,0.55). Auf den Fotokacheln stand
+#      Playfair in .030 auf Hoehe .945 - eine zweite Handschrift fuer
+#      denselben Namen. Jetzt beide gleich.
+#
+#      Die Groesse .0104 waere rechnerisch dasselbe wie c(14), sieht im
+#      Gitter aber halb so gross aus (die Kartenkacheln zeichnen auf
+#      einer anderen Flaeche). Gemessen und auf .026 gesetzt: der Name
+#      ist auf Foto- und Textkachel gleich breit.
+#
+#      GEPRUEFT mit einer Foto- und einer Textkachel nebeneinander:
+#          karten247  Foto: kein Name       Text: carinaannaprav
+#          karten248  Foto: carinaannaprav  Text: carinaannaprav
+#      Der echte 100-Tage-Plan zeichnet unveraendert (dieselben
+#      Kartenkacheln wie in 247, byte-gleicher Schnappschuss).
+
+P.append((
+ 'nameZeigen:0',
+ 'nameZeigen:1',
+ 'Name auf den Fotokacheln wieder einschalten', 1))
+
+P.append((
+ 'nameSchrift:"Playfair Display",nameGewicht:"400",nameLaufweite:60,nameAnteil:.030',
+ 'nameSchrift:"PoppinsBold",nameGewicht:"700",nameLaufweite:140,nameAnteil:.026,nameUnten:.905',
+ 'Foto-Name genauso setzen wie auf den Textkacheln', 1))
+
+P.append((
+ 'nameFarbe:"#F2EFE9"',
+ 'nameFarbe:"rgba(246,241,230,0.55)",nameDeckkraft:1',
+ 'Gleiche Deckkraft wie der Name auf den Textkacheln', 1))
+
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
