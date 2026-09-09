@@ -5670,6 +5670,43 @@ P.append((
  'children:"✕"})})]}),v.jsxs("button",{onClick:()=>{h(null),Zt(ae)},disabled:ot,className:"w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-purple-700 hover:bg-purple-50 border-b border-gray-50 disabled:opacity-50",children:[v.jsx(ke,{icon:H1,className:"text-base"})," In Fotos speichern"]}),v.jsxs("button",{onClick:()=>{h(null),d(u===ae.day?null:ae.day)},className:"w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50",children:[v.jsx(ke,{icon:cS,className:"text-base text-gray-500"})," Caption"]}),',
  '… und ganz oben wieder einsetzen, Fotos zuerst', 1))
 
+# 193  Export raus, und der Zoom beim Scrollen
+#
+#      "Export brauch ich nicht. Und wenn ich nach unten scrolle kommt
+#      manchmal dann diese Einstellung wieso" (dazu ein Bild: die Seite
+#      etwa vierfach vergroessert, das Logo fuellt den halben Schirm)
+#
+#      EXPORT faellt aus dem Kachelmenue. "In Fotos speichern" macht
+#      dasselbe fuer den Weg, den sie geht.
+#
+#      DER ZOOM ist keine Einstellung, sondern iOS. Safari zoomt von
+#      selbst hinein, sobald ein Eingabefeld den Fokus bekommt und
+#      dessen Schrift KLEINER ALS 16px ist - und bleibt danach drin.
+#      Die App hat solche Felder reichlich: text-sm ist 14px, text-xs
+#      12px. Beim Scrollen landet der Finger unterwegs auf einem, iOS
+#      hakt es als Antippen ab, zoomt, und der Rest der Seite ist
+#      ploetzlich viermal so gross.
+#
+#      Gegenmittel in beiden index.html, nicht im Bundle:
+#          input,textarea,select{font-size:16px!important}
+#          html{touch-action:manipulation}
+#
+#      Das !important muss sein: die Tailwind-Klasse text-sm ist eine
+#      Klasse (0,1,0) und schlaegt den Elementwaehler (0,0,1), und ihr
+#      Stylesheet wird spaeter geladen.
+#
+#      touch-action:manipulation nimmt das Doppeltipp-Zoomen weg -
+#      Wischen und Zusammenziehen mit zwei Fingern bleiben, sie kann
+#      also weiter absichtlich hineinzoomen.
+#
+#      GEPRUEFT im Browser: alle Felder rechnen 16px, touchAction steht
+#      auf manipulation, das Menue hat keinen Export mehr.
+
+P.append((
+ 'v.jsxs("button",{onClick:()=>{h(null),St(ae)},disabled:ot,className:"w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50 disabled:opacity-50",children:[v.jsx(ke,{icon:M1,className:"text-base text-gray-500"})," Export"]}),',
+ '',
+ 'Export aus dem Kachelmenue nehmen', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

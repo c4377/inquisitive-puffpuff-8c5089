@@ -22,12 +22,20 @@
          seine eigene Tagesnummer und nimmt sonst den Wert oben. */
       var g=JSON.parse(localStorage.getItem("BS_SCHWARZ_TAG")||"null");
       if(g&&typeof g==="object")window.BS_SCHWARZ_TAG=g;}catch(e){}</script>
-    <script type="module" crossorigin src="/assets/index-B5karten251.js"></script>
+    <script type="module" crossorigin src="/assets/index-B5karten252.js"></script>
     <!-- Montserrat liegt hier im Projekt, nicht bei Google. Der Zeichner misst
          Texte auf dem Canvas und braucht die Schrift sofort; ueber das Netz
          geladen waere sie beim ersten Bild manchmal noch nicht da. Alle
          anderen Schriften der App liegen aus demselben Grund unter /fonts. -->
     <style>
+      /* iOS zoomt beim Antippen eines Eingabefeldes automatisch hinein,
+         wenn dessen Schrift kleiner als 16px ist — und bleibt danach
+         hineingezoomt. Genau das passiert beim Scrollen, wenn der Finger
+         unterwegs auf einem Feld landet. Mit 16px faellt der Grund weg. */
+      input,textarea,select{font-size:16px!important}
+      /* Doppeltippen zoomt auf iOS ebenfalls. "manipulation" schaltet nur
+         das ab — Wischen und Zusammenziehen mit zwei Fingern bleiben. */
+      html{touch-action:manipulation}
       /* EINE Datei fuer alle Schnitte von 100 bis 900. Vorher lagen hier
            nur 400 und 700 als feste Schnitte; Light 300 - der Schnitt der
            Marke - haette ueber das Netz kommen muessen und waere beim ersten

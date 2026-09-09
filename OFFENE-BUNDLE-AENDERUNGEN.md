@@ -6478,3 +6478,42 @@ gleiche Aktionen, nur an anderer Stelle.
 | Post löschen | Post löschen |
 
 **Geprüft** im Menü von Tag 2, Fenster 430 × 900.
+
+## 193 — Export raus, und der Zoom beim Scrollen
+
+*„Export brauch ich nicht. Und wenn ich nach unten scrolle kommt manchmal dann
+diese Einstellung wieso"* — dazu ein Bild: die Seite rund **vierfach
+vergrößert**, das Logo füllt den halben Schirm.
+
+### Export
+
+Fällt aus dem Kachelmenü. „In Fotos speichern" macht dasselbe für den Weg, den
+du gehst.
+
+### Der Zoom ist keine Einstellung, sondern iOS
+
+Safari zoomt **von selbst** hinein, sobald ein Eingabefeld den Fokus bekommt
+und dessen Schrift **kleiner als 16 px** ist — und bleibt danach drin. Die App
+hat solche Felder reichlich: `text-sm` sind 14 px, `text-xs` 12 px.
+
+Beim Scrollen landet der Finger unterwegs auf einem Feld, iOS hakt das als
+Antippen ab, zoomt hinein — und der Rest der Seite ist plötzlich viermal so
+groß. Genau dein Bild.
+
+Gegenmittel, in beiden `index.html` statt im Bundle:
+
+```css
+input,textarea,select{font-size:16px!important}
+html{touch-action:manipulation}
+```
+
+Das `!important` muss sein: die Tailwind-Klasse `text-sm` ist eine Klasse
+(0,1,0) und schlägt den Elementwähler (0,0,1) — und ihr Stylesheet wird später
+geladen.
+
+`touch-action: manipulation` nimmt zusätzlich das **Doppeltipp-Zoomen** weg.
+Wischen und Zusammenziehen mit zwei Fingern bleiben: absichtlich hineinzoomen
+kannst du weiter.
+
+**Geprüft** im Browser: alle Felder rechnen 16 px, `touchAction` steht auf
+`manipulation`, das Menü hat keinen Export mehr.
