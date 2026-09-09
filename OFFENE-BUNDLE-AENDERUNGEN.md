@@ -6517,3 +6517,54 @@ kannst du weiter.
 
 **Geprüft** im Browser: alle Felder rechnen 16 px, `touchAction` steht auf
 `manipulation`, das Menü hat keinen Export mehr.
+
+## 194 — Die Seite lädt bei Tag 40 neu
+
+*„Jetzt komme ich gar nicht mehr zu Tag 1, es lädt neu bei Tag 40."*
+
+Das ist kein Absturz der App — das ist iOS. Safari wirft den Tab weg, wenn er
+zu viel Speicher hält, und lädt ihn neu.
+
+### Gemessen
+
+112 Tage mit Fotos und Screenshots, einmal durchgescrollt, **Spitze der
+gleichzeitig belegten Leinwandfläche**:
+
+| | Spitze | entspricht | behaltene Kacheln |
+|---|---|---|---|
+| karten247 | 39,2 Mpx | ~157 MB | 49 |
+| karten252 | 39,2 Mpx | ~157 MB | 49 |
+| **karten253** | **8,1 Mpx** | **~32 MB** | **25** |
+
+**247 und 252 sind gleich.** Die Änderungen 249–252 haben das nicht verursacht
+— die Decke war schon vorher da, der Plan ist nur darüber hinausgewachsen.
+
+### Ursache
+
+Jede Kachel, die in den 600-px-Rand scrollt, fängt **sofort** an zu zeichnen.
+Beim schnellen Scrollen waren das über 50 gleichzeitig — jede mit einer
+Leinwand von 800 × 1000, allein 3,2 MB Bildspeicher pro Stück, dazu die Fotos.
+
+### Zwei Sachen dagegen
+
+1. **Eine Warteschlange** (`zSchlitz`). Es zeichnen höchstens **vier**
+   Gitterkacheln gleichzeitig, der Rest wartet. Der Platz wird im `finally`
+   freigegeben und zur Sicherheit auch nach 15 s, falls ein Bild nie
+   zurückmeldet — sonst stünde die Schlange für immer.
+
+2. **`setDimensions` wandert in die Warteschlange.** Vorher wurde die Leinwand
+   sofort auf 800 × 1000 vergrößert, auch wenn die Kachel noch gar nicht dran
+   war — die 3,2 MB waren also schon belegt, während sie wartete. Jetzt bleibt
+   sie bei den voreingestellten 300 × 150, bis sie wirklich zeichnet.
+
+Editor und Export (`asImage:false`) gehen **nicht** durch die Schlange: dort
+zählt jede Sekunde, und es ist immer nur eine Leinwand offen.
+
+### Nebenbei besser geworden
+
+Weil weniger Kacheln fertig werden, während sie schon aus dem Bild gescrollt
+sind, greift das Freigeben aus **188** wieder richtig: 25 statt 49 behaltene
+Kacheln.
+
+**Geprüft** außerdem: das Gitter zeichnet unverändert (Platte, Text, Foto,
+Screenshot), der Editor öffnet mit 1600 × 2000.

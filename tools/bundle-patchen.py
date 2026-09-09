@@ -5707,6 +5707,64 @@ P.append((
  '',
  'Export aus dem Kachelmenue nehmen', 1))
 
+# 194  Die Seite laedt bei Tag 40 neu
+#
+#      "Jetzt komme ich gar nicht mehr zu Tag 1, es laedt neu bei Tag
+#      40." Das ist kein Absturz der App, das ist iOS: Safari wirft den
+#      Tab weg, wenn er zu viel Speicher haelt, und laedt ihn neu.
+#
+#      GEMESSEN, 112 Tage mit Fotos und Screenshots, einmal
+#      durchgescrollt, Spitze der gleichzeitig belegten Leinwandflaeche:
+#
+#          karten247   39,2 Mpx  (~157 MB)   49 Kacheln behalten
+#          karten252   39,2 Mpx  (~157 MB)   49 Kacheln behalten
+#          karten253    8,1 Mpx  (~ 32 MB)   25 Kacheln behalten
+#
+#      Wichtig: 247 und 252 sind gleich. Die Aenderungen 249-252 haben
+#      das NICHT verursacht - die Decke war schon vorher da, ihr Plan
+#      ist nur darueber hinausgewachsen.
+#
+#      URSACHE: jede Kachel, die in den 600px-Rand scrollt, faengt
+#      SOFORT an zu zeichnen. Beim schnellen Scrollen waren das ueber
+#      50 gleichzeitig, jede mit einer Leinwand von 800x1000 - allein
+#      3,2 MB Bildspeicher pro Stueck, und dazu die Fotos.
+#
+#      ZWEI SACHEN dagegen:
+#
+#      (1) Eine Warteschlange (zSchlitz). Es zeichnen hoechstens VIER
+#          Gitterkacheln gleichzeitig, der Rest wartet. Der Platz wird
+#          im finally freigegeben und zur Sicherheit auch nach 15 s,
+#          falls ein Bild nie zurueckmeldet - sonst stuende die
+#          Schlange fuer immer.
+#
+#      (2) setDimensions wandert IN die Warteschlange. Vorher wurde
+#          die Leinwand sofort auf 800x1000 vergroessert, auch wenn die
+#          Kachel noch gar nicht dran war - die 3,2 MB waren also schon
+#          belegt, waehrend sie wartete. Jetzt bleibt sie bei den
+#          voreingestellten 300x150, bis sie wirklich zeichnet.
+#
+#      Der Editor und der Export (asImage:false) gehen NICHT durch die
+#      Schlange: dort zaehlt jede Sekunde, und es ist immer nur eine
+#      Leinwand offen.
+#
+#      NEBENBEI besser geworden: weil weniger Kacheln fertig werden,
+#      waehrend sie schon aus dem Bild gescrollt sind, greift das
+#      Freigeben aus 188 wieder richtig - 25 statt 49 behaltene
+#      Kacheln.
+#
+#      GEPRUEFT ausserdem: Gitter zeichnet unveraendert (Platte, Text,
+#      Foto, Screenshot), der Editor oeffnet mit 1600x2000.
+
+P.append((
+ 'e.renderAll()},XV=ce.forwardRef(',
+ 'e.renderAll()},zSchlitz=()=>{const W=(window.__bsMalQ=window.__bsMalQ||{n:0,q:[],max:4});return new Promise(ok=>{const start=()=>{W.n+=1;let weg=!1;const frei=()=>{if(weg)return;weg=!0;W.n-=1;const nx=W.q.shift();nx&&nx()};setTimeout(frei,15e3);ok(frei)};W.n<W.max?start():W.q.push(start)})},XV=ce.forwardRef(',
+ 'Warteschlange fuer das Zeichnen anlegen', 1))
+
+P.append((
+ 'e.format==="4:5"&&(g=800,m=1e3),p.setDimensions({width:g,height:m});const y=g/400,w=++c.current;const zLauf=f.current.then(async()=>{var b;if(w===c.current&&a.current===p)return Ca(p,e,g,m,{slideIndex:e.slideNumber?e.slideNumber-1:0,totalSlides:e.totalSlides||(e.slideNumber?2:1),scale:y,globalBrandName:typeof e.brandText=="string"&&e.brandText.trim()?e.brandText:n,typography:(b=l==null?void 0:l.currentBrandConfig)==null?void 0:b.typography})});',
+ 'e.format==="4:5"&&(g=800,m=1e3);const y=g/400,w=++c.current;const zLauf=f.current.then(async()=>{var b;if(w!==c.current||a.current!==p)return;const zFrei=i?await zSchlitz():()=>{};try{if(w!==c.current||a.current!==p)return;p.setDimensions({width:g,height:m});return await Ca(p,e,g,m,{slideIndex:e.slideNumber?e.slideNumber-1:0,totalSlides:e.totalSlides||(e.slideNumber?2:1),scale:y,globalBrandName:typeof e.brandText=="string"&&e.brandText.trim()?e.brandText:n,typography:(b=l==null?void 0:l.currentBrandConfig)==null?void 0:b.typography})}finally{zFrei()}});',
+ 'Hoechstens vier Gitterkacheln gleichzeitig, und erst dann die Leinwand gross machen', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
