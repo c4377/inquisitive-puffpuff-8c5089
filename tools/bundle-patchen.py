@@ -5495,6 +5495,101 @@ P.append((
  'Gleiche Deckkraft wie der Name auf den Textkacheln', 1))
 
 
+# 190  Der Screenshot allein erklaert nichts
+#
+#      "Der Screenshot alleine hilft nicht, mach eine erklaerende
+#      Hook-Zeile dazu und mach ihn passend zum 3:4 Format. Am
+#      Textkachel sehe ich keinen Namen."
+#
+#      DREI SACHEN.
+#
+#      (1) HOOK-ZEILE. Beim Platzieren hat Pt() den Text der Folie
+#      geleert (text:"") und nur das Bild gesetzt. Uebrig blieb ein
+#      Screenshot ohne ein Wort dazu.
+#
+#      Der Text steht aber schon im Plan: der Platzhalter ist fast
+#      immer Folie 0, und Folie 1 desselben Tages erklaert ihn.
+#
+#          Tag 2  Folie 0  [Screenshot S-R52ZN]
+#                 Folie 1  Das ist die Reaktion einer Kundin auf
+#                          einen klaren Impuls.
+#
+#      Genau die Zeile wird jetzt als overlayHook mitgenommen: erst die
+#      naechste Folie ohne Platzhalter, sonst die vorige, sonst der
+#      Tagestitel ohne sein "BEWEIS - " davor. Auf 120 Zeichen gekuerzt,
+#      an der Wortgrenze. Eine schon gesetzte Hook-Zeile bleibt stehen.
+#
+#      (2) INS FORMAT. Der Screenshot wurde auf 80% der Breite skaliert
+#      und mittig gesetzt - in seiner eigenen Hoehe. Ein hochkantes
+#      Handybild ragte damit oben und unten aus der Kachel heraus und
+#      hat sie komplett zugedeckt.
+#
+#      Jetzt bekommt er eine Box: unter der Hook-Zeile bis .865 (ueber
+#      dem Namen), quer bis .09 Rand. Skaliert wird mit Math.min von
+#      Breite und Hoehe - er passt ganz hinein, nichts wird
+#      abgeschnitten, nichts ragt heraus. Der vorhandene Groessen-
+#      regler wirkt weiter, .8 ist jetzt "voll".
+#
+#      Die Hook-Zeile braucht eine Farbe, die auf dem Kachelgrund
+#      lesbar ist. Der Grundton wird in Ca gemerkt (zGrundTon), weil er
+#      in einem Block steht, den Ae() nicht sieht.
+#
+#      (3) NAME AUF DER TEXTKACHEL. Gemessen, warum er dort fehlt:
+#
+#          wt f=ablauf  ABS=rgba(246,241,230,0.55)  grund=#2B211A
+#          wt f=marke   ABS=#000000                 grund=#FFFFFF
+#
+#      Der Kartenzeichner hat sich bei fassung "marke" selbst
+#      ausgenommen: Je.fassung!=="marke". Die Markenkachel war die
+#      einzige ohne Namen. Die Bedingung faellt weg.
+#
+#      Dazu zwei Kleinigkeiten aus demselben Durchgang: auf
+#      Plattenkacheln war der Name ebenfalls unterdrueckt (tt.platten),
+#      jetzt steht er dort in der Plattenfarbe. Und wo ein
+#      Monogrammring sitzt, rueckt er um c(42) nach rechts, statt im
+#      Ring zu liegen.
+#
+#      GEPRUEFT an vier Kacheln - Platte, dunkler Text, Foto,
+#      Screenshot: auf allen vieren steht der Name. Der echte
+#      100-Tage-Plan: 52 Screenshots platziert, alle mit Hook-Zeile aus
+#      dem eigenen Tag, 100 Kacheln ohne Seitenfehler.
+
+
+P.append((
+ 'Ca=async(e,t,r,n,i={})=>{',
+ 'Ca=async(e,t,r,n,i={})=>{let zGrundTon="";',
+ 'Merker fuer den Grundton der Kachel', 1))
+
+P.append((
+ 'lt=!_C(et),wt=(Je,rt)=>{',
+ 'lt=(zGrundTon=et,!_C(et)),wt=(Je,rt)=>{',
+ 'Grundton merken, damit der Screenshot-Haken lesbar bleibt', 1))
+
+P.append((
+ 'if(t.overlayIsScreenshot){const et=r*(typeof t.overlayImageScale=="number"?t.overlayImageScale:.8)/me.width,lt=me.width*et,wt=me.height*et,tt=r/2+(typeof t.overlayImageX=="number"?t.overlayImageX:0)*d,Qt=n/2+(typeof t.overlayImageY=="number"?t.overlayImageY:0)*d,Wt=10*d;e.add(new Pe.fabric.Rect({left:tt,top:Qt,originX:"center",originY:"center",width:lt+Wt*2,height:wt+Wt*2,rx:12*d,ry:12*d,fill:F,selectable:!1,shadow:"rgba(0,0,0,0.22) 0px 10px 30px"})),me.set({originX:"center",originY:"center",left:tt,top:Qt,scaleX:et,scaleY:et,selectable:!1,clipPath:new Pe.fabric.Rect({width:me.width,height:me.height,rx:6/et,ry:6/et,originX:"center",originY:"center"})}),e.add(me),Fe(!0);return}',
+ 'if(t.overlayIsScreenshot){const zHk=String(t.overlayHook||"").replace(/\\*/g,"").trim(),zBg=String(zGrundTon||t.plateOverride||t.backgroundColor||"#000000"),zTint=w(zBg)>150?"#241C16":"#F6F1E6",zRd=r*.09,Wt=10*d;let zOben=n*.115;if(zHk){const zTb=new Pe.fabric.Textbox(zHk,{left:r/2,top:n*.10,originX:"center",originY:"top",width:r-zRd*2,fontSize:Math.round(r*(BS_KACHEL.hakenAnteil||.055)),fontFamily:BS_KACHEL.deckblattFamilie||"Playfair Display",fontWeight:"400",fill:zTint,textAlign:"center",lineHeight:1.18,selectable:!1,evented:!1});for(let zi=0;zi<4&&zTb.height>n*.30;zi+=1)zTb.set({fontSize:Math.round(zTb.fontSize*.88)});e.add(zTb),zOben=n*.10+zTb.height+n*.045}const zUnten=n*.865,zH=Math.max(n*.24,zUnten-zOben),zF=typeof t.overlayImageScale=="number"?Math.max(.3,Math.min(1,t.overlayImageScale/.8)):1,et=Math.min((r-zRd*2-Wt*2)/me.width,(zH-Wt*2)/me.height)*zF,lt=me.width*et,wt=me.height*et,tt=r/2+(typeof t.overlayImageX=="number"?t.overlayImageX:0)*d,Qt=zOben+zH/2+(typeof t.overlayImageY=="number"?t.overlayImageY:0)*d;e.add(new Pe.fabric.Rect({left:tt,top:Qt,originX:"center",originY:"center",width:lt+Wt*2,height:wt+Wt*2,rx:12*d,ry:12*d,fill:F,selectable:!1,shadow:"rgba(0,0,0,0.22) 0px 10px 30px"})),me.set({originX:"center",originY:"center",left:tt,top:Qt,scaleX:et,scaleY:et,selectable:!1,clipPath:new Pe.fabric.Rect({width:me.width,height:me.height,rx:6/et,ry:6/et,originX:"center",originY:"center"})}),e.add(me),Fe(!0);return}',
+ 'Screenshot: erklaerende Hook-Zeile und ins Format eingepasst', 1))
+
+P.append((
+ '(tt.platten||BS_KACHEL.nameZeigen===0)||e.add(new Pe.fabric.Text(Ze,{left:_e,',
+ 'BS_KACHEL.nameZeigen===0||e.add(new Pe.fabric.Text(Ze,{left:_e+(Ye&&Ye.istKarte&&Ye.monogrammFarbe?c(42):0),',
+ 'Name auch auf Plattenkacheln, und nicht mehr im Monogramm', 1))
+
+P.append((
+ 'fill:BS_KACHEL.nameFarbe||"#FFFFFF",opacity:(BS_KACHEL.nameDeckkraft||.55),selectable:!1}))',
+ 'fill:tt.platten?(tt.bandSchriftFarbe||tt.schriftFarbe||"#241C16"):(BS_KACHEL.nameFarbe||"#FFFFFF"),opacity:(BS_KACHEL.nameDeckkraft||.55),selectable:!1}))',
+ 'Name auf der Platte in der Plattenfarbe', 1))
+
+P.append((
+ 'Je.aufFoto!==!0&&Je.fassung!=="marke"&&txt("carinaannaprav",',
+ 'Je.aufFoto!==!0&&txt("carinaannaprav",',
+ 'Name auch auf der Markenkachel (das war die Textkachel ohne Namen)', 1))
+
+P.append((
+ 'const He=(e.contentPlan||[]).map(ot=>({...ot,slides:(ot.slides||[]).map((dt,ut)=>{const st=`${ot.day}_${ut}`;return _e[st]?{...dt,overlayImage:_e[st],overlayIsScreenshot:!0,overlayImageScale:.8,overlayImageRounded:!1,overlayImageX:0,overlayImageY:0,text:"",_wasScreenshot:!0}:dt})}));',
+ 'const zSauber=zx=>String(zx||"").replace(/\\*/g,"").replace(/\\s+/g," ").trim(),zTauglich=zs=>{if(!zs)return"";const zt=zSauber(zs.text);return!zt||q$(zs.text)?"":zt},zKurz=zt=>zt.length<=120?zt:zt.slice(0,117).replace(/\\s+\\S*$/,"")+"…",zHaken=(ot,ut)=>{try{const zs=ot.slides||[];for(let zi=ut+1;zi<zs.length;zi+=1){const zt=zTauglich(zs[zi]);if(zt)return zKurz(zt)}for(let zi=ut-1;zi>=0;zi-=1){const zt=zTauglich(zs[zi]);if(zt)return zKurz(zt)}const zT=zSauber(ot.title).replace(/^[^–—-]{2,24}[–—-]\\s*/,"");return zT?zKurz(zT):""}catch(zz){return""}};const He=(e.contentPlan||[]).map(ot=>({...ot,slides:(ot.slides||[]).map((dt,ut)=>{const st=`${ot.day}_${ut}`;return _e[st]?{...dt,overlayImage:_e[st],overlayIsScreenshot:!0,overlayImageScale:.8,overlayImageRounded:!1,overlayImageX:0,overlayImageY:0,overlayHook:zSauber(dt.overlayHook)||zHaken(ot,ut),text:"",_wasScreenshot:!0}:dt})}));',
+ 'Beim Platzieren die Hook-Zeile aus dem Tag mitnehmen', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

@@ -6335,3 +6335,73 @@ Der echte 100-Tage-Plan zeichnet unverändert: dieselben Kartenkacheln wie in
 **Nebenbefund:** `BS_KACHEL.name` wird nirgends gelesen. Der Name steht an
 zwei Stellen fest im Bundle. Wenn er einmal wechseln soll, sind das zwei
 Stellen, nicht ein Schalter.
+
+## 190 — Der Screenshot allein erklärt nichts
+
+*„Der Screenshot alleine hilft nicht, mach eine erklärende Hook-Zeile dazu
+und mach ihn passend zum 3:4 Format. Am Textkachel sehe ich keinen Namen."*
+
+### 1 · Die Hook-Zeile
+
+Beim Platzieren hat `Pt()` den Text der Folie **geleert** (`text:""`) und nur
+das Bild gesetzt. Übrig blieb ein Screenshot ohne ein Wort dazu.
+
+Der Text steht aber längst im Plan. Der Platzhalter ist fast immer Folie 0 —
+und Folie 1 desselben Tages erklärt ihn:
+
+```
+Tag 2  Folie 0  [Screenshot S-R52ZN]
+       Folie 1  Das ist die Reaktion einer Kundin auf einen klaren Impuls.
+```
+
+Genau die Zeile wird jetzt als `overlayHook` mitgenommen: erst die nächste
+Folie ohne Platzhalter, sonst die vorige, sonst der Tagestitel ohne sein
+„BEWEIS – " davor. Auf 120 Zeichen gekürzt, an der Wortgrenze. Eine schon
+gesetzte Hook-Zeile bleibt stehen.
+
+### 2 · Ins Format
+
+Der Screenshot wurde auf **80 % der Breite** skaliert und mittig gesetzt — in
+seiner eigenen Höhe. Ein hochkantes Handybild ragte damit oben und unten aus
+der Kachel heraus und hat sie komplett zugedeckt.
+
+Jetzt bekommt er eine Box: unter der Hook-Zeile bis `.865` (über dem Namen),
+quer bis `.09` Rand. Skaliert wird mit `Math.min` von Breite und Höhe — er
+passt ganz hinein, **nichts wird abgeschnitten, nichts ragt heraus**. Der
+vorhandene Größenregler wirkt weiter, `.8` ist jetzt „voll".
+
+Die Hook-Zeile braucht eine Farbe, die auf dem Kachelgrund lesbar ist. Der
+Grundton wird dafür in `Ca` gemerkt (`zGrundTon`) — er steht in einem Block,
+den `Ae()` nicht sieht.
+
+### 3 · Der Name auf der Textkachel
+
+Gemessen, warum er dort fehlt:
+
+```
+wt f=ablauf  ABS=rgba(246,241,230,0.55)  grund=#2B211A
+wt f=marke   ABS=#000000                 grund=#FFFFFF
+```
+
+Der Kartenzeichner hat sich bei `fassung === "marke"` **selbst ausgenommen**:
+
+```js
+Je.aufFoto!==!0 && Je.fassung!=="marke" && txt("carinaannaprav", …)
+```
+
+Die Markenkachel war die einzige ohne Namen. Die Bedingung fällt weg.
+
+Zwei Kleinigkeiten aus demselben Durchgang: auf **Plattenkacheln** war der
+Name ebenfalls unterdrückt (`tt.platten`) — jetzt steht er dort in der
+Plattenfarbe. Und wo ein **Monogrammring** sitzt, rückt er um `c(42)` nach
+rechts, statt im Ring zu liegen.
+
+### Geprüft
+
+Vier Kacheln — Platte, dunkler Text, Foto, Screenshot: auf allen vieren steht
+der Name. Der echte 100-Tage-Plan: **52 Screenshots platziert, alle mit
+Hook-Zeile aus dem eigenen Tag**, 100 Kacheln ohne Seitenfehler.
+
+**Greift erst beim erneuten Platzieren:** schon gesetzte Screenshots haben
+noch keine Hook-Zeile — dafür einmal „Platzieren" drücken. Das Einpassen ins
+Format gilt sofort.
