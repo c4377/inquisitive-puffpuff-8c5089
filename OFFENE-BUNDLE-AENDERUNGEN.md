@@ -6449,3 +6449,32 @@ Steht auf der Folie nur die Kennung, bleibt der Screenshot ohne Zeile.
 
 4 Folien vorher, 4 Folien nachher. Am echten 100-Tage-Plan: 52 Screenshots
 platziert, keine geborgten Zeilen mehr.
+
+## 192 — „In Fotos speichern" ganz oben, Caption darunter
+
+Das Kachelmenü hatte die beiden Punkte, die täglich gebraucht werden, an
+**Stelle 10 und 11** — unter Layout-Stil, Unschärfe Folgeseiten, Große
+Headline und Tiefen-Overlay. Auf dem Handy heißt das scrollen, jedes Mal.
+
+Beide Knöpfe stehen jetzt direkt unter der Kopfzeile „Tag N",
+**„In Fotos speichern" zuerst**. Sonst ändert sich nichts: gleiche Knöpfe,
+gleiche Aktionen, nur an anderer Stelle.
+
+| vorher | nachher |
+|---|---|
+| Als gepostet sperren | **In Fotos speichern** |
+| Bearbeiten | **Caption** |
+| Tauschen mit Tag … | Als gepostet sperren |
+| Einfügen vor Tag … | Bearbeiten |
+| Stories dazu schreiben | Tauschen mit Tag … |
+| Neu laden | Einfügen vor Tag … |
+| Layout-Stil | Stories dazu schreiben |
+| Unschärfe Folgeseiten | Neu laden |
+| Große Headline | Layout-Stil |
+| Tiefen-Overlay | Unschärfe Folgeseiten |
+| Caption | Große Headline |
+| In Fotos speichern | Tiefen-Overlay |
+| Export | Export |
+| Post löschen | Post löschen |
+
+**Geprüft** im Menü von Tag 2, Fenster 430 × 900.

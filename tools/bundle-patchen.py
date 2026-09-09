@@ -5637,6 +5637,39 @@ P.append((
  'overlayHook:zSauber(dt.overlayHook)||zEigen(dt.text)',
  'Kein Text mehr von der naechsten Folie holen', 1))
 
+# 192  "In Fotos speichern" ganz oben, Caption darunter
+#
+#      Das Kachelmenue hatte die beiden Punkte, die sie taeglich
+#      braucht, an Stelle 10 und 11 - unter Layout-Stil, Unschaerfe,
+#      Grosse Headline und Tiefen-Overlay. Auf dem Handy heisst das
+#      scrollen, jedes Mal.
+#
+#      Beide Knoepfe wandern direkt unter die Kopfzeile "Tag N",
+#      "In Fotos speichern" zuerst. Sonst aendert sich nichts: gleiche
+#      Knoepfe, gleiche Klicks, nur an anderer Stelle.
+#
+#      Neue Reihenfolge:
+#          In Fotos speichern
+#          Caption
+#          Als gepostet sperren
+#          Bearbeiten
+#          Tauschen mit Tag ...
+#          ...
+#          Export
+#          Post loeschen
+#
+#      GEPRUEFT im Menue von Tag 2, Fenster 430x900.
+
+P.append((
+ 'v.jsxs("button",{onClick:()=>{h(null),d(u===ae.day?null:ae.day)},className:"w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50",children:[v.jsx(ke,{icon:cS,className:"text-base text-gray-500"})," Caption"]}),v.jsxs("button",{onClick:()=>{h(null),Zt(ae)},disabled:ot,className:"w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-purple-700 hover:bg-purple-50 border-b border-gray-50 disabled:opacity-50",children:[v.jsx(ke,{icon:H1,className:"text-base"})," In Fotos speichern"]}),',
+ '',
+ 'Caption und "In Fotos speichern" aus der Mitte des Menues nehmen', 1))
+
+P.append((
+ 'children:"✕"})})]}),',
+ 'children:"✕"})})]}),v.jsxs("button",{onClick:()=>{h(null),Zt(ae)},disabled:ot,className:"w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-purple-700 hover:bg-purple-50 border-b border-gray-50 disabled:opacity-50",children:[v.jsx(ke,{icon:H1,className:"text-base"})," In Fotos speichern"]}),v.jsxs("button",{onClick:()=>{h(null),d(u===ae.day?null:ae.day)},className:"w-full flex items-center gap-3 px-4 py-3.5 text-sm font-bold text-gray-800 hover:bg-gray-50 border-b border-gray-50",children:[v.jsx(ke,{icon:cS,className:"text-base text-gray-500"})," Caption"]}),',
+ '… und ganz oben wieder einsetzen, Fotos zuerst', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
