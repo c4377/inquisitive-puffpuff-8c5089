@@ -15,14 +15,35 @@
 
 // ─────────────────────────────────────────────────────────────────────────
 // DAS ANGEBOT. Die einzige Stelle, an der es steht.
-// Aendert sich Preis, Start oder Anmeldeweg, wird NUR hier geaendert.
+// Aendert sich Preis, Start oder Stichwort, wird NUR hier geaendert.
+//
+// STICHWORT: Der Weg zum Kurs ist eine ManyChat-Automation. Wer auf die
+// Story mit diesem Wort antwortet, bekommt den Link automatisch. Genau
+// deshalb muss es WOERTLICH stimmen — ein erfundenes Stichwort loest die
+// Automation nicht aus, und die Frau, die geantwortet hat, bekommt nichts.
+// Solange es nicht feststeht, bleibt es LEER: dann laedt die Story ohne
+// Stichwort ein, statt eines zu erfinden.
+const STICHWORT = '';
+
 const ANGEBOT = `
   The Strategy — der Audio-Kurs. Ab 15. September.
-  Darauf fuehrt jede Einladung hin: per DM, nicht ueber einen Link.
-  Das 1:1 gibt es weiter und darf vorkommen, wenn der Post davon handelt.
-  Es ist aber nicht das Ziel der Stories.
+  Darauf fuehrt jede Einladung hin.
+
+  DER WEG IST EINE MANYCHAT-AUTOMATION.
+${STICHWORT ? `  Die Einladung bittet um EINE Antwort auf die Story: das Stichwort
+  ${STICHWORT}. Wer es schickt, bekommt den Link automatisch.
+  Schreib es genau so, in Grossbuchstaben, und verlange nichts ausser ihm.
+  Kein "und dann schreib mir noch", keine zweite Bedingung — jede
+  Zusatzbedingung bricht die Automation.`
+    : `  Das Stichwort steht noch nicht fest. Lade deshalb OHNE Stichwort ein:
+  bitte um eine Antwort auf die Story ("antworte mir kurz").
+  ERFINDE KEIN STICHWORT. Ein falsches Wort loest die Automation nicht aus.`}
+
+  KEIN Link, kein "Link in Bio", keine Adresse — die Automation schickt ihn.
   KEIN Countdown, KEIN Rabatt, KEINE kuenstliche Verknappung.
-  Nenne keinen Preis, solange keiner hier steht.`;
+  Nenne keinen Preis, solange keiner hier steht.
+  Das 1:1 gibt es weiter und darf vorkommen, wenn der Post davon handelt.
+  Es ist aber nicht das Ziel der Stories.`;
 // ─────────────────────────────────────────────────────────────────────────
 
 const MONDAY = `
@@ -91,8 +112,11 @@ STORY-ARTEN (mische sie)
 - "aussage"     – ein Satz, der sitzt. Nichts drumherum.
 - "fly"         – Beobachtung aus dem Arbeitsalltag, beilaeufig erzaehlt.
 - "frage"       – echte Frage an die Community (Umfrage oder DM-Aufruf).
-- "cta"         – Einladung zu The Strategy. Ueber DM ansprechen
-                  ("schreib mir"), nicht ueber einen Link.
+- "cta"         – Einladung zu The Strategy. Sie bittet um eine ANTWORT AUF
+                  DIE STORY, nie um einen Klick. Siehe DAS ANGEBOT oben:
+                  dort steht, ob mit Stichwort oder ohne.
+                  Die Einladung steht als eigene Story, nicht angehaengt an
+                  einen anderen Gedanken. Ein Satz Grund, dann die Bitte.
 
 BAUWEISE (das ist der Unterschied zwischen Text und Story-Selling)
 Jede Story traegt genau EINEN Gedanken. Nicht zwei. Der naechste Gedanke ist
