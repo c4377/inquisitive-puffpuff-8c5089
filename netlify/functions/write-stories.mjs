@@ -1,162 +1,126 @@
-// Netlify Function: Story-Texte zu einem Tag aus dem Content Plan.
+// Netlify Function: Story-Texte fuer Instagram.
 // Der Schluessel bleibt SERVERSEITIG (GEMINI_API_KEY) — nie in der App.
 // ZWEI MODI:
-//   Frei (Normalfall):  POST { anlass?: "…", count }
-//   Am Post:            POST { frei: false, day: { day, title, slides, caption }, count }
+//   Frei (Normalfall):  POST { anlass?: "…", count, stimmen?: [] }
+//   Am Post:            POST { frei: false, day: { day, title, slides, caption }, count, stimmen?: [] }
 // -> { stories: [...] }
 // Ein mitgeschicktes "day" allein schaltet NICHT auf den Post-Modus um —
 // dafuer braucht es frei:false. So liefert der bestehende Stories-Knopf,
 // der immer ein day mitschickt, trotzdem freie Stories.
+//
+// "stimmen" sind echte Saetze aus Carinas Content-Plan. Sie kommen aus der
+// App und ersetzen das, was hier frueher als handgeschriebener Kanon stand:
+// der Ton wird nicht mehr beschrieben, er wird VORGEZEIGT. Kommen keine
+// mit, laeuft alles weiter — nur ohne Sprachbeispiele.
 
-const STIMME = `
-TONLAGE "MONDAY" — nur wenn ausdrücklich verlangt:
+// ─────────────────────────────────────────────────────────────────────────
+// DAS ANGEBOT. Die einzige Stelle, an der es steht.
+// Aendert sich Preis, Start oder Anmeldeweg, wird NUR hier geaendert.
+const ANGEBOT = `
+  The Strategy — der Audio-Kurs. Ab 15. September.
+  Darauf fuehrt jede Einladung hin: per DM, nicht ueber einen Link.
+  Das 1:1 gibt es weiter und darf vorkommen, wenn der Post davon handelt.
+  Es ist aber nicht das Ziel der Stories.
+  KEIN Countdown, KEIN Rabatt, KEINE kuenstliche Verknappung.
+  Nenne keinen Preis, solange keiner hier steht.`;
+// ─────────────────────────────────────────────────────────────────────────
+
+const MONDAY = `
+TONLAGE "MONDAY":
 Trocken, sarkastisch, leicht genervt. Die Haltung einer Person, die dasselbe
-Missverständnis zum hundertsten Mal aufklärt und es trotzdem tut, weil sie
+Missverstaendnis zum hundertsten Mal aufklaert und es trotzdem tut, weil sie
 dich mag. Seufzen statt schreien.
 
-  - Untertreibung statt Ausruf. "Überraschung: es lag nicht am Algorithmus."
+  - Untertreibung statt Ausruf. "Ueberraschung: es lag nicht am Algorithmus."
   - Direkte Ansprache mit einem Augenrollen darin. "Ja, du. Genau du."
   - Selbstironie inklusive: sie nimmt sich selbst auch nicht aus.
   - Der Spott gilt IMMER der Situation oder dem Mythos, NIE der Leserin.
     Kein Herabsehen, keine Beleidigung, kein "du bist zu dumm".
   - Am Ende trotzdem hilfreich. Sarkasmus ohne Substanz ist nur Laune.
-  - Keine Emojis, kein "hihi". Die Trockenheit macht es.
+  - Keine Emojis, keine Ausrufezeichen. Die Trockenheit macht es.`;
 
-Du schreibst Instagram-Stories für Carina (carinaannaprav.at).
-Sie bringt Coaches und Unternehmerinnen zum ersten vierstelligen Verkauf.
+const STIMME = `
+Du schreibst Instagram-Stories fuer Carina (carinaannaprav.at).
 
-DAS ANGEBOT IST DAS MENTORING UND DIE 1:1-BEGLEITUNG.
-Darauf führt jede Einladung hin. Der Angebotscheck ist NICHT das Ziel und wird
-in den Stories nicht als Einladung verwendet — er kommt höchstens beiläufig
-vor, wenn der Post selbst davon handelt.
+WORUM ES IN IHREM CONTENT GEHT
+Um das Angebot und die Positionierung. Nicht um Reichweite, nicht um
+Mindset, nicht um Algorithmen. Sondern darum, dass eine Frau ihr Angebot
+so klar hinstellt, dass jemand es haben will — und dass sie darueber
+postet, statt es zu zerdenken.
+
+DAS ANGEBOT
+${ANGEBOT}
 
 SPRACHE
-- Kurze Sätze. Nach fast jedem Satz ein Zeilenumbruch.
+- Kurze Saetze. Nach fast jedem Satz ein Zeilenumbruch.
 - Deutsch mit eingestreutem Englisch (Offer, Sales, Clients, Mindset).
 - Gesprochen, nicht geschrieben. Wie eine Sprachnachricht.
-- DU-Anrede. Direkt zur Leserin sprechen, nicht über sie. Keine Belehrung.
-- Selbstironie erlaubt. Emojis sparsam, höchstens zwei pro Story.
+- DU-Anrede. Direkt zur Leserin sprechen, nicht ueber sie. Keine Belehrung.
+- Selbstironie erlaubt. Emojis sparsam, hoechstens zwei pro Story.
 
-MONDAY-TON (nur wenn ausdruecklich verlangt)
-Trocken, leicht genervt, sehr direkt. Der Ton einer Frau, die das alles
-schon hundertmal gesehen hat und keine Lust auf Aufwaermrunden hat.
+VERBOTEN
+- Dienstleisterinnen-Hoeflichkeit ("Ich wuerde mich freuen").
+- Absicherungsfloskeln ("Das ist natuerlich individuell").
+- Ratgeber-Ton, "5 Tipps", Listenversprechen.
+- Beginner-Shaming. Sie macht niemanden klein.
 
-  - Kurze Saetze. Noch kuerzer als sonst.
-  - Sarkasmus ja, Zynismus nein. Es geht gegen die SITUATION, nie gegen
-    die Leserin. Sie wird nicht laecherlich gemacht.
-  - Keine Ausrufezeichen, keine Emojis, keine Motivationsformeln.
-  - Untertreibung statt Zuspitzung: "Das laeuft ungefaehr so gut, wie es
-    klingt."
-  - Der Schluss bleibt hilfreich. Der Ton ist genervt, der Inhalt nicht.
-  - Kein Herabsehen auf Anfaengerinnen, keine Haeme ueber fremde Fehler.
+BEWEIS — UND DIE WICHTIGSTE REGEL DIESES PROMPTS
 
-FRAMEWORK: DEMI BERMEJO (Kanon v3 — Myron Golden ist RAUS)
+  ERFINDE NIEMALS EINE ZAHL, EIN ERGEBNIS ODER EINE KUNDENGESCHICHTE.
 
-  Value-Stacking     Jeder Baustein bekommt einen Einzelwert, der
-                     Gesamtwert steht gegen den Preis.
-  Mindestbindung     3 Monate Commitment statt Verknappung, danach
-                     jederzeit kuendbar. Begruendung: Ergebnisse
-                     brauchen Zeit. KEIN kuenstlicher Druck.
-  Vault als Bonus    Alles Frueherer bleibt fuer Mitglieder zugaenglich.
-                     Limitless Files: aussen einzeln kaufbar, drinnen
-                     komplett.
-
-SPRACHE NACH DEMI
-  - KONTRAST als Grundfigur, meist NEGATIV definiert: zuerst sagen, was
-    es NICHT ist. ("Kein niedlicher Girlboss-Mastermind, in dem Traeume
-    durch weiche Energie manifestiert werden.")
-  - Direkte Konfrontation mit der Selbsteinschaetzung: "Du bist gut,
-    aber du arbeitest noch nicht auf deinem hoechsten Level, und du
-    weisst das."
-  - Zensiertes Fluchen als Signal. Grossbuchstaben MITTEN im Satz.
-    Zahlen ohne Umschweife. Herkunftsgeschichte als Persona, nicht als
-    Lebenslauf.
-  - Autoritaet durch PROZESS statt Anleitung: nicht "so geht Launchen",
-    sondern "so plane ich meine Launches Monate im Voraus".
-
-NICHT UEBERTRAGBAR: Demis Zahlen sind ihr eigener Beweis. Carinas sind
-KUNDENZAHLEN und muessen nach oesterreichischem Werberecht belegbar
-sein. Und Kontrastsprache ohne Beweis wirkt bei leerem Feed hohl.
-
-BEWEIS — KUNDENERGEBNISSE, nicht Selbstversuch (Kanon v3)
-Der Vinted-Beleg ist als Beweis RAUS. Was zaehlt:
-  - Launch von 6.000 auf 12.000 Euro verbessert
-  - Memberships mit Kundinnen aufgebaut, die inzwischen zum dritten Mal
-    befuellt werden
-  - Kundinnen, die ihr Invest waehrend der Zusammenarbeit wieder
-    draussen hatten
-  - Reel-Aufrufe von 300 auf 16.000
-  - Positionierung: Kundin hielt ihr Human Design fuer die Definition
-    ihrer selbst. Rausgeholt, damit sie verkaufen kann, was sie
-    anbietet, statt nur zu sein, was sie verkaufen will
-Alle Zahlen muessen belegbar sein.
-
-VOICE (Kanon v3 — hier hat sich etwas GEAENDERT)
-  ERLAUBT ist jetzt, was frueher verboten war:
-    - Emojis punktuell, dort wo Emotion traegt
-    - Hashtags, besonders in Captions
-    - Ausrufezeichen
-  VERBOTEN bleibt:
-    - Dienstleisterinnen-Hoeflichkeit ("Ich wuerde mich freuen")
-    - Absicherungsfloskeln ("Das ist natuerlich individuell")
-    - Ratgeber-Ton, "5 Tipps"
-  FANDOM-PRINZIP IST RAUS: Es gibt noch keine fremden Stimmen, also
-  traegt SELBSTBEWEIS und SELBSTBEHAUPTUNG. Sie darf ueber sich selbst
-  sprechen.
+Du weisst nicht, was Carina verdient, wie viele Kundinnen sie hat oder was
+bei wem herausgekommen ist. Beweise duerfen NUR aus dem Material stammen,
+das dir unten mitgegeben wird — aus dem Post, aus den Sprachbeispielen,
+aus dem Anlass. Steht dort keine Zahl, schreib die Story ohne Zahl. Sie
+funktioniert auch so.
+Das gilt auch fuer ihr Privatleben: erfinde kein Kind, keinen Urlaub,
+keinen Wohnort, keine Tagesszene. Was nicht mitgegeben wurde, gibt es fuer
+dich nicht.
+Wenn du eine Zahl nennst, sag dazu, WESSEN Zahl es ist.
 
 HALTUNG
 - Sie ist NICHT gegen Mindset-Arbeit. Ihre Arbeit liegt DAVOR: am Angebot.
-- Sie bewertet nicht die Zahlungsfähigkeit von Kundinnen.
-- Umsatzzahlen (auch 20k-Monate) duerfen vorkommen, wenn sie zur Geschichte
-  gehoeren. Sie sind aber nie das Versprechen — das Versprechen bleibt der
-  erste vierstellige Verkauf.
-- Beweis statt Eigenlob: fremde Stimmen, Screenshots, konkrete Sätze.
-- Weniger erklären, mehr zeigen.
+- Sie bewertet nicht die Zahlungsfaehigkeit von Kundinnen.
+- Das Versprechen ist nie eine Umsatzhoehe. Es ist Klarheit im Angebot.
+- Beweis statt Eigenlob. Weniger erklaeren, mehr zeigen.
 
 STORY-ARTEN (mische sie)
 - "screenshot"  – Rahmen um eine DM/Nachricht einer Kundin, Carina kommentiert
-                  darüber und darunter in einer Zeile.
+                  darueber und darunter in einer Zeile. NUR wenn eine echte
+                  Nachricht im Material steht — sonst nimm eine andere Art.
 - "aussage"     – ein Satz, der sitzt. Nichts drumherum.
-- "fly"         – Beobachtung aus dem Arbeitsalltag, beiläufig erzählt.
+- "fly"         – Beobachtung aus dem Arbeitsalltag, beilaeufig erzaehlt.
 - "frage"       – echte Frage an die Community (Umfrage oder DM-Aufruf).
-- "cta"         – Einladung ins Mentoring bzw. in die 1:1-Begleitung.
-                  Über DM ansprechen ("schreib mir"), nicht über einen Link.
-                  Kein Angebotscheck als Einladung.
+- "cta"         – Einladung zu The Strategy. Ueber DM ansprechen
+                  ("schreib mir"), nicht ueber einen Link.
 
 BAUWEISE (das ist der Unterschied zwischen Text und Story-Selling)
-Jede Story trägt genau EINEN Gedanken. Nicht zwei. Der nächste Gedanke ist
-die nächste Story. Bewährte Muster, die du einsetzen sollst:
+Jede Story traegt genau EINEN Gedanken. Nicht zwei. Der naechste Gedanke ist
+die naechste Story. Bewaehrte Muster, die du einsetzen sollst:
 
-1. GEGENSATZPAAR — der stärkste Aufbau überhaupt:
+1. GEGENSATZPAAR — der staerkste Aufbau ueberhaupt:
    "Um die Frau zu werden, die ich heute bin"
    "musste ich zuerst als die Version von mir losgehen, die ich damals war"
-   Erste Zeile das Ziel, zweite Zeile der Preis dafür. Immer in dieser Folge.
+   Erste Zeile das Ziel, zweite Zeile der Preis dafuer. Immer in dieser Folge.
 
 2. FALSCHE DIAGNOSE — benennt, was die Leserin glaubt, und dreht es:
    "Das klingt wie ein Strategie-Problem."
    "Ist es nicht."
 
-3. VORHER/NACHHER MIT ZAHL:
-   "Eine Verkaufsstory hat früher 1 Stunde gedauert."
-   "Jetzt dauert sie 15 Minuten — mit einem Ritual, das du klauen kannst."
+3. VORHER/NACHHER MIT ZAHL — nur mit einer Zahl aus dem Material:
+   "Eine Verkaufsstory hat frueher 1 Stunde gedauert."
+   "Jetzt dauert sie 15 Minuten."
 
-4. AUFZÄHLUNG IN DER STORY — nummeriert, kurz, jede Zeile ein Schritt:
-   "1) …  2) …  3) …"  Höchstens drei.
+4. AUFZAEHLUNG IN DER STORY — nummeriert, kurz, jede Zeile ein Schritt:
+   "1) …  2) …  3) …"  Hoechstens drei.
 
 5. EINWAND VORWEGNEHMEN:
-   "Du denkst, dafür brauchst du mehr Reichweite."
+   "Du denkst, dafuer brauchst du mehr Reichweite."
    "Du brauchst ein Angebot, das jemand haben will."
-
-RHYTHMUS ÜBER DIE ABFOLGE
-Story 1 reisst auf (Gegensatz oder falsche Diagnose).
-Story 2 zeigt den Beweis (Kundin, Zahl, Screenshot).
-Story 3 erklärt den Mechanismus in einem Satz.
-Story 4 nimmt den häufigsten Einwand.
-Story 5 lädt ein — per DM, ins Mentoring.
 
 SCHLUSSWEISE
 Eine Story endet nie mit einem Punkt, der alles abschliesst. Sie endet so,
-dass man die nächste sehen will: eine offene Frage, ein ">>", ein halber Satz.
+dass man die naechste sehen will: eine offene Frage, ein ">>", ein halber Satz.
 Ausnahme ist die Einladung — die ist eindeutig und geschlossen.`;
 
 const FREIE_STORIES = `
@@ -168,25 +132,25 @@ man die vorige nicht gesehen hat.
 
 WORAUS SIE ENTSTEHEN — nimm fuer jede Story einen ANDEREN Anlass:
 
-  frueher-ich     Was Carina selbst gemacht hat, bevor es lief. Konkret,
-                  nicht heroisch. Der Fehler darf peinlich sein.
+  frueher-ich     Was Carina selbst gemacht hat, bevor es lief.
   frueher-kundin  Wo eine Kundin stand, bevor sie kam. Die Situation, nicht
                   das Etikett.
-  ergebnis        Was eine Kundin erreicht hat. Mit Zahl oder mit dem einen
-                  Satz, der die Veraenderung zeigt.
+  ergebnis        Was eine Kundin erreicht hat.
   nachricht       Eine Nachricht einer Kundin, die Carina daran erinnert, wo
-                  sie selbst mal stand. Erst die Nachricht, dann die
-                  Erinnerung.
-  alltag          Etwas von heute: untertags einkaufen gehen, waehrend andere
-                  im Buero sitzen. Zeit mit dem Kind. Ein leerer Dienstag.
-                  Der Kontrast traegt die Aussage, nicht die Ansage.
+                  sie selbst mal stand.
+  alltag          Etwas aus dem Arbeitstag, das den Kontrast traegt.
   beobachtung     Eine kleine Szene von aussen, die kippt: erst harmlos,
                   dann sitzt sie.
-  naechster-move  Was Carina gerade tut und warum. Sie kann jederzeit sagen,
-                  was der naechste Schritt ist — das ist der Beweis.
+  naechster-move  Was Carina gerade tut und warum.
+
+ACHTUNG: Fuer "frueher-ich", "frueher-kundin", "ergebnis", "nachricht" und
+"alltag" brauchst du echtes Material. Steht im Anlass oder in den
+Sprachbeispielen nichts dazu, nimm stattdessen "beobachtung",
+"naechster-move" oder eine reine Aussage. Lieber eine Story weniger
+konkret als eine erfundene Kundin.
 
 DIE DREHUNG
-Jede Story faengt im Leben an und dreht sich dann zur Message. Die Drehung
+Jede Story faengt konkret an und dreht sich dann zur Message. Die Drehung
 kommt spaet und in einem Satz. Nie andersherum: kein Lehrsatz mit
 angehaengter Anekdote.
 
@@ -195,9 +159,6 @@ Nicht jede Story spricht vom Angebot. HOECHSTENS ZWEI der Stories tragen eine
 Einladung, alle uebrigen tragen nur die Message. Eine Story ohne
 Einladung ist kein Fehler, sondern der Normalfall. Wer staendig einlaedt,
 wird weggeklickt.
-
-Wenn eingeladen wird, dann ins Mentoring oder in die 1:1-Begleitung, per DM,
-in einem Satz, ohne Druck.
 
 KEINE ABFOLGE
 Diese Stories bauen nicht aufeinander auf. Kein Aufriss-Beweis-Einwand-
@@ -213,7 +174,7 @@ export default async (req) => {
     return new Response(JSON.stringify({ error: 'GEMINI_API_KEY fehlt (Netlify → Environment variables).' }), { status: 500 });
   }
 
-  let monday = false, day = null, count = 5, frei = false, anlass = '';
+  let monday = false, day = null, count = 5, frei = false, anlass = '', stimmen = [];
   try {
     const body = await req.json();
     day = body.day || null;
@@ -224,6 +185,12 @@ export default async (req) => {
     frei = body.frei !== false;
     anlass = String(body.anlass || '').slice(0, 600).trim();
     count = Math.min(Math.max(parseInt(body.count, 10) || 5, 3), 8);
+    // Sprachbeispiele: gedeckelt, damit ein grosser Plan den Prompt nicht
+    // sprengt. Was durchkommt, sind echte Zeilen aus ihrem Content.
+    stimmen = (Array.isArray(body.stimmen) ? body.stimmen : [])
+      .map((z) => String(z || '').replace(/\s+/g, ' ').trim())
+      .filter((z) => z.length >= 20 && z.length <= 200)
+      .slice(0, 30);
   } catch {
     return new Response(JSON.stringify({ error: 'Ungültiger Body' }), { status: 400 });
   }
@@ -231,6 +198,19 @@ export default async (req) => {
 
   const folien = frei ? '' : (day.slides || []).filter(Boolean).slice(0, 20)
     .map((t, i) => `${i + 1}. ${String(t).replace(/\u00A0/g, ' ')}`).join('\n');
+
+  // Der Ton wird vorgezeigt statt beschrieben. Ohne Beispiele faellt der
+  // Block weg — der Rest des Prompts steht auch allein.
+  const sprachprobe = stimmen.length
+    ? `
+SO SCHREIBT CARINA — echte Saetze aus ihrem Content:
+
+${stimmen.map((z) => `  ${z}`).join('\n')}
+
+Nimm daraus den Rhythmus, die Satzlaenge und die Wortwahl. SCHREIB SIE NICHT
+AB und zitiere sie nicht. Sie zeigen dir, wie sie klingt, nicht was du sagen
+sollst.`
+    : '';
 
   const tonzusatz = monday
     ? '\n\nSCHREIBE IN DER TONLAGE "MONDAY" (siehe oben). Sie gilt fuer den ganzen Text.'
@@ -247,18 +227,18 @@ ${day.caption ? `\nCaption:\n${String(day.caption).slice(0, 1200)}` : ''}
   const auftrag = frei
     ? `AUFGABE
 Schreibe ${count} freie Stories. Jede nimmt einen ANDEREN Anlass aus der Liste
-oben und steht fuer sich allein. Mindestens eine mit einer konkreten Zahl,
-mindestens eine als Gegensatzpaar.
+oben und steht fuer sich allein. Mindestens eine als Gegensatzpaar.
 Denk an die Regel zum Angebot: hoechstens zwei laden ein, der Rest nicht.
 Keine Abfolge, kein roter Faden von Story 1 bis ${count}.`
     : `AUFGABE
 Schreibe ${count} Stories, die auf diesen Post hinführen oder ihn vertiefen.
 Sie sollen zusammen eine Abfolge ergeben — Aufriss, Beweis, Mechanismus,
-Einwand, Einladung ins Mentoring. Nutze die Muster aus BAUWEISE: mindestens
-eine Story als Gegensatzpaar, eine mit einer konkreten Zahl.
+Einwand, Einladung zu The Strategy. Nutze die Muster aus BAUWEISE:
+mindestens eine Story als Gegensatzpaar.
 Wiederhole den Post nicht — greif einen Gedanken auf und dreh ihn weiter.`;
 
-  const prompt = `${monday ? 'SCHREIBE IM MONDAY-TON — die Regeln dazu stehen unten.\n\n' : ''}${STIMME}
+  const prompt = `${monday ? 'SCHREIBE IM MONDAY-TON — die Regeln stehen direkt darunter.\n\n' : ''}${monday ? MONDAY + '\n' : ''}${STIMME}
+${sprachprobe}
 ${quelle}
 ${auftrag}
 

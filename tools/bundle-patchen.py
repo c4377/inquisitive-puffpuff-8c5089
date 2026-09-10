@@ -5765,6 +5765,58 @@ P.append((
  'e.format==="4:5"&&(g=800,m=1e3);const y=g/400,w=++c.current;const zLauf=f.current.then(async()=>{var b;if(w!==c.current||a.current!==p)return;const zFrei=i?await zSchlitz():()=>{};try{if(w!==c.current||a.current!==p)return;p.setDimensions({width:g,height:m});return await Ca(p,e,g,m,{slideIndex:e.slideNumber?e.slideNumber-1:0,totalSlides:e.totalSlides||(e.slideNumber?2:1),scale:y,globalBrandName:typeof e.brandText=="string"&&e.brandText.trim()?e.brandText:n,typography:(b=l==null?void 0:l.currentBrandConfig)==null?void 0:b.typography})}finally{zFrei()}});',
  'Hoechstens vier Gitterkacheln gleichzeitig, und erst dann die Leinwand gross machen', 1))
 
+# 195  Der Storyschreiber sprach von einem anderen Geschaeft
+#
+#      "Ich find den Storyschreiber richtig gut. Aber ich glaube, er ist
+#      grad nicht kohaerent mit meinem Content und dem Kurs."
+#
+#      Stimmt. In der App lagen FUENF Positionierungen nebeneinander:
+#
+#        write-stories   carinaannaprav.at, erster vierstelliger Verkauf,
+#                        Mentoring + 1:1, Angebotscheck VERBOTEN
+#        build-webinar   dieselbe Marke, aber "keine 20k-Monate" —
+#                        write-stories erlaubte sie ausdruecklich
+#        write-reminder  Kanon v3, "naechster Money-Making Move"
+#        write-pins      limitlessselling.at, Vinted als Kernbeweis —
+#                        write-stories: "Vinted ist RAUS"
+#        storyStrategy   Angebotscheck als CTA, also genau das, was
+#                        write-stories verboten hat
+#
+#      Und in ihrem echten 100-Tage-Plan kommt von alldem fast nichts
+#      vor: 1:1 elfmal, Instagram achtmal, Workshop einmal. Kein
+#      Limitless, kein Vinted, kein Mentoring, kein "vierstellig".
+#
+#      Ihre Entscheidung: Marke carinaannaprav, Einladung auf THE
+#      STRATEGY (Audio-Kurs ab 15.9.), und der Ton soll aus ihrem
+#      eigenen Content kommen.
+#
+#      IM BUNDLE (hier): der Storyschreiber schickt jetzt echte Saetze
+#      aus dem Content-Plan mit. zStimmen() sammelt alle Folientexte,
+#      wirft Platzhalter und Screenshot-Zeilen weg, nimmt nur 20-200
+#      Zeichen und verteilt 24 Stueck gleichmaessig ueber den ganzen
+#      Plan. Der Versatz haengt an der Tagesnummer, damit nicht jeder
+#      Tag dieselbe Probe bekommt.
+#
+#      IN DER FUNKTION (netlify/functions/write-stories.mjs, nicht hier):
+#      Demi-Bermejo-Block raus, doppelter MONDAY-Ton raus, veralteter
+#      Beweiskatalog raus, Angebotscheck-Verbot raus. Dafuer EIN
+#      Angebotsblock ganz oben und die Regel, dass Zahlen, Kundinnen
+#      und Privatleben nur aus dem mitgelieferten Material stammen
+#      duerfen.
+#
+#      GEPRUEFT im Browser: der Aufruf traegt 24 Saetze, 1625 Zeichen,
+#      kein Platzhalter darunter.
+
+P.append((
+ '},OT=({isOpen:e,onClose:t,day:r})=>{',
+ '},zStimmen=(zp,zTag)=>{try{const zA=[];(zp||[]).forEach(zd=>((zd&&zd.slides)||[]).forEach(zs=>{const zt=String(typeof zs=="string"?zs:(zs&&zs.text)||"").replace(/\\s+/g," ").trim();if(!zt||zt.length<20||zt.length>200)return;if(zt.indexOf("[")>=0||/\\bS-[0-9A-Z]{5}\\b/.test(zt)||/screenshot/i.test(zt))return;zA.push(zt)}));if(!zA.length)return[];const zN=Math.min(24,zA.length),zS=Math.max(1,Math.floor(zA.length/zN)),zO=(Number(zTag)||0)%zS,zR=[];for(let zi=0;zi<zN;zi+=1){const zx=zA[(zO+zi*zS)%zA.length];zx&&zR.indexOf(zx)<0&&zR.push(zx)}return zR}catch(zz){return[]}},OT=({isOpen:e,onClose:t,day:r})=>{',
+ 'Sammler fuer echte Saetze aus dem Content-Plan', 1))
+
+P.append((
+ 'count:5,monday:n.mondayTon===!0',
+ 'count:5,monday:n.mondayTon===!0,stimmen:zStimmen(n.contentPlan,r.day)',
+ 'Sprachbeispiele an den Storyschreiber mitschicken', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

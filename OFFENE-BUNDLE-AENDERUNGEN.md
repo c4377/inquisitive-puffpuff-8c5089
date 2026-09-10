@@ -6568,3 +6568,46 @@ Kacheln.
 
 **Geprüft** außerdem: das Gitter zeichnet unverändert (Platte, Text, Foto,
 Screenshot), der Editor öffnet mit 1600 × 2000.
+
+## 195 — Der Storyschreiber sprach von einem anderen Geschäft
+
+*„Ich find den Storyschreiber richtig gut. Aber ich glaube, er ist grad nicht
+kohärent mit meinem Content und dem Kurs."*
+
+Stimmt. In der App lagen **fünf Positionierungen** nebeneinander:
+
+| Datei | Marke | Einladung | Widerspruch |
+|---|---|---|---|
+| `write-stories` | carinaannaprav.at, „erster vierstelliger Verkauf" | Mentoring + 1:1 | Angebotscheck **verboten** |
+| `build-webinar` | dieselbe Marke | Mentoring + 1:1 | „keine 20k-Monate" — Stories erlaubten sie |
+| `write-reminder` | Kanon v3 | — | „nächster Money-Making Move" |
+| `write-pins` | limitlessselling.at | Found Not Followed, 47 € | Vinted als Kernbeweis — Stories: „Vinted ist RAUS" |
+| `storyStrategy.js` | — | **Angebotscheck** | genau das, was Stories verboten haben |
+
+Im echten 100-Tage-Plan kommt von alldem fast nichts vor: **1:1** elfmal,
+Instagram achtmal, Workshop einmal. Kein Limitless, kein Vinted, kein
+Mentoring, kein „vierstellig".
+
+Ihre Entscheidung: Marke **carinaannaprav**, Einladung auf **The Strategy**
+(Audio-Kurs ab 15.9.), Ton **aus dem eigenen Content**.
+
+### Im Bundle
+
+Der Storyschreiber schickt jetzt echte Sätze aus dem Content-Plan mit.
+`zStimmen()` sammelt alle Folientexte, wirft Platzhalter und
+Screenshot-Zeilen weg, nimmt nur 20–200 Zeichen und verteilt **24 Stück
+gleichmäßig über den ganzen Plan**. Der Versatz hängt an der Tagesnummer,
+damit nicht jeder Tag dieselbe Probe bekommt.
+
+### In der Funktion
+
+`netlify/functions/write-stories.mjs` (nicht Teil des Bundles): Demi-Bermejo-
+Block raus, doppelter MONDAY-Ton raus, veralteter Beweiskatalog raus,
+Angebotscheck-Verbot raus. Dafür **ein** Angebotsblock ganz oben — die einzige
+Stelle, an der Preis, Start und Anmeldeweg stehen — und die Regel, dass
+Zahlen, Kundinnen und Privatleben nur aus dem mitgelieferten Material stammen
+dürfen.
+
+**Geprüft** im Browser: der Aufruf trägt 24 Sätze, 1625 Zeichen, kein
+Platzhalter darunter. Prompt-Prüfung: The Strategy drin, Demi/Vinted/
+Angebotscheck/20k/vierstellig raus, MONDAY-Regelblock genau einmal.
