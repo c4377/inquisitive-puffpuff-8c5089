@@ -6791,3 +6791,46 @@ Zeile laufen**: sie gehen über den Kartenzeichner (exit3) und sitzen dort
 ohnehin mittig.
 
 `textImmerMitte:0` schaltet alles zurück.
+
+## 202 — Der Überzug war dreieinhalbmal zu dunkel
+
+*„Das overlay ist extrem dunkel was ist da los bei den rotierenden mit
+schwarz?"*
+
+### Gemessen
+
+Mittlere Helligkeit der Kachel (0–255). Tag 2 und 4 sind die rotierenden,
+Tag 1 und 3 die andere Hälfte:
+
+| Stand | Tag 2 | Tag 4 | | Tag 1 | Tag 3 |
+|---|---|---|---|---|---|
+| karten257 (vorher, schwarzweiß) | 81 | 79 | | 71 | 80 |
+| karten260 (Anthrazit, .42) | 63 | 63 | | 71 | 80 |
+| karten263 (schwarz, .42) | **23** | **23** | | 71 | 80 |
+
+### Der Grund ist die Reihenfolge
+
+Der Überzug liegt **direkt auf dem Foto**. Darüber kommen erst der
+Tiefenverlauf (`tiefeOben` .55, `tiefeUnten` .85) und die Vignette (.6). Die
+**multiplizieren** den Überzug, sie addieren ihn nicht. 42 % Schwarz unten
+heißen deshalb nicht 42 % weniger Licht, sondern knapp drei Viertel.
+
+### Ein Irrweg, der hier stehen bleibt
+
+Die Vermutung war, die Selbstregelung `zAuf` dunkle ein zweites Mal ab, weil
+sie das Quellbild misst und vom Überzug nichts weiß. Gegenprobe mit
+`zAuf *= (1 - bildUeberzug)` und derselben Korrektur an der Vignette:
+**23 → 24.** Wirkungslos, wieder verworfen.
+
+### Stattdessen die Deckkraft gemessen
+
+| `bildUeberzug` | .08 | **.15** | .22 | .30 | .42 |
+|---|---|---|---|---|---|
+| Helligkeit | 64 | **54** | 45 | 35 | 23 |
+
+`.15` gewählt: deutlich dunkler als das Anthrazit, das zu hell war, und weit
+weg von den 23.
+
+„Komplettes Overlay" und „so hell wie der Rest des Feeds" schließen sich aus —
+ein Überzug dunkelt nun einmal ab. Die Tabelle steht hier, damit der nächste
+Wunsch ein Nachschlagen ist und kein Versuch.

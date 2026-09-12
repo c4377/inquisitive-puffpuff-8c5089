@@ -6056,6 +6056,48 @@ P.append((
  'bildTon:"14,13,12",textImmerMitte:1',
  'Die Regel einschalten', 1))
 
+# 202  Der Ueberzug war dreieinhalbmal zu dunkel
+#
+#      "Das overlay ist extrem dunkel was ist da los bei den
+#      rotierenden mit schwarz?"
+#
+#      GEMESSEN, mittlere Helligkeit der Kachel (0-255), Tag 2 und 4
+#      sind die rotierenden, Tag 1 und 3 die andere Haelfte:
+#
+#          karten257 (vorher, schwarzweiss)   81  79  |  71  80
+#          karten260 (Anthrazit .42)          63  63  |  71  80
+#          karten263 (schwarz .42)            23  23  |  71  80
+#
+#      Der Grund ist die REIHENFOLGE. Der Ueberzug liegt direkt auf dem
+#      Foto - darueber kommen erst der Tiefenverlauf (tiefeOben .55,
+#      tiefeUnten .85) und die Vignette (.6). Die multiplizieren den
+#      Ueberzug, sie addieren ihn nicht. 42% Schwarz unten heissen
+#      deshalb nicht 42% weniger Licht, sondern knapp drei Viertel.
+#
+#      EIN IRRWEG, der hier nicht steht: die Vermutung, die
+#      Selbstregelung zAuf dunkle ein zweites Mal ab, weil sie das
+#      Quellbild misst und den Ueberzug nicht kennt. Gegenprobe mit
+#      zAuf *= (1 - bildUeberzug) und derselben Korrektur an der
+#      Vignette: 23 -> 24. Wirkungslos, wieder verworfen.
+#
+#      Stattdessen die Deckkraft gemessen:
+#
+#          bildUeberzug   .08  .15  .22  .30  .42
+#          Helligkeit      64   54   45   35   23
+#
+#      .15 gewaehlt: deutlich dunkler als das Anthrazit, das ihr zu
+#      hell war, und weit weg von den 23.
+#
+#      "Komplettes Overlay" und "so hell wie der Rest des Feeds"
+#      schliessen sich aus - ein Ueberzug dunkelt nun einmal ab. Die
+#      Tabelle steht hier, damit der naechste Wunsch ein Nachschlagen
+#      ist und kein Versuch.
+
+P.append((
+ 'bildUeberzug:.42',
+ 'bildUeberzug:.15',
+ 'Ueberzug von 42% auf 15% - gemessen, nicht geschaetzt', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
