@@ -5860,67 +5860,6 @@ P.append((
  'folgeFuss:.86,folgeMitte:.58',
  'Die Hoehe dafuer als eigener Regler', 1))
 
-# 197  Kaffee statt Schwarz — nur auf dem Deckblatt
-#
-#      "Nur fuers Cover mach bitte statt soviel schwarz weiss ein
-#      overlay in coffee und das Bild dahinter extrem scharf damit es
-#      super hervortritt."
-#
-#      DER TON. Der Schleier ueber dem Foto nimmt seine Farbe aus zTon.
-#      Und zTon hatte eine Abkuerzung:
-#
-#          if (zSat === -1 && BS_KACHEL.tonNeutral) return tonNeutral;
-#
-#      Bei Schwarzweiss also immer "13,13,13" — praktisch Schwarz.
-#      Davor steht jetzt eine Zeile fuer das Deckblatt: deckblattTon,
-#      "111,78,55", also #6F4E37 Coffee. Schwarzweiss bleibt, der
-#      Schleier ist warm — zusammen ein Kaffee-Duoton.
-#
-#      Die Deckkraft regelt sich selbst nach: zAuf wird so lange
-#      erhoeht, bis der Untergrund unter der Schrift dunkel genug ist
-#      (textGrundZiel). Ein hellerer Ton heisst nicht, dass die
-#      Headline verschwindet.
-#
-#      DIE SCHAERFE. Eine Faltung (Convolute) mit
-#      [0,-s,0, -s,1+4s,-s, 0,-s,0], s = deckblattSchaerfe = 1.6.
-#      Dazu deckblattKontrast .18.
-#
-#      VORHER VERKLEINERN, und das ist der Punkt: fabric schickt
-#      Bilder nur bis fabric.textureSize (2048) ueber WebGL. Alles
-#      darueber faltet es in JavaScript, und ihre Handyfotos sind
-#      groesser. Deshalb wird das Bild fuer das Deckblatt zuerst auf
-#      2048 gebracht und me.scaleX/scaleY um denselben Faktor
-#      angehoben. 2048 liegt ueber dem Export (1600x2000), es geht also
-#      keine sichtbare Qualitaet verloren.
-#
-#      GEMESSEN an einem Foto mit 2600x3250:
-#
-#          Kachel            Kantenstaerke   Spanne
-#          Deckblatt 255         13,5          234
-#          Deckblatt 256         17,6          252   +30%
-#          Folie 2   255/256     13,3          250   unveraendert
-#
-#      Und die Lage des Bildes bleibt exakt: ein heller Balken im Foto
-#      sitzt vorher wie nachher auf .2051 der Kachelhoehe. Das
-#      Austauschen des Elements verschiebt also nichts.
-#
-#      Drei Regler: deckblattTon, deckblattSchaerfe, deckblattKontrast.
-
-P.append((
- 'const zTon=(()=>{try{if(zSat===-1&&BS_KACHEL.tonNeutral)return BS_KACHEL.tonNeutral;',
- 'const zTon=(()=>{try{if(t.folienRolle==="deckblatt"&&BS_KACHEL.deckblattTon)return BS_KACHEL.deckblattTon;if(zSat===-1&&BS_KACHEL.tonNeutral)return BS_KACHEL.tonNeutral;',
- 'Deckblatt bekommt einen eigenen Schleierton', 1))
-
-P.append((
- 'const zK=Number(BS_KACHEL.bildKontrast)||0,zH=Number(BS_KACHEL.bildHelligkeit)||0,zFl=[];',
- 'const zK=Number(BS_KACHEL.bildKontrast)||0,zH=Number(BS_KACHEL.bildHelligkeit)||0,zFl=[];const zDeck=t.folienRolle==="deckblatt",zSch=zDeck?(Number(BS_KACHEL.deckblattSchaerfe)||0):0,zDk=zDeck?(Number(BS_KACHEL.deckblattKontrast)||0):0;if(zSch>0){try{const zMax=Number(Pe.fabric.textureSize)||2048;const zEl=me.getElement&&me.getElement(),zGr=Math.max((zEl&&zEl.width)||0,(zEl&&zEl.height)||0);if(zEl&&zGr>zMax){const zf=zMax/zGr,zc=document.createElement("canvas");zc.width=Math.max(1,Math.round(zEl.width*zf));zc.height=Math.max(1,Math.round(zEl.height*zf));zc.getContext("2d").drawImage(zEl,0,0,zc.width,zc.height);const zsx=me.scaleX,zsy=me.scaleY,zl=me.left,zt=me.top;me.setElement(zc);me.set({originX:"center",originY:"center",left:zl,top:zt,scaleX:zsx/zf,scaleY:zsy/zf,selectable:!1})}}catch(zz){}if(Pe.fabric.Image.filters.Convolute)zFl.push(new Pe.fabric.Image.filters.Convolute({matrix:[0,-zSch,0,-zSch,1+4*zSch,-zSch,0,-zSch,0]}))}if(zDk&&Pe.fabric.Image.filters.Contrast)zFl.push(new Pe.fabric.Image.filters.Contrast({contrast:zDk}));',
- 'Deckblattfoto schaerfen, vorher auf Texturgroesse bringen', 1))
-
-P.append((
- 'bildTon:"14,13,12"',
- 'bildTon:"14,13,12",deckblattTon:"111,78,55",deckblattSchaerfe:1.6,deckblattKontrast:.18',
- 'Kaffee, Schaerfe und Kontrast als Werte', 1))
-
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
