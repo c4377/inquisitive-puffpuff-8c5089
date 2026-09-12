@@ -6646,3 +6646,32 @@ Text rutscht also nicht aus der Kachel.
 | Folie 2 ohne Foto | .468 | .468 | unverändert |
 
 `folgeMitte` ist ein eigener Regler: höher heißt tiefer.
+
+## 197 — Das Storymenü war tot, wenn keine Marke gewählt war
+
+*„Ich brauche außerdem das Storymenü funktionierend."*
+
+Der Story Planner zeigte nur **„Bitte wähle zuerst eine Brand im Dashboard"**.
+Posts läuft ohne gewählte Marke, Stories nicht — deshalb fällt es nie auf, man
+kommt nur nie hinein.
+
+Der Wächter ist **nicht** überflüssig. Nimmt man ihn weg, stürzt die Seite ab:
+
+```
+TypeError: Cannot read properties of undefined (reading 'typography')
+```
+
+Gemessen mit einer Probefassung ohne Wächter.
+
+Also nicht den Wächter entfernen, sondern **die Marke besorgen**: ein Effekt
+nimmt die erste aus `brandConfigurations`, sobald die Daten geladen sind und
+keine gewählt ist — genau das, was das Dashboard tut. Die App liefert
+`curated_carina` mit, es ist also immer eine da.
+
+Der Effekt steht direkt vor dem `return`, nach allen anderen Hooks. In `KX`
+gibt es keinen vorgezogenen Ausstieg auf Komponentenebene, die Hook-Reihenfolge
+bleibt also stabil.
+
+**Geprüft:** der Planer zeichnet jetzt seine ganze Leiste — Mit Text, Nur Foto,
+Style Shifter, Bulk Text Input, Strategie, + Slide, Edit Sequence, Alle in
+Fotos, Bild generieren — und die Vorschaukachel in Playfair auf Schwarz.

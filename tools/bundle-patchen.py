@@ -5860,6 +5860,40 @@ P.append((
  'folgeFuss:.86,folgeMitte:.58',
  'Die Hoehe dafuer als eigener Regler', 1))
 
+# 197  Das Storymenue war tot, wenn keine Marke gewaehlt war
+#
+#      "Ich brauche ausserdem das Storymenue funktionierend."
+#
+#      Der Story Planner zeigte nur "Bitte waehle zuerst eine Brand im
+#      Dashboard". Posts laeuft ohne gewaehlte Marke, Stories nicht -
+#      deshalb faellt es nie auf, man kommt nur nie hinein.
+#
+#      Der Waechter ist NICHT ueberfluessig: nimmt man ihn weg, stuerzt
+#      die Seite ab mit
+#          TypeError: Cannot read properties of undefined
+#                     (reading 'typography')
+#      Gemessen mit einer Probefassung ohne Waechter.
+#
+#      Also nicht den Waechter entfernen, sondern die Marke besorgen:
+#      ein Effekt nimmt die erste aus brandConfigurations, sobald die
+#      Daten geladen sind und keine gewaehlt ist - genau das, was das
+#      Dashboard tut. Die App liefert curated_carina mit, es ist also
+#      immer eine da.
+#
+#      Der Effekt steht direkt vor dem return, nach allen anderen
+#      Hooks. In KX gibt es keinen vorgezogenen Ausstieg auf
+#      Komponentenebene, die Hook-Reihenfolge bleibt also stabil.
+#
+#      GEPRUEFT: der Planer zeichnet jetzt seine ganze Leiste -
+#      Mit Text, Nur Foto, Style Shifter, Bulk Text Input, Strategie,
+#      + Slide, Edit Sequence, Alle in Fotos, Bild generieren - und die
+#      Vorschaukachel in Playfair auf Schwarz.
+
+P.append((
+ 'zSSetzLauft(!1)};return e.currentBrandConfig?v.jsxs("div",{className:"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-32",children:[',
+ 'zSSetzLauft(!1)};ce.useEffect(()=>{try{if(!r||e.currentBrandConfig)return;const zL=(e.brandConfigurations||[])[0];zL&&t({currentBrandConfig:zL})}catch(zz){}},[r,e.currentBrandConfig,e.brandConfigurations]);return e.currentBrandConfig?v.jsxs("div",{className:"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-32",children:[',
+ 'Story Planner waehlt die Marke selbst, wenn keine gewaehlt ist', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
