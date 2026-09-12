@@ -6834,3 +6834,41 @@ weg von den 23.
 „Komplettes Overlay" und „so hell wie der Rest des Feeds" schließen sich aus —
 ein Überzug dunkelt nun einmal ab. Die Tabelle steht hier, damit der nächste
 Wunsch ein Nachschlagen ist und kein Versuch.
+
+## 203 — Auf den Überzugskacheln kein Tiefenverlauf und keine Vignette
+
+*„Dann nimm auf diesen (!) den Tiefenverlauf und die Vignette weg."*
+
+Ein Merker `zUeberAn`, ganz oben in `Ca` gesetzt, sobald der Überzug gezeichnet
+wurde. Tiefenverlauf und Vignette fragen ihn ab und zeichnen dann nicht. Beide
+sitzen an ganz verschiedenen Stellen in `Ca` — deshalb ein Merker und keine
+Bedingung vor Ort: `zSat` ist an der Verlaufsstelle nicht in Reichweite.
+
+### Korrektur zu 202
+
+Dort steht, Verlauf und Vignette würden den Überzug multiplizieren und deshalb
+sei er so dunkel. **Das ist falsch.** Jetzt gegengemessen:
+
+| `bildUeberzug` | mit Verlauf + Vignette | ohne |
+|---|---|---|
+| .15 | 54 | **56** |
+| .42 / .38 | 23 | 28 |
+
+Zwei Punkte Unterschied. Die beiden Ebenen tragen fast nichts zur Dunkelheit
+bei — die Steilheit kommt woanders her und ist weiterhin **nicht erklärt**. Die
+gemessene Kurve gilt, die Erklärung dazu nicht.
+
+Was sich wirklich ändert, ist der **Charakter**: die Kachel ist jetzt
+gleichmäßig statt oben und unten abgedunkelt und in den Ecken abgeschattet.
+
+### Neue Kurve ohne die beiden Ebenen
+
+| `bildUeberzug` | .15 | .28 | .38 | .48 |
+|---|---|---|---|---|
+| Helligkeit | **56** | 39 | 28 | 20 |
+
+Bei `.15` geblieben — derselbe Helligkeitswert wie vorher.
+
+**Achtung:** der Tiefenverlauf hat auch die Schrift lesbar gemacht. Auf diesen
+Kacheln steht die Headline jetzt auf dem blanken Foto plus 15 % Schwarz. Bei
+einem hellen Foto kann das knapp werden.

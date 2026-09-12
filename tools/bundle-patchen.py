@@ -6098,6 +6098,66 @@ P.append((
  'bildUeberzug:.15',
  'Ueberzug von 42% auf 15% - gemessen, nicht geschaetzt', 1))
 
+# 203  Auf den Ueberzugskacheln kein Tiefenverlauf und keine Vignette
+#
+#      "Dann nimm auf diesen (!) den Tiefenverlauf und die Vignette
+#      weg."
+#
+#      Ein Merker zUeberAn, ganz oben in Ca gesetzt, sobald der
+#      Ueberzug gezeichnet wurde. Der Tiefenverlauf und die Vignette
+#      fragen ihn ab und zeichnen dann nicht. Beide sind an zwei ganz
+#      verschiedenen Stellen in Ca, deshalb ein Merker und keine
+#      Bedingung vor Ort - zSat ist an der Verlaufsstelle nicht in
+#      Reichweite.
+#
+#      KORREKTUR ZU 202. Dort steht, der Verlauf und die Vignette
+#      wuerden den Ueberzug multiplizieren und deshalb sei er so
+#      dunkel. Das ist FALSCH, jetzt gegengemessen:
+#
+#          bildUeberzug .15   mit Verlauf+Vignette  54
+#                             ohne                  56
+#          bildUeberzug .42   mit                   23
+#                       .38   ohne                  28
+#
+#      Zwei Punkte Unterschied. Die beiden Ebenen tragen fast nichts
+#      zur Dunkelheit bei - die Steilheit kommt woanders her und ist
+#      weiter nicht erklaert. Die gemessene Kurve gilt trotzdem, die
+#      Erklaerung dazu nicht.
+#
+#      Was sich WIRKLICH aendert, ist der Charakter: die Kachel ist
+#      jetzt gleichmaessig statt oben und unten abgedunkelt und in den
+#      Ecken abgeschattet.
+#
+#      Neue Kurve ohne die beiden Ebenen:
+#          bildUeberzug   .15  .28  .38  .48
+#          Helligkeit      56   39   28   20
+#
+#      Bei .15 geblieben, also derselbe Helligkeitswert wie vorher.
+#
+#      ACHTUNG: der Tiefenverlauf hat auch die Schrift lesbar gemacht.
+#      Auf diesen Kacheln steht die Headline jetzt auf dem blanken Foto
+#      plus 15% Schwarz. Bei einem hellen Foto kann das knapp werden.
+
+P.append((
+ 'Ca=async(e,t,r,n,i={})=>{let zGrundTon="";',
+ 'Ca=async(e,t,r,n,i={})=>{let zGrundTon="";let zUeberAn=!1;',
+ 'Merker: auf dieser Kachel liegt der Ueberzug', 1))
+
+P.append((
+ 'globalCompositeOperation:zM,selectable:!1,evented:!1}))})();',
+ 'globalCompositeOperation:zM,selectable:!1,evented:!1})),zUeberAn=!0})();',
+ 'Den Merker setzen, sobald der Ueberzug gezeichnet ist', 1))
+
+P.append((
+ 'const zVi=(Number(BS_KACHEL.bildVignette)||0)*zVig;if(zVi>0){',
+ 'const zVi=(Number(BS_KACHEL.bildVignette)||0)*zVig;if(zVi>0&&!zUeberAn){',
+ 'Keine Vignette unter dem Ueberzug', 1))
+
+P.append((
+ 'if($e&&new RegExp(BS_KACHEL.tiefeSchriften||"Playfair").test(String(Qe))&&t.tiefenOverlay!==!1){',
+ 'if($e&&!zUeberAn&&new RegExp(BS_KACHEL.tiefeSchriften||"Playfair").test(String(Qe))&&t.tiefenOverlay!==!1){',
+ 'Kein Tiefenverlauf unter dem Ueberzug', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
