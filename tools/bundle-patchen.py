@@ -5981,6 +5981,33 @@ P.append((
  'tonNeutral:"56,62,66"',
  'Der Schleier derselben Kacheln zieht mit', 1))
 
+# 200  Doch wieder schwarz statt Anthrazit
+#
+#      "Und mach lieber wieder schwarz statt Anthrazit oder zumindest
+#      duenkler."
+#
+#      ueberzugTon von "56,62,66" auf "0,0,0". tonNeutral zurueck auf
+#      seinen alten Wert "13,13,13" - damit liegt auf diesen Kacheln
+#      genau der Schleier, den der Feed vorher hatte.
+#
+#      Was von 198 bleibt: die Rotation entscheidet weiter, welche
+#      Kachel welchen Look bekommt, der frueher schwarzweisse Slot ist
+#      jetzt FARBE unter einem schwarzen Ueberzug. Deckkraft weiter
+#      bildUeberzug = .42.
+#
+#      GEPRUEFT an denselben sechs Tagen: 2, 4 und 6 dunkel und
+#      neutral, kein Blaustich mehr, 1, 3 und 5 unveraendert farbig.
+
+P.append((
+ 'ueberzugTon:"56,62,66"',
+ 'ueberzugTon:"0,0,0"',
+ 'Ueberzug wieder schwarz statt Anthrazit', 1))
+
+P.append((
+ 'tonNeutral:"56,62,66"',
+ 'tonNeutral:"13,13,13"',
+ 'Und der Schleier zurueck auf den alten neutralen Wert', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

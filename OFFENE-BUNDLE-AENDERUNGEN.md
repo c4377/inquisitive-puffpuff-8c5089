@@ -6732,3 +6732,22 @@ während der Überzug kühl ist.
 
 **Geprüft** an denselben sechs Tagen: 2, 4 und 6 jetzt kühl grau statt braun,
 1, 3 und 5 unverändert farbig.
+
+## 200 — Doch wieder schwarz statt Anthrazit
+
+*„Und mach lieber wieder schwarz statt Anthrazit oder zumindest dünkler."*
+
+| | 199 | 200 |
+|---|---|---|
+| `ueberzugTon` | `"56,62,66"` | `"0,0,0"` |
+| `tonNeutral` | `"56,62,66"` | `"13,13,13"` |
+
+`tonNeutral` geht zurück auf seinen alten Wert — damit liegt auf diesen Kacheln
+genau der Schleier, den der Feed vorher hatte.
+
+Was von **198** bleibt: die Rotation entscheidet weiter, welche Kachel welchen
+Look bekommt. Der früher schwarzweiße Slot ist jetzt **Farbe unter einem
+schwarzen Überzug**. Deckkraft weiter `bildUeberzug` = .42.
+
+**Geprüft** an denselben sechs Tagen: 2, 4 und 6 dunkel und neutral, kein
+Blaustich mehr, 1, 3 und 5 unverändert farbig.
