@@ -6646,3 +6646,53 @@ Text rutscht also nicht aus der Kachel.
 | Folie 2 ohne Foto | .468 | .468 | unverändert |
 
 `folgeMitte` ist ein eigener Regler: höher heißt tiefer.
+
+## 197 — Kaffee statt Schwarz, nur auf dem Deckblatt
+
+*„Nur fürs Cover mach bitte statt soviel schwarz weiß ein overlay in coffee und
+das Bild dahinter extrem scharf damit es super hervortritt."*
+
+### Der Ton
+
+Der Schleier über dem Foto nimmt seine Farbe aus `zTon`. Und `zTon` hatte eine
+Abkürzung:
+
+```js
+if (zSat === -1 && BS_KACHEL.tonNeutral) return tonNeutral;   // "13,13,13"
+```
+
+Bei Schwarzweiß also **immer praktisch Schwarz**. Davor steht jetzt eine Zeile
+für das Deckblatt: `deckblattTon` = `"111,78,55"`, also **#6F4E37 Coffee**.
+Schwarzweiß bleibt, der Schleier ist warm — zusammen ein Kaffee-Duoton.
+
+Die Deckkraft regelt sich selbst nach: `zAuf` wird so lange erhöht, bis der
+Untergrund unter der Schrift dunkel genug ist (`textGrundZiel`). Ein hellerer
+Ton heißt also nicht, dass die Headline verschwindet.
+
+### Die Schärfe
+
+Eine Faltung mit `[0,−s,0, −s,1+4s,−s, 0,−s,0]`, `s = deckblattSchaerfe = 1.6`,
+dazu `deckblattKontrast` .18.
+
+**Vorher verkleinern**, und das ist der eigentliche Punkt: fabric schickt
+Bilder nur bis `fabric.textureSize` (2048) über WebGL. Alles darüber faltet es
+in JavaScript — und deine Handyfotos sind größer. Deshalb wird das Bild fürs
+Deckblatt zuerst auf 2048 gebracht und `scaleX`/`scaleY` um denselben Faktor
+angehoben. 2048 liegt über dem Export (1600 × 2000), es geht also keine
+sichtbare Qualität verloren.
+
+### Gemessen
+
+An einem Foto mit 2600 × 3250:
+
+| Kachel | Kantenstärke | Spanne | |
+|---|---|---|---|
+| Deckblatt karten255 | 13,5 | 234 | |
+| **Deckblatt karten256** | **17,6** | **252** | +30 % |
+| Folie 2 (255 und 256) | 13,3 | 250 | unverändert |
+
+Und die Lage des Bildes bleibt exakt: ein heller Balken im Foto sitzt vorher
+wie nachher auf `.2051` der Kachelhöhe. Das Austauschen des Elements
+verschiebt also nichts.
+
+Drei Regler: `deckblattTon`, `deckblattSchaerfe`, `deckblattKontrast`.
