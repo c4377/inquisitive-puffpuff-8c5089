@@ -6872,3 +6872,18 @@ Bei `.15` geblieben — derselbe Helligkeitswert wie vorher.
 **Achtung:** der Tiefenverlauf hat auch die Schrift lesbar gemacht. Auf diesen
 Kacheln steht die Headline jetzt auf dem blanken Foto plus 15 % Schwarz. Bei
 einem hellen Foto kann das knapp werden.
+
+## 204 — Ein Stück dunkler
+
+*„Bissi dünkler."*
+
+`bildUeberzug` von `.15` auf `.21`. Gemessen: **56 → 47**.
+
+Der nächste Stützpunkt der Kurve wäre `.28` mit 39 gewesen — das ist ein
+Sprung, kein Stück, deshalb dazwischen.
+
+Kurve ohne Tiefenverlauf und Vignette (aus **203**), jetzt mit dem neuen Punkt:
+
+| `bildUeberzug` | .15 | **.21** | .28 | .38 | .48 |
+|---|---|---|---|---|---|
+| Helligkeit | 56 | **47** | 39 | 28 | 20 |

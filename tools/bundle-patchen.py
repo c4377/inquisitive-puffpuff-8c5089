@@ -6158,6 +6158,24 @@ P.append((
  'if($e&&!zUeberAn&&new RegExp(BS_KACHEL.tiefeSchriften||"Playfair").test(String(Qe))&&t.tiefenOverlay!==!1){',
  'Kein Tiefenverlauf unter dem Ueberzug', 1))
 
+# 204  Ein Stueck dunkler
+#
+#      "Bissi duenkler."
+#
+#      bildUeberzug von .15 auf .21. Gemessen: 56 -> 47. Der naechste
+#      Stuetzpunkt der Kurve waere .28 mit 39 gewesen - das ist ein
+#      Sprung, kein Stueck, deshalb dazwischen.
+#
+#      Kurve ohne Tiefenverlauf und Vignette (aus 203), jetzt mit dem
+#      neuen Punkt:
+#          bildUeberzug   .15  .21  .28  .38  .48
+#          Helligkeit      56   47   39   28   20
+
+P.append((
+ 'bildUeberzug:.15',
+ 'bildUeberzug:.21',
+ 'Ein Stueck dunkler: 15% auf 21%', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
