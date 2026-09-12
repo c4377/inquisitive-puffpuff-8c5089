@@ -6887,3 +6887,29 @@ Kurve ohne Tiefenverlauf und Vignette (aus **203**), jetzt mit dem neuen Punkt:
 | `bildUeberzug` | .15 | **.21** | .28 | .38 | .48 |
 |---|---|---|---|---|---|
 | Helligkeit | 56 | **47** | 39 | 28 | 20 |
+
+## 205 — Zurück zu Schwarzweiß
+
+*„Geh lieber zurück zum schwarz weiß danke."*
+
+**Zwei Werte, kein Code angefasst:**
+
+| | vorher | jetzt |
+|---|---|---|
+| `bildUeberzug` | `.21` | `0` — der Überzug zeichnet nicht mehr |
+| `swBleibt` | — | `1` — der Graustich zeichnet wieder |
+
+Damit fällt die ganze Kette **198–204** von selbst weg: ohne Überzug bleibt
+`zUeberAn` falsch, also kommen Tiefenverlauf und Vignette aus **203** von
+allein zurück. `tonNeutral` steht seit **200** wieder auf `"13,13,13"`, der
+Rotationsslot ist also exakt der alte.
+
+**Gemessen:** Tag 2 = 80, Tag 4 = 79. Referenz karten257, vor der ganzen
+Übung: 81 und 79. Wiederhergestellt.
+
+Die Mechanik bleibt im Bundle liegen und ist über diese zwei Werte jederzeit
+wieder einschaltbar. Die gemessenen Kurven stehen in **202**, **203** und
+**204**.
+
+**Was bleibt:** **197** (Story Planner öffnet) und **201** (Text sitzt mittig)
+sind unberührt — die gehörten nicht zu dieser Kette.

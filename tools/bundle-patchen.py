@@ -6176,6 +6176,35 @@ P.append((
  'bildUeberzug:.21',
  'Ein Stueck dunkler: 15% auf 21%', 1))
 
+# 205  Zurueck zu schwarzweiss
+#
+#      "Geh lieber zurueck zum schwarz weiss danke."
+#
+#      ZWEI WERTE, kein Code angefasst:
+#          bildUeberzug: .21 -> 0    der Ueberzug zeichnet nicht mehr
+#          swBleibt: 1               der Graustich-Rect zeichnet wieder
+#
+#      Damit faellt die ganze Kette 198-204 von selbst weg: ohne
+#      Ueberzug bleibt zUeberAn falsch, also kommen Tiefenverlauf und
+#      Vignette aus 203 von allein zurueck. tonNeutral steht seit 200
+#      wieder auf "13,13,13", der Rotationsslot ist also exakt der
+#      alte.
+#
+#      GEMESSEN: Tag 2 = 80, Tag 4 = 79. Referenz karten257, vor der
+#      ganzen Uebung: 81 und 79. Wiederhergestellt.
+#
+#      Die Mechanik bleibt im Bundle liegen und ist ueber diese zwei
+#      Werte jederzeit wieder einschaltbar. Die gemessenen Kurven
+#      stehen in 202, 203 und 204.
+#
+#      WAS BLEIBT: 197 (Story Planner oeffnet) und 201 (Text sitzt
+#      mittig) sind unberuehrt - die gehoerten nicht zu dieser Kette.
+
+P.append((
+ 'bildUeberzug:.21',
+ 'bildUeberzug:0,swBleibt:1',
+ 'Ueberzug aus, Entsaettigung wieder an - zurueck zu schwarzweiss', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
