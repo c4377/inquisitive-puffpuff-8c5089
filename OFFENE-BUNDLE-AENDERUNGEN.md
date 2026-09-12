@@ -6713,3 +6713,22 @@ Drei Regler: `bildUeberzug` (.42), `ueberzugTon` (`"62,44,32"`, #3E2C20),
 
 **Geprüft** an sechs Tagen mit demselben Foto: Tag 2, 4 und 6 tragen den
 Kaffee, Tag 1, 3 und 5 sind unverändert farbig. Keine Kachel mehr schwarzweiß.
+
+## 199 — Anthrazit statt Kaffee
+
+*„Ok machs doch Anthrazit statt coffee."*
+
+Zwei Werte, sonst nichts. Der Überzug aus **198** bleibt, wo er ist — auf
+denselben Kacheln, mit derselben Deckkraft, in derselben Rotation. Nur die
+Farbe wechselt:
+
+| | vorher | nachher |
+|---|---|---|
+| `ueberzugTon` | `"62,44,32"` (#3E2C20) | `"56,62,66"` (#383E42, RAL 7016) |
+| `tonNeutral` | `"62,44,32"` | `"56,62,66"` |
+
+`tonNeutral` zieht mit, damit der Schleier derselben Kacheln nicht warm bleibt,
+während der Überzug kühl ist.
+
+**Geprüft** an denselben sechs Tagen: 2, 4 und 6 jetzt kühl grau statt braun,
+1, 3 und 5 unverändert farbig.

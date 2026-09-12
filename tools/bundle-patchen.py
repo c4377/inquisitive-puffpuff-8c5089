@@ -5956,6 +5956,31 @@ P.append((
  '(()=>{const zU=Number(BS_KACHEL.bildUeberzug)||0;if(!(zU>0)||!t.background||!(zSat<=-.99))return;const zM=BS_MISCHBAR?(BS_KACHEL.ueberzugModus||"source-over"):"source-over";e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:`rgba(${BS_KACHEL.ueberzugTon||zTon||"0,0,0"},${zU})`,globalCompositeOperation:zM,selectable:!1,evented:!1}))})();const ur=new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:`rgba(${zTon||"0,0,0"},${Et*zAuf})`,selectable:!1});',
  'Kaffee-Ueberzug, nur wo die Reihe bisher schwarzweiss gesagt hat', 1))
 
+# 199  Anthrazit statt Kaffee
+#
+#      "Ok machs doch Anthrazit statt coffee."
+#
+#      Zwei Werte, sonst nichts. Der Ueberzug aus 198 bleibt wo er ist -
+#      auf denselben Kacheln, mit derselben Deckkraft, in derselben
+#      Rotation. Nur die Farbe wechselt von "62,44,32" (#3E2C20) auf
+#      "56,62,66" (#383E42, RAL 7016 Anthrazitgrau).
+#
+#      tonNeutral zieht mit, damit der Schleier derselben Kacheln nicht
+#      warm bleibt, waehrend der Ueberzug kuehl ist.
+#
+#      GEPRUEFT an denselben sechs Tagen: 2, 4 und 6 jetzt kuehl grau
+#      statt braun, 1, 3 und 5 unveraendert farbig.
+
+P.append((
+ 'ueberzugTon:"62,44,32"',
+ 'ueberzugTon:"56,62,66"',
+ 'Ueberzug in Anthrazit statt Kaffee (RAL 7016, #383E42)', 1))
+
+P.append((
+ 'tonNeutral:"62,44,32"',
+ 'tonNeutral:"56,62,66"',
+ 'Der Schleier derselben Kacheln zieht mit', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
