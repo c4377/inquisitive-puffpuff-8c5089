@@ -6329,6 +6329,24 @@ P.append((
  'return e.currentBrandConfig?v.jsxs("div",{className:"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-32",children:[v.jsx(cG,{isOpen:zSsAuf,onClose:()=>zSetzSsAuf(!1),placeholders:zSsPlatz(),onApply:zSsLegen}),',
  'Derselbe Dialog wie im Content-Plan, mit den Story-Folien gefuettert', 1))
 
+# 208  Strategie und "+ Slide" raus
+#
+#      "Button Strategie und + slide loeschen."
+#
+#      Nur die beiden Knoepfe aus der Leiste. Der Strategie-Bereich und
+#      die Funktion hinter "+ Slide" bleiben im Bundle liegen - sie
+#      sind nur nicht mehr erreichbar. Das haelt den Weg zurueck offen
+#      und spart einen Eingriff in die Zustandslogik.
+#
+#      GEPRUEFT: die Leiste zeigt jetzt
+#          Bulk Text Input, Screenshots, Edit Sequence, Alle in Fotos
+#      keine Seitenfehler.
+
+P.append((
+ 'v.jsxs("button",{onClick:()=>m(!g),className:`text-sm px-3 py-1 rounded-lg font-bold transition-colors flex items-center ${g?"bg-amber-500 text-white":"bg-amber-50 text-amber-700 hover:bg-amber-100"}`,children:[v.jsx(ke,{icon:DX,className:"mr-1"})," Strategie"]}),v.jsxs("button",{onClick:D,className:"text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-lg font-bold hover:bg-gray-200 transition-colors flex items-center",children:[v.jsx(ke,{icon:HX,className:"mr-1"})," + Slide"]}),',
+ '',
+ 'Die Knoepfe Strategie und + Slide aus der Story-Leiste nehmen', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

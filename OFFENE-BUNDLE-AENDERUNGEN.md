@@ -7003,3 +7003,20 @@ Höhe des Textblocks als Anteil der Kachel:
 Der kurze Satz isoliert die reine Schriftgröße: `.60` ergibt −44 %, also genau
 die genannten 40 %. `storyAnteil` greift **nur** bei `format "9:16"`, der Feed
 bleibt unberührt.
+
+## 208 — Strategie und „+ Slide" raus
+
+*„Button Strategie und + slide löschen."*
+
+Nur die beiden Knöpfe aus der Leiste. Der Strategie-Bereich und die Funktion
+hinter „+ Slide" bleiben im Bundle liegen — sie sind nur nicht mehr
+erreichbar. Das hält den Weg zurück offen und spart einen Eingriff in die
+Zustandslogik.
+
+**Geprüft**, die Leiste zeigt jetzt:
+
+```
+Bulk Text Input · Screenshots · Edit Sequence · Alle in Fotos
+```
+
+Keine Seitenfehler.
