@@ -6913,3 +6913,47 @@ wieder einschaltbar. Die gemessenen Kurven stehen in **202**, **203** und
 
 **Was bleibt:** **197** (Story Planner öffnet) und **201** (Text sitzt mittig)
 sind unberührt — die gehörten nicht zu dieser Kette.
+
+## 206 — Story-Folien sahen aus wie aus einer anderen App
+
+*„Also bitte genauso wie die Feed Posts und auch die Text Skalierung gleich und
+kein Hintergrund."* — dazu ein Bild: weiße Kästchen hinter jeder Textzeile,
+Schrift viel zu groß, quer über die ganze Kachel.
+
+### Ursache
+
+Der Story Planner gibt dem Zeichner nur Farben und Schriften der Marke mit:
+
+```jsx
+<Kl data={{...E, fontFamily, accentFontFamily, color,
+           backgroundColor, accentColor, secondaryColor}} />
+```
+
+Kein `textBands`, keine `folienRolle`, kein `format`. Der Zeichner fällt damit
+in das **alte Layout** — dieselbe Falle wie bei `bandStyle:"none"`. Die weißen
+Kästchen sind die Zeilenplatten aus diesem Layout.
+
+### Die Ergänzung
+
+`zStoryFeed()` setzt genau die vier Eigenschaften, die eine Feed-Kachel
+ausmachen:
+
+| | |
+|---|---|
+| `format` | `"9:16"` |
+| `textBands` | `true` |
+| `folienRolle` | erste Folie `deckblatt`, Rest `folge` — damit Deckblatt- und Folgeschrift greifen |
+| `_tag` | damit Sättigung und Vignette rotieren wie im Feed |
+
+Alles andere fällt im Zeichner auf dieselben Vorgaben wie beim Feed zurück:
+`textStil "platte"`, `kachelSchrift "marke"`, `karte "dunkel"`.
+
+Die weißen Kästchen verschwinden dabei von selbst: liegt ein Foto darunter,
+setzt der Zeichner `tt.platten = false`.
+
+**An zwei Stellen**, sonst sieht der Export anders aus als das Gitter: die
+Vorschaukachel und „Alle in Fotos".
+
+**Geprüft** mit den fünf Folien aus der Story-Strategie: vorher winzige Schrift
+unten auf schwarzem Grund, jetzt dunkle Karte, Playfair in Feed-Größe, Handle
+mit Monogramm.

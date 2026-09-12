@@ -6205,6 +6205,59 @@ P.append((
  'bildUeberzug:0,swBleibt:1',
  'Ueberzug aus, Entsaettigung wieder an - zurueck zu schwarzweiss', 1))
 
+# 206  Story-Folien sahen aus wie aus einer anderen App
+#
+#      "Also bitte genauso wie die Feed Posts und auch die Text
+#      Skalierung gleich und kein Hintergrund."
+#      Dazu ein Bild: weisse Kaestchen hinter jeder Textzeile, Schrift
+#      viel zu gross, quer ueber die ganze Kachel.
+#
+#      URSACHE: der Story Planner gibt dem Zeichner nur Farben und
+#      Schriften der Marke mit:
+#
+#          <Kl data={{...E, fontFamily, accentFontFamily, color,
+#                     backgroundColor, accentColor, secondaryColor}} />
+#
+#      Kein textBands, keine folienRolle, kein format. Der Zeichner
+#      faellt damit in das alte Layout - dieselbe Falle wie bei
+#      bandStyle:"none". Die weissen Kaestchen sind die Zeilenplatten
+#      aus diesem Layout.
+#
+#      zStoryFeed() ergaenzt genau die vier Eigenschaften, die eine
+#      Feed-Kachel ausmachen:
+#          format "9:16", textBands true,
+#          folienRolle (erste Folie deckblatt, Rest folge, damit die
+#            Deckblatt- und Folgeschrift greifen),
+#          _tag (damit Saettigung und Vignette rotieren wie im Feed)
+#      Alles andere faellt im Zeichner auf dieselben Vorgaben wie beim
+#      Feed zurueck: textStil "platte", kachelSchrift "marke", karte
+#      "dunkel".
+#
+#      Die weissen Kaestchen verschwinden dabei von selbst: liegt ein
+#      Foto darunter, setzt der Zeichner tt.platten=!1.
+#
+#      AN ZWEI STELLEN, sonst sieht der Export anders aus als das
+#      Gitter: die Vorschaukachel und "Alle in Fotos".
+#
+#      GEPRUEFT mit den fuenf Folien aus der Story-Strategie: vorher
+#      winzige Schrift unten auf schwarzem Grund, jetzt dunkle Karte,
+#      Playfair in Feed-Groesse, Handle mit Monogramm.
+
+P.append((
+ ',KX=()=>{',
+ ',zStoryFeed=(zs,zi)=>{try{return{...zs,format:"9:16",textBands:!0,folienRolle:(zs&&zs.folienRolle)||(zi===0?"deckblatt":"folge"),_tag:typeof (zs&&zs._tag)=="number"?zs._tag:(Number(zi)||0)+1}}catch(zz){return zs}},KX=()=>{',
+ 'Story-Folien bekommen dieselben Eigenschaften wie Feed-Kacheln', 1))
+
+P.append((
+ 'v.jsx(Kl,{data:{...E,fontFamily:e.currentBrandConfig.typography.fontFamily,',
+ 'v.jsx(Kl,{data:{...zStoryFeed(E,H),fontFamily:e.currentBrandConfig.typography.fontFamily,',
+ 'Im Gitter', 1))
+
+P.append((
+ 'await Ca(W,{...pe,visualElements:pe.visualElements||[]},ye,ue,{slideIndex:fe,',
+ 'await Ca(W,{...zStoryFeed(pe,fe),visualElements:pe.visualElements||[]},ye,ue,{slideIndex:fe,',
+ 'Und beim Export, damit beide gleich aussehen', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
