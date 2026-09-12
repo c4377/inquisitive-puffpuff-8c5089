@@ -5894,6 +5894,74 @@ P.append((
  'zSSetzLauft(!1)};ce.useEffect(()=>{try{if(!r||e.currentBrandConfig)return;const zL=(e.brandConfigurations||[])[0];zL&&t({currentBrandConfig:zL})}catch(zz){}},[r,e.currentBrandConfig,e.brandConfigurations]);return e.currentBrandConfig?v.jsxs("div",{className:"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-32",children:[',
  'Story Planner waehlt die Marke selbst, wenn keine gewaehlt ist', 1))
 
+# 198  Kaffee-Ueberzug statt Schwarzweiss
+#
+#      "Statt den schwarz weiss Posts (die 50% rotierenden) Farben
+#      lassen aber ein komplettes overlay drueber geben in einem
+#      dunklen Coffee braun und das Bild dahinter muss so gut graded
+#      sein dass man es scharf sehen kann."
+#
+#      DIE ROTATION. saettigungReihe:"-1|0.1" mit saettigungWechsel:1
+#      hat je nach Tagesnummer entweder -1 (voll entsaettigt) oder 0.1
+#      genommen - daher die haelfte schwarzweiss. Jetzt "0": Farbe,
+#      immer.
+#
+#      DER UEBERZUG als EIGENE Ebene. Nicht ueber die vorhandenen
+#      Schleier, denn die haengen alle an zAuf *= zSw, und zSw faellt
+#      ohne gesetzten Regler auf schwarzGrund .2 zurueck. Ein Kaffee
+#      mit 20% waere unsichtbar und wuerde verschwinden, sobald sie den
+#      Schwarz-Regler bewegt.
+#
+#      Drei Regler: bildUeberzug (.42), ueberzugTon ("62,44,32",
+#      #3E2C20) und ueberzugModus. Der Modus geht ueber
+#      globalCompositeOperation, abgesichert mit BS_MISCHBAR - koennte
+#      der Browser keine Mischmodi, faellt er auf source-over zurueck.
+#
+#      bildFarbNeutral:0 IST KEIN SCHOENHEITSFEHLER. Der Farbmisch-
+#      Block prueft "bildFarbNeutral!==0 && !(zSat<=-.99)" und lief
+#      bisher NUR NICHT, weil entsaettigt wurde. Mit Farbe waere er ab
+#      sofort aktiv und wuerde pro Kachel ein ZWEITES volles Bild
+#      zeichnen - genau die Speicherlast aus 194, die den Tab bei Tag
+#      40 weggeworfen hat.
+#
+#      AUSGEWAEHLT aus drei Fassungen an derselben Kachel:
+#        K1  multiply, helles Kaffee .50  - Farben bleiben deutlich
+#        K2  source-over, dunkles Kaffee .42  <- ihre Wahl
+#        K3  color, Duoton - alles Kaffee, Struktur am schaerfsten
+#
+#      Der Ueberzug liegt auf ALLEN Fotokacheln, Deckblatt wie
+#      Folienseite.
+
+P.append((
+ 'bildSaettigung:-1,',
+ 'bildSaettigung:0,',
+ 'Farbe bleibt: keine Entsaettigung mehr', 1))
+
+P.append((
+ 'saettigungReihe:"-1|0.1"',
+ 'saettigungReihe:"0"',
+ 'Kein Wechsel mehr zwischen schwarzweiss und Farbe', 1))
+
+P.append((
+ 'bildTon:"14,13,12"',
+ 'bildTon:"62,44,32",bildFarbNeutral:0,bildUeberzug:.42,ueberzugTon:"62,44,32",ueberzugModus:"source-over"',
+ 'Kaffee als Ton, Farbmischung aus, Ueberzug angelegt', 1))
+
+P.append((
+ 'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20"',
+ 'tonReihe:"62,44,32"',
+ 'Ein Ton fuer alle Kacheln statt vier', 1))
+
+P.append((
+ 'tonNeutral:"13,13,13"',
+ 'tonNeutral:"62,44,32"',
+ 'Auch der neutrale Ton ist Kaffee', 1))
+
+P.append((
+ 'const ur=new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:`rgba(${zTon||"0,0,0"},${Et*zAuf})`,selectable:!1});',
+ '(()=>{const zU=Number(BS_KACHEL.bildUeberzug)||0;if(!(zU>0)||!t.background)return;const zM=BS_MISCHBAR?(BS_KACHEL.ueberzugModus||"source-over"):"source-over";e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:`rgba(${BS_KACHEL.ueberzugTon||zTon||"0,0,0"},${zU})`,globalCompositeOperation:zM,selectable:!1,evented:!1}))})();const ur=new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:`rgba(${zTon||"0,0,0"},${Et*zAuf})`,selectable:!1});',
+ 'Der Kaffee-Ueberzug als eigene Ebene, unabhaengig vom Schwarz-Regler', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
