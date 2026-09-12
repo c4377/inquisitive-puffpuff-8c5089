@@ -6676,43 +6676,40 @@ bleibt also stabil.
 Style Shifter, Bulk Text Input, Strategie, + Slide, Edit Sequence, Alle in
 Fotos, Bild generieren — und die Vorschaukachel in Playfair auf Schwarz.
 
-## 198 — Kaffee-Überzug statt Schwarzweiß
+## 198 — Kaffee statt Schwarzweiß, aber nur dort, wo Schwarzweiß war
 
 *„Statt den schwarz weiß Posts (die 50 % rotierenden) Farben lassen aber ein
-komplettes overlay drüber geben in einem dunklen Coffee braun und das Bild
-dahinter muss so gut graded sein dass man es scharf sehen kann."*
+komplettes overlay drüber geben in einem dunklen Coffee braun."*
+Und danach: *„Die Rotation sollte aber bleiben. Du solltest nur die anpassen,
+die schwarz weiß waren."*
 
-### Die Rotation
+**Der erste Anlauf war falsch** (karten258, zurückgenommen): dort ist
+`saettigungReihe` auf `"0"` gegangen und der Überzug lag auf **allen**
+Fotokacheln. Damit war die Rotation weg.
 
-`saettigungReihe:"-1|0.1"` mit `saettigungWechsel:1` hat je nach Tagesnummer
-entweder `-1` (voll entsättigt) oder `0.1` genommen — daher die Hälfte
-schwarzweiß. Jetzt `"0"`: Farbe, immer.
+Jetzt bleibt die Reihe `"-1|0.1"` wörtlich stehen. Sie entscheidet weiter,
+welche Kachel welchen Look bekommt — nur heißt der Slot `-1` nicht mehr
+schwarzweiß, sondern **Farbe mit Kaffee-Überzug**:
 
-### Der Überzug als eigene Ebene
+- Der Graustich-Rect (`globalCompositeOperation: "saturation"`) zeichnet nicht
+  mehr. Er hängt jetzt an `swBleibt === 1`, das nirgends gesetzt ist — so
+  bleibt der Weg zurück offen.
+- Der Überzug-Rect zeichnet **nur** bei `zSat <= -.99`, also genau auf
+  denselben Kacheln.
 
-**Nicht** über die vorhandenen Schleier. Die hängen alle an `zAuf *= zSw`, und
-`zSw` fällt ohne gesetzten Regler auf `schwarzGrund` = .2 zurück. Ein Kaffee
-mit 20 % wäre unsichtbar — und würde verschwinden, sobald der Schwarz-Regler
-bewegt wird.
+### Warum `zSat` selbst unangetastet bleibt
 
-Drei Regler: `bildUeberzug` (.42), `ueberzugTon` (`"62,44,32"`, #3E2C20) und
-`ueberzugModus`. Der Modus läuft über `globalCompositeOperation`, abgesichert
-mit `BS_MISCHBAR` — könnte der Browser keine Mischmodi, fällt er auf
-`source-over` zurück.
+Der Farbmisch-Block prüft `bildFarbNeutral!==0 && !(zSat<=-.99)`. Würde man
+`zSat` auf 0 setzen, spränge er auf diesen Kacheln an und zeichnete ein
+**zweites volles Bild** — die Speicherlast aus **194**. Mit `zSat = -1` bleibt
+er aus, so wie bisher.
 
-### `bildFarbNeutral:0` ist kein Schönheitsfehler
+`tonNeutral` geht von `"13,13,13"` auf Kaffee. Dieser Wert greift ohnehin nur
+bei `zSat === -1`, also genau auf den betroffenen Kacheln. `tonReihe` bleibt
+unangetastet — die andere Hälfte ändert sich nicht.
 
-Der Farbmisch-Block prüft `bildFarbNeutral!==0 && !(zSat<=-.99)` und lief
-bisher **nur nicht, weil entsättigt wurde**. Mit Farbe wäre er ab sofort aktiv
-und würde pro Kachel ein **zweites volles Bild** zeichnen — genau die
-Speicherlast aus **194**, die den Tab bei Tag 40 weggeworfen hat.
+Drei Regler: `bildUeberzug` (.42), `ueberzugTon` (`"62,44,32"`, #3E2C20),
+`ueberzugModus`.
 
-### Ausgewählt aus drei Fassungen
-
-| | Überzug | |
-|---|---|---|
-| K1 | multiply, helles Kaffee .50 | Farben bleiben deutlich |
-| **K2** | **source-over, dunkles Kaffee .42** | **ihre Wahl** |
-| K3 | color, Duoton | alles Kaffee, Struktur am schärfsten |
-
-Der Überzug liegt auf **allen** Fotokacheln, Deckblatt wie Folienseite.
+**Geprüft** an sechs Tagen mit demselben Foto: Tag 2, 4 und 6 tragen den
+Kaffee, Tag 1, 3 und 5 sind unverändert farbig. Keine Kachel mehr schwarzweiß.
