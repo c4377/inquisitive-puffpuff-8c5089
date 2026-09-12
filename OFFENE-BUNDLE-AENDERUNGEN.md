@@ -6611,3 +6611,38 @@ dürfen.
 **Geprüft** im Browser: der Aufruf trägt 24 Sätze, 1625 Zeichen, kein
 Platzhalter darunter. Prompt-Prüfung: The Strategy drin, Demi/Vinted/
 Angebotscheck/20k/vierstellig raus, MONDAY-Regelblock genau einmal.
+
+## 196 — Ab Folie 2 klebte der Text am Fuß
+
+*„Setz bei den Carousels mit Foto den Text mehr in die Mitte als nur unten ab
+Slide 2."*
+
+Schuld war **eine Zeile**. Jede Folienseite — alles außer dem Deckblatt —
+wurde am Fuß ausgerichtet:
+
+```js
+De = n * BS_KACHEL.folgeFuss - ae + Et/2      // folgeFuss = .86
+```
+
+Der Textblock hängt also mit seiner **Unterkante** auf 86 % der Höhe, egal wie
+kurz der Text ist. Bei zwei Zeilen sitzt alles ganz unten.
+
+**Nicht über die Lagen-Namen gelöst**, obwohl es naheliegt: `BS_DUNKEL` trägt
+`lagenReihe:"unten"`, und der Filter davor wirft jede Mittellage wieder auf
+„unten" zurück. Ein `folgeLage:"mitte"` wäre wirkungslos verpufft. Deshalb
+direkt an die Positionszeile.
+
+Jetzt wird die Folienseite **mit Foto** um `folgeMitte` (.58) **zentriert**,
+die Folienseite **ohne Foto** behält den Fuß, das **Deckblatt** bleibt
+unberührt. Die Klammer danach (`textUnten` .86) greift weiter — ein langer
+Text rutscht also nicht aus der Kachel.
+
+**Gemessen** an der senkrechten Mitte des Textblocks:
+
+| Kachel | karten254 | karten255 | |
+|---|---|---|---|
+| Deckblatt mit Foto | .725 | .725 | unverändert |
+| **Folie 2 mit Foto, kurz** | **.732** | **.573** | in die Mitte |
+| Folie 2 ohne Foto | .468 | .468 | unverändert |
+
+`folgeMitte` ist ein eigener Regler: höher heißt tiefer.

@@ -5817,6 +5817,49 @@ P.append((
  'count:5,monday:n.mondayTon===!0,stimmen:zStimmen(n.contentPlan,r.day)',
  'Sprachbeispiele an den Storyschreiber mitschicken', 1))
 
+# 196  Ab Folie 2 klebte der Text am Fuss
+#
+#      "Setz bei den Carousels mit Foto den Text mehr in die Mitte als
+#      nur unten ab Slide 2."
+#
+#      Schuld war EINE Zeile. Jede Folienseite (alles ausser dem
+#      Deckblatt) wurde am Fuss ausgerichtet:
+#
+#          De = n*BS_KACHEL.folgeFuss - ae + Et/2        // folgeFuss .86
+#
+#      Der Block haengt also mit seiner UNTERKANTE auf 86% der Hoehe,
+#      egal wie kurz der Text ist. Bei zwei Zeilen sitzt alles ganz
+#      unten.
+#
+#      NICHT ueber die Lagen-Namen geloest, obwohl es naheliegt:
+#      BS_DUNKEL traegt lagenReihe:"unten", und der Filter davor wirft
+#      jede Mittellage wieder auf "unten" zurueck. Ein folgeLage:"mitte"
+#      waere wirkungslos verpufft. Deshalb direkt an die Positionszeile.
+#
+#      Jetzt: Folienseite MIT Foto wird um folgeMitte (.58) ZENTRIERT,
+#      Folienseite OHNE Foto behaelt den Fuss, das Deckblatt bleibt
+#      unberuehrt. Die Klammer danach (textUnten .86) greift weiter —
+#      ein langer Text rutscht also nicht aus der Kachel.
+#
+#      GEMESSEN an der senkrechten Mitte des Textblocks:
+#
+#          Kachel                    254     255
+#          Deckblatt mit Foto        .725    .725   unveraendert
+#          Folie 2 mit Foto, kurz    .732    .573   in die Mitte
+#          Folie 2 ohne Foto         .468    .468   unveraendert
+#
+#      folgeMitte ist ein eigener Regler: hoeher heisst tiefer.
+
+P.append((
+ 'const zFF=Number(BS_KACHEL.folgeFuss)||0;zFF>0&&t.folienRolle&&t.folienRolle!=="deckblatt"&&(De=n*zFF-ae+Et/2);',
+ 'const zFF=Number(BS_KACHEL.folgeFuss)||0;zFF>0&&t.folienRolle&&t.folienRolle!=="deckblatt"&&(De=$e?n*(Number(BS_KACHEL.folgeMitte)||.58)-ae/2+Et/2:n*zFF-ae+Et/2);',
+ 'Folienseiten mit Foto mittig setzen statt an den Fuss', 1))
+
+P.append((
+ 'folgeFuss:.86',
+ 'folgeFuss:.86,folgeMitte:.58',
+ 'Die Hoehe dafuer als eigener Regler', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
