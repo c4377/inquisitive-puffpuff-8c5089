@@ -6751,3 +6751,43 @@ schwarzen Überzug**. Deckkraft weiter `bildUeberzug` = .42.
 
 **Geprüft** an denselben sechs Tagen: 2, 4 und 6 dunkel und neutral, kein
 Blaustich mehr, 1, 3 und 5 unverändert farbig.
+
+## 201 — Harte Regel: der Text sitzt mittig
+
+*„Baue eine harte Regel das Text immer mittig ist nicht soweit unten."*
+
+**Eine Zeile**, hinter der ganzen Lagen-Rechnung. Sie überschreibt alles, was
+vorher entschieden wurde:
+
+```js
+BS_KACHEL.textImmerMitte === 1 && (De = n*(BS_KACHEL.textMitte||.5) - ae/2 + Et/2)
+```
+
+Damit sind auf einen Schlag außer Kraft:
+
+- `lagenReihe:"unten"` und der Filter, der jede Mittellage zurückgeworfen hat
+- `textLageUnten` .80
+- `folgeLage:"unten"`
+- `folgeFuss` .86 — der Fuß ab Folie 2
+- der Lagenwechsel nach Textprüfsumme
+
+Die **Klammern danach bleiben** absichtlich stehen: `textUnten` .86 fängt einen
+zu langen Block, die obere Klammer `n*.1+SR` hält ihn unter dem Schild. Ein
+langer Text rutscht also weiter nicht aus der Kachel.
+
+### Gemessen
+
+Senkrechte Mitte des Textblocks:
+
+| Kachel | karten262 | karten263 | |
+|---|---|---|---|
+| **Deckblatt mit Foto** | **.721** | **.571** | das war es |
+| Folie mit Foto | .574 | .574 | schon aus 196 |
+| Folie ohne Foto, kurz | .467 | .467 | unverändert |
+| Folie ohne Foto, lang | .468 | .468 | unverändert |
+
+Die beiden Textkacheln sind unverändert, weil sie **gar nicht durch diese
+Zeile laufen**: sie gehen über den Kartenzeichner (exit3) und sitzen dort
+ohnehin mittig.
+
+`textImmerMitte:0` schaltet alles zurück.

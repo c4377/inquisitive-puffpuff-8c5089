@@ -6008,6 +6008,54 @@ P.append((
  'tonNeutral:"13,13,13"',
  'Und der Schleier zurueck auf den alten neutralen Wert', 1))
 
+# 201  Harte Regel: der Text sitzt mittig
+#
+#      "Baue eine harte Regel das Text immer mittig ist nicht soweit
+#      unten."
+#
+#      EINE Zeile, hinter der ganzen Lagen-Rechnung. Sie ueberschreibt
+#      alles, was vorher entschieden wurde:
+#
+#          BS_KACHEL.textImmerMitte===1 &&
+#            (De = n*(BS_KACHEL.textMitte||.5) - ae/2 + Et/2)
+#
+#      Damit sind auf einen Schlag ausser Kraft:
+#        - lagenReihe "unten" und der Filter, der jede Mittellage
+#          zurueckgeworfen hat
+#        - textLageUnten .80
+#        - folgeLage "unten"
+#        - folgeFuss .86, der Fuss ab Folie 2
+#        - der Lagenwechsel nach Textpruefsumme
+#
+#      Die Klammern DANACH bleiben absichtlich stehen: textUnten .86
+#      faengt einen zu langen Block, die obere Klammer n*.1+SR haelt
+#      ihn unter dem Schild. Ein langer Text rutscht also weiter nicht
+#      aus der Kachel.
+#
+#      GEMESSEN an der senkrechten Mitte des Textblocks:
+#
+#          Kachel                    262     263
+#          Deckblatt mit Foto        .721    .571   <- das war es
+#          Folie mit Foto            .574    .574   schon aus 196
+#          Folie ohne Foto, kurz     .467    .467   unveraendert
+#          Folie ohne Foto, lang     .468    .468   unveraendert
+#
+#      Die beiden Textkacheln sind unveraendert, weil sie gar nicht
+#      durch diese Zeile laufen: sie gehen ueber den Kartenzeichner
+#      (exit3) und sitzen dort ohnehin mittig.
+#
+#      textImmerMitte=0 schaltet alles zurueck.
+
+P.append((
+ 'const zFF=Number(BS_KACHEL.folgeFuss)||0;zFF>0&&t.folienRolle&&t.folienRolle!=="deckblatt"&&(De=$e?n*(Number(BS_KACHEL.folgeMitte)||.58)-ae/2+Et/2:n*zFF-ae+Et/2);',
+ 'const zFF=Number(BS_KACHEL.folgeFuss)||0;zFF>0&&t.folienRolle&&t.folienRolle!=="deckblatt"&&(De=$e?n*(Number(BS_KACHEL.folgeMitte)||.58)-ae/2+Et/2:n*zFF-ae+Et/2);BS_KACHEL.textImmerMitte===1&&(De=n*(Number(BS_KACHEL.textMitte)||.5)-ae/2+Et/2);',
+ 'Harte Regel: der Textblock sitzt mittig, egal was Lage und Fuss sagen', 1))
+
+P.append((
+ 'bildTon:"14,13,12"',
+ 'bildTon:"14,13,12",textImmerMitte:1',
+ 'Die Regel einschalten', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
