@@ -6957,3 +6957,49 @@ Vorschaukachel und „Alle in Fotos".
 **Geprüft** mit den fünf Folien aus der Story-Strategie: vorher winzige Schrift
 unten auf schwarzem Grund, jetzt dunkle Karte, Playfair in Feed-Größe, Handle
 mit Monogramm.
+
+## 207 — Screenshot-Knopf im Story Planner, und 9:16 bekommt eigene Schriftgrößen
+
+*„Ich hab keinen Button um den Screenshot zu setzen und die Skalierung der
+Schrift ist 40 % zu groß."*
+
+### Der Knopf
+
+Der Dialog `cG` nimmt alles über Props:
+
+```js
+cG({isOpen, onClose, placeholders, onApply})
+```
+
+Er lädt die Bibliothek selbst aus Supabase, gleicht selbst ab und kann OCR
+selbst nachlesen. Für die Stories fehlten also nur **zwei Funktionen**:
+`zSsPlatz()` sammelt die Platzhalter aus den Story-Folien ein (id `s_<index>`,
+matchText aus `q$`), `zSsLegen()` schreibt die Treffer zurück. **Kein neues
+OCR, keine zweite Bibliothek** — dieselben Kennungen wie im Content-Plan.
+
+Die Hook-Zeile entsteht dabei wie in **191**: aus dem eigenen Text der Folie,
+Klammer und Kennung weggeworfen.
+
+### Die Schrift — zwei Hebel, weil einer nicht reicht
+
+1. **`qe`, die Startgröße.** Wirkt auf **kurze** Texte — die lösen die
+   Schrumpfschleife nie aus und behalten den Startwert.
+2. **`Je`, das Höhenbudget der Schrumpfschleife.** Wirkt auf **lange** Texte —
+   dort bestimmt nicht der Startwert die Größe, sondern wann die Schleife
+   aufhört.
+
+Erst nur (1) gebaut — **wirkungslos**, gemessen an einem langen Satz:
+identische Kachel bei .71, .55 und .45.
+
+### Gemessen
+
+Höhe des Textblocks als Anteil der Kachel:
+
+| | aus | `storyAnteil` .60 | |
+|---|---|---|---|
+| langer Satz | .393 (7 Zeilen) | .133 (3 Zeilen) | |
+| **kurzer Satz** | **.054** | **.030** | **−44 %** |
+
+Der kurze Satz isoliert die reine Schriftgröße: `.60` ergibt −44 %, also genau
+die genannten 40 %. `storyAnteil` greift **nur** bei `format "9:16"`, der Feed
+bleibt unberührt.

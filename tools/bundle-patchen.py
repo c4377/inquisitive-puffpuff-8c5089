@@ -6258,6 +6258,77 @@ P.append((
  'await Ca(W,{...zStoryFeed(pe,fe),visualElements:pe.visualElements||[]},ye,ue,{slideIndex:fe,',
  'Und beim Export, damit beide gleich aussehen', 1))
 
+# 207  Screenshot-Knopf im Story Planner, und 9:16 bekommt eigene
+#      Schriftgroessen
+#
+#      "Ich hab keinen Button um den Screenshot zu setzen und die
+#      Skalierung der Schrift ist 40% zu gross."
+#
+#      DER KNOPF. Der Dialog cG nimmt alles ueber Props:
+#          cG({isOpen, onClose, placeholders, onApply})
+#      Er laedt die Bibliothek selbst aus Supabase, gleicht selbst ab
+#      und kann OCR selbst nachlesen. Fuer die Stories fehlten also nur
+#      zwei Funktionen: zSsPlatz() sammelt die Platzhalter aus den
+#      Story-Folien ein (id "s_<index>", matchText aus q$), zSsLegen()
+#      schreibt die Treffer zurueck. Kein neues OCR, keine zweite
+#      Bibliothek - dieselben Kennungen wie im Content-Plan.
+#
+#      Die Hook-Zeile entsteht dabei wie in 191: aus dem eigenen Text
+#      der Folie, Klammer und Kennung weggeworfen.
+#
+#      DIE SCHRIFT. Zwei Hebel, weil einer nicht reicht:
+#
+#      (1) qe, die Startgroesse. Wirkt auf KURZE Texte - die loesen die
+#          Schrumpfschleife nie aus und behalten den Startwert.
+#      (2) Je, das Hoehenbudget der Schrumpfschleife. Wirkt auf LANGE
+#          Texte - dort bestimmt nicht der Startwert die Groesse,
+#          sondern wann die Schleife aufhoert.
+#
+#      Erst nur (1) gebaut - wirkungslos, gemessen an einem langen
+#      Satz: identische Kachel bei .71, .55 und .45. Der Grund steht
+#      oben.
+#
+#      GEMESSEN, Hoehe des Textblocks als Anteil der Kachel:
+#
+#          langer Satz    aus    .393 (7 Zeilen)
+#                         .60    .133 (3 Zeilen)
+#          kurzer Satz    aus    .054
+#                         .60    .030      -44%
+#
+#      Der kurze Satz isoliert die reine Schriftgroesse: .60 ergibt
+#      -44%, also genau ihre 40%. storyAnteil greift nur bei
+#      format "9:16", der Feed bleibt unberuehrt.
+
+P.append((
+ 'bildTon:"14,13,12"',
+ 'bildTon:"14,13,12",storyAnteil:.60',
+ 'Schriftgroesse fuer 9:16 als eigener Wert', 1))
+
+P.append((
+ 'let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?(t.folienRolle==="deckblatt"?BS_KACHEL.deckblattGroesse:(BS_KACHEL.fotoGroesse||PV)):OV);',
+ 'let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?(t.folienRolle==="deckblatt"?BS_KACHEL.deckblattGroesse:(BS_KACHEL.fotoGroesse||PV)):OV);t.format==="9:16"&&BS_KACHEL.storyAnteil&&(qe=Math.max(c(12),Math.round(qe*Number(BS_KACHEL.storyAnteil))));',
+ 'Startgroesse auf Story-Kacheln kleiner - das wirkt auf kurze Texte', 1))
+
+P.append((
+ 'const Je=n*(jr?(BS_KACHEL.textHoeheZaehler||.48):(BS_KACHEL.textHoehe||.74))-SR;',
+ 'const Je=n*(jr?(BS_KACHEL.textHoeheZaehler||.48):(BS_KACHEL.textHoehe||.74))*(t.format==="9:16"&&BS_KACHEL.storyAnteil?Number(BS_KACHEL.storyAnteil):1)-SR;',
+ 'Und das Hoehenbudget - das wirkt auf lange Texte', 1))
+
+P.append((
+ 'zSSetzLauft(!1)};ce.useEffect(()=>{try{if(!r||e.currentBrandConfig)return;',
+ 'zSSetzLauft(!1)};const[zSsAuf,zSetzSsAuf]=ce.useState(!1);const zSsPlatz=()=>{const zr=[];(i||[]).forEach((zx,zi)=>{const zm=q$(zx&&zx.text);zm&&zr.push({id:"s_"+zi,matchText:zm})});return zr};const zSsLegen=async zm=>{s(zl=>zl.map((zx,zi)=>{const zu=zm&&zm["s_"+zi];if(!zu)return zx;const zHk=(()=>{try{const zt=String(zx.text||"").split(/\\r?\\n/).map(zz=>String(zz).replace(/\\[[^\\]]*\\]/g," ").replace(/\\bS-[0-9A-Z]{5}\\b/ig," ").replace(/^\\s*screenshot\\s*[:\\u2013\\u2014-]?\\s*/i," ").replace(/\\s+/g," ").trim()).filter(zz=>/[a-zA-Z\\u00C0-\\u00FF]{2}/.test(zz)).join(" ").trim();return zt&&!q$(zt)?zt:""}catch(zz){return""}})();return{...zx,overlayImage:zu,overlayIsScreenshot:!0,overlayImageScale:.8,overlayImageRounded:!1,overlayImageX:0,overlayImageY:0,overlayHook:zHk,text:"",_wasScreenshot:!0}}))};ce.useEffect(()=>{try{if(!r||e.currentBrandConfig)return;',
+ 'Platzhalter einsammeln und Treffer in die Story-Folien schreiben', 1))
+
+P.append((
+ 'children:[v.jsx(ke,{icon:HX,className:"mr-1"})," + Slide"]})]}),',
+ 'children:[v.jsx(ke,{icon:HX,className:"mr-1"})," + Slide"]}),v.jsxs("button",{onClick:()=>zSetzSsAuf(!0),className:"text-sm bg-emerald-50 text-emerald-700 px-3 py-1 rounded-lg font-bold hover:bg-emerald-100 transition-colors flex items-center",children:[v.jsx(ke,{icon:RX,className:"mr-1"})," Screenshots"]})]}),',
+ 'Der Knopf neben "+ Slide"', 1))
+
+P.append((
+ 'return e.currentBrandConfig?v.jsxs("div",{className:"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-32",children:[',
+ 'return e.currentBrandConfig?v.jsxs("div",{className:"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-32",children:[v.jsx(cG,{isOpen:zSsAuf,onClose:()=>zSetzSsAuf(!1),placeholders:zSsPlatz(),onApply:zSsLegen}),',
+ 'Derselbe Dialog wie im Content-Plan, mit den Story-Folien gefuettert', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
