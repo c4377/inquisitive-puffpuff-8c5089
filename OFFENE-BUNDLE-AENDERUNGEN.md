@@ -7020,3 +7020,41 @@ Bulk Text Input · Screenshots · Edit Sequence · Alle in Fotos
 ```
 
 Keine Seitenfehler.
+
+## 209 — „Große Headline" hat nichts getan
+
+*„Same Branding wie der Feed nur prominenter."*
+
+Für die Pinnable Posts braucht es **kein neues Layout**. Der Schalter dafür
+stand schon im Kachelmenü — **„Große Headline"**, mit An/Aus-Anzeige. Er hat
+auf den Feed-Kacheln aber nichts getan: `bigHeadline` wird nur im **alten**
+Layout gelesen —
+
+```js
+ae = t.bigHeadline === true ? Math.round(ur * 1.35) : ur
+```
+
+— und der Feed-Zeichner kennt ihn nicht. Gemessen an zwei gleichen Kacheln,
+eine mit Schalter an: **beide .235**.
+
+Jetzt greift er im Feed-Zeichner, über dieselben zwei Hebel wie bei den
+Stories in **207**: Startgröße **und** Höhenbudget. Nur der Startwert hätte
+wieder nichts gebracht — die Schrumpfschleife hätte ihn zurückgeholt.
+
+Dazu: der Tagesschalter setzt `bigHeadline` jetzt auf **alle** Folien des
+Tages, nicht nur auf die erste. Ein Pinnable ist ein ganzes Karussell, nicht
+nur sein Deckblatt. Bisheriges Verhalten geht dabei nicht verloren — es hat ja
+nichts bewirkt.
+
+### Gemessen
+
+Höhe des Textblocks:
+
+| | aus | groß |
+|---|---|---|
+| karten270 | .235 | .235 — kein Unterschied |
+| **karten271** | .235 | **.564** |
+
+`pinnAnteil` 1.35, derselbe Faktor, den das alte Layout benutzt hat. Schrift,
+Farben, Name und Kachelgrund bleiben unverändert — **dasselbe Branding, nur
+lauter**.

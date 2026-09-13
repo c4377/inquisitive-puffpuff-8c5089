@@ -6347,6 +6347,58 @@ P.append((
  '',
  'Die Knoepfe Strategie und + Slide aus der Story-Leiste nehmen', 1))
 
+# 209  "Grosse Headline" hat nichts getan
+#
+#      "Same Branding wie der Feed nur prominenter."
+#
+#      Fuer die Pinnable Posts braucht es kein neues Layout. Der
+#      Schalter dafuer stand schon im Kachelmenue - "Grosse Headline",
+#      mit An/Aus-Anzeige. Er hat auf den Feed-Kacheln aber NICHTS
+#      getan: bigHeadline wird nur im alten Layout gelesen
+#
+#          ae = t.bigHeadline===!0 ? Math.round(ur*1.35) : ur
+#
+#      und der Feed-Zeichner kennt ihn nicht. Gemessen an zwei
+#      gleichen Kacheln, eine mit Schalter an: beide .235.
+#
+#      Jetzt greift er im Feed-Zeichner, ueber dieselben zwei Hebel wie
+#      bei den Stories in 207 - Startgroesse UND Hoehenbudget. Nur der
+#      Startwert haette wieder nichts gebracht, die Schrumpfschleife
+#      haette ihn zurueckgeholt.
+#
+#      Dazu: der Tagesschalter setzt bigHeadline jetzt auf ALLE Folien
+#      des Tages, nicht nur auf die erste. Ein Pinnable ist ein ganzes
+#      Karussell, nicht nur sein Deckblatt. Bisheriges Verhalten geht
+#      dabei nicht verloren - es hat ja nichts bewirkt.
+#
+#      GEMESSEN, Hoehe des Textblocks:
+#          karten270  aus .235   gross .235   (kein Unterschied)
+#          karten271  aus .235   gross .564
+#
+#      pinnAnteil 1.35, derselbe Faktor, den das alte Layout benutzt
+#      hat. Schrift, Farben, Name, Kachelgrund bleiben unveraendert -
+#      es ist dasselbe Branding, nur lauter.
+
+P.append((
+ 'bildTon:"14,13,12"',
+ 'bildTon:"14,13,12",pinnAnteil:1.35',
+ 'Wie stark "Gross" vergroessert', 1))
+
+P.append((
+ 'let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?(t.folienRolle==="deckblatt"?BS_KACHEL.deckblattGroesse:(BS_KACHEL.fotoGroesse||PV)):OV);t.format==="9:16"&&BS_KACHEL.storyAnteil&&(qe=Math.max(c(12),Math.round(qe*Number(BS_KACHEL.storyAnteil))));',
+ 'let qe=t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):c($e?(t.folienRolle==="deckblatt"?BS_KACHEL.deckblattGroesse:(BS_KACHEL.fotoGroesse||PV)):OV);t.format==="9:16"&&BS_KACHEL.storyAnteil&&(qe=Math.max(c(12),Math.round(qe*Number(BS_KACHEL.storyAnteil))));t.bigHeadline===!0&&BS_KACHEL.pinnAnteil&&(qe=Math.round(qe*Number(BS_KACHEL.pinnAnteil)));',
+ '"Grosse Headline" wirkt jetzt auch im Feed-Zeichner', 1))
+
+P.append((
+ 'const Je=n*(jr?(BS_KACHEL.textHoeheZaehler||.48):(BS_KACHEL.textHoehe||.74))*(t.format==="9:16"&&BS_KACHEL.storyAnteil?Number(BS_KACHEL.storyAnteil):1)-SR;',
+ 'const Je=n*(jr?(BS_KACHEL.textHoeheZaehler||.48):(BS_KACHEL.textHoehe||.74))*(t.format==="9:16"&&BS_KACHEL.storyAnteil?Number(BS_KACHEL.storyAnteil):1)*(t.bigHeadline===!0&&BS_KACHEL.pinnAnteil?Number(BS_KACHEL.pinnAnteil):1)-SR;',
+ 'Und das Hoehenbudget waechst mit, sonst schrumpft die Schleife es zurueck', 1))
+
+P.append((
+ 'const He=(ve.slides||[]).map((De,Ze)=>Ze===0?{...De,bigHeadline:De.bigHeadline!==!0}:De);return{...ve,slides:He}});t({contentPlan:Rt(_e,We)})},Ne=ae=>{',
+ 'const He=(ve.slides||[]).map((De,Ze)=>({...De,bigHeadline:(((ve.slides||[])[0]||{}).bigHeadline)!==!0}));return{...ve,slides:He}});t({contentPlan:Rt(_e,We)})},Ne=ae=>{',
+ '"Gross" gilt fuer das ganze Karussell, nicht nur fuer die erste Folie', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
