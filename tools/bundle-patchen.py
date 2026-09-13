@@ -6399,6 +6399,45 @@ P.append((
  'const He=(ve.slides||[]).map((De,Ze)=>({...De,bigHeadline:(((ve.slides||[])[0]||{}).bigHeadline)!==!0}));return{...ve,slides:He}});t({contentPlan:Rt(_e,We)})},Ne=ae=>{',
  '"Gross" gilt fuer das ganze Karussell, nicht nur fuer die erste Folie', 1))
 
+# 210  Die zwei Pinnable Posts
+#
+#      "Mach bitte neue Pinnable Posts ... Same Branding wie der Feed
+#       nur prominenter ... 15.000 gemacht durch energetisches
+#       Auftreten, und mit 18 habe ich Premium Fitnessmitgliedschaften
+#       verkauft. Suechte rauslassen."
+#
+#      Es sind zwei Posts, nicht drei - die "4 Suechte" hat sie
+#      ausdruecklich gestrichen.
+#
+#      Ein neuer Knopf "Pinnable" neben "Ablauf" legt beide Karussells
+#      an: je sieben Folien, 4:5, jede Folie mit bigHeadline - also
+#      derselbe Feed-Look, nur in der grossen Fassung aus 209. Kein
+#      eigenes Layout, keine eigenen Farben.
+#
+#      Die Tagesnummern haengen sich hinten an den Plan (hoechster Tag
+#      + 1 und + 2), damit nichts ueberschrieben wird. optional:!0,
+#      damit sie nicht in der Pflichtfolge stehen.
+#
+#      Der Schlusssatz beider Posts ruft das ManyChat-Stichwort auf.
+#      START ist aus ihrem eigenen Folientext uebernommen ("Schreib mir
+#      START, wenn dein Content endlich arbeiten soll") - sie muss es
+#      bestaetigen, sonst loest die Automation nicht aus. In
+#      netlify/functions/write-stories.mjs steht STICHWORT weiter leer.
+#
+#      GEPRUEFT im Browser: Knopf da, zwei Tage angelegt, erste Folie
+#          {"tage":2,"ersteTitel":"Pinnable \u2014 15 Tage","gross":true}
+#      keine Seitenfehler.
+
+P.append((
+ "abAnlegen=(ae,_e)=>{",
+ "pinAnlegen=()=>{const zN=(i||[]).reduce((zx,zr)=>Math.max(zx,Number(zr&&zr.day)||0),0);const zMk=(zT,zTi,zNr)=>({day:zN+zNr,title:zTi,optional:!0,slides:zT.map(zx=>({text:zx,visualElements:[],format:\"4:5\",bigHeadline:!0}))});const zA=[\"15 Tage.\\n15.000 Euro an Anfragen.\", \"Nicht durch eine neue Strategie.\\nDurch mein Auftreten.\", \"Ich habe aufgehört, mein Angebot zu erklären.\\nIch bin damit aufgetreten.\", \"Das klingt nach Soft Skill.\\nIst es nicht.\", \"Es ist der Unterschied zwischen einer, die hofft, dass jemand fragt — und einer, die weiß, was sie da hat.\", \"Du denkst, dafür brauchst du erst Ergebnisse.\\nDie Ergebnisse kommen danach. Nicht davor.\", \"Schreib mir START, wenn du wissen willst, wie das bei dir aussieht.\"],zB=[\"Mit 18 habe ich Premium-Mitgliedschaften verkauft.\", \"Nicht, weil ich ein Skript hatte.\", \"Sondern weil ich nie so getan habe, als müsste ich jemanden überreden.\", \"Verkaufen hat für mich nie so ausgesehen wie das, was Sales-Typen daraus gemacht haben.\", \"Die brauchen einen Bedarf, den sie erst erzeugen.\\nIch hatte etwas, das jemand haben wollte.\", \"Daran hat sich bis heute nichts geändert.\\nNur der Preis.\", \"Schreib mir START, wenn du verkaufen willst, ohne jemanden zu überreden.\"];t({contentPlan:Rt([...i,zMk(zA,\"Pinnable \\u2014 15 Tage\",1),zMk(zB,\"Pinnable \\u2014 Mit 18\",2)],We)});$(\"Zwei Pinnable Posts angelegt: Tag \"+(zN+1)+\" und \"+(zN+2))},abAnlegen=(ae,_e)=>{",
+ "Die zwei Pinnable-Karussells anlegen", 1))
+
+P.append((
+ "v.jsxs(\"button\",{onClick:()=>abSetzen(!0),className:\"px-2.5 py-1.5 bg-white text-purple-700 border border-purple-200 rounded-lg font-bold hover:bg-purple-50 transition-colors flex items-center whitespace-nowrap text-[11px]\",children:[v.jsx(ke,{icon:AS,className:\"mr-2\"}),\"Ablauf\"]}),",
+ "v.jsxs(\"button\",{onClick:()=>abSetzen(!0),className:\"px-2.5 py-1.5 bg-white text-purple-700 border border-purple-200 rounded-lg font-bold hover:bg-purple-50 transition-colors flex items-center whitespace-nowrap text-[11px]\",children:[v.jsx(ke,{icon:AS,className:\"mr-2\"}),\"Ablauf\"]}),v.jsxs(\"button\",{onClick:pinAnlegen,className:\"px-2.5 py-1.5 bg-white text-emerald-700 border border-emerald-200 rounded-lg font-bold hover:bg-emerald-50 transition-colors flex items-center whitespace-nowrap text-[11px]\",children:[v.jsx(ke,{icon:AS,className:\"mr-2\"}),\"Pinnable\"]}),",
+ "Der Knopf neben Ablauf", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

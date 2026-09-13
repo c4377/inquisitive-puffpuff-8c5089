@@ -7058,3 +7058,96 @@ Höhe des Textblocks:
 `pinnAnteil` 1.35, derselbe Faktor, den das alte Layout benutzt hat. Schrift,
 Farben, Name und Kachelgrund bleiben unverändert — **dasselbe Branding, nur
 lauter**.
+
+## 210 — Die zwei Pinnable Posts
+
+*„Mach bitte neue Pinnable Posts … Same Branding wie der Feed nur prominenter
+… 15.000 gemacht durch energetisches Auftreten, und mit 18 habe ich Premium
+Fitnessmitgliedschaften verkauft. Süchte rauslassen."*
+
+Es sind **zwei** Posts, nicht drei — die „4 Süchte" hat sie ausdrücklich
+gestrichen.
+
+Ein neuer Knopf **„Pinnable"** neben „Ablauf" legt beide Karussells an: je
+sieben Folien, 4:5, **jede** Folie mit `bigHeadline`. Also derselbe Feed-Look
+in der großen Fassung aus **209** — kein eigenes Layout, keine eigenen Farben,
+keine eigene Schrift.
+
+```js
+pinAnlegen=()=>{
+  const zN=(i||[]).reduce((zx,zr)=>Math.max(zx,Number(zr&&zr.day)||0),0);
+  const zMk=(zT,zTi,zNr)=>({day:zN+zNr,title:zTi,optional:!0,
+    slides:zT.map(zx=>({text:zx,visualElements:[],format:"4:5",bigHeadline:!0}))});
+  …
+  t({contentPlan:Rt([...i,zMk(zA,"Pinnable — 15 Tage",1),
+                          zMk(zB,"Pinnable — Mit 18",2)],We)});
+}
+```
+
+Die Tagesnummern hängen sich **hinten** an den Plan (höchster Tag + 1 und + 2),
+damit nichts überschrieben wird. `optional:!0`, damit sie nicht in der
+Pflichtfolge stehen.
+
+### Post A — „15 Tage"
+
+```
+15 Tage.
+15.000 Euro an Anfragen.
+
+Nicht durch eine neue Strategie.
+Durch mein Auftreten.
+
+Ich habe aufgehört, mein Angebot zu erklären.
+Ich bin damit aufgetreten.
+
+Das klingt nach Soft Skill.
+Ist es nicht.
+
+Es ist der Unterschied zwischen einer, die hofft, dass jemand fragt —
+und einer, die weiß, was sie da hat.
+
+Du denkst, dafür brauchst du erst Ergebnisse.
+Die Ergebnisse kommen danach. Nicht davor.
+
+Schreib mir START, wenn du wissen willst, wie das bei dir aussieht.
+```
+
+### Post B — „Mit 18"
+
+```
+Mit 18 habe ich Premium-Mitgliedschaften verkauft.
+
+Nicht, weil ich ein Skript hatte.
+
+Sondern weil ich nie so getan habe, als müsste ich jemanden überreden.
+
+Verkaufen hat für mich nie so ausgesehen wie das,
+was Sales-Typen daraus gemacht haben.
+
+Die brauchen einen Bedarf, den sie erst erzeugen.
+Ich hatte etwas, das jemand haben wollte.
+
+Daran hat sich bis heute nichts geändert.
+Nur der Preis.
+
+Schreib mir START, wenn du verkaufen willst, ohne jemanden zu überreden.
+```
+
+### Offen: das Stichwort
+
+Der Schlusssatz beider Posts ruft das ManyChat-Stichwort auf. **START** ist aus
+ihrem eigenen Folientext übernommen („Schreib mir START, wenn dein Content
+endlich arbeiten soll") — sie muss es **bestätigen**, sonst löst die Automation
+nicht aus. In `netlify/functions/write-stories.mjs` steht `STICHWORT` weiterhin
+leer, der Storyschreiber lädt also bewusst **ohne** Stichwort ein.
+
+**Geprüft** im Browser:
+
+```
+Marke  : Carina Brand
+Knopf da: true
+Kacheln: 2
+Plan   : {"tage":2,"ersteTitel":"Pinnable — 15 Tage","groß":true,
+          "text":"15 Tage.\n15.000 Euro an Anfragen."}
+Fehler : []
+```
