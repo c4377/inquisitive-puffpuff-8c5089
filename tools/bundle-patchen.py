@@ -6438,6 +6438,58 @@ P.append((
  "v.jsxs(\"button\",{onClick:()=>abSetzen(!0),className:\"px-2.5 py-1.5 bg-white text-purple-700 border border-purple-200 rounded-lg font-bold hover:bg-purple-50 transition-colors flex items-center whitespace-nowrap text-[11px]\",children:[v.jsx(ke,{icon:AS,className:\"mr-2\"}),\"Ablauf\"]}),v.jsxs(\"button\",{onClick:pinAnlegen,className:\"px-2.5 py-1.5 bg-white text-emerald-700 border border-emerald-200 rounded-lg font-bold hover:bg-emerald-50 transition-colors flex items-center whitespace-nowrap text-[11px]\",children:[v.jsx(ke,{icon:AS,className:\"mr-2\"}),\"Pinnable\"]}),",
  "Der Knopf neben Ablauf", 1))
 
+# 211  Die Pinnable Posts sahen aus wie Reminder-Zettel
+#
+#      "Ernsthaft?" - mit einem Bild von zwei beigen Notizzetteln auf
+#      blaugrauem Grund. Kein Foto, keine Feed-Schrift, ein Etikett
+#      REMINDER darueber. Genau das Gegenteil von "Same Branding wie
+#      der Feed".
+#
+#      Schuld war EIN Feld: optional:!0. Ich hatte es gesetzt, damit
+#      die zwei Tage nicht in der Pflichtfolge stehen. optional ist
+#      aber genau der Schalter, an dem die App einen Reminder erkennt:
+#
+#          istReminder=(ot.optional===!0||!!ot.reminderArt)
+#                      &&ot.reminderArt!=="ablauf"
+#
+#      Zwei Folgen davon, beide sichtbar:
+#        - karte wird aus der Textlaenge gewaehlt, <=110 Zeichen
+#          ergibt "zettel" - die beige Notiz mit REMINDER-Zeile.
+#        - im zweiten Durchgang wird das Foto abgeraeumt:
+#          background:null, overlay:void 0.
+#      Der Ablauf-Post entkommt dem nur ueber reminderArt==="ablauf".
+#
+#      optional faellt also weg. Dafuer tileMode:"photo" - derselbe
+#      Wert, den der Ablauf-Post schon setzt. Damit haengen die zwei
+#      Tage nicht am Hell/Dunkel-Rhythmus (textJede:7), sondern liegen
+#      fest auf der Fotoseite. Die Schaltung ist abgesichert: ohne
+#      Bilder im Pool (Ze.length>0) faellt sie von selbst zurueck.
+#
+#      Dazu ersetzt ein zweiter Druck auf den Knopf die alten
+#      Pinnable-Tage, statt weitere anzuhaengen - sonst muesste sie die
+#      kaputten von Hand loeschen.
+#
+#      NACHGESTELLT im Browser, gleicher Plan, nur anderes Bundle:
+#          karten272  Tag 4 = beiger Zettel mit REMINDER
+#          karten273  Tag 4 = Feed-Kachel, gleiche Schrift und
+#                     gleicher Aufbau wie ein gewoehnlicher Tag
+#      keine Seitenfehler.
+#
+#      NICHT geprueft: ob die zwei Tage im echten Feed ein Foto
+#      bekommen. Der Bildpool laedt in der Testumgebung nicht - dort
+#      bleiben ALLE Tage hell, auch gewoehnliche. Das ist eine Grenze
+#      des Aufbaus, kein Befund ueber die App.
+
+P.append((
+ "pinAnlegen=()=>{const zN=(i||[]).reduce((zx,zr)=>Math.max(zx,Number(zr&&zr.day)||0),0);const zMk=(zT,zTi,zNr)=>({day:zN+zNr,title:zTi,optional:!0,slides:",
+ "pinAnlegen=()=>{const zAlt=(i||[]).filter(zr=>!/^Pinnable/.test(String((zr&&zr.title)||\"\")));const zN=zAlt.reduce((zx,zr)=>Math.max(zx,Number(zr&&zr.day)||0),0);const zMk=(zT,zTi,zNr)=>({day:zN+zNr,title:zTi,tileMode:\"photo\",slides:",
+ "Kein optional mehr (das war die Reminder-Schaltung), dafuer tileMode photo wie beim Ablauf-Post", 1))
+
+P.append((
+ "t({contentPlan:Rt([...i,zMk(zA,\"Pinnable \\u2014 15 Tage\",1),zMk(zB,\"Pinnable \\u2014 Mit 18\",2)],We)});",
+ "t({contentPlan:Rt([...zAlt,zMk(zA,\"Pinnable \\u2014 15 Tage\",1),zMk(zB,\"Pinnable \\u2014 Mit 18\",2)],We)});",
+ "An den bereinigten Plan anhaengen, damit ein zweiter Druck die alten ersetzt", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

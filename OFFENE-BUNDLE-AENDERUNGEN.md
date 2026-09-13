@@ -7151,3 +7151,56 @@ Plan   : {"tage":2,"ersteTitel":"Pinnable — 15 Tage","groß":true,
           "text":"15 Tage.\n15.000 Euro an Anfragen."}
 Fehler : []
 ```
+
+## 211 — Die Pinnable Posts sahen aus wie Reminder-Zettel
+
+*„Ernsthaft?"* — dazu ein Bild von zwei beigen Notizzetteln auf blaugrauem
+Grund. Kein Foto, nicht die Feed-Schrift, ein Etikett **REMINDER** darüber.
+Das genaue Gegenteil von „Same Branding wie der Feed".
+
+Schuld war **ein Feld**: `optional:!0`. Ich hatte es gesetzt, damit die zwei
+Tage nicht in der Pflichtfolge stehen. `optional` ist aber genau der Schalter,
+an dem die App einen Reminder erkennt:
+
+```js
+istReminder = (ot.optional === true || !!ot.reminderArt)
+              && ot.reminderArt !== "ablauf"
+```
+
+Zwei Folgen davon, beide im Bild zu sehen:
+
+* `karte` wird aus der **Textlänge** gewählt — bis 110 Zeichen ergibt das
+  `"zettel"`, die beige Notiz mit der REMINDER-Zeile.
+* Im zweiten Durchgang wird das Foto abgeräumt: `background:null`,
+  `overlay:void 0`. Deshalb der leere blaugraue Grund.
+
+Der Ablauf-Post entgeht dem nur über `reminderArt==="ablauf"` — die eine
+Ausnahme, die in der Bedingung steht.
+
+### Was jetzt passiert
+
+`optional` fällt weg. Dafür `tileMode:"photo"` — derselbe Wert, den der
+Ablauf-Post schon setzt. Damit hängen die zwei Tage nicht am Hell/Dunkel-
+Rhythmus (`textJede:7`), sondern liegen fest auf der Fotoseite. Die Schaltung
+ist abgesichert: ohne Bilder im Pool (`Ze.length>0`) fällt sie von selbst
+zurück.
+
+Dazu **ersetzt** ein zweiter Druck auf den Knopf die alten Pinnable-Tage,
+statt weitere anzuhängen — sonst müsste sie die kaputten von Hand löschen.
+
+### Nachgestellt
+
+Gleicher Plan, gleicher Klick, nur anderes Bundle:
+
+| | Tag 4 |
+|---|---|
+| karten272 | beiger Zettel mit REMINDER-Zeile |
+| **karten273** | Feed-Kachel, gleiche Schrift und gleicher Aufbau wie ein gewöhnlicher Tag |
+
+Keine Seitenfehler.
+
+### Was ich nicht geprüft habe
+
+Ob die zwei Tage im echten Feed auch ein **Foto** bekommen. Der Bildpool lädt
+in der Testumgebung nicht — dort bleiben **alle** Tage hell, auch gewöhnliche.
+Das ist eine Grenze des Aufbaus, kein Befund über die App.
