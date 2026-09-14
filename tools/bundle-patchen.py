@@ -6558,6 +6558,39 @@ P.append((
  "Schreib mir STARTEN, wenn du verkaufen willst, ohne jemanden zu überreden.",
  "Das ManyChat-Stichwort im Pinnable-Post B", 1))
 
+# 214  Der geteilte Post war nur unsichtbar, nicht weg
+#
+#      "Wir hatten so eine 2 Teile Version der Slide gibts die noch" -
+#      "Richte den Split Post wie er war also mit Helvetica und so."
+#
+#      Der Zeichner konnte ihn die ganze Zeit: Zweig
+#      if(t.splitBands===!0) - obere Haelfte Bandfarbe mit Text auf
+#      weissen Plaettchen in Helvetica, untere Haelfte das Foto. Auch
+#      der Setter kannte ihn schon:
+#
+#          _e==="split"?De.tileMode="split":...
+#
+#      und die Anzeige der aktiven Fassung ebenfalls
+#      (ae.tileMode==="split"?"split":...).
+#
+#      Gefehlt hat NUR der Chip in der VERSION-Reihe des
+#      Kachelmenues. Ein Listeneintrag, sonst nichts - kein neuer
+#      Zeichencode, keine neue Logik. Deshalb kommt er auch genau so
+#      zurueck wie frueher, Helvetica und Plaettchen inklusive.
+#
+#      splitImage greift dabei direkt in den Bildpool (xo) und geht
+#      NICHT ueber den normalen Zuteiler ed. Darum zeigt diese Kachel
+#      auch in der Testumgebung ein Foto, waehrend alle anderen dort
+#      leer bleiben.
+#
+#      GEPRUEFT im Browser: Chip da, Klick setzt tileMode auf "split",
+#      die Kachel zeichnet zweigeteilt. Keine Seitenfehler.
+
+P.append((
+ "{wert:\"standard\",label:\"Standard\"},{wert:\"foto\",label:\"Foto\"},{wert:\"montserrat\",label:\"Fließtext auf Foto\"}",
+ "{wert:\"standard\",label:\"Standard\"},{wert:\"foto\",label:\"Foto\"},{wert:\"split\",label:\"Geteilt\"},{wert:\"montserrat\",label:\"Fließtext auf Foto\"}",
+ "Der Chip \"Geteilt\" zurueck in die VERSION-Reihe", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

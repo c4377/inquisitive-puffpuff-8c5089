@@ -7273,3 +7273,34 @@ Schreib es genau so, in Grossbuchstaben, und verlange nichts ausser ihm.
 ```
 
 Damit ist die letzte offene Vermutung aus 210 erledigt.
+
+## 214 — Der geteilte Post war nur unsichtbar, nicht weg
+
+*„Wir hatten so eine 2 Teile Version der Slide gibts die noch"* — *„Richte den
+Split Post wie er war also mit Helvetica und so."*
+
+Der Zeichner konnte ihn die ganze Zeit. Der Zweig `if(t.splitBands===true)`
+zeichnet die obere Hälfte in der Bandfarbe des Tages, mit dem Text auf weißen
+Plättchen in Helvetica, und die untere Hälfte als Foto.
+
+Auch der Setter kannte ihn schon:
+
+```js
+_e === "split" ? De.tileMode = "split" : …
+```
+
+und die Anzeige der aktiven Fassung ebenfalls (`ae.tileMode==="split"?"split":…`).
+
+**Gefehlt hat nur der Chip** in der VERSION-Reihe des Kachelmenüs — ein
+Listeneintrag, sonst nichts. Kein neuer Zeichencode, keine neue Logik. Deshalb
+kommt er auch genau so zurück wie früher, Helvetica und Plättchen inklusive.
+
+### Nebenbefund
+
+`splitImage` greift direkt in den Bildpool (`xo`) und geht **nicht** über den
+normalen Zuteiler `ed`. Darum zeigt diese Kachel auch in der Testumgebung ein
+Foto, während dort alle anderen leer bleiben — und darum ist sie unabhängig
+vom Hell/Dunkel-Rhythmus.
+
+**Geprüft** im Browser: Chip da, Klick setzt `tileMode` auf `"split"`, die
+Kachel zeichnet zweigeteilt. Keine Seitenfehler.
