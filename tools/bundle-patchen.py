@@ -6490,6 +6490,38 @@ P.append((
  "t({contentPlan:Rt([...zAlt,zMk(zA,\"Pinnable \\u2014 15 Tage\",1),zMk(zB,\"Pinnable \\u2014 Mit 18\",2)],We)});",
  "An den bereinigten Plan anhaengen, damit ein zweiter Druck die alten ersetzt", 1))
 
+# 212  Pinnable in normaler Schriftgroesse
+#
+#      "Ich moechte lieber Fotos Und den Text im Verhaeltnis Groesse
+#       zu den anderen Posts."
+#
+#      Damit faellt bigHeadline wieder weg. Ich hatte es auf jede
+#      Pinnable-Folie gesetzt, weil sie vorher "viel mehr
+#      intensiviert" wollte - im Feed sieht das aber nicht nach
+#      prominent aus, sondern nach anders.
+#
+#      Der Schalter selbst bleibt (211/209), er wird nur nicht mehr
+#      automatisch gesetzt. Sie kann ihn pro Tag im Kachelmenue
+#      anschalten.
+#
+#      tileMode:"photo" bleibt - das ist der Hebel fuer die Fotos.
+#
+#      GEPRUEFT ueber die Felder der erzeugten Folie, nicht ueber das
+#      Bild: die Pinnable-Folie hat jetzt DIESELBE Feldliste wie eine
+#      gewoehnliche Folie, bigHeadline ist nicht mehr dabei.
+#          karten273  gross:true
+#          karten274  gross:false
+#
+#      Dabei ausserdem gelernt: background steht bei KEINER Folie im
+#      gespeicherten Plan, auch bei gewoehnlichen nicht. Fotos werden
+#      erst beim Zeichnen zugeteilt. Die Pinnable-Tage sind ab hier
+#      also nicht mehr von einem gewoehnlichen Tag zu unterscheiden.
+
+P.append((
+ "slides:zT.map(zx=>({text:zx,visualElements:[],format:\"4:5\",bigHeadline:!0}))});const zA=",
+ "slides:zT.map(zx=>({text:zx,visualElements:[],format:\"4:5\"}))});const zA=",
+ "Pinnable-Folien in normaler Feed-Schriftgroesse, ohne bigHeadline", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

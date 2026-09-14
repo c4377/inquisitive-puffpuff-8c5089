@@ -7204,3 +7204,40 @@ Keine Seitenfehler.
 Ob die zwei Tage im echten Feed auch ein **Foto** bekommen. Der Bildpool lädt
 in der Testumgebung nicht — dort bleiben **alle** Tage hell, auch gewöhnliche.
 Das ist eine Grenze des Aufbaus, kein Befund über die App.
+
+## 212 — Pinnable in normaler Schriftgröße
+
+*„Ich möchte lieber Fotos und den Text im Verhältnis Größe zu den anderen
+Posts."*
+
+Damit fällt `bigHeadline` wieder weg. Ich hatte es auf jede Pinnable-Folie
+gesetzt, weil sie vorher *„viel mehr intensiviert"* wollte — im Feed sieht das
+aber nicht nach prominent aus, sondern nach **anders**.
+
+Der Schalter selbst bleibt (siehe 209/211), er wird nur nicht mehr automatisch
+gesetzt. Sie kann ihn pro Tag im Kachelmenü anschalten.
+
+`tileMode:"photo"` bleibt — das ist der Hebel für die Fotos.
+
+### Geprüft über die Felder, nicht über das Bild
+
+Die erzeugte Pinnable-Folie hat jetzt **dieselbe Feldliste** wie eine
+gewöhnliche Folie:
+
+| | `bigHeadline` |
+|---|---|
+| karten273 | `true` |
+| **karten274** | nicht vorhanden |
+
+### Nebenbefund
+
+`background` steht bei **keiner** Folie im gespeicherten Plan — auch bei
+gewöhnlichen nicht. Fotos werden erst **beim Zeichnen** zugeteilt, aus dem
+Bildpool (`brandImages`, eine Liste von URL-Strings). Die Pinnable-Tage sind ab
+hier in den Daten nicht mehr von einem gewöhnlichen Tag zu unterscheiden — was
+mit den Fotos passiert, passiert für beide gleich.
+
+Was die Testumgebung weiterhin **nicht** zeigt: die Zuteilung selbst. Dort
+bleiben alle Tage hell, weil die Testbilder keine Helligkeitsanalyse haben, die
+der Zuteiler erwartet. Das gilt für gewöhnliche Tage genauso und ist kein
+Befund über die App.
