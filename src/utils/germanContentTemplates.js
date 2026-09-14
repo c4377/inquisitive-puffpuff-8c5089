@@ -219,7 +219,7 @@ export const generate7DayPlan = (strategy, brandConfig) => {
       `Ich suche Frauen, die bereit sind für *mehr*.`,
       `Wenn du spürst, dass da noch so viel mehr in dir steckt...`,
       `...dann ist das hier dein *Zeichen*.`,
-      `Schreib mir "*START*" und wir schauen, ob wir matchen.`,
+      `Schreib mir "*STARTEN*" und wir schauen, ob wir matchen.`,
       `Let's do this.`
     ]
   };

@@ -23,7 +23,7 @@
 // Automation nicht aus, und die Frau, die geantwortet hat, bekommt nichts.
 // Solange es nicht feststeht, bleibt es LEER: dann laedt die Story ohne
 // Stichwort ein, statt eines zu erfinden.
-const STICHWORT = '';
+const STICHWORT = 'STARTEN';
 
 const ANGEBOT = `
   The Strategy — der Audio-Kurs. Ab 15. September.

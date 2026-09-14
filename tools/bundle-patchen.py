@@ -6522,6 +6522,42 @@ P.append((
  "slides:zT.map(zx=>({text:zx,visualElements:[],format:\"4:5\"}))});const zA=",
  "Pinnable-Folien in normaler Feed-Schriftgroesse, ohne bigHeadline", 1))
 
+# 213  Das Stichwort heisst STARTEN, nicht START
+#
+#      "STARTEN ist was den ManyChat Flow startet nicht START."
+#
+#      Ich hatte START aus einer ihrer eigenen Folien abgeleitet
+#      ("Schreib mir START, wenn dein Content endlich arbeiten soll")
+#      und als Vermutung gekennzeichnet. Die Vermutung war falsch.
+#
+#      Ein falsches Stichwort ist kein Schoenheitsfehler: die
+#      Automation loest nicht aus, und wer geantwortet hat, bekommt
+#      nichts. Deshalb an ALLEN drei Stellen geaendert:
+#
+#        1. Bundle - die Schlusszeile beider Pinnable Posts (hier).
+#        2. netlify/functions/write-stories.mjs - STICHWORT stand
+#           bisher absichtlich LEER, damit der Storyschreiber keins
+#           erfindet. Jetzt 'STARTEN'. Der Angebotsblock schaltet
+#           damit von "lade OHNE Stichwort ein" auf die Fassung mit
+#           Wort um.
+#        3. src/utils/germanContentTemplates.js - die alte
+#           Wochenvorlage sagte ebenfalls START. Sie steckt nicht im
+#           Bundle, waere aber die naechste Quelle fuer das falsche
+#           Wort gewesen.
+#
+#      GEPRUEFT: der gerenderte Angebotsblock nennt STARTEN und
+#      verlangt ausdruecklich nichts ausser dem Wort.
+
+P.append((
+ "Schreib mir START, wenn du wissen willst, wie das bei dir aussieht.",
+ "Schreib mir STARTEN, wenn du wissen willst, wie das bei dir aussieht.",
+ "Das ManyChat-Stichwort im Pinnable-Post A", 1))
+
+P.append((
+ "Schreib mir START, wenn du verkaufen willst, ohne jemanden zu überreden.",
+ "Schreib mir STARTEN, wenn du verkaufen willst, ohne jemanden zu überreden.",
+ "Das ManyChat-Stichwort im Pinnable-Post B", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

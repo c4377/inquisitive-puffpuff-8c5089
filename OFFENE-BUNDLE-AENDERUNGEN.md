@@ -7241,3 +7241,35 @@ Was die Testumgebung weiterhin **nicht** zeigt: die Zuteilung selbst. Dort
 bleiben alle Tage hell, weil die Testbilder keine Helligkeitsanalyse haben, die
 der Zuteiler erwartet. Das gilt für gewöhnliche Tage genauso und ist kein
 Befund über die App.
+
+## 213 — Das Stichwort heißt STARTEN, nicht START
+
+*„STARTEN ist was den ManyChat Flow startet nicht START."*
+
+Ich hatte **START** aus einer ihrer eigenen Folien abgeleitet („Schreib mir
+START, wenn dein Content endlich arbeiten soll") und als Vermutung
+gekennzeichnet. Die Vermutung war falsch.
+
+Ein falsches Stichwort ist kein Schönheitsfehler: die Automation löst nicht
+aus, und wer geantwortet hat, bekommt nichts. Deshalb an **allen drei** Stellen
+geändert:
+
+1. **Bundle** — die Schlusszeile beider Pinnable Posts.
+2. **`netlify/functions/write-stories.mjs`** — `STICHWORT` stand bisher
+   absichtlich leer, damit der Storyschreiber keins erfindet. Jetzt `'STARTEN'`.
+   Der Angebotsblock schaltet damit von *„lade ohne Stichwort ein"* auf die
+   Fassung mit Wort um.
+3. **`src/utils/germanContentTemplates.js`** — die alte Wochenvorlage sagte
+   ebenfalls START. Sie steckt nicht im Bundle, wäre aber die nächste Quelle für
+   das falsche Wort gewesen.
+
+**Geprüft**, der gerenderte Angebotsblock:
+
+```
+DER WEG IST EINE MANYCHAT-AUTOMATION.
+Die Einladung bittet um EINE Antwort auf die Story: das Stichwort
+STARTEN. Wer es schickt, bekommt den Link automatisch.
+Schreib es genau so, in Grossbuchstaben, und verlange nichts ausser ihm.
+```
+
+Damit ist die letzte offene Vermutung aus 210 erledigt.
