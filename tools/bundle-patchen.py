@@ -7255,6 +7255,45 @@ P.append((
  "kastenAn:0,layoutAn:1,layoutReihe:\"brand_photo_gradient|brand_photo_bottom_left|brand_photo_top|brand_photo_center|brand_photo_bigword|brand_photo_quote|brand_photo_bottom_serif|brand_photo_frame|brand_frame_top_text|brand_frame_left|brand_frame_polaroid|brand_text_plate|brand_text_plate_top|brand_text_left|brand_text_bigword|brand_text_quote|brand_text_statement|brand_text_kicker_lead|brand_text_minimal|brand_text_bold_top\",kastenFarbe:\"#B03A5B\"",
  "Alle zwanzig Layouts in der Reihe, und der Schalter dafuer", 1))
 
+# 230  Rotation wieder aus - sie kostet zu viel
+#
+#      "Aber wieso ist Handschrift und Playfair weg und auch die
+#       folgeslides anders?"
+#
+#      Alle drei Beobachtungen haben DIESELBE Ursache: die zwanzig
+#      Layouts sind ein ANDERER Zeichnerzweig. Er holt seine Schrift
+#      ueber Ct() aus typography.fontFamily - bei ihr Petrona, nicht
+#      Playfair - und er kennt die zweite Zeile in Handschrift
+#      ueberhaupt nicht. Die steckt allein im Feed-Zweig, zusammen mit
+#      Groessenlogik, Lage und Namenszug.
+#
+#      Und die Rotation lief ueber den GLOBALEN Folienindex, nicht
+#      ueber den Tag. Damit bekam jede Folgefolie eines Karussells ihr
+#      eigenes Layout - deshalb waren auch die anders.
+#
+#      Also layoutAn wieder 0. NACHGEMESSEN: drei Kacheln aus
+#      verschiedenen Zeilen sind danach BYTEWEISE dieselben Bilder wie
+#      vor der Rotation.
+#
+#      Der Apparat bleibt liegen: zLay, layoutReihe, der Namenshaken
+#      in renderAll. Eine 1 schaltet ihn wieder ein.
+#
+#      WAS SIE WIRKLICH WILL, aus derselben Nachricht: vier Varianten
+#      - der heutige Stand, Foto gerahmt, Text gerahmt, reiner Text.
+#      Der heutige Stand und der reine Text existieren bereits, sie
+#      wechseln ueber textJede. Neu sind nur die zwei GERAHMTEN.
+#
+#      DER RICHTIGE WEG DAFUER ist NICHT der Layout-Zweig, sondern ein
+#      Rahmen IM Feed-Zeichner: dort bleiben Playfair, Handschrift,
+#      Namenszug, Groessen und Folienrollen erhalten. Ein Rahmen ist
+#      ein Rechteck - dieselbe Technik wie der Kasten aus 217.
+#      Zusaetzlich muss die Wahl am TAG haengen, nicht am Folienindex.
+
+P.append((
+ "kastenAn:0,layoutAn:1,layoutReihe:",
+ "kastenAn:0,layoutAn:0,layoutReihe:",
+ "Rotation aus - sie kostet Playfair, Handschrift und die Folgefolien", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

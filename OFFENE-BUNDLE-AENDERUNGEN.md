@@ -7802,3 +7802,35 @@ sonst stünde er im Feed doppelt.
 **Geprüft:** neun aufeinanderfolgende Tage zeichnen neun verschiedene Layouts,
 Namenszug auf allen, keine Seitenfehler. `layoutAn: 0` stellt den alten Zustand
 her.
+
+## 230 — Rotation wieder aus: sie kostet zu viel
+
+*„Aber wieso ist Handschrift und Playfair weg und auch die folgeslides anders?"*
+
+Alle drei Beobachtungen haben **dieselbe Ursache**: die zwanzig Layouts sind ein
+**anderer Zeichnerzweig**. Er holt seine Schrift über `Ct()` aus
+`typography.fontFamily` — bei ihr **Petrona**, nicht Playfair — und er kennt die
+zweite Zeile in Handschrift überhaupt nicht. Die steckt allein im Feed-Zweig,
+zusammen mit Größenlogik, Lage und Namenszug.
+
+Und die Rotation lief über den **globalen Folienindex**, nicht über den Tag.
+Damit bekam jede Folgefolie eines Karussells ihr eigenes Layout — deshalb waren
+auch die anders.
+
+Also `layoutAn: 0`. **Nachgemessen:** drei Kacheln aus verschiedenen Zeilen sind
+danach *byteweise* dieselben Bilder wie vor der Rotation.
+
+Der Apparat bleibt liegen: `zLay`, `layoutReihe`, der Namenshaken in
+`renderAll`. Eine `1` schaltet ihn wieder ein.
+
+### Was sie wirklich will
+
+Aus derselben Nachricht: **vier Varianten** — der heutige Stand, Foto gerahmt,
+Text gerahmt, reiner Text. Der heutige Stand und der reine Text **existieren
+bereits**, sie wechseln über `textJede`. Neu sind nur die zwei **gerahmten**.
+
+Der richtige Weg dafür ist **nicht** der Layout-Zweig, sondern ein Rahmen **im
+Feed-Zeichner**: dort bleiben Playfair, Handschrift, Namenszug, Größen und
+Folienrollen erhalten. Ein Rahmen ist ein Rechteck — dieselbe Technik wie der
+Kasten aus 217. Zusätzlich muss die Wahl am **Tag** hängen, nicht am
+Folienindex.
