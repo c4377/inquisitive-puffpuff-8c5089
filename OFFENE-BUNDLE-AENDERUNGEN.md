@@ -7498,3 +7498,27 @@ Kasten: `kastenAnteil` .72 → **.60**, `kastenSpalte` .72 → **.64**.
 
 **Geprüft** im Browser, gleiches Deckblatt: Kasten schmaler und niedriger als in
 karten280, Handschrift darunter deutlich größer. Keine Seitenfehler.
+
+## 220 — Beere statt Schwarz im Kasten
+
+*„Vielleicht die Schrift im Kasten besser rot rosa probiere es hier gerendert
+bitte"* — dann: *„4"*.
+
+Vier Töne gerendert, **nichts davon veröffentlicht**, bis die Wahl feststand:
+
+| | Hex | |
+|---|---|---|
+| 1 | `#FF3A2E` | ihr Akzentrot aus der Marke |
+| 2 | `#E8836B` | Koralle, der Ton des Namenszugs |
+| 3 | `#D9566B` | Rosé |
+| **4** | **`#B03A5B`** | **Beere — gewählt** |
+
+Die helleren Töne sind auf der dünnen Schreibschrift schwer zu lesen: die
+Striche sind nur wenige Pixel breit, und je heller der Ton auf Weiß, desto mehr
+flimmert er. Beere trägt Farbe und bleibt am Handy lesbar.
+
+Die Farbe hängt an `BS_KACHEL.kastenFarbe`. Fällt der Schlüssel weg, ist die
+Schrift wieder schwarz — der alte Stand bleibt als Rückfalltür erhalten.
+
+**Geprüft:** das gerenderte Deckblatt ist **byteweise dasselbe Bild** wie die
+Probe, die sie gewählt hat. Keine Seitenfehler.

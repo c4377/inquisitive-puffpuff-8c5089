@@ -6875,6 +6875,44 @@ P.append((
  "kastenAn:1,kastenAnteil:.60,kastenSpalte:.64,kastenHand:1.12,kastenLuft:.02",
  "Kasten nochmal kleiner, Handschrift eigene Groesse", 1))
 
+# 220  Beere statt Schwarz im Kasten
+#
+#      "Vielleicht die Schrift im Kasten besser rot rosa probiere es
+#       hier gerendert bitte" - dann: "4".
+#
+#      Vier Toene gerendert, nichts davon veroeffentlicht:
+#          1  #FF3A2E  ihr Akzentrot aus der Marke
+#          2  #E8836B  Koralle, der Ton des Namenszugs
+#          3  #D9566B  Rose
+#          4  #B03A5B  Beere      <- gewaehlt
+#
+#      Die helleren Toene sind auf der duennen Schreibschrift schwer
+#      zu lesen: die Striche sind nur wenige Pixel breit, und je
+#      heller der Ton auf Weiss, desto mehr flimmert er. Beere traegt
+#      Farbe und bleibt am Handy lesbar.
+#
+#      Die Farbe haengt an BS_KACHEL.kastenFarbe. Faellt der Schluessel
+#      weg, ist die Schrift wieder schwarz - der alte Stand bleibt also
+#      als Rueckfalltuer erhalten.
+#
+#      GEPRUEFT: das gerenderte Deckblatt ist BYTEWEISE dasselbe Bild
+#      wie die Probe, die sie gewaehlt hat. Keine Seitenfehler.
+
+P.append((
+ "fill:rr?tt.highlight:zKa&&Ve?\"#000000\":",
+ "fill:rr?tt.highlight:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):",
+ "Kastenfarbe fuer hervorgehobene Einzelwoerter", 1))
+
+P.append((
+ "fill:zKa&&Ve?\"#000000\":",
+ "fill:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):",
+ "Kastenfarbe fuer die ganze Zeile", 1))
+
+P.append((
+ "kastenAn:1,kastenAnteil:.60",
+ "kastenAn:1,kastenFarbe:\"#B03A5B\",kastenAnteil:.60",
+ "Beere als Schriftfarbe im Kasten", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
