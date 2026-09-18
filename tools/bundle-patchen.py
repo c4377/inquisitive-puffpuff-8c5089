@@ -6837,6 +6837,44 @@ P.append((
  "kastenAn:1,kastenAnteil:.72,kastenSpalte:.72,kastenLuft:.02,kastenPolsterX:.055",
  "Groesse, Spaltenbreite und Abstand des Kastens", 1))
 
+# 219  Noch kleiner - und die Handschrift wieder gross
+#
+#      "Kleiner. Die Handschrift darunter ist zu klein."
+#
+#      Das zweite war eine Nebenwirkung des ersten, aus 218. qe2, die
+#      Groesse der Handschrift, wird aus qe abgeleitet:
+#
+#          qe2 = qe * zweitAnteil * handGroesse
+#
+#      Als der Kasten qe mal kastenAnteil genommen hat, ist die
+#      Handschrift lautlos mitgeschrumpft. Sie war nie gemeint.
+#
+#      Jetzt haengt sie nicht mehr daran:
+#
+#          * (zKa ? kastenHand / kastenAnteil : 1)
+#
+#      Die Division holt genau den Faktor wieder heraus, den der
+#      Kasten abgezogen hat. kastenHand 1 waere die Groesse von vor
+#      218; 1.12 ist etwas darueber, weil sie sie zu klein fand.
+#      Wichtig dabei: die Handschrift bleibt gleich gross, egal wie
+#      klein der Kasten noch wird.
+#
+#      Kasten: kastenAnteil .72 -> .60, kastenSpalte .72 -> .64.
+#
+#      GEPRUEFT im Browser, gleiches Deckblatt: Kasten schmaler und
+#      niedriger als in karten280, Handschrift darunter deutlich
+#      groesser. Keine Seitenfehler.
+
+P.append((
+ "qe2=$e?Math.round(qe*((zVS&&BS_KACHEL.versalZweitAnteil)||BS_KACHEL.zweitAnteil||1)*((zVS||BS_KACHEL.folgeZweitHand||!(t.folienRolle&&t.folienRolle!==\"deckblatt\"))?(Number(BS_KACHEL.handGroesse)||1):1)):qe,",
+ "qe2=$e?Math.round(qe*((zVS&&BS_KACHEL.versalZweitAnteil)||BS_KACHEL.zweitAnteil||1)*((zVS||BS_KACHEL.folgeZweitHand||!(t.folienRolle&&t.folienRolle!==\"deckblatt\"))?(Number(BS_KACHEL.handGroesse)||1):1)*(zKa?(Number(BS_KACHEL.kastenHand)||1)/(Number(BS_KACHEL.kastenAnteil)||.72):1)):qe,",
+ "Die Handschrift haengt nicht mehr an der verkleinerten Kastenschrift", 1))
+
+P.append((
+ "kastenAn:1,kastenAnteil:.72,kastenSpalte:.72,kastenLuft:.02",
+ "kastenAn:1,kastenAnteil:.60,kastenSpalte:.64,kastenHand:1.12,kastenLuft:.02",
+ "Kasten nochmal kleiner, Handschrift eigene Groesse", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

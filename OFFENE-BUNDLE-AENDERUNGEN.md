@@ -7468,3 +7468,33 @@ Keine Seitenfehler.
 
 `kastenAnteil: .72` · `kastenSpalte: .72` · `kastenLuft: .02` ·
 `kastenPolsterX: .055` · `kastenPolsterY: .045` · `kastenRahmen: .009`
+
+## 219 — Noch kleiner, und die Handschrift wieder groß
+
+*„Kleiner. Die Handschrift darunter ist zu klein."*
+
+Das zweite war eine **Nebenwirkung des ersten**, aus 218. `qe2`, die Größe der
+Handschrift, wird aus `qe` abgeleitet:
+
+```js
+qe2 = qe * zweitAnteil * handGroesse
+```
+
+Als der Kasten `qe * kastenAnteil` genommen hat, ist die Handschrift lautlos
+mitgeschrumpft. Gemeint war sie nie.
+
+Jetzt hängt sie nicht mehr daran:
+
+```js
+* (zKa ? kastenHand / kastenAnteil : 1)
+```
+
+Die Division holt genau den Faktor wieder heraus, den der Kasten abgezogen hat.
+`kastenHand: 1` wäre die Größe von vor 218; **1.12** ist etwas darüber, weil sie
+zu klein war. Das Wichtige daran: die Handschrift bleibt ab jetzt **gleich
+groß, egal wie klein der Kasten noch wird**. Die beiden Größen sind entkoppelt.
+
+Kasten: `kastenAnteil` .72 → **.60**, `kastenSpalte` .72 → **.64**.
+
+**Geprüft** im Browser, gleiches Deckblatt: Kasten schmaler und niedriger als in
+karten280, Handschrift darunter deutlich größer. Keine Seitenfehler.
