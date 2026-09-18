@@ -7671,3 +7671,29 @@ ist keine Bildbibliothek im Container.
 klebenden Kopfleiste und kamen halb als Werkzeugleiste heraus.
 `scrollIntoViewIfNeeded` genügt nicht — es braucht danach noch ein Stück
 Rad abwärts, sonst deckt die Leiste die obere Kante ab.
+
+## 226 — Deckblatt wieder weiß, und dabei bleibt es
+
+*„Hm nein weiß."*
+
+`deckblattFarbe` fällt wieder weg. Nachgerechnet: der Stand ist danach
+**byteweise wieder karten286**.
+
+### Damit ist die Farbrunde durch
+
+Gesehen und verworfen: Beere im Kasten · Beere als Fläche mit weißer Schrift in
+drei Rahmenfassungen · Hellorange · Sandorange · Knochen · die Tafel mit zwölf
+Tönen. Jedes Mal zurück auf Weiß.
+
+Das ist keine Unentschlossenheit, sondern ein **Befund**: die Überschrift ist
+nicht die Stelle für Farbe. Sie steht auf wechselnden Fotos, also muss sie auf
+jedem Untergrund tragen — und das kann nur Weiß. Wer hier das nächste Mal Farbe
+vorschlägt, schlägt dasselbe nochmal vor.
+
+**Nicht probiert und offen**, falls das Thema wiederkommt: die Handschriftzeile,
+der Namenszug unten (`nameFarbe`), das Schild über der Überschrift, oder das
+Sternchen-Highlight — also Farbe an einer **Nebenstelle** statt an der
+Hauptzeile.
+
+Die Schlüssel `deckblattFarbe`, `kastenAn` und der ganze Kastenapparat bleiben
+im Bundle. Ein Wert genügt jeweils.

@@ -7088,6 +7088,38 @@ P.append((
  "kastenAn:0,deckblattFarbe:\"#E7DDCF\",kastenFarbe:\"#B03A5B\"",
  "Deckblatt in Knochen", 1))
 
+# 226  Deckblatt wieder weiss - und dabei bleibt es
+#
+#      "Hm nein weiss."
+#
+#      deckblattFarbe faellt wieder weg. Nachgerechnet: der Stand ist
+#      danach byteweise wieder karten286.
+#
+#      DAMIT IST DIE FARBRUNDE DURCH. Gesehen und verworfen wurden:
+#      Beere im Kasten, Beere als Flaeche mit weisser Schrift in drei
+#      Rahmenfassungen, Hellorange, Sandorange, Knochen, und die Tafel
+#      mit zwoelf Toenen. Jedes Mal zurueck auf Weiss.
+#
+#      Das ist keine Unentschlossenheit, sondern ein Befund: die
+#      Ueberschrift ist nicht die Stelle fuer Farbe. Sie steht auf
+#      wechselnden Fotos, also muss sie auf jedem Untergrund tragen,
+#      und das kann nur Weiss. Wer hier das naechste Mal Farbe
+#      vorschlaegt, schlaegt dasselbe nochmal vor.
+#
+#      Was NICHT probiert wurde und offen steht, falls das Thema
+#      wiederkommt: die Handschriftzeile, der Namenszug unten
+#      (nameFarbe), das Schild ueber der Ueberschrift, oder das
+#      Sternchen-Highlight - also Farbe an einer NEBENstelle statt an
+#      der Hauptzeile.
+#
+#      Die Schluessel deckblattFarbe, kastenAn und der ganze
+#      Kastenapparat bleiben im Bundle. Ein Wert genuegt jeweils.
+
+P.append((
+ "kastenAn:0,deckblattFarbe:\"#E7DDCF\",kastenFarbe:\"#B03A5B\"",
+ "kastenAn:0,kastenFarbe:\"#B03A5B\"",
+ "Deckblatt wieder weiss", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
