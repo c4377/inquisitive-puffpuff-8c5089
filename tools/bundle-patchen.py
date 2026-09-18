@@ -7010,7 +7010,27 @@ P.append((
 #      GEPRUEFT: das gerenderte Deckblatt ist BYTEWEISE dasselbe Bild
 #      wie Probe 3. Keine Seitenfehler.
 
-P.append((\n "const zKa=BS_KACHEL.kastenAn===1&&t.folienRolle===\"deckblatt\"&&!tt.istKarte;",\n "const zKa=BS_KACHEL.kastenAn===1&&t.folienRolle===\"deckblatt\"&&!tt.istKarte;const zDf=(t.folienRolle===\"deckblatt\"&&!tt.istKarte&&BS_KACHEL.deckblattFarbe)||\"\";",\n "zDf: eigene Schriftfarbe fuer das Deckblatt, auch ohne Kasten", 1))\n\nP.append((\n "fill:rr?tt.highlight:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):",\n "fill:rr?tt.highlight:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):zDf&&Ve?zDf:",\n "Deckblattfarbe fuer hervorgehobene Einzelwoerter", 1))\n\nP.append((\n "fill:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):",\n "fill:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):zDf&&Ve?zDf:",\n "Deckblattfarbe fuer die ganze Zeile", 1))\n\nP.append((\n "kastenAn:1,kastenFarbe:\"#B03A5B\"",\n "kastenAn:0,deckblattFarbe:\"#E8A87C\",kastenFarbe:\"#B03A5B\"",\n "Kasten aus, Deckblatt in Sandorange", 1))\n\n# Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
+P.append((
+ "const zKa=BS_KACHEL.kastenAn===1&&t.folienRolle===\"deckblatt\"&&!tt.istKarte;",
+ "const zKa=BS_KACHEL.kastenAn===1&&t.folienRolle===\"deckblatt\"&&!tt.istKarte;const zDf=(t.folienRolle===\"deckblatt\"&&!tt.istKarte&&BS_KACHEL.deckblattFarbe)||\"\";",
+ "zDf: eigene Schriftfarbe fuer das Deckblatt, auch ohne Kasten", 1))
+
+P.append((
+ "fill:rr?tt.highlight:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):",
+ "fill:rr?tt.highlight:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):zDf&&Ve?zDf:",
+ "Deckblattfarbe fuer hervorgehobene Einzelwoerter", 1))
+
+P.append((
+ "fill:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):",
+ "fill:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):zDf&&Ve?zDf:",
+ "Deckblattfarbe fuer die ganze Zeile", 1))
+
+P.append((
+ "kastenAn:1,kastenFarbe:\"#B03A5B\"",
+ "kastenAn:0,deckblattFarbe:\"#E8A87C\",kastenFarbe:\"#B03A5B\"",
+ "Kasten aus, Deckblatt in Sandorange", 1))
+
+# Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
 DA = [
