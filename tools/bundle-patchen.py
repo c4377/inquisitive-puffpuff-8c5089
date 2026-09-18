@@ -6772,6 +6772,71 @@ P.append((
  "geteilt:1,geteiltAnteil:25,kastenAn:1,kastenPolsterX:.055,kastenPolsterY:.045,kastenRahmen:.009",
  "Den Kasten einschalten und seine Masse", 1))
 
+# 218  Kasten kleiner, Schreibschrift statt Serifenlose
+#
+#      "Kleiner? Und die Schreibschrift statt die non serif?"
+#
+#      Schrift: Qe wird im Kasten BS_KACHEL.zweiteFamilie
+#      ("Nothing You Could Do") - dieselbe Hand wie die zweite Zeile.
+#
+#      Kleiner war der lehrreiche Teil. Erster Versuch: nur die
+#      Startgroesse qe mal .72. Ergebnis: KEIN Unterschied. Dieselbe
+#      Falle wie bei der Story-Schrift in 207 - die Schrumpfschleife
+#      fuellt das Hoehenbudget Je wieder auf, egal wo sie anfaengt.
+#
+#      Zweiter Versuch: nur die Spalte schmaler. Ergebnis: schmaler
+#      UND hoeher, sechs Zeilen statt vier. Auch nicht kleiner,
+#      nur anders geschnitten.
+#
+#      Was wirkt, sind alle drei zusammen:
+#        qe            * kastenAnteil   (Startgroesse)
+#        Je            * kastenAnteil   (Hoehenbudget)
+#        Qt aus kastenSpalte statt zbr  (Spaltenbreite)
+#      Erst dann schrumpft der Block wirklich: vier Zeilen statt
+#      sechs, Luft links und rechts, Foto ringsum sichtbar.
+#
+#      Dazu ein Abstand unter dem Kasten. Der Kasten reicht um
+#      kastenPolsterY tiefer als die letzte Zeile, die Handschrift
+#      setzte davor genau auf seiner Unterkante auf. zKaLuft schiebt
+#      sie beim Uebergang rt===Lt einmalig nach unten.
+#
+#      GEPRUEFT im Browser, gleiches Deckblatt:
+#          karten279  vier Zeilen Serifenlose, Kasten ueber die
+#                     volle Spalte, Handschrift klebt an der Kante
+#          karten280  vier Zeilen Hand, Kasten mit Rand, Handschrift
+#                     frei darunter
+#      keine Seitenfehler.
+
+P.append((
+ "const zKa=BS_KACHEL.kastenAn===1&&t.folienRolle===\"deckblatt\"&&!tt.istKarte;zKa&&(Qe=(i.typography&&i.typography.bodyFontFamily)||t.bodyFontFamily||\"HelveticaNeueBrand\");",
+ "const zKa=BS_KACHEL.kastenAn===1&&t.folienRolle===\"deckblatt\"&&!tt.istKarte;zKa&&(Qe=BS_KACHEL.zweiteFamilie||(i.typography&&i.typography.bodyFontFamily)||t.bodyFontFamily||\"HelveticaNeueBrand\",qe=Math.max(c(12),Math.round(qe*(Number(BS_KACHEL.kastenAnteil)||.72))));",
+ "Schreibschrift im Kasten, und die Startgroesse kleiner", 1))
+
+P.append((
+ "Qt=r*zbr-(tt.polsterX||0)*2",
+ "Qt=r*(zKa&&BS_KACHEL.kastenSpalte?Number(BS_KACHEL.kastenSpalte):zbr)-(tt.polsterX||0)*2",
+ "Schmalere Spalte im Kasten, damit er Luft an den Seiten laesst", 1))
+
+P.append((
+ "*(t.bigHeadline===!0&&BS_KACHEL.pinnAnteil?Number(BS_KACHEL.pinnAnteil):1)-SR;let rt=0;for(;;){",
+ "*(t.bigHeadline===!0&&BS_KACHEL.pinnAnteil?Number(BS_KACHEL.pinnAnteil):1)*(zKa?(Number(BS_KACHEL.kastenAnteil)||.72):1)-SR;let rt=0;for(;;){",
+ "Der zweite Hebel: auch das Hoehenbudget schrumpft, sonst holt die Schleife die Groesse zurueck", 1))
+
+P.append((
+ "zKa&&Lt>0&&(()=>{const zPx=",
+ "const zKaLuft=zKa&&Lt>0?r*((Number(BS_KACHEL.kastenPolsterY)||.045)+(Number(BS_KACHEL.kastenLuft)||.02)):0;zKa&&Lt>0&&(()=>{const zPx=",
+ "Abstand unter dem Kasten ausrechnen", 1))
+
+P.append((
+ "if(zGT&&rt===Lt){const zU=n*(BS_KACHEL.geteiltUnten||BS_KACHEL.textUnten||.86)",
+ "if(zKa&&rt===Lt)De+=zKaLuft;if(zGT&&rt===Lt){const zU=n*(BS_KACHEL.geteiltUnten||BS_KACHEL.textUnten||.86)",
+ "Die Handschrift beginnt unter dem Kasten, nicht auf seiner Kante", 1))
+
+P.append((
+ "kastenAn:1,kastenPolsterX:.055",
+ "kastenAn:1,kastenAnteil:.72,kastenSpalte:.72,kastenLuft:.02,kastenPolsterX:.055",
+ "Groesse, Spaltenbreite und Abstand des Kastens", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

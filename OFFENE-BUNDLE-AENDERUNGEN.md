@@ -7420,3 +7420,51 @@ Keine Seitenfehler.
 
 `kastenPolsterX: .055`, `kastenPolsterY: .045`, `kastenRahmen: .009` — jeweils
 Anteile der Kachelbreite. `kastenAn: 0` schaltet alles wieder ab.
+
+## 218 — Kasten kleiner, Schreibschrift statt Serifenloser
+
+*„Kleiner? Und die Schreibschrift statt die non serif?"*
+
+**Die Schrift** war der einfache Teil: `Qe` wird im Kasten
+`BS_KACHEL.zweiteFamilie` — „Nothing You Could Do", dieselbe Hand wie die
+zweite Zeile.
+
+### „Kleiner" war der lehrreiche Teil
+
+**Erster Versuch:** nur die Startgröße `qe * .72`. Ergebnis: **kein
+Unterschied**. Dieselbe Falle wie bei der Story-Schrift in 207 — die
+Schrumpfschleife füllt das Höhenbudget `Je` wieder auf, egal wo sie anfängt.
+
+**Zweiter Versuch:** nur die Spalte schmaler. Ergebnis: schmaler **und höher**,
+sechs Zeilen statt vier. Auch nicht kleiner, nur anders geschnitten.
+
+**Was wirkt, sind alle drei zusammen:**
+
+| Hebel | |
+|---|---|
+| `qe * kastenAnteil` | Startgröße |
+| `Je * kastenAnteil` | Höhenbudget |
+| `Qt` aus `kastenSpalte` statt `zbr` | Spaltenbreite |
+
+Erst dann schrumpft der Block wirklich: vier Zeilen statt sechs, Luft links und
+rechts, Foto ringsum sichtbar.
+
+### Der Abstand darunter
+
+Der Kasten reicht um `kastenPolsterY` tiefer als die letzte Zeile — die
+Handschrift setzte davor **genau auf seiner Unterkante** auf. `zKaLuft` schiebt
+sie beim Übergang `rt === Lt` einmalig nach unten.
+
+**Geprüft** im Browser, gleiches Deckblatt:
+
+| | |
+|---|---|
+| karten279 | vier Zeilen Serifenlose, Kasten über die volle Spalte, Handschrift klebt an der Kante |
+| **karten280** | vier Zeilen Hand, Kasten mit Rand, Handschrift frei darunter |
+
+Keine Seitenfehler.
+
+### Stellschrauben
+
+`kastenAnteil: .72` · `kastenSpalte: .72` · `kastenLuft: .02` ·
+`kastenPolsterX: .055` · `kastenPolsterY: .045` · `kastenRahmen: .009`
