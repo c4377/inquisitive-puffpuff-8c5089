@@ -6975,7 +6975,42 @@ P.append((
  "kastenSchrift:\"Playfair Display\",kastenAnteil:.70",
  "Kasten eine Stufe groesser", 1))
 
-# Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
+# 223  Kasten aus, Deckblatt in Sandorange
+#
+#      "Zurueck zu nur Playfair in weiss oder vielleicht hellorange"
+#      - dann: "Sandorange mal".
+#
+#      Drei Proben gerendert, nichts davon veroeffentlicht, bis die
+#      Wahl feststand:
+#          weiss     der Stand vor dem ganzen Kasten
+#          #F2A26B   Hellorange
+#          #E8A87C   Sandorange   <- gewaehlt
+#
+#      Der Kasten geht ueber kastenAn:0 aus. Der ganze Apparat aus
+#      217 bis 222 bleibt im Bundle liegen - Kasten, Rahmen, Farben,
+#      Masse, die Entkopplung der Handschrift. Eine 1 holt ihn zurueck.
+#
+#      Neu ist nur zDf: eine Schriftfarbe fuer das Deckblatt, die auch
+#      OHNE Kasten greift.
+#
+#          zDf = t.folienRolle==="deckblatt" && !tt.istKarte
+#                && BS_KACHEL.deckblattFarbe
+#
+#      Karten und Folgefolien bleiben aussen vor, wie beim Kasten.
+#      Ohne den Schluessel ist alles wie vorher - die Farbe faellt auf
+#      tt.schriftFarbe zurueck, also Weiss.
+#
+#      ZU BEDENKEN, falls sie das Thema nochmal aufmacht: ohne Kasten
+#      steht die Schrift direkt auf dem Foto, und der Untergrund
+#      wechselt von Bild zu Bild. Weiss traegt auf jedem Foto, Orange
+#      nur auf dunklen. Der Schlagschatten bleibt aktiv und faengt
+#      einiges ab, aber auf einem hellen oder sandfarbenen Bild wird
+#      es eng. Genau dafuer gab es den Kasten.
+#
+#      GEPRUEFT: das gerenderte Deckblatt ist BYTEWEISE dasselbe Bild
+#      wie Probe 3. Keine Seitenfehler.
+
+P.append((\n "const zKa=BS_KACHEL.kastenAn===1&&t.folienRolle===\"deckblatt\"&&!tt.istKarte;",\n "const zKa=BS_KACHEL.kastenAn===1&&t.folienRolle===\"deckblatt\"&&!tt.istKarte;const zDf=(t.folienRolle===\"deckblatt\"&&!tt.istKarte&&BS_KACHEL.deckblattFarbe)||\"\";",\n "zDf: eigene Schriftfarbe fuer das Deckblatt, auch ohne Kasten", 1))\n\nP.append((\n "fill:rr?tt.highlight:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):",\n "fill:rr?tt.highlight:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):zDf&&Ve?zDf:",\n "Deckblattfarbe fuer hervorgehobene Einzelwoerter", 1))\n\nP.append((\n "fill:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):",\n "fill:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):zDf&&Ve?zDf:",\n "Deckblattfarbe fuer die ganze Zeile", 1))\n\nP.append((\n "kastenAn:1,kastenFarbe:\"#B03A5B\"",\n "kastenAn:0,deckblattFarbe:\"#E8A87C\",kastenFarbe:\"#B03A5B\"",\n "Kasten aus, Deckblatt in Sandorange", 1))\n\n# Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
 DA = [

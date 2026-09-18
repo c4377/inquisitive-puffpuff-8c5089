@@ -7573,3 +7573,41 @@ git show <commit>:site/assets/index-B5karten282.js
 ```
 
 So verglichen: Probe und karten284 sind identisch.
+
+## 223 — Kasten aus, Deckblatt in Sandorange
+
+*„Zurück zu nur Playfair in weiß oder vielleicht hellorange"* — dann:
+*„Sandorange mal"*.
+
+Drei Proben gerendert, **nichts davon veröffentlicht**, bis die Wahl feststand:
+
+| | |
+|---|---|
+| weiß | der Stand vor dem ganzen Kasten |
+| `#F2A26B` | Hellorange |
+| **`#E8A87C`** | **Sandorange — gewählt** |
+
+Der Kasten geht über `kastenAn: 0` aus. Der ganze Apparat aus **217 bis 222**
+bleibt im Bundle liegen — Kasten, Rahmen, Farben, Maße, die Entkopplung der
+Handschrift. Eine `1` holt ihn zurück.
+
+Neu ist nur `zDf`: eine Schriftfarbe fürs Deckblatt, die auch **ohne** Kasten
+greift.
+
+```js
+zDf = t.folienRolle === "deckblatt" && !tt.istKarte
+   && BS_KACHEL.deckblattFarbe
+```
+
+Karten und Folgefolien bleiben außen vor, wie beim Kasten. Ohne den Schlüssel
+ist alles wie vorher — die Farbe fällt auf `tt.schriftFarbe` zurück, also Weiß.
+
+### Zu bedenken, falls das Thema wiederkommt
+
+Ohne Kasten steht die Schrift **direkt auf dem Foto**, und der Untergrund
+wechselt von Bild zu Bild. Weiß trägt auf jedem Foto, Orange nur auf dunklen.
+Der Schlagschatten bleibt aktiv und fängt einiges ab, aber auf einem hellen
+oder sandfarbenen Bild wird es eng. Genau dafür gab es den Kasten.
+
+**Geprüft:** das gerenderte Deckblatt ist **byteweise dasselbe Bild** wie
+Probe 3. Keine Seitenfehler.
