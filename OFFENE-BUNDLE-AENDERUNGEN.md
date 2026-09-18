@@ -7697,3 +7697,33 @@ Hauptzeile.
 
 Die Schlüssel `deckblattFarbe`, `kastenAn` und der ganze Kastenapparat bleiben
 im Bundle. Ein Wert genügt jeweils.
+
+## 227 — Story-Deckblätter wie Posts, für Reels-Cover
+
+*„Ich brauche Reels Cover also bitte die Stories exakt so branden wie die
+Posts."*
+
+Die Stories liefen schon durch den Feed-Zeichner — `zStoryFeed` setzt
+`format:"9:16"`, `textBands` und `folienRolle`. Der einzige Unterschied war
+`storyAnteil: .60` aus **207**: die Story-Schrift war um 40 % verkleinert.
+
+Das gilt jetzt nur noch für **Folgefolien**. Deckblätter bekommen die volle
+Postgröße, über **beide** Hebel — Startgröße und Höhenbudget. Nur einer davon
+wäre wirkungslos, siehe 218.
+
+### Warum geteilt statt überall
+
+Ihr Wunsch von damals galt den **Text-Folien** im Story-Menü, der von heute gilt
+dem **Cover**. So bleiben beide erfüllt. Wenn sie es doch überall will, fällt
+die Bedingung `folienRolle !== "deckblatt"` wieder weg.
+
+**Geprüft:** 4:5-Post und 9:16-Deckblatt mit demselben Text nebeneinander —
+gleiche Schrift, gleiche Größenverhältnisse, Handschrift und Namenszug an
+derselben Stelle. Die Story bricht in mehr Zeilen um, das liegt am schmaleren
+Format.
+
+### Zum Profilgitter
+
+Instagram schneidet ein Reels-Cover fürs Profil **mittig auf 4:5** zu, also etwa
+15 bis 85 % der Höhe. Der Textblock liegt bei 17 bis 80 % und überlebt den
+Zuschnitt. Wer hier die Lage ändert, sollte das nachrechnen.

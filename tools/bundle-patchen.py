@@ -7120,6 +7120,45 @@ P.append((
  "kastenAn:0,kastenFarbe:\"#B03A5B\"",
  "Deckblatt wieder weiss", 1))
 
+# 227  Story-Deckblaetter wie Posts - fuer Reels-Cover
+#
+#      "Ich brauche Reels Cover also bitte die Stories exakt so
+#       branden wie die Posts."
+#
+#      Die Stories liefen schon durch den Feed-Zeichner (zStoryFeed
+#      setzt format 9:16, textBands, folienRolle). Der einzige
+#      Unterschied war storyAnteil .60 aus 207 - sie hatte die
+#      Story-Schrift damals um 40 Prozent verkleinert.
+#
+#      Das gilt jetzt nur noch fuer FOLGEfolien. Deckblaetter
+#      bekommen die volle Postgroesse, ueber beide Hebel: Startgroesse
+#      und Hoehenbudget. Nur einer davon waere wirkungslos, siehe 218.
+#
+#      WARUM GETEILT statt ueberall: ihr Wunsch von damals galt den
+#      Text-Folien im Story-Menue, der von heute gilt dem Cover. Beide
+#      bleiben so erfuellt. Wenn sie es doch ueberall will, faellt die
+#      Bedingung folienRolle!=="deckblatt" wieder weg.
+#
+#      GEPRUEFT: 4:5-Post und 9:16-Deckblatt mit demselben Text
+#      nebeneinander - gleiche Schrift, gleiche Groessenverhaeltnisse,
+#      Handschrift und Namenszug an derselben Stelle. Die Story bricht
+#      in mehr Zeilen um, das liegt am schmaleren Format.
+#
+#      ZUM GITTER: Instagram schneidet ein Reels-Cover fuers Profil
+#      mittig auf 4:5 zu, also etwa 15 bis 85 Prozent der Hoehe. Der
+#      Textblock liegt bei 17 bis 80 Prozent und ueberlebt den
+#      Zuschnitt. Wer hier die Lage aendert, sollte das nachrechnen.
+
+P.append((
+ "t.format===\"9:16\"&&BS_KACHEL.storyAnteil&&(qe=Math.max(c(12),Math.round(qe*Number(BS_KACHEL.storyAnteil))))",
+ "t.format===\"9:16\"&&BS_KACHEL.storyAnteil&&t.folienRolle!==\"deckblatt\"&&(qe=Math.max(c(12),Math.round(qe*Number(BS_KACHEL.storyAnteil))))",
+ "Story-Deckblaetter in voller Postgroesse (Startgroesse)", 1))
+
+P.append((
+ "(t.format===\"9:16\"&&BS_KACHEL.storyAnteil?Number(BS_KACHEL.storyAnteil):1)",
+ "(t.format===\"9:16\"&&BS_KACHEL.storyAnteil&&t.folienRolle!==\"deckblatt\"?Number(BS_KACHEL.storyAnteil):1)",
+ "Dasselbe beim Hoehenbudget, sonst schrumpft die Schleife es zurueck", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
