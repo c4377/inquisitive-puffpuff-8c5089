@@ -7611,3 +7611,35 @@ oder sandfarbenen Bild wird es eng. Genau dafür gab es den Kasten.
 
 **Geprüft:** das gerenderte Deckblatt ist **byteweise dasselbe Bild** wie
 Probe 3. Keine Seitenfehler.
+
+## 224 — Deckblatt wieder weiß, und der Akzent ist nirgends
+
+*„Ok nein weiß ich find meinen Akzent nicht."*
+
+`deckblattFarbe` fällt weg, damit greift `zDf` nicht mehr und die Farbe fällt
+auf `tt.schriftFarbe` zurück — also Weiß. Der Schlüssel selbst bleibt im
+Zeichner; ein Wert genügt, um wieder einzufärben.
+
+### Nachgesehen: sie wird ihren Akzent auch nicht finden
+
+Im Feed-Zweig, 45 KB lang, kommt `accentColor` **null mal** vor. Ihre Marke
+führt `colors.accent = "#FF3A2E"`, der Kachelzeichner liest das an keiner
+Stelle.
+
+Farbe kann auf einer Feed-Kachel nur über `tt.highlight` kommen, also über
+Wörter in `*Sternchen*`. Auch das ist **keine** Markenfarbe — in allen
+Fassungen steht dort eine feste Konstante:
+
+```js
+wa = "#F3E5AB"   // ein blasses Gelb
+E1 = wa
+// sonst: "#FFFFFF", "#000000", null, h.betont
+```
+
+Ihr Akzent ist also nicht falsch gesetzt und nicht überschrieben — er ist im
+Kachelzeichner schlicht **nicht angeschlossen**. Wenn sie ihn sehen will, ist
+das eine Änderung, keine Einstellung.
+
+Naheliegende Stellen, falls sie das will: das `*Wort*`-Highlight auf
+`colors.accent` legen, die Handschriftzeile einfärben, oder den Namenszug unten
+(`nameFarbe`, steht heute auf `rgba(246,241,230,0.55)`).

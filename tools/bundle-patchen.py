@@ -7030,6 +7030,38 @@ P.append((
  "kastenAn:0,deckblattFarbe:\"#E8A87C\",kastenFarbe:\"#B03A5B\"",
  "Kasten aus, Deckblatt in Sandorange", 1))
 
+# 224  Deckblatt wieder weiss - und der Akzent ist nirgends
+#
+#      "Ok nein weiss ich find meinen Akzent nicht."
+#
+#      deckblattFarbe faellt weg, damit greift zDf nicht mehr und die
+#      Farbe faellt auf tt.schriftFarbe zurueck, also Weiss. Der
+#      Schluessel selbst bleibt im Zeichner - ein Wert genuegt, um
+#      wieder einzufaerben.
+#
+#      NACHGESEHEN, warum sie ihren Akzent nicht findet: sie wird ihn
+#      auch nicht finden. Im Feed-Zweig, 45 KB lang, kommt
+#      accentColor NULL MAL vor. Ihre Marke fuehrt
+#      colors.accent "#FF3A2E", der Zeichner liest das an keiner
+#      Stelle.
+#
+#      Farbe kann auf einer Feed-Kachel nur ueber tt.highlight
+#      kommen, also ueber Woerter in *Sternchen*. Auch das ist keine
+#      Markenfarbe: in allen Fassungen steht dort eine feste
+#      Konstante -
+#          wa = "#F3E5AB"   ein blasses Gelb
+#          E1 = wa
+#          oder "#FFFFFF", "#000000", null
+#
+#      Ihr Akzent ist also nicht falsch gesetzt oder ueberschrieben,
+#      er ist im Kachelzeichner schlicht nicht angeschlossen. Wenn
+#      sie ihn sehen will, ist das eine Aenderung, keine Einstellung.
+
+P.append((
+ "kastenAn:0,deckblattFarbe:\"#E8A87C\",kastenFarbe:\"#B03A5B\"",
+ "kastenAn:0,kastenFarbe:\"#B03A5B\"",
+ "Deckblatt wieder weiss - der Schluessel faellt weg, zDf greift nicht mehr", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
