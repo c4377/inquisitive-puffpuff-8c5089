@@ -7304,3 +7304,45 @@ vom Hell/Dunkel-Rhythmus.
 
 **Geprüft** im Browser: Chip da, Klick setzt `tileMode` auf `"split"`, die
 Kachel zeichnet zweigeteilt. Keine Seitenfehler.
+
+## 215 — Der geteilte Post: weißer Kopf mit schwarzem Rahmen
+
+*„Statt Playfair hätte ich lieber dieselbe Schrift wie die andere aber auf
+weißem Hintergrund der schwarz umrahmt ist in schwarz und der 2. Teil wie er
+ist und die Folge Folien wie sie sind in der Handschrift."*
+
+Drei Änderungen, alle im Split-Zweig.
+
+**1. Die obere Hälfte war ein zweites Foto.** `Fe(t.background, true)` hat dort
+ein Bild gezeichnet. Jetzt steht da ein weißer Grund mit schwarzem Rahmen,
+Stärke `c(9)`, nach innen gesetzt, damit er nicht über die Kante läuft.
+
+**2. Keine Plättchen und schwarze Schrift — nur oben.** Auf weißem Grund wären
+die weißen Plättchen unsichtbar und würden nur die Zeilenhöhe aufblähen. Beides
+hängt an `lt === "oben"`; die untere Hälfte bleibt unverändert, samt Plättchen
+und Bandlogik.
+
+**3. Nur das Deckblatt wird geteilt.**
+
+```js
+splitBands: ot.tileMode === "split" && ta === "deckblatt" ? true : undefined
+```
+
+`ta` kommt aus `CG(index, anzahl)` und ist nur bei Index 0 `"deckblatt"`. Die
+Folgefolien bleiben damit gewöhnliche Feed-Folien — Playfair und Handschrift,
+wie sie sind.
+
+### Zum „statt Playfair"
+
+Die Schrift in der oberen Hälfte war nie Playfair — sie kommt aus
+`typography.bodyFontFamily`, bei ihrer Marke `OpenSansBrand`. Gemeint war das
+**Deckblatt**, das vorher wie jedes andere Cover in Playfair gesetzt war.
+
+**Geprüft** im Browser, ein Tag mit drei Folien:
+
+| | |
+|---|---|
+| Folie 1 | weißer Kopf, schwarzer Rahmen, schwarze Serifenlose, Foto unten |
+| Folie 2 | gewöhnliche Feed-Folie, nicht geteilt |
+
+Keine Seitenfehler.

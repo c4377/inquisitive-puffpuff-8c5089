@@ -6591,6 +6591,67 @@ P.append((
  "{wert:\"standard\",label:\"Standard\"},{wert:\"foto\",label:\"Foto\"},{wert:\"split\",label:\"Geteilt\"},{wert:\"montserrat\",label:\"Fließtext auf Foto\"}",
  "Der Chip \"Geteilt\" zurueck in die VERSION-Reihe", 1))
 
+# 215  Der geteilte Post: weisser Kopf mit schwarzem Rahmen
+#
+#      "Statt Playfair haette ich lieber dieselbe Schrift wie die
+#       andere aber auf weissem Hintergrund der schwarz umrahmt ist
+#       in schwarz und der 2. Teil wie er ist und die Folge Folien
+#       wie sie sind in der Handschrift."
+#
+#      Drei Aenderungen, alle am Split-Zweig:
+#
+#      1. Obere Haelfte war ein zweites Foto (Fe(t.background,!0)).
+#         Jetzt weisser Grund mit schwarzem Rahmen, Staerke c(9),
+#         innen gesetzt damit er nicht ueber die Kante laeuft.
+#      2. Die Plaettchen hinter den Zeilen entfallen OBEN - auf
+#         weissem Grund waeren sie unsichtbar und wuerden nur die
+#         Zeilenhoehe aufblaehen. Die Schrift dort ist schwarz statt
+#         Oe. Beides nur fuer lt==="oben"; unten bleibt alles wie es
+#         war, samt Plaettchen und Bandlogik.
+#      3. Nur das DECKBLATT wird geteilt:
+#
+#             splitBands:ot.tileMode==="split"&&ta==="deckblatt"
+#
+#         ta kommt aus CG(index, anzahl) und ist nur bei Index 0
+#         "deckblatt". Die Folgefolien bleiben damit gewoehnliche
+#         Feed-Folien - Playfair und Handschrift, wie sie sind.
+#
+#      Die Schrift oben war nie Playfair: sie kommt aus
+#      typography.bodyFontFamily, bei ihrer Marke OpenSansBrand.
+#      "Statt Playfair" meint das Deckblatt, das vorher wie jedes
+#      andere Cover gesetzt war.
+#
+#      GEPRUEFT im Browser, Tag mit drei Folien:
+#          Folie 1  weisser Kopf, schwarzer Rahmen, schwarze Serifenlose,
+#                   Foto unten
+#          Folie 2  gewoehnliche Feed-Folie, nicht geteilt
+#      keine Seitenfehler.
+
+P.append((
+ "splitBands:ot.tileMode===\"split\"?!0:void 0",
+ "splitBands:ot.tileMode===\"split\"&&ta===\"deckblatt\"?!0:void 0",
+ "Nur das Deckblatt wird geteilt, die Folgefolien bleiben gewoehnliche Feed-Folien", 1))
+
+P.append((
+ "await Fe(t.background,!0),await Fe(t.splitImage||t.overlayImage||t.background,!1);",
+ "(()=>{const zRa=c(9);e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:ge,fill:\"#FFFFFF\",selectable:!1})),e.add(new Pe.fabric.Rect({left:zRa/2,top:zRa/2,width:Math.max(1,r-zRa),height:Math.max(1,ge-zRa),fill:\"transparent\",stroke:\"#000000\",strokeWidth:zRa,selectable:!1}))})(),await Fe(t.splitImage||t.overlayImage||t.background,!1);",
+ "Obere Haelfte: weisser Grund mit schwarzem Rahmen statt Foto", 1))
+
+P.append((
+ "e.add(new Pe.fabric.Rect({left:r/2,top:jr,width:Zt,height:sr*.98,originX:\"center\",originY:\"center\",fill:dr.plattenFarbe,rx:dr.rundung,ry:dr.rundung,selectable:!1}));",
+ "lt!==\"oben\"&&e.add(new Pe.fabric.Rect({left:r/2,top:jr,width:Zt,height:sr*.98,originX:\"center\",originY:\"center\",fill:dr.plattenFarbe,rx:dr.rundung,ry:dr.rundung,selectable:!1}));",
+ "Keine Plaettchen auf dem weissen Teil - dort waeren sie unsichtbar", 1))
+
+P.append((
+ "fontStyle:ur.kursiv?\"italic\":\"normal\",fontWeight:\"400\",fill:Oe,selectable:!1}",
+ "fontStyle:ur.kursiv?\"italic\":\"normal\",fontWeight:\"400\",fill:lt===\"oben\"?\"#000000\":Oe,selectable:!1}",
+ "Schwarze Schrift oben (kursive Woerter)", 1))
+
+P.append((
+ "originY:\"center\",fontSize:tt,fontFamily:wt,fontWeight:\"400\",fill:Oe,selectable:!1}",
+ "originY:\"center\",fontSize:tt,fontFamily:wt,fontWeight:\"400\",fill:lt===\"oben\"?\"#000000\":Oe,selectable:!1}",
+ "Schwarze Schrift oben (gewoehnliche Zeilen)", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
