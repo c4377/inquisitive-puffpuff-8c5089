@@ -7062,6 +7062,32 @@ P.append((
  "kastenAn:0,kastenFarbe:\"#B03A5B\"",
  "Deckblatt wieder weiss - der Schluessel faellt weg, zDf greift nicht mehr", 1))
 
+# 225  Deckblatt in Knochen
+#
+#      "Ich meine ich finde geschmacklich keinen der mir gefaellt."
+#      Also nicht mehr einzeln vorschlagen, sondern zwoelf Toene auf
+#      EINEM Blatt, gleiche Kachel, gleicher Text, gleiches Foto.
+#      Gewaehlt: Nr 2, Knochen #E7DDCF.
+#
+#      WIE DIE TAFEL ENTSTAND, falls sie nochmal gebraucht wird:
+#      eine Probefassung, in der zDf zuerst t.probeFarbe liest,
+#      danach zwoelf Tage mit je einem Ton gesaet. So stehen alle
+#      Varianten in EINEM Browserlauf nebeneinander statt in zwoelf.
+#      Die Einzelbilder danach mit einem kleinen Node-Skript zu einem
+#      Raster zusammengesetzt - reines zlib und PNG von Hand, es ist
+#      keine Bildbibliothek im Container.
+#
+#      STOLPERSTELLE: die Kacheln 10 bis 12 lagen beim ersten Lauf
+#      unter der klebenden Kopfleiste und kamen halb als Werkzeugleiste
+#      heraus. scrollIntoViewIfNeeded genuegt nicht, es braucht danach
+#      noch ein Stueck Radabwaerts, sonst deckt die Leiste die obere
+#      Kante ab.
+
+P.append((
+ "kastenAn:0,kastenFarbe:\"#B03A5B\"",
+ "kastenAn:0,deckblattFarbe:\"#E7DDCF\",kastenFarbe:\"#B03A5B\"",
+ "Deckblatt in Knochen", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

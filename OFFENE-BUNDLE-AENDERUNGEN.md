@@ -7643,3 +7643,31 @@ das eine Änderung, keine Einstellung.
 Naheliegende Stellen, falls sie das will: das `*Wort*`-Highlight auf
 `colors.accent` legen, die Handschriftzeile einfärben, oder den Namenszug unten
 (`nameFarbe`, steht heute auf `rgba(246,241,230,0.55)`).
+
+## 225 — Deckblatt in Knochen
+
+*„Ich meine ich finde geschmacklich keinen der mir gefällt."*
+
+Also nicht weiter einzeln vorschlagen, sondern **zwölf Töne auf einem Blatt** —
+gleiche Kachel, gleicher Text, gleiches Foto. Gewählt: Nr. 2, **Knochen
+`#E7DDCF`**.
+
+| | | |
+|---|---|---|
+| 1 Weiß | 2 **Knochen** `#E7DDCF` | 3 Sand `#D9C7A7` |
+| 4 Ocker `#C9973F` | 5 Terrakotta `#C56A4E` | 6 ihr `#FF3A2E` |
+| 7 Ziegel `#A63A2B` | 8 Wein `#7B2D3A` | 9 Altrosa `#C98A93` |
+| 10 Salbei `#8FA08B` | 11 Rauchblau `#6B7FA3` | 12 Petrol `#2F5D62` |
+
+### Wie die Tafel entstand, falls sie nochmal gebraucht wird
+
+Eine Probefassung, in der `zDf` zuerst `t.probeFarbe` liest, dann zwölf Tage mit
+je einem Ton gesät. So stehen alle Varianten in **einem** Browserlauf
+nebeneinander statt in zwölf. Die Einzelbilder danach mit einem kleinen
+Node-Skript zu einem Raster zusammengesetzt — reines zlib und PNG von Hand, es
+ist keine Bildbibliothek im Container.
+
+**Stolperstelle:** die Kacheln 10 bis 12 lagen beim ersten Lauf unter der
+klebenden Kopfleiste und kamen halb als Werkzeugleiste heraus.
+`scrollIntoViewIfNeeded` genügt nicht — es braucht danach noch ein Stück
+Rad abwärts, sonst deckt die Leiste die obere Kante ab.
