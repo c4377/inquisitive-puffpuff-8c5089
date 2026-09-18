@@ -6652,6 +6652,47 @@ P.append((
  "originY:\"center\",fontSize:tt,fontFamily:wt,fontWeight:\"400\",fill:lt===\"oben\"?\"#000000\":Oe,selectable:!1}",
  "Schwarze Schrift oben (gewoehnliche Zeilen)", 1))
 
+# 216  215 wieder zurueck - es ging nie um den geteilten Post
+#
+#      "Aehm ich meinte nicht die geteilten aendere das zurueck ich
+#       meinte alle Posts."
+#
+#      Ich hatte ihren Satz auf den geteilten Post bezogen, weil wir
+#      gerade darueber gesprochen hatten. Gemeint waren die Deckblaetter
+#      aller Posts.
+#
+#      Alle fuenf Eingriffe aus 215 sind hier umgedreht. Nachgerechnet:
+#      der Stand ist danach BYTEWEISE wieder karten276.
+#
+#      Die Abschnitte 214 (der Chip "Geteilt") und alles davor bleiben.
+#      Was sie wirklich will, ist noch nicht gebaut - erst muss klar
+#      sein, ob das Foto auf dem Deckblatt verschwindet.
+
+P.append((
+ "splitBands:ot.tileMode===\"split\"&&ta===\"deckblatt\"?!0:void 0",
+ "splitBands:ot.tileMode===\"split\"?!0:void 0",
+ "Zurueck: Nur das Deckblatt wird geteilt, die Folgefolien bleiben gewoehnliche Feed-Folien", 1))
+
+P.append((
+ "(()=>{const zRa=c(9);e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:ge,fill:\"#FFFFFF\",selectable:!1})),e.add(new Pe.fabric.Rect({left:zRa/2,top:zRa/2,width:Math.max(1,r-zRa),height:Math.max(1,ge-zRa),fill:\"transparent\",stroke:\"#000000\",strokeWidth:zRa,selectable:!1}))})(),await Fe(t.splitImage||t.overlayImage||t.background,!1);",
+ "await Fe(t.background,!0),await Fe(t.splitImage||t.overlayImage||t.background,!1);",
+ "Zurueck: Obere Haelfte: weisser Grund mit schwarzem Rahmen statt Foto", 1))
+
+P.append((
+ "lt!==\"oben\"&&e.add(new Pe.fabric.Rect({left:r/2,top:jr,width:Zt,height:sr*.98,originX:\"center\",originY:\"center\",fill:dr.plattenFarbe,rx:dr.rundung,ry:dr.rundung,selectable:!1}));",
+ "e.add(new Pe.fabric.Rect({left:r/2,top:jr,width:Zt,height:sr*.98,originX:\"center\",originY:\"center\",fill:dr.plattenFarbe,rx:dr.rundung,ry:dr.rundung,selectable:!1}));",
+ "Zurueck: Keine Plaettchen auf dem weissen Teil - dort waeren sie unsichtbar", 1))
+
+P.append((
+ "fontStyle:ur.kursiv?\"italic\":\"normal\",fontWeight:\"400\",fill:lt===\"oben\"?\"#000000\":Oe,selectable:!1}",
+ "fontStyle:ur.kursiv?\"italic\":\"normal\",fontWeight:\"400\",fill:Oe,selectable:!1}",
+ "Zurueck: Schwarze Schrift oben (kursive Woerter)", 1))
+
+P.append((
+ "originY:\"center\",fontSize:tt,fontFamily:wt,fontWeight:\"400\",fill:lt===\"oben\"?\"#000000\":Oe,selectable:!1}",
+ "originY:\"center\",fontSize:tt,fontFamily:wt,fontWeight:\"400\",fill:Oe,selectable:!1}",
+ "Zurueck: Schwarze Schrift oben (gewoehnliche Zeilen)", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

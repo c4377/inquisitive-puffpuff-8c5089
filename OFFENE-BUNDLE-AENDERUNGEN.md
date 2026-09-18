@@ -7346,3 +7346,21 @@ Die Schrift in der oberen Hälfte war nie Playfair — sie kommt aus
 | Folie 2 | gewöhnliche Feed-Folie, nicht geteilt |
 
 Keine Seitenfehler.
+
+## 216 — 215 wieder zurück: es ging nie um den geteilten Post
+
+*„Ähm ich meinte nicht die geteilten ändere das zurück ich meinte alle Posts."*
+
+Ich hatte ihren Satz auf den geteilten Post bezogen, weil wir gerade darüber
+gesprochen hatten. Gemeint waren die **Deckblätter aller Posts**.
+
+Alle fünf Eingriffe aus **215** sind hier umgedreht. Nachgerechnet: der Stand
+ist danach **byteweise wieder karten276**.
+
+Abschnitt **214** — der Chip „Geteilt" — bleibt. Der geteilte Post ist also
+weiterhin erreichbar und sieht wieder so aus wie früher.
+
+Was sie wirklich will, ist noch nicht gebaut. Offen ist die Frage, ob auf dem
+Deckblatt das **Foto verschwindet** (weißer Grund über die ganze Kachel) oder
+ob der weiße, schwarz umrahmte Block **auf** dem Foto sitzt. Davon hängt ab,
+wie der ganze Feed aussieht — deshalb erst fragen, dann bauen.
