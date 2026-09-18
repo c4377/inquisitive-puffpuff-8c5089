@@ -7364,3 +7364,59 @@ Was sie wirklich will, ist noch nicht gebaut. Offen ist die Frage, ob auf dem
 Deckblatt das **Foto verschwindet** (weißer Grund über die ganze Kachel) oder
 ob der weiße, schwarz umrahmte Block **auf** dem Foto sitzt. Davon hängt ab,
 wie der ganze Feed aussieht — deshalb erst fragen, dann bauen.
+
+## 217 — Deckblätter: weißer Kasten mit schwarzem Rahmen
+
+*„Statt Playfair … dieselbe Schrift wie die andere aber auf weißem Hintergrund
+der schwarz umrahmt ist in schwarz und der 2. Teil wie er ist und die Folge
+Folien wie sie sind in der Handschrift"* — und dann: *„ich meinte alle Posts"*.
+Auf Nachfrage: **das Foto bleibt**, der Kasten sitzt darauf.
+
+Ein Schalter trägt alles:
+
+```js
+zKa = BS_KACHEL.kastenAn === 1
+   && t.folienRolle === "deckblatt"
+   && !tt.istKarte
+```
+
+Karten (Zettel, Ablauf, Reminder) sind ausgenommen — die haben ihre eigene
+Gestalt. Folgefolien ebenfalls: dort ist `folienRolle` nie `"deckblatt"`,
+Playfair und Handschrift bleiben unberührt.
+
+### Was der Schalter bewirkt
+
+* `Qe` wird die **Fließschrift der Marke** statt `deckblattFamilie`.
+* **Ein** Kasten hinter dem ganzen Überschriftsblock: weiß, darauf ein
+  schwarzer Rahmen. Breite aus `PB` — der breitesten Überschriftszeile, die
+  ohnehin schon berechnet wurde — Höhe `Lt * Et * zF`. Auf `r*.94` gedeckelt,
+  damit er nie über die Kachel läuft.
+* Die **Plättchen je Zeile entfallen** dort. Der Kasten ist schon da.
+* Überschrift **schwarz, ohne Schlagschatten**. Der Schatten würde auf Weiß nur
+  schmieren.
+* `zGT` — der geteilte Textsatz, `geteiltAnteil: 25` — bleibt auf Deckblättern
+  aus. Er verschiebt `De` **mitten in der Schleife**, und der Kasten wird vorher
+  gemessen; sonst säße er woanders als der Text.
+
+### Ohne Foto passiert nichts
+
+Ohne Foto wird `nurErsteZeilePlatte` nicht gesetzt, damit ist `Lt = 0` und der
+Kasten fällt über `Lt > 0` von selbst weg. Reine Textdeckblätter bleiben wie
+sie waren — kein halb gebauter Rahmen.
+
+Der zweite Teil ist unangetastet: `QeZ`, Größe, Farbe und Schatten der
+Handschrift stehen wie vorher.
+
+**Geprüft** im Browser, Deckblatt mit Foto:
+
+| Überschrift | Ergebnis |
+|---|---|
+| eine Zeile | Kasten eng um „15 Tage." |
+| vier Zeilen | Kasten wächst mit, Handschrift darunter frei |
+
+Keine Seitenfehler.
+
+### Stellschrauben
+
+`kastenPolsterX: .055`, `kastenPolsterY: .045`, `kastenRahmen: .009` — jeweils
+Anteile der Kachelbreite. `kastenAn: 0` schaltet alles wieder ab.

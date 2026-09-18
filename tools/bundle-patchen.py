@@ -6693,6 +6693,85 @@ P.append((
  "originY:\"center\",fontSize:tt,fontFamily:wt,fontWeight:\"400\",fill:Oe,selectable:!1}",
  "Zurueck: Schwarze Schrift oben (gewoehnliche Zeilen)", 1))
 
+# 217  Deckblaetter: weisser Kasten mit schwarzem Rahmen
+#
+#      "Statt Playfair ... dieselbe Schrift wie die andere aber auf
+#       weissem Hintergrund der schwarz umrahmt ist in schwarz und
+#       der 2. Teil wie er ist und die Folge Folien wie sie sind in
+#       der Handschrift" - und dann: "ich meinte alle Posts".
+#      Auf Nachfrage: das Foto bleibt, der Kasten sitzt darauf.
+#
+#      Ein Schalter zKa traegt alles:
+#
+#          zKa = BS_KACHEL.kastenAn===1
+#                && t.folienRolle==="deckblatt"
+#                && !tt.istKarte
+#
+#      Karten (Zettel, Ablauf, Reminder) sind ausgenommen, die haben
+#      ihre eigene Gestalt. Folgefolien ebenfalls - dort ist
+#      folienRolle nie "deckblatt", Playfair und Handschrift bleiben.
+#
+#      Was zKa bewirkt:
+#        - Qe wird die Flieszschrift der Marke statt deckblattFamilie.
+#        - EIN Kasten hinter dem ganzen Ueberschriftsblock: weiss,
+#          darauf ein schwarzer Rahmen. Breite aus PB (die breiteste
+#          Ueberschriftszeile, war schon berechnet), Hoehe Lt*Et*zF.
+#          Auf r*.94 gedeckelt, damit er nie ueber die Kachel laeuft.
+#        - Die Plaettchen je Zeile entfallen dort - der Kasten ist
+#          schon da.
+#        - Ueberschrift schwarz, ohne Schlagschatten. Der Schatten
+#          wuerde auf Weiss nur schmieren.
+#        - zGT (der geteilte Textsatz, geteiltAnteil 25) bleibt auf
+#          Deckblaettern aus. Er verschiebt De mitten in der Schleife,
+#          und der Kasten wird vorher gemessen.
+#
+#      Ohne Foto ist nurErsteZeilePlatte nicht gesetzt, damit Lt=0 und
+#      der Kasten faellt von selbst weg. Reine Textdeckblaetter bleiben
+#      also wie sie waren.
+#
+#      Der zweite Teil ist unberuehrt: QeZ, Groesse, Farbe, Schatten
+#      der Handschrift stehen wie vorher.
+#
+#      GEPRUEFT im Browser, Deckblatt mit Foto:
+#          eine Zeile   Kasten eng um "15 Tage."
+#          vier Zeilen  Kasten waechst mit, Handschrift darunter frei
+#      keine Seitenfehler.
+
+P.append((
+ "t.folienRolle&&t.folienRolle!==\"deckblatt\"&&BS_KACHEL.folgeFamilie&&(Qe=BS_KACHEL.folgeFamilie);",
+ "t.folienRolle&&t.folienRolle!==\"deckblatt\"&&BS_KACHEL.folgeFamilie&&(Qe=BS_KACHEL.folgeFamilie);const zKa=BS_KACHEL.kastenAn===1&&t.folienRolle===\"deckblatt\"&&!tt.istKarte;zKa&&(Qe=(i.typography&&i.typography.bodyFontFamily)||t.bodyFontFamily||\"HelveticaNeueBrand\");",
+ "zKa: der Kasten gilt auf jedem Deckblatt ausser auf Karten; Schrift dort die Flieszschrift", 1))
+
+P.append((
+ "&&$e&&tt.nurErsteZeilePlatte===!0&&Lt>0&&dr.length>Lt;dr.forEach((Je,rt)=>{",
+ "&&$e&&tt.nurErsteZeilePlatte===!0&&Lt>0&&dr.length>Lt&&!zKa;zKa&&Lt>0&&(()=>{const zPx=r*(Number(BS_KACHEL.kastenPolsterX)||.055),zPy=r*(Number(BS_KACHEL.kastenPolsterY)||.045),zRa=Math.max(1,r*(Number(BS_KACHEL.kastenRahmen)||.009)),zB=Math.min(r*.94,PB+It*2+zPx*2),zH=Lt*Et*zF+zPy*2,zX=tt.ausrichtung===\"links\"?Math.min(r-zB/2,_e-It+zB/2):r/2,zY=De+(Lt-1)*Et*zF/2;e.add(new Pe.fabric.Rect({left:zX,top:zY,width:zB,height:zH,originX:\"center\",originY:\"center\",fill:\"#FFFFFF\",selectable:!1,evented:!1})),e.add(new Pe.fabric.Rect({left:zX,top:zY,width:Math.max(1,zB-zRa),height:Math.max(1,zH-zRa),originX:\"center\",originY:\"center\",fill:\"transparent\",stroke:\"#000000\",strokeWidth:zRa,selectable:!1,evented:!1}))})();dr.forEach((Je,rt)=>{",
+ "Der weisse Kasten mit schwarzem Rahmen hinter dem Ueberschriftsblock; zGT bleibt dabei aus", 1))
+
+P.append((
+ "!ge&&(tt.platten||Ve&&!tt.ohnePlatteErste)&&e.add(new Pe.fabric.Rect({left:tt.ausrichtung===\"links\"?_e-It+qt/2:r/2,top:De,width:qt,height:Et+c(1.5)",
+ "!(zKa&&Ve)&&!ge&&(tt.platten||Ve&&!tt.ohnePlatteErste)&&e.add(new Pe.fabric.Rect({left:tt.ausrichtung===\"links\"?_e-It+qt/2:r/2,top:De,width:qt,height:Et+c(1.5)",
+ "Keine Plaettchen je Zeile, wo schon der Kasten liegt", 1))
+
+P.append((
+ "fill:(!ge&&(tt.platten||Ve&&!tt.ohnePlatteErste))?tt.bandSchriftFarbe||\"#000000\":tt.schriftFarbe||\"#FFFFFF\",selectable:!1,stroke:",
+ "fill:zKa&&Ve?\"#000000\":(!ge&&(tt.platten||Ve&&!tt.ohnePlatteErste))?tt.bandSchriftFarbe||\"#000000\":tt.schriftFarbe||\"#FFFFFF\",selectable:!1,stroke:",
+ "Schwarze Ueberschrift im Kasten (ganze Zeile)", 1))
+
+P.append((
+ "shadow:(ge||!tt.platten&&(!Ve||tt.ohnePlatteErste))&&!lt?me():void 0});",
+ "shadow:zKa&&Ve?void 0:((ge||!tt.platten&&(!Ve||tt.ohnePlatteErste))&&!lt?me():void 0)});",
+ "Kein Schlagschatten auf Weiss (ganze Zeile)", 1))
+
+P.append((
+ "fill:rr?tt.highlight:(!ge&&(tt.platten||Ve&&!tt.ohnePlatteErste))?tt.bandSchriftFarbe||\"#000000\":tt.schriftFarbe||\"#FFFFFF\",selectable:!1,shadow:(ge||!tt.platten)&&!lt?me():void 0});",
+ "fill:rr?tt.highlight:zKa&&Ve?\"#000000\":(!ge&&(tt.platten||Ve&&!tt.ohnePlatteErste))?tt.bandSchriftFarbe||\"#000000\":tt.schriftFarbe||\"#FFFFFF\",selectable:!1,shadow:zKa&&Ve?void 0:((ge||!tt.platten)&&!lt?me():void 0)});",
+ "Dasselbe fuer hervorgehobene Einzelwoerter", 1))
+
+P.append((
+ "geteilt:1,geteiltAnteil:25",
+ "geteilt:1,geteiltAnteil:25,kastenAn:1,kastenPolsterX:.055,kastenPolsterY:.045,kastenRahmen:.009",
+ "Den Kasten einschalten und seine Masse", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
