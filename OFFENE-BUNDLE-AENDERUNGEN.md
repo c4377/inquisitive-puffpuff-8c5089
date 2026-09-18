@@ -7761,3 +7761,44 @@ Jetzt geht dieselbe Abbildung auch in den Editor.
 `textBands` ist die Weiche zwischen Feed-Zeichner und altem Layout. Wer eine
 **vierte** Stelle baut, die Story-Folien irgendwohin reicht, muss `zStoryFeed`
 mitgeben — sonst fällt genau dort das Branding wieder heraus.
+
+## 229 — Die zwanzig Layouts sind wieder da
+
+*„Bring mir alle zurück."*
+
+Ihre zwanzig Layouts lagen **vollständig** im Bundle: die Tabelle `lr` mit drei
+Grundformen (`gradient`, `frame`, `plate`) und die Auswahl im Editor unter
+LAYOUT. Nur **gewählt** wurden sie nie — der Feed-Zweig kommt im Zeichner
+**vor** der Layouttabelle und greift, sobald `textBands` gesetzt ist. Also lief
+jede Kachel in denselben Look.
+
+`zLay(index, folie)` wählt jetzt reihum aus `layoutReihe`. Eine Folie mit
+eigenem `brand_`-Layout behält ihres.
+
+### Die Stolperstelle — zwei Anläufe
+
+Im Eigenschaftsobjekt steht **1737 Zeichen nach** `textBands` nochmal
+`layout:Br,layoutId:…` — und beim Objektliteral gewinnt der **letzte**
+Schlüssel. Meine erste Zuweisung wurde lautlos überschrieben; am Zeichner kamen
+`layout` **und** `textBands` leer an.
+
+Gefunden durch **Protokollieren im Zeichner**, nicht durch Lesen. Der Code sah
+an beiden Stellen richtig aus.
+
+Dazu gibt es das Objekt **zweimal**, für beide Zweige des Ternärs — deshalb
+Anzahl 2 im Paar.
+
+### Namenszug
+
+Die Layout-Zweige zeichnen ihn nicht, und es gibt **16 Ausstiege** — zu viele
+zum Einzelpatchen. Stattdessen hängt sich `Ca` einmal in `e.renderAll` ein und
+zieht den Zug bei **jedem** Aufruf nach. Nicht nur beim ersten: manche Zweige
+rufen `renderAll` mehrfach und räumen die Fläche zwischendurch — bei den
+Rahmen-Layouts fehlte er dadurch.
+
+Der Haken ist eng gefasst: nur ohne `textBands` und nur bei `brand_`-Layouts,
+sonst stünde er im Feed doppelt.
+
+**Geprüft:** neun aufeinanderfolgende Tage zeichnen neun verschiedene Layouts,
+Namenszug auf allen, keine Seitenfehler. `layoutAn: 0` stellt den alten Zustand
+her.

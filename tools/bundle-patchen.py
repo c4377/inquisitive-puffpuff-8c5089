@@ -7194,6 +7194,67 @@ P.append((
  "M=E=>{n(\"/editor\",{state:{slides:(i||[]).map((zs,zi)=>zStoryFeed(zs,zi)),initialSlideIndex:E,dayTitle:\"Story Sequence\"}})}",
  "Der Editor bekommt die Story-Folien mit Feed-Merkmalen statt roh", 1))
 
+# 229  Die zwanzig Layouts sind wieder da
+#
+#      "Bring mir alle zurueck."
+#
+#      Ihre zwanzig Layouts lagen vollstaendig im Bundle: die
+#      Tabelle lr mit drei Grundformen (gradient, frame, plate) und
+#      die Auswahl TT im Editor unter LAYOUT. Nur gewaehlt wurden sie
+#      nie - der Feed-Zweig kommt im Zeichner VOR der Layouttabelle,
+#      und er greift, sobald textBands gesetzt ist. Also lief jede
+#      Kachel in denselben Look.
+#
+#      zLay(index, folie) waehlt jetzt reihum aus layoutReihe. Eine
+#      Folie mit eigenem brand_-Layout behaelt ihres.
+#
+#      DIE STOLPERSTELLE, die mich zwei Anlaeufe gekostet hat:
+#      im Eigenschaftsobjekt steht 1737 Zeichen NACH textBands
+#      nochmal layout:Br,layoutId:... - und beim Objektliteral
+#      gewinnt der LETZTE Schluessel. Meine erste Zuweisung wurde
+#      lautlos ueberschrieben; am Zeichner kamen layout UND textBands
+#      leer an. Gefunden durch Protokollieren im Zeichner, nicht durch
+#      Lesen. Dazu gibt es das Objekt ZWEIMAL, fuer beide Zweige des
+#      Ternaers - deshalb Anzahl 2.
+#
+#      NAMENSZUG: die Layout-Zweige zeichnen ihn nicht, und es gibt
+#      16 Ausstiege - zu viele zum Einzelpatchen. Stattdessen haengt
+#      sich Ca einmal in e.renderAll ein und zieht den Zug bei JEDEM
+#      Aufruf nach. Nicht nur beim ersten: manche Zweige rufen
+#      renderAll mehrfach und raeumen die Flaeche zwischendurch - bei
+#      den Rahmen-Layouts fehlte er dadurch. Der Haken ist eng
+#      gefasst: nur ohne textBands und nur bei brand_-Layouts, sonst
+#      stuende er im Feed doppelt.
+#
+#      GEPRUEFT: neun aufeinanderfolgende Tage zeichnen neun
+#      verschiedene Layouts, Namenszug auf allen, keine Seitenfehler.
+#      layoutAn 0 stellt den alten Zustand her.
+
+P.append((
+ "Ca=async(e,t,r,n,i={})=>{let zGrundTon=\"\";",
+ "Ca=async(e,t,r,n,i={})=>{let zGrundTon=\"\";try{if(BS_KACHEL.nameZeigen!==0&&t&&t.textBands!==!0&&String(t.layout||\"\").indexOf(\"brand_\")===0){const zRA=e.renderAll.bind(e);let zNo=null;e.renderAll=function(){try{if(!zNo||!e._objects||e._objects.indexOf(zNo)<0){zNo=new Pe.fabric.Text(\"carinaannaprav\",{left:r*.09,top:n*(BS_KACHEL.nameUnten||.945),originX:\"left\",originY:\"center\",fontSize:Math.round(r*(BS_KACHEL.nameAnteil||.042)),fontFamily:BS_KACHEL.nameSchrift||\"OpenSansBrand\",fontWeight:(BS_KACHEL.nameGewicht||\"400\"),charSpacing:(BS_KACHEL.nameLaufweite==null?150:BS_KACHEL.nameLaufweite),fill:BS_KACHEL.nameFarbe||\"#FFFFFF\",opacity:(BS_KACHEL.nameDeckkraft||.55),selectable:!1,evented:!1});e.add(zNo)}else if(e.bringToFront)e.bringToFront(zNo)}catch(zy){}return zRA.apply(e,arguments)}}}catch(zz){}",
+ "Namenszug auf den Layout-Kacheln, bei jedem renderAll nachgezogen", 1))
+
+P.append((
+ "aS=e=>{const t=Math.max(0,Number(e)||0);",
+ "zLay=(zi,zs)=>{try{const ze=zs&&zs.layout;if(ze&&String(ze).indexOf(\"brand_\")===0)return ze;if(BS_KACHEL.layoutAn!==1)return \"\";const zl=String(BS_KACHEL.layoutReihe||\"\").split(\"|\").filter(Boolean);if(!zl.length)return \"\";return zl[(Number(zi)||0)%zl.length]}catch(zz){return \"\"}},aS=e=>{const t=Math.max(0,Number(e)||0);",
+ "zLay: welches Layout ein Tag bekommt; eine eigene Wahl der Folie gewinnt", 1))
+
+P.append((
+ "textBands:ot.bandStyle===\"none\"?void 0:!0,",
+ "textBands:(zLay(dt,rt)||ot.bandStyle===\"none\")?void 0:!0,",
+ "Mit Layout kein textBands - sonst kommt der Zeichner nie zur Layouttabelle", 1))
+
+P.append((
+ "layout:Br,layoutId:Mt?Br:sn?\"auto\":rt.layoutId||Br,",
+ "layout:zLay(dt,rt)||Br,layoutId:zLay(dt,rt)||(Mt?Br:sn?\"auto\":rt.layoutId||Br),",
+ "Beide Zweige des Eigenschaftsbaus - der letzte Schluessel gewinnt", 2))
+
+P.append((
+ "kastenAn:0,kastenFarbe:\"#B03A5B\"",
+ "kastenAn:0,layoutAn:1,layoutReihe:\"brand_photo_gradient|brand_photo_bottom_left|brand_photo_top|brand_photo_center|brand_photo_bigword|brand_photo_quote|brand_photo_bottom_serif|brand_photo_frame|brand_frame_top_text|brand_frame_left|brand_frame_polaroid|brand_text_plate|brand_text_plate_top|brand_text_left|brand_text_bigword|brand_text_quote|brand_text_statement|brand_text_kicker_lead|brand_text_minimal|brand_text_bold_top\",kastenFarbe:\"#B03A5B\"",
+ "Alle zwanzig Layouts in der Reihe, und der Schalter dafuer", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
