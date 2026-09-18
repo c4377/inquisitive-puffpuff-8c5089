@@ -7727,3 +7727,37 @@ Format.
 Instagram schneidet ein Reels-Cover fürs Profil **mittig auf 4:5** zu, also etwa
 15 bis 85 % der Höhe. Der Textblock liegt bei 17 bis 80 % und überlebt den
 Zuschnitt. Wer hier die Lage ändert, sollte das nachrechnen.
+
+## 228 — Der Editor bekam die Story-Folien roh
+
+*„Achtung sobald ich bearbeite ändert es sich in ein altes Branding."*
+
+Die Story-Folien tragen ihre Feed-Merkmale **nicht im Plan**. Sie bekommen sie
+erst beim Zeichnen, durch `zStoryFeed`: `format:"9:16"`, `textBands`,
+`folienRolle`, `_tag`.
+
+Das lief an **zwei** Stellen — im Raster und beim Ausgeben. Der Editor war die
+dritte und hatte es nicht:
+
+```js
+M = E => n("/editor", {state:{slides: i, …}})
+```
+
+`i` sind die **rohen** Folien. Ohne `textBands` fällt der Zeichner ins alte
+Layout: weiße Kachel, schwarze Serifenschrift, kein Namenszug. Genau das war zu
+sehen.
+
+Jetzt geht dieselbe Abbildung auch in den Editor.
+
+**Nachgestellt** im Browser, Story-Planer öffnen, Kachel anklicken:
+
+| | |
+|---|---|
+| karten289 | weiße Kachel, schwarze Serifenschrift |
+| **karten290** | dunkle Feed-Kachel mit Namenszug, 9:16 |
+
+### Merke
+
+`textBands` ist die Weiche zwischen Feed-Zeichner und altem Layout. Wer eine
+**vierte** Stelle baut, die Story-Folien irgendwohin reicht, muss `zStoryFeed`
+mitgeben — sonst fällt genau dort das Branding wieder heraus.

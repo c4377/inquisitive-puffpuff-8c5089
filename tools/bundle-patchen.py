@@ -7159,6 +7159,41 @@ P.append((
  "(t.format===\"9:16\"&&BS_KACHEL.storyAnteil&&t.folienRolle!==\"deckblatt\"?Number(BS_KACHEL.storyAnteil):1)",
  "Dasselbe beim Hoehenbudget, sonst schrumpft die Schleife es zurueck", 1))
 
+# 228  Der Editor bekam die Story-Folien roh
+#
+#      "Achtung sobald ich bearbeite aendert es sich in ein altes
+#       Branding."
+#
+#      Die Story-Folien tragen ihre Feed-Merkmale nicht im Plan. Sie
+#      bekommen sie erst beim Zeichnen, durch zStoryFeed:
+#          format 9:16, textBands, folienRolle, _tag
+#
+#      Das lief an ZWEI Stellen - im Raster und beim Ausgeben. Der
+#      Editor war die dritte und hatte es nicht:
+#
+#          M = E => n("/editor", {state:{slides:i, ...}})
+#
+#      i sind die ROHEN Folien. Ohne textBands faellt der Zeichner in
+#      das alte Layout - weisse Kachel, schwarze Serifenschrift, kein
+#      Namenszug. Genau das hat sie gesehen.
+#
+#      Jetzt geht dieselbe Abbildung auch in den Editor.
+#
+#      NACHGESTELLT im Browser, Story-Planer oeffnen, Kachel
+#      anklicken:
+#          karten289  weisse Kachel, schwarze Serifenschrift
+#          karten290  dunkle Feed-Kachel mit Namenszug, 9:16
+#
+#      MERKE: textBands ist die Weiche zwischen Feed-Zeichner und
+#      altem Layout. Wer eine vierte Stelle baut, die Story-Folien
+#      irgendwohin reicht, muss zStoryFeed mitgeben - sonst faellt
+#      genau dort das Branding wieder heraus.
+
+P.append((
+ "M=E=>{n(\"/editor\",{state:{slides:i,initialSlideIndex:E,dayTitle:\"Story Sequence\"}})}",
+ "M=E=>{n(\"/editor\",{state:{slides:(i||[]).map((zs,zi)=>zStoryFeed(zs,zi)),initialSlideIndex:E,dayTitle:\"Story Sequence\"}})}",
+ "Der Editor bekommt die Story-Folien mit Feed-Merkmalen statt roh", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
