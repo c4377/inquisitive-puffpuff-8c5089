@@ -6913,6 +6913,41 @@ P.append((
  "kastenAn:1,kastenFarbe:\"#B03A5B\",kastenAnteil:.60",
  "Beere als Schriftfarbe im Kasten", 1))
 
+# 221  Playfair zurueck in den Kasten
+#
+#      "Hm kann man nicht gut lesen aber Playfair mit Kasten und in
+#       der Farbe?"
+#
+#      Sie hat recht, und der Grund ist die Strichstaerke. "Nothing
+#      You Could Do" zieht Linien von wenigen Pixeln. In Schwarz auf
+#      Weiss traegt das noch; sobald Farbe dazukommt, sinkt der
+#      Kontrast an jeder Kante und die Schrift franst aus. Playfair
+#      hat kraeftige Grundstriche - dieselbe Farbe haelt dort.
+#
+#      Also: Kasten bleibt, Beere bleibt, Groesse bleibt (.60, von ihr
+#      zweimal nachjustiert). Nur die Schrift geht zurueck auf
+#      Playfair Display.
+#
+#      Dafuer ein eigener Schluessel kastenSchrift, statt die alte
+#      Zeile umzuschreiben. Damit stehen jetzt drei Wege offen, ohne
+#      Eingriff in den Zeichner:
+#          kastenSchrift gesetzt   diese Schrift
+#          nicht gesetzt           zweiteFamilie, also die Hand
+#          kastenAn 0              gar kein Kasten
+#
+#      GEPRUEFT: das gerenderte Deckblatt ist BYTEWEISE dasselbe Bild
+#      wie die Probe. Keine Seitenfehler.
+
+P.append((
+ "zKa&&(Qe=BS_KACHEL.zweiteFamilie||(i.typography&&i.typography.bodyFontFamily)||t.bodyFontFamily||\"HelveticaNeueBrand\"",
+ "zKa&&(Qe=BS_KACHEL.kastenSchrift||BS_KACHEL.zweiteFamilie||(i.typography&&i.typography.bodyFontFamily)||t.bodyFontFamily||\"HelveticaNeueBrand\"",
+ "Eigene Schrift fuer den Kasten, faellt sonst auf die Hand zurueck", 1))
+
+P.append((
+ "kastenAn:1,kastenFarbe:\"#B03A5B\",kastenAnteil:.60",
+ "kastenAn:1,kastenFarbe:\"#B03A5B\",kastenSchrift:\"Playfair Display\",kastenAnteil:.60",
+ "Playfair im Kasten", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

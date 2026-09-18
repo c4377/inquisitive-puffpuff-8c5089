@@ -7522,3 +7522,27 @@ Schrift wieder schwarz — der alte Stand bleibt als Rückfalltür erhalten.
 
 **Geprüft:** das gerenderte Deckblatt ist **byteweise dasselbe Bild** wie die
 Probe, die sie gewählt hat. Keine Seitenfehler.
+
+## 221 — Playfair zurück in den Kasten
+
+*„Hm kann man nicht gut lesen aber Playfair mit Kasten und in der Farbe?"*
+
+Sie hat recht, und der Grund ist die **Strichstärke**. „Nothing You Could Do"
+zieht Linien von wenigen Pixeln. In Schwarz auf Weiß trägt das noch; sobald
+Farbe dazukommt, sinkt der Kontrast an jeder Kante und die Schrift franst aus.
+Playfair hat kräftige Grundstriche — dieselbe Farbe hält dort.
+
+Also: **Kasten bleibt, Beere bleibt, Größe bleibt** (`.60`, von ihr zweimal
+nachjustiert). Nur die Schrift geht zurück auf Playfair Display.
+
+Dafür ein eigener Schlüssel `kastenSchrift`, statt die alte Zeile
+umzuschreiben. Damit stehen drei Wege offen, ohne Eingriff in den Zeichner:
+
+| | |
+|---|---|
+| `kastenSchrift` gesetzt | diese Schrift |
+| nicht gesetzt | `zweiteFamilie`, also die Hand |
+| `kastenAn: 0` | gar kein Kasten |
+
+**Geprüft:** das gerenderte Deckblatt ist **byteweise dasselbe Bild** wie die
+Probe. Keine Seitenfehler.
