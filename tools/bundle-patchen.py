@@ -6948,6 +6948,33 @@ P.append((
  "kastenAn:1,kastenFarbe:\"#B03A5B\",kastenSchrift:\"Playfair Display\",kastenAnteil:.60",
  "Playfair im Kasten", 1))
 
+# 222  Kasten eine Stufe groesser
+#
+#      "Ja groesser."
+#
+#      kastenAnteil .60 -> .70. Sonst nichts. Mit Playfair vertraegt
+#      der Kasten mehr als mit der duennen Hand, deshalb war das
+#      Verkleinern aus 219 an die alte Schrift gebunden, nicht an ihren
+#      Geschmack.
+#
+#      Die Handschrift darunter bleibt unveraendert gross - genau
+#      dafuer steht die Division kastenHand/kastenAnteil aus 219. Sie
+#      haelt beide Groessen auseinander, in beide Richtungen.
+#
+#      MERKE fuer den naechsten Bildvergleich: die Probe pf70 hiess
+#      beim Pruefen schon nicht mehr so, und index-B5karten282.js war
+#      zu dem Zeitpunkt bereits eine Weiterleitung. Ein Nachbau aus
+#      der Datei im Arbeitsverzeichnis vergleicht dann 338 Byte Stub
+#      gegen das echte Bundle und meldet falschen Alarm. Die alten
+#      Staende stehen in git, nicht mehr auf der Platte:
+#          git show <commit>:site/assets/index-B5karten282.js
+#      So verglichen: Probe und karten284 sind identisch.
+
+P.append((
+ "kastenSchrift:\"Playfair Display\",kastenAnteil:.60",
+ "kastenSchrift:\"Playfair Display\",kastenAnteil:.70",
+ "Kasten eine Stufe groesser", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

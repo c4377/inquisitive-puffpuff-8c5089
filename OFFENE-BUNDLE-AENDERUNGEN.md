@@ -7546,3 +7546,30 @@ umzuschreiben. Damit stehen drei Wege offen, ohne Eingriff in den Zeichner:
 
 **Geprüft:** das gerenderte Deckblatt ist **byteweise dasselbe Bild** wie die
 Probe. Keine Seitenfehler.
+
+## 222 — Kasten eine Stufe größer
+
+*„Ja größer."*
+
+`kastenAnteil` .60 → **.70**. Sonst nichts.
+
+Mit Playfair verträgt der Kasten mehr als mit der dünnen Hand — das Verkleinern
+aus 219 war also an die alte Schrift gebunden, nicht an ihren Geschmack.
+
+Die Handschrift darunter bleibt **unverändert groß**. Genau dafür steht die
+Division `kastenHand / kastenAnteil` aus 219: sie hält die beiden Größen
+auseinander, in beide Richtungen.
+
+### Merke für den nächsten Bildvergleich
+
+Die Probe hieß beim Prüfen schon nicht mehr so, und `index-B5karten282.js` war
+zu dem Zeitpunkt **bereits eine Weiterleitung**. Ein Nachbau aus der Datei im
+Arbeitsverzeichnis vergleicht dann 338 Byte Stub gegen das echte Bundle und
+meldet falschen Alarm. Die alten Stände stehen in git, nicht mehr auf der
+Platte:
+
+```
+git show <commit>:site/assets/index-B5karten282.js
+```
+
+So verglichen: Probe und karten284 sind identisch.
