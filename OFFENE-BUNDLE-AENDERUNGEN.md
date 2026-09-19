@@ -8752,3 +8752,43 @@ vorher so.
 
 `hakenAkzentFarbe` wird geleert. Der Code aus 245 bleibt: ein Farbwert genügt
 und die Betonung ist wieder da.
+
+## 257 — Text unter den Screenshot, und der zweite Weg im Eigenschaftsbau
+
+> „Bei sowas lege den Text unter den Screenshot."
+
+Dazu ihr Screenshot: die Zeile liegt quer über dem Foto, obwohl der Stapel aus
+242 genau das verhindern soll.
+
+### Mein Test zeigte den Fehler nicht
+
+Nachgestellt mit Hookzeile und Foto sitzt der Stapel sauber. Der Unterschied
+liegt im Eigenschaftsbau: der hat **zwei** Zweige, und 242 hat nur einen
+gefasst.
+
+```
+rt._colorOverride ? { ...rt, ... }       <- nicht gefasst
+                  : { ...rt, text:Ir }   <- gefasst
+```
+
+Im ersten Zweig blieb `overlayHook` leer und der Text stehen — also zeichnete
+ihn der Feed-Zweig über das Foto, während der Stapel oben eine leere Zeile
+ließ. Die Umschichtung steht jetzt in **beiden** Zweigen.
+
+### Die Reihenfolge
+
+`ssTextUnten` hängt die Hookzeile hinter den Kasten statt davor. Der Stapel ist
+dann:
+
+| | |
+|---|---|
+| 1 | Foto |
+| 2 | Screenshot |
+| 3 | Text |
+
+Gerechnet wird wie gehabt erst die Gesamthöhe, dann der obere Rand — deshalb
+bleibt die Gruppe mittig.
+
+**Geprüft:** beide Fälle gerendert — Folie mit `overlayHook` und Folie, deren
+Text erst umgeschichtet wird. Beide sehen gleich aus, Reihenfolge stimmt,
+nichts überlappt.

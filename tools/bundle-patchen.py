@@ -8422,6 +8422,53 @@ P.append((
  'hakenAkzentFarbe:"",',
  'Das Gelb in der Hookzeile wieder aus', 1))
 
+# 257  Text unter den Screenshot - und der zweite Weg im Eigenschaftsbau
+#
+#      "Bei sowas lege den Text unter den Screenshot." Dazu ihr
+#      Screenshot: die Zeile liegt quer ueber dem Foto, obwohl der
+#      Stapel aus 242 genau das verhindern soll.
+#
+#      MEIN TEST ZEIGTE DEN FEHLER NICHT. Nachgestellt mit Hookzeile
+#      und Foto sitzt der Stapel sauber. Der Unterschied liegt im
+#      Eigenschaftsbau: der hat ZWEI Zweige, und 242 hat nur einen
+#      gefasst.
+#          rt._colorOverride ? { ...rt, ... }      <- nicht gefasst
+#                            : { ...rt, text:Ir }  <- gefasst
+#      Im ersten Zweig blieb overlayHook leer und der Text stehen -
+#      also zeichnete ihn der Feed-Zweig ueber das Foto, waehrend der
+#      Stapel oben eine leere Zeile liess. Die Umschichtung steht
+#      jetzt in beiden Zweigen.
+#
+#      DIE REIHENFOLGE: ssTextUnten haengt die Hookzeile hinter den
+#      Kasten statt davor. Der Stapel ist dann
+#          Foto - Screenshot - Text
+#      Gerechnet wird wie gehabt erst die Gesamthoehe, dann der obere
+#      Rand, deshalb bleibt die Gruppe mittig.
+#
+#      GEPRUEFT: beide Faelle gerendert - Folie mit overlayHook und
+#      Folie, deren Text erst umgeschichtet wird. Beide sehen gleich
+#      aus, Reihenfolge stimmt, nichts ueberlappt.
+
+P.append((
+ 'editorialDark:Mt?!1:_e.editorialDark===!0||_e.ruleSet==="editorial_dark"}',
+ 'editorialDark:Mt?!1:_e.editorialDark===!0||_e.ruleSet==="editorial_dark",...(rt.overlayIsScreenshot===!0&&!String(rt.overlayHook||"").trim()&&String(rt.text||"").trim()?{overlayHook:String(rt.text).replace(/\\*/g," ").replace(/\\s+/g," ").trim(),text:""}:{})}',
+ 'Auch der Farb-Zweig des Eigenschaftsbaus schiebt den Text in die Hookzeile', 1))
+
+P.append((
+ 'if(zTbO)zTbO.set({top:zTop}),e.add(zTbO),zTop+=zHh+zG;',
+ 'const zTU=BS_KACHEL.ssTextUnten===1;if(zTbO&&!zTU)zTbO.set({top:zTop}),e.add(zTbO),zTop+=zHh+zG;',
+ 'Die Hookzeile oben nur noch, wenn sie nicht unten stehen soll', 1))
+
+P.append((
+ 'e.add(me),Fe(!0)}catch(zz){Fe(!1)}};const zFot=String(t.zSsFoto||"");',
+ 'e.add(me),zTbO&&zTU&&(zTop+=zBox+zG,zTbO.set({top:zTop}),e.add(zTbO)),Fe(!0)}catch(zz){Fe(!1)}};const zFot=String(t.zSsFoto||"");',
+ 'Und sonst unter den Screenshot-Kasten', 1))
+
+P.append((
+ 'ssFotoAnteil:.52,',
+ 'ssFotoAnteil:.52,ssTextUnten:1,',
+ 'Text unter dem Screenshot', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
