@@ -8827,3 +8827,30 @@ Farbe.
 
 **Geprüft:** acht Folien gerendert, sechs verschiedene Anordnungen sichtbar,
 kein roter Rahmen mehr.
+
+## 259 — Rückstellpunkt: karten321 **ist** karten292
+
+> „Bitte zurück zu 292 …"
+
+Diesmal **kein Nachbau und kein Paar**. `karten321` ist die Datei aus Commit
+`75cb3ba`, Byte für Byte — verglichen: es unterscheiden sich genau **3
+Zeichen**, und das ist das Versionsschild.
+
+### Wichtig für die Wartung
+
+Alles ab Abschnitt 293 steckt **nicht** in dieser Datei. Die Paare weiter oben
+im Patch-Skript passen deshalb nicht mehr auf das laufende Bundle. **Verloren
+ist nichts** — jeder Abschnitt steht dort und lässt sich einzeln wieder
+auftragen.
+
+### Was damit weg ist
+
+| Abschnitt | |
+|---|---|
+| 293 | die Farbleiste über dem Feed |
+| 294 | Screenshot-Gruppe mittig |
+| 295 | Folgefolien zentriert |
+| 235–238, 297–299 | Rahmen und Layoutrotation |
+| 302–320 | Layouts überall, Playfair statt Petrona, Deckblattgröße, Gesichtszuschnitt, Schwarzweiß-Anteil, der Screenshot-Stapel und seine sechs Anordnungen |
+
+**Was da ist:** der schwarze Feed mit Playfair und Handschrift, wie am Anfang.

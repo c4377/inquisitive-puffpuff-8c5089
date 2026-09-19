@@ -8533,6 +8533,34 @@ P.append((
  'ssReihe:"A|D|B|C|A|E|D|F",ssKastenFarbe:"#FFFFFF",',
  'Weiss, damit der Screenshot wie eine Karte liegt', 1))
 
+# 259  Rueckstellpunkt: karten321 IST karten292
+#
+#      "Bitte zurueck zu 292, ich weiss nicht wie's ..."
+#
+#      Diesmal KEIN Nachbau und kein Paar. karten321 ist die Datei
+#      aus Commit 75cb3ba, Byte fuer Byte - verglichen, es
+#      unterscheiden sich genau 3 Zeichen, und das ist das
+#      Versionsschild.
+#
+#      WICHTIG FUER DIE WARTUNG: alles ab Abschnitt 293 steckt NICHT
+#      in dieser Datei. Die Paare weiter oben in diesem Skript passen
+#      deshalb nicht mehr auf das laufende Bundle. Verloren ist
+#      nichts - jeder Abschnitt steht hier und laesst sich einzeln
+#      wieder auftragen.
+#
+#      WAS DAMIT WEG IST, damit es beim Suchen nicht verwundert:
+#          293  die Farbleiste ueber dem Feed
+#          294  Screenshot-Gruppe mittig
+#          295  Folgefolien zentriert
+#          297-299, 235-238  Rahmen und Layoutrotation
+#          302-320  Layouts ueberall, Playfair statt Petrona,
+#                   Deckblattgroesse, Gesichtszuschnitt,
+#                   Schwarzweiss-Anteil, der Screenshot-Stapel und
+#                   seine sechs Anordnungen
+#
+#      WAS DA IST: der schwarze Feed mit Playfair und Handschrift,
+#      wie am Anfang.
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
