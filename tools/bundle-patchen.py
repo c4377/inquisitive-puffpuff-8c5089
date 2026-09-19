@@ -8561,6 +8561,30 @@ P.append((
 #      WAS DA IST: der schwarze Feed mit Playfair und Handschrift,
 #      wie am Anfang.
 
+# 260  karten322 IST karten291
+#
+#      "Nein nein nein, das war anders." - nach dem Rueckstellen auf
+#      292. Also zum dritten Mal dieselbe Nummer, dieselbe Luecke
+#      zwischen Nummer und Absicht.
+#
+#      DIESMAL NICHT GERATEN: drei Raster gerendert und vorgelegt -
+#      292 wie es lief, 292 mit eingeschaltetem Layoutschalter
+#      (= 291), und dasselbe mit Playfair statt Petrona. Ihre Wahl:
+#      das mittlere.
+#
+#      karten322 ist deshalb die Datei karten291 aus Commit f2524c8,
+#      byteweise verglichen: 3 Zeichen Unterschied, gleiche Laenge -
+#      das Versionsschild.
+#
+#      SIE HAT PETRONA GEWAEHLT, obwohl sie sich frueher darueber
+#      beschwert hat. Auf Deckblaettern gibt es damit auch keine
+#      Handschriftzeile. Das ist so gewollt, nicht uebersehen - die
+#      Playfair-Fassung lag daneben und sie hat die andere genommen.
+#
+#      Zur Wartung gilt wie bei 259: alles ab 293 steckt nicht in
+#      dieser Datei, die Paare oben passen nicht darauf, und
+#      verloren ist trotzdem nichts.
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

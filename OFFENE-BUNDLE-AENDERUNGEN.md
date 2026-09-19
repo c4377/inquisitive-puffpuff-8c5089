@@ -8854,3 +8854,25 @@ auftragen.
 | 302–320 | Layouts überall, Playfair statt Petrona, Deckblattgröße, Gesichtszuschnitt, Schwarzweiß-Anteil, der Screenshot-Stapel und seine sechs Anordnungen |
 
 **Was da ist:** der schwarze Feed mit Playfair und Handschrift, wie am Anfang.
+
+## 260 — karten322 **ist** karten291
+
+> „Nein nein nein, das war anders." — nach dem Rückstellen auf 292.
+
+Zum dritten Mal dieselbe Nummer, dieselbe Lücke zwischen Nummer und Absicht.
+
+**Diesmal nicht geraten:** drei Raster gerendert und vorgelegt — 292 wie es
+lief, 292 mit eingeschaltetem Layoutschalter (= 291), und dasselbe mit Playfair
+statt Petrona. Ihre Wahl: **das mittlere**.
+
+`karten322` ist deshalb die Datei `karten291` aus Commit `f2524c8`, byteweise
+verglichen: **3 Zeichen** Unterschied bei gleicher Länge — das Versionsschild.
+
+### Sie hat Petrona gewählt
+
+Obwohl sie sich früher darüber beschwert hat. Auf Deckblättern gibt es damit
+auch keine Handschriftzeile. Das ist so gewollt, nicht übersehen — die
+Playfair-Fassung lag daneben und sie hat die andere genommen.
+
+Zur Wartung gilt wie bei 259: alles ab 293 steckt nicht in dieser Datei, die
+Paare oben passen nicht darauf, und verloren ist trotzdem nichts.
