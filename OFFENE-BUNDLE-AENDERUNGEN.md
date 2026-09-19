@@ -9124,3 +9124,65 @@ zQ = Qe · (bandMin + (1 − bandMin)·zF) · bandStaerke
 Beide Bilder gesichtet: Schrift überall lesbar. Ihr Fall (helle Haut, weißes
 Top, Sofa) liegt dazwischen: Spitze etwa .61 statt .90, gut ein Drittel
 weniger.
+
+## 268 — Wie Lisa.contentdesign es bauen würde
+
+> „kannst du bitte so bauen also die Layouts die Folien, alles wie wenn
+> Lisa.contentdesign es bauen würde, sie würde vielleicht auch Farben ändern
+> oder so bitte mach es einfach wie sie würde"
+
+### Vorlage
+
+Zwei Profil-Screenshots von **lisa.contentdesign**. Was dort steht:
+
+| | Lisa | hier |
+|---|---|---|
+| Grund | Schokobraun, kein Schwarz | `#2B1E17` |
+| Karten | Creme mit doppeltem dünnem Rahmen | `#E9E3DA`, Rahmen 6.2 % / 7.6 % |
+| Schrift | enge, kontrastreiche Serife, Regular, groß, Kursiv als Betonung | Playfair Display 400, Zeile .9, Laufweite -40, Kursiv ohne Farbe |
+| Unterzeile | kleine Versalien mit weiter Laufweite oder kleine Serife | Montserrat 500 / Playfair 400 |
+| Fotos | alle warm-braun getont, kein Schwarzweiß | Tönung `#6E4B36`, Composite `color`, Deckkraft .8; Schwarzweiß aus |
+| Hierarchie | erster Satz groß, Rest klein | `zTeilen()` / `zUnter()` |
+| Inset | dunkle Fläche, großes Wort, kleines Hochformat-Foto, Rest darunter | `brand_frame_top_text` mit `inset` |
+
+### Umgesetzt (329 → 330, 291-Linie)
+
+- **Farben** stehen im Stil-Objekt G2 und im Kachelaufbau. Die drei
+  Zeichen-Zweige (gradient / plate / frame) erzwingen sie zusätzlich über
+  `zGrund()` und `zFarbe()`, damit ein gespeicherter Stil mit Schwarz/Weiß
+  nicht durchschlägt. Creme gibt es nur über `plateColor` in der
+  Layout-Tabelle (plate, plate_top, quote, kicker_lead, minimal), alles
+  andere ist schokobraun. Der Name wird auf hellen Flächen dunkel
+  (`zFill()` bei jedem `renderAll`).
+- **Schrift**: Playfair Display statt Petrona in den Layouts. Die alten
+  Playfair-Sonderfälle (Zeile -.34, Größe .82, Laufweite -135, optische
+  Engstellung `Fr()`) sind entschärft. Alle Deckblatt-Gewichte auf 400.
+  Deckblatt-Schrift × 1.3 (`lisaGroesse`).
+- **Aufteilung**: `zTeilen()` trennt am ersten Satzende, ohne Lookbehind
+  (ältere Safari würden sonst am Regex sterben). `zUnter()` setzt den Rest
+  als Versalzeile (bis 42 Zeichen) oder Playfair-Zeile darunter; die
+  Headline bekommt dafür 10 % weniger Platz nach unten.
+- **Inset**: Foto .42 breit, 1.22 hoch, ab .27. Davor das große Wort
+  (zwei Wörter oder bis zum ersten Komma), darunter der Rest.
+- **Tönung**: ein Rect über jedem Foto, auch im Inset. `saettigungReihe`
+  auf `"0.05"`, also kein Schwarzweiß mehr.
+- **Layout-Reihe** neu gemischt: Foto / Creme-Karte / Inset / Foto / dunkle
+  Fläche … (20 Einträge, siehe `layoutReihe`).
+- **Folgefolien** unverändert (Playfair + Handschrift aus der 291-Linie).
+
+### Regler (BS_DUNKEL)
+
+`lisaGrund`, `lisaCreme`, `lisaHell`, `lisaDunkel`, `lisaGroesse` 1.3,
+`lisaZeile` -.12, `lisaLaufweite` -40, `lisaTeilen` 1, `lisaKapitel` .0145,
+`lisaUnter` .03, `lisaUnterGross` .042, `lisaInsetBreite` .42,
+`lisaInsetUnten` .056, `bildTonung`, `bildTonungKraft` .8, `nameFarbeHell`.
+
+### Gesichtet
+
+Raster mit dunklem und buntem Testfoto, Karussell (Deckblatt mit
+Versal-Unterzeile, Folgefolien wie zuvor), Screenshot-Folie. Keine
+Konsolenfehler. Replay aus dem eingecheckten 329 ist byte-genau.
+
+Zurück: `site/index.html` und `site/dunkel/index.html` auf
+`index-B5karten329.js` stellen geht nicht mehr direkt (329 ist Stub) —
+stattdessen `git show 9b6ac80:site/assets/index-B5karten329.js` holen.

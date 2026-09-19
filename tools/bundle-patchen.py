@@ -8964,6 +8964,186 @@ P.append((
  'hellKraft:.8,bandDunkel:70,bandHell:170,bandMin:.35,bandStaerke:.85,',
  'Regler: ab welcher Helligkeit der Balken voll wird, Rest bei dunklem Foto, globale Staerke', 1))
 
+# 268  Wie Lisa.contentdesign es bauen wuerde
+#
+#      "kannst du bitte so bauen also die Layouts die Folien, alles wie
+#      wenn Lisa.contentdesign es bauen wuerde, sie wuerde vielleicht
+#      auch Farben aendern oder so bitte mach es einfach wie sie wuerde"
+#
+#      VORLAGE: zwei Profil-Screenshots von lisa.contentdesign (Uploads
+#      38d53864 und 367b7445). Was dort steht:
+#        - Farben: Schokobraun (#2B1E17) statt Schwarz, Creme (#E9E3DA)
+#          statt Weiss/Hellgrau, Schrift creme auf dunkel und braun auf
+#          hell. Kein Rot, kein Gelb, keine Akzentfarbe.
+#        - Schrift: enge, kontrastreiche Serife in Regular, grosse
+#          Zeilen, Kursiv fuer Betonung, dazu kleine Versalzeilen mit
+#          weiter Laufweite. Hier: Playfair Display 400 (liegt lokal),
+#          Zeilenabstand .9, Laufweite -40, Betonung kursiv ohne Farbe.
+#        - Fotos: alle warm-braun getont, kein Schwarzweiss.
+#        - Layouts: Foto mit Text unten/oben/links, Creme-Karte mit
+#          doppeltem duennem Rahmen, dunkle Flaeche mit grossem Wort und
+#          kleinem Hochformat-Foto in der Mitte ("Seit wann" / "Nein,").
+#        - Hierarchie: erster Satz gross, Rest klein darunter.
+#
+#      UMGESETZT in der 291-Linie (329 -> 330):
+#        Stil-Objekt G2 und Kachelaufbau tragen die Toene; die drei
+#        Zeichen-Zweige (gradient/plate/frame) erzwingen sie zusaetzlich
+#        ueber zGrund()/zFarbe(), damit ein gespeicherter Stil mit
+#        Schwarz/Weiss nicht durchschlaegt. Creme nur ueber plateColor
+#        in der Layout-Tabelle (plate, plate_top, quote, kicker_lead,
+#        minimal); alles andere schokobraun.
+#        zTeilen() trennt am ersten Satzende (ohne Lookbehind, damit
+#        aeltere Safari nicht am Regex sterben); zUnter() setzt den Rest
+#        als Versalzeile (bis 42 Zeichen) oder Playfair-Zeile darunter.
+#        Inset (brand_frame_top_text): Foto .42 breit, 1.22 hoch, ab
+#        .27; grosses Wort davor (2 Woerter oder bis zum ersten Komma),
+#        Rest unter dem Foto.
+#        Toenung: Rect #6E4B36 mit globalCompositeOperation "color",
+#        Deckkraft .8, ueber jedem Foto (auch im Inset). Schwarzweiss
+#        ist damit aus (saettigungReihe "0.05").
+#        Deckblatt-Schrift x 1.3 (lisaGroesse), Folgefolien unveraendert
+#        (Playfair + Handschrift aus der 291-Linie).
+#
+#      REGLER (BS_DUNKEL): lisaGrund, lisaCreme, lisaHell, lisaDunkel,
+#        lisaGroesse 1.3, lisaZeile -.12, lisaLaufweite -40, lisaTeilen 1,
+#        lisaKapitel .0145, lisaUnter .03, lisaUnterGross .042,
+#        lisaInsetBreite .42, lisaInsetUnten .056, bildTonung "#6E4B36",
+#        bildTonungKraft .8, nameFarbeHell.
+#
+#      GESICHTET: Raster mit dunklem und buntem Testfoto, Karussell
+#      (Deckblatt mit Versal-Unterzeile, Folgefolien wie zuvor),
+#      Screenshot-Folie. Keine Konsolenfehler.
+
+P.append((
+ 'colors:{primary:"#FFFFFF",secondary:"#000000",tertiary:"#8E8E92",accent:"#FF3A2E",neutral:"#000000",background:"#000000",darkPlate:"#000000"},typography:{fontFamily:"Petrona",plateFontFamily:"Petrona",signatureFontFamily:"OpenSansBrand",accentFontFamily:"OpenSansBrand",bodyFontFamily:"OpenSansBrand",fontWeight:"400"},fotoSchriften:[BS_KACHEL.fotoSchrift],textSchrift:"Petrona",layout:"brand_photo_gradient",warmEditorial:!1,headlineTracking:-15,headlineLineHeight:1,textTileLight:"#FFFFFF",textTileDark:"#000000"',
+ 'colors:{primary:"#F1EBE3",secondary:"#2B1E17",tertiary:"#9C8B7C",accent:"#F1EBE3",neutral:"#2B1E17",background:"#2B1E17",darkPlate:"#2B1E17"},typography:{fontFamily:"Playfair Display",plateFontFamily:"Playfair Display",signatureFontFamily:"OpenSansBrand",accentFontFamily:"Playfair Display",bodyFontFamily:"Playfair Display",fontWeight:"400"},fotoSchriften:[BS_KACHEL.fotoSchrift],textSchrift:"Playfair Display",layout:"brand_photo_gradient",warmEditorial:!1,headlineTracking:(Number(BS_KACHEL.lisaLaufweite)||-40),headlineLineHeight:1,textTileLight:"#E9E3DA",textTileDark:"#2B1E17"',
+ 'Stil-Objekt: Schokobraun, Creme, Playfair Display statt Petrona, Akzent ohne Farbe', 1))
+
+P.append((
+ 'Ro=$r,ci="#FFFFFF",Wi=ve.background}else if(_e.warmEditorial)Wi="#000000",ci="#FFFFFF";else if(_e.textTileLight||_e.textTileDark){const $r=_e.textTileLight||"#E8E8E8";Wi=_e.textTileDark||"#000000",ci=$r}else Wi="#000000",ci="#E8E8E8";return Mt&&!Ta&&(ci=Ft(Wi)?"#FFFFFF":"#1A1512")',
+ 'Ro=$r,ci="#F1EBE3",Wi=ve.background}else if(_e.warmEditorial)Wi="#000000",ci="#FFFFFF";else if(_e.textTileLight||_e.textTileDark){const $r=_e.textTileLight||"#E8E8E8";Wi=_e.textTileDark||"#000000",ci=$r}else Wi="#000000",ci="#E8E8E8";return Mt&&!Ta&&(ci=Ft(Wi)?"#F1EBE3":"#2B1E17")',
+ 'Kachelaufbau: Schrift creme auf dunkel, schokobraun auf hell', 1))
+
+P.append((
+ '"#1A1612":"#F2EDE6"',
+ '"#2B1E17":"#F1EBE3"',
+ 'Kontrastwahl X(): dieselben zwei Toene', 1))
+
+P.append((
+ 'Un()?-.34:0',
+ 'Un()?(Number(BS_KACHEL.lisaZeile)||-.12):0',
+ 'Playfair: Zeilenabstand -.12 statt -.34 (Regler lisaZeile)', 1))
+
+P.append((
+ 'Un()?.82:1',
+ '1',
+ 'Playfair: keine Verkleinerung auf .82 mehr', 1))
+
+P.append((
+ 'Un()?-135:0',
+ 'Un()?-40:0',
+ 'Playfair: Laufweite -40 statt -135, wenn kein Wert gesetzt', 1))
+
+P.append((
+ 'const er=Fr($t,Ye,tt),pr=typeof t.headlineTracking',
+ 'const er=Un()?0:Fr($t,Ye,tt),pr=typeof t.headlineTracking',
+ 'Playfair: optische Engstellung Fr() aus, nur noch headlineTracking', 1))
+
+P.append((
+ 'fontWeight:t.fontWeight||(ge.bigWord?"700":"600")',
+ 'fontWeight:"400"',
+ 'Deckblatt-Schrift regular statt 600/700 (gradient + plate)', 2))
+
+P.append((
+ 'me.fontWeight||"600"',
+ 'me.fontWeight||"400"',
+ 'Pt(): Vorgabe 400 statt 600', 1))
+
+P.append((
+ 'fontWeight:t.fontWeight||"600"',
+ 'fontWeight:"400"',
+ 'Folgefolien der Layouts: regular statt 600', 2))
+
+P.append((
+ 'fontFamily:"Montserrat",fontWeight:"600",fill:Oe,charSpacing:ht',
+ 'fontFamily:"Montserrat",fontWeight:"500",fill:Oe,charSpacing:ht',
+ 'Versalzeile Te(): Gewicht 500', 1))
+
+P.append((
+ 'let qe=c(15),ht=400;const Ye=r*.88',
+ 'let qe=c(14),ht=300;const Ye=r*.88',
+ 'Versalzeile Te(): kleiner, Laufweite 300', 1))
+
+P.append((
+ 'fontFamily:"Montserrat",fontWeight:"600",fill:Oe,charSpacing:400',
+ 'fontFamily:"Montserrat",fontWeight:"500",fill:Oe,charSpacing:300',
+ 'Versalzeile Se(): Gewicht 500, Laufweite 300', 1))
+
+P.append((
+ 'lr={brand_photo_gradient:{base:"gradient",textPos:"bottom",align:"center"},brand_photo_bottom_left:{base:"gradient",textPos:"bottom",align:"left"},brand_photo_top:{base:"gradient",textPos:"top",align:"center"},brand_photo_center:{base:"gradient",textPos:"center",align:"center"},brand_photo_bigword:{base:"gradient",textPos:"center",align:"center",bigWord:!0},brand_photo_quote:{base:"gradient",textPos:"center",align:"center",kicker:"top"},brand_photo_bottom_serif:{base:"gradient",textPos:"bottom",align:"center",kicker:"bottom"},brand_photo_frame:{base:"frame",textPos:"below",align:"center"},brand_frame_top_text:{base:"frame",textPos:"above",align:"center"},brand_frame_left:{base:"frame",framePos:"left",textPos:"below",align:"center"},brand_frame_polaroid:{base:"frame",polaroid:!0,textPos:"below",align:"center"},brand_text_plate:{base:"plate",textPos:"center",align:"center",rule:!0},brand_text_plate_top:{base:"plate",textPos:"top",align:"center",rule:!0},brand_text_left:{base:"plate",textPos:"center",align:"left",rule:!1},brand_text_bigword:{base:"plate",textPos:"center",align:"center",bigWord:!0},brand_text_quote:{base:"plate",textPos:"center",align:"center",kicker:"top",rule:!0},brand_text_statement:{base:"plate",textPos:"center",align:"center",kicker:"bottom"},brand_text_kicker_lead:{base:"plate",textPos:"center",align:"center",kicker:"top"},brand_text_minimal:{base:"plate",textPos:"center",align:"center"},brand_text_bold_top:{base:"plate",textPos:"top",align:"left",bigWord:!0},',
+ 'zGrund=zg=>{try{const zl=w(zg);if(BS_KACHEL.lisaGrund&&zl<45)return BS_KACHEL.lisaGrund;if(BS_KACHEL.lisaCreme&&zl>205)return BS_KACHEL.lisaCreme;return zg}catch(zz){return zg}},zFarbe=zg=>ee(zg)?(BS_KACHEL.lisaHell||"#F1EBE3"):(BS_KACHEL.lisaDunkel||"#2B1E17"),zTeilen=(zx,zKurz)=>{try{const zs=String(zx||"").replace(/\\s+/g," ").trim();if(!zs)return null;const zp=zs.match(/^(.*?[.!?\\u2026])\\s+([A-ZÄÖÜ\\u201E\\u201C"].*)$/);if(zp){const zo=zp[1],zu=zp[2];if(zo.replace(/\\*/g,"").length<=90&&zu.replace(/\\*/g,"").length<=160&&zu.replace(/\\*/g,"").length>=3)return{oben:zo,unten:zu}}if(!zKurz)return null;const zk=zs.match(/^([^,]{2,18}),\\s+(.{8,})$/);if(zk)return{oben:zk[1]+",",unten:zk[2]};const zw=zs.split(" ");if(zw.length>=4){const zo=zw.slice(0,2).join(" ");if(zo.replace(/\\*/g,"").length<=18)return{oben:zo,unten:zw.slice(2).join(" ")}}return null}catch(zz){return null}},zUnter=(zH,zx,zF,zLinks,zLeft,zGross)=>{try{if(!zH||!zx)return;const zs=String(zx).replace(/\\*/g,"").trim();if(!zs)return;const zb=zH.originY==="center"?zH.top+(zH.height||0)/2:zH.originY==="bottom"?zH.top:zH.top+(zH.height||0);const zy=zb+n*.028;const zKap=!zGross&&zs.length<=42&&!/[.!?]\\s/.test(zs);if(zKap){let zg=Math.round(r*(Number(BS_KACHEL.lisaKapitel)||.0145)),zc=300;const zm=()=>new Pe.fabric.Text(zs.toUpperCase(),{left:zLinks?zLeft:r/2,top:zy,originX:zLinks?"left":"center",originY:"top",fontSize:zg,fontFamily:"Montserrat",fontWeight:"500",fill:G(zF,.85),charSpacing:zc,selectable:!1});let zt=zm();for(;zt.width>r*.84&&zc>80;)zc-=60,zt=zm();for(;zt.width>r*.84&&zg>8;)zg-=1,zt=zm();e.add(zt);return}const zg=Math.round(r*(zGross?(Number(BS_KACHEL.lisaUnterGross)||.042):(Number(BS_KACHEL.lisaUnter)||.03))),zw=Math.max(zH.width||0,r*.5),zt=new Pe.fabric.Textbox(zs,{left:zLinks?zLeft:r/2-zw/2,top:zy,originX:"left",originY:"top",width:zw,fontSize:zg,fontFamily:"Playfair Display",fontWeight:"400",fill:G(zF,.92),textAlign:zLinks?"left":"center",lineHeight:1.18,charSpacing:-20,selectable:!1});for(let zi=0;zi<24&&zy+zt.height>n*.88&&zt.fontSize>10;zi+=1)zt.set({fontSize:zt.fontSize-1});e.add(zt)}catch(zz){}},lr={brand_photo_gradient:{base:"gradient",textPos:"bottom",align:"center",scrim:.6},brand_photo_bottom_left:{base:"gradient",textPos:"bottom",align:"left",scrim:.6},brand_photo_top:{base:"gradient",textPos:"top",align:"center",scrim:.55},brand_photo_center:{base:"gradient",textPos:"center",align:"center",scrim:.55},brand_photo_bigword:{base:"gradient",textPos:"center",align:"center",bigWord:!0,scrim:.55},brand_photo_quote:{base:"gradient",textPos:"center",align:"center",kicker:"top",scrim:.55},brand_photo_bottom_serif:{base:"gradient",textPos:"bottom",align:"center",kicker:"bottom",scrim:.6},brand_photo_frame:{base:"frame",textPos:"below",align:"center"},brand_frame_top_text:{base:"frame",textPos:"above",align:"center",inset:!0},brand_frame_left:{base:"frame",framePos:"left",textPos:"below",align:"center"},brand_frame_polaroid:{base:"frame",polaroid:!0,textPos:"below",align:"center"},brand_text_plate:{base:"plate",textPos:"center",align:"center",rule:!0,plateColor:"#E9E3DA"},brand_text_plate_top:{base:"plate",textPos:"top",align:"center",rule:!0,plateColor:"#E9E3DA"},brand_text_left:{base:"plate",textPos:"center",align:"left",rule:!1},brand_text_bigword:{base:"plate",textPos:"center",align:"center",bigWord:!0},brand_text_quote:{base:"plate",textPos:"center",align:"center",kicker:"top",rule:!0,plateColor:"#E9E3DA"},brand_text_statement:{base:"plate",textPos:"center",align:"center",kicker:"bottom"},brand_text_kicker_lead:{base:"plate",textPos:"center",align:"center",kicker:"top",plateColor:"#E9E3DA"},brand_text_minimal:{base:"plate",textPos:"center",align:"center",plateColor:"#E9E3DA"},brand_text_bold_top:{base:"plate",textPos:"top",align:"left",bigWord:!0},',
+ 'Layout-Tabelle: Helfer zGrund/zFarbe/zTeilen/zUnter, scrim je Fotolayout, Creme-Flaechen, Inset-Rahmen', 1))
+
+P.append((
+ 'if(e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:Fe,selectable:!1})),ge.rule&&ee(me)){const br=r*.08;e.add(new Pe.fabric.Rect({left:br,top:br,width:r-br*2,height:n-br*2,fill:"transparent",stroke:G(me,.35),strokeWidth:1.5*d,selectable:!1}))}',
+ 'if(e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:Fe,selectable:!1})),ge.rule&&ee(me)){const br=r*.062,br2=r*.076;e.add(new Pe.fabric.Rect({left:br,top:br,width:r-br*2,height:n-br*2,fill:"transparent",stroke:G(me,.5),strokeWidth:1.4*d,selectable:!1}));e.add(new Pe.fabric.Rect({left:br2,top:br2,width:r-br2*2,height:n-br2*2,fill:"transparent",stroke:G(me,.3),strokeWidth:1*d,selectable:!1}))}',
+ 'Doppelrahmen auf der Creme-Flaeche (6.2 % und 7.6 %)', 1))
+
+P.append((
+ 'if(Pt(ht,qe,{left:br,top:ae,originX:sr,originY:De,width:r*(Ze?ot:kt?.46:ge.exactWidth||(_t?.82:.86)),maxWidth:Qt?void 0:Ze?r*dt:void 0,fontSize:Qt&&t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):Ze?k():t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):c(ve),minFontSize:Ze?T():void 0,goldOk:ur,fill:me,accentFill:Oe,textAlign:Ht,lineHeight:ge.bigWord?.98:t.warmEditorial?1.04:1.12,fontWeight:"400",shadow:se(),maxBottom:Ke}),',
+ 'const zSp=BS_KACHEL.lisaTeilen!==0&&!Qt&&!Ye&&!ge.bigWord&&!t.secondaryText&&!kt?zTeilen($e?$e.rest:t.text,!1):null,zOb=zSp?ye(zSp.oben):null,zHt=Pt(zOb?zOb.segments:ht,zOb?zOb.plain:qe,{left:br,top:ae,originX:sr,originY:De,width:r*(Ze?ot:kt?.46:ge.exactWidth||(_t?.82:.86)),maxWidth:Qt?void 0:Ze?r*dt:void 0,fontSize:Qt&&t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):Ze?k()*(Number(BS_KACHEL.lisaGroesse)||1):t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):c(ve),minFontSize:Ze?T()*(Number(BS_KACHEL.lisaGroesse)||1):void 0,goldOk:ur,fill:me,accentFill:Oe,textAlign:Ht,lineHeight:ge.bigWord?.98:t.warmEditorial?1.04:1.12,fontWeight:"400",shadow:se(),maxBottom:zSp?Ke-n*.1:Ke});if(zSp&&zUnter(zHt,zSp.unten,me,Ht==="left",br),',
+ 'gradient-Zweig: erster Satz gross, Rest als Versal- oder Serifen-Unterzeile; Groesse x lisaGroesse', 1))
+
+P.append((
+ 'if(Pt(qe,$e,{left:Ye,top:tt,originX:et,originY:Qt,width:r*(kt?.78:ge.exactWidth||(ht?.8:.74)),maxWidth:kt?r*.82:void 0,fontSize:t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):kt?r*(ar/1080):t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):c(jt),goldOk:_t,minFontSize:kt?r*(56/1080):void 0,fill:me,accentFill:Oe,textAlign:lt,lineHeight:ge.bigWord?.98:kt?1.16:t.warmEditorial?1.04:1.14,fontWeight:"400",shadow:se(),maxBottom:kt?n*.72:Ke}),',
+ 'const zSp=BS_KACHEL.lisaTeilen!==0&&(i.slideIndex||0)===0&&!ge.bigWord&&!t.secondaryText?zTeilen(Qe?Qe.rest:t.text,!1):null,zOb=zSp?ye(zSp.oben):null,zHt=Pt(zOb?zOb.segments:qe,zOb?zOb.plain:$e,{left:Ye,top:tt,originX:et,originY:Qt,width:r*(kt?.78:ge.exactWidth||(ht?.8:.74)),maxWidth:kt?r*.82:void 0,fontSize:t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):kt?r*(ar/1080):t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):c(jt)*(Number(BS_KACHEL.lisaGroesse)||1),goldOk:_t,minFontSize:kt?r*(56/1080):void 0,fill:me,accentFill:Oe,textAlign:lt,lineHeight:ge.bigWord?.98:kt?1.16:t.warmEditorial?1.04:1.14,fontWeight:"400",shadow:se(),maxBottom:zSp?(kt?n*.72:Ke)-n*.1:kt?n*.72:Ke});if(zSp&&zUnter(zHt,zSp.unten,me,lt==="left",Ye),',
+ 'plate-Zweig: dieselbe Aufteilung; Groesse x lisaGroesse', 1))
+
+P.append((
+ 'const{plain:Qe,segments:$e}=ye(t.text),qe=ge.textPos==="above",ht=ge.polaroid?r*.5:r*.58,Ye=ht*(ge.polaroid?1:1.12),et=(r-ht)/2,lt=ge.polaroid?r*.028:0,wt=ge.polaroid?lt*4:0,tt=qe?n*.46:n*.13,Qt=tt+Ye+wt;if(t.secondaryText&&!qe&&Se(t.secondaryText,r/2,n*.07,G(me,.7),"top"),qe&&Pt($e,Qe,{left:r/2,top:n*.22,originX:"center",originY:"center",width:r*.82,fontSize:c(t.fontSize||46),fill:me,accentFill:Oe,textAlign:"center",lineHeight:t.warmEditorial?1.04:1.12,shadow:se(),maxBottom:Ke}),',
+ 'const zIn=ge.inset===!0&&$&&(i.slideIndex||0)===0,zSp=zIn?zTeilen(t.text,!0):null,zOb=zSp?ye(zSp.oben):null,{plain:Qe,segments:$e}=zOb||ye(t.text),qe=ge.textPos==="above",ht=zIn?r*(Number(BS_KACHEL.lisaInsetBreite)||.40):ge.polaroid?r*.5:r*.58,Ye=ht*(zIn?1.22:ge.polaroid?1:1.12),et=(r-ht)/2,lt=ge.polaroid?r*.028:0,wt=ge.polaroid?lt*4:0,tt=zIn?n*(zSp?.27:.34):qe?n*.46:n*.13,Qt=tt+Ye+wt;if(t.secondaryText&&!qe&&Se(t.secondaryText,r/2,n*.07,G(me,.7),"top"),qe){const zHt=Pt($e,Qe,{left:r/2,top:zIn?(zSp?n*.155:n*.21):n*.22,originX:"center",originY:"center",width:r*.86,fontSize:c(zIn?(zSp&&Qe.length<=16?118:zSp?76:52):t.fontSize||46),fill:me,accentFill:Oe,textAlign:"center",lineHeight:zIn?.98:t.warmEditorial?1.04:1.12,shadow:se(),maxBottom:zIn?tt-n*.02:Ke});zIn&&zSp&&(zHt.set({top:tt-n*.03-(zHt.height||0)/2}),zHt.setCoords&&zHt.setCoords())}if(',
+ 'frame-Zweig: Inset - kleines Hochformat-Foto, grosses Wort oben, Rest unten', 1))
+
+P.append((
+ 'e.add(ar),!ge.polaroid&&ee(me)&&e.add(new Pe.fabric.Rect({left:et,top:tt,width:ht,height:Ye,fill:"transparent",stroke:G(me,.25),strokeWidth:1.5*d,selectable:!1})),_t()},{crossOrigin:"anonymous"})}),!qe){',
+ 'e.add(ar),(()=>{try{const zT=String(BS_KACHEL.bildTonung||""),zK=Number(BS_KACHEL.bildTonungKraft)||0;zT&&zK>0&&BS_FARBMISCH&&e.add(new Pe.fabric.Rect({left:et,top:tt,width:ht,height:Ye,fill:zT,opacity:zK,globalCompositeOperation:"color",selectable:!1,evented:!1}))}catch(zz){}})(),!ge.polaroid&&!zIn&&ee(me)&&e.add(new Pe.fabric.Rect({left:et,top:tt,width:ht,height:Ye,fill:"transparent",stroke:G(me,.25),strokeWidth:1.5*d,selectable:!1})),_t()},{crossOrigin:"anonymous"})}),zIn&&zSp){const zW=r*.8,zt=new Pe.fabric.Textbox(String(zSp.unten).replace(/\\*/g,"").trim(),{left:r/2-zW/2,top:Qt+n*.035,originX:"left",originY:"top",width:zW,fontSize:Math.round(r*(Number(BS_KACHEL.lisaInsetUnten)||.046)),fontFamily:"Playfair Display",fontWeight:"400",fill:me,textAlign:"center",lineHeight:1.06,charSpacing:-30,selectable:!1});for(let zi=0;zi<30&&Qt+n*.035+zt.height>n*.88&&zt.fontSize>12;zi+=1)zt.set({fontSize:zt.fontSize-1});e.add(zt)}if(!qe){',
+ 'frame-Zweig: Toenung auch auf dem Inset-Foto, Unterzeile unter dem Foto', 1))
+
+P.append((
+ 'BS_KACHEL.swBleibt===1&&zSat<=-.99&&BS_MISCHBAR&&e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:"#808080",globalCompositeOperation:"saturation",selectable:!1,evented:!1}));',
+ 'BS_KACHEL.swBleibt===1&&zSat<=-.99&&BS_MISCHBAR&&e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:"#808080",globalCompositeOperation:"saturation",selectable:!1,evented:!1}));(()=>{try{const zT=String(BS_KACHEL.bildTonung||""),zK=Number(BS_KACHEL.bildTonungKraft)||0;if(!zT||!(zK>0)||!BS_FARBMISCH||zSat<=-.99||!t.background)return;e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:zT,opacity:zK,globalCompositeOperation:"color",selectable:!1,evented:!1}))}catch(zz){}})();',
+ 'Lader u(): warme Toenung (Composite "color", Regler bildTonung/bildTonungKraft)', 1))
+
+P.append((
+ 'layoutReihe:"brand_photo_gradient|brand_photo_bottom_left|brand_photo_top|brand_photo_center|brand_photo_bigword|brand_photo_quote|brand_photo_bottom_serif|brand_photo_frame|brand_frame_top_text|brand_frame_left|brand_frame_polaroid|brand_text_plate|brand_text_plate_top|brand_text_left|brand_text_bigword|brand_text_quote|brand_text_statement|brand_text_kicker_lead|brand_text_minimal|brand_text_bold_top",',
+ 'layoutReihe:"brand_photo_bottom_left|brand_text_quote|brand_frame_top_text|brand_photo_top|brand_text_left|brand_photo_gradient|brand_photo_center|brand_text_plate|brand_photo_bottom_serif|brand_frame_top_text|brand_photo_bigword|brand_text_statement|brand_photo_quote|brand_frame_left|brand_text_plate_top|brand_photo_bottom_left|brand_text_bigword|brand_photo_frame|brand_text_minimal|brand_photo_top",bildTonung:"#6E4B36",bildTonungKraft:.8,lisaTeilen:1,lisaGrund:"#2B1E17",lisaCreme:"#E9E3DA",lisaHell:"#F1EBE3",lisaDunkel:"#2B1E17",lisaGroesse:1.3,nameFarbeHell:"rgba(43,30,23,0.5)",lisaLaufweite:-40,lisaZeile:-.12,lisaKapitel:.0145,lisaUnter:.03,lisaUnterGross:.042,lisaInsetBreite:.42,lisaInsetUnten:.056,',
+ 'Regler in BS_DUNKEL: neue layoutReihe, bildTonung, lisa*-Regler', 1))
+
+P.append((
+ 'saettigungReihe:"-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1",',
+ 'saettigungReihe:"0.05",',
+ 'Kein Schwarzweiss mehr: saettigungReihe "0.05"', 1))
+
+P.append((
+ 'if(Yt&&Yt.base==="gradient"){const ge=Yt,Fe=t.overlayColor||"#1A1512",me=X(t.color,$,Fe),Oe=t.accentColor||me,',
+ 'if(Yt&&Yt.base==="gradient"){const ge=Yt,Fe=zGrund(t.overlayColor||"#1A1512"),me=$?(BS_KACHEL.lisaHell||X(t.color,$,Fe)):zFarbe(Fe),Oe=me,',
+ 'Farben erzwingen im gradient-Zweig, unabhaengig vom gespeicherten Stil', 1))
+
+P.append((
+ 'Fe=t.plateOverride||ge&&ge.plateColor||t.backgroundColor||"#E8E8E8",me=X(t.color,!1,Fe),Oe=t.accentColor||me;',
+ 'Fe=ge&&ge.plateColor?ge.plateColor:(BS_KACHEL.lisaGrund||zGrund(t.plateOverride||t.backgroundColor||"#E8E8E8")),me=zFarbe(Fe),Oe=me;',
+ 'Farben erzwingen in plate- und frame-Zweig: Creme nur per plateColor, sonst lisaGrund', 2))
+
+P.append((
+ 'fill:BS_KACHEL.nameFarbe||"#FFFFFF",opacity:(BS_KACHEL.nameDeckkraft||.55),selectable:!1,evented:!1});e.add(zNo)}else if(e.bringToFront)e.bringToFront(zNo)}',
+ 'fill:zFill(),opacity:(BS_KACHEL.nameDeckkraft||.55),selectable:!1,evented:!1});e.add(zNo)}else{try{zNo.set("fill",zFill())}catch(zy){}if(e.bringToFront)e.bringToFront(zNo)}}',
+ 'Name auf hellen Flaechen dunkel (zFill bei jedem renderAll)', 1))
+
+P.append((
+ 'const zRA=e.renderAll.bind(e);let zNo=null;e.renderAll=function(){',
+ 'const zRA=e.renderAll.bind(e);let zNo=null;const zFill=()=>{try{const zo=(e._objects||[]).filter(zx=>zx&&zx.type==="rect"&&typeof zx.fill=="string"&&zx.width>=r*.98&&zx.height>=n*.98&&(!zx.globalCompositeOperation||zx.globalCompositeOperation==="source-over")&&zx.fill!=="transparent").pop();if(zo){let zl=-1;const zf=String(zo.fill).trim();if(zf.charAt(0)==="#"){let zh=zf.slice(1);zh.length===3&&(zh=zh.split("").map(zq=>zq+zq).join(""));zl=.2126*parseInt(zh.slice(0,2),16)+.7152*parseInt(zh.slice(2,4),16)+.0722*parseInt(zh.slice(4,6),16)}else{const zm=zf.match(/rgba?\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)/);zm&&(zl=.2126*zm[1]+.7152*zm[2]+.0722*zm[3])}if(zl>150)return BS_KACHEL.nameFarbeHell||"rgba(43,30,23,0.5)"}}catch(zz){}return BS_KACHEL.nameFarbe||"#FFFFFF"};e.renderAll=function(){',
+ 'zFill(): letzte volle Flaeche ohne Composite bestimmt die Namensfarbe', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
