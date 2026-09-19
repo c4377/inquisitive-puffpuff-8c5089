@@ -9044,3 +9044,32 @@ anderen mitziehen würde.
 
 **Nicht erfasst:** die Rahmenlayouts (`E=true`), die ihr Bild an `u()` vorbei
 laden — wie bei Schwarzweiß (256) und Zuschnitt (254).
+
+## 266 — Drei Reparaturen, die der 291-Linie fehlten
+
+> Ihr Raster mit zwei rot durchgestrichenen Kacheln: „Die Kompositionen würde
+> ich so nicht posten, und die Folgefolien, die jetzt anscheinend nur mehr
+> Montserrat haben statt meiner Playfair und Handschrift, haben zu großen Text."
+
+`karten322` ist byteweise 291. In dieser Linie fehlen drei Dinge, die in der
+anderen Linie längst repariert waren:
+
+| | aus | Wirkung |
+|---|---|---|
+| **Screenshot-Folien bekommen kein Layout** | 241, 257 | Ohne die Sperre malen zwei Zweige auf dieselbe Folie — Foto-Inlay + Headline vom Layout, Hookzeile + Kasten vom Overlay. Das waren die durchgestrichenen Kacheln. Dazu die Umschichtung `text → overlayHook` in **beiden** Zweigen des Eigenschaftsbaus, mit `rt.text` statt `Ir`. |
+| **Layouts nur auf dem Deckblatt** | 238 | `zLay(Ve===0?dt:-1)`; Folgefolien gehen durch den Feed-Zweig — der einzige, der Playfair **plus** Handschriftzeile kann. Im Layout-Zweig holen sich Folgefolien die Fließtextschrift (249), daher das Montserrat. |
+| **Folgefolien kleiner** | 239 | `folgeAnteil: .82` auf beide Hebel, `qe` und `Je`. |
+
+**Geprüft** am gerenderten Karussell mit zweisätzigem Text: 322 zeigt Folie 2 als
+fette Grotesk in einem Block; 328 als Playfair-Headline mit dem zweiten Satz in
+Handschrift, zentriert. Screenshot-Folie mit Foto: kein Inlay mehr, Hookzeile
+und Kasten als Gruppe mittig. Raster: Deckblatt-Layouts unverändert.
+
+**Fehlversuch beim Messen, zum Merken:** eine `e.add`-Sonde vor `zSat` fängt
+im Editor-Vorschaufenster nichts — dort hängt der Zeichner an einem anderen
+Canvas. Ein Pixel-Scan auf hellen Zeilen scheitert an weißer Seitenfläche und
+hellem Foto. Entschieden hat der Blick auf die vier Bilder.
+
+**Offen gelassen:** die Folge-Headline steht in `folgeGewicht: 700`, wie im
+Stand 292. Für Deckblätter hieß es „kein fettes Playfair" (253), für Folgefolien
+nur „zu groß". Das Gewicht ist eine Zahl, wenn sie es leichter will.

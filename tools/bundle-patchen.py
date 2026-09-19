@@ -8817,6 +8817,87 @@ P.append((
  'bildHeben:0,hellZiel:105,hellGammaMax:1.7,hellKraft:.8,',
  'Zielhelligkeit, staerkste erlaubte Anhebung, Kurve', 1))
 
+# 266  Drei Reparaturen, die der 291-Linie fehlten
+#
+#      Ihr Raster mit zwei rot durchgestrichenen Kacheln (Tag 81, 76):
+#      "Die Kompositionen wuerde ich so nicht posten, und die
+#       Folgefolien, die jetzt anscheinend nur mehr Montserrat haben
+#       statt meiner Playfair und Handschrift, haben zu grossen Text."
+#
+#      karten322 ist byteweise 291. In dieser Linie fehlen drei
+#      Dinge, die in der anderen Linie laengst repariert waren:
+#
+#      1. SCREENSHOT-FOLIEN BEKOMMEN KEIN LAYOUT (aus 241). Ohne die
+#         Sperre malen zwei Zweige auf dieselbe Folie: das Layout ein
+#         Foto-Inlay plus Headline, der Overlay-Zweig Hookzeile plus
+#         Kasten. Das sind die durchgestrichenen Kacheln. Dazu die
+#         Umschichtung text -> overlayHook in BEIDEN Zweigen des
+#         Eigenschaftsbaus (aus 257), mit rt.text statt Ir, damit sie
+#         in beiden Literalen gleich lautet.
+#
+#      2. LAYOUTS NUR AUF DEM DECKBLATT (aus 238). zLay(Ve===0?dt:-1)
+#         an allen drei Stellen, und zLay gibt bei negativem Index ""
+#         zurueck. Damit gehen Folgefolien durch den Feed-Zweig - der
+#         einzige, der Playfair PLUS die Handschriftzeile kann. Im
+#         Layout-Zweig holen sich Folgefolien die Fliesstextschrift
+#         (249), daher das Montserrat.
+#
+#      3. FOLGEFOLIEN KLEINER (aus 239): folgeAnteil .82 auf beide
+#         Hebel, Startgroesse qe und Hoehenbudget Je.
+#
+#      GEPRUEFT am gerenderten Karussell mit zweisaetzigem Text -
+#         322: Folie 2 fette Grotesk, ein Block
+#         328: Folie 2 Playfair-Headline, zweiter Satz in Handschrift,
+#              zentriert
+#      Screenshot-Folie mit Foto: kein Inlay mehr, Hookzeile und
+#      Kasten als Gruppe mittig. Raster: Deckblatt-Layouts unveraendert.
+#
+#      FEHLVERSUCH beim Messen, zum Merken: eine e.add-Sonde vor
+#      zSat faengt im Editor-Vorschaufenster nichts - dort haengt der
+#      Zeichner an einem anderen Canvas. Ein Pixel-Scan auf hellen
+#      Zeilen scheitert an weisser Seitenflaeche und hellem Foto.
+#      Entschieden hat der Blick auf die vier Bilder.
+#
+#      OFFEN GELASSEN: die Folge-Headline steht in folgeGewicht 700,
+#      wie im Stand 292. Sie hat fuer Deckblaetter "kein fettes
+#      Playfair" gesagt (253), fuer Folgefolien nur "zu gross". Das
+#      Gewicht ist eine Zahl, wenn sie es leichter will.
+
+P.append((
+ 'zLay=(zi,zs)=>{try{const ze=zs&&zs.layout;',
+ 'zLay=(zi,zs)=>{try{if((Number(zi)||0)<0)return "";if(zs&&(zs.overlayIsScreenshot===!0||zs._wasScreenshot===!0))return "";const ze=zs&&zs.layout;',
+ 'zLay: negativer Index heisst kein Layout; Screenshot-Folien bekommen nie eines', 1))
+
+P.append((
+ 'textBands:(zLay(dt,rt)||ot.bandStyle==="none")?void 0:!0,',
+ 'textBands:(zLay(Ve===0?dt:-1,rt)||ot.bandStyle==="none")?void 0:!0,...(rt.overlayIsScreenshot===!0&&!String(rt.overlayHook||"").trim()&&String(rt.text||"").trim()?{overlayHook:String(rt.text).replace(/\\*/g," ").replace(/\\s+/g," ").trim(),text:""}:{}),',
+ 'Layout nur auf dem Deckblatt (Ve===0); Text einer Screenshot-Folie wandert in die Hookzeile', 1))
+
+P.append((
+ 'layout:zLay(dt,rt)||Br,layoutId:zLay(dt,rt)||',
+ 'layout:zLay(Ve===0?dt:-1,rt)||Br,layoutId:zLay(Ve===0?dt:-1,rt)||',
+ 'Dasselbe an beiden Stellen des Eigenschaftsbaus', 2))
+
+P.append((
+ 'editorialDark:Mt?!1:_e.editorialDark===!0||_e.ruleSet==="editorial_dark"}',
+ 'editorialDark:Mt?!1:_e.editorialDark===!0||_e.ruleSet==="editorial_dark",...(rt.overlayIsScreenshot===!0&&!String(rt.overlayHook||"").trim()&&String(rt.text||"").trim()?{overlayHook:String(rt.text).replace(/\\*/g," ").replace(/\\s+/g," ").trim(),text:""}:{})}',
+ 'Auch im Farb-Zweig des Eigenschaftsbaus', 1))
+
+P.append((
+ 't.bigHeadline===!0&&BS_KACHEL.pinnAnteil&&(qe=Math.roun',
+ 't.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeAnteil&&(qe=Math.max(c(12),Math.round(qe*Number(BS_KACHEL.folgeAnteil))));t.bigHeadline===!0&&BS_KACHEL.pinnAnteil&&(qe=Math.roun',
+ 'Folgefolien kleiner: Startgroesse', 1))
+
+P.append((
+ '*(t.bigHeadline===!0&&BS_KACHEL.pinnAnteil?Number(BS_KACHEL.pinnAnteil):1)*(zKa?(Number(BS_KACHEL.kastenAnteil)||.72):1)-SR;',
+ '*(t.folienRolle&&t.folienRolle!=="deckblatt"&&BS_KACHEL.folgeAnteil?Number(BS_KACHEL.folgeAnteil):1)*(t.bigHeadline===!0&&BS_KACHEL.pinnAnteil?Number(BS_KACHEL.pinnAnteil):1)*(zKa?(Number(BS_KACHEL.kastenAnteil)||.72):1)-SR;',
+ 'Und das Hoehenbudget, sonst holt die Schrumpfschleife es zurueck', 1))
+
+P.append((
+ 'kastenAn:0,ssLuft:.035,',
+ 'kastenAn:0,ssLuft:.035,folgeAnteil:.82,',
+ 'Wie stark die Folgefolien kleiner werden', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
