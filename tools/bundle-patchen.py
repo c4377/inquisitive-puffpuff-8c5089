@@ -8585,6 +8585,49 @@ P.append((
 #      dieser Datei, die Paare oben passen nicht darauf, und
 #      verloren ist trotzdem nichts.
 
+# 261  Abstand zwischen Hookzeile und Screenshot
+#
+#      "Ok, Abstand zwischen Text und Bild naeher."
+#
+#      karten322 ist der Stand von 291 und hat deshalb den ALTEN
+#      Screenshot-Zweig: die Hookzeile sitzt fest bei n*.10, und der
+#      Kasten wird in der gesamten Restflaeche darunter zentriert -
+#          Qt = zOben + zH/2
+#      Bei kurzem Screenshot klafft dazwischen eine Luecke, die mit
+#      der Bildhoehe schwankt.
+#
+#      Eingebaut ist jetzt genau die Rechnung aus 294, mehr nicht:
+#      Hoehe der Zeile plus ssLuft plus Kastenhoehe ergibt die
+#      Gesamthoehe, daraus der obere Rand, und die Zeile wird
+#      nachtraeglich dorthin gesetzt. Damit ist der Abstand
+#      IMMER ssLuft, unabhaengig vom Screenshot.
+#
+#      NICHT mitgenommen: das Foto im Stapel (242), die sechs
+#      Anordnungen (258), der Text unter dem Kasten (257). Nur der
+#      Abstand, um den sie gebeten hat.
+#
+#      GEPRUEFT: dieselbe Folie vor und nach der Aenderung gerendert.
+
+P.append((
+ 'zRd=r*.09,Wt=10*d;let zOben=n*.115;if(zHk){',
+ 'zRd=r*.09,Wt=10*d;let zOben=n*.115,zTbO=null;if(zHk){',
+ 'Die Hookzeile merken, um sie nachher noch verschieben zu koennen', 1))
+
+P.append((
+ 'e.add(zTb),zOben=n*.10+zTb.height+n*.045}',
+ 'e.add(zTb),zTbO=zTb,zOben=n*.10+zTb.height+n*.045}',
+ 'Dasselbe', 1))
+
+P.append((
+ 'Qt=zOben+zH/2+(typeof t.overlayImageY=="number"?t.overlayImageY:0)*d;',
+ 'Qt=(()=>{try{const zG=n*(Number(BS_KACHEL.ssLuft)||.035),zHh=zTbO?zTbO.height:0,zBox=wt+Wt*2,zGes=zHh+(zHh?zG:0)+zBox,zO=n*.10,zU=n*.865,zTop=Math.max(zO,Math.min((zO+zU)/2-zGes/2,zU-zGes));if(zTbO)zTbO.set({top:zTop});return zTop+zHh+(zHh?zG:0)+zBox/2}catch(zz){return zOben+zH/2}})()+(typeof t.overlayImageY=="number"?t.overlayImageY:0)*d;',
+ 'Hookzeile und Kasten stehen als eine Gruppe mittig, Abstand ist ssLuft', 1))
+
+P.append((
+ 'kastenAn:0,',
+ 'kastenAn:0,ssLuft:.035,',
+ 'Der Abstand zwischen Text und Screenshot', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

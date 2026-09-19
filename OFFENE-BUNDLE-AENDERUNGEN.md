@@ -8876,3 +8876,28 @@ Playfair-Fassung lag daneben und sie hat die andere genommen.
 
 Zur Wartung gilt wie bei 259: alles ab 293 steckt nicht in dieser Datei, die
 Paare oben passen nicht darauf, und verloren ist trotzdem nichts.
+
+## 261 — Abstand zwischen Hookzeile und Screenshot
+
+> „Ok, Abstand zwischen Text und Bild näher."
+
+`karten322` ist der Stand von 291 und hat deshalb den **alten**
+Screenshot-Zweig: die Hookzeile sitzt fest bei `n*.10`, und der Kasten wird in
+der gesamten Restfläche darunter zentriert:
+
+```
+Qt = zOben + zH/2
+```
+
+Bei kurzem Screenshot klafft dazwischen eine Lücke, die mit der Bildhöhe
+schwankt.
+
+Eingebaut ist jetzt genau die Rechnung aus 294, mehr nicht: Höhe der Zeile plus
+`ssLuft` plus Kastenhöhe ergibt die Gesamthöhe, daraus der obere Rand, und die
+Zeile wird nachträglich dorthin gesetzt. Damit ist der Abstand **immer**
+`ssLuft`, unabhängig vom Screenshot.
+
+**Nicht mitgenommen:** das Foto im Stapel (242), die sechs Anordnungen (258),
+der Text unter dem Kasten (257). Nur der Abstand, um den sie gebeten hat.
+
+**Geprüft:** dieselbe Folie vor und nach der Änderung gerendert.
