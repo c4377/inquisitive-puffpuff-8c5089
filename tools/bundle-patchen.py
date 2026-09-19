@@ -8898,6 +8898,72 @@ P.append((
  'kastenAn:0,ssLuft:.035,folgeAnteil:.82,',
  'Wie stark die Folgefolien kleiner werden', 1))
 
+# 267  Der Balken hinter der Schrift richtet sich nach dem Foto
+#
+#      Ihr Deckblatt Tag 109: helles Foto auf dem Sofa, dahinter ein
+#      dunkler Balken quer durch Gesicht und Oberkoerper. "Hier ist
+#      der Balken zu stark - manchmal passt das, aber so nicht."
+#
+#      WAS DER BALKEN IST, nach drei Fehlgriffen: KEINER der
+#      wortwoertlichen rgba-Kandidaten (dr/0.32, 0,0,0/0.55,
+#      20,18,16/0.70) - ein farbcodierter Test faerbte nichts. Der
+#      Balken ist die Glocke jr(st) im gradient-Zweig des
+#      Layout-Zeichners:
+#          Qe = t.overlayStrength ?? Yt.scrim ?? (serif .44 | warm .26 | .78)
+#          pr = min(Qe + .12, .95)          Spitze in der Textmitte
+#          Flanken bei st +- .15 mit Qe * .72, Null bei st +- .34
+#      Layouts ohne eigenen scrim-Wert landen bei Qe .78, Spitze .90.
+#      Das ist ihr Balken.
+#
+#      JETZT haengt Qe an der Helligkeit des Fotos GENAU hinter dem
+#      Text. Dafuer zwei Zutaten im Lader u():
+#        - die Messung aus 327 behaelt ihr 16x16-Netz (t._hellNetz)
+#        - nach dem Platzieren wird jede der 16 Kachelzeilen auf die
+#          zugehoerige Bildzeile abgebildet (me.top, me.height*jt),
+#          also inklusive Zoom und Versatz der Gesichtszuschnitte -
+#          t._hellZeilen
+#      Im gradient-Zweig: mittlere Helligkeit der Zeilen im Band
+#      er +- .15, daraus
+#          zF = clamp((L - bandDunkel) / (bandHell - bandDunkel), 0, 1)
+#          zQ = Qe * (bandMin + (1 - bandMin) * zF) * bandStaerke
+#      Spitze und Flanken nutzen zQ. Regler: bandDunkel 70, bandHell
+#      170, bandMin .35, bandStaerke .85.
+#
+#      GEMESSEN am Helligkeitsprofil von Tag 5, oben nach unten:
+#        helles Foto   Minimum in der Balkenmitte 55 -> 69
+#                      (Balken bleibt als Lesehilfe, weicher)
+#        dunkles Foto  Minimum 47 -> 60, Zeilen um den Text 56 -> 86
+#                      (Balken praktisch weg, Foto kommt durch)
+#      Beide Bilder gesichtet: Schrift ueberall lesbar.
+#
+#      Ihr Fall (helle Haut, weisses Top, Sofa: L etwa 120-140) liegt
+#      dazwischen: Spitze etwa .61 statt .90, gut ein Drittel weniger.
+
+P.append((
+ 'const zm=zs/(zd.length/4);t._hellMittel=Math.round(zm);',
+ 'const zm=zs/(zd.length/4);t._hellMittel=Math.round(zm);t._hellNetz=(()=>{const zN=[];for(let zy=0;zy<16;zy++){const zR=[];for(let zx=0;zx<16;zx++){const zi=(zy*16+zx)*4;zR.push(.2126*zd[zi]+.7152*zd[zi+1]+.0722*zd[zi+2])}zN.push(zR)}return zN})();',
+ 'Die Messung aus 327 behaelt das 16x16-Helligkeitsnetz des Fotos', 1))
+
+P.append((
+ 'me.set({originX:"center",originY:"center",left:r/2+pr,top:n/2+jr,scaleX:jt,scaleY:jt,selectable:!1});',
+ 'me.set({originX:"center",originY:"center",left:r/2+pr,top:n/2+jr,scaleX:jt,scaleY:jt,selectable:!1});try{const zN=t._hellNetz;if(zN&&zN.length===16){const zHb=me.height*jt,zOb=n/2+jr-zHb/2,zZ=[];for(let zk=0;zk<16;zk++){const zy=(zk+.5)/16*n,zq=Math.max(0,Math.min(15,Math.floor((zy-zOb)/zHb*16))),zR=zN[zq];zZ.push(zR.reduce((za,zb)=>za+zb,0)/zR.length)}t._hellZeilen=zZ}}catch(zz){}',
+ 'Nach dem Platzieren: Helligkeit je Kachelzeile, mit Zoom und Versatz abgebildet', 1))
+
+P.append((
+ 'const er=$t?.72:Math.min(Math.max(jt/n,.08),.92),pr=Math.min(Qe+.12,.95),jr=st=>{',
+ 'const er=$t?.72:Math.min(Math.max(jt/n,.08),.92),zQ=(()=>{try{const zZ=t._hellZeilen;if(!zZ||zZ.length!==16)return Qe;const za=Math.max(0,Math.min(15,Math.floor((er-.15)*16))),zb=Math.max(za,Math.min(15,Math.ceil((er+.15)*16)));let zs=0,zk=0;for(let zi=za;zi<=zb;zi++){zs+=zZ[zi];zk++}const zL=zs/Math.max(1,zk),zD=Number(BS_KACHEL.bandDunkel)||70,zH=Number(BS_KACHEL.bandHell)||170,zMn=Number(BS_KACHEL.bandMin)||.35,zSt=Number(BS_KACHEL.bandStaerke)||1;const zF=Math.max(0,Math.min(1,(zL-zD)/Math.max(1,zH-zD)));t._bandLum=Math.round(zL);return Qe*(zMn+(1-zMn)*zF)*zSt}catch(zz){return Qe}})(),pr=Math.min(zQ+.12,.95),jr=st=>{',
+ 'Balken nur so stark, wie das Foto hinter dem Text hell ist', 1))
+
+P.append((
+ 'Je(st-.15,Qe*.72),Je(st,pr),Je(st+.15,Qe*.72)',
+ 'Je(st-.15,zQ*.72),Je(st,pr),Je(st+.15,zQ*.72)',
+ 'Die Flanken der Glocke folgen demselben Wert', 1))
+
+P.append((
+ 'hellKraft:.8,',
+ 'hellKraft:.8,bandDunkel:70,bandHell:170,bandMin:.35,bandStaerke:.85,',
+ 'Regler: ab welcher Helligkeit der Balken voll wird, Rest bei dunklem Foto, globale Staerke', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

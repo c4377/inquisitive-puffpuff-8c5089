@@ -9073,3 +9073,54 @@ hellem Foto. Entschieden hat der Blick auf die vier Bilder.
 **Offen gelassen:** die Folge-Headline steht in `folgeGewicht: 700`, wie im
 Stand 292. Für Deckblätter hieß es „kein fettes Playfair" (253), für Folgefolien
 nur „zu groß". Das Gewicht ist eine Zahl, wenn sie es leichter will.
+
+## 267 — Der Balken hinter der Schrift richtet sich nach dem Foto
+
+> Ihr Deckblatt Tag 109: helles Foto, dahinter ein dunkler Balken quer durch
+> Gesicht und Oberkörper. „Hier ist der Balken zu stark — manchmal passt das,
+> aber so nicht."
+
+### Was der Balken ist
+
+**Keiner** der wörtlichen rgba-Kandidaten — ein farbcodierter Test färbte
+nichts. Der Balken ist die Glocke `jr(st)` im gradient-Zweig des
+Layout-Zeichners:
+
+```
+Qe = t.overlayStrength ?? Yt.scrim ?? (serif .44 | warm .26 | .78)
+pr = min(Qe + .12, .95)        Spitze in der Textmitte
+Flanken bei st ± .15 mit Qe·.72, Null bei st ± .34
+```
+
+Layouts ohne eigenen `scrim`-Wert landen bei `Qe .78`, Spitze **.90**.
+
+### Jetzt
+
+`Qe` hängt an der Helligkeit des Fotos **genau hinter dem Text**. Zwei Zutaten
+im Lader `u()`: die Messung aus 327 behält ihr 16×16-Netz (`t._hellNetz`), und
+nach dem Platzieren wird jede der 16 Kachelzeilen auf die zugehörige Bildzeile
+abgebildet — inklusive Zoom und Versatz der Gesichtszuschnitte
+(`t._hellZeilen`). Im gradient-Zweig:
+
+```
+zF = clamp((L − bandDunkel) / (bandHell − bandDunkel), 0, 1)
+zQ = Qe · (bandMin + (1 − bandMin)·zF) · bandStaerke
+```
+
+| Regler | |
+|---|---|
+| `bandDunkel` | 70 |
+| `bandHell` | 170 |
+| `bandMin` | .35 |
+| `bandStaerke` | .85 |
+
+### Gemessen am Helligkeitsprofil von Tag 5
+
+| | Balkenmitte |
+|---|---|
+| helles Foto | 55 → **69** — Balken bleibt als Lesehilfe, weicher |
+| dunkles Foto | 47 → **60**, Zeilen um den Text 56 → **86** — Balken praktisch weg |
+
+Beide Bilder gesichtet: Schrift überall lesbar. Ihr Fall (helle Haut, weißes
+Top, Sofa) liegt dazwischen: Spitze etwa .61 statt .90, gut ein Drittel
+weniger.
