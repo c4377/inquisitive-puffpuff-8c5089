@@ -8173,3 +8173,44 @@ Zeichner geschickt und `qe` protokolliert:
 
 Das sind −18 %. Das Raster zeichnet nur das Deckblatt, deshalb war dafür eine
 Sonde nötig statt eines Blicks aufs Bild. Deckblätter bleiben unberührt.
+
+## 240 — Die Layouts wieder an, auf jeder Folie (wie karten291)
+
+> „Nein, da waren die Layouts!??"
+
+### Der Zahlendreher, zum Merken
+
+`karten291` und `karten292` unterscheiden sich in **genau zwei Zeichen**:
+
+| | |
+|---|---|
+| 291 | `layoutAn:1` |
+| 292 | `layoutAn:0` |
+
+Byteweise verglichen — sonst sind die Dateien identisch. Sie hat „zurück zu
+292" gesagt und die **Variation** gemeint. 292 ist aber genau der Stand *ohne*
+sie. Abschnitt 239 hat die Nummer befolgt statt die Absicht.
+
+**Regel daraus:** wird eine Versionsnummer genannt, erst nachsehen, was
+drinsteht, dann bauen.
+
+Ausgewählt hat sie danach aus vier gerenderten Rastern — 291 (Layouts überall),
+300 (nur Deckblatt), 301 (keine). Ihre Wahl: **291**.
+
+### Was geändert wurde
+
+Die Einschränkung aus 238 wieder heraus: `zLay` bekommt den Folienindex statt
+„Deckblatt oder −1". Der Rest von 239 bleibt — Farbleiste, `ssLuft`,
+`textMitte`, Rahmen aus.
+
+### Was das kostet, ehrlich notiert
+
+Mit `layoutAn: 1` liefert `zLay` für **jede** Folie ein Layout (erst das
+`brand_`-Layout der Folie, sonst eines aus `layoutReihe`). Damit ist
+`textBands` undefined, der Feed-Zweig wird gar nicht erst betreten — und
+`folgeAnteil` aus 239 läuft ins Leere, weil `qe` genau dort gesetzt wird.
+
+Die Layoutfolien zeichnen ihre Schrift ohnehin deutlich kleiner. Soll die
+Schrift der Folgefolien **auch innerhalb der Layouts** kleiner werden, braucht
+es einen eigenen Hebel im Layout-Zeichner. `folgeAnteil` bleibt stehen, damit
+es bei `layoutAn: 0` sofort wieder greift.

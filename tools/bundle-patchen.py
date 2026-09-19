@@ -7737,6 +7737,53 @@ P.append((
  "kastenAn:0,folgeAnteil:.82,rahmenReihe:",
  "Wie stark die Folgefolien kleiner werden", 1))
 
+# 240  Die Layouts wieder an - auf JEDER Folie, wie bei karten291
+#
+#      "Nein, da waren die Layouts!??"
+#
+#      DER ZAHLENDREHER, zum Merken: karten291 und karten292
+#      unterscheiden sich in GENAU ZWEI ZEICHEN -
+#          291:  layoutAn:1
+#          292:  layoutAn:0
+#      (byteweise verglichen, sonst sind die Dateien identisch).
+#      Sie hat "zurueck zu 292" gesagt und die Variation gemeint. 292
+#      ist aber genau der Stand OHNE sie. 239 hat die Nummer befolgt
+#      statt die Absicht. Bei einer genannten Versionsnummer also
+#      erst nachsehen, was drinsteht, dann bauen.
+#
+#      Ausgewaehlt hat sie danach aus vier gerenderten Rastern:
+#      291 (Layouts ueberall), 300 (nur Deckblatt), 301 (keine).
+#      Ihre Wahl: 291.
+#
+#      Also die Einschraenkung aus 238 wieder heraus - zLay bekommt
+#      den Folienindex statt "Deckblatt oder -1". Der Rest von 239
+#      bleibt: Farbleiste, ssLuft, textMitte, Rahmen aus.
+#
+#      WAS DAS KOSTET, ehrlich notiert: mit layoutAn 1 liefert zLay
+#      fuer JEDE Folie ein Layout (erst das brand_-Layout der Folie,
+#      sonst eines aus layoutReihe). Damit ist textBands undefined,
+#      der Feed-Zweig wird gar nicht erst betreten - und folgeAnteil
+#      aus 239 laeuft ins Leere, weil qe dort gesetzt wird. Die
+#      Layoutfolien zeichnen ihre Schrift ohnehin kleiner. Will sie
+#      die Folgefolien AUCH innerhalb der Layouts kleiner, braucht es
+#      einen eigenen Hebel im Layout-Zeichner. folgeAnteil bleibt
+#      stehen, damit es bei layoutAn 0 sofort wieder greift.
+
+P.append((
+ "layoutAn:0",
+ "layoutAn:1",
+ "Die zwanzig Layouts wieder an - wie bei karten291", 1))
+
+P.append((
+ "textBands:(zLay(ta===\"deckblatt\"?ot.day:-1,rt)||ot.bandStyle===\"none\")?void 0:!0",
+ "textBands:(zLay(dt,rt)||ot.bandStyle===\"none\")?void 0:!0",
+ "Layout wieder auf jeder Folie, nicht nur auf dem Deckblatt", 1))
+
+P.append((
+ "layout:zLay(ta===\"deckblatt\"?ot.day:-1,rt)||Br,layoutId:zLay(ta===\"deckblatt\"?ot.day:-1,rt)||",
+ "layout:zLay(dt,rt)||Br,layoutId:zLay(dt,rt)||",
+ "Dasselbe an beiden Stellen des Eigenschaftsbaus", 2))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
