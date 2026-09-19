@@ -7894,6 +7894,50 @@ P.append((
  r"""Ye=(()=>{const zY=T1({hatFoto:$e,karte:t.overlayIsScreenshot===!0?"dunkel":t.karte||"dunkel"});try{if(t.overlayIsScreenshot===!0&&BS_KACHEL.ssGrund)zY.grundFarbe=String(BS_KACHEL.ssGrund)}catch(zz){}return zY})()""",
  'Der Grund der Screenshot-Folie wird im Zeichner entschieden, nicht im Eigenschaftsbau', 1))
 
+# 243  Foto auf der Screenshot-Folie groesser und zugeschnitten
+#
+#      "Foto groesser und lieber zugeschnitten, also das war nicht
+#       schlecht vorher."
+#
+#      242 hat das Foto EINGEPASST (Math.min) - es wurde also so
+#      klein, dass es ganz hineinpasste, und liess seitlich Luft.
+#      Jetzt wird es FORMATFUELLEND skaliert (Math.max) und der
+#      Ueberstand weggeschnitten: volle Spaltenbreite, Hoehe nach
+#      Mass, Ausschnitt mittig ueber einen clipPath.
+#
+#      Der Unterschied steckt in zwei Zeichen:
+#          Math.min -> einpassen, Raender bleiben frei
+#          Math.max -> fuellen, Ueberstand wird abgeschnitten
+#      Dazu muss der clipPath die ZIELmasse bekommen (zFw/zFs mal
+#      zFh/zFs), nicht die Bildmasse - sonst schneidet er nichts ab.
+#      Und das Bild haengt an originY "center" mit top zTop+zFh/2,
+#      weil der clipPath um den Objektmittelpunkt herum rechnet.
+#
+#      ssFotoAnteil von .42 auf .52: das Foto bekommt gut die Haelfte
+#      der Flaeche, die nach der Hookzeile uebrig ist. ssFotoBreite
+#      ist der Anteil der Spaltenbreite, 1 heisst ganze Breite.
+#
+#      GEPRUEFT: Folie gerendert. Raster Pixel fuer Pixel gegen 304
+#      gehalten - Unterschied nur die letzte Ziffer im Versionsschild
+#      und 15 Pixel mit hoechstens 8 von 255 Helligkeitsunterschied
+#      im Weichzeichner. Zwei Laeufe desselben Bundles sind
+#      identisch, das Rendern ist also verlaesslich.
+
+P.append((
+ "let zFs=0,zFh=0;if(zFo){zFs=Math.min(zBr/zFo.width,zFoMax/zFo.height),zFh=zFo.height*zFs}",
+ "let zFs=0,zFh=0,zFw=0;if(zFo){zFw=zBr*(Number(BS_KACHEL.ssFotoBreite)||1),zFh=zFoMax,zFs=Math.max(zFw/zFo.width,zFh/zFo.height)}",
+ "Foto wird formatfuellend skaliert statt eingepasst", 1))
+
+P.append((
+ 'if(zFo)zFo.set({originX:"center",originY:"top",left:r/2,top:zTop,scaleX:zFs,scaleY:zFs,selectable:!1,evented:!1,clipPath:new Pe.fabric.Rect({width:zFo.width,height:zFo.height,rx:10/zFs,ry:10/zFs,originX:"center",originY:"center"})}),e.add(zFo),zTop+=zFh+zG;',
+ 'if(zFo)zFo.set({originX:"center",originY:"center",left:r/2,top:zTop+zFh/2,scaleX:zFs,scaleY:zFs,selectable:!1,evented:!1,clipPath:new Pe.fabric.Rect({width:zFw/zFs,height:zFh/zFs,rx:10/zFs,ry:10/zFs,originX:"center",originY:"center"})}),e.add(zFo),zTop+=zFh+zG;',
+ "Ausschnitt mittig, auf die Zielmasse beschnitten", 1))
+
+P.append((
+ "ssFotoAnteil:.42,",
+ "ssFotoAnteil:.52,ssFotoBreite:1,",
+ "Foto groesser: gut die Haelfte der Restflaeche, volle Spaltenbreite", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

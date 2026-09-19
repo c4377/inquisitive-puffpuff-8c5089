@@ -8310,3 +8310,33 @@ der dunklen Karte.
 **Geprüft:** Screenshot-Folie gerendert, Raster mit den Layouts danebengelegt —
 unverändert. Die vier Paare aus Abschnitt 242 spielen karten303 byteweise in
 karten304 zurück.
+
+## 243 — Foto auf der Screenshot-Folie größer und zugeschnitten
+
+> „Foto größer und lieber zugeschnitten, also das war nicht schlecht vorher."
+
+242 hat das Foto **eingepasst** — es wurde so klein skaliert, dass es ganz
+hineinpasste, und ließ seitlich Luft. Jetzt wird es **formatfüllend** skaliert
+und der Überstand weggeschnitten: volle Spaltenbreite, Höhe nach Maß,
+Ausschnitt mittig über einen `clipPath`.
+
+Der Unterschied steckt in zwei Zeichen:
+
+| | |
+|---|---|
+| `Math.min` | einpassen, Ränder bleiben frei |
+| `Math.max` | füllen, Überstand wird abgeschnitten |
+
+Dazu muss der `clipPath` die **Zielmaße** bekommen (`zFw/zFs` × `zFh/zFs`),
+nicht die Bildmaße — sonst schneidet er nichts ab. Und das Bild hängt an
+`originY: "center"` mit `top: zTop + zFh/2`, weil der `clipPath` um den
+Objektmittelpunkt herum rechnet.
+
+`ssFotoAnteil` von `.42` auf `.52`: das Foto bekommt gut die Hälfte der Fläche,
+die nach der Hookzeile übrig ist. `ssFotoBreite` ist der Anteil der
+Spaltenbreite, `1` heißt ganze Breite.
+
+**Geprüft:** Folie gerendert. Raster Pixel für Pixel gegen 304 gehalten —
+Unterschied nur die letzte Ziffer im Versionsschild und 15 Pixel mit höchstens
+8 von 255 Helligkeitsunterschied im Weichzeichner. Zwei Läufe desselben Bundles
+sind identisch, das Rendern ist also verlässlich.
