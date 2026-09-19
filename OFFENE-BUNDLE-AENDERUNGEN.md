@@ -9001,3 +9001,46 @@ und gemeinsam geschrieben (263, Fehler 2), Ladefehler werden nicht gespeichert.
 168 Fotos liegen als volle Data-URLs im Speicher und jede Kachel zieht sie in
 Originalgröße. Wenn das Posten nach 264 immer noch träge ist, liegt es daran
 und nicht an der Erkennung — dann wären Vorschaubilder der nächste Schritt.
+
+## 265 — Dunkle Fotos auf Helligkeit bringen, je Foto gemessen
+
+> „Ich hab nun neue Bilder geladen, aber sie sind zu dunkel insgesamt und durch
+> die dunkle Farbe unter der Schrift viel zu dunkel. Kannst du sie auf die
+> Helligkeit bringen wie alle anderen?"
+
+Der vorhandene Hub (`bildHeben` / `hellBoost`, ColorMatrix) liegt hinter
+`warmEditorial` und steht bei ihr auf 0 — unbrauchbar als Grundlage. Neu, direkt
+nach dem Laden jedes Fotos im Lader `u()`: das Bild wird auf 16×16 gezeichnet,
+die mittlere Luminanz gemessen (`t._hellMittel`), und liegt sie unter
+`hellZiel`, kommt ein **Gamma-Filter** dazu. Gamma statt Addition, damit die
+Mitteltöne steigen und Schwarz Schwarz bleibt — so behält der Verlauf unter der
+Schrift seinen Kontrast.
+
+### Fehlgriff, gemessen erwischt
+
+fabric rechnet Gamma **umgekehrt** zur üblichen Lesart — Werte über 1 hellen
+auf. Mit meiner ersten Kurve (unter 1) wurde das dunkle Raster *dunkler*:
+
+| | vorher | nachher |
+|---|---|---|
+| dunkles Testfoto, Kurve falsch herum | 53.2 | **40.2** |
+| dunkles Testfoto, Kurve umgedreht | 53.2 | **70.4** (+32 %) |
+| graues Testfoto (Kontrolle) | 101.9 | 101.9 |
+
+Gemessen als mittlere Luminanz über den Rasterbereich, also inklusive Text und
+Zwischenräumen — die Fotos selbst steigen stärker als die Zahl zeigt.
+
+### Regler
+
+| | | |
+|---|---|---|
+| `hellZiel` | 105 | Zielmittel; nur **dunklere** Fotos werden angefasst |
+| `hellGammaMax` | 1.7 | Deckel |
+| `hellKraft` | .8 | Kurve |
+
+„Wie alle anderen" ist damit ein fester Zielwert, nicht der Durchschnitt ihres
+Pools — bewusst, weil ein gleitender Durchschnitt bei jedem neuen Foto alle
+anderen mitziehen würde.
+
+**Nicht erfasst:** die Rahmenlayouts (`E=true`), die ihr Bild an `u()` vorbei
+laden — wie bei Schwarzweiß (256) und Zuschnitt (254).

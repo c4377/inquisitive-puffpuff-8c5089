@@ -8771,6 +8771,52 @@ P.append((
  'title:"Doppelte Bilder entfernen",children:"Duplikate entfernen"}),v.jsx("button",{onClick:()=>{if(zAusdruckLauft2.l){zAusdruckLauft2.stopp=!0;return}const zO=(e.brandImages||[]).filter(zu=>((e.imageMeta||{})[zu]||{}).ausdruck===void 0&&!zAusdruckErg.has(zu));if(!zO.length)return;zAusdruckLauft2.l=!0,zAusdruckLauft2.stopp=!1,zAusdruckLauft2.n=zO.length,zAusdruckLauft2.i=0;t({imageMeta:{...e.imageMeta||{}}});(async()=>{try{for(const zu of zO){if(zAusdruckLauft2.stopp)break;const za=await zAusdruck(zu);zAusdruckLauft2.i+=1;if(za){zAusdruckErg.set(zu,za);const G={...e.imageMeta||{}};zAusdruckErg.forEach((zv,zk)=>{G[zk]={...G[zk]||{},ausdruck:zv}});t({imageMeta:G})}else t({imageMeta:{...e.imageMeta||{}}});await new Promise(zr=>setTimeout(zr,200))}}catch(zz){}zAusdruckLauft2.l=!1;const G={...e.imageMeta||{}};zAusdruckErg.forEach((zv,zk)=>{G[zk]={...G[zk]||{},ausdruck:zv}});t({imageMeta:G});B(zAusdruckLauft2.stopp?"Lesen gestoppt.":"Ausdr\\u00fccke gelesen.");setTimeout(()=>B(""),3e3)})()},className:`text-xs px-2 py-1 rounded border ${zAusdruckLauft2.l?"border-amber-300 bg-amber-50 text-amber-800":"border-gray-200 text-gray-600 hover:bg-gray-50"}`,title:"Gesichtsausdruck aller noch ungelesenen Fotos erkennen \\u2013 l\\u00e4uft nur, solange du hier bist, und l\\u00e4sst sich stoppen",children:zAusdruckLauft2.l?`Stoppen (${zAusdruckLauft2.i}/${zAusdruckLauft2.n})`:`Ausdr\\u00fccke lesen (${(e.brandImages||[]).filter(zu=>((e.imageMeta||{})[zu]||{}).ausdruck===void 0&&!zAusdruckErg.has(zu)).length} offen)`}),',
  "Knopf 'Ausdruecke lesen (N offen)' neben 'Duplikate entfernen', mit Stopp und Fortschritt, 200 ms Pause je Foto", 1))
 
+# 265  Dunkle Fotos auf Helligkeit bringen - je Foto gemessen
+#
+#      "Ich hab nun neue Bilder geladen, aber sie sind zu dunkel
+#       insgesamt und durch die dunkle Farbe unter der Schrift viel
+#       zu dunkel. Kannst du sie auf die Helligkeit bringen wie alle
+#       anderen?"
+#
+#      Der vorhandene Hub (bildHeben / hellBoost, ColorMatrix) liegt
+#      hinter warmEditorial und steht bei ihr auf 0 - unbrauchbar als
+#      Grundlage. Neu, direkt nach dem Laden jedes Fotos im Lader u():
+#      das Bild wird auf 16x16 gezeichnet, die mittlere Luminanz
+#      gemessen (t._hellMittel), und liegt sie unter hellZiel, kommt
+#      ein Gamma-Filter dazu. Gamma statt Aufhellen per Addition,
+#      damit die Mitteltoene steigen und Schwarz Schwarz bleibt - so
+#      behaelt der Verlauf unter der Schrift seinen Kontrast.
+#
+#      FEHLGRIFF, gemessen erwischt: fabric rechnet Gamma UMGEKEHRT
+#      zur ueblichen Lesart - Werte ueber 1 hellen auf. Mit meiner
+#      ersten Kurve (unter 1) wurde das dunkle Raster DUNKLER:
+#          dunkles Testfoto   53.2 -> 40.2   (falsch herum)
+#      Kurve umgedreht:
+#          dunkles Testfoto   53.2 -> 70.4   (+32 %)
+#          graues Testfoto   101.9 -> 101.9  (unveraendert, wie es soll)
+#      Gemessen als mittlere Luminanz ueber den Rasterbereich, also
+#      inklusive Text und Zwischenraeumen - die Fotos selbst steigen
+#      staerker als die Zahl zeigt.
+#
+#      REGLER: hellZiel 105 (Zielmittel; nur DUNKLERE Fotos werden
+#      angefasst), hellGammaMax 1.7 (Deckel), hellKraft .8 (Kurve).
+#      "Wie alle anderen" ist damit ein fester Zielwert, nicht der
+#      Durchschnitt ihres Pools - bewusst, weil ein gleitender
+#      Durchschnitt bei jedem neuen Foto alle anderen mitziehen wuerde.
+#
+#      NICHT erfasst: die Rahmenlayouts (E=true), die ihr Bild an u()
+#      vorbei laden - wie bei Schwarzweiss (256) und Zuschnitt (254).
+
+P.append((
+ 'me.setElement(Ze)}}catch{}const Oe=Math.max(r/me.width,n/me.height),Qe=i.slideIndex||0,',
+ 'me.setElement(Ze)}}catch{}try{const zZiel=Number(BS_KACHEL.hellZiel)||0;if(zZiel>0&&Pe.fabric.Image.filters&&Pe.fabric.Image.filters.Gamma){const zel=me.getElement&&me.getElement();if(zel&&zel.width){const zc=document.createElement("canvas");zc.width=zc.height=16;const zx=zc.getContext("2d");zx.drawImage(zel,0,0,16,16);const zd=zx.getImageData(0,0,16,16).data;let zs=0;for(let zi=0;zi<zd.length;zi+=4)zs+=.2126*zd[zi]+.7152*zd[zi+1]+.0722*zd[zi+2];const zm=zs/(zd.length/4);t._hellMittel=Math.round(zm);const zMax=Number(BS_KACHEL.hellGammaMax)||1.7,zg=Math.min(zMax,Math.max(1,Math.pow(zZiel/Math.max(1,zm),Number(BS_KACHEL.hellKraft)||.8)));if(zg>1.015){me.filters=(me.filters||[]).concat([new Pe.fabric.Image.filters.Gamma({gamma:[zg,zg,zg]})]);me.applyFilters()}}}}catch(zz){}const Oe=Math.max(r/me.width,n/me.height),Qe=i.slideIndex||0,',
+ 'Jedes Foto wird nach dem Laden gemessen; liegt sein Mittel unter hellZiel, hebt ein Gamma-Filter die Mitteltoene an (fabric: Gamma ueber 1 hellt auf) - Schwarz bleibt Schwarz', 1))
+
+P.append((
+ 'bildHeben:0,',
+ 'bildHeben:0,hellZiel:105,hellGammaMax:1.7,hellKraft:.8,',
+ 'Zielhelligkeit, staerkste erlaubte Anhebung, Kurve', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
