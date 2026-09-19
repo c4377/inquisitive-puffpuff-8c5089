@@ -8079,3 +8079,49 @@ sieht. Zwei Stärken gerendert und verglichen; die leisere
 
 Kachelmaße am **Raster** prüfen, nicht an der Einzelkachel. Was bei 565 Pixeln
 fein wirkt, ist bei 120 nicht da.
+
+## 238 — Die Layouts zurück, diesmal nur auf dem Deckblatt
+
+*„Du hattest es vorher bei der falschen Petrona-Schrift besser"* — *„geh zurück
+zu der Art vor der Umstellung zurück auf Playfair, mit den Layouts."*
+
+Also `layoutAn` wieder `1`. Aber **nicht** so wie in 229: ihr Einwand von damals
+war berechtigt und bleibt eingebaut.
+
+### Zwei Unterschiede zu 229
+
+1. **Gewählt wird nach Tag**, nicht nach Folienindex. Ein Karussell hätte sonst
+   pro Folie ein anderes Layout.
+2. **Nur das Deckblatt** bekommt überhaupt eins. Folgefolien rufen `zLay` mit
+   `-1`, und `zLay` gibt bei negativem Index sofort `""` zurück — **vor** der
+   Abfrage des Layouts an der Folie. Sonst hätte der
+   `brand_text_plate`-Stempel aus dem Normalisierer sie doch wieder
+   hineingezogen, genau wie in **234**.
+
+### Belegt, nicht vermutet
+
+Die Eigenschaften je Folie eines Karussells protokolliert:
+
+| Folie | Rolle | Layout | textBands |
+|---|---|---|---|
+| 1 | deckblatt | `brand_photo_bottom_left` | — |
+| 2 | inhalt | keins | true |
+| 3 | abschluss | keins | true |
+
+### Was das kostet
+
+Auf den **Deckblättern**: Playfair weicht Petrona (der Layout-Zweig holt die
+Schrift aus `typography.fontFamily`), und die Handschriftzeile gibt es dort
+nicht. Genau das hat ihr besser gefallen. Auf den **Folgefolien** bleibt beides.
+
+Die Rahmen aus 235–237 liegen damit auf Deckblättern brach — sie werden im
+Feed-Zweig gezeichnet, den ein Deckblatt jetzt nicht mehr betritt. Der
+Layoutsatz hat eigene gerahmte Fassungen. Bei `layoutAn: 0` sind die Rahmen
+sofort wieder da.
+
+### Fehlversuch beim Prüfen, zum Merken
+
+Ein Tag mit **einer** Folie taugt nicht als Test für Folgefolien. `ta` kommt aus
+`CG(index, anzahl)` — bei einer einzigen Folie ist sie immer `"deckblatt"`, egal
+was man als `folienRolle` hineinschreibt. Mein erster Vergleich hat deshalb drei
+Deckblätter gegen drei Deckblätter gehalten.

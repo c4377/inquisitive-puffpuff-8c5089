@@ -7614,6 +7614,66 @@ P.append((
  "rahmenRand:.09,rahmenLinie:.014,rahmenSpalte:.72,rahmenFarbe:\"#F6F1E6\",rahmenDeckkraft:1",
  "Rahmen kraeftiger - bei Rastergroesse war die Haarlinie unsichtbar", 1))
 
+# 238  Die Layouts zurueck - diesmal nur auf dem Deckblatt
+#
+#      "Du hattest es vorher bei der falschen Petrona-Schrift
+#       besser" - "geh zurueck zu der Art vor der Umstellung zurueck
+#       auf Playfair, mit den Layouts."
+#
+#      Also layoutAn wieder 1. Aber NICHT so wie in 229: ihr Einwand
+#      von damals war berechtigt und bleibt eingebaut.
+#
+#      ZWEI UNTERSCHIEDE ZU 229:
+#        1. Gewaehlt wird nach TAG, nicht nach Folienindex. Ein
+#           Karussell haette sonst pro Folie ein anderes Layout.
+#        2. Nur das Deckblatt bekommt ueberhaupt eins. Folgefolien
+#           rufen zLay mit -1, und zLay gibt bei negativem Index
+#           sofort "" zurueck - VOR der Abfrage des Layouts an der
+#           Folie. Sonst haette der brand_text_plate-Stempel aus dem
+#           Normalisierer sie doch wieder hineingezogen, genau wie
+#           in 234.
+#
+#      BELEGT, nicht vermutet: die Eigenschaften je Folie eines
+#      Karussells protokolliert -
+#          Folie 1  deckblatt  layout brand_photo_bottom_left
+#          Folie 2  inhalt     kein layout, textBands true
+#          Folie 3  abschluss  kein layout, textBands true
+#
+#      WAS DAS KOSTET, auf den DECKBLAETTERN: Playfair weicht Petrona
+#      (der Layout-Zweig holt die Schrift aus typography.fontFamily),
+#      und die Handschriftzeile gibt es dort nicht. Genau das hat ihr
+#      besser gefallen. Auf den Folgefolien bleibt beides.
+#
+#      Die Rahmen aus 235-237 liegen damit auf Deckblaettern brach -
+#      sie werden im Feed-Zweig gezeichnet, den ein Deckblatt jetzt
+#      nicht mehr betritt. Der Layoutsatz hat eigene gerahmte
+#      Fassungen. Bei layoutAn 0 sind die Rahmen sofort wieder da.
+#
+#      FEHLVERSUCH BEIM PRUEFEN, zum Merken: ein Tag mit EINER Folie
+#      taugt nicht als Test fuer Folgefolien. ta kommt aus
+#      CG(index, anzahl) - bei einer einzigen Folie ist sie immer
+#      "deckblatt", egal was man als folienRolle hineinschreibt.
+
+P.append((
+ "zLay=(zi,zs)=>{try{if(BS_KACHEL.layoutAn!==1)return \"\";const ze=zs&&zs.layout;",
+ "zLay=(zi,zs)=>{try{if(BS_KACHEL.layoutAn!==1)return \"\";if((Number(zi)||0)<0)return \"\";const ze=zs&&zs.layout;",
+ "Ein negativer Index heisst: diese Folie bekommt kein Layout", 1))
+
+P.append((
+ "textBands:(zLay(dt,rt)||ot.bandStyle===\"none\")?void 0:!0,_rah:(ta===\"deckblatt\"?zRah(ot.day):0),",
+ "textBands:(zLay(ta===\"deckblatt\"?ot.day:-1,rt)||ot.bandStyle===\"none\")?void 0:!0,_rah:(ta===\"deckblatt\"?zRah(ot.day):0),",
+ "Layout nur auf dem Deckblatt, und nach TAG gewaehlt statt nach Folienindex", 1))
+
+P.append((
+ "layout:zLay(dt,rt)||Br,layoutId:zLay(dt,rt)||(Mt?Br:sn?\"auto\":rt.layoutId||Br),",
+ "layout:zLay(ta===\"deckblatt\"?ot.day:-1,rt)||Br,layoutId:zLay(ta===\"deckblatt\"?ot.day:-1,rt)||(Mt?Br:sn?\"auto\":rt.layoutId||Br),",
+ "Dasselbe an beiden Stellen des Eigenschaftsbaus", 2))
+
+P.append((
+ "layoutAn:0",
+ "layoutAn:1",
+ "Die Layouts wieder an", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
