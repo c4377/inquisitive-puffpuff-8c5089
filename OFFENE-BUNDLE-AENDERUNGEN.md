@@ -8340,3 +8340,22 @@ Spaltenbreite, `1` heißt ganze Breite.
 Unterschied nur die letzte Ziffer im Versionsschild und 15 Pixel mit höchstens
 8 von 255 Helligkeitsunterschied im Weichzeichner. Zwei Läufe desselben Bundles
 sind identisch, das Rendern ist also verlässlich.
+
+## 244 — Das Foto wieder halbbreit: die Aufteilung von 302, ohne Überlapp
+
+> „Nein, so wie das, nur Abstände besser."
+
+Dazu noch einmal ihr Screenshot von karten302.
+
+Gemeint war also **nicht** das Foto über die ganze Spalte — das war 243 —,
+sondern die Anordnung, die sie auf dem alten Bild sah: ein halbbreites Inlay,
+Text darüber, Screenshot darunter. Kaputt war daran nur, dass die Zeile auf dem
+Foto lag.
+
+Genau das ist seit 242 gelöst: der Stapel wird als Ganzes gerechnet. Es fehlte
+nur die Breite — `ssFotoBreite` von `1` zurück auf `.52`.
+
+**Nachgemessen an ihrem Screenshot:** das Foto lief dort von x 245 bis 670 bei
+920 Bildbreite, also **46 %**, und war etwa **31 %** der Kachelhöhe hoch. Mit
+`ssFotoBreite: .52` und `ssFotoAnteil: .52` kommt der Zeichner auf dieselbe
+Größenordnung — deshalb diese zwei Werte und keine geschätzten.

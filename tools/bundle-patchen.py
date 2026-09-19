@@ -7938,6 +7938,31 @@ P.append((
  "ssFotoAnteil:.52,ssFotoBreite:1,",
  "Foto groesser: gut die Haelfte der Restflaeche, volle Spaltenbreite", 1))
 
+# 244  Das Foto wieder halbbreit - die Aufteilung von 302, ohne Ueberlapp
+#
+#      "Nein, so wie das, nur Abstaende besser." Dazu nochmal ihr
+#      Screenshot von karten302.
+#
+#      Sie wollte also NICHT das Foto ueber die ganze Spalte (das war
+#      243), sondern die Anordnung, die sie auf dem alten Bild sah:
+#      ein halbbreites Inlay, Text darueber, Screenshot darunter.
+#      Kaputt war daran nur, dass die Zeile auf dem Foto lag.
+#
+#      Genau das ist seit 242 geloest - der Stapel wird als Ganzes
+#      gerechnet. Es fehlte nur die Breite. ssFotoBreite von 1 auf
+#      .52 zurueck.
+#
+#      NACHGEMESSEN an ihrem Screenshot: das Foto lief dort von x 245
+#      bis 670 bei 920 Bildbreite, also 46 Prozent, und war etwa 31
+#      Prozent der Kachelhoehe hoch. Mit ssFotoBreite .52 und
+#      ssFotoAnteil .52 kommt der Zeichner auf dieselbe Groessen-
+#      ordnung - deshalb diese zwei Werte und nicht geschaetzte.
+
+P.append((
+ "ssFotoAnteil:.52,ssFotoBreite:1,",
+ "ssFotoAnteil:.52,ssFotoBreite:.52,",
+ "Foto halbbreit als Inlay statt ueber die ganze Spalte", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
