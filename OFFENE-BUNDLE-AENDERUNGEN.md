@@ -7979,3 +7979,36 @@ zählt nur noch, wenn die Rotation überhaupt an ist.
 Ein Schalter, der erst an **zweiter** Stelle gefragt wird, ist kein Schalter.
 Beim Zurückdrehen in 230 habe ich nur geprüft, ob der Feed wieder stimmt — nicht,
 ob es einen Weg **daran vorbei** gibt.
+
+## 235 — Die zwei gerahmten Varianten
+
+*„Ja bau die zwei Rahmen."*
+
+**Nicht** über die Layout-Tabelle, sondern **im Feed-Zeichner** — das war die
+Lehre aus 229/230. Der Rahmen ist reine **Zusatzzeichnung**; Schrift, Größen,
+Lage, Handschrift und Namenszug laufen unverändert weiter. Der Fehler von
+damals kann hier nicht passieren, weil **kein anderer Zweig betreten wird**.
+
+`zRah(tag)` liest `rahmenReihe`, Vorgabe `"0|0|1|0|0|2|0"`:
+
+| | |
+|---|---|
+| `0` | kein Rahmen |
+| `1` | **Foto gerahmt** — ein Rand in Kachelfarbe über die Bildkanten, dazu die Linie. Das Bild wird nicht verschoben, nur beschnitten; deshalb bleibt die Zuteilung der Fotos unberührt. |
+| `2` | **Text gerahmt** — nur die Linie. |
+
+**Nur das Deckblatt:** `_rah` wird nur bei `ta === "deckblatt"` gesetzt. Die
+Folgefolien bleiben, wie sie sind — genau ihr Einwand von vorgestern.
+
+Im Rahmen wird die Textspalte auf `rahmenSpalte: .74` verengt, sonst stößt der
+Text an die Linie (sonst `.86` Spalte bei einem Rahmen bei `.88` innen).
+
+**Geprüft** im Browser, sieben aufeinanderfolgende Tage:
+
+| | |
+|---|---|
+| Tag 1 | unverändert, Playfair und Handschrift |
+| Tag 3 | Foto gerahmt |
+| Tag 6 | Text gerahmt |
+
+Keine Seitenfehler. `rahmenReihe: "0"` schaltet alles ab.

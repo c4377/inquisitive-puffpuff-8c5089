@@ -7488,6 +7488,63 @@ P.append((
  "zLay=(zi,zs)=>{try{if(BS_KACHEL.layoutAn!==1)return \"\";const ze=zs&&zs.layout;if(ze&&String(ze).indexOf(\"brand_\")===0)return ze;",
  "Erst den Schalter fragen, dann das Layout an der Folie", 1))
 
+# 235  Die zwei gerahmten Varianten
+#
+#      "Ja bau die zwei Rahmen."
+#
+#      NICHT ueber die Layout-Tabelle, sondern IM Feed-Zeichner - das
+#      war die Lehre aus 229/230. Der Rahmen ist reine ZUSATZ-
+#      zeichnung; Schrift, Groessen, Lage, Handschrift und Namenszug
+#      laufen unveraendert weiter. Der Fehler von damals kann hier
+#      nicht passieren, weil kein anderer Zweig betreten wird.
+#
+#      zRah(tag) liest rahmenReihe, Vorgabe "0|0|1|0|0|2|0":
+#          0  kein Rahmen
+#          1  Foto gerahmt - ein Rand in Kachelfarbe ueber die
+#             Bildkanten, dazu die Linie. Das Bild wird nicht
+#             verschoben, es wird nur beschnitten; deshalb bleibt
+#             die Zuteilung der Fotos unberuehrt.
+#          2  Text gerahmt - nur die Linie.
+#
+#      NUR DAS DECKBLATT: _rah wird nur bei ta==="deckblatt" gesetzt.
+#      Die Folgefolien bleiben, wie sie sind - genau ihr Einwand von
+#      vorgestern.
+#
+#      Im Rahmen wird die Textspalte auf rahmenSpalte .74 verengt,
+#      sonst stoesst der Text an die Linie (Spalte sonst .86 bei
+#      einem Rahmen bei .88 innen).
+#
+#      GEPRUEFT im Browser, sieben aufeinanderfolgende Tage:
+#          Tag 1  unveraendert, Playfair und Handschrift
+#          Tag 3  Foto gerahmt
+#          Tag 6  Text gerahmt
+#      keine Seitenfehler. rahmenReihe "0" schaltet alles ab.
+
+P.append((
+ "zLay=(zi,zs)=>{try{if(BS_KACHEL.layoutAn!==1)return \"\";",
+ "zRah=zd=>{try{const zl=String(BS_KACHEL.rahmenReihe||\"\").split(\"|\").filter(zx=>zx!==\"\");if(!zl.length)return 0;return Number(zl[(Math.max(1,Number(zd)||1)-1)%zl.length])||0}catch(zz){return 0}},zLay=(zi,zs)=>{try{if(BS_KACHEL.layoutAn!==1)return \"\";",
+ "zRah: welche Rahmenfassung ein Tag bekommt, 0 keine, 1 Foto, 2 Text", 1))
+
+P.append((
+ "textBands:(zLay(dt,rt)||ot.bandStyle===\"none\")?void 0:!0,",
+ "textBands:(zLay(dt,rt)||ot.bandStyle===\"none\")?void 0:!0,_rah:(ta===\"deckblatt\"?zRah(ot.day):0),",
+ "Nur das Deckblatt bekommt einen Rahmen - die Folgefolien bleiben unberuehrt", 1))
+
+P.append((
+ "const $e=!!t.background;let qe=t.sizeLocked&&typeof t.fontSize==\"number\"",
+ "const $e=!!t.background;(()=>{try{const zR=Number(t._rah)||0;if(!zR)return;const zM=r*(Number(BS_KACHEL.rahmenRand)||.06),zLn=Math.max(1,r*(Number(BS_KACHEL.rahmenLinie)||.0045));if(zR===1){const zG=BS_KACHEL.rahmenGrund||\"#0C0C0D\";[[0,0,r,zM],[0,n-zM,r,zM],[0,0,zM,n],[r-zM,0,zM,n]].forEach(zb=>e.add(new Pe.fabric.Rect({left:zb[0],top:zb[1],width:zb[2],height:zb[3],fill:zG,selectable:!1,evented:!1})))}e.add(new Pe.fabric.Rect({left:zM+zLn/2,top:zM+zLn/2,width:Math.max(1,r-2*zM-zLn),height:Math.max(1,n-2*zM-zLn),fill:\"transparent\",stroke:BS_KACHEL.rahmenFarbe||\"#F6F1E6\",strokeWidth:zLn,opacity:(BS_KACHEL.rahmenDeckkraft==null?.5:Number(BS_KACHEL.rahmenDeckkraft)),selectable:!1,evented:!1}))}catch(zz){}})();let qe=t.sizeLocked&&typeof t.fontSize==\"number\"",
+ "Den Rahmen zeichnen: bei 1 zusaetzlich ein Rand in Kachelfarbe ueber die Bildkanten", 1))
+
+P.append((
+ "Qt=r*(zKa&&BS_KACHEL.kastenSpalte?Number(BS_KACHEL.kastenSpalte):zbr)-(tt.polsterX||0)*2",
+ "Qt=r*(zKa&&BS_KACHEL.kastenSpalte?Number(BS_KACHEL.kastenSpalte):(t._rah&&BS_KACHEL.rahmenSpalte?Number(BS_KACHEL.rahmenSpalte):zbr))-(tt.polsterX||0)*2",
+ "Im Rahmen eine schmalere Spalte, damit der Text nicht an die Linie stoesst", 1))
+
+P.append((
+ "kastenAn:0,ssLuft:.035",
+ "kastenAn:0,rahmenReihe:\"0|0|1|0|0|2|0\",rahmenRand:.06,rahmenLinie:.0045,rahmenSpalte:.74,rahmenFarbe:\"#F6F1E6\",rahmenDeckkraft:.5,rahmenGrund:\"#0C0C0D\",ssLuft:.035",
+ "Die Rahmenreihe und ihre Masse", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
