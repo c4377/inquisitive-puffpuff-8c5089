@@ -8216,6 +8216,28 @@ P.append((
  r"""sandGrund:"#3A2418",layoutSchritt:7,""",
  'Wie weit die Folgefolien in der Layoutreihe weiterspringen', 1))
 
+# 252  Zurueck zum Schwarz
+#
+#      "Zurueck zum schwarz."
+#
+#      sandGrund wird geleert. Der Tauschcode aus 250 bleibt drin und
+#      tut bei leerem Wert nichts - ein Farbwert genuegt, und der Ton
+#      ist sofort wieder da. ssGrund geht auf #141210 zurueck, damit
+#      die Screenshot-Folie zum Rest passt.
+#
+#      NACHGEMESSEN am Grund von Tag 9, mit dem neutralen Graubild:
+#          vor 250   0,0,0
+#          mit 250   58,36,23
+#          jetzt     0,0,0
+#      Also punktgenau der alte Zustand, nicht nur ungefaehr.
+#
+#      Die Layoutvariation aus 251 und alles andere bleibt.
+
+P.append((
+ r"""ssGrund:"#3A2418",sandGrund:"#3A2418",""",
+ r"""ssGrund:"#141210",sandGrund:"",""",
+ 'Sandton wieder aus - der Grund ist wieder schwarz', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

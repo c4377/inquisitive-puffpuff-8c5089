@@ -8560,3 +8560,23 @@ Reihe, deshalb wiederholt sich innerhalb eines Karussells nichts.
 **Geprüft** am Karussell: Folie 1 mittig auf Foto, Folie 2 unten links, Folie 3
 eine reine Textfolie. Dass auf Folie 3 das Foto verschwindet, liegt am
 Textlayout und ist Teil der Variation.
+
+## 252 — Zurück zum Schwarz
+
+> „Zurück zum schwarz."
+
+`sandGrund` wird geleert. Der Tauschcode aus 250 bleibt drin und tut bei leerem
+Wert nichts — ein Farbwert genügt, und der Ton ist sofort wieder da. `ssGrund`
+geht auf `#141210` zurück, damit die Screenshot-Folie zum Rest passt.
+
+**Nachgemessen** am Grund von Tag 9, mit dem neutralen Graubild:
+
+| | |
+|---|---|
+| vor 250 | `0,0,0` |
+| mit 250 | `58,36,23` |
+| jetzt | `0,0,0` |
+
+Also punktgenau der alte Zustand, nicht nur ungefähr.
+
+Die Layoutvariation aus 251 und alles andere bleibt.
