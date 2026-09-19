@@ -8359,3 +8359,32 @@ nur die Breite — `ssFotoBreite` von `1` zurück auf `.52`.
 920 Bildbreite, also **46 %**, und war etwa **31 %** der Kachelhöhe hoch. Mit
 `ssFotoBreite: .52` und `ssFotoAnteil: .52` kommt der Zeichner auf dieselbe
 Größenordnung — deshalb diese zwei Werte und keine geschätzten.
+
+## 245 — Zwei Wörter der Hookzeile in Beere
+
+> „Vielleicht machst du bei der Hook immer 2 Wörter so magenta berry?"
+
+Die Farbe ist nicht neu erfunden: **`#B03A5B`** ist ihr eigener Beerenton, der
+schon als `kastenFarbe` in der Konfiguration steht. Damit bleibt es eine Marke
+und keine zweite.
+
+### Warum Textstile und nicht zwei Textboxen
+
+Eine fabric-Textbox trägt `styles[Zeile][Zeichen]` — und zwar bezogen auf den
+**ungebrochenen** Text, nicht auf die umbrochenen Zeilen. Die Hookzeile hat kein
+`\n`, also ist alles Zeile 0 und der Zeichenindex läuft durch den ganzen Satz.
+Deshalb reicht ein Bereich von `zVon` bis `zBis`, egal wo fabric später
+umbricht. Zwei getrennte Textboxen hätten den Umbruch zerschossen.
+
+Die Stile werden **vor** der Schrumpfschleife gesetzt und überleben sie —
+`set({fontSize})` fasst `styles` nicht an.
+
+### Drei Stellschrauben
+
+| Wert | Bedeutung |
+|---|---|
+| `hakenAkzentFarbe` | leer heißt aus |
+| `hakenAkzent` | `"ende"` (Vorgabe) oder `"anfang"` |
+| `hakenAkzentWoerter` | wie viele Wörter, Vorgabe `2` |
+
+Bei bis zu zwei Wörtern passiert nichts — sonst wäre die ganze Zeile farbig.

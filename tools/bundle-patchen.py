@@ -7963,6 +7963,43 @@ P.append((
  "ssFotoAnteil:.52,ssFotoBreite:.52,",
  "Foto halbbreit als Inlay statt ueber die ganze Spalte", 1))
 
+# 245  Zwei Woerter der Hookzeile in Beere
+#
+#      "Vielleicht machst du bei der Hook immer 2 Woerter so magenta
+#       berry?"
+#
+#      Die Farbe ist nicht neu erfunden: #B03A5B ist ihr eigener
+#      Beerenton, der schon als kastenFarbe in der Konfiguration
+#      steht. Damit bleibt es eine Marke und keine zweite.
+#
+#      GEMACHT ueber fabric-Textstile, nicht ueber zwei Textboxen.
+#      Eine Textbox traegt styles[Zeile][Zeichen] - und zwar auf den
+#      UNGEBROCHENEN Text bezogen, nicht auf die umbrochenen Zeilen.
+#      Die Hookzeile hat kein \n, also ist alles Zeile 0 und der
+#      Zeichenindex laeuft durch den ganzen Satz. Deshalb reicht ein
+#      Bereich von zVon bis zBis, egal wo fabric spaeter umbricht.
+#      Zwei getrennte Textboxen haetten den Umbruch zerschossen.
+#
+#      Die Stile werden VOR der Schrumpfschleife gesetzt und
+#      ueberleben sie - set({fontSize}) fasst styles nicht an.
+#
+#      DREI STELLSCHRAUBEN:
+#        hakenAkzentFarbe   leer heisst aus
+#        hakenAkzent        "ende" (Vorgabe) oder "anfang"
+#        hakenAkzentWoerter wie viele Woerter, Vorgabe 2
+#      Bei bis zu zwei Woertern passiert nichts - sonst waere die
+#      ganze Zeile farbig.
+
+P.append((
+ "for(let zi=0;zi<4&&zTb.height>n*.26;zi+=1)zTb.set({fontSize:Math.round(zTb.fontSize*.88)});",
+ "try{const zAk=String(BS_KACHEL.hakenAkzentFarbe||\"\").trim(),zAnz=Number(BS_KACHEL.hakenAkzentWoerter)||2;if(zAk&&zHk.indexOf(\" \")>0){const zW=zHk.split(/\\s+/);if(zW.length>zAnz){const zEnde=BS_KACHEL.hakenAkzent!==\"anfang\",zTeil=zEnde?zW.slice(-zAnz).join(\" \"):zW.slice(0,zAnz).join(\" \"),zVon=zEnde?zHk.length-zTeil.length:0,zBis=zVon+zTeil.length,zSt={};for(let zi=zVon;zi<zBis;zi+=1)zSt[zi]={fill:zAk};zTb.set({styles:{0:zSt}})}}}catch(zz){}for(let zi=0;zi<4&&zTb.height>n*.26;zi+=1)zTb.set({fontSize:Math.round(zTb.fontSize*.88)});",
+ "Zwei Woerter der Hookzeile bekommen den Beerenton", 1))
+
+P.append((
+ "ssFotoAnteil:.52,ssFotoBreite:.52,",
+ "ssFotoAnteil:.52,ssFotoBreite:.52,hakenAkzentFarbe:\"#B03A5B\",hakenAkzent:\"ende\",hakenAkzentWoerter:2,",
+ "Farbe, Seite und Anzahl der betonten Woerter", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
