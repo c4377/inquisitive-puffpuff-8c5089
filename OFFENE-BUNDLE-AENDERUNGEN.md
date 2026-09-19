@@ -8522,3 +8522,41 @@ lässt helle Karten unberührt. Gemessen am Grund von Tag 9:
 **Was das nicht ändert:** Kacheln mit vollflächigem Foto. Deren Ton kommt aus
 dem Bild selbst. Wer die warm haben will, braucht warme Fotos oder einen echten
 Farbschleier darüber — das wäre eine eigene Arbeit.
+
+## 251 — Layouts variieren jetzt auch innerhalb des Karussells
+
+> „Layouts die variieren sollen bitte auf die Folgefolien."
+
+### Nachgemessen statt vermutet
+
+Eine Sonde im Eigenschaftsbau hat für ein Karussell aus drei Folien
+protokolliert:
+
+| Folie | Rolle | Layout |
+|---|---|---|
+| 1 | deckblatt | `brand_photo_gradient` |
+| 2 | inhalt | `brand_photo_gradient` |
+| 3 | abschluss | `brand_photo_gradient` |
+
+Alle drei dasselbe. Grund: `zLay` bekam `dt`, und `dt` ist der **Tages**index.
+Ein Tag, ein Layout, egal wie viele Folien. Was ich vorher für Variation
+gehalten hatte, waren nur die Textpositionsregeln *innerhalb* desselben
+Layouts.
+
+### Was sich ändert
+
+Die Folienposition steht in `Ve` — dieselbe Zahl, aus der `CG()` die Rolle
+ableitet. Der Index ist jetzt:
+
+| | |
+|---|---|
+| Deckblatt | `dt` |
+| Folgefolien | `dt + Ve * layoutSchritt` |
+
+Das Deckblatt bleibt damit bei seinem bisherigen Layout, der Feed im Raster
+ändert sich nicht. `layoutSchritt: 7` ist teilerfremd zu den 20 Einträgen der
+Reihe, deshalb wiederholt sich innerhalb eines Karussells nichts.
+
+**Geprüft** am Karussell: Folie 1 mittig auf Foto, Folie 2 unten links, Folie 3
+eine reine Textfolie. Dass auf Folie 3 das Foto verschwindet, liegt am
+Textlayout und ist Teil der Variation.

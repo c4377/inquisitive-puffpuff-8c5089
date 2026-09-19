@@ -8174,6 +8174,48 @@ P.append((
  r"""ssGrund:"#3A2418",sandGrund:"#3A2418",""",
  'Der Sandton, auch fuer die Screenshot-Folie', 1))
 
+# 251  Layouts variieren jetzt auch INNERHALB des Karussells
+#
+#      "Layouts die variieren sollen bitte auf die Folgefolien."
+#
+#      NACHGEMESSEN statt vermutet: eine Sonde im Eigenschaftsbau hat
+#      fuer ein Karussell aus drei Folien protokolliert -
+#          Folie 1  deckblatt  brand_photo_gradient
+#          Folie 2  inhalt     brand_photo_gradient
+#          Folie 3  abschluss  brand_photo_gradient
+#      Alle drei dasselbe. Grund: zLay bekam dt, und dt ist der
+#      TAGESindex. Ein Tag, ein Layout, egal wie viele Folien.
+#      Was ich vorher fuer Variation gehalten hatte, waren nur die
+#      Textpositionsregeln INNERHALB desselben Layouts.
+#
+#      Die Folienposition steht in Ve - dieselbe Zahl, aus der CG()
+#      die Rolle ableitet. Der Index ist jetzt
+#          Deckblatt      dt
+#          Folgefolien    dt + Ve * layoutSchritt
+#      Das Deckblatt bleibt damit bei seinem bisherigen Layout, der
+#      Feed im Raster aendert sich nicht. layoutSchritt 7 ist
+#      teilerfremd zu den 20 Eintraegen der Reihe, deshalb wiederholt
+#      sich innerhalb eines Karussells nichts.
+#
+#      GEPRUEFT am Karussell: Folie 1 mittig auf Foto, Folie 2 unten
+#      links, Folie 3 eine reine Textfolie. Dass auf Folie 3 das Foto
+#      verschwindet, liegt am Textlayout und ist Teil der Variation.
+
+P.append((
+ r"""textBands:(zLay(dt,rt)||ot.bandStyle==="none")?void 0:!0,""",
+ r"""textBands:(zLay(Ve===0?dt:dt+Ve*(Number(BS_KACHEL.layoutSchritt)||7),rt)||ot.bandStyle==="none")?void 0:!0,""",
+ 'Folgefolien waehlen ihr Layout nach der Folienposition', 1))
+
+P.append((
+ r"""layout:zLay(dt,rt)||Br,layoutId:zLay(dt,rt)||""",
+ r"""layout:zLay(Ve===0?dt:dt+Ve*(Number(BS_KACHEL.layoutSchritt)||7),rt)||Br,layoutId:zLay(Ve===0?dt:dt+Ve*(Number(BS_KACHEL.layoutSchritt)||7),rt)||""",
+ 'Dasselbe an beiden Stellen des Eigenschaftsbaus', 2))
+
+P.append((
+ r"""sandGrund:"#3A2418",""",
+ r"""sandGrund:"#3A2418",layoutSchritt:7,""",
+ 'Wie weit die Folgefolien in der Layoutreihe weiterspringen', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
