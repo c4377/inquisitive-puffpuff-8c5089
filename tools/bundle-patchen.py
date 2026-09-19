@@ -8654,6 +8654,71 @@ P.append((
  'saettigungReihe:"-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1"',
  'Nur noch jede vierte Kachel schwarzweiss statt jeder zweiten', 1))
 
+# 263  Gesichtsausdruck je Foto - Schritt eins der Stimmungswahl
+#
+#      "Kannst du schauen, wo mein Gesicht zu welcher Aussage passt?
+#       Wahrscheinlich nicht." - "Ok."
+#
+#      DOCH, ZUR HAELFTE. Die App laedt face-api mit tinyFaceDetector.
+#      Dieselbe Bibliothek kann Mimik (faceExpressionNet), im Bundle
+#      ist der Code dafuer drin - nur die Gewichte fehlten. CDNs
+#      sind hier gesperrt, npm nicht: aus @vladmandic/face-api 1.7.15
+#      kommen face_expression_model.bin und das Manifest nach
+#      site/models. Die Detektor-Gewichte des Pakets sind byteweise
+#      identisch mit den vorhandenen, also dieselbe Modellfamilie.
+#
+#      WAS ES TUT: im Bilder-Reiter wird jedes Foto ohne Etikett
+#      einmal durch Detektor + Ausdrucksnetz geschickt, das Ergebnis
+#      landet in imageMeta[url].ausdruck (froehlich, ernst, neutral,
+#      ueberrascht, kein Gesicht) und steht als antippbares Etikett
+#      unter der Prioritaet. Antippen wechselt froehlich -> ernst ->
+#      neutral. Die Handkorrektur ist damit dasselbe Feld wie das
+#      Ergebnis - keine zweite Wahrheit.
+#
+#      DREI FEHLER AUF DEM WEG, alle im Test gefunden:
+#        1. "Assignment to constant variable" - die Hilfsvariablen
+#           haengen in einer const-Kette hinter HV. Zustand lebt
+#           jetzt in Behaeltern ({p:null}, Set, Map), die man
+#           veraendern statt zuweisen kann.
+#        2. Ein Foto blieb dauerhaft auf "liest...". Mit einer Sonde:
+#           BEIDE Erkennungen lieferten korrekt n:0 - verloren ging
+#           das Speichern. Jede Kachel schreibt mit dem imageMeta-
+#           Schnappschuss ihres Renders; die letzte ueberschreibt die
+#           frueheren. Jetzt sammelt zAusdruckErg alle Ergebnisse und
+#           jede Schreibung traegt alle zusammen ein.
+#        3. Das Etikett sass auf der Unterkante und verdeckte "Als
+#           CTA-Foto" - jetzt top-8 unter dem Prioritaets-Etikett.
+#
+#      Ladefehler werden NICHT gespeichert (nur echte Ergebnisse),
+#      damit ein Geraet ohne WebGL es beim naechsten Oeffnen erneut
+#      versucht. Die Erkennungen laufen streng nacheinander -
+#      schonender fuer 40 Fotos auf dem Handy.
+#
+#      TESTBEDINGUNG, ehrlich: der Test-Browser hat WebGL nur per
+#      --use-angle=swiftshader (Software). Damit ist belegt: Modell
+#      laedt, Inferenz laeuft, Ergebnis wird fuer alle Kacheln
+#      gespeichert und angezeigt. NICHT belegt, weil hier kein echtes
+#      Portraet liegt: wie gut der Ausdruck auf ihren Fotos gelesen
+#      wird. Das beurteilt sie im Bilder-Reiter.
+#
+#      Schritt zwei (Ton je Post beim Bulk Import ueber das Gemini-
+#      Backend, Abgleich beim Zeichnen) folgt getrennt.
+
+P.append((
+ 'for(let B=w;B<=b;B++)for(let k=m;k<=y;k++)B>=0&&B<t&&k>=0&&k<t&&r.add(B*t+k)}}catch{}return r},',
+ 'for(let B=w;B<=b;B++)for(let k=m;k<=y;k++)B>=0&&B<t&&k>=0&&k<t&&r.add(B*t+k)}}catch{}return r},zAusdruckLauft=new Set,zAusdruckNetz={p:null},zAusdruckKette={p:Promise.resolve()},zAusdruckErg=new Map,zAusdruckWort={happy:"fr\\u00f6hlich",neutral:"neutral",sad:"ernst",angry:"ernst",fearful:"ernst",disgusted:"ernst",surprised:"\\u00fcberrascht"},zAusdruck=async zu=>{try{if(!await QV()||!Zh||!Zh.nets||!Zh.nets.faceExpressionNet)return null;zAusdruckNetz.p||(zAusdruckNetz.p=Zh.nets.faceExpressionNet.loadFromUri(MV).then(()=>!0).catch(ze=>(console.warn("Ausdrucksmodell nicht geladen:",ze&&ze.message||ze),!1)));if(!await zAusdruckNetz.p)return null;const zi=await new Promise((ok,no)=>{const im=new Image;im.crossOrigin="anonymous";im.onload=()=>ok(im);im.onerror=()=>no(new Error("Bild"));im.src=zu});const zr=await Zh.detectAllFaces(zi,new Zh.TinyFaceDetectorOptions({inputSize:416,scoreThreshold:.4})).withFaceExpressions();if(!zr||!zr.length)return"kein Gesicht";zr.sort((a,b)=>b.detection.box.width*b.detection.box.height-a.detection.box.width*a.detection.box.height);const ze=zr[0].expressions||{},zk=Object.keys(ze).sort((a,b)=>ze[b]-ze[a])[0];return zAusdruckWort[zk]||zk||null}catch(zz){console.warn("Ausdruck:",zz&&zz.message||zz);return null}},',
+ 'Gesichtsausdruck je Foto erkennen: face-api mit faceExpressionNet aus /models', 1))
+
+P.append((
+ 'Z=W=>{const G={...e.imageMeta||{},[U]:{...E,...W}};t({imageMeta:G})},re=Y===2?"Hoch":Y===0?"Niedrig":"Normal",',
+ 'Z=W=>{const G={...e.imageMeta||{},[U]:{...E,...W}};t({imageMeta:G})},zAE=(()=>{try{if(E.ausdruck===void 0&&!zAusdruckLauft.has(U)){zAusdruckLauft.add(U);zAusdruckKette.p=zAusdruckKette.p.then(()=>zAusdruck(U)).then(za=>{if(za){zAusdruckErg.set(U,za);const G={...e.imageMeta||{}};zAusdruckErg.forEach((zv,zk)=>{G[zk]={...G[zk]||{},ausdruck:zv}});t({imageMeta:G})}}).catch(()=>{})}}catch(zz){}return E.ausdruck!==void 0?E.ausdruck:zAusdruckErg.get(U)})(),zAEnext={"fr\\u00f6hlich":"ernst",ernst:"neutral",neutral:"fr\\u00f6hlich"},re=Y===2?"Hoch":Y===0?"Niedrig":"Normal",',
+ 'Erkennung je Kachel einmal anstossen, nacheinander; Ergebnisse in einer Tabelle sammeln und beim Speichern alle zusammen in imageMeta schreiben, damit kein veralteter Schnappschuss ein frueheres Ergebnis ueberschreibt', 1))
+
+P.append((
+ '((ue=e.currentBrandConfig)==null?void 0:ue.ctaImage)===U&&v.jsx("span",{className:"absolute top-1.5 right-1.5 bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow",children:"CTA"})]})',
+ '((ue=e.currentBrandConfig)==null?void 0:ue.ctaImage)===U&&v.jsx("span",{className:"absolute top-1.5 right-1.5 bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow",children:"CTA"}),v.jsx("button",{onClick:W=>{W.preventDefault(),Z({ausdruck:zAEnext[zAE]||"fr\\u00f6hlich"})},className:`absolute top-8 left-1.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow ${zAE===void 0?"bg-white/70 text-gray-500":zAE==="fr\\u00f6hlich"?"bg-amber-100 text-amber-800":zAE==="ernst"?"bg-slate-700 text-white":"bg-white/90 text-gray-700"}`,title:"Erkannter Gesichtsausdruck \\u2013 antippen zum \\u00c4ndern",children:zAE===void 0?"liest\\u2026":zAE})]})',
+ 'Etikett unter dem Prioritaets-Etikett oben links auf der Bildkachel, antippbar zum Korrigieren', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

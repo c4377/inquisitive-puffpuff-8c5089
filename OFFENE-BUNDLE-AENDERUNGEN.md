@@ -8924,3 +8924,46 @@ das geklärt:
 
 Im Bild sind genau diese zwei grau. **Die Änderung stimmte, die Messung nicht.**
 Beim nächsten Mal zuerst ins Bild schauen.
+
+## 263 — Gesichtsausdruck je Foto: Schritt eins der Stimmungswahl
+
+> „Kannst du schauen, wo mein Gesicht zu welcher Aussage passt? Wahrscheinlich
+> nicht." — „Ok."
+
+**Doch, zur Hälfte.** Die App lädt `face-api` mit `tinyFaceDetector`. Dieselbe
+Bibliothek kann Mimik (`faceExpressionNet`), der Code ist im Bundle — nur die
+Gewichte fehlten. CDNs sind hier gesperrt, npm nicht: aus
+`@vladmandic/face-api 1.7.15` kommen `face_expression_model.bin` und das
+Manifest nach `site/models`. Die Detektor-Gewichte des Pakets sind byteweise
+identisch mit den vorhandenen — dieselbe Modellfamilie.
+
+### Was es tut
+
+Im Bilder-Reiter wird jedes Foto ohne Etikett einmal durch Detektor und
+Ausdrucksnetz geschickt. Das Ergebnis landet in `imageMeta[url].ausdruck`
+(fröhlich, ernst, neutral, überrascht, kein Gesicht) und steht als antippbares
+Etikett unter der Priorität. Antippen wechselt fröhlich → ernst → neutral. Die
+Handkorrektur ist dasselbe Feld wie das Ergebnis — keine zweite Wahrheit.
+
+### Drei Fehler auf dem Weg, alle im Test gefunden
+
+| | Symptom | Ursache | Behebung |
+|---|---|---|---|
+| 1 | `Assignment to constant variable` | Hilfsvariablen hängen in einer `const`-Kette hinter `HV` | Zustand in Behältern (`{p:null}`, `Set`, `Map`) |
+| 2 | ein Foto dauerhaft „liest…" | Sonde: **beide** Erkennungen liefern `n:0`; verloren ging das *Speichern* — jede Kachel schreibt mit dem `imageMeta`-Schnappschuss ihres Renders, die letzte überschreibt die früheren | `zAusdruckErg` sammelt alle Ergebnisse, jede Schreibung trägt alle zusammen ein |
+| 3 | Etikett verdeckt „Als CTA-Foto" | saß auf der Unterkante | `top-8`, unter dem Prioritäts-Etikett |
+
+Ladefehler werden **nicht** gespeichert, damit ein Gerät ohne WebGL es beim
+nächsten Öffnen erneut versucht. Die Erkennungen laufen streng nacheinander —
+schonender für 40 Fotos auf dem Handy.
+
+### Testbedingung, ehrlich
+
+Der Test-Browser hat WebGL nur per Software (`--use-angle=swiftshader`). Damit
+ist **belegt**: Modell lädt, Inferenz läuft, Ergebnis wird für alle Kacheln
+gespeichert und angezeigt. **Nicht belegt**, weil hier kein echtes Porträt
+liegt: wie gut der Ausdruck auf ihren Fotos gelesen wird. Das beurteilt sie im
+Bilder-Reiter.
+
+Schritt zwei — Ton je Post beim Bulk Import über das Gemini-Backend, Abgleich
+beim Zeichnen — folgt getrennt.
