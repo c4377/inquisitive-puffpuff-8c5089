@@ -7294,6 +7294,80 @@ P.append((
  "kastenAn:0,layoutAn:0,layoutReihe:",
  "Rotation aus - sie kostet Playfair, Handschrift und die Folgefolien", 1))
 
+# 231  Farbauswahl ueber dem Feed, einklappbar
+#
+#      "Bei der Farbauswahl bitte einklappbar damit ich nicht so lange
+#       scrolle und am besten ueber dem Feed weil dann sehe ich das
+#       Ergebnis sofort."
+#
+#      Die Auswahl in den Markeneinstellungen gibt es zwar, aber der
+#      Zeichner liest sie nicht - siehe 224. Eine zweite Auswahl mit
+#      demselben Problem waere sinnlos gewesen. Deshalb hier BEIDES:
+#      die Leiste UND die Verdrahtung.
+#
+#      VIER ROLLEN, weil sie vier Farben wollte:
+#          text      die Ueberschrift auf dem Foto
+#          hand      die Handschriftzeile
+#          name      der Namenszug unten
+#          flaeche   der Grund der reinen Textkacheln
+#
+#      Gespeichert wird in localStorage unter BS_PALETTE, und beide
+#      index.html holen sie VOR dem Modul nach window.BS_PALETTE -
+#      genau wie BS_SCHWARZ_TAG, aus demselben Grund: der Zeichner
+#      liest sie schon bei der ersten Kachel.
+#
+#      Nichts gesetzt heisst: alles bleibt wie im Bundle. Jede Rolle
+#      laesst sich einzeln wieder loeschen (x), oder alle auf einmal.
+#
+#      WARUM EIN KNOPF ZUM NEUZEICHNEN: die Kacheln sind gemerkt und
+#      zeichnen nicht neu, nur weil sich localStorage aendert. Ein
+#      Neuladen ist ehrlicher als eine halbe Aktualisierung, und der
+#      Plan liegt ohnehin in der Datenbank.
+#
+#      Die Leiste haengt in der Werkzeugzeile hinter dem Pinnable-
+#      Knopf und ist w-full, bricht also in eine eigene Zeile um -
+#      direkt ueber dem Raster, ohne Scrollen.
+#
+#      GEPRUEFT im Browser: Leiste da, vier Farbfelder, aufklappbar.
+#      Mit text/hand/name gesetzt zeichnet die Kachel Ueberschrift,
+#      Handschrift und Namenszug in den gewaehlten Toenen. Keine
+#      Seitenfehler.
+
+P.append((
+ "zLay=(zi,zs)=>{try{",
+ "zFarbLeiste=()=>{const[zAuf,zSetzAuf]=ce.useState(!1);const zLies=()=>{try{return JSON.parse(localStorage.getItem(\"BS_PALETTE\")||\"{}\")||{}}catch(zz){return{}}};const[zP,zSetzP]=ce.useState(zLies);const zRollen=[[\"text\",\"Überschrift\",\"#FFFFFF\"],[\"hand\",\"Handschrift\",\"#FFFFFF\"],[\"name\",\"Namenszug\",\"#E8836B\"],[\"flaeche\",\"Textfläche\",\"#0C0C0D\"]];const zSchreib=zn=>{zSetzP(zn);try{localStorage.setItem(\"BS_PALETTE\",JSON.stringify(zn));window.BS_PALETTE=zn}catch(zz){}};const zAend=(zk,zv)=>zSchreib({...zP,[zk]:zv});const zWeg=zk=>{const zn={...zP};delete zn[zk];zSchreib(zn)};const zAlles=()=>{try{localStorage.removeItem(\"BS_PALETTE\");window.BS_PALETTE=null}catch(zz){}zSetzP({})};return v.jsxs(\"div\",{className:\"w-full\",children:[v.jsxs(\"button\",{onClick:()=>zSetzAuf(!zAuf),className:\"w-full flex items-center justify-between px-3 py-2 rounded-lg border border-gray-200 bg-white text-[11px] font-bold text-gray-700 hover:bg-gray-50 transition-colors\",children:[v.jsxs(\"span\",{className:\"flex items-center gap-2\",children:[\"Farben\",v.jsx(\"span\",{className:\"flex gap-1\",children:zRollen.map(zr=>v.jsx(\"span\",{className:\"inline-block w-3 h-3 rounded-full border border-gray-300\",style:{background:zP[zr[0]]||zr[2]}},zr[0]))})]}),v.jsx(\"span\",{className:\"text-gray-400\",children:zAuf?\"Zuklappen\":\"Aufklappen\"})]}),zAuf?v.jsxs(\"div\",{className:\"mt-2 p-3 rounded-lg border border-gray-200 bg-gray-50/70\",children:[v.jsx(\"div\",{className:\"grid grid-cols-2 gap-2\",children:zRollen.map(zr=>v.jsxs(\"label\",{className:\"flex items-center gap-2 bg-white rounded-lg border border-gray-200 px-2 py-1.5\",children:[v.jsx(\"input\",{type:\"color\",value:zP[zr[0]]||zr[2],onChange:zE=>zAend(zr[0],zE.target.value),className:\"w-7 h-7 rounded cursor-pointer border-0 bg-transparent p-0\"}),v.jsx(\"span\",{className:\"text-[11px] font-bold text-gray-700 flex-1\",children:zr[1]}),zP[zr[0]]?v.jsx(\"button\",{onClick:zE=>{zE.preventDefault();zWeg(zr[0])},className:\"text-[10px] text-gray-400 hover:text-gray-700\",children:\"x\"}):null]},zr[0]))}),v.jsxs(\"div\",{className:\"flex items-center gap-2 mt-2\",children:[v.jsx(\"button\",{onClick:()=>{try{location.reload()}catch(zz){}},className:\"flex-1 px-3 py-2 rounded-lg bg-gray-900 text-white text-[11px] font-bold hover:bg-black transition-colors\",children:\"Anwenden und neu zeichnen\"}),v.jsx(\"button\",{onClick:zAlles,className:\"px-3 py-2 rounded-lg border border-gray-200 bg-white text-[11px] font-bold text-gray-600 hover:bg-gray-50\",children:\"Alles zurück\"})]}),v.jsx(\"p\",{className:\"text-[10px] text-gray-400 mt-2 leading-snug\",children:\"Die Auswahl ist gespeichert. Erst nach \\u201eAnwenden\\u201c zeichnet der Feed sie neu.\"})]}):null]})},zLay=(zi,zs)=>{try{",
+ "Platzhalter fuer die Farbleiste im selben const-Block", 1))
+
+P.append((
+ "Ca=async(e,t,r,n,i={})=>{let zGrundTon=\"\";",
+ "Ca=async(e,t,r,n,i={})=>{let zGrundTon=\"\";const zPal=(()=>{try{return(typeof window<\"u\"&&window.BS_PALETTE)||{}}catch(zz){return{}}})();",
+ "Die gespeicherte Farbauswahl einmal je Kachel lesen", 1))
+
+P.append((
+ "fill:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):zDf&&Ve?zDf:(!ge&&(tt.platten||Ve&&!tt.ohnePlatteErste))?tt.bandSchriftFarbe||\"#000000\":tt.schriftFarbe||\"#FFFFFF\",selectable:!1,stroke:",
+ "fill:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):zDf&&Ve?zDf:(!ge&&(tt.platten||Ve&&!tt.ohnePlatteErste))?tt.bandSchriftFarbe||\"#000000\":((Ve?zPal.text:zPal.hand)||tt.schriftFarbe||\"#FFFFFF\"),selectable:!1,stroke:",
+ "Ueberschrift und Handschrift aus der Farbauswahl (ganze Zeile)", 1))
+
+P.append((
+ "fill:rr?tt.highlight:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):zDf&&Ve?zDf:(!ge&&(tt.platten||Ve&&!tt.ohnePlatteErste))?tt.bandSchriftFarbe||\"#000000\":tt.schriftFarbe||\"#FFFFFF\",selectable:!1,shadow:",
+ "fill:rr?tt.highlight:zKa&&Ve?(BS_KACHEL.kastenFarbe||\"#000000\"):zDf&&Ve?zDf:(!ge&&(tt.platten||Ve&&!tt.ohnePlatteErste))?tt.bandSchriftFarbe||\"#000000\":((Ve?zPal.text:zPal.hand)||tt.schriftFarbe||\"#FFFFFF\"),selectable:!1,shadow:",
+ "Dasselbe fuer hervorgehobene Einzelwoerter", 1))
+
+P.append((
+ "fill:tt.platten?(tt.bandSchriftFarbe||tt.schriftFarbe||\"#241C16\"):(BS_KACHEL.nameFarbe||\"#FFFFFF\")",
+ "fill:tt.platten?(tt.bandSchriftFarbe||tt.schriftFarbe||\"#241C16\"):(zPal.name||BS_KACHEL.nameFarbe||\"#FFFFFF\")",
+ "Namenszug aus der Farbauswahl", 1))
+
+P.append((
+ "if(!t){const h=UV(u);return{platten:!1,istKarte:!0,grundFarbe:h.grund,",
+ "if(!t){const h=UV(u);const zpf=(()=>{try{return(typeof window<\"u\"&&window.BS_PALETTE&&window.BS_PALETTE.flaeche)||\"\"}catch(zz){return\"\"}})();return{platten:!1,istKarte:!0,grundFarbe:zpf||h.grund,",
+ "Textflaeche aus der Farbauswahl", 1))
+
+P.append((
+ "v.jsxs(\"button\",{onClick:pinAnlegen,className:\"px-2.5 py-1.5 bg-white text-emerald-700 border border-emerald-200 rounded-lg font-bold hover:bg-emerald-50 transition-colors flex items-center whitespace-nowrap text-[11px]\",children:[v.jsx(ke,{icon:AS,className:\"mr-2\"}),\"Pinnable\"]}),",
+ "v.jsxs(\"button\",{onClick:pinAnlegen,className:\"px-2.5 py-1.5 bg-white text-emerald-700 border border-emerald-200 rounded-lg font-bold hover:bg-emerald-50 transition-colors flex items-center whitespace-nowrap text-[11px]\",children:[v.jsx(ke,{icon:AS,className:\"mr-2\"}),\"Pinnable\"]}),v.jsx(zFarbLeiste,{}),",
+ "Die Farbleiste in die Werkzeugzeile, also direkt ueber dem Raster", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

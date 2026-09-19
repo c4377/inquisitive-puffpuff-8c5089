@@ -7834,3 +7834,43 @@ Feed-Zeichner**: dort bleiben Playfair, Handschrift, Namenszug, Größen und
 Folienrollen erhalten. Ein Rahmen ist ein Rechteck — dieselbe Technik wie der
 Kasten aus 217. Zusätzlich muss die Wahl am **Tag** hängen, nicht am
 Folienindex.
+
+## 231 — Farbauswahl über dem Feed, einklappbar
+
+*„Bei der Farbauswahl bitte einklappbar damit ich nicht so lange scrolle und am
+besten über dem Feed weil dann sehe ich das Ergebnis sofort."*
+
+Die Auswahl in den Markeneinstellungen **gibt es** zwar, aber der Zeichner liest
+sie nicht — siehe **224**. Eine zweite Auswahl mit demselben Problem wäre
+sinnlos gewesen. Deshalb hier **beides**: die Leiste **und** die Verdrahtung.
+
+### Vier Rollen
+
+| Schlüssel | wirkt auf |
+|---|---|
+| `text` | die Überschrift auf dem Foto |
+| `hand` | die Handschriftzeile |
+| `name` | den Namenszug unten |
+| `flaeche` | den Grund der reinen Textkacheln |
+
+Gespeichert wird in `localStorage` unter `BS_PALETTE`, und **beide**
+`index.html` holen sie **vor** dem Modul nach `window.BS_PALETTE` — genau wie
+`BS_SCHWARZ_TAG`, aus demselben Grund: der Zeichner liest sie schon bei der
+ersten Kachel.
+
+Nichts gesetzt heißt: alles bleibt wie im Bundle. Jede Rolle lässt sich einzeln
+wieder löschen, oder alle auf einmal.
+
+### Warum ein Knopf zum Neuzeichnen
+
+Die Kacheln sind gemerkt und zeichnen nicht neu, nur weil sich `localStorage`
+ändert. Ein Neuladen ist ehrlicher als eine halbe Aktualisierung — und der Plan
+liegt ohnehin in der Datenbank, es geht nichts verloren.
+
+Die Leiste hängt in der Werkzeugzeile hinter dem Pinnable-Knopf und ist
+`w-full`, bricht also in eine eigene Zeile um — direkt über dem Raster, ohne
+Scrollen.
+
+**Geprüft** im Browser: Leiste da, vier Farbfelder, aufklappbar. Mit
+`text`/`hand`/`name` gesetzt zeichnet die Kachel Überschrift, Handschrift und
+Namenszug in den gewählten Tönen. Keine Seitenfehler.

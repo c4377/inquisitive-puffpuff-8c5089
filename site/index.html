@@ -21,8 +21,14 @@
       /* Ausnahmen je Kachel, {"47":0.5}. Der Zeichner sucht darin
          seine eigene Tagesnummer und nimmt sonst den Wert oben. */
       var g=JSON.parse(localStorage.getItem("BS_SCHWARZ_TAG")||"null");
-      if(g&&typeof g==="object")window.BS_SCHWARZ_TAG=g;}catch(e){}</script>
-    <script type="module" crossorigin src="/assets/index-B5karten292.js"></script>
+      if(g&&typeof g==="object")window.BS_SCHWARZ_TAG=g;
+      /* Die Farbauswahl. Vier Rollen: text, hand, name, flaeche. Muss aus
+         demselben Grund wie der Schwarz-Regler VOR dem Modul stehen — der
+         Zeichner liest sie schon bei der ersten Kachel. Nichts gesetzt
+         heisst: alles bleibt wie im Bundle. */
+      var pal=JSON.parse(localStorage.getItem("BS_PALETTE")||"null");
+      if(pal&&typeof pal==="object")window.BS_PALETTE=pal;}catch(e){}</script>
+    <script type="module" crossorigin src="/assets/index-B5karten293.js"></script>
     <!-- Montserrat liegt hier im Projekt, nicht bei Google. Der Zeichner misst
          Texte auf dem Canvas und braucht die Schrift sofort; ueber das Netz
          geladen waere sie beim ersten Bild manchmal noch nicht da. Alle
