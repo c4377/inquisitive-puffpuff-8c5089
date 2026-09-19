@@ -8447,3 +8447,38 @@ trägt (`t._petronaTausch`). Wo Playfair echt konfiguriert ist, bleiben sie
 unverändert.
 
 `petronaErsatz` steuert das Ganze — leer heißt: alles bleibt bei Petrona.
+
+## 249 — Die Folgefolien holten sich die Fließtextschrift
+
+> „Aber Layouts auch auf den Folgefolien."
+
+Sie **hatten** welche. Nachgestellt mit einem Karussell aus drei Folien und dem
+Vorschaufenster abfotografiert:
+
+| Folie | gezeichnet als | Tausch aus 248 |
+|---|---|---|
+| 1 | Playfair, mittig | griff |
+| 2 | fette Grotesk, unten links | griff **nicht** |
+
+Es fehlte also nicht das Layout, sondern die Schrift. Ohne dieses Bild hätte
+ich weiter an der Rotation gedreht.
+
+### Grund
+
+Im Eigenschaftsbau steht:
+
+```
+Tt = ct || (Ve===0 ? He.fontFamily||Vt : He.bodyFontFamily||"Montserrat")
+```
+
+Nur die **erste** Folie bekommt die Headline-Schrift. Alle weiteren bekommen
+die Fließtextschrift — und die ist keine Petrona, also lief der Tausch aus 248
+an ihnen vorbei.
+
+Die Bedingung fasst jetzt auch Layoutfolien, deren Familie nicht Petrona ist.
+Ausgenommen bleibt eine ausdrücklich gewählte Headline-Schrift
+(`headlineFontChosen`) — wer im Editor eine Schrift setzt, behält sie.
+
+**Geprüft:** Karussell neu gerendert, alle drei Folien in Playfair mit jeweils
+eigenem Layout. Das Raster unterscheidet sich nur in den Zeilen des
+Versionsschilds.

@@ -8096,6 +8096,37 @@ P.append((
  r"""hakenAkzentFarbe:"#F3E5AB",petronaErsatz:"Playfair Display",""",
  'Welche Schrift Petrona ersetzt', 1))
 
+# 249  Die Folgefolien holten sich die Fliesstextschrift
+#
+#      "Aber Layouts auch auf den Folgefolien."
+#
+#      Sie HATTEN welche. Nachgestellt mit einem Karussell aus drei
+#      Folien und dem Vorschaufenster abfotografiert:
+#          Folie 1  Playfair, mittig      - Layout, Tausch griff
+#          Folie 2  fette Grotesk, unten links - Layout, Tausch griff NICHT
+#      Es fehlte also nicht das Layout, sondern die Schrift. Ohne
+#      dieses Bild haette ich weiter an der Rotation gedreht.
+#
+#      GRUND: im Eigenschaftsbau steht
+#          Tt = ct || (Ve===0 ? He.fontFamily||Vt : He.bodyFontFamily||"Montserrat")
+#      Nur die ERSTE Folie bekommt die Headline-Schrift. Alle
+#      weiteren bekommen die Fliesstextschrift - und die ist keine
+#      Petrona, also lief der Tausch aus 248 an ihnen vorbei.
+#
+#      Die Bedingung fasst jetzt auch Layoutfolien, deren Familie
+#      nicht Petrona ist. Ausgenommen bleibt eine ausdruecklich
+#      gewaehlte Headline-Schrift (headlineFontChosen) - wer im
+#      Editor eine Schrift setzt, behaelt sie.
+#
+#      GEPRUEFT: Karussell neu gerendert, alle drei Folien in
+#      Playfair mit jeweils eigenem Layout. Das Raster unterscheidet
+#      sich nur in den Zeilen des Versionsschilds.
+
+P.append((
+ r"""try{const zEr=String(BS_KACHEL.petronaErsatz||"");if(zEr&&t&&/Petrona/.test(String(t.fontFamily||"")))t.fontFamily=zEr,t._petronaTausch=!0}catch(zz){}""",
+ r"""try{const zEr=String(BS_KACHEL.petronaErsatz||"");if(zEr&&t){const zLay=String(t.layout||"").indexOf("brand_")===0,zPet=/Petrona/.test(String(t.fontFamily||""));if(zPet||zLay&&t.headlineFontChosen!==!0&&String(t.fontFamily||"")!==zEr)t.fontFamily=zEr,t._petronaTausch=!0}}catch(zz){}""",
+ 'Auch Folgefolien im Layout bekommen die Headline-Schrift statt der Fliesstextschrift', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
