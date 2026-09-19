@@ -7907,3 +7907,35 @@ geklemmt, das Bild läuft also nie unter `n*.865`.
 | **karten294** | Zeile und Bild zusammen, gemeinsam mittig |
 
 Keine Seitenfehler. `ssLuft: .035` regelt den Abstand.
+
+## 233 — Text wirklich mittig
+
+*„Die folgeslides wie gehabt — zentriert und Playfair und Handschrift
+gemischt."*
+
+**Nachgesehen, bevor ich etwas anfasse:** Playfair und Handschrift sind bei den
+Folgefolien **bereits** gemischt, über zwei Schlüssel, die zusammenspielen:
+
+| | |
+|---|---|
+| `folgeFamilie: "Playfair Display"` | die Hauptzeilen |
+| `folgeZweitHand: 1` | `QeZ` fällt auf `zweiteFamilie`, also die Handschrift |
+
+Da war nichts zu tun. Gut, dass ich erst gerendert habe.
+
+**Nicht in Ordnung war die Lage.** `textMitte` stand auf `.58`, und
+`textImmerMitte === 1` setzt `De` genau darauf. Der Block saß also **acht
+Prozent unter der Mitte** — oben ein Loch, unten drückte die Handschrift fast
+auf den Namenszug.
+
+`.58` war mein eigener Wert aus **205**, als sie *„Text immer mittig, nicht so
+weit unten"* verlangt hat. Ich bin damals von `.7` nur bis `.58` gegangen statt
+bis zur Mitte. Jetzt `.50`.
+
+**Gilt für alle Kacheln**, nicht nur für Folgefolien — eine getrennte Lage für
+Deckblatt und Folge wäre eine zweite Wahrheit über dieselbe Regel gewesen.
+
+**Geprüft:** drei Kacheln gerendert, zwei davon byteweise gleich der Probe, die
+dritte 17 Byte daneben — dieselbe Schwankung im geblurrten Foto wie in 222.
+Derselbe Bundle zweimal gerendert ist byteweise identisch, es liegt also nicht
+an der Änderung.

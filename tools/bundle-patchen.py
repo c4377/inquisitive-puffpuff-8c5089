@@ -7414,6 +7414,43 @@ P.append((
  "kastenAn:0,ssLuft:.035,layoutAn:0",
  "Der Abstand zwischen Hookzeile und Screenshot", 1))
 
+# 233  Text wirklich mittig
+#
+#      "Die folgeslides wie gehabt - zentriert und Playfair und
+#       Handschrift gemischt."
+#
+#      NACHGESEHEN, bevor ich etwas anfasse: Playfair und Handschrift
+#      sind bei den Folgefolien bereits gemischt, und zwar ueber zwei
+#      Schluessel, die zusammenspielen:
+#          folgeFamilie   "Playfair Display"  -> Hauptzeilen
+#          folgeZweitHand 1                    -> QeZ faellt auf
+#                                                 zweiteFamilie, also
+#                                                 die Handschrift
+#      Da war also nichts zu tun. Gut, dass ich erst gerendert habe.
+#
+#      NICHT in Ordnung war die Lage: textMitte stand auf .58, und
+#      textImmerMitte===1 setzt De genau darauf. Der Block sass also
+#      acht Prozent unter der Mitte - oben ein Loch, unten drueckte
+#      die Handschrift fast auf den Namenszug.
+#
+#      .58 war mein eigener Wert aus 205, als sie "Text immer mittig,
+#      nicht so weit unten" verlangt hat. Ich bin damals von .7 nur
+#      bis .58 gegangen statt bis zur Mitte. Jetzt .50.
+#
+#      GILT FUER ALLE KACHELN, nicht nur fuer Folgefolien - eine
+#      getrennte Lage fuer Deckblatt und Folge waere eine zweite
+#      Wahrheit ueber dieselbe Regel gewesen.
+#
+#      GEPRUEFT: drei Kacheln gerendert, zwei davon byteweise gleich
+#      der Probe, die dritte 17 Byte daneben - dieselbe Schwankung im
+#      geblurrten Foto wie in 222. Derselbe Bundle zweimal gerendert
+#      ist byteweise identisch, es liegt also nicht an der Aenderung.
+
+P.append((
+ "textMitte:.58",
+ "textMitte:.50",
+ "Text wirklich mittig statt auf 58 Prozent", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
