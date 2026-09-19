@@ -9208,6 +9208,93 @@ P.append((
  'saettigungReihe:"-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1",',
  'Schwarzweiss-Anteil wie vor 330 (jedes vierte Foto)', 1))
 
+# 270  Name repariert, Layouts auf den Folgefolien
+#
+#      Screenshot Folie 7/13: "Name ist kaputt und mir fehlt das Layout
+#      auf den Folge Folien."
+#
+#      NAME: die Einblendung aus 291 wickelte e.renderAll bei JEDEM
+#      Aufruf des Zeichners neu ein. Jede Huelle hatte ihr eigenes
+#      Textobjekt und zeichnete es nach e.clear() wieder - mit den
+#      Massen ihres Aufrufs. Auf Schwarz fiel das nie auf, weil die
+#      Kopien hell waren; seit 331 zFill() sie auf hellem Grund dunkel
+#      faerbt, standen sie sichtbar uebereinander. Jetzt ein Haken pro
+#      Leinwand (e.__zNameHook), Masse/Farbe/An-aus werden je Aufruf
+#      gesetzt; bei Band-Folien (textBands) entfernt der Haken sein
+#      Objekt, weil der Band-Zweig den Namen selbst zeichnet.
+#
+#      FOLGEFOLIEN: 328 hatte die Layouts aufs Deckblatt beschraenkt.
+#      zLayF(dt, Ve, rt, foto) waehlt jetzt je Folie: Deckblatt wie
+#      bisher aus layoutReihe[dt]; Folgefolie mit Foto aus
+#      layoutReihe[dt + Ve*layoutSchritt]; Folgefolie ohne Foto aus
+#      folgeReihe[dt + Ve - 1] (hell/dunkel im Wechsel). Gespeicherte
+#      Layouts der Folgefolien werden dabei uebergangen. Im Zeichner
+#      faellt die Vereinheitlichung (plate/gradient links, followUp)
+#      weg, Satzaufteilung und Inset gelten auch dort, Schrift x .82.
+#
+#      GESICHTET: 5 Folien (Foto-Deckblatt, Creme/Schwarz im Wechsel,
+#      erster Satz gross, Rest klein), Name einmal, korrekt gefaerbt.
+
+P.append((
+ 'try{if(BS_KACHEL.nameZeigen!==0&&t&&t.textBands!==!0&&String(t.layout||"").indexOf("brand_")===0){const zRA=e.renderAll.bind(e);let zNo=null;const zFill=()=>{try{const zo=(e._objects||[]).filter(zx=>zx&&zx.type==="rect"&&typeof zx.fill=="string"&&zx.width>=r*.98&&zx.height>=n*.98&&(!zx.globalCompositeOperation||zx.globalCompositeOperation==="source-over")&&zx.fill!=="transparent").pop();if(zo){let zl=-1;const zf=String(zo.fill).trim();if(zf.charAt(0)==="#"){let zh=zf.slice(1);zh.length===3&&(zh=zh.split("").map(zq=>zq+zq).join(""));zl=.2126*parseInt(zh.slice(0,2),16)+.7152*parseInt(zh.slice(2,4),16)+.0722*parseInt(zh.slice(4,6),16)}else{const zm=zf.match(/rgba?\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)/);zm&&(zl=.2126*zm[1]+.7152*zm[2]+.0722*zm[3])}if(zl>150)return BS_KACHEL.nameFarbeHell||"rgba(17,17,17,0.5)"}}catch(zz){}return BS_KACHEL.nameFarbe||"#FFFFFF"};e.renderAll=function(){try{if(!zNo||!e._objects||e._objects.indexOf(zNo)<0){zNo=new Pe.fabric.Text("carinaannaprav",{left:r*.09,top:n*(BS_KACHEL.nameUnten||.945),originX:"left",originY:"center",fontSize:Math.round(r*(BS_KACHEL.nameAnteil||.042)),fontFamily:BS_KACHEL.nameSchrift||"OpenSansBrand",fontWeight:(BS_KACHEL.nameGewicht||"400"),charSpacing:(BS_KACHEL.nameLaufweite==null?150:BS_KACHEL.nameLaufweite),fill:zFill(),opacity:(BS_KACHEL.nameDeckkraft||.55),selectable:!1,evented:!1});e.add(zNo)}else{try{zNo.set("fill",zFill())}catch(zy){}if(e.bringToFront)e.bringToFront(zNo)}}catch(zy){}return zRA.apply(e,arguments)}}}catch(zz){}',
+ 'try{const zAn=BS_KACHEL.nameZeigen!==0&&t&&t.textBands!==!0&&String(t.layout||"").indexOf("brand_")===0;const zH=e.__zNameHook||(e.__zNameHook={an:!1,r:0,n:0,no:null,installed:!1});zH.an=zAn;zH.r=r;zH.n=n;if(!zH.installed){zH.installed=!0;const zRA=e.renderAll.bind(e);const zFill=()=>{try{const zo=(e._objects||[]).filter(zx=>zx&&zx.type==="rect"&&typeof zx.fill=="string"&&zx.width>=zH.r*.98&&zx.height>=zH.n*.98&&(!zx.globalCompositeOperation||zx.globalCompositeOperation==="source-over")&&zx.fill!=="transparent").pop();if(zo){let zl=-1;const zf=String(zo.fill).trim();if(zf.charAt(0)==="#"){let zh=zf.slice(1);zh.length===3&&(zh=zh.split("").map(zq=>zq+zq).join(""));zl=.2126*parseInt(zh.slice(0,2),16)+.7152*parseInt(zh.slice(2,4),16)+.0722*parseInt(zh.slice(4,6),16)}else{const zm=zf.match(/rgba?\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)/);zm&&(zl=.2126*zm[1]+.7152*zm[2]+.0722*zm[3])}if(zl>150)return BS_KACHEL.nameFarbeHell||"rgba(17,17,17,0.5)"}}catch(zz){}return BS_KACHEL.nameFarbe||"#FFFFFF"};const zMass=()=>({left:zH.r*.09,top:zH.n*(BS_KACHEL.nameUnten||.945),fontSize:Math.round(zH.r*(BS_KACHEL.nameAnteil||.042)),fill:zFill()});e.renderAll=function(){try{const zDa=zH.no&&e._objects&&e._objects.indexOf(zH.no)>=0;if(!zH.an){if(zDa)e.remove(zH.no);zH.no=null}else if(!zDa){zH.no=new Pe.fabric.Text("carinaannaprav",Object.assign({originX:"left",originY:"center",fontFamily:BS_KACHEL.nameSchrift||"OpenSansBrand",fontWeight:(BS_KACHEL.nameGewicht||"400"),charSpacing:(BS_KACHEL.nameLaufweite==null?150:BS_KACHEL.nameLaufweite),opacity:(BS_KACHEL.nameDeckkraft||.55),selectable:!1,evented:!1},zMass()));e.add(zH.no)}else{try{zH.no.set(zMass())}catch(zy){}if(e.bringToFront)e.bringToFront(zH.no)}}catch(zy){}return zRA.apply(e,arguments)}}}catch(zz){}',
+ 'Namens-Einblendung: ein Haken je Leinwand, Masse und Farbe je Aufruf, weg bei Band-Folien', 1))
+
+P.append((
+ '},aS=e=>{const t=Math.max(0,Number(e)||0);',
+ '},zLayF=(dt,Ve,rt,ea)=>{try{const zF=BS_KACHEL.folgeLayouts===1,zV=Number(Ve)||0;if(zV>0&&!zF)return "";const zS=zV>0?{...(rt||{}),layout:void 0}:rt;let L=zLay((Number(dt)||0)+zV*(Number(BS_KACHEL.layoutSchritt)||7),zS);if(L&&zV>0&&!(typeof ea=="string"&&ea.length>5)){const zR=String(BS_KACHEL.folgeReihe||"").split("|").filter(Boolean);if(zR.length)L=zR[((Number(dt)||0)+zV-1)%zR.length]}return L||""}catch(zz){return ""}},aS=e=>{const t=Math.max(0,Number(e)||0);',
+ 'zLayF(): Layout je Folie, Folgefolien ohne Foto aus folgeReihe', 1))
+
+P.append((
+ 'isCtaSlide:Ea,layout:zLay(Ve===0?dt:-1,rt)||Br,layoutId:zLay(Ve===0?dt:-1,rt)||',
+ 'isCtaSlide:Ea,layout:zLayF(dt,Ve,rt,ea)||Br,layoutId:zLayF(dt,Ve,rt,ea)||',
+ 'Kachelaufbau (Farbueberschreibung): Layout ueber zLayF', 1))
+
+P.append((
+ 'textBands:(zLay(Ve===0?dt:-1,rt)||ot.bandStyle==="none")',
+ 'textBands:(zLayF(dt,Ve,rt,(e.tagBilder||{})[ot.day]||rt.background)||ot.bandStyle==="none")',
+ 'Kachelaufbau: Band-Entscheidung ueber zLayF', 1))
+
+P.append((
+ 'visualElements:_e.visualElements||[],layout:zLay(Ve===0?dt:-1,rt)||Br,layoutId:zLay(Ve===0?dt:-1,rt)||',
+ 'visualElements:_e.visualElements||[],layout:zLayF(dt,Ve,rt,(e.tagBilder||{})[ot.day]||rt.background)||Br,layoutId:zLayF(dt,Ve,rt,(e.tagBilder||{})[ot.day]||rt.background)||',
+ 'Kachelaufbau: Layout ueber zLayF', 1))
+
+P.append((
+ 'let Yt=lr[D];const Tr=.62,Qr=67,rn=.72;if(Yt&&typeof i.slideIndex=="number"&&i.slideIndex>0){',
+ 'let Yt=lr[D];const Tr=.62,Qr=67,rn=.72;if(Yt&&typeof i.slideIndex=="number"&&i.slideIndex>0&&BS_KACHEL.folgeLayouts!==1){',
+ 'Zeichner: keine Vereinheitlichung der Folgefolien, wenn folgeLayouts an', 1))
+
+P.append((
+ 'const zSp=BS_KACHEL.lisaTeilen!==0&&!Qt&&!Ye&&!ge.bigWord&&!t.secondaryText&&!kt?zTeilen($e?$e.rest:t.text,!1):null',
+ 'const zSp=BS_KACHEL.lisaTeilen!==0&&!Ye&&!ge.bigWord&&!t.secondaryText&&!kt?zTeilen($e?$e.rest:t.text,!1):null',
+ 'gradient-Zweig: Satzaufteilung auch auf Folgefolien', 1))
+
+P.append((
+ 'const zSp=BS_KACHEL.lisaTeilen!==0&&(i.slideIndex||0)===0&&!ge.bigWord&&!t.secondaryText?zTeilen(Qe?Qe.rest:t.text,!1):null',
+ 'const zSp=BS_KACHEL.lisaTeilen!==0&&!ge.bigWord&&!t.secondaryText?zTeilen(Qe?Qe.rest:t.text,!1):null',
+ 'plate-Zweig: Satzaufteilung auch auf Folgefolien', 1))
+
+P.append((
+ 'const zIn=ge.inset===!0&&$&&(i.slideIndex||0)===0,',
+ 'const zIn=ge.inset===!0&&$,',
+ 'frame-Zweig: Inset auch auf Folgefolien', 1))
+
+P.append((
+ '(Number(BS_KACHEL.lisaGroesse)||1)',
+ 'zGr()',
+ 'Groesse ueber zGr() (Folgefolien x folgeLayoutAnteil)', 3))
+
+P.append((
+ 'zTeilen=(zx,zKurz)=>{',
+ 'zGr=()=>(Number(BS_KACHEL.lisaGroesse)||1)*((i.slideIndex||0)>0?(Number(BS_KACHEL.folgeLayoutAnteil)||.82):1),zTeilen=(zx,zKurz)=>{',
+ 'zGr() definiert', 1))
+
+P.append((
+ 'lisaGroesse:1.3,nameFarbeHell:',
+ 'lisaGroesse:1.3,folgeLayouts:1,layoutSchritt:3,folgeReihe:"brand_text_quote|brand_text_left|brand_text_plate_top|brand_text_statement|brand_text_minimal|brand_text_bigword|brand_text_kicker_lead|brand_text_bold_top",folgeLayoutAnteil:.82,nameFarbeHell:',
+ 'Regler: folgeLayouts 1, layoutSchritt 3, folgeReihe, folgeLayoutAnteil .82', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

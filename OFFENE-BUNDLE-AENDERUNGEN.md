@@ -9210,3 +9210,34 @@ Zurück auf ihres:
 Alle 330-Regler bleiben, nur die Werte wechseln. Gesichtet: Raster mit
 dunklem und buntem Testfoto, Karussell-Deckblatt. Replay aus dem
 eingecheckten 330 ist byte-genau.
+
+## 270 — Name repariert, Layouts auf den Folgefolien
+
+> Screenshot Folie 7/13: „Name ist kaputt und mir fehlt das Layout auf den
+> Folge Folien."
+
+**Name.** Die Einblendung aus 291 wickelte `e.renderAll` bei jedem Aufruf des
+Zeichners neu ein. Jede Hülle hatte ihr eigenes Textobjekt und zeichnete es
+nach `e.clear()` wieder, mit den Maßen ihres Aufrufs. Auf Schwarz fiel das
+nie auf, die Kopien waren hell. Seit 331 färbt `zFill()` sie auf hellem Grund
+dunkel, da standen sie sichtbar übereinander. Jetzt gibt es einen Haken pro
+Leinwand (`e.__zNameHook`); Maße, Farbe und An/Aus werden je Aufruf gesetzt.
+Bei Band-Folien entfernt der Haken sein Objekt, weil der Band-Zweig den Namen
+selbst zeichnet.
+
+**Folgefolien.** 328 hatte die Layouts aufs Deckblatt beschränkt. `zLayF()`
+wählt jetzt je Folie:
+
+| Folie | Quelle |
+|---|---|
+| Deckblatt | `layoutReihe[dt]` wie bisher |
+| Folgefolie mit Foto | `layoutReihe[dt + Ve·layoutSchritt]` |
+| Folgefolie ohne Foto | `folgeReihe[dt + Ve − 1]`, hell und dunkel im Wechsel |
+
+Gespeicherte Layouts der Folgefolien werden dabei übergangen. Im Zeichner
+fällt die Vereinheitlichung der Folgefolien weg, Satzaufteilung und Inset
+gelten auch dort, Schrift × `folgeLayoutAnteil` .82.
+
+Regler: `folgeLayouts` 1, `layoutSchritt` 3, `folgeReihe`,
+`folgeLayoutAnteil` .82. Gesichtet: fünf Folien, Creme und Schwarz im
+Wechsel, erster Satz groß, Rest klein, Name einmal und richtig gefärbt.
