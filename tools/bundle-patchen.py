@@ -7834,6 +7834,66 @@ P.append((
  "textBands:(zLay(dt,rt)||ot.bandStyle===\"none\")?void 0:!0,...(rt.overlayIsScreenshot===!0&&!String(rt.overlayHook||\"\").trim()&&String(Ir||\"\").trim()?{overlayHook:String(Ir).replace(/\\*/g,\" \").replace(/\\s+/g,\" \").trim(),text:\"\"}:{}),",
  "Headline einer Screenshot-Folie wird zur Hookzeile - sonst zeichnen zwei Zweige nebeneinander", 1))
 
+# 242  Screenshot-Folie: Text, Foto und Screenshot untereinander
+#
+#      "Es haette eh gepasst, aber Screenshot und Bild und Text
+#       besser aufteilen, damit sie nicht uebereinander stehen."
+#
+#      241 hatte das Foto geopfert, um den Ueberlapp loszuwerden. Das
+#      war einer zu viel: sie will alle drei, nur ordentlich gesetzt.
+#
+#      Der Screenshot-Zweig zeichnet jetzt einen STAPEL und zentriert
+#      ihn als Ganzes im Band .10 bis .865 -
+#          Hookzeile
+#          Foto (Inlay, hoechstens ssFotoAnteil der Restflaeche)
+#          Screenshot-Kasten (der Rest)
+#      mit ssLuft als Abstand zwischen den Teilen. Erst werden alle
+#      drei Hoehen gerechnet, dann die Gesamthoehe, dann der obere
+#      Rand - deshalb kann nichts mehr uebereinander liegen.
+#
+#      WOHER DAS FOTO KOMMT: im Eigenschaftsbau wandert das Tagesbild
+#      nach zSsFoto und background wird geleert. Sonst laege dasselbe
+#      Bild zusaetzlich vollflaechig darunter.
+#
+#      DER GRUND WURDE DABEI WEISS, und das war die eigentliche
+#      Arbeit. Drei Fehlversuche, jeder mit einer Sonde widerlegt:
+#        - backgroundColor setzen: kommt an, faerbt aber nichts.
+#        - plateOverride setzen: kommt gar nicht erst an, wird
+#          unterwegs ueberschrieben.
+#        - karte "dunkel" im Eigenschaftsbau: wird ebenfalls
+#          ueberschrieben, die Sonde meldet weiter karte "hell".
+#      Gefaerbt wird von T1({hatFoto,karte}).grundFarbe, gemessen:
+#          karte "hell"    #FFFFFF
+#          karte "dunkel"  #2B211A
+#      Ohne Foto greift immer der Plattenzweig. Deshalb liegt die
+#      Entscheidung jetzt im Zeichner, wo t.overlayIsScreenshot
+#      nachweislich ankommt, und nicht im Eigenschaftsbau. ssGrund
+#      setzt den Ton danach auf Schwarz statt auf das Braun der
+#      dunklen Karte.
+#
+#      GEPRUEFT: Screenshot-Folie gerendert, Raster mit den Layouts
+#      danebengelegt - unveraendert.
+
+P.append((
+ r"""if(t.overlayIsScreenshot){const zHk=String(t.overlayHook||"").replace(/\*/g,"").trim(),zBg=String(zGrundTon||t.plateOverride||t.backgroundColor||"#000000"),zTint=w(zBg)>150?"#241C16":"#F6F1E6",zRd=r*.09,Wt=10*d;let zOben=n*.115,zTbO=null;if(zHk){const zTb=new Pe.fabric.Textbox(zHk,{left:r/2,top:n*.10,originX:"center",originY:"top",width:r-zRd*2,fontSize:Math.round(r*(BS_KACHEL.hakenAnteil||.055)),fontFamily:BS_KACHEL.deckblattFamilie||"Playfair Display",fontWeight:"400",fill:zTint,textAlign:"center",lineHeight:1.18,selectable:!1,evented:!1});for(let zi=0;zi<4&&zTb.height>n*.30;zi+=1)zTb.set({fontSize:Math.round(zTb.fontSize*.88)});e.add(zTb),zTbO=zTb,zOben=n*.10+zTb.height+n*.045}const zUnten=n*.865,zH=Math.max(n*.24,zUnten-zOben),zF=typeof t.overlayImageScale=="number"?Math.max(.3,Math.min(1,t.overlayImageScale/.8)):1,et=Math.min((r-zRd*2-Wt*2)/me.width,(zH-Wt*2)/me.height)*zF,lt=me.width*et,wt=me.height*et,tt=r/2+(typeof t.overlayImageX=="number"?t.overlayImageX:0)*d,Qt=(()=>{try{const zG=n*(Number(BS_KACHEL.ssLuft)||.035),zHh=zTbO?zTbO.height:0,zBox=wt+Wt*2,zGes=zHh+(zHh?zG:0)+zBox,zO=n*.10,zU=n*.865,zTop=Math.max(zO,Math.min((zO+zU)/2-zGes/2,zU-zGes));if(zTbO)zTbO.set({top:zTop});return zTop+zHh+(zHh?zG:0)+zBox/2}catch(zz){return zOben+zH/2}})()+(typeof t.overlayImageY=="number"?t.overlayImageY:0)*d;e.add(new Pe.fabric.Rect({left:tt,top:Qt,originX:"center",originY:"center",width:lt+Wt*2,height:wt+Wt*2,rx:12*d,ry:12*d,fill:F,selectable:!1,shadow:"rgba(0,0,0,0.22) 0px 10px 30px"})),me.set({originX:"center",originY:"center",left:tt,top:Qt,scaleX:et,scaleY:et,selectable:!1,clipPath:new Pe.fabric.Rect({width:me.width,height:me.height,rx:6/et,ry:6/et,originX:"center",originY:"center"})}),e.add(me),Fe(!0);return}""",
+ r"""if(t.overlayIsScreenshot){const zHk=String(t.overlayHook||"").replace(/\*/g,"").trim(),zBg=String(zGrundTon||t.plateOverride||t.backgroundColor||"#000000"),zTint=w(zBg)>150?"#241C16":"#F6F1E6",zRd=r*.09,Wt=10*d,zO=n*.10,zU=n*.865,zG=n*(Number(BS_KACHEL.ssLuft)||.035),zBr=r-zRd*2;const zSetz=zFo=>{try{let zTbO=null,zHh=0;if(zHk){const zTb=new Pe.fabric.Textbox(zHk,{left:r/2,top:zO,originX:"center",originY:"top",width:zBr,fontSize:Math.round(r*(BS_KACHEL.hakenAnteil||.055)),fontFamily:BS_KACHEL.deckblattFamilie||"Playfair Display",fontWeight:"400",fill:zTint,textAlign:"center",lineHeight:1.18,selectable:!1,evented:!1});for(let zi=0;zi<4&&zTb.height>n*.26;zi+=1)zTb.set({fontSize:Math.round(zTb.fontSize*.88)});zTbO=zTb,zHh=zTb.height}const zRest=Math.max(n*.24,zU-zO-zHh-zG*(zFo?2:zHh?1:0));const zFoMax=zFo?zRest*(Number(BS_KACHEL.ssFotoAnteil)||.42):0;let zFs=0,zFh=0;if(zFo){zFs=Math.min(zBr/zFo.width,zFoMax/zFo.height),zFh=zFo.height*zFs}const zBoxMax=Math.max(n*.12,zRest-zFh),zF=typeof t.overlayImageScale=="number"?Math.max(.3,Math.min(1,t.overlayImageScale/.8)):1,et=Math.min((zBr-Wt*2)/me.width,(zBoxMax-Wt*2)/me.height)*zF,lt=me.width*et,wt=me.height*et,zBox=wt+Wt*2,zGes=zHh+(zHh?zG:0)+zFh+(zFh?zG:0)+zBox;let zTop=Math.max(zO,Math.min((zO+zU)/2-zGes/2,zU-zGes));if(zTbO)zTbO.set({top:zTop}),e.add(zTbO),zTop+=zHh+zG;const tt=r/2+(typeof t.overlayImageX=="number"?t.overlayImageX:0)*d;if(zFo)zFo.set({originX:"center",originY:"top",left:r/2,top:zTop,scaleX:zFs,scaleY:zFs,selectable:!1,evented:!1,clipPath:new Pe.fabric.Rect({width:zFo.width,height:zFo.height,rx:10/zFs,ry:10/zFs,originX:"center",originY:"center"})}),e.add(zFo),zTop+=zFh+zG;const Qt=zTop+zBox/2+(typeof t.overlayImageY=="number"?t.overlayImageY:0)*d;e.add(new Pe.fabric.Rect({left:tt,top:Qt,originX:"center",originY:"center",width:lt+Wt*2,height:wt+Wt*2,rx:12*d,ry:12*d,fill:F,selectable:!1,shadow:"rgba(0,0,0,0.22) 0px 10px 30px"})),me.set({originX:"center",originY:"center",left:tt,top:Qt,scaleX:et,scaleY:et,selectable:!1,clipPath:new Pe.fabric.Rect({width:me.width,height:me.height,rx:6/et,ry:6/et,originX:"center",originY:"center"})}),e.add(me),Fe(!0)}catch(zz){Fe(!1)}};const zFot=String(t.zSsFoto||"");if(zFot.length>5)try{Pe.fabric.Image.fromURL(zFot,zi=>zSetz(zi&&zi.width>0?zi:null),{crossOrigin:"anonymous"})}catch(zz){zSetz(null)}else zSetz(null);return}""",
+ 'Screenshot-Folie als Stapel: Hookzeile, Foto, Kasten - als Gruppe mittig', 1))
+
+P.append((
+ r"""...(rt.overlayIsScreenshot===!0&&!String(rt.overlayHook||"").trim()&&String(Ir||"").trim()?{overlayHook:String(Ir).replace(/\*/g," ").replace(/\s+/g," ").trim(),text:""}:{}),""",
+ r"""...(rt.overlayIsScreenshot===!0&&!String(rt.overlayHook||"").trim()&&String(Ir||"").trim()?{overlayHook:String(Ir).replace(/\*/g," ").replace(/\s+/g," ").trim(),text:""}:{}),...(rt.overlayIsScreenshot===!0?{zSsFoto:((e.tagBilder||{})[ot.day]||rt.background||""),background:"",karte:"dunkel"}:{}),""",
+ 'Das Tagesbild wandert nach zSsFoto, damit es nicht doppelt liegt', 1))
+
+P.append((
+ r"""ssLuft:.035,""",
+ r"""ssLuft:.035,ssFotoAnteil:.42,ssGrund:"#141210",""",
+ 'Wie viel Hoehe das Foto bekommt, und der Grundton', 1))
+
+P.append((
+ r"""Ye=T1({hatFoto:$e,karte:t.karte||"dunkel"})""",
+ r"""Ye=(()=>{const zY=T1({hatFoto:$e,karte:t.overlayIsScreenshot===!0?"dunkel":t.karte||"dunkel"});try{if(t.overlayIsScreenshot===!0&&BS_KACHEL.ssGrund)zY.grundFarbe=String(BS_KACHEL.ssGrund)}catch(zz){}return zY})()""",
+ 'Der Grund der Screenshot-Folie wird im Zeichner entschieden, nicht im Eigenschaftsbau', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

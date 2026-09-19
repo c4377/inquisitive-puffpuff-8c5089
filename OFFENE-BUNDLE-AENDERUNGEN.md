@@ -8257,3 +8257,56 @@ Layouts ist unverändert — die Änderung fasst nur Folien mit
 **Was das kostet:** das dekorative Foto auf einer Screenshot-Folie fällt weg,
 weil es aus dem Layout kam. Headline plus Kasten auf ruhigem Grund — die
 Aufteilung aus 294.
+
+## 242 — Screenshot-Folie: Text, Foto und Screenshot untereinander
+
+> „Es hätte eh gepasst, aber Screenshot und Bild und Text besser aufteilen,
+> damit sie nicht übereinander stehen."
+
+241 hatte das Foto geopfert, um den Überlapp loszuwerden. Das war einer zu
+viel: sie will alle drei, nur ordentlich gesetzt.
+
+### Der Stapel
+
+Der Screenshot-Zweig zeichnet jetzt einen Stapel und zentriert ihn **als
+Ganzes** im Band `.10` bis `.865`:
+
+| | |
+|---|---|
+| 1 | Hookzeile |
+| 2 | Foto als Inlay, höchstens `ssFotoAnteil` der Restfläche |
+| 3 | Screenshot-Kasten, der Rest |
+
+Dazwischen `ssLuft`. Erst werden alle drei Höhen gerechnet, dann die
+Gesamthöhe, dann der obere Rand — deshalb kann nichts mehr übereinander
+liegen.
+
+**Woher das Foto kommt:** im Eigenschaftsbau wandert das Tagesbild nach
+`zSsFoto`, `background` wird geleert. Sonst läge dasselbe Bild zusätzlich
+vollflächig darunter.
+
+### Der Grund wurde dabei weiß — das war die eigentliche Arbeit
+
+Drei Fehlversuche, jeder mit einer Sonde widerlegt:
+
+| Versuch | Ergebnis |
+|---|---|
+| `backgroundColor` setzen | kommt an, färbt aber nichts |
+| `plateOverride` setzen | kommt gar nicht erst an, wird unterwegs überschrieben |
+| `karte: "dunkel"` im Eigenschaftsbau | wird ebenfalls überschrieben, Sonde meldet weiter `karte: "hell"` |
+
+Gefärbt wird von `T1({hatFoto, karte}).grundFarbe`. Gemessen:
+
+| `karte` | `grundFarbe` |
+|---|---|
+| `"hell"` | `#FFFFFF` |
+| `"dunkel"` | `#2B211A` |
+
+Ohne Foto greift immer der Plattenzweig. Deshalb liegt die Entscheidung jetzt
+im **Zeichner**, wo `t.overlayIsScreenshot` nachweislich ankommt, und nicht im
+Eigenschaftsbau. `ssGrund` setzt den Ton danach auf Schwarz statt auf das Braun
+der dunklen Karte.
+
+**Geprüft:** Screenshot-Folie gerendert, Raster mit den Layouts danebengelegt —
+unverändert. Die vier Paare aus Abschnitt 242 spielen karten303 byteweise in
+karten304 zurück.
