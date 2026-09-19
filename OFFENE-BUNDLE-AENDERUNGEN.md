@@ -8967,3 +8967,37 @@ Bilder-Reiter.
 
 Schritt zwei — Ton je Post beim Bulk Import über das Gemini-Backend, Abgleich
 beim Zeichnen — folgt getrennt.
+
+## 264 — Ausdrücke lesen nur noch auf Knopfdruck
+
+> „Ich habe außerdem gerade 168 Fotos und jetzt dauert das Post erstellen
+> ultralange, bitte beschleunigen."
+
+**Ursache, mit hoher Wahrscheinlichkeit 263:** die Erkennung startete beim
+Rendern der Bildkachel von selbst. Die Kette läuft dann alle 168 Fotos durch —
+auch wenn sie den Reiter längst verlassen hat und Posts baut. Detektor und
+Ausdrucksnetz rechnen auf derselben Grafikeinheit wie der Post-Zeichner.
+Minuten Konkurrenz.
+
+### Jetzt
+
+Kein Autostart. Neben „Duplikate entfernen" steht **„Ausdrücke lesen (N
+offen)"**. Gedrückt liest die App nacheinander alle Fotos ohne Etikett, mit 200
+ms Pause je Foto, zeigt den Fortschritt (i/n) und lässt sich mit demselben Knopf
+stoppen. Ungelesene Fotos zeigen „offen". Ergebnisse werden weiter gesammelt
+und gemeinsam geschrieben (263, Fehler 2), Ladefehler werden nicht gespeichert.
+
+**Geprüft** im Test-Browser mit Software-WebGL:
+
+| | |
+|---|---|
+| vor dem Klick, 8 s gewartet | offen, offen — nichts läuft |
+| Knopf zeigt | Ausdrücke lesen (2 offen) |
+| nach dem Klick, 10 s | kein Gesicht, kein Gesicht |
+| Konsole | leer |
+
+### Offen gehalten, ehrlich
+
+168 Fotos liegen als volle Data-URLs im Speicher und jede Kachel zieht sie in
+Originalgröße. Wenn das Posten nach 264 immer noch träge ist, liegt es daran
+und nicht an der Erkennung — dann wären Vorschaubilder der nächste Schritt.

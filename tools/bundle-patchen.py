@@ -8719,6 +8719,58 @@ P.append((
  '((ue=e.currentBrandConfig)==null?void 0:ue.ctaImage)===U&&v.jsx("span",{className:"absolute top-1.5 right-1.5 bg-emerald-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow",children:"CTA"}),v.jsx("button",{onClick:W=>{W.preventDefault(),Z({ausdruck:zAEnext[zAE]||"fr\\u00f6hlich"})},className:`absolute top-8 left-1.5 text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow ${zAE===void 0?"bg-white/70 text-gray-500":zAE==="fr\\u00f6hlich"?"bg-amber-100 text-amber-800":zAE==="ernst"?"bg-slate-700 text-white":"bg-white/90 text-gray-700"}`,title:"Erkannter Gesichtsausdruck \\u2013 antippen zum \\u00c4ndern",children:zAE===void 0?"liest\\u2026":zAE})]})',
  'Etikett unter dem Prioritaets-Etikett oben links auf der Bildkachel, antippbar zum Korrigieren', 1))
 
+# 264  Ausdruecke lesen nur noch auf Knopfdruck
+#
+#      "Ich habe ausserdem gerade 168 Fotos und jetzt dauert das Post
+#       erstellen ultralange, bitte beschleunigen."
+#
+#      URSACHE, mit hoher Wahrscheinlichkeit 263: die Erkennung
+#      startete beim Rendern der Bildkachel von selbst. Die Kette
+#      laeuft dann alle 168 Fotos durch - auch wenn sie den Reiter
+#      laengst verlassen hat und Posts baut. Detektor und
+#      Ausdrucksnetz rechnen auf derselben Grafikeinheit wie der
+#      Post-Zeichner. Minuten Konkurrenz.
+#
+#      JETZT: kein Autostart. Neben "Duplikate entfernen" steht
+#      "Ausdruecke lesen (N offen)". Gedrueckt liest die App
+#      nacheinander alle Fotos ohne Etikett, mit 200 ms Pause je
+#      Foto, zeigt den Fortschritt (i/n) und laesst sich mit
+#      demselben Knopf stoppen. Ungelesene Fotos zeigen "offen".
+#      Ergebnisse werden weiter gesammelt und gemeinsam geschrieben
+#      (263, Fehler 2), Ladefehler werden nicht gespeichert.
+#
+#      GEPRUEFT im Test-Browser mit Software-WebGL:
+#          vor dem Klick, 8 s gewartet:  offen, offen  (nichts laeuft)
+#          Knopf zeigt:                  Ausdruecke lesen (2 offen)
+#          nach dem Klick, 10 s:         kein Gesicht, kein Gesicht
+#          Konsole leer, keine Fehler.
+#
+#      OFFEN GEHALTEN, ehrlich: 168 Fotos liegen als volle Data-URLs
+#      im Speicher und jede Kachel zieht sie in Originalgroesse. Wenn
+#      das Posten nach 264 immer noch traege ist, liegt es daran und
+#      nicht an der Erkennung - dann waeren Vorschaubilder der
+#      naechste Schritt.
+
+P.append((
+ 'zAusdruckKette={p:Promise.resolve()},zAusdruckErg=new Map,',
+ 'zAusdruckKette={p:Promise.resolve()},zAusdruckErg=new Map,zAusdruckLauft2={l:!1,stopp:!1,n:0,i:0},',
+ 'Laufzustand fuer den Leseknopf', 1))
+
+P.append((
+ 'zAE=(()=>{try{if(E.ausdruck===void 0&&!zAusdruckLauft.has(U)){zAusdruckLauft.add(U);zAusdruckKette.p=zAusdruckKette.p.then(()=>zAusdruck(U)).then(za=>{if(za){zAusdruckErg.set(U,za);const G={...e.imageMeta||{}};zAusdruckErg.forEach((zv,zk)=>{G[zk]={...G[zk]||{},ausdruck:zv}});t({imageMeta:G})}}).catch(()=>{})}}catch(zz){}return E.ausdruck!==void 0?E.ausdruck:zAusdruckErg.get(U)})(),',
+ 'zAE=E.ausdruck!==void 0?E.ausdruck:zAusdruckErg.get(U),',
+ 'Kein Autostart mehr beim Rendern der Kachel - nur noch anzeigen, was bekannt ist', 1))
+
+P.append((
+ 'children:zAE===void 0?"liest\\u2026":zAE})]})',
+ 'children:zAE===void 0?"offen":zAE})]})',
+ "Ungelesene Fotos zeigen 'offen' statt 'liest...'", 1))
+
+P.append((
+ 'title:"Doppelte Bilder entfernen",children:"Duplikate entfernen"}),',
+ 'title:"Doppelte Bilder entfernen",children:"Duplikate entfernen"}),v.jsx("button",{onClick:()=>{if(zAusdruckLauft2.l){zAusdruckLauft2.stopp=!0;return}const zO=(e.brandImages||[]).filter(zu=>((e.imageMeta||{})[zu]||{}).ausdruck===void 0&&!zAusdruckErg.has(zu));if(!zO.length)return;zAusdruckLauft2.l=!0,zAusdruckLauft2.stopp=!1,zAusdruckLauft2.n=zO.length,zAusdruckLauft2.i=0;t({imageMeta:{...e.imageMeta||{}}});(async()=>{try{for(const zu of zO){if(zAusdruckLauft2.stopp)break;const za=await zAusdruck(zu);zAusdruckLauft2.i+=1;if(za){zAusdruckErg.set(zu,za);const G={...e.imageMeta||{}};zAusdruckErg.forEach((zv,zk)=>{G[zk]={...G[zk]||{},ausdruck:zv}});t({imageMeta:G})}else t({imageMeta:{...e.imageMeta||{}}});await new Promise(zr=>setTimeout(zr,200))}}catch(zz){}zAusdruckLauft2.l=!1;const G={...e.imageMeta||{}};zAusdruckErg.forEach((zv,zk)=>{G[zk]={...G[zk]||{},ausdruck:zv}});t({imageMeta:G});B(zAusdruckLauft2.stopp?"Lesen gestoppt.":"Ausdr\\u00fccke gelesen.");setTimeout(()=>B(""),3e3)})()},className:`text-xs px-2 py-1 rounded border ${zAusdruckLauft2.l?"border-amber-300 bg-amber-50 text-amber-800":"border-gray-200 text-gray-600 hover:bg-gray-50"}`,title:"Gesichtsausdruck aller noch ungelesenen Fotos erkennen \\u2013 l\\u00e4uft nur, solange du hier bist, und l\\u00e4sst sich stoppen",children:zAusdruckLauft2.l?`Stoppen (${zAusdruckLauft2.i}/${zAusdruckLauft2.n})`:`Ausdr\\u00fccke lesen (${(e.brandImages||[]).filter(zu=>((e.imageMeta||{})[zu]||{}).ausdruck===void 0&&!zAusdruckErg.has(zu)).length} offen)`}),',
+ "Knopf 'Ausdruecke lesen (N offen)' neben 'Duplikate entfernen', mit Stopp und Fortschritt, 200 ms Pause je Foto", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
