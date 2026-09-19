@@ -8623,3 +8623,45 @@ Folgefolien nicht — die Bedingung fragt `folienRolle`.
 
 Dass zwei Werte kaum steigen, ist richtig so: dort begrenzt die Einpassprobe in
 `Pt()`, nicht der Faktor. Nichts läuft über.
+
+## 254 — Der Zuschnitt kann Gesichter, er wurde nur nie benutzt
+
+> „Schau wirklich, dass du Fotos nimmst, wo ich direkt in die Kamera schaue,
+> und schneide sie so."
+
+### Gefunden statt gebaut
+
+Im Zeichner steht längst eine Tabelle von Zuschnitten, und die Hälfte davon
+rechnet mit dem Gesicht:
+
+| Zuschnitt | Mitte | Zoom |
+|---|---|---|
+| `full` | Bildmitte | 1 |
+| `wide` | Bildmitte | 1.35 |
+| `face` | **Gesichtsmitte** | 2.3 |
+| `bust` | **Gesichtsmitte** | 1.7 |
+| `close` | **Gesichtsmitte** | 1.85 |
+
+Die Gesichtsmitte kommt aus `t._autoImage.faceZones`, also aus dem
+`tinyFaceDetector`, den die App ohnehin lädt.
+
+`deckblattSchnitte` stand auf `"full|full|wide|full|wide|full"` —
+ausschließlich die zwei Zuschnitte, die das Gesicht **nicht** benutzen. Deshalb
+saß der Ausschnitt immer auf der Bildmitte, egal wo sie im Bild ist. Jetzt:
+`"bust|face|bust|close|bust|face"`.
+
+### Was damit nicht gelöst ist
+
+Welches Foto **genommen** wird. Der Detektor findet, *dass* ein Gesicht da ist
+— nicht, wohin sie schaut. In `site/models` liegt nur `tiny_face_detector`,
+keine Landmarken. Ohne die lässt sich frontal nicht von Profil unterscheiden.
+
+Die Auswahl läuft über `xo()`, das nach `imageMeta[url].priority` sortiert —
+das Feld, das im Bilder-Reiter als Hoch/Normal/Niedrig editierbar ist. Von Hand
+gesetzt wirkt es sofort.
+
+**Geprüft:** Raster gerendert, die Kacheln zoomen sichtbar näher.
+**Nicht geprüft**, weil hier kein echtes Porträt liegt: ob der Detektor auf
+ihren Fotos anschlägt. Ohne Treffer fällt der Zuschnitt auf `qe .5 / ht .34`
+zurück — oberes Drittel, was für Porträts immer noch besser sitzt als die
+Mitte.

@@ -8285,6 +8285,47 @@ P.append((
  r"""layoutSchritt:7,layoutGewicht:"400",deckblattGroesser:1.3,""",
  'Gewicht und Groessenfaktor fuers Deckblatt', 1))
 
+# 254  Der Zuschnitt kann Gesichter - er wurde nur nie benutzt
+#
+#      "Schau wirklich, dass du Fotos nimmst, wo ich direkt in die
+#       Kamera schaue, und schneide sie so."
+#
+#      GEFUNDEN statt gebaut: im Zeichner steht laengst eine Tabelle
+#      von Zuschnitten, und die Haelfte davon rechnet mit dem
+#      Gesicht -
+#          full  [.5,  .5,  1  ]   Bildmitte, kein Zoom
+#          wide  [.5,  .55, 1.35]  Bildmitte
+#          face  [qe,  ht,  2.3 ]  GESICHTSmitte
+#          bust  [qe,  ht+.22,1.7]  GESICHTSmitte
+#          close [qe,  ht+.06,1.85] GESICHTSmitte
+#      qe und ht kommen aus t._autoImage.faceZones, also aus dem
+#      tinyFaceDetector, den die App schon laedt.
+#
+#      deckblattSchnitte stand auf "full|full|wide|full|wide|full" -
+#      ausschliesslich die zwei Zuschnitte, die das Gesicht NICHT
+#      benutzen. Deshalb sass der Ausschnitt immer auf der Bildmitte,
+#      egal wo sie im Bild ist. Jetzt: "bust|face|bust|close|bust|face".
+#
+#      WAS DAMIT NICHT GELOEST IST, ausdruecklich: welches Foto
+#      GENOMMEN wird. Der Detektor findet, DASS ein Gesicht da ist -
+#      nicht, wohin sie schaut. In site/models liegt nur
+#      tiny_face_detector, keine Landmarken. Ohne die laesst sich
+#      frontal nicht von Profil unterscheiden.
+#      Die Auswahl laeuft ueber xo(), das nach imageMeta[url].priority
+#      sortiert - das Feld, das im Bilder-Reiter als Hoch/Normal/
+#      Niedrig editierbar ist. Von Hand gesetzt wirkt es sofort.
+#
+#      GEPRUEFT: Raster gerendert, die Kacheln zoomen sichtbar naeher.
+#      NICHT geprueft, weil hier kein echtes Portraet liegt: ob der
+#      Detektor auf ihren Fotos anschlaegt. Ohne Treffer faellt der
+#      Zuschnitt auf qe .5 / ht .34 zurueck - also oberes Drittel,
+#      was fuer Portraets immer noch besser sitzt als die Mitte.
+
+P.append((
+ 'deckblattSchnitte:"full|full|wide|full|wide|full"',
+ 'deckblattSchnitte:"bust|face|bust|close|bust|face"',
+ 'Deckblaetter schneiden aufs Gesicht statt auf die Bildmitte', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
