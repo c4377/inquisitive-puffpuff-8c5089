@@ -8238,6 +8238,53 @@ P.append((
  r"""ssGrund:"#141210",sandGrund:"",""",
  'Sandton wieder aus - der Grund ist wieder schwarz', 1))
 
+# 253  Deckblattschrift groesser, und kein fettes Playfair mehr
+#
+#      "Schrift groesser auf Cover und kein Fettes Playfair."
+#
+#      ZWEI FEHLGRIFFE VORHER, beide durch Messen aufgeflogen:
+#        1. Ich habe die Obergrenze r*(128/1080) in der Routine jt()
+#           angehoben. Eine Sonde dort hat NIE gefeuert - jt() zeichnet
+#           die Deckblaetter gar nicht.
+#        2. Danach eine Sonde auf e.add, die jedes Textobjekt
+#           protokolliert. Die hat die Wahrheit gezeigt:
+#               Playfair Display 700  brand_frame_top_text, brand_photo_frame
+#               Playfair Display 400  alle uebrigen
+#               Groessen 53, 62, 74, 90
+#           Gezeichnet wird in Pt(), einer ganz anderen Routine.
+#
+#      DAS FETTE kam aus tt, der Gewichtskette in Pt(). Sie endet auf
+#      Xt(Ye,tt); direkt danach wird jetzt auf layoutGewicht gesetzt,
+#      wenn die Familie Playfair ist. Nach dem Ende der Kette, nicht
+#      davor - sonst haette Xt() es wieder ueberschrieben.
+#
+#      DIE GROESSE haengt an _t, der Startgroesse aus der
+#      Layoutvorgabe mal jt (bei Playfair .82). Deckblaetter bekommen
+#      dort jetzt deckblattGroesser dazu. Folgefolien nicht - die
+#      Bedingung fragt folienRolle.
+#
+#      GEMESSEN, vorher gegen nachher:
+#          Gewicht  700 -> 400 (bei den zwei Rahmenlayouts)
+#          Groesse   53 -> 69,  74 -> 96,  62 -> 64,  90 -> 91
+#      Dass zwei Werte kaum steigen, ist richtig so: dort begrenzt
+#      die Einpassprobe in Pt(), nicht der Faktor. Nichts laeuft
+#      ueber.
+
+P.append((
+ r"""tt=Xt(Ye,tt);const Qt=$e,""",
+ r"""tt=Xt(Ye,tt);try{if(BS_KACHEL.layoutGewicht&&/Playfair/i.test(String(Ye)))tt=String(BS_KACHEL.layoutGewicht)}catch(zz){}const Qt=$e,""",
+ 'Playfair im Layout bekommt ein festes Gewicht, kein Fettes mehr', 1))
+
+P.append((
+ r"""let _t=Math.round((ht?me.fontSize*1.35:me.fontSize)*jt);""",
+ r"""let _t=Math.round((ht?me.fontSize*1.35:me.fontSize)*jt*(!t.folienRolle||t.folienRolle==="deckblatt"?Number(BS_KACHEL.deckblattGroesser)||1:1));""",
+ 'Deckblaetter duerfen groesser starten', 1))
+
+P.append((
+ r"""layoutSchritt:7,""",
+ r"""layoutSchritt:7,layoutGewicht:"400",deckblattGroesser:1.3,""",
+ 'Gewicht und Groessenfaktor fuers Deckblatt', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

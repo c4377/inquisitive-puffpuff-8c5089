@@ -8580,3 +8580,46 @@ geht auf `#141210` zurück, damit die Screenshot-Folie zum Rest passt.
 Also punktgenau der alte Zustand, nicht nur ungefähr.
 
 Die Layoutvariation aus 251 und alles andere bleibt.
+
+## 253 — Deckblattschrift größer, und kein fettes Playfair mehr
+
+> „Schrift größer auf Cover und kein Fettes Playfair."
+
+### Zwei Fehlgriffe vorher, beide durch Messen aufgeflogen
+
+1. Ich habe die Obergrenze `r*(128/1080)` in der Routine `jt()` angehoben. Eine
+   Sonde dort hat **nie gefeuert** — `jt()` zeichnet die Deckblätter gar nicht.
+2. Danach eine Sonde auf `e.add`, die jedes Textobjekt protokolliert. Die hat
+   die Wahrheit gezeigt:
+
+| Familie | Gewicht | Layouts |
+|---|---|---|
+| Playfair Display | **700** | `brand_frame_top_text`, `brand_photo_frame` |
+| Playfair Display | 400 | alle übrigen |
+
+Größen: 53, 62, 74, 90. Gezeichnet wird in **`Pt()`**, einer ganz anderen
+Routine.
+
+### Was geändert wurde
+
+**Das Fette** kam aus `tt`, der Gewichtskette in `Pt()`. Sie endet auf
+`Xt(Ye,tt)`; direkt danach wird jetzt auf `layoutGewicht` gesetzt, wenn die
+Familie Playfair ist — **nach** dem Ende der Kette, nicht davor, sonst hätte
+`Xt()` es wieder überschrieben.
+
+**Die Größe** hängt an `_t`, der Startgröße aus der Layoutvorgabe mal `jt` (bei
+Playfair `.82`). Deckblätter bekommen dort jetzt `deckblattGroesser` dazu.
+Folgefolien nicht — die Bedingung fragt `folienRolle`.
+
+### Gemessen, vorher gegen nachher
+
+| | vorher | nachher |
+|---|---|---|
+| Gewicht (Rahmenlayouts) | 700 | **400** |
+| `brand_photo_center` u.a. | 53 | **69** |
+| `brand_frame_top_text` | 74 | **96** |
+| `brand_photo_frame` | 62 | 64 |
+| `brand_photo_bigword` | 90 | 91 |
+
+Dass zwei Werte kaum steigen, ist richtig so: dort begrenzt die Einpassprobe in
+`Pt()`, nicht der Faktor. Nichts läuft über.
