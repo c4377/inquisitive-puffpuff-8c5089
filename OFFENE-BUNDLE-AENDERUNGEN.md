@@ -8901,3 +8901,26 @@ Zeile wird nachträglich dorthin gesetzt. Damit ist der Abstand **immer**
 der Text unter dem Kasten (257). Nur der Abstand, um den sie gebeten hat.
 
 **Geprüft:** dieselbe Folie vor und nach der Änderung gerendert.
+
+## 262 — Nur noch jede vierte Kachel in Schwarzweiß
+
+> „Ich treffe zu oft auf schwarz weiße Bilder und sie passen stimmungstechnisch
+> nicht."
+
+`saettigungReihe` hatte zwei Einträge, `"-1|0.1"`, und `saettigungWechsel`
+wählt nach `_tag` modulo Länge — also jede zweite Kachel. Neu: 40 Einträge,
+davon **10** auf `-1`, gleichmäßig verteilt. **50 % → 25 %**.
+
+### Ein Fehlalarm beim Prüfen, zum Merken
+
+Mein Zählskript meldete *0 von 9 schwarzweiß*. Die Regionen darin waren auf
+einen früheren Seitenumbruch geeicht und lagen daneben. Zwei Gegenproben haben
+das geklärt:
+
+- Reihe auf `"-1"` gesetzt → 8 von 9 Kacheln wurden grau, der Mechanismus
+  greift also.
+- Eine Sonde auf `zSat` protokolliert → `_tag` ist eine Zahl, und Tag 4 und
+  Tag 8 bekommen `-1`.
+
+Im Bild sind genau diese zwei grau. **Die Änderung stimmte, die Messung nicht.**
+Beim nächsten Mal zuerst ins Bild schauen.

@@ -8628,6 +8628,32 @@ P.append((
  'kastenAn:0,ssLuft:.035,',
  'Der Abstand zwischen Text und Screenshot', 1))
 
+# 262  Nur noch jede vierte Kachel in Schwarzweiss
+#
+#      "Ich treffe zu oft auf schwarzweisse Bilder und sie passen
+#       stimmungstechnisch nicht."
+#
+#      saettigungReihe hatte zwei Eintraege, "-1|0.1", und
+#      saettigungWechsel waehlt nach _tag modulo Laenge - also jede
+#      zweite Kachel. Neu: 40 Eintraege, davon 10 auf -1, gleichmaessig
+#      verteilt. 50 Prozent -> 25 Prozent.
+#
+#      EIN FEHLALARM BEIM PRUEFEN, zum Merken: mein Zaehlskript meldete
+#      0 von 9 schwarzweiss. Die Regionen darin waren auf einen
+#      frueheren Seitenumbruch geeicht und lagen daneben. Zwei
+#      Gegenproben haben das geklaert -
+#        - Reihe auf "-1" gesetzt: 8 von 9 Kacheln wurden grau, der
+#          Mechanismus greift also.
+#        - Eine Sonde auf zSat protokolliert: _tag ist eine Zahl, und
+#          Tag 4 und Tag 8 bekommen -1.
+#      Im Bild sind genau diese zwei grau. Die Aenderung stimmte, die
+#      Messung nicht. Beim naechsten Mal zuerst ins Bild schauen.
+
+P.append((
+ 'saettigungReihe:"-1|0.1"',
+ 'saettigungReihe:"-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1"',
+ 'Nur noch jede vierte Kachel schwarzweiss statt jeder zweiten', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
