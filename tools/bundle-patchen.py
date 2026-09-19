@@ -9295,6 +9295,90 @@ P.append((
  'lisaGroesse:1.3,folgeLayouts:1,layoutSchritt:3,folgeReihe:"brand_text_quote|brand_text_left|brand_text_plate_top|brand_text_statement|brand_text_minimal|brand_text_bigword|brand_text_kicker_lead|brand_text_bold_top",folgeLayoutAnteil:.82,nameFarbeHell:',
  'Regler: folgeLayouts 1, layoutSchritt 3, folgeReihe, folgeLayoutAnteil .82', 1))
 
+# 271  Schwarz-Weiss statt Creme, Text runter, Playfair erzwungen
+#
+#      Folie 3/10 (weisse Karte mit Doppelrahmen, Text oben, in
+#      Montserrat): "nicht mittig oder tief genug. Orientiere nur bei
+#      Bildern manchmal nach oben (wenn das Gesicht unten ist), sonst
+#      immer runter. Dieses Layout finde ich am unpassendsten, meine
+#      Farben sind wirklich eher schwarz-weiss - zeig mir mal, was das
+#      bedeutet."
+#
+#      SCHRIFT: die Folgefolien nahmen t.fontFamily aus ihrem
+#      gespeicherten Stil (bodyFontFamily -> Montserrat). Pt() setzt
+#      jetzt BS_KACHEL.lisaSchrift (Playfair Display) fuer alle
+#      Layout-Kacheln; Un() erkennt das mit.
+#
+#      LAGE: Flaechen (plate) und fotolose gradient-Kacheln zentrieren
+#      den Textblock bei .58 statt oben (.24) oder mitte (.5). Fotos
+#      blieben schon vorher unten (.64), ausser die Gesichtszonen liegen
+#      im unteren Drittel - dann oben. Regler lisaUnten 1, lisaTextMitte.
+#
+#      FARBE: helle Karte reines Weiss, Text Schwarz; Doppelrahmen aus
+#      (lisaRahmen 0). Damit sind die Flaechen wieder ihr Schwarz/Weiss.
+#
+#      GESICHTET: 5 Folien (Foto, Weiss, Schwarz, Weiss, Schwarz), Raster.
+
+P.append((
+ 'Un=()=>/playfair/i.test(String(t.fontFamily||""))',
+ 'Un=()=>/playfair/i.test(String(BS_KACHEL.lisaSchrift||t.fontFamily||""))',
+ 'Un(): Playfair-Erkennung auch ueber lisaSchrift', 1))
+
+P.append((
+ 'Oe&&Qe===2?Ye="Montserrat":Ye=qe?"Montserrat":m,',
+ 'Oe&&Qe===2?Ye="Montserrat":Ye=qe?"Montserrat":(BS_KACHEL.lisaSchrift||m),',
+ 'Pt(): Schrift in den Layouts immer lisaSchrift (Playfair), egal was der gespeicherte Stil sagt', 1))
+
+P.append((
+ 'textTileLight:"#F2EFE9",textTileDark:"#000000"',
+ 'textTileLight:"#FFFFFF",textTileDark:"#000000"',
+ 'Textflaechen: reines Weiss', 1))
+
+P.append((
+ 'return Mt&&!Ta&&(ci=Ft(Wi)?"#FFFFFF":"#111111")',
+ 'return Mt&&!Ta&&(ci=Ft(Wi)?"#FFFFFF":"#000000")',
+ 'Kachelaufbau: Schwarz auf hell', 1))
+
+P.append((
+ '"#111111":"#F2EFE9"',
+ '"#000000":"#FFFFFF"',
+ 'Kontrastwahl X(): Schwarz / Weiss', 1))
+
+P.append((
+ 'zFarbe=zg=>ee(zg)?(BS_KACHEL.lisaHell||"#FFFFFF"):(BS_KACHEL.lisaDunkel||"#111111")',
+ 'zFarbe=zg=>ee(zg)?(BS_KACHEL.lisaHell||"#FFFFFF"):(BS_KACHEL.lisaDunkel||"#000000")',
+ 'zFarbe(): Vorgaben Weiss / Schwarz', 1))
+
+P.append((
+ 'plateColor:"#F2EFE9"',
+ 'plateColor:"#FFFFFF"',
+ 'Helle Flaechen der Layout-Tabelle: Weiss', 5))
+
+P.append((
+ 'lisaCreme:"#F2EFE9",lisaHell:"#FFFFFF",lisaDunkel:"#111111",',
+ 'lisaCreme:"#FFFFFF",lisaHell:"#FFFFFF",lisaDunkel:"#000000",lisaRahmen:0,lisaUnten:1,lisaTextMitte:.58,lisaSchrift:"Playfair Display",',
+ 'Regler: lisaCreme weiss, lisaDunkel schwarz, lisaRahmen 0, lisaUnten 1, lisaTextMitte .58, lisaSchrift', 1))
+
+P.append((
+ 'nameFarbeHell:"rgba(17,17,17,0.5)"',
+ 'nameFarbeHell:"rgba(0,0,0,0.5)"',
+ 'Name auf hellen Flaechen: halbtransparentes Schwarz', 1))
+
+P.append((
+ 'ge.rule&&ee(me)){const br=r*.062,br2=r*.076;',
+ 'ge.rule&&ee(me)&&BS_KACHEL.lisaRahmen!==0){const br=r*.062,br2=r*.076;',
+ 'Doppelrahmen abschaltbar (lisaRahmen 0 = aus)', 1))
+
+P.append((
+ 'let tt=ge.exactY!=null?n*ge.exactY:ge.textPos==="top"?n*.24:n*.5;const Qt=ge.textPos==="top"?"top":"center";',
+ 'let tt=ge.exactY!=null?n*ge.exactY:BS_KACHEL.lisaUnten===1?n*(Number(BS_KACHEL.lisaTextMitte)||.58):ge.textPos==="top"?n*.24:n*.5;const Qt=ge.textPos==="top"&&BS_KACHEL.lisaUnten!==1?"top":"center";',
+ 'plate-Zweig: Text mittig-tief bei .58 statt oben/mitte', 1))
+
+P.append((
+ 'wt??($?n*.64:ge.textPos==="top"?n*.14:ge.textPos==="center"?n*.4:n*.64)',
+ 'wt??($?n*.64:BS_KACHEL.lisaUnten===1?n*(Number(BS_KACHEL.lisaTextMitte)||.58):ge.textPos==="top"?n*.14:ge.textPos==="center"?n*.4:n*.64)',
+ 'gradient-Zweig ohne Foto: Text mittig-tief bei .58', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

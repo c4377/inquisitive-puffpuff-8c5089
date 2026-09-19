@@ -9241,3 +9241,25 @@ gelten auch dort, Schrift × `folgeLayoutAnteil` .82.
 Regler: `folgeLayouts` 1, `layoutSchritt` 3, `folgeReihe`,
 `folgeLayoutAnteil` .82. Gesichtet: fünf Folien, Creme und Schwarz im
 Wechsel, erster Satz groß, Rest klein, Name einmal und richtig gefärbt.
+
+## 271 — Schwarz-Weiß statt Creme, Text runter, Playfair erzwungen
+
+> Folie 3/10: „nicht mittig oder tief genug. Orientiere nur bei Bildern
+> manchmal nach oben (wenn das Gesicht unten ist), sonst immer runter. Dieses
+> Layout finde ich am unpassendsten, meine Farben sind wirklich eher
+> schwarz-weiß — zeig mir mal, was das bedeutet."
+
+- **Schrift.** Die Folgefolien nahmen die Schrift aus dem gespeicherten Stil
+  (Montserrat). `Pt()` setzt jetzt `lisaSchrift` (Playfair Display) für alle
+  Layout-Kacheln.
+- **Lage.** Flächen und fotolose Kacheln zentrieren den Textblock bei .58
+  statt oben oder in der Mitte. Fotos bleiben unten (.64), außer die
+  Gesichtszonen liegen im unteren Drittel, dann oben. Regler `lisaUnten` 1,
+  `lisaTextMitte` .58.
+- **Farbe.** Helle Karte reines Weiß, Text Schwarz, Doppelrahmen aus
+  (`lisaRahmen` 0). Zurück zur Creme-Karte mit Rahmen: `lisaCreme` `#F2EFE9`
+  und `lisaRahmen` 1, die fünf `plateColor` in der Layout-Tabelle folgen
+  nicht automatisch (stehen auf `#FFFFFF`).
+
+Gesichtet: fünf Folien im Wechsel Foto, Weiß, Schwarz, Weiß, Schwarz; Raster.
+Replay aus dem eingecheckten 332 ist byte-genau.
