@@ -8716,3 +8716,39 @@ Farbe.
 
 `swStaerke` fehlt oder ist keine Zahl → Deckkraft 1, also genau der alte
 Zustand.
+
+## 256 — Missverständnis: nicht die Sättigung, die Anzahl
+
+> „Stop — schwarz weiße Bilder nicht weniger schwarz weiß in der Sättigung."
+> und: „Jetzt noch das Gelb in der Schrift weg."
+
+**Mein Fehler in 255.** „15% weniger schwarz weiß" habe ich als „weniger stark
+entsättigt" gelesen. Gemeint war: **weniger schwarzweiße Bilder**. Die Kacheln,
+die schwarzweiß sind, sollen es ganz sein.
+
+Also `swStaerke` zurück auf `1` — der Code aus 255 bleibt stehen und tut bei
+`1` nichts.
+
+### Die Anzahl
+
+Sie steuert `saettigungReihe` zusammen mit `saettigungWechsel`: die Kachel
+nimmt den Eintrag an Position `_tag` modulo Länge. Bei `"-1|0.1"` war das jede
+zweite, also 50 %. Neu: **40 Einträge, davon 17 auf `-1`**.
+
+| | |
+|---|---|
+| vorher | 50,0 % |
+| jetzt | 42,5 % |
+| Differenz | **15,0 % weniger** |
+
+Die 17 sind gleichmäßig über die 40 verteilt (nach `floor(i*17/40)`), damit
+nicht drei schwarzweiße Tage aufeinander folgen.
+
+**Geprüft** am Raster mit Farbtestbild, Kachel für Kachel gemessen: die
+schwarzweißen sitzen auf den Tagen 3 und 5, genau auf den Positionen, an denen
+die Reihe `-1` stehen hat. Tag 8 trägt ein Rahmenlayout und lädt sein Bild über
+einen anderen Weg, der die Schwarzweiß-Fläche nicht bekommt — das war schon
+vorher so.
+
+`hakenAkzentFarbe` wird geleert. Der Code aus 245 bleibt: ein Farbwert genügt
+und die Betonung ist wieder da.

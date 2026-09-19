@@ -8375,6 +8375,53 @@ P.append((
  'swBleibt:1,swStaerke:.8',
  '80 Prozent Schwarzweiss - gemessen bleiben 15,3 Prozent Farbe', 1))
 
+# 256  Missverstaendnis: nicht die Saettigung, die ANZAHL
+#
+#      "Stop - schwarzweisse Bilder nicht weniger schwarzweiss in der
+#       Saettigung." Dazu: "Jetzt noch das Gelb in der Schrift weg."
+#
+#      MEIN FEHLER in 255. "15% weniger schwarz weiss" habe ich als
+#      "weniger stark entsaettigt" gelesen. Gemeint war: WENIGER
+#      schwarzweisse Bilder. Die Kacheln, die schwarzweiss sind,
+#      sollen es ganz sein.
+#
+#      Also swStaerke zurueck auf 1 - der Code aus 255 bleibt stehen
+#      und tut bei 1 nichts.
+#
+#      Die Anzahl steuert saettigungReihe zusammen mit
+#      saettigungWechsel: die Kachel nimmt den Eintrag an Position
+#      _tag modulo Laenge. Bei "-1|0.1" war das jede zweite, also
+#      50 Prozent. Neu: 40 Eintraege, davon 17 auf -1.
+#          50,0 % -> 42,5 %  = 15,0 Prozent weniger
+#      Die 17 sind gleichmaessig ueber die 40 verteilt (nach
+#      floor(i*17/40)), damit nicht drei schwarzweisse Tage
+#      aufeinander folgen.
+#
+#      GEPRUEFT am Raster mit Farbtestbild, Kachel fuer Kachel
+#      gemessen: die schwarzweissen sitzen auf den Tagen 3 und 5,
+#      genau auf den Positionen, an denen die Reihe -1 stehen hat.
+#      Tag 8 traegt ein Rahmenlayout und laedt sein Bild ueber einen
+#      anderen Weg, der die Schwarzweiss-Flaeche nicht bekommt - das
+#      war schon vorher so.
+#
+#      hakenAkzentFarbe wird geleert. Der Code aus 245 bleibt, ein
+#      Farbwert genuegt und die Betonung ist wieder da.
+
+P.append((
+ 'swBleibt:1,swStaerke:.8',
+ 'swBleibt:1,swStaerke:1',
+ 'Schwarzweiss wieder voll - die Saettigung war nicht gemeint', 1))
+
+P.append((
+ 'saettigungReihe:"-1|0.1"',
+ 'saettigungReihe:"-1|0.1|0.1|-1|0.1|-1|0.1|0.1|-1|0.1|-1|0.1|-1|0.1|0.1|-1|0.1|-1|0.1|-1|0.1|0.1|-1|0.1|-1|0.1|-1|0.1|0.1|-1|0.1|-1|0.1|-1|0.1|0.1|-1|0.1|-1|0.1"',
+ 'Statt jeder zweiten Kachel nur noch 17 von 40 in Schwarzweiss', 1))
+
+P.append((
+ 'hakenAkzentFarbe:"#F3E5AB",',
+ 'hakenAkzentFarbe:"",',
+ 'Das Gelb in der Hookzeile wieder aus', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
