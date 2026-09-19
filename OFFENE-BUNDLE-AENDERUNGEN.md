@@ -7874,3 +7874,36 @@ Scrollen.
 **Geprüft** im Browser: Leiste da, vier Farbfelder, aufklappbar. Mit
 `text`/`hand`/`name` gesetzt zeichnet die Kachel Überschrift, Handschrift und
 Namenszug in den gewählten Tönen. Keine Seitenfehler.
+
+## 232 — Screenshot-Folie: der Abstand zur Hookzeile
+
+*„Zuviel Abstand."*
+
+Die Hookzeile stand fest bei `n*.10`, und der Screenshot wurde in der
+**Restfläche** darunter zentriert:
+
+```
+zOben = n*.10 + Höhe der Zeile + n*.045
+Qt    = zOben + zH/2            mit zH bis n*.865
+```
+
+Bei einem kleinen Screenshot — einer kurzen Sprechblase — klafft dadurch ein
+Loch von einem Drittel der Kachel zwischen Zeile und Bild. **Je kleiner der
+Screenshot, desto größer das Loch.**
+
+Jetzt werden Zeile und Bild als **eine Gruppe** mittig gesetzt: Gesamthöhe =
+Zeilenhöhe + `ssLuft` + Bildhöhe, davon die Mitte auf die Mitte des Bandes
+`[.10, .865]` gelegt, und die Zeile wird nachträglich dorthin geschoben. Dafür
+musste `zTb` über `zTbO` aus dem `if`-Block heraus sichtbar werden.
+
+Passt auch bei großen Screenshots: `zTop` ist nach unten auf `zU - zGes`
+geklemmt, das Bild läuft also nie unter `n*.865`.
+
+**Geprüft** im Browser, gleiche Folie mit kurzer Sprechblase:
+
+| | |
+|---|---|
+| karten293 | Zeile oben, Bild in der Mitte, Loch dazwischen |
+| **karten294** | Zeile und Bild zusammen, gemeinsam mittig |
+
+Keine Seitenfehler. `ssLuft: .035` regelt den Abstand.

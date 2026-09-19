@@ -7368,6 +7368,52 @@ P.append((
  "v.jsxs(\"button\",{onClick:pinAnlegen,className:\"px-2.5 py-1.5 bg-white text-emerald-700 border border-emerald-200 rounded-lg font-bold hover:bg-emerald-50 transition-colors flex items-center whitespace-nowrap text-[11px]\",children:[v.jsx(ke,{icon:AS,className:\"mr-2\"}),\"Pinnable\"]}),v.jsx(zFarbLeiste,{}),",
  "Die Farbleiste in die Werkzeugzeile, also direkt ueber dem Raster", 1))
 
+# 232  Screenshot-Folie: der Abstand zur Hookzeile
+#
+#      "Zuviel Abstand."
+#
+#      Die Hookzeile stand fest bei n*.10, und der Screenshot wurde in
+#      der RESTFLAECHE darunter zentriert:
+#          zOben = n*.10 + Hoehe der Zeile + n*.045
+#          Qt    = zOben + zH/2        mit zH bis n*.865
+#      Bei einem kleinen Screenshot - eine kurze Sprechblase - klafft
+#      dadurch ein Loch von einem Drittel der Kachel zwischen Zeile
+#      und Bild. Je kleiner der Screenshot, desto groesser das Loch.
+#
+#      Jetzt werden Zeile und Bild als EINE GRUPPE mittig gesetzt:
+#      Gesamthoehe = Zeilenhoehe + ssLuft + Bildhoehe, davon die Mitte
+#      auf die Mitte des Bandes [.10, .865] gelegt, und die Zeile wird
+#      nachtraeglich dorthin geschoben. Dafuer musste zTb ueber zTbO
+#      aus dem if-Block heraus sichtbar werden.
+#
+#      Passt auch bei grossen Screenshots: zTop ist nach unten auf
+#      zU-zGes geklemmt, das Bild laeuft also nie unter n*.865.
+#
+#      GEPRUEFT im Browser, gleiche Folie mit kurzer Sprechblase:
+#          karten293  Zeile oben, Bild in der Mitte, Loch dazwischen
+#          karten294  Zeile und Bild zusammen, gemeinsam mittig
+#      keine Seitenfehler. ssLuft .035 regelt den Abstand.
+
+P.append((
+ "let zOben=n*.115;if(zHk){const zTb=new Pe.fabric.Textbox(zHk,{left:r/2,top:n*.10,",
+ "let zOben=n*.115,zTbO=null;if(zHk){const zTb=new Pe.fabric.Textbox(zHk,{left:r/2,top:n*.10,",
+ "Die Hookzeile merken, damit sie nachher mitwandern kann", 1))
+
+P.append((
+ "e.add(zTb),zOben=n*.10+zTb.height+n*.045}",
+ "e.add(zTb),zTbO=zTb,zOben=n*.10+zTb.height+n*.045}",
+ "Dasselbe - die Zeile festhalten", 1))
+
+P.append((
+ "Qt=zOben+zH/2+(typeof t.overlayImageY==\"number\"?t.overlayImageY:0)*d;",
+ "Qt=(()=>{try{const zG=n*(Number(BS_KACHEL.ssLuft)||.035),zHh=zTbO?zTbO.height:0,zBox=wt+Wt*2,zGes=zHh+(zHh?zG:0)+zBox,zO=n*.10,zU=n*.865,zTop=Math.max(zO,Math.min((zO+zU)/2-zGes/2,zU-zGes));if(zTbO)zTbO.set({top:zTop});return zTop+zHh+(zHh?zG:0)+zBox/2}catch(zz){return zOben+zH/2}})()+(typeof t.overlayImageY==\"number\"?t.overlayImageY:0)*d;",
+ "Hook und Screenshot als eine Gruppe mittig setzen statt den Screenshot in der Restflaeche", 1))
+
+P.append((
+ "kastenAn:0,layoutAn:0",
+ "kastenAn:0,ssLuft:.035,layoutAn:0",
+ "Der Abstand zwischen Hookzeile und Screenshot", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
