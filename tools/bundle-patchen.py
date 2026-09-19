@@ -8469,6 +8469,70 @@ P.append((
  'ssFotoAnteil:.52,ssTextUnten:1,',
  'Text unter dem Screenshot', 1))
 
+# 258  Sechs Anordnungen fuer die Screenshot-Folie
+#
+#      "So, jetzt hast du alle so gebaut und es ist fad."
+#
+#      Stimmt. 242 bis 257 haben EINE Anordnung immer besser
+#      gemacht, und damit sahen alle gleich aus. Die Layouts
+#      variieren, die Screenshot-Folien nicht.
+#
+#      Jetzt waehlt ssReihe nach _tag aus sechs Bauarten. Jede ist
+#      ein Tripel [Text unten?, Fotobreite, Fotohoehe-Anteil]:
+#          A  1, .52, .52   Foto hoch, Kasten, Text unten
+#          B  0, .52, .52   Text oben, Foto, Kasten
+#          C  1, 1,   .42   Foto ueber die ganze Spalte, Text unten
+#          D  0, 0,   0     ohne Foto: Text oben, Kasten
+#          E  1, .4,  .62   schmales hohes Foto, Text unten
+#          F  0, 1,   .34   Text oben, flaches breites Foto
+#      Ist ssReihe leer, gilt wieder die feste Reihenfolge aus 257.
+#
+#      NEBENBEFUND beim Durchsehen der acht gerenderten Kacheln: eine
+#      hatte einen dicken ROTEN Rahmen um den Screenshot. Der Rand
+#      des Kastens war fill:F, und F ist t.backgroundColor - die
+#      Farbe der Kachel. Auf den meisten Kacheln ist die hell, auf
+#      dieser war sie rot. Das war schon vor 258 so, faellt aber nur
+#      auf, wenn man mehrere Kacheln nebeneinander sieht. Der Kasten
+#      hat jetzt mit ssKastenFarbe eine eigene Farbe.
+#
+#      GEPRUEFT: acht Folien gerendert, sechs verschiedene
+#      Anordnungen sichtbar, kein roter Rahmen mehr.
+
+P.append((
+ 'const zSetz=zFo=>{try{let zTbO=null,zHh=0;',
+ 'const zSetz=zFo=>{try{const zVa=(()=>{try{const zl=String(BS_KACHEL.ssReihe||"").split("|").filter(Boolean);if(!zl.length)return null;const zn=typeof t._tag=="number"?t._tag:String(zHk||"").length;return zl[((zn%zl.length)+zl.length)%zl.length]}catch(zz){return null}})(),zTab={A:[1,.52,.52],B:[0,.52,.52],C:[1,1,.42],D:[0,0,0],E:[1,.4,.62],F:[0,1,.34]},zVv=zTab[zVa]||null,zTU=zVv?zVv[0]===1:BS_KACHEL.ssTextUnten===1,zFB=zVv?zVv[1]:(Number(BS_KACHEL.ssFotoBreite)||1),zFA=zVv?zVv[2]:(Number(BS_KACHEL.ssFotoAnteil)||.42);if(!(zFA>0))zFo=null;let zTbO=null,zHh=0;',
+ 'Sechs Anordnungen fuer die Screenshot-Folie, gewaehlt nach Tag', 1))
+
+P.append((
+ 'const zFoMax=zFo?zRest*(Number(BS_KACHEL.ssFotoAnteil)||.42):0;',
+ 'const zFoMax=zFo?zRest*zFA:0;',
+ 'Die Foto-Hoehe kommt aus der Anordnung', 1))
+
+P.append((
+ 'zFw=zBr*(Number(BS_KACHEL.ssFotoBreite)||1)',
+ 'zFw=zBr*zFB',
+ 'Die Foto-Breite ebenso', 1))
+
+P.append((
+ 'const zTU=BS_KACHEL.ssTextUnten===1;',
+ '',
+ 'Die alte feste Reihenfolge entfaellt', 1))
+
+P.append((
+ 'ssTextUnten:1,',
+ 'ssTextUnten:1,ssReihe:"A|D|B|C|A|E|D|F",',
+ 'Die Reihe der Anordnungen', 1))
+
+P.append((
+ 'width:lt+Wt*2,height:wt+Wt*2,rx:12*d,ry:12*d,fill:F,selectable:!1,shadow:"rgba(0,0,0,0.22) 0px 10px 30px"',
+ 'width:lt+Wt*2,height:wt+Wt*2,rx:12*d,ry:12*d,fill:(BS_KACHEL.ssKastenFarbe||F),selectable:!1,shadow:"rgba(0,0,0,0.22) 0px 10px 30px"',
+ 'Der Rand um den Screenshot bekommt eine eigene Farbe statt der Kachelfarbe', 1))
+
+P.append((
+ 'ssReihe:"A|D|B|C|A|E|D|F",',
+ 'ssReihe:"A|D|B|C|A|E|D|F",ssKastenFarbe:"#FFFFFF",',
+ 'Weiss, damit der Screenshot wie eine Karte liegt', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

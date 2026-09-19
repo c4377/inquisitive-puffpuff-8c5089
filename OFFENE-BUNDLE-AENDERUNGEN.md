@@ -8792,3 +8792,38 @@ bleibt die Gruppe mittig.
 **Geprüft:** beide Fälle gerendert — Folie mit `overlayHook` und Folie, deren
 Text erst umgeschichtet wird. Beide sehen gleich aus, Reihenfolge stimmt,
 nichts überlappt.
+
+## 258 — Sechs Anordnungen für die Screenshot-Folie
+
+> „So, jetzt hast du alle so gebaut und es ist fad."
+
+Stimmt. 242 bis 257 haben **eine** Anordnung immer besser gemacht — und damit
+sahen alle gleich aus. Die Layouts variieren, die Screenshot-Folien nicht.
+
+Jetzt wählt `ssReihe` nach `_tag` aus sechs Bauarten. Jede ist ein Tripel
+[Text unten?, Fotobreite, Fotohöhe-Anteil]:
+
+| | | Aufbau |
+|---|---|---|
+| A | `1, .52, .52` | Foto hoch, Kasten, Text unten |
+| B | `0, .52, .52` | Text oben, Foto, Kasten |
+| C | `1, 1, .42` | Foto über die ganze Spalte, Text unten |
+| D | `0, 0, 0` | ohne Foto: Text oben, Kasten |
+| E | `1, .4, .62` | schmales hohes Foto, Text unten |
+| F | `0, 1, .34` | Text oben, flaches breites Foto |
+
+Ist `ssReihe` leer, gilt wieder die feste Reihenfolge aus 257.
+
+### Nebenbefund
+
+Beim Durchsehen der acht gerenderten Kacheln hatte eine einen dicken **roten**
+Rahmen um den Screenshot. Der Rand des Kastens war `fill:F`, und `F` ist
+`t.backgroundColor` — die Farbe der Kachel. Auf den meisten ist die hell, auf
+dieser war sie rot.
+
+Das war schon vor 258 so, fällt aber nur auf, wenn man mehrere Kacheln
+nebeneinander sieht. Der Kasten hat jetzt mit `ssKastenFarbe` eine eigene
+Farbe.
+
+**Geprüft:** acht Folien gerendert, sechs verschiedene Anordnungen sichtbar,
+kein roter Rahmen mehr.
