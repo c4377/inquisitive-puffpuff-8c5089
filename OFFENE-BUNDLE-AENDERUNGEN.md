@@ -8049,3 +8049,33 @@ Stellen.
 
 **Merke:** die beiden Reihen teilen denselben Takt 7. Ändert man `textJede`,
 verschiebt sich, worauf die Rahmen fallen.
+
+## 237 — Die Rahmen waren bei Rastergröße unsichtbar
+
+*„Ich seh nicht viel davon."*
+
+Stimmt, und der Grund ist ein **Maßstabsfehler** von mir. Alle Rahmenmaße hängen
+an der Kachelbreite `r`, und geprüft habe ich an **einzelnen** Kacheln von 565
+Pixeln. Dort war `rahmenLinie: .0045` eine feine Linie. Im Raster ist eine
+Kachel auf dem Handy aber nur rund **120 Pixel** breit — dieselbe Linie ist dort
+unter einem Pixel, und bei Deckkraft `.5` verschwindet sie ganz.
+
+Dazu kam: `rahmenGrund: "#0C0C0D"` auf einem dunklen Foto ist **derselbe Ton**.
+Der Rand des gerahmten Fotos war also auch nicht zu sehen.
+
+| | vorher | jetzt |
+|---|---|---|
+| `rahmenLinie` | .0045 | **.014** |
+| `rahmenDeckkraft` | .5 | **1** |
+| `rahmenRand` | .06 | **.09** |
+| `rahmenSpalte` | .74 | **.72** |
+
+**Geprüft:** diesmal **nicht** an einer Einzelkachel, sondern am **Raster** bei
+402 Pixeln Breite mit dreifacher Auflösung — also so, wie sie es am Telefon
+sieht. Zwei Stärken gerendert und verglichen; die leisere
+(`.075`/`.009`/`.85`) liegt in der Geschichte, falls es zu viel ist.
+
+### Merke
+
+Kachelmaße am **Raster** prüfen, nicht an der Einzelkachel. Was bei 565 Pixeln
+fein wirkt, ist bei 120 nicht da.

@@ -7581,6 +7581,39 @@ P.append((
  "rahmenReihe:\"2|0|1|0|0|0|0\"",
  "Text gerahmt auf den Textkacheltag legen, Foto gerahmt auf einen Fototag", 1))
 
+# 237  Die Rahmen waren bei Rastergroesse unsichtbar
+#
+#      "Ich seh nicht viel davon."
+#
+#      Stimmt, und der Grund ist ein Massstabsfehler von mir. Alle
+#      Rahmenmasse haengen an der Kachelbreite r, und geprueft habe
+#      ich an EINZELNEN Kacheln von 565 Pixeln. Dort war
+#      rahmenLinie .0045 eine feine Linie. Im Raster ist eine Kachel
+#      auf dem Handy aber nur rund 120 Pixel breit - dieselbe Linie
+#      ist dort unter einem Pixel, und bei Deckkraft .5 verschwindet
+#      sie ganz.
+#
+#      Dazu kam: rahmenGrund #0C0C0D auf einem dunklen Foto ist
+#      derselbe Ton. Der Rand des gerahmten Fotos war also auch nicht
+#      zu sehen.
+#
+#      Jetzt: Linie .0045 -> .014, Deckkraft .5 -> 1, Rand .06 ->
+#      .09, Spalte .74 -> .72.
+#
+#      GEPRUEFT: diesmal NICHT an einer Einzelkachel, sondern am
+#      Raster bei 402 Pixeln Breite mit dreifacher Aufloesung, also
+#      so, wie sie es am Telefon sieht. Zwei Staerken gerendert und
+#      verglichen; die leisere (.075/.009/.85) liegt als s1 in der
+#      Geschichte, falls es zu viel ist.
+#
+#      MERKE: Kachelmasse am RASTER pruefen, nicht an der Einzel-
+#      kachel. Was bei 565 Pixeln fein wirkt, ist bei 120 nicht da.
+
+P.append((
+ "rahmenRand:.06,rahmenLinie:.0045,rahmenSpalte:.74,rahmenFarbe:\"#F6F1E6\",rahmenDeckkraft:.5",
+ "rahmenRand:.09,rahmenLinie:.014,rahmenSpalte:.72,rahmenFarbe:\"#F6F1E6\",rahmenDeckkraft:1",
+ "Rahmen kraeftiger - bei Rastergroesse war die Haarlinie unsichtbar", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
