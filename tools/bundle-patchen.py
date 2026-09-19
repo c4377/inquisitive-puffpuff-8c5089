@@ -7674,6 +7674,69 @@ P.append((
  "layoutAn:1",
  "Die Layouts wieder an", 1))
 
+# 239  Zurueck auf den Stand von 292 - und die Folgefolien kleiner
+#
+#      "Mach zurueck zu Karten 292 und aendere nur, dass die
+#       Folgefolien schriftmaessig kleiner sind und man die Farben
+#       eben anpassen kann."
+#
+#      Also raus, was nach 292 an OPTIK dazugekommen ist und was sie
+#      nicht bestellt hatte:
+#        - die Layoutrotation aus 238 (layoutAn wieder 0)
+#        - die zwei gerahmten Varianten aus 235-237 (rahmenReihe "0")
+#      Beides bleibt als Code im Bundle - nur die Schalter stehen auf
+#      aus. Ein Wort von ihr und sie sind wieder da.
+#
+#      DRIN BLEIBT, was sie nach 292 AUSDRUECKLICH verlangt hat:
+#        293  die Farbleiste (genau das "Farben anpassen" hier)
+#        294  die Screenshot-Gruppe mittig statt mit Luecke
+#             ("Zuviel Abstand")
+#        295  textMitte .50, die Folgefolien wirklich zentriert
+#        296  zLay fragt den Schalter ZUERST - ohne das waere
+#             layoutAn:0 wirkungslos, weil der Normalisierer jeder
+#             Folie brand_text_plate anstempelt
+#
+#      DIE FOLGEFOLIEN KLEINER: wieder beide Hebel, sonst passiert
+#      nichts. qe ist die Startgroesse, Je das Hoehenbudget. Setzt man
+#      nur qe herunter, holt die Schrumpfschleife die Groesse aus dem
+#      Budget zurueck - der Anteil verpufft. Dasselbe Muster wie schon
+#      bei pinnAnteil und kastenAnteil.
+#
+#      GEMESSEN, nicht geschaetzt: eine Folie mit folienRolle
+#      "inhalt" durch den Zeichner geschickt und qe protokolliert -
+#          ohne folgeAnteil   qe 102.56
+#          mit  folgeAnteil   qe 84.0      = -18 %
+#      Das Raster zeichnet nur das Deckblatt, deshalb war dafuer eine
+#      Sonde noetig statt eines Blicks aufs Bild.
+#
+#      Deckblaetter bleiben unberuehrt: die Bedingung fragt
+#      folienRolle && folienRolle !== "deckblatt".
+
+P.append((
+ "layoutAn:1",
+ "layoutAn:0",
+ "Layouts wieder aus - zurueck auf den Stand von karten292", 1))
+
+P.append((
+ "rahmenReihe:\"2|0|1|0|0|0|0\"",
+ "rahmenReihe:\"0\"",
+ "Rahmen aus - ebenfalls nach 292 dazugekommen", 1))
+
+P.append((
+ "t.bigHeadline===!0&&BS_KACHEL.pinnAnteil&&(qe=Math.roun",
+ "t.folienRolle&&t.folienRolle!==\"deckblatt\"&&BS_KACHEL.folgeAnteil&&(qe=Math.max(c(12),Math.round(qe*Number(BS_KACHEL.folgeAnteil))));t.bigHeadline===!0&&BS_KACHEL.pinnAnteil&&(qe=Math.roun",
+ "Folgefolien kleiner: Startgroesse", 1))
+
+P.append((
+ "*(t.bigHeadline===!0&&BS_KACHEL.pinnAnteil?Number(BS_KACHEL.pinnAnteil):1)*(zKa?(Number(BS_KACHEL.kastenAnteil)||.72):1)-SR;",
+ "*(t.folienRolle&&t.folienRolle!==\"deckblatt\"&&BS_KACHEL.folgeAnteil?Number(BS_KACHEL.folgeAnteil):1)*(t.bigHeadline===!0&&BS_KACHEL.pinnAnteil?Number(BS_KACHEL.pinnAnteil):1)*(zKa?(Number(BS_KACHEL.kastenAnteil)||.72):1)-SR;",
+ "Und das Hoehenbudget - sonst holt die Schrumpfschleife es zurueck", 1))
+
+P.append((
+ "kastenAn:0,rahmenReihe:",
+ "kastenAn:0,folgeAnteil:.82,rahmenReihe:",
+ "Wie stark die Folgefolien kleiner werden", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

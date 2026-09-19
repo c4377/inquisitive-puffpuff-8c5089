@@ -8125,3 +8125,51 @@ Ein Tag mit **einer** Folie taugt nicht als Test für Folgefolien. `ta` kommt au
 `CG(index, anzahl)` — bei einer einzigen Folie ist sie immer `"deckblatt"`, egal
 was man als `folienRolle` hineinschreibt. Mein erster Vergleich hat deshalb drei
 Deckblätter gegen drei Deckblätter gehalten.
+
+## 239 — Zurück auf den Stand von 292, und die Folgefolien kleiner
+
+> „Mach zurück zu Karten 292 und ändere nur, dass die Folgefolien schriftmäßig
+> kleiner sind und man die Farben eben anpassen kann."
+
+Raus ist, was nach 292 an **Optik** dazugekommen ist, ohne dass sie es bestellt
+hatte:
+
+| Was | Schalter | jetzt |
+|---|---|---|
+| Layoutrotation (238) | `layoutAn` | `0` |
+| Die zwei gerahmten Varianten (235–237) | `rahmenReihe` | `"0"` |
+
+Beides bleibt als Code im Bundle — nur die Schalter stehen auf aus. Ein Wort
+und sie sind wieder da.
+
+### Was drin bleibt
+
+Alles, was sie nach 292 ausdrücklich verlangt hat:
+
+- **293** die Farbleiste — genau das „Farben anpassen" aus diesem Auftrag
+- **294** die Screenshot-Gruppe mittig statt mit Lücke („Zuviel Abstand")
+- **295** `textMitte: .50`, die Folgefolien wirklich zentriert
+- **296** `zLay` fragt den Schalter **zuerst** — ohne das wäre `layoutAn: 0`
+  wirkungslos, weil der Normalisierer jeder Folie `brand_text_plate` anstempelt
+
+### Die Folgefolien kleiner
+
+Wieder **beide Hebel**, sonst passiert nichts. `qe` ist die Startgröße, `Je` das
+Höhenbudget. Setzt man nur `qe` herunter, holt die Schrumpfschleife die Größe aus
+dem Budget zurück und der Anteil verpufft — dasselbe Muster wie schon bei
+`pinnAnteil` und `kastenAnteil`.
+
+```
+folgeAnteil: .82   greift bei  t.folienRolle && t.folienRolle !== "deckblatt"
+```
+
+**Gemessen, nicht geschätzt.** Eine Folie mit `folienRolle: "inhalt"` durch den
+Zeichner geschickt und `qe` protokolliert:
+
+| | `qe` |
+|---|---|
+| ohne `folgeAnteil` | 102.56 |
+| mit `folgeAnteil` | 84.0 |
+
+Das sind −18 %. Das Raster zeichnet nur das Deckblatt, deshalb war dafür eine
+Sonde nötig statt eines Blicks aufs Bild. Deckblätter bleiben unberührt.
