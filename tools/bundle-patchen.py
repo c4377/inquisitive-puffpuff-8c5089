@@ -7545,6 +7545,42 @@ P.append((
  "kastenAn:0,rahmenReihe:\"0|0|1|0|0|2|0\",rahmenRand:.06,rahmenLinie:.0045,rahmenSpalte:.74,rahmenFarbe:\"#F6F1E6\",rahmenDeckkraft:.5,rahmenGrund:\"#0C0C0D\",ssLuft:.035",
  "Die Rahmenreihe und ihre Masse", 1))
 
+# 236  Die vier Varianten aufeinander ausgerichtet
+#
+#      "Welche 4 Layout baust du nun?"
+#
+#      Beim Beantworten nachgerechnet - und dabei gemerkt, dass eine
+#      der vier gar nicht vorkam.
+#
+#      ZWEI RHYTHMEN, die nichts voneinander wussten:
+#          textJede 7     -> (ut%7)!==0 heisst Foto. Also sind die
+#                            Tage 1, 8, 15 die reinen Textkacheln.
+#          rahmenReihe    -> greift ueber (tag-1)%7, derselbe Takt.
+#
+#      Mit "0|0|1|0|0|2|0" lag die 2 auf Position 5, also auf Tag 6 -
+#      einem FOTO-Tag. "Text gerahmt" war damit nie ein gerahmter
+#      Textslide, sondern ein zweites gerahmtes Foto. Und die
+#      Textkachel auf Position 0 bekam nie einen Rahmen.
+#
+#      Jetzt "2|0|1|0|0|0|0": die 2 auf Position 0, also genau auf
+#      den Textkacheltag. Die 1 bleibt auf Position 2, einem Fototag.
+#
+#      DAMIT STEHEN DIE VIER:
+#          Tag 1, 8, 15   Text gerahmt   (Textkachel + Linie)
+#          Tag 3, 10, 17  Foto gerahmt
+#          Tag 2,4,5,...  Foto mit Text  (der Standard)
+#          - reine Textkachel ohne Rahmen kommt nicht mehr vor,
+#            weil Position 0 jetzt belegt ist. Wer sie zurueck will,
+#            nimmt textJede auf 5 oder die Reihe auf 14 Stellen.
+#
+#      MERKE: die beiden Reihen teilen denselben Takt 7. Aendert man
+#      textJede, verschiebt sich, worauf die Rahmen fallen.
+
+P.append((
+ "rahmenReihe:\"0|0|1|0|0|2|0\"",
+ "rahmenReihe:\"2|0|1|0|0|0|0\"",
+ "Text gerahmt auf den Textkacheltag legen, Foto gerahmt auf einen Fototag", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

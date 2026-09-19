@@ -8012,3 +8012,40 @@ Text an die Linie (sonst `.86` Spalte bei einem Rahmen bei `.88` innen).
 | Tag 6 | Text gerahmt |
 
 Keine Seitenfehler. `rahmenReihe: "0"` schaltet alles ab.
+
+## 236 — Die vier Varianten aufeinander ausgerichtet
+
+*„Welche 4 Layout baust du nun?"*
+
+Beim Beantworten nachgerechnet — und dabei gemerkt, dass **eine der vier gar
+nicht vorkam**.
+
+### Zwei Rhythmen, die nichts voneinander wussten
+
+| | |
+|---|---|
+| `textJede: 7` | `(ut % 7) !== 0` heißt Foto. Also sind Tag **1, 8, 15** die reinen Textkacheln. |
+| `rahmenReihe` | greift über `(tag-1) % 7` — **derselbe Takt**. |
+
+Mit `"0|0|1|0|0|2|0"` lag die `2` auf Position 5, also auf **Tag 6 — einem
+Fototag**. „Text gerahmt" war damit nie ein gerahmter Textslide, sondern ein
+zweites gerahmtes Foto. Und die Textkachel auf Position 0 bekam **nie** einen
+Rahmen.
+
+Jetzt `"2|0|1|0|0|0|0"`: die `2` auf Position 0, also genau auf den
+Textkacheltag. Die `1` bleibt auf Position 2, einem Fototag.
+
+### Damit stehen die vier
+
+| Tage | |
+|---|---|
+| 1, 8, 15 | **Text gerahmt** — Textkachel mit Linie |
+| 3, 10, 17 | **Foto gerahmt** |
+| 2, 4, 5, 6, 7 … | **Foto mit Text** — der Standard |
+
+Die **reine Textkachel ohne Rahmen** kommt nicht mehr vor, weil Position 0 jetzt
+belegt ist. Wer sie zurück will, nimmt `textJede` auf 5 oder die Reihe auf 14
+Stellen.
+
+**Merke:** die beiden Reihen teilen denselben Takt 7. Ändert man `textJede`,
+verschiebt sich, worauf die Rahmen fallen.
