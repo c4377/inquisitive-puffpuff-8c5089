@@ -8127,6 +8127,53 @@ P.append((
  r"""try{const zEr=String(BS_KACHEL.petronaErsatz||"");if(zEr&&t){const zLay=String(t.layout||"").indexOf("brand_")===0,zPet=/Petrona/.test(String(t.fontFamily||""));if(zPet||zLay&&t.headlineFontChosen!==!0&&String(t.fontFamily||"")!==zEr)t.fontFamily=zEr,t._petronaTausch=!0}}catch(zz){}""",
  'Auch Folgefolien im Layout bekommen die Headline-Schrift statt der Fliesstextschrift', 1))
 
+# 250  Sandton statt Schwarz - und vier widerlegte Hebel davor
+#
+#      "Versuche statt schwarz mal die" - dazu ein Foto von nassem
+#      Sand mit Schaum.
+#
+#      VIER HEBEL PROBIERT UND JEDEN GEMESSEN WIDERLEGT, bevor der
+#      richtige gefunden war. Der Mittelwert der Kachelflaeche ist
+#      jeweils ueber das halbe Raster gerechnet:
+#          tonReihe / tonNeutral braun      45,42,39 -> 46,42,39
+#          waerme bis .55, Ton aus dem Bild 45,42,39 -> 46,42,39
+#          tiefeOben/Mitte/Unten eingeschaltet, braun
+#                                           45,42,39 -> 46,42,39
+#          Rottest auf rgba(${dr},0.32) im Layoutzweig: kein Rot
+#      Ein Punkt Unterschied ist nichts. Diese Regler gehoeren zum
+#      FEED-Zweig - und seit die Layouts auf allen Folien laufen,
+#      betritt kaum eine Kachel diesen Zweig noch. Sie liefen ins
+#      Leere.
+#
+#      DER TESTFEHLER, der das lange verdeckt hat: mein Testbild war
+#      selbst fast schwarz. Damit laesst sich kein Farbton
+#      beurteilen. Erst mit einem neutralen Graubild (/tmp/an/grau.b64,
+#      selbst erzeugt) wurde sichtbar, was die Kacheln wirklich
+#      schwarz macht: nicht ein Farbregler, sondern
+#      t.backgroundColor - reines #000000 - als Grund unter dem
+#      Foto-Inlay.
+#
+#      Also wird genau der getauscht: Gruende, deren Helligkeit unter
+#      46 liegt, bekommen sandGrund. Die Schwelle laesst helle
+#      Karten unberuehrt. Gemessen am Grund von Tag 9:
+#          vorher  0,0,0
+#          nachher 58,36,23
+#
+#      Was das NICHT aendert: Kacheln mit vollflaechigem Foto. Deren
+#      Ton kommt aus dem Bild selbst. Wer die warm haben will,
+#      braucht warme Fotos oder einen echten Farbschleier darueber -
+#      das waere eine eigene Arbeit.
+
+P.append((
+ r"""const zPal=(()=>{try{return(typeof window<"u"&&window.BS_PALETTE)||{}}catch(zz){return{}}})();""",
+ r"""const zPal=(()=>{try{return(typeof window<"u"&&window.BS_PALETTE)||{}}catch(zz){return{}}})();try{const zSd=String(BS_KACHEL.sandGrund||"");if(zSd&&t){const zD=zy=>{const zh=String(zy||"").trim();if(!/^#[0-9a-fA-F]{6}$/.test(zh))return!1;const zr=parseInt(zh.slice(1,3),16),zg=parseInt(zh.slice(3,5),16),zb=parseInt(zh.slice(5,7),16);return .2126*zr+.7152*zg+.0722*zb<46};zD(t.backgroundColor)&&(t.backgroundColor=zSd);zD(t.plateOverride)&&(t.plateOverride=zSd);zD(t.darkPlate)&&(t.darkPlate=zSd)}}catch(zz){}""",
+ 'Fast schwarze Kachelgruende bekommen den Sandton', 1))
+
+P.append((
+ r"""ssGrund:"#141210",""",
+ r"""ssGrund:"#3A2418",sandGrund:"#3A2418",""",
+ 'Der Sandton, auch fuer die Screenshot-Folie', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

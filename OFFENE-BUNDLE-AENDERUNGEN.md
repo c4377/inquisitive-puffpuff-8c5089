@@ -8482,3 +8482,43 @@ Ausgenommen bleibt eine ausdrücklich gewählte Headline-Schrift
 **Geprüft:** Karussell neu gerendert, alle drei Folien in Playfair mit jeweils
 eigenem Layout. Das Raster unterscheidet sich nur in den Zeilen des
 Versionsschilds.
+
+## 250 — Sandton statt Schwarz, und vier widerlegte Hebel davor
+
+> „Versuche statt schwarz mal die" — dazu ein Foto von nassem Sand mit Schaum.
+
+### Vier Hebel probiert, jeden gemessen widerlegt
+
+Mittelwert der Kachelfläche, über das halbe Raster gerechnet:
+
+| Hebel | Mittelwert |
+|---|---|
+| `tonReihe` / `tonNeutral` auf Braun | 45,42,39 → **46,42,39** |
+| `waerme` bis `.55`, Ton aus ihrem Bild | 45,42,39 → **46,42,39** |
+| `tiefeOben/Mitte/Unten` eingeschaltet, braun | 45,42,39 → **46,42,39** |
+| Rottest auf `rgba(${dr},0.32)` im Layoutzweig | kein Rot |
+
+Ein Punkt Unterschied ist nichts. Diese Regler gehören zum **Feed-Zweig** — und
+seit die Layouts auf allen Folien laufen, betritt kaum eine Kachel diesen Zweig
+noch. Sie liefen ins Leere.
+
+### Der Testfehler, der das lange verdeckt hat
+
+Mein Testbild war selbst fast schwarz. Damit lässt sich kein Farbton
+beurteilen. Erst mit einem neutralen Graubild wurde sichtbar, was die Kacheln
+wirklich schwarz macht: kein Farbregler, sondern `t.backgroundColor` — reines
+`#000000` — als Grund unter dem Foto-Inlay.
+
+### Was jetzt passiert
+
+Gründe, deren Helligkeit unter 46 liegt, bekommen `sandGrund`. Die Schwelle
+lässt helle Karten unberührt. Gemessen am Grund von Tag 9:
+
+| | |
+|---|---|
+| vorher | `0,0,0` |
+| nachher | `58,36,23` |
+
+**Was das nicht ändert:** Kacheln mit vollflächigem Foto. Deren Ton kommt aus
+dem Bild selbst. Wer die warm haben will, braucht warme Fotos oder einen echten
+Farbschleier darüber — das wäre eine eigene Arbeit.
