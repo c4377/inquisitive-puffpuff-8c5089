@@ -8665,3 +8665,54 @@ gesetzt wirkt es sofort.
 ihren Fotos anschlägt. Ohne Treffer fällt der Zuschnitt auf `qe .5 / ht .34`
 zurück — oberes Drittel, was für Porträts immer noch besser sitzt als die
 Mitte.
+
+## 255 — Fünfzehn Prozent weniger Schwarzweiß
+
+> „15% weniger schwarz weiß."
+
+### Zwei Sackgassen, beide gemessen statt geglaubt
+
+**1.** `saettigungReihe` von `"-1|0.1"` auf `"-0.85|0.1"`. Klingt nach 15 %
+weniger. Gemessen am Farbabstand der Kacheln (max−min über RGB, Mittel über
+drei Kacheln):
+
+| | Farbabstand |
+|---|---|
+| `-1` | 4.31 |
+| `-0.85` | **36.87** |
+
+Also kein bisschen weniger, sondern **volle** Farbe.
+
+**2.** Ein Suchlauf zeigte einen **Sprung** statt eines Verlaufs:
+
+| | |
+|---|---|
+| `-0.999` | 4.31 |
+| `-0.995` | 4.31 |
+| `-0.99` | 4.31 |
+| `-0.98` | 36.87 |
+
+Ein Sprung ist kein Filter. Also lag es nicht an der Sättigung.
+
+### Gefunden
+
+Drei Stellen im Zeichner hängen an der harten Schwelle `zSat<=-.99`. Die
+entscheidende ist **`swBleibt`** — eine graue Fläche `#808080` im Mischmodus
+`saturation` über dem Foto. Die ist ganz an oder ganz aus, und **sie** macht
+das Schwarzweiß, nicht der Sättigungsfilter.
+
+### Der richtige Hebel: die Deckkraft dieser Fläche
+
+Eingekreist, weil auch das nicht linear ist:
+
+| Deckkraft | Farbabstand | Farbe |
+|---|---|---|
+| `.85` | 7.65 | 10.3 % |
+| **`.80`** | **9.28** | **15.3 %** |
+| `.78` | 9.90 | 17.2 % |
+
+Gesetzt ist `.80`. Bezugspunkte: `4.31` ist ganz schwarzweiß, `36.87` ist volle
+Farbe.
+
+`swStaerke` fehlt oder ist keine Zahl → Deckkraft 1, also genau der alte
+Zustand.

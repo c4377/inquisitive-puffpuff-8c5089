@@ -8326,6 +8326,55 @@ P.append((
  'deckblattSchnitte:"bust|face|bust|close|bust|face"',
  'Deckblaetter schneiden aufs Gesicht statt auf die Bildmitte', 1))
 
+# 255  Fuenfzehn Prozent weniger Schwarzweiss
+#
+#      "15% weniger schwarz weiss."
+#
+#      ZWEI SACKGASSEN, beide gemessen statt geglaubt:
+#
+#      1. saettigungReihe von "-1|0.1" auf "-0.85|0.1". Klingt nach
+#         15 Prozent weniger. Gemessen am Farbabstand der Kacheln
+#         (max(r,g,b) minus min(r,g,b), Mittel ueber drei Kacheln):
+#             -1      4.31
+#             -0.85  36.87
+#         Also kein bisschen weniger, sondern VOLLE Farbe.
+#
+#      2. Ein Suchlauf ueber -0.999, -0.995, -0.99, -0.98 zeigte
+#         einen SPRUNG statt eines Verlaufs:
+#             -0.999  4.31
+#             -0.995  4.31
+#             -0.99   4.31
+#             -0.98  36.87
+#         Ein Sprung ist kein Filter. Also lag es nicht an der
+#         Saettigung.
+#
+#      GEFUNDEN: drei Stellen im Zeichner haengen an der harten
+#      Schwelle zSat<=-.99. Die entscheidende ist swBleibt - eine
+#      graue Flaeche #808080 im Mischmodus "saturation" ueber dem
+#      Foto. Die ist ganz an oder ganz aus, und SIE macht das
+#      Schwarzweiss, nicht der Saettigungsfilter.
+#
+#      Der richtige Hebel ist also die DECKKRAFT dieser Flaeche.
+#      Eingekreist, weil auch das nicht linear ist:
+#          Deckkraft .85  ->  7.65  = 10.3 Prozent Farbe
+#          Deckkraft .80  ->  9.28  = 15.3 Prozent Farbe
+#          Deckkraft .78  ->  9.90  = 17.2 Prozent Farbe
+#      Gesetzt ist .80. Bezugspunkte: 4.31 ist ganz schwarzweiss,
+#      36.87 ist volle Farbe.
+#
+#      swStaerke fehlt oder ist keine Zahl -> Deckkraft 1, also
+#      genau der alte Zustand.
+
+P.append((
+ 'BS_KACHEL.swBleibt===1&&zSat<=-.99&&BS_MISCHBAR&&e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:"#808080",globalCompositeOperation:"saturation",selectable:!1,evented:!1}));',
+ 'BS_KACHEL.swBleibt===1&&zSat<=-.99&&BS_MISCHBAR&&e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:"#808080",globalCompositeOperation:"saturation",opacity:(typeof BS_KACHEL.swStaerke=="number"?Math.max(0,Math.min(1,BS_KACHEL.swStaerke)):1),selectable:!1,evented:!1}));',
+ 'Die Schwarzweiss-Flaeche bekommt eine Deckkraft', 1))
+
+P.append((
+ 'swBleibt:1',
+ 'swBleibt:1,swStaerke:.8',
+ '80 Prozent Schwarzweiss - gemessen bleiben 15,3 Prozent Farbe', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
