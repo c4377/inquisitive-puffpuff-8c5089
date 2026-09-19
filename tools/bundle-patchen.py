@@ -9400,6 +9400,26 @@ P.append((
  'originY:Qe,fontSize:c(22),fontFamily:"Montserrat",fontWeight:"500",fill:Oe,charSpacing:300',
  'Versalzeile Se(): 22 statt 15', 1))
 
+# 273  Versalzeile nochmal 50 Prozent groesser
+#
+#      "Ok nochmal 50 % groesser." lisaKapitel .022 -> .033, Te() 21 -> 32,
+#      Se() 22 -> 33. Gegenueber 333 also das 2,25-fache.
+
+P.append((
+ 'lisaKapitel:.022,',
+ 'lisaKapitel:.033,',
+ 'Versal-Unterzeile (zUnter): .033 der Breite', 1))
+
+P.append((
+ 'let qe=c(21),ht=300;const Ye=r*.88',
+ 'let qe=c(32),ht=300;const Ye=r*.88',
+ 'Versalzeile Te(): 32', 1))
+
+P.append((
+ 'originY:Qe,fontSize:c(22),fontFamily:"Montserrat",fontWeight:"500",fill:Oe,charSpacing:300',
+ 'originY:Qe,fontSize:c(33),fontFamily:"Montserrat",fontWeight:"500",fill:Oe,charSpacing:300',
+ 'Versalzeile Se(): 33', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

@@ -9270,3 +9270,10 @@ Replay aus dem eingecheckten 332 ist byte-genau.
 
 `lisaKapitel` .0145 → .022 (die Versal-Unterzeile aus `zUnter`), dazu die
 Versal-Helfer `Te()` und `Se()` von 14/15 auf 21/22. Gesichtet im Karussell.
+
+## 273 — Versalzeile nochmal 50 Prozent größer
+
+> „Ok nochmal 50 % größer."
+
+`lisaKapitel` .022 → .033, `Te()` 21 → 32, `Se()` 22 → 33. Gegenüber 333 das
+2,25-fache. Gesichtet im Karussell.
