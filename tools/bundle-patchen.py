@@ -9379,6 +9379,27 @@ P.append((
  'wt??($?n*.64:BS_KACHEL.lisaUnten===1?n*(Number(BS_KACHEL.lisaTextMitte)||.58):ge.textPos==="top"?n*.14:ge.textPos==="center"?n*.4:n*.64)',
  'gradient-Zweig ohne Foto: Text mittig-tief bei .58', 1))
 
+# 272  Versalzeile 50 Prozent groesser
+#
+#      "eins noch: die All-Caps-Schrift bitte 50 % groesser."
+#      lisaKapitel .0145 -> .022 (die Unterzeile aus zUnter), dazu die
+#      beiden Versal-Helfer Te() und Se() von 14/15 auf 21/22.
+
+P.append((
+ 'lisaKapitel:.0145,',
+ 'lisaKapitel:.022,',
+ 'Versal-Unterzeile (zUnter): .022 statt .0145 der Breite, also plus 50 Prozent', 1))
+
+P.append((
+ 'let qe=c(14),ht=300;const Ye=r*.88',
+ 'let qe=c(21),ht=300;const Ye=r*.88',
+ 'Versalzeile Te(): 21 statt 14', 1))
+
+P.append((
+ 'originY:Qe,fontSize:c(15),fontFamily:"Montserrat",fontWeight:"500",fill:Oe,charSpacing:300',
+ 'originY:Qe,fontSize:c(22),fontFamily:"Montserrat",fontWeight:"500",fill:Oe,charSpacing:300',
+ 'Versalzeile Se(): 22 statt 15', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

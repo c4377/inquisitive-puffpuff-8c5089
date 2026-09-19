@@ -9263,3 +9263,10 @@ Wechsel, erster Satz groß, Rest klein, Name einmal und richtig gefärbt.
 
 Gesichtet: fünf Folien im Wechsel Foto, Weiß, Schwarz, Weiß, Schwarz; Raster.
 Replay aus dem eingecheckten 332 ist byte-genau.
+
+## 272 — Versalzeile 50 Prozent größer
+
+> „eins noch: die All-Caps-Schrift bitte 50 % größer."
+
+`lisaKapitel` .0145 → .022 (die Versal-Unterzeile aus `zUnter`), dazu die
+Versal-Helfer `Te()` und `Se()` von 14/15 auf 21/22. Gesichtet im Karussell.
