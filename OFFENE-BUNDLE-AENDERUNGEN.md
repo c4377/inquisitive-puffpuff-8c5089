@@ -8413,3 +8413,37 @@ zweiten.
 Hookzeile steht in Knochenweiß (`#F6F1E6`). Hellgelb liegt so nah daran, dass
 die Betonung auf dem Handy kaum auffällt. Zwei kräftigere Gelbtöne (`#F0CE5A`,
 `#E8B93C`) lagen ihr gerendert daneben vor. Gebaut ist, was sie verlangt hat.
+
+## 248 — Petrona gegen Playfair getauscht, in den Layouts
+
+> „Die Folgeslides sind wieder falsch und du nutzt wieder Prato oder wie die
+> Schrift heißt." — und auf meinen Vorschlag, die Layouts aufs Deckblatt zu
+> beschränken: „Nein, lass es wie es ist und hole nur Playfair für den
+> Austausch mit Prato."
+
+Also **nicht** die Rotation einschränken. Nur die Schrift.
+
+### Der Tausch allein reicht nicht
+
+Setzt man die Familie auf Playfair, laufen die Zeilen ineinander und die Wörter
+kleben zusammen. Zwei Stellen im Layout-Zweig sind daran schuld:
+
+| | |
+|---|---|
+| `Un()` | prüft `/playfair/i` auf der Familie und setzt die Zeilenhöhe um `-.34` herunter — gedacht für die große Deckblattzeile im Feed-Zweig, nicht für die kleine Layoutschrift |
+| `Fr()` | misst über `Rt()` die optischen Seitenränder mit `measureText` und leitet daraus eine **negative** Laufweite ab. Bei Playfair fällt das so scharf aus, dass die Wortabstände verschwinden |
+
+**Belegt durch einen Vergleich mit drei Ersatzschriften:**
+
+| Schrift | Ergebnis |
+|---|---|
+| Lora | sauber |
+| Fraunces | sauber |
+| Playfair Display | zusammengequetscht |
+
+Es liegt also nicht am Tausch an sich, sondern an diesen zwei
+Playfair-Sonderfällen. Beide werden übersprungen, wenn die Folie den Tausch
+trägt (`t._petronaTausch`). Wo Playfair echt konfiguriert ist, bleiben sie
+unverändert.
+
+`petronaErsatz` steuert das Ganze — leer heißt: alles bleibt bei Petrona.

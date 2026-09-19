@@ -8039,6 +8039,63 @@ P.append((
  'hakenAkzentFarbe:"#F3E5AB",',
  "Die zwei betonten Woerter in Hellgelb statt Beere", 1))
 
+# 248  Petrona gegen Playfair getauscht - in den Layouts
+#
+#      "Die Folgeslides sind wieder falsch und du nutzt wieder Prato
+#       oder wie die Schrift heisst." Dann, nach meinem Vorschlag,
+#       die Layouts aufs Deckblatt zu beschraenken: "Nein, lass es
+#       wie es ist und hole nur Playfair fuer den Austausch mit
+#       Prato."
+#
+#      Also NICHT die Rotation einschraenken. Nur die Schrift.
+#
+#      DER TAUSCH ALLEIN REICHT NICHT, und das war der eigentliche
+#      Fund. Setzt man die Familie auf Playfair, laufen die Zeilen
+#      ineinander und die Woerter kleben zusammen. Zwei Stellen im
+#      Layout-Zweig sind daran schuld:
+#
+#        Un()  prueft /playfair/i auf der Familie und setzt dann die
+#              Zeilenhoehe um -.34 herunter. Das ist fuer die grosse
+#              Deckblattzeile im Feed-Zweig gedacht, nicht fuer die
+#              kleine Layoutschrift.
+#        Fr()  misst ueber Rt() die optischen Seitenraender der
+#              Schrift mit measureText und leitet daraus eine
+#              NEGATIVE Laufweite ab. Bei Playfair faellt diese
+#              Rechnung so scharf aus, dass die Wortabstaende
+#              verschwinden.
+#
+#      BELEGT durch einen Vergleich mit drei Ersatzschriften:
+#          Lora              sauber
+#          Fraunces          sauber
+#          Playfair Display  zusammengequetscht
+#      Es liegt also nicht am Tausch an sich, sondern an diesen zwei
+#      Playfair-Sonderfaellen. Beide werden jetzt uebersprungen, wenn
+#      die Folie den Tausch traegt (t._petronaTausch). Wo Playfair
+#      echt konfiguriert ist, bleiben sie unveraendert.
+#
+#      petronaErsatz steuert das Ganze - leer heisst: alles bleibt
+#      bei Petrona.
+
+P.append((
+ r"""const zPal=(()=>{try{return(typeof window<"u"&&window.BS_PALETTE)||{}}catch(zz){return{}}})();""",
+ r"""const zPal=(()=>{try{return(typeof window<"u"&&window.BS_PALETTE)||{}}catch(zz){return{}}})();try{const zEr=String(BS_KACHEL.petronaErsatz||"");if(zEr&&t&&/Petrona/.test(String(t.fontFamily||"")))t.fontFamily=zEr,t._petronaTausch=!0}catch(zz){}""",
+ 'Petrona wird durch die Ersatzschrift getauscht', 1))
+
+P.append((
+ r"""Un=()=>/playfair/i.test(String(t.fontFamily||"")),""",
+ r"""Un=()=>t._petronaTausch!==!0&&/playfair/i.test(String(t.fontFamily||"")),""",
+ 'Die Playfair-Zeilenhoehe des Feed-Zweigs gilt nicht fuer getauschte Layouts', 1))
+
+P.append((
+ r"""Fr=(ge,Fe,me)=>{const $e=Rt(Fe||"HelveticaNeueBrand",me||"400",ge);if(!$e)return 0;""",
+ r"""Fr=(ge,Fe,me)=>{if(t._petronaTausch===!0&&String(Fe||"")===String(BS_KACHEL.petronaErsatz||""))return 0;const $e=Rt(Fe||"HelveticaNeueBrand",me||"400",ge);if(!$e)return 0;""",
+ 'Keine optische Laufweitenkorrektur fuer die getauschte Schrift', 1))
+
+P.append((
+ r"""hakenAkzentFarbe:"#F3E5AB",""",
+ r"""hakenAkzentFarbe:"#F3E5AB",petronaErsatz:"Playfair Display",""",
+ 'Welche Schrift Petrona ersetzt', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
