@@ -8000,6 +8000,24 @@ P.append((
  "ssFotoAnteil:.52,ssFotoBreite:.52,hakenAkzentFarbe:\"#B03A5B\",hakenAkzent:\"ende\",hakenAkzentWoerter:2,",
  "Farbe, Seite und Anzahl der betonten Woerter", 1))
 
+# 246  Das Beere heller
+#
+#      "Heller das Berry."
+#
+#      hakenAkzentFarbe von #B03A5B auf #D6467A. Auf dem fast
+#      schwarzen Grund der Screenshot-Folie stand der dunkle Beerenton
+#      zu nah am Umfeld - der hellere setzt sich ab, ohne bunt zu
+#      werden.
+#
+#      Beide Toene lagen ihr gerendert vor, sie hat den helleren
+#      gewaehlt. kastenFarbe bleibt unveraendert bei #B03A5B, das ist
+#      ein anderer Ort.
+
+P.append((
+ 'hakenAkzentFarbe:"#B03A5B",',
+ 'hakenAkzentFarbe:"#D6467A",',
+ "Der Beerenton der zwei betonten Woerter wird heller", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

@@ -8388,3 +8388,14 @@ Die Stile werden **vor** der Schrumpfschleife gesetzt und überleben sie —
 | `hakenAkzentWoerter` | wie viele Wörter, Vorgabe `2` |
 
 Bei bis zu zwei Wörtern passiert nichts — sonst wäre die ganze Zeile farbig.
+
+## 246 — Das Beere heller
+
+> „Heller das Berry."
+
+`hakenAkzentFarbe` von `#B03A5B` auf **`#D6467A`**. Auf dem fast schwarzen Grund
+der Screenshot-Folie stand der dunkle Beerenton zu nah am Umfeld — der hellere
+setzt sich ab, ohne bunt zu werden.
+
+Beide Töne lagen ihr gerendert vor, sie hat den helleren gewählt. `kastenFarbe`
+bleibt unverändert bei `#B03A5B`, das ist ein anderer Ort.
