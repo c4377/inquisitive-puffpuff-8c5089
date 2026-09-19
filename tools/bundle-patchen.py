@@ -8018,6 +8018,27 @@ P.append((
  'hakenAkzentFarbe:"#D6467A",',
  "Der Beerenton der zwei betonten Woerter wird heller", 1))
 
+# 247  Die betonten Woerter in Hellgelb
+#
+#      "Vielleicht besser in hellgelb."
+#
+#      hakenAkzentFarbe von #D6467A auf #F3E5AB - und das ist kein
+#      neuer Ton: dieses Vanillegelb steckt schon als fest
+#      verdrahtetes wa="#F3E5AB" im Bundle, mit dem die App
+#      Markierungen setzt. Also wieder eine Farbwelt statt einer
+#      zweiten.
+#
+#      IHR GESAGT, weil es an der Sache liegt und nicht am Geschmack:
+#      die Hookzeile steht in Knochenweiss (#F6F1E6). Hellgelb liegt
+#      so nah daran, dass die Betonung auf dem Handy kaum auffaellt.
+#      Zwei kraeftigere Gelbtoene (#F0CE5A, #E8B93C) lagen ihr
+#      gerendert daneben vor. Gebaut ist, was sie verlangt hat.
+
+P.append((
+ 'hakenAkzentFarbe:"#D6467A",',
+ 'hakenAkzentFarbe:"#F3E5AB",',
+ "Die zwei betonten Woerter in Hellgelb statt Beere", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

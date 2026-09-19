@@ -8399,3 +8399,17 @@ setzt sich ab, ohne bunt zu werden.
 
 Beide Töne lagen ihr gerendert vor, sie hat den helleren gewählt. `kastenFarbe`
 bleibt unverändert bei `#B03A5B`, das ist ein anderer Ort.
+
+## 247 — Die betonten Wörter in Hellgelb
+
+> „Vielleicht besser in hellgelb."
+
+`hakenAkzentFarbe` von `#D6467A` auf **`#F3E5AB`** — und das ist kein neuer Ton:
+dieses Vanillegelb steckt schon als fest verdrahtetes `wa="#F3E5AB"` im Bundle,
+mit dem die App Markierungen setzt. Also wieder eine Farbwelt statt einer
+zweiten.
+
+**Ihr gesagt, weil es an der Sache liegt und nicht am Geschmack:** die
+Hookzeile steht in Knochenweiß (`#F6F1E6`). Hellgelb liegt so nah daran, dass
+die Betonung auf dem Handy kaum auffällt. Zwei kräftigere Gelbtöne (`#F0CE5A`,
+`#E8B93C`) lagen ihr gerendert daneben vor. Gebaut ist, was sie verlangt hat.
