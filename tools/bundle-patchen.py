@@ -7784,6 +7784,56 @@ P.append((
  "layout:zLay(dt,rt)||Br,layoutId:zLay(dt,rt)||",
  "Dasselbe an beiden Stellen des Eigenschaftsbaus", 2))
 
+# 241  Screenshot-Folien: zwei Zeichner haben uebereinander gemalt
+#
+#      "Besser aufteilen." Dazu ein Screenshot vom Handy: die Headline
+#      liegt quer ueber dem kleinen Foto, darunter der weisse
+#      Screenshot-Kasten, das untere Drittel leer.
+#
+#      URSACHE, zwei Dinge gleichzeitig - seit 240 ist layoutAn 1, und
+#      zLay liefert fuer JEDE Folie ein Layout, auch fuer eine
+#      Screenshot-Folie. Damit malen zwei Zweige unabhaengig
+#      voneinander auf dieselbe Kachel:
+#        - der Layout-Zweig ein Foto-Inlay plus die Headline
+#        - der Overlay-Zweig (t.overlayIsScreenshot) den weissen
+#          Kasten, mittig zwischen .10 und .865
+#      Keiner der beiden weiss vom anderen. Das Ergebnis ist der
+#      Ueberlapp oben und die Leere unten.
+#
+#      Dazu kommt: die Gruppenmitte aus 294 rechnet nur mit
+#      overlayHook. Steht die Zeile stattdessen in text - weil sie im
+#      Editor getippt wurde statt vom Screenshot-Setzer uebernommen -
+#      kennt die Rechnung sie nicht und zentriert nur den Kasten.
+#
+#      ZWEI AENDERUNGEN:
+#        1. zLay gibt fuer Screenshot-Folien "" zurueck. Die Abfrage
+#           steht VOR dem brand_-Layout der Folie, sonst zieht der
+#           Normalisierer sie doch wieder hinein (dieselbe Falle wie
+#           in 234 und 296).
+#        2. Im Eigenschaftsbau wandert der Text einer Screenshot-
+#           Folie nach overlayHook und text wird geleert - genau das,
+#           was zSsLegen beim Setzen ohnehin tut. Damit zeichnet nur
+#           noch ein Zweig, und Hookzeile und Kasten stehen als eine
+#           Gruppe mittig.
+#
+#      GEPRUEFT: Screenshot-Folie gerendert, vorher und nachher. Das
+#      Raster mit den Layouts ist unveraendert - die Aenderung fasst
+#      nur Folien mit overlayIsScreenshot an.
+#
+#      WAS DAS KOSTET: das dekorative Foto auf einer Screenshot-Folie
+#      faellt weg, weil es aus dem Layout kam. Headline plus Kasten
+#      auf ruhigem Grund - die Aufteilung aus 294.
+
+P.append((
+ "zLay=(zi,zs)=>{try{if(BS_KACHEL.layoutAn!==1)return \"\";",
+ "zLay=(zi,zs)=>{try{if(BS_KACHEL.layoutAn!==1)return \"\";if(zs&&(zs.overlayIsScreenshot===!0||zs._wasScreenshot===!0))return \"\";",
+ "Screenshot-Folien bekommen kein Layout", 1))
+
+P.append((
+ "textBands:(zLay(dt,rt)||ot.bandStyle===\"none\")?void 0:!0,",
+ "textBands:(zLay(dt,rt)||ot.bandStyle===\"none\")?void 0:!0,...(rt.overlayIsScreenshot===!0&&!String(rt.overlayHook||\"\").trim()&&String(Ir||\"\").trim()?{overlayHook:String(Ir).replace(/\\*/g,\" \").replace(/\\s+/g,\" \").trim(),text:\"\"}:{}),",
+ "Headline einer Screenshot-Folie wird zur Hookzeile - sonst zeichnen zwei Zweige nebeneinander", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

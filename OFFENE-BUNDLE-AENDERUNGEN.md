@@ -8214,3 +8214,46 @@ Die Layoutfolien zeichnen ihre Schrift ohnehin deutlich kleiner. Soll die
 Schrift der Folgefolien **auch innerhalb der Layouts** kleiner werden, braucht
 es einen eigenen Hebel im Layout-Zeichner. `folgeAnteil` bleibt stehen, damit
 es bei `layoutAn: 0` sofort wieder greift.
+
+## 241 — Screenshot-Folien: zwei Zeichner haben übereinander gemalt
+
+> „Besser aufteilen."
+
+Dazu ein Screenshot vom Handy: die Headline liegt quer über dem kleinen Foto,
+darunter der weiße Screenshot-Kasten, das untere Drittel leer.
+
+### Ursache
+
+Zwei Dinge gleichzeitig. Seit 240 ist `layoutAn: 1`, und `zLay` liefert für
+**jede** Folie ein Layout — auch für eine Screenshot-Folie. Damit malen zwei
+Zweige unabhängig voneinander auf dieselbe Kachel:
+
+| Zweig | malt |
+|---|---|
+| Layout | Foto-Inlay und die Headline |
+| Overlay (`t.overlayIsScreenshot`) | den weißen Kasten, mittig zwischen `.10` und `.865` |
+
+Keiner weiß vom anderen. Daher der Überlapp oben und die Leere unten.
+
+Dazu kommt: die Gruppenmitte aus 294 rechnet nur mit `overlayHook`. Steht die
+Zeile stattdessen in `text` — weil sie im Editor getippt wurde statt vom
+Screenshot-Setzer übernommen — kennt die Rechnung sie nicht und zentriert nur
+den Kasten.
+
+### Zwei Änderungen
+
+1. `zLay` gibt für Screenshot-Folien `""` zurück. Die Abfrage steht **vor** dem
+   `brand_`-Layout der Folie, sonst zieht der Normalisierer sie doch wieder
+   hinein — dieselbe Falle wie in 234 und 296.
+2. Im Eigenschaftsbau wandert der Text einer Screenshot-Folie nach
+   `overlayHook`, `text` wird geleert. Genau das, was `zSsLegen` beim Setzen
+   ohnehin tut. Damit zeichnet nur noch ein Zweig, und Hookzeile und Kasten
+   stehen als **eine** Gruppe mittig.
+
+**Geprüft:** Screenshot-Folie gerendert, vorher und nachher. Das Raster mit den
+Layouts ist unverändert — die Änderung fasst nur Folien mit
+`overlayIsScreenshot` an.
+
+**Was das kostet:** das dekorative Foto auf einer Screenshot-Folie fällt weg,
+weil es aus dem Layout kam. Headline plus Kasten auf ruhigem Grund — die
+Aufteilung aus 294.
