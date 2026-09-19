@@ -7451,6 +7451,43 @@ P.append((
  "textMitte:.50",
  "Text wirklich mittig statt auf 58 Prozent", 1))
 
+# 234  Der Schalter wurde umgangen
+#
+#      "Wir haben nun wieder eine 2. Schrift als Playfair bei den
+#       neuen Layouts."
+#
+#      Die Rotation steht seit 230 auf 0. Trotzdem landeten Kacheln im
+#      Layout-Zweig, weil zLay in DIESER Reihenfolge fragte:
+#
+#          1. hat die Folie ein brand_-Layout?  -> nimm es
+#          2. ist layoutAn 1?                   -> sonst nichts
+#
+#      Punkt 1 stand VOR dem Schalter. Und Folien bringen so ein
+#      Layout mit: ein Normalisierungspfad stempelt
+#          layout: Ve.layout || Ve.layoutId || "brand_text_plate"
+#      auf jede Folie, die keins hat. Jede so normalisierte Kachel
+#      ging damit am ausgeschalteten Schalter vorbei - in den
+#      Layout-Zweig, wo die Schrift ueber Ct() aus
+#      typography.fontFamily kommt, also Petrona, und wo es die
+#      Handschriftzeile nicht gibt.
+#
+#      Jetzt fragt zLay zuerst den Schalter. Ein eigenes Layout an der
+#      Folie zaehlt nur noch, wenn die Rotation ueberhaupt an ist.
+#
+#      NACHGESTELLT mit layout:"brand_text_plate" an der Folie:
+#          karten295  schmale Serife, keine Handschrift, kein Foto
+#          karten296  Playfair, Handschrift, Foto - wie im Feed
+#
+#      LEHRE: ein Schalter, der erst an zweiter Stelle gefragt wird,
+#      ist kein Schalter. Beim Zurueckdrehen in 230 habe ich nur
+#      geprueft, ob der Feed wieder stimmt - nicht, ob es einen Weg
+#      daran vorbei gibt.
+
+P.append((
+ "zLay=(zi,zs)=>{try{const ze=zs&&zs.layout;if(ze&&String(ze).indexOf(\"brand_\")===0)return ze;if(BS_KACHEL.layoutAn!==1)return \"\";",
+ "zLay=(zi,zs)=>{try{if(BS_KACHEL.layoutAn!==1)return \"\";const ze=zs&&zs.layout;if(ze&&String(ze).indexOf(\"brand_\")===0)return ze;",
+ "Erst den Schalter fragen, dann das Layout an der Folie", 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

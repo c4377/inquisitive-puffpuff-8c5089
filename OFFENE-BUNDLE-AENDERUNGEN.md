@@ -7939,3 +7939,43 @@ Deckblatt und Folge wäre eine zweite Wahrheit über dieselbe Regel gewesen.
 dritte 17 Byte daneben — dieselbe Schwankung im geblurrten Foto wie in 222.
 Derselbe Bundle zweimal gerendert ist byteweise identisch, es liegt also nicht
 an der Änderung.
+
+## 234 — Der Schalter wurde umgangen
+
+*„Wir haben nun wieder eine 2. Schrift als Playfair bei den neuen Layouts."*
+
+Die Rotation steht seit **230** auf `0`. Trotzdem landeten Kacheln im
+Layout-Zweig, weil `zLay` in **dieser Reihenfolge** fragte:
+
+```
+1. hat die Folie ein brand_-Layout?  -> nimm es
+2. ist layoutAn 1?                   -> sonst nichts
+```
+
+Punkt 1 stand **vor** dem Schalter. Und Folien bringen so ein Layout mit: ein
+Normalisierungspfad stempelt
+
+```js
+layout: Ve.layout || Ve.layoutId || "brand_text_plate"
+```
+
+auf jede Folie, die keins hat. Jede so normalisierte Kachel ging damit am
+ausgeschalteten Schalter vorbei — in den Layout-Zweig, wo die Schrift über
+`Ct()` aus `typography.fontFamily` kommt (also **Petrona**) und wo es die
+**Handschriftzeile nicht gibt**.
+
+Jetzt fragt `zLay` **zuerst** den Schalter. Ein eigenes Layout an der Folie
+zählt nur noch, wenn die Rotation überhaupt an ist.
+
+**Nachgestellt** mit `layout:"brand_text_plate"` an der Folie:
+
+| | |
+|---|---|
+| karten295 | schmale Serife, keine Handschrift, kein Foto |
+| **karten296** | Playfair, Handschrift, Foto — wie im Feed |
+
+### Lehre
+
+Ein Schalter, der erst an **zweiter** Stelle gefragt wird, ist kein Schalter.
+Beim Zurückdrehen in 230 habe ich nur geprüft, ob der Feed wieder stimmt — nicht,
+ob es einen Weg **daran vorbei** gibt.
