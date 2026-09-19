@@ -9144,6 +9144,70 @@ P.append((
  'const zRA=e.renderAll.bind(e);let zNo=null;const zFill=()=>{try{const zo=(e._objects||[]).filter(zx=>zx&&zx.type==="rect"&&typeof zx.fill=="string"&&zx.width>=r*.98&&zx.height>=n*.98&&(!zx.globalCompositeOperation||zx.globalCompositeOperation==="source-over")&&zx.fill!=="transparent").pop();if(zo){let zl=-1;const zf=String(zo.fill).trim();if(zf.charAt(0)==="#"){let zh=zf.slice(1);zh.length===3&&(zh=zh.split("").map(zq=>zq+zq).join(""));zl=.2126*parseInt(zh.slice(0,2),16)+.7152*parseInt(zh.slice(2,4),16)+.0722*parseInt(zh.slice(4,6),16)}else{const zm=zf.match(/rgba?\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)/);zm&&(zl=.2126*zm[1]+.7152*zm[2]+.0722*zm[3])}if(zl>150)return BS_KACHEL.nameFarbeHell||"rgba(43,30,23,0.5)"}}catch(zz){}return BS_KACHEL.nameFarbe||"#FFFFFF"};e.renderAll=function(){',
  'zFill(): letzte volle Flaeche ohne Composite bestimmt die Namensfarbe', 1))
 
+# 269  Lisas Handwerk, Carinas Branding
+#
+#      "Wieso sind die Fotos getoent - es soll so sein als wuerde sie
+#      mein Branding entwerfen, nicht ihres bauen."
+#
+#      330 hatte Lisas Palette mitgenommen: Schokobraun, Creme, warm
+#      getonte Fotos, kein Schwarzweiss. Das war zu viel Lisa. Bleiben
+#      soll nur das Handwerk - Layouts, Playfair regular, erster Satz
+#      gross und Rest klein, Doppelrahmen, Inset. Farben und Fotos
+#      wieder ihre: Schwarz, Weiss, Off-White #F2EFE9 (ihr Schildgrund),
+#      Fotos ungetont, jedes vierte Schwarzweiss wie vor 330.
+#      Alle 330-Regler bleiben, nur die Werte wechseln
+#      (bildTonungKraft 0, lisaGrund #000000, lisaCreme #F2EFE9).
+
+P.append((
+ 'colors:{primary:"#F1EBE3",secondary:"#2B1E17",tertiary:"#9C8B7C",accent:"#F1EBE3",neutral:"#2B1E17",background:"#2B1E17",darkPlate:"#2B1E17"}',
+ 'colors:{primary:"#FFFFFF",secondary:"#000000",tertiary:"#8E8E92",accent:"#FFFFFF",neutral:"#000000",background:"#000000",darkPlate:"#000000"}',
+ 'Stil-Objekt: zurueck auf Schwarz/Weiss, Playfair bleibt', 1))
+
+P.append((
+ 'textTileLight:"#E9E3DA",textTileDark:"#2B1E17"',
+ 'textTileLight:"#F2EFE9",textTileDark:"#000000"',
+ 'Textflaechen: Off-White #F2EFE9 und Schwarz', 1))
+
+P.append((
+ 'Ro=$r,ci="#F1EBE3",Wi=ve.background',
+ 'Ro=$r,ci="#FFFFFF",Wi=ve.background',
+ 'Kachelaufbau: Schrift weiss auf Foto', 1))
+
+P.append((
+ 'return Mt&&!Ta&&(ci=Ft(Wi)?"#F1EBE3":"#2B1E17")',
+ 'return Mt&&!Ta&&(ci=Ft(Wi)?"#FFFFFF":"#111111")',
+ 'Kachelaufbau: weiss auf dunkel, fast-schwarz auf hell', 1))
+
+P.append((
+ '"#2B1E17":"#F1EBE3"',
+ '"#111111":"#F2EFE9"',
+ 'Kontrastwahl X(): #111111 / #F2EFE9', 1))
+
+P.append((
+ 'zFarbe=zg=>ee(zg)?(BS_KACHEL.lisaHell||"#F1EBE3"):(BS_KACHEL.lisaDunkel||"#2B1E17")',
+ 'zFarbe=zg=>ee(zg)?(BS_KACHEL.lisaHell||"#FFFFFF"):(BS_KACHEL.lisaDunkel||"#111111")',
+ 'zFarbe(): Vorgaben weiss / fast-schwarz', 1))
+
+P.append((
+ 'return BS_KACHEL.nameFarbeHell||"rgba(43,30,23,0.5)"',
+ 'return BS_KACHEL.nameFarbeHell||"rgba(17,17,17,0.5)"',
+ 'zFill(): Name auf hellen Flaechen dunkelgrau', 1))
+
+P.append((
+ 'plateColor:"#E9E3DA"',
+ 'plateColor:"#F2EFE9"',
+ 'Helle Flaechen der Layout-Tabelle: Off-White statt Creme', 5))
+
+P.append((
+ 'bildTonung:"#6E4B36",bildTonungKraft:.8,lisaTeilen:1,lisaGrund:"#2B1E17",lisaCreme:"#E9E3DA",lisaHell:"#F1EBE3",lisaDunkel:"#2B1E17",lisaGroesse:1.3,nameFarbeHell:"rgba(43,30,23,0.5)",',
+ 'bildTonung:"",bildTonungKraft:0,lisaTeilen:1,lisaGrund:"#000000",lisaCreme:"#F2EFE9",lisaHell:"#FFFFFF",lisaDunkel:"#111111",lisaGroesse:1.3,nameFarbeHell:"rgba(17,17,17,0.5)",',
+ 'Regler: Toenung aus, lisaGrund schwarz, lisaCreme Off-White', 1))
+
+P.append((
+ 'saettigungReihe:"0.05",',
+ 'saettigungReihe:"-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1",',
+ 'Schwarzweiss-Anteil wie vor 330 (jedes vierte Foto)', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

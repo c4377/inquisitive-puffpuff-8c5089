@@ -9186,3 +9186,27 @@ Konsolenfehler. Replay aus dem eingecheckten 329 ist byte-genau.
 Zurück: `site/index.html` und `site/dunkel/index.html` auf
 `index-B5karten329.js` stellen geht nicht mehr direkt (329 ist Stub) —
 stattdessen `git show 9b6ac80:site/assets/index-B5karten329.js` holen.
+
+## 269 — Lisas Handwerk, Carinas Branding
+
+> „Wieso sind die Fotos getönt — es soll so sein als würde sie mein Branding
+> entwerfen, nicht ihres bauen."
+
+330 hatte Lisas Palette mitgenommen. Das war zu viel Lisa. Geblieben ist nur
+das Handwerk aus 330: Layout-Mix, Playfair Display regular, erster Satz groß
+und Rest als Unterzeile, Doppelrahmen auf der hellen Karte, Inset-Rahmen mit
+großem Wort, Deckblatt-Schrift × 1.3.
+
+Zurück auf ihres:
+
+| | 330 | 331 |
+|---|---|---|
+| Grund | Schokobraun `#2B1E17` | Schwarz `#000000` |
+| helle Karte | Creme `#E9E3DA` | Off-White `#F2EFE9` (ihr Schildgrund) |
+| Schrift | Creme / Braun | Weiß / `#111111` |
+| Fotos | warm getönt | ungetönt (`bildTonungKraft` 0) |
+| Schwarzweiß | aus | jedes vierte Foto wie vor 330 |
+
+Alle 330-Regler bleiben, nur die Werte wechseln. Gesichtet: Raster mit
+dunklem und buntem Testfoto, Karussell-Deckblatt. Replay aus dem
+eingecheckten 330 ist byte-genau.
