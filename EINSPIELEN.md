@@ -22,6 +22,25 @@ Wird `vite build` ausgeführt, entsteht die App aus dem alten `src` und
 alles Neuere ist weg. `src` bleibt trotzdem im Repo — als Archiv, nicht
 als Quelle.
 
+## Vor jedem Commit: die Verweise prüfen
+
+```
+python3 tools/ziel-pruefen.py
+```
+
+Bricht das Skript ab, **nicht einspielen**.
+
+Der Grund dafür ist einmal passiert und kostet sofort die ganze Seite: die
+Testläufe schreiben `site/index.html` auf das gerade geprüfte Bundle um. Wird
+diese Probe danach gelöscht und das Nachziehen greift daneben, bleibt ein
+Verweis auf eine Datei stehen, die es nicht mehr gibt. Netlify antwortet mit
+404, die Seite bleibt **weiß** — ohne Fehlermeldung im Browser, ohne dass am
+Bundle selbst irgendetwas falsch wäre.
+
+Das Skript folgt beiden `index.html` durch die ganze Kette der Weiterleitungen
+bis zum echten Bundle und prüft zusätzlich, dass keine der alten
+Weiterleitungen ins Leere zeigt.
+
 ## netlify.toml — so muss sie aussehen
 
 ```toml
