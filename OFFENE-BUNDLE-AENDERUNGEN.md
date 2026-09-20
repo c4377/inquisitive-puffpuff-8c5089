@@ -9324,3 +9324,14 @@ Fotolayout, und der Zeichner setzt das CTA-Foto selbst, wenn die letzte von
 mehreren Folien kein Foto hat (kein Screenshot, kein Ablauf). Dafür geben
 Editor-Vorschau und die drei Exporte `ctaImage` aus dem Stil mit. Gesichtet
 mit gesetztem Test-CTA: Folie 5 zeigt es mit Text unten.
+
+## 277 — CTA-Foto immer über die ganze Seite
+
+> „Hm, find ich nicht gut — und das CTA über die ganze Seite immer."
+
+338 setzte das CTA-Foto nur, wenn die letzte Folie kein Foto hatte, und ließ
+das Layout stehen; bei ihr lag das CTA-Bild deshalb als Schleier oder kleiner
+Ausschnitt hinter einer Textfläche. Jetzt bekommt die letzte von mehreren
+Folien immer das CTA-Foto als Hintergrund und das Layout
+`brand_photo_gradient` (Regler `ctaLayout`), sobald eines gesetzt ist.
+Screenshot- und Ablauf-Folien ausgenommen. Gesichtet mit sieben Folien.

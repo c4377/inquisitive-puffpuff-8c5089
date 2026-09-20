@@ -9534,6 +9534,28 @@ P.append((
  'typography:We==null?void 0:We.typography,ctaImage:We==null?void 0:We.ctaImage});',
  'Exporte: CTA-Foto aus dem Stil mitgeben', 3))
 
+# 277  CTA-Foto immer ueber die ganze Seite
+#
+#      "Hm, find ich nicht gut - und das CTA ueber die ganze Seite immer."
+#
+#      338 setzte das CTA-Foto nur, wenn die letzte Folie KEIN Foto hatte,
+#      und liess das Layout aus der Reihe stehen. Bei ihr kam die letzte
+#      Folie mit einem anderen Foto und einem Textlayout an - das
+#      CTA-Bild lag dann als Schleier oder kleiner Ausschnitt hinter
+#      der Flaeche. Jetzt: ist ein CTA-Foto gesetzt, bekommt die letzte
+#      von mehreren Folien IMMER dieses Foto als Hintergrund und das
+#      Layout brand_photo_gradient (Regler ctaLayout), egal was im Plan
+#      steht. Ohne CTA-Foto, aber isCtaSlide mit Foto: ebenfalls
+#      vollflaechig. Screenshot- und Ablauf-Folien bleiben ausgenommen.
+#
+#      GESICHTET: 7 Folien, die letzte waere ein Textlayout gewesen -
+#      zeigt jetzt das Test-CTA (grau) ueber die ganze Seite.
+
+P.append((
+ 'try{if(i&&typeof i.ctaImage=="string"&&i.ctaImage.length>5&&(Number(i.totalSlides)||1)>1&&(i.slideIndex||0)===(Number(i.totalSlides)||1)-1&&!(typeof t.background=="string"&&t.background.length>5)&&t.overlayIsScreenshot!==!0&&t.karte!=="ablauf"){const zL=String(t.layout||"");t={...t,background:i.ctaImage,isCtaSlide:!0,textBands:zL.indexOf("brand_")===0?void 0:t.textBands,layout:zL.indexOf("brand_")===0&&!/photo|frame/.test(zL)?"brand_photo_gradient":t.layout,layoutId:zL.indexOf("brand_")===0&&!/photo|frame/.test(zL)?"brand_photo_gradient":t.layoutId}}}catch(zz){}',
+ 'try{const zCtaBild=i&&typeof i.ctaImage=="string"&&i.ctaImage.length>5?i.ctaImage:"",zLetzte=(Number(i.totalSlides)||1)>1&&(i.slideIndex||0)===(Number(i.totalSlides)||1)-1,zHatBg=typeof t.background=="string"&&t.background.length>5;if(zLetzte&&t.overlayIsScreenshot!==!0&&t.karte!=="ablauf"&&(zCtaBild||(t.isCtaSlide===!0&&zHatBg))){const zL=String(t.layout||""),zBrand=zL.indexOf("brand_")===0||BS_KACHEL.folgeLayouts===1,zLay2=BS_KACHEL.ctaLayout||"brand_photo_gradient";t={...t,background:zCtaBild||t.background,isCtaSlide:!0,textBands:zBrand?void 0:t.textBands,layout:zBrand?zLay2:t.layout,layoutId:zBrand?zLay2:t.layoutId}}}catch(zz){}',
+ 'Zeichner: letzte Folie traegt immer das CTA-Foto vollflaechig (Fotolayout, kein Band), wenn eines gesetzt ist', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
