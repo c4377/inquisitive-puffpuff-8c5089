@@ -9372,3 +9372,12 @@ Deckblatt.
 
 Merke für die Prüfläufe: parallele Läufe mit verschiedenen Bundles sind
 ungültig, weil sie dieselbe `index.html` umschreiben. Nacheinander rendern.
+
+## 281 — Textkachel-Deckblatt mittig
+
+> „Gut — und Cover jetzt mehr mittig."
+
+Der Textblock der Textflächen stand seit 333 bei .58. Für das Deckblatt gilt
+jetzt .5; folgt eine Unterzeile, rückt die Headline um .045 hoch, damit der
+Block als Ganzes mittig sitzt. Folgefolien bleiben bei .58. Regler
+`lisaDeckMitte`, `lisaDeckHub`. Gesichtet im Raster (Tag 8, 5, 2).

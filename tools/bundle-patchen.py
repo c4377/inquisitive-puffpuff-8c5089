@@ -9646,6 +9646,30 @@ P.append((
  'textFotoHell:.9,textFotoAnteil:.4,',
  'Regler textFotoHell .9, textFotoAnteil .4', 1))
 
+# 281  Textkachel-Deckblatt mittig
+#
+#      "Gut - und Cover jetzt mehr mittig." Der Textblock der
+#      Textflaechen stand seit 333 bei .58 (auf ihren Wunsch "immer
+#      runter"). Fuer das Deckblatt gilt jetzt .5, und wenn eine
+#      Unterzeile folgt, rueckt die Headline um .045 hoch, damit der
+#      ganze Block mittig sitzt. Folgefolien bleiben bei .58. Dafuer
+#      wird die Satzaufteilung vor der Lage berechnet.
+
+P.append((
+ 'let tt=zInsetUnten>0?zInsetUnten+n*(Number(BS_KACHEL.textFotoLuft)||.05):ge.exactY!=null?n*ge.exactY:BS_KACHEL.lisaUnten===1?n*(Number(BS_KACHEL.lisaTextMitte)||.58):',
+ 'const zSp=BS_KACHEL.lisaTeilen!==0&&!ge.bigWord&&!t.secondaryText?zTeilen(Qe?Qe.rest:t.text,!1):null;let tt=zInsetUnten>0?zInsetUnten+n*(Number(BS_KACHEL.textFotoLuft)||.05):ge.exactY!=null?n*ge.exactY:BS_KACHEL.lisaUnten===1?((i.slideIndex||0)===0?n*(Number(BS_KACHEL.lisaDeckMitte)||.5)-(zSp?n*(Number(BS_KACHEL.lisaDeckHub)||.045):0):n*(Number(BS_KACHEL.lisaTextMitte)||.58)):',
+ 'plate-Zweig: Aufteilung vor der Lage berechnen; Deckblatt-Block mittig (.5, bei Unterzeile .045 hoeher), Folgefolien bleiben .58', 1))
+
+P.append((
+ 'const zSp=BS_KACHEL.lisaTeilen!==0&&!ge.bigWord&&!t.secondaryText?zTeilen(Qe?Qe.rest:t.text,!1):null,zOb=zSp?ye(zSp.oben):null,zHt=Pt(',
+ 'const zOb=zSp?ye(zSp.oben):null,zHt=Pt(',
+ 'plate-Zweig: zOb/zHt nutzen die vorgezogene Aufteilung', 1))
+
+P.append((
+ 'lisaTextMitte:.58,',
+ 'lisaTextMitte:.58,lisaDeckMitte:.5,lisaDeckHub:.045,',
+ 'Regler lisaDeckMitte .5, lisaDeckHub .045', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
