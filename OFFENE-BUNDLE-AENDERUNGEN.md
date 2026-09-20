@@ -9355,3 +9355,20 @@ vorbeigeht. Jetzt: Foto .5 breit (1:1.2) ab .10, Gamma-Aufhellung auf
 `hellZiel` × 1.1, darunter Headline und Unterzeile mittig mit .05 Luft. Die
 Blur-Fassung bekommt dieselbe Aufhellung. Regler `textFotoBreite`,
 `textFotoHoehe`, `textFotoLuft`, `textFotoHell`. Gesichtet mit sieben Folien.
+
+## 280 — Inset-Aufhellung: Person statt Fenster messen
+
+> „Findest du es heller?" — kaum, 109 → 114 im Mittel.
+
+Ihr Foto ist Gegenlicht: helles Fenster, sie selbst dunkel. Die Messung über
+das ganze Bild sah keinen Bedarf. Jetzt zählen nur die Bildmitte und dort die
+dunkleren 40 Prozent der Proben, Ziel `hellZiel` × .9. Cap und Kraft wie beim
+Deckblatt.
+
+| synthetisches Gegenlicht-Porträt | 341 | 342 |
+|---|---|---|
+| Person | 69 | 113 |
+| Inset gesamt | 173 | 197 |
+
+Merke für die Prüfläufe: parallele Läufe mit verschiedenen Bundles sind
+ungültig, weil sie dieselbe `index.html` umschreiben. Nacheinander rendern.

@@ -9621,6 +9621,31 @@ P.append((
  'textFotoBreite:.5,textFotoHoehe:1.2,textFotoOben:.10,textFotoLuft:.05,textFotoHell:1.1,',
  'Regler: textFotoBreite .5, textFotoHoehe 1.2, textFotoLuft .05, textFotoHell 1.1', 1))
 
+# 280  Inset-Aufhellung: Person statt Fenster messen
+#
+#      "Findest du es heller?" - kaum: 109 -> 114 im Mittel. Ihr Foto
+#      ist Gegenlicht: helles Fenster, sie selbst dunkel. Die Messung
+#      ueber das ganze Bild sah keinen Bedarf (Gamma 1,01). Jetzt
+#      werden nur die Bildmitte (x 25-75 %, ab y 25 %) und dort die
+#      dunkleren 40 % der Proben gemittelt; Ziel hellZiel x .9 dafuer.
+#      Cap bleibt hellGammaMax 1.7, Kraft hellKraft .8.
+#
+#      GEMESSEN an einem synthetischen Gegenlicht-Portraet (nacheinander
+#      gerendert - parallele Laeufe mit verschiedenen Bundles sind
+#      ungueltig, sie schreiben dieselbe index.html um):
+#        Person   69 -> 113      Inset-Mittel 173 -> 197
+#      Fenster bleibt hell, ohne auszubrennen.
+
+P.append((
+ 'const zd2=zx2.getImageData(0,0,16,16).data;let zs2=0;for(let zi=0;zi<zd2.length;zi+=4)zs2+=.2126*zd2[zi]+.7152*zd2[zi+1]+.0722*zd2[zi+2];const zm2=zs2/(zd2.length/4),zg2=Math.min(Number(BS_KACHEL.hellGammaMax)||1.7,Math.max(1,Math.pow((zZ*(Number(BS_KACHEL.textFotoHell)||1))/Math.max(1,zm2),Number(BS_KACHEL.hellKraft)||.8)));',
+ 'const zd2=zx2.getImageData(0,0,16,16).data,zL2=[];for(let zy=0;zy<16;zy++)for(let zx=0;zx<16;zx++){if(zx<4||zx>=12||zy<4)continue;const zi=(zy*16+zx)*4;zL2.push(.2126*zd2[zi]+.7152*zd2[zi+1]+.0722*zd2[zi+2])}zL2.sort((za,zb)=>za-zb);const zN2=Math.max(1,Math.round(zL2.length*(Number(BS_KACHEL.textFotoAnteil)||.4)));let zs2=0;for(let zi=0;zi<zN2;zi++)zs2+=zL2[zi];const zm2=zs2/zN2,zg2=Math.min(Number(BS_KACHEL.hellGammaMax)||1.7,Math.max(1,Math.pow((zZ*(Number(BS_KACHEL.textFotoHell)||1))/Math.max(1,zm2),Number(BS_KACHEL.hellKraft)||.8)));',
+ 'zLadeFoto(): Aufhellung misst die dunkleren 40 % der Bildmitte (Person im Gegenlicht), nicht das ganze Bild', 1))
+
+P.append((
+ 'textFotoHell:1.1,',
+ 'textFotoHell:.9,textFotoAnteil:.4,',
+ 'Regler textFotoHell .9, textFotoAnteil .4', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
