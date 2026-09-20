@@ -9483,6 +9483,57 @@ P.append((
  'lisaSchrift:"Playfair Display",textFoto:"blur|inset",textFotoDeck:.8,textFotoBlur:.45,textFotoBreite:.28,textFotoOben:.10,',
  'Regler: textFoto "blur|inset", textFotoDeck .8, textFotoBlur .45, textFotoBreite .28, textFotoOben .10', 1))
 
+# 276  CTA-Foto auch am Ende der Textposts
+#
+#      "Geht das CTA-Foto noch? Ich will auch am Ende der Textposts mein
+#      CTA-Bild."
+#
+#      BISHER haengt das CTA-Foto (Brand-Einstellungen, "Wird immer auf
+#      der letzten Slide verwendet") an Rt(): beim Normalisieren des
+#      Plans bekommt die letzte Folie background = ctaImage. Wird das
+#      Foto spaeter gesetzt oder der Plan nicht neu normalisiert, fehlt
+#      es. Und seit 332 waehlte zLayF fuer Folgefolien ohne Foto ein
+#      Textlayout - die Flaeche deckte das CTA-Foto zu.
+#
+#      JETZT zweigleisig:
+#        - Rt(): zLayF bekommt Ea (CTA-Kennzeichen) und liefert dann
+#          brand_photo_gradient.
+#        - Zeichner: die Aufrufer (Editor-Vorschau XV, drei Exporte)
+#          geben ctaImage aus currentBrandConfig in den Optionen mit.
+#          Ist die Folie die letzte von mehreren, hat kein Foto, ist
+#          kein Screenshot und kein Ablauf, setzt Ca background =
+#          ctaImage, Fotolayout, kein Band. Damit klappt es ohne
+#          Neu-Normalisieren, auch bei reinen Textposts.
+#      Das Raster zeigt nur Deckblaetter und ist nicht betroffen.
+#
+#      GESICHTET: 5 Folien mit gesetztem CTA-Foto (grau): Folie 5 zeigt
+#      es mit Text unten. Ohne CTA-Foto unveraendert.
+
+P.append((
+ 'zLayF=(dt,Ve,rt,ea)=>{try{const zF=BS_KACHEL.folgeLayouts===1,zV=Number(Ve)||0;if(zV>0&&!zF)return "";',
+ 'zLayF=(dt,Ve,rt,ea,zCta)=>{try{const zF=BS_KACHEL.folgeLayouts===1,zV=Number(Ve)||0;if(zV>0&&!zF)return "";if(zCta===!0&&zF&&typeof ea=="string"&&ea.length>5)return "brand_photo_gradient";',
+ 'zLayF(): CTA-Folie bekommt ein Fotolayout (brand_photo_gradient)', 1))
+
+P.append((
+ 'zLayF(dt,Ve,rt,ea)',
+ 'zLayF(dt,Ve,rt,ea,Ea)',
+ 'Kachelaufbau: zLayF bekommt das CTA-Kennzeichen mit', 2))
+
+P.append((
+ 'if(typeof t._tag=="number"&&((i.slideIndex||0)===0||!(window.__bsTagFoto||{})[String(t._tag)])){const zT=window.__bsTagFoto=window.__bsTagFoto||{};zT[String(t._tag)]=t.background}}}catch(zz){}',
+ 'if(typeof t._tag=="number"&&((i.slideIndex||0)===0||!(window.__bsTagFoto||{})[String(t._tag)])){const zT=window.__bsTagFoto=window.__bsTagFoto||{};zT[String(t._tag)]=t.background}}}catch(zz){}try{if(i&&typeof i.ctaImage=="string"&&i.ctaImage.length>5&&(Number(i.totalSlides)||1)>1&&(i.slideIndex||0)===(Number(i.totalSlides)||1)-1&&!(typeof t.background=="string"&&t.background.length>5)&&t.overlayIsScreenshot!==!0&&t.karte!=="ablauf"){const zL=String(t.layout||"");t={...t,background:i.ctaImage,isCtaSlide:!0,textBands:zL.indexOf("brand_")===0?void 0:t.textBands,layout:zL.indexOf("brand_")===0&&!/photo|frame/.test(zL)?"brand_photo_gradient":t.layout,layoutId:zL.indexOf("brand_")===0&&!/photo|frame/.test(zL)?"brand_photo_gradient":t.layoutId}}}catch(zz){}',
+ 'Zeichner: letzte Folie ohne Foto nimmt das CTA-Foto aus den Optionen (Fotolayout, kein Band)', 1))
+
+P.append((
+ 'typography:(b=l==null?void 0:l.currentBrandConfig)==null?void 0:b.typography})}finally{zFrei()}',
+ 'typography:(b=l==null?void 0:l.currentBrandConfig)==null?void 0:b.typography,ctaImage:(b=l==null?void 0:l.currentBrandConfig)==null?void 0:b.ctaImage})}finally{zFrei()}',
+ 'Editor-Vorschau (XV): CTA-Foto aus dem Stil mitgeben', 1))
+
+P.append((
+ 'typography:We==null?void 0:We.typography});',
+ 'typography:We==null?void 0:We.typography,ctaImage:We==null?void 0:We.ctaImage});',
+ 'Exporte: CTA-Foto aus dem Stil mitgeben', 3))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

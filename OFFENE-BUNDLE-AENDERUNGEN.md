@@ -9312,3 +9312,15 @@ Die Headline rückt beim Inset bei Bedarf kleiner oder tiefer.
 Screenshot-Folien bleiben ohne. Regler: `textFoto`, `textFotoDeck`,
 `textFotoBlur`, `textFotoBreite`, `textFotoOben`. Gesichtet: fünf Folien und
 Raster.
+
+## 276 — CTA-Foto auch am Ende der Textposts
+
+> „Geht das CTA-Foto noch? Ich will auch am Ende der Textposts mein CTA-Bild."
+
+Bisher hing das CTA-Foto am Normalisieren des Plans (`Rt()`), und seit 332
+wählte `zLayF` für Folgefolien ohne Foto ein Textlayout, die Fläche deckte
+das Foto zu. Jetzt zweigleisig: `zLayF` liefert für die CTA-Folie ein
+Fotolayout, und der Zeichner setzt das CTA-Foto selbst, wenn die letzte von
+mehreren Folien kein Foto hat (kein Screenshot, kein Ablauf). Dafür geben
+Editor-Vorschau und die drei Exporte `ctaImage` aus dem Stil mit. Gesichtet
+mit gesetztem Test-CTA: Folie 5 zeigt es mit Text unten.
