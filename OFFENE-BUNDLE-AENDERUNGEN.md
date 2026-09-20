@@ -9343,3 +9343,15 @@ Screenshot- und Ablauf-Folien ausgenommen. Gesichtet mit sieben Folien.
 Das Foto aus 337 (blurred dahinter oder klein ausgeschnitten) gilt nur noch
 für Folgefolien. Das Deckblatt einer Textkachel bleibt reine Fläche. Regler
 `textFotoDeckblatt` 1 schaltet es dort wieder ein. Gesichtet im Raster.
+
+## 279 — Inset überarbeitet: größer, mittig, heller, Text darunter
+
+> Folie 3/16: „Cover mehr mittig zentriert, diese Größe ist irgendwie lame,
+> das Foto zu dunkel — überarbeiten."
+
+Das Foto der Textflächen war .28 breit, der Text darunter links, und die
+Aufhellung aus 327 fehlte, weil der eigene Lader am Deckblatt-Lader
+vorbeigeht. Jetzt: Foto .5 breit (1:1.2) ab .10, Gamma-Aufhellung auf
+`hellZiel` × 1.1, darunter Headline und Unterzeile mittig mit .05 Luft. Die
+Blur-Fassung bekommt dieselbe Aufhellung. Regler `textFotoBreite`,
+`textFotoHoehe`, `textFotoLuft`, `textFotoHell`. Gesichtet mit sieben Folien.

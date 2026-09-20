@@ -9573,6 +9573,54 @@ P.append((
  'textFoto:"blur|inset",textFotoDeckblatt:0,',
  'Regler textFotoDeckblatt 0', 1))
 
+# 279  Inset ueberarbeitet: groesser, mittig, heller, Text darunter
+#
+#      Folie 3/16: "Cover mehr mittig zentriert, diese Groesse ist
+#      irgendwie lame, das Foto zu dunkel - ueberarbeiten."
+#
+#      Das Foto der Textflaechen war .28 breit, oben mittig, der Text
+#      darunter links (Layout brand_text_left) und die Aufhellung aus
+#      327 fehlte, weil zLadeFoto() am Lader u() vorbeigeht. Jetzt:
+#      Foto .5 breit, 1:1.2, ab .10 (bis etwa .58), Gamma-Aufhellung
+#      auf hellZiel x 1.1 wie beim Deckblatt, darunter der Text mittig
+#      mit .05 Luft, Headline .84 breit, Unterzeile ebenfalls mittig.
+#      Die Blur-Fassung bekommt dieselbe Aufhellung.
+
+P.append((
+ 'const zk=Math.max(zo.w/zim.width,zo.h/zim.height),zUeb=zim.height*zk-zo.h,zBias=typeof zo.bias=="number"?zo.bias:0;',
+ 'try{const zZ=Number(BS_KACHEL.hellZiel)||0,zel2=zim.getElement&&zim.getElement();if(zZ>0&&zel2&&zel2.width&&Pe.fabric.Image.filters&&Pe.fabric.Image.filters.Gamma){const zc2=document.createElement("canvas");zc2.width=zc2.height=16;const zx2=zc2.getContext("2d");zx2.drawImage(zel2,0,0,16,16);const zd2=zx2.getImageData(0,0,16,16).data;let zs2=0;for(let zi=0;zi<zd2.length;zi+=4)zs2+=.2126*zd2[zi]+.7152*zd2[zi+1]+.0722*zd2[zi+2];const zm2=zs2/(zd2.length/4),zg2=Math.min(Number(BS_KACHEL.hellGammaMax)||1.7,Math.max(1,Math.pow((zZ*(Number(BS_KACHEL.textFotoHell)||1))/Math.max(1,zm2),Number(BS_KACHEL.hellKraft)||.8)));if(zg2>1.015){zim.filters=(zim.filters||[]).concat([new Pe.fabric.Image.filters.Gamma({gamma:[zg2,zg2,zg2]})]);zim.applyFilters()}}}catch(zz){}const zk=Math.max(zo.w/zim.width,zo.h/zim.height),zUeb=zim.height*zk-zo.h,zBias=typeof zo.bias=="number"?zo.bias:0;',
+ 'zLadeFoto(): Aufhellung per Gamma auf hellZiel x textFotoHell, wie im Deckblatt-Lader', 1))
+
+P.append((
+ 'const zW=r*(Number(BS_KACHEL.textFotoBreite)||.28),zH=zW*1.25,zY=n*(Number(BS_KACHEL.textFotoOben)||.10);',
+ 'const zW=r*(Number(BS_KACHEL.textFotoBreite)||.5),zH=zW*(Number(BS_KACHEL.textFotoHoehe)||1.2),zY=n*(Number(BS_KACHEL.textFotoOben)||.10);',
+ 'Inset: Breite .5 statt .28, Hoehe per textFotoHoehe', 1))
+
+P.append((
+ 'let tt=ge.exactY!=null?n*ge.exactY:BS_KACHEL.lisaUnten===1?n*(Number(BS_KACHEL.lisaTextMitte)||.58):ge.textPos==="top"?n*.24:n*.5;const Qt=ge.textPos==="top"&&BS_KACHEL.lisaUnten!==1?"top":"center";',
+ 'let tt=zInsetUnten>0?zInsetUnten+n*(Number(BS_KACHEL.textFotoLuft)||.05):ge.exactY!=null?n*ge.exactY:BS_KACHEL.lisaUnten===1?n*(Number(BS_KACHEL.lisaTextMitte)||.58):ge.textPos==="top"?n*.24:n*.5;const Qt=zInsetUnten>0?"top":ge.textPos==="top"&&BS_KACHEL.lisaUnten!==1?"top":"center";',
+ 'plate-Zweig: Text unter dem Inset (originY top, Luft textFotoLuft)', 1))
+
+P.append((
+ 'zHt=Pt(zOb?zOb.segments:qe,zOb?zOb.plain:$e,{left:Ye,top:tt,originX:et,originY:Qt,width:r*(kt?.78:ge.exactWidth||(ht?.8:.74)),maxWidth:kt?r*.82:void 0,',
+ 'zHt=Pt(zOb?zOb.segments:qe,zOb?zOb.plain:$e,{left:zInsetUnten>0?r/2:Ye,top:tt,originX:zInsetUnten>0?"center":et,originY:Qt,width:r*(zInsetUnten>0?.84:kt?.78:ge.exactWidth||(ht?.8:.74)),maxWidth:kt?r*.82:void 0,',
+ 'plate-Zweig: Headline unter dem Inset mittig, Breite .84', 1))
+
+P.append((
+ 'goldOk:_t,minFontSize:kt?r*(56/1080):void 0,fill:me,accentFill:Oe,textAlign:lt,lineHeight:',
+ 'goldOk:_t,minFontSize:kt?r*(56/1080):void 0,fill:me,accentFill:Oe,textAlign:zInsetUnten>0?"center":lt,lineHeight:',
+ 'plate-Zweig: Headline unter dem Inset zentriert', 1))
+
+P.append((
+ 'if(zSp&&zUnter(zHt,zSp.unten,me,lt==="left",Ye),',
+ 'if(zSp&&zUnter(zHt,zSp.unten,me,zInsetUnten>0?!1:lt==="left",Ye),',
+ 'plate-Zweig: Unterzeile unter dem Inset zentriert', 1))
+
+P.append((
+ 'textFotoBreite:.28,textFotoOben:.10,',
+ 'textFotoBreite:.5,textFotoHoehe:1.2,textFotoOben:.10,textFotoLuft:.05,textFotoHell:1.1,',
+ 'Regler: textFotoBreite .5, textFotoHoehe 1.2, textFotoLuft .05, textFotoHell 1.1', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
