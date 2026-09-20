@@ -9335,3 +9335,11 @@ Ausschnitt hinter einer Textfläche. Jetzt bekommt die letzte von mehreren
 Folien immer das CTA-Foto als Hintergrund und das Layout
 `brand_photo_gradient` (Regler `ctaLayout`), sobald eines gesetzt ist.
 Screenshot- und Ablauf-Folien ausgenommen. Gesichtet mit sieben Folien.
+
+## 278 — Textkachel: Deckblatt ohne Foto
+
+> „Die erste Slide ohne Foto beim Textkachel."
+
+Das Foto aus 337 (blurred dahinter oder klein ausgeschnitten) gilt nur noch
+für Folgefolien. Das Deckblatt einer Textkachel bleibt reine Fläche. Regler
+`textFotoDeckblatt` 1 schaltet es dort wieder ein. Gesichtet im Raster.

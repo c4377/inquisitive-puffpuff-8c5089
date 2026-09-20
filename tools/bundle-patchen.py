@@ -9556,6 +9556,23 @@ P.append((
  'try{const zCtaBild=i&&typeof i.ctaImage=="string"&&i.ctaImage.length>5?i.ctaImage:"",zLetzte=(Number(i.totalSlides)||1)>1&&(i.slideIndex||0)===(Number(i.totalSlides)||1)-1,zHatBg=typeof t.background=="string"&&t.background.length>5;if(zLetzte&&t.overlayIsScreenshot!==!0&&t.karte!=="ablauf"&&(zCtaBild||(t.isCtaSlide===!0&&zHatBg))){const zL=String(t.layout||""),zBrand=zL.indexOf("brand_")===0||BS_KACHEL.folgeLayouts===1,zLay2=BS_KACHEL.ctaLayout||"brand_photo_gradient";t={...t,background:zCtaBild||t.background,isCtaSlide:!0,textBands:zBrand?void 0:t.textBands,layout:zBrand?zLay2:t.layout,layoutId:zBrand?zLay2:t.layoutId}}}catch(zz){}',
  'Zeichner: letzte Folie traegt immer das CTA-Foto vollflaechig (Fotolayout, kein Band), wenn eines gesetzt ist', 1))
 
+# 278  Textkachel: Deckblatt ohne Foto
+#
+#      "Die erste Slide ohne Foto beim Textkachel." Das Foto aus 337
+#      (blurred dahinter / klein ausgeschnitten) gilt nur noch fuer
+#      Folgefolien; das Deckblatt einer Textkachel bleibt reine Flaeche.
+#      Regler textFotoDeckblatt 1 schaltet es dort wieder ein.
+
+P.append((
+ 'const zTF=(()=>{try{if(!BS_KACHEL.textFoto||t.overlayIsScreenshot===!0)return null;',
+ 'const zTF=(()=>{try{if(!BS_KACHEL.textFoto||t.overlayIsScreenshot===!0)return null;if((i.slideIndex||0)===0&&BS_KACHEL.textFotoDeckblatt!==1)return null;',
+ 'plate-Zweig: kein Foto (blur/inset) auf dem Deckblatt, nur Folgefolien', 1))
+
+P.append((
+ 'textFoto:"blur|inset",',
+ 'textFoto:"blur|inset",textFotoDeckblatt:0,',
+ 'Regler textFotoDeckblatt 0', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
