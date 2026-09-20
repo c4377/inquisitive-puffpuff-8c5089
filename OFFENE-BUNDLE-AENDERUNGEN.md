@@ -9288,3 +9288,27 @@ Screenshot-Folien laufen durch den Band-Zweig, der den Namen fest in
 Hook-Zeile war schon grundabhängig. Jetzt: ohne Foto und Grund heller als 150
 → `nameFarbeHell`, sonst wie bisher. Nachgestellt mit Screenshot ohne Foto
 (weiß) und mit Foto.
+
+## 275 — Reine Textfolien zeigen sie trotzdem: blurred oder klein
+
+> „Ich würde gerne bei den reinen Textposts dennoch mich zeigen, blurred im
+> Hintergrund oder einfach klein ausgeschnitten als Bild — ohne was ist das
+> nix."
+
+**Woher das Foto.** Folgefolien tragen kein Foto. Beim Zeichnen einer Folie
+mit Foto merkt sich der Zeichner das Foto je Tag (`window.__bsTagFoto`,
+Deckblatt hat Vorrang). Textflächen ohne eigenes Foto nehmen das Foto ihres
+Tages, sonst eines aus der Bilderliste nach Text-Hash. Im Plan wird nichts
+gespeichert, das würde den Speicher vervielfachen.
+
+**Zwei Fassungen im Wechsel:**
+
+| | |
+|---|---|
+| `blur` | Foto vollflächig, Blur .45, darüber die Fläche mit Deckkraft .8 |
+| `inset` | Fläche deckend, darüber ein Hochformat-Ausschnitt .28 breit ab .10, Zuschnitt nach oben versetzt |
+
+Die Headline rückt beim Inset bei Bedarf kleiner oder tiefer.
+Screenshot-Folien bleiben ohne. Regler: `textFoto`, `textFotoDeck`,
+`textFotoBlur`, `textFotoBreite`, `textFotoOben`. Gesichtet: fünf Folien und
+Raster.

@@ -9435,6 +9435,54 @@ P.append((
  'fill:tt.platten?(tt.bandSchriftFarbe||tt.schriftFarbe||"#241C16"):(!$e&&w(String(zGrundTon||"#000000"))>150?(BS_KACHEL.nameFarbeHell||"rgba(0,0,0,0.5)"):(BS_KACHEL.nameFarbe||"#FFFFFF")),opacity:(BS_KACHEL.nameDeckkraft||.55),selectable:!1}))',
  'Band-Zweig: Name auf hellem Grund ohne Foto dunkel (Screenshot-Folien auf Weiss)', 1))
 
+# 275  Reine Textfolien zeigen sie trotzdem: blurred oder klein
+#
+#      "Ich wuerde gerne bei den reinen Textposts dennoch mich zeigen,
+#      blurred im Hintergrund oder einfach klein ausgeschnitten als
+#      Bild - ohne was ist das nix."
+#
+#      WOHER DAS FOTO: Folgefolien tragen kein Foto. Beim Zeichnen
+#      einer Folie MIT Foto merkt sich Ca das Foto je Tag
+#      (window.__bsTagFoto[_tag], Deckblatt hat Vorrang). Textflaechen
+#      ohne eigenes Foto nehmen das Foto ihres Tages; fehlt auch das,
+#      ein Foto aus window.__bsBilder nach Text-Hash. Nichts wird im
+#      Plan gespeichert (Fotos sind Data-URLs, das wuerde den Speicher
+#      vervielfachen).
+#
+#      ZWEI FASSUNGEN im Wechsel ((_tag + slideIndex) % 2):
+#        blur   Foto vollflaechig, auf 720 px verkleinert, Blur .45,
+#               darueber die Flaeche mit Deckkraft .8 - auf Weiss ein
+#               heller Schleier, auf Schwarz ein dunkler.
+#        inset  Flaeche deckend, darueber ein Hochformat-Ausschnitt
+#               .28 breit (1:1.25) ab .10, Zuschnitt nach oben
+#               versetzt (bias .35, Gesichter). Die Headline rueckt bei
+#               Bedarf kleiner oder tiefer, damit sie nicht ins Foto
+#               laeuft.
+#      Screenshot-Folien bleiben ohne.
+#
+#      GESICHTET: 5 Folien (Weiss blur, Schwarz inset, Weiss blur,
+#      Schwarz inset), Raster mit buntem Testfoto.
+
+P.append((
+ 'try{if(typeof window<"u"&&typeof t.background=="string"&&t.background){const zL=window.__bsBilder=window.__bsBilder||[];if(zL.indexOf(t.background)<0)zL.push(t.background)}}catch(zz){}',
+ 'try{if(typeof window<"u"&&typeof t.background=="string"&&t.background){const zL=window.__bsBilder=window.__bsBilder||[];if(zL.indexOf(t.background)<0)zL.push(t.background);if(typeof t._tag=="number"&&((i.slideIndex||0)===0||!(window.__bsTagFoto||{})[String(t._tag)])){const zT=window.__bsTagFoto=window.__bsTagFoto||{};zT[String(t._tag)]=t.background}}}catch(zz){}',
+ 'Merkliste window.__bsTagFoto: Foto je Tag beim Zeichnen einer Folie mit Foto', 1))
+
+P.append((
+ 'if(Yt&&Yt.base==="plate"){const ge=Yt,Fe=ge&&ge.plateColor?ge.plateColor:(BS_KACHEL.lisaGrund||zGrund(t.plateOverride||t.backgroundColor||"#E8E8E8")),me=zFarbe(Fe),Oe=me;if(e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:Fe,selectable:!1})),',
+ 'if(Yt&&Yt.base==="plate"){const ge=Yt,Fe=ge&&ge.plateColor?ge.plateColor:(BS_KACHEL.lisaGrund||zGrund(t.plateOverride||t.backgroundColor||"#E8E8E8")),me=zFarbe(Fe),Oe=me;const zTF=(()=>{try{if(!BS_KACHEL.textFoto||t.overlayIsScreenshot===!0)return null;const zL=String(BS_KACHEL.textFoto).split("|").filter(Boolean);if(!zL.length)return null;const zReg=(typeof window<"u"&&window.__bsTagFoto)||{};let zF=$?t.background:(zReg[String(t._tag)]||"");if(!zF){const zB=(typeof window<"u"&&window.__bsBilder)||[];if(zB.length){let zh=0;const zs=String(t.text||"");for(let zi=0;zi<zs.length;zi++)zh=(zh*31+zs.charCodeAt(zi))%99991;zF=zB[zh%zB.length]}}if(!zF)return null;const zArt=zL[((Number(t._tag)||0)+(i.slideIndex||0))%zL.length];return zArt&&zArt!=="keins"?{url:zF,art:zArt}:null}catch(zz){return null}})(),zLadeFoto=(zu,zo)=>new Promise(zr=>{let zd=!1;const zf=()=>{zd||(zd=!0,zr())};setTimeout(zf,6e3);try{Pe.fabric.Image.fromURL(zu,zim=>{if(!zim)return zf();try{const zel=zim.getElement&&zim.getElement(),zMax=zo.blur?720:1400;if(zel&&zel.width&&Math.max(zel.width,zel.height)>zMax){const zs=zMax/Math.max(zel.width,zel.height),zc=document.createElement("canvas");zc.width=Math.round(zel.width*zs);zc.height=Math.round(zel.height*zs);zc.getContext("2d").drawImage(zel,0,0,zc.width,zc.height);zim.setElement(zc)}const zk=Math.max(zo.w/zim.width,zo.h/zim.height),zUeb=zim.height*zk-zo.h,zBias=typeof zo.bias=="number"?zo.bias:0;zim.set({originX:"center",originY:"center",left:zo.x+zo.w/2,top:zo.y+zo.h/2+zUeb*zBias,scaleX:zk,scaleY:zk,selectable:!1,evented:!1});if(zo.clip)zim.clipPath=new Pe.fabric.Rect({left:zo.x,top:zo.y,width:zo.w,height:zo.h,absolutePositioned:!0});if(zo.blur&&Pe.fabric.Image.filters&&Pe.fabric.Image.filters.Blur){zim.filters=[new Pe.fabric.Image.filters.Blur({blur:zo.blur})];try{zim.applyFilters()}catch(zz){zim.filters=[]}}e.add(zim);zf()}catch(zz){zf()}},{crossOrigin:"anonymous"})}catch(zz){zf()}});let zInsetUnten=0;if(zTF&&zTF.art==="blur")await zLadeFoto(zTF.url,{x:0,y:0,w:r,h:n,blur:Number(BS_KACHEL.textFotoBlur)||.45,bias:.15});if(e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:zTF&&zTF.art==="blur"?G(Fe,Number(BS_KACHEL.textFotoDeck)||.8):Fe,selectable:!1})),zTF&&zTF.art==="inset"){const zW=r*(Number(BS_KACHEL.textFotoBreite)||.28),zH=zW*1.25,zY=n*(Number(BS_KACHEL.textFotoOben)||.10);await zLadeFoto(zTF.url,{x:r/2-zW/2,y:zY,w:zW,h:zH,clip:!0,bias:.35});zInsetUnten=zY+zH}if(',
+ 'plate-Zweig: zTF waehlt blur oder inset, zLadeFoto() zeichnet das Foto (blurred hinter der Flaeche oder klein ausgeschnitten oben)', 1))
+
+P.append((
+ 'maxBottom:zSp?(kt?n*.72:Ke)-n*.1:kt?n*.72:Ke});if(zSp&&zUnter(zHt,zSp.unten,me,lt==="left",Ye),',
+ 'maxBottom:zSp?(kt?n*.72:Ke)-n*.1:kt?n*.72:Ke});try{if(zInsetUnten>0&&zHt&&zHt.originY==="center"){const zGr2=zInsetUnten+n*.035;let zi2=0;for(;zHt.top-(zHt.height||0)/2<zGr2&&zHt.fontSize>12&&zi2<80;zi2+=1)zHt.set("fontSize",zHt.fontSize-1),zHt.initDimensions&&zHt.initDimensions();if(zHt.top-(zHt.height||0)/2<zGr2){zHt.set("top",zGr2+(zHt.height||0)/2);zHt.setCoords&&zHt.setCoords()}}}catch(zz){}if(zSp&&zUnter(zHt,zSp.unten,me,lt==="left",Ye),',
+ 'plate-Zweig: Headline weicht dem Inset aus (kleiner, sonst tiefer)', 1))
+
+P.append((
+ 'lisaSchrift:"Playfair Display",',
+ 'lisaSchrift:"Playfair Display",textFoto:"blur|inset",textFotoDeck:.8,textFotoBlur:.45,textFotoBreite:.28,textFotoOben:.10,',
+ 'Regler: textFoto "blur|inset", textFotoDeck .8, textFotoBlur .45, textFotoBreite .28, textFotoOben .10', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
