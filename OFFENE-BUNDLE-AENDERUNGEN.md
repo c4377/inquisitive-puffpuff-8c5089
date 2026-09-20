@@ -9277,3 +9277,14 @@ Versal-Helfer `Te()` und `Se()` von 14/15 auf 21/22. Gesichtet im Karussell.
 
 `lisaKapitel` .022 → .033, `Te()` 21 → 32, `Se()` 22 → 33. Gegenüber 333 das
 2,25-fache. Gesichtet im Karussell.
+
+## 274 — Screenshot-Folie auf Weiß: Name war weiß
+
+> „Weiße Posts erhalten am Cover eine weiße Schrift, wenn sie mit Screenshot
+> sind."
+
+Screenshot-Folien laufen durch den Band-Zweig, der den Namen fest in
+`nameFarbe` (helles Creme) zeichnet, auf weißem Grund also unsichtbar. Die
+Hook-Zeile war schon grundabhängig. Jetzt: ohne Foto und Grund heller als 150
+→ `nameFarbeHell`, sonst wie bisher. Nachgestellt mit Screenshot ohne Foto
+(weiß) und mit Foto.

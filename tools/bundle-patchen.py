@@ -9420,6 +9420,21 @@ P.append((
  'originY:Qe,fontSize:c(33),fontFamily:"Montserrat",fontWeight:"500",fill:Oe,charSpacing:300',
  'Versalzeile Se(): 33', 1))
 
+# 274  Screenshot-Folie auf Weiss: Name war weiss
+#
+#      "Weisse Posts erhalten am Cover eine weisse Schrift, wenn sie mit
+#      Screenshot sind." Screenshot-Folien laufen durch den Band-Zweig,
+#      der den Namen fest in nameFarbe (helles Creme, .55) zeichnet -
+#      auf weissem Grund unsichtbar bzw. weiss. Die Hook-Zeile selbst war
+#      schon grundabhaengig (zTint). Jetzt: ohne Foto und Grund heller
+#      als 150 -> nameFarbeHell (halbtransparentes Schwarz), sonst wie
+#      bisher. Nachgestellt: Screenshot ohne Foto (weiss) und mit Foto.
+
+P.append((
+ 'fill:tt.platten?(tt.bandSchriftFarbe||tt.schriftFarbe||"#241C16"):(BS_KACHEL.nameFarbe||"#FFFFFF"),opacity:(BS_KACHEL.nameDeckkraft||.55),selectable:!1}))',
+ 'fill:tt.platten?(tt.bandSchriftFarbe||tt.schriftFarbe||"#241C16"):(!$e&&w(String(zGrundTon||"#000000"))>150?(BS_KACHEL.nameFarbeHell||"rgba(0,0,0,0.5)"):(BS_KACHEL.nameFarbe||"#FFFFFF")),opacity:(BS_KACHEL.nameDeckkraft||.55),selectable:!1}))',
+ 'Band-Zweig: Name auf hellem Grund ohne Foto dunkel (Screenshot-Folien auf Weiss)', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
