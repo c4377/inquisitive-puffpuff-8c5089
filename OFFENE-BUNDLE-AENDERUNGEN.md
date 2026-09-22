@@ -9790,3 +9790,25 @@ Cover fällt Prosa wie „normal" auf die bisherige Textbox zurück. Regler:
 
 Gesichtet: ihr Schlusstext (18 Zeilen) auf Tagesfoto — alles lesbar, keine
 Bullets, passt in die Karte.
+
+## 302 — „Rahmen Layout raus und Layouts generell die wir nicht verwenden löschen"
+
+Drei Stellen:
+
+1. **Cover-Rotation** (`layoutReihe`): nur noch Foto Verlauf / unten links /
+   oben / Mitte und die vier Text-Flächen (hell, dunkel-links, oben,
+   minimal). Raus: alle Rahmen-Layouts, Polaroid, Bigword, Zitat, Serif,
+   Statement, Kicker-Lead, Bold-oben. `folgeReihe` (nur noch Fallback, falls
+   `folgeFoto` aus) ebenso bereinigt.
+2. **Gespeicherte Rahmen-Layouts** (Tag 17, 14, 9, 6, 4 im Plan) werden beim
+   Zeichnen auf „Foto Verlauf" umgeleitet — direkt beim Layout-Schlüssel,
+   damit auch die Sonderregel „Rahmen-Layouts laden das Foto selbst" nicht
+   mehr greift. Die Layout-Definitionen bleiben im Code, sind aber
+   unerreichbar.
+3. **Layout-Wähler**: statt rund dreißig Einträgen zehn — vier Foto-Cover,
+   „Foto Folgefolie", „Foto Highlight", vier Text-Flächen („Text-Fläche
+   hell", „Text-Fläche dunkel", „Fläche oben", „Minimal"). Die alten
+   Nicht-brand-Layouts (editorial_classic, cover_* usw.) sind raus.
+
+Gesichtet: Cover mit gespeichertem Rahmen-Layout und Foto rendert als volles
+Foto mit Text, kein Rahmen.

@@ -10655,6 +10655,55 @@ P.append((
  'title:"Geladene Datei",children:"karten364"',
  'Versionsschild auf karten364', 1))
 
+
+# --- karten365: Rahmen-Layouts raus, Layout-Waehler auf das Verwendete
+#     reduziert ----------------------------------------------------------------
+#
+#     "Rahmen Layout raus und Layouts generell die wir nicht verwenden loeschen"
+#
+#     Drei Stellen:
+#      1. Cover-Rotation layoutReihe: nur noch Foto Verlauf/unten links/oben/
+#         Mitte und die vier Text-Flaechen (hell, dunkel-links, oben, minimal).
+#         Raus: alle brand_frame_*, brand_photo_frame, Bigword, Zitat, Serif,
+#         Statement, Kicker-Lead, Bold-oben. folgeReihe (nur noch Fallback,
+#         falls folgeFoto aus) ebenso bereinigt.
+#      2. Gespeicherte Rahmen-Layouts (Tag 17, 14, 9, 6, 4 im Plan) werden
+#         beim Zeichnen auf brand_photo_gradient umgeleitet - direkt bei D,
+#         damit auch die E-Liste (Rahmen-Layouts laden das Foto nicht ueber
+#         u()) nicht mehr greift. Die lr-Eintraege bleiben stehen, sind aber
+#         unerreichbar.
+#      3. Layout-Waehler (TT): statt ~30 Eintraegen zehn - vier Foto-Cover,
+#         Foto Folgefolie, Foto Highlight, vier Text-Flaechen. Die alten
+#         Nicht-brand-Layouts (editorial_classic, cover_* usw.) sind raus.
+#
+#     GESICHTET: Cover mit gespeichertem brand_frame_left + Foto rendert
+#     als volles Foto mit Text, kein Rahmen.
+
+P.append((
+ 'layoutReihe:"brand_photo_bottom_left|brand_text_quote|brand_frame_top_text|brand_photo_top|brand_text_left|brand_photo_gradient|brand_photo_center|brand_text_plate|brand_photo_bottom_serif|brand_frame_top_text|brand_photo_bigword|brand_text_statement|brand_photo_quote|brand_frame_left|brand_text_plate_top|brand_photo_bottom_left|brand_text_bigword|brand_photo_frame|brand_text_minimal|brand_photo_top"',
+ 'layoutReihe:"brand_photo_bottom_left|brand_text_plate|brand_photo_top|brand_text_left|brand_photo_gradient|brand_photo_center|brand_text_plate_top|brand_text_minimal"',
+ 'layoutReihe bereinigt', 1))
+
+P.append((
+ 'folgeReihe:"brand_text_quote|brand_text_left|brand_text_plate_top|brand_text_statement|brand_text_minimal|brand_text_bigword|brand_text_kicker_lead|brand_text_bold_top"',
+ 'folgeReihe:"brand_text_left|brand_text_plate_top|brand_text_minimal|brand_text_plate"',
+ 'folgeReihe bereinigt', 1))
+
+P.append((
+ 'let D=t.layout||"centered_focus";',
+ 'let D=t.layout||"centered_focus";/^brand_(frame_|photo_frame)/.test(D)&&(D="brand_photo_gradient");',
+ 'Rahmen-Layouts -> Foto Verlauf', 1))
+
+P.append((
+ 'TT=({currentLayout:e,onUpdate:t})=>{const r=[{id:"brand_photo_gradient",name:"Foto Verlauf",icon:Bu,description:"Text unten auf Foto"},{id:"brand_photo_bottom_left",name:"Foto unten links",icon:CA,description:"Text unten links"},{id:"brand_photo_highlight",name:"Foto Highlight",icon:Xh,description:"Weißer Text, lila Highlight"},{id:"brand_photo_top",name:"Foto oben",icon:CA,description:"Text oben auf Foto"},{id:"brand_photo_center",name:"Foto Mitte",icon:vo,description:"Text mittig auf Foto"},{id:"brand_photo_bigword",name:"Foto Big-Word",icon:vo,description:"Riesenwort auf Foto"},{id:"brand_photo_quote",name:"Foto Zitat",icon:Xh,description:"Kicker + Zitat"},{id:"brand_photo_bottom_serif",name:"Foto Serif",icon:xc,description:"Serif unten + Fuß"},{id:"brand_photo_frame",name:"Foto gerahmt",icon:P2,description:"Foto im Rahmen"},{id:"brand_frame_top_text",name:"Rahmen Text oben",icon:P2,description:"Text über Rahmen"},{id:"brand_frame_left",name:"Rahmen links",icon:_3,description:"Rahmen versetzt"},{id:"brand_frame_polaroid",name:"Polaroid",icon:XA,description:"Foto wie Polaroid"},{id:"brand_text_plate",name:"Text-Fläche",icon:XA,description:"Text mittig, Rahmen"},{id:"brand_text_plate_top",name:"Fläche oben",icon:CA,description:"Text oben"},{id:"brand_text_left",name:"Fläche links",icon:CA,description:"Text linksbündig"},{id:"brand_text_bigword",name:"Big-Word",icon:vo,description:"Riesenwort-Statement"},{id:"brand_text_quote",name:"Zitat-Fläche",icon:Xh,description:"Kicker + Zitat"},{id:"brand_text_statement",name:"Statement",icon:xc,description:"Aussage + Fußzeile"},{id:"brand_text_kicker_lead",name:"Kicker-Lead",icon:xc,description:"Kicker führt ein"},{id:"brand_text_minimal",name:"Minimal",icon:XA,description:"Nur Text, ruhig"},{id:"brand_text_bold_top",name:"Bold oben links",icon:vo,description:"Großer Text oben links"},{id:"editorial_classic",name:"Classic Center",icon:XA,description:"Klarer, zentrierter Text"},{id:"minimal_quote",name:"Quote Focus",icon:Xh,description:"Zitat-Stil, ruhig"},{id:"maximized_bold",name:"Impact Text",icon:vo,description:"Großer Aussage-Text"},{id:"paper_box",name:"Paper Box",icon:xc,description:"Text auf ruhiger Fläche"},{id:"cover_top_center",name:"Cover Oben",icon:CA,description:"Titel oben auf Foto"},{id:"cover_center_hero",name:"Cover Mitte",icon:vo,description:"Großer Titel mittig"},{id:"cover_bottom_center",name:"Cover Unten",icon:L3,description:"Titel unten zentriert"},{id:"cover_top_left",name:"Cover Oben Links",icon:T3,description:"Titel oben links"},{id:"cover_bottom_left",name:"Cover Unten Links",icon:N3,description:"Titel unten links"}];',
+ 'TT=({currentLayout:e,onUpdate:t})=>{const r=[{id:"brand_photo_gradient",name:"Foto Verlauf",icon:Bu,description:"Text unten auf Foto"},{id:"brand_photo_bottom_left",name:"Foto unten links",icon:CA,description:"Text unten links"},{id:"brand_photo_top",name:"Foto oben",icon:CA,description:"Text oben auf Foto"},{id:"brand_photo_center",name:"Foto Mitte",icon:vo,description:"Text mittig auf Foto"},{id:"brand_photo_folge",name:"Foto Folgefolie",icon:vo,description:"Aufbau + Pointe auf Foto"},{id:"brand_photo_highlight",name:"Foto Highlight",icon:Xh,description:"Weißer Text, lila Highlight"},{id:"brand_text_plate",name:"Text-Fläche hell",icon:XA,description:"Text mittig, weißer Grund"},{id:"brand_text_left",name:"Text-Fläche dunkel",icon:CA,description:"Text linksbündig, schwarzer Grund"},{id:"brand_text_plate_top",name:"Fläche oben",icon:CA,description:"Text oben, weißer Grund"},{id:"brand_text_minimal",name:"Minimal",icon:XA,description:"Nur Text, ruhig"}];',
+ 'Layout-Waehler auf verwendete Layouts reduziert', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten364"',
+ 'title:"Geladene Datei",children:"karten365"',
+ 'Versionsschild auf karten365', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
