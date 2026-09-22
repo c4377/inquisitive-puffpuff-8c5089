@@ -9533,3 +9533,53 @@ zentriert. Nicht umgesetzt: die Nummer als eigene, abgesetzte Kicker-Zeile —
 nächster Schritt, falls gewünscht. Gesichtet: vier Beispiel-Folien aus
 ihrem eigenen Text, drei korrekt linksbündig, ein kurzer Zweisatz blieb
 zentriert.
+
+## 293 — „Das ist hässlich. Ein generelles Design hinterfragen wäre es gewesen."
+
+> „Es tut mir leid das ist hässlich. Ein generelles Design hinterfragen
+> wäre es gewesen."
+
+292 hat nur die Ausrichtung repariert, aber weiterhin ihre Schrittfolgen
+und Listen durch `Pt()` gezeichnet — eine einzige automatisch umbrechende
+Textbox, die die von ihr selbst gesetzten Zeilenumbrüche verschluckt und
+alles zu einem Absatz verschmilzt. Das war der eigentliche Fehler, nicht
+nur die Ausrichtung. Ein zweiter, gründlicherer Design-Agent (Senior
+Editorial Art Director, mit ihrem ganzen 30-Tage-Text gebrieft) hat ein
+Rollen-System für sieben Folientypen vorgeschlagen (Cover-Hook, Schritt,
+Kurz-Aussage, Frage-Kaskade, Beweis/Screenshot, Wendepunkt-Prosa, CTA).
+Umgesetzt wurden die zwei Rollen, die 292 sichtbar am schlechtesten
+getroffen hat:
+
+1. **Schrittfolge** (führende Nummer, z. B. „01 — ..."). Die Nummer wird
+   zu einem eigenen, großen Element (kein Fließtext mehr), das Label
+   darunter, dann jede weitere Original-Zeile als eigener Block mit
+   eigenem Zeilenabstand — nichts verschmilzt mehr. „Nicht ..."-Zeilen
+   stehen gedimmt (50 % Deckkraft), eine folgende „Sondern ..."-Zeile
+   steht betont.
+2. **Liste / Fragenkaskade** (mindestens drei Zeilen, keine Nummer, stark
+   wechselnde Zeilenlänge — dieselbe Erkennung wie in 292). Jede Zeile
+   eigener Block mit kleinem Gedankenstrich davor, gleichmäßiges Gewicht,
+   engerer Zeilenabstand.
+
+Beide Fälle schrumpfen automatisch in mehreren Stufen, falls der Text auch
+gestapelt nicht in die Karte passt (bis zu 20 % der Ausgangsgröße). Die
+Schriftwahl repliziert exakt `Pt()`s eigene Logik (neuer Helfer `zFont()`)
+— sonst wäre der Text versehentlich auf die serifige Deckblatt-Schrift
+zurückgefallen statt auf die serifenlose Textkachel-Schrift, die 290/291
+extra eingeführt haben.
+
+Umgesetzt in gradient- und plate-Zweig, ausdrücklich auch fürs Deckblatt
+(Folie 0) — der Inhalt entscheidet über die Rolle, nicht die Folienposition.
+Kurze normale Sätze und echte Fließtext-Absätze laufen unverändert über
+`Pt()`. Der frame-Zweig bleibt unverändert. Nicht umgesetzt: die restlichen
+fünf Rollen aus dem Agent-Vorschlag (Kurz-Aussage/Zitat mit großem
+Anführungszeichen, Beweis/Screenshot-Caption, Wendepunkt-Lead+Prosa,
+eigenständiges CTA-Layout mit Signatur-Element) — nächster Schritt, falls
+gewünscht.
+
+Gesichtet: ihre eigene Schrittfolge aus 292s Test (passt gestapelt ohne
+Überlauf in die Karte, „Nicht"-Zeilen sichtbar gedimmt), eine vierzeilige
+Fragenkaskade ohne Nummer (Gedankenstrich-Liste), ein kurzer normaler Satz
+(unverändert zentriert über `Pt()`), dieselbe Schrittfolge im gradient-Zweig
+ohne eigenes Foto (Verlaufshintergrund statt Karte). Alle vier korrekt
+serifenlos in HelveticaNeueBrand, keine Überläufe.

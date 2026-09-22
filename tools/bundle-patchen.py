@@ -10189,6 +10189,61 @@ P.append((
  'ht=t.alignLocked&&t.textAlign?t.textAlign==="left":(ge.align==="left"&&!(t.warmEditorial&&(i.slideIndex||0)===0))||(!t.alignLocked&&zAusrichtung(t.text).left),Ye=ht?r*.1:r/2',
  'plate-Zweig: Linksbuendigkeit auch bei erkanntem Listentext', 1))
 
+
+# --- karten355: strukturierter Mehrzeilen-Text statt einer verschmelzenden
+#     Textbox (Reaktion auf "Es tut mir leid das ist haesslich. Ein
+#     generelles Design hinterfragen waere es gewesen.") -----------------
+#
+#     karten354 hat nur die AUSRICHTUNG von Listen-/Schrittfolgen-Text auf
+#     links umgestellt, aber weiterhin per Pt() eine einzige automatisch
+#     umbrechende Textbox gezeichnet - die von ihr gesetzten Zeilenumbrueche
+#     wurden dabei verschluckt und alles floss zu einem Absatz zusammen.
+#     Das war der eigentliche Fehler, nicht nur die Ausrichtung.
+#
+#     Neu: zRolle() klassifiziert den Text (Schrittfolge mit fuehrender
+#     Nummer / Liste mit stark wechselnder Zeilenlaenge / normal) und
+#     zStapel() zeichnet Schrittfolgen und Listen als eigene, gestapelte
+#     Bloecke statt einer verschmelzenden Textbox:
+#      - Schrittfolge: Nummer als grosses eigenes Element, Label darunter,
+#        jede weitere Zeile eigener Block; "Nicht ..."-Zeilen gedimmt,
+#        "Sondern ..."-Zeilen betont.
+#      - Liste (z.B. Fragenkaskade): jede Zeile eigener Block mit kleinem
+#        Gedankenstrich davor, gleichmaessiges Gewicht.
+#      - Automatische Schriftgroessen-Schrumpfung, falls der Text auch
+#        gestapelt nicht in die Karte passt.
+#     Die Schriftwahl repliziert exakt Pt()s eigene Logik (zFont()), damit
+#     der Text nicht versehentlich auf die serifige Deckblatt-Schrift
+#     zurueckfaellt statt der serifenlosen Textkachel-Schrift.
+#
+#     UMGESETZT in gradient- und plate-Zweig, jeweils auch fuers Deckblatt
+#     (Slide 0) - der Inhalt entscheidet, nicht die Folienposition. Der
+#     frame-Zweig (kleines Foto + grosses Wort) bleibt unveraendert.
+#
+#     GESICHTET: die Schrittfolge aus karten354s eigenem Test (grosse
+#     Nummer, gedimmte "Nicht"-Zeilen, passt ohne Ueberlauf in die Karte)
+#     sowie eine vierzeilige Fragenkaskade ohne Nummer (Gedankenstrich-
+#     Liste). Kurze normale Saetze laufen unveraendert ueber Pt().
+
+P.append((
+ 'return{left:zMin/zMax<.5}}catch(zz){return{left:!1}}},zGrund=zg=>{',
+ 'return{left:zMin/zMax<.5}}catch(zz){return{left:!1}}},zRolle=zx=>{try{const zL=String(zx||"").split(/\\r?\\n/).map(zq=>zq.trim()).filter(Boolean);const zN=zL.length;if(zN>=2&&/^\\d{1,2}\\s*[\\u2014\\u2013.)-]/.test(zL[0]||""))return"schritt";if(zN<3)return"normal";const zLens=zL.map(zq=>zq.replace(/\\*/g,"").length);const zMax=Math.max.apply(null,zLens),zMin=Math.min.apply(null,zLens);if(!(zMax>0))return"normal";return zMin/zMax<.5?"liste":"normal"}catch(zz){return"normal"}},zGrund=zg=>{',
+ 'Helfer zAusrichtung() um zRolle() ergaenzt: erkennt Nummerierte-Schritt- und Listen-Text zusaetzlich zur reinen Links/Zentriert-Frage', 1))
+
+P.append((
+ 'e.add(zt)}catch(zz){}},lr={brand_photo_gradient:',
+ 'e.add(zt)}catch(zz){}},zFont=(zHatFoto)=>{try{if(t.warmEditorial){let zY=Ct();if(t.isTextTile===!0&&!zHatFoto){const zP=t.plateFont||(i.typography&&i.typography.plateFontFamily)||"HelveticaNeueBrand";if(t.headlineFontChosen===!0||Bt(zP))zY=zP}return zY}const zQe=t.serifHeadline===!1||(t.boldMode===!0&&(typeof t.boldStyle=="number"?t.boldStyle:-1)===0);return zQe?"Montserrat":(BS_KACHEL.lisaSchrift||m)}catch(zz){return BS_KACHEL.lisaSchrift||"HelveticaNeueBrand"}},zStapel=(zRl,zText,zOpt)=>{try{const zL=String(zText||"").split(/\\r?\\n/).map(zq=>zq.trim()).filter(Boolean);if(!zL.length)return null;const zFam=zOpt.fontFamily||Ct(),zLeft=zOpt.left,zW=zOpt.width,zFill=zOpt.fill,zAcc=zOpt.accentFill||zFill,zBase=zOpt.fontSize,zTop=zOpt.top,zMax=zOpt.maxBottom||n*.92,zClean=zq=>zq.replace(/\\*/g,"");const zNumM=zRl==="schritt"?/^(\\d{1,2})\\s*[\\u2014\\u2013.)-]?\\s*(.*)$/.exec(zL[0]):null;const zSpecs=[];let zRest=zL;if(zNumM){zSpecs.push({txt:zNumM[1],sz:2.5,wt:"700",fill:zAcc,gap:0});const zLabel=zClean(zNumM[2]||"").trim();zLabel&&zSpecs.push({txt:zLabel,sz:.92,wt:"700",fill:zFill,gap:.16});zRest=zL.slice(1)}zRest.forEach((zln,zi)=>{let zf=zFill,zwt="600";/^(nicht|kein|keine)\\b/i.test(zln)?(zf=G(zFill,.5),zwt="500"):/^(sondern|stattdessen)\\b/i.test(zln)&&(zf=zAcc,zwt="700");const zsz=zRl==="schritt"?.54:.64,ztxt=zRl==="liste"?"\\u2014  "+zln:zln;zSpecs.push({txt:ztxt,sz:zsz,wt:zwt,fill:zf,gap:zi===0?(zNumM?.22:.18):.15})});const zBauen=zScale=>{let zY=zTop;const zBx=[];for(const zs of zSpecs){zY+=zs.gap*zBase*zScale;const zt=new Pe.fabric.Textbox(zClean(zs.txt),{left:zLeft,top:zY,originX:"left",originY:"top",width:zW,fontSize:Math.max(10,zs.sz*zBase*zScale),fontFamily:zFam,fontWeight:Xt(zFam,zs.wt),fill:zs.fill,lineHeight:1.1,shadow:zOpt.shadow,selectable:!1});zY+=zt.height||0,zBx.push(zt)}return{bx:zBx,bottom:zY}};let zScale=1,zErg=zBauen(zScale);for(let zi=0;zi<45&&zErg.bottom>zMax&&zScale>.2;zi+=1)zScale-=.02,zErg=zBauen(zScale);zErg.bx.forEach(zt=>e.add(zt));return{top:zTop,height:zErg.bottom-zTop,originY:"top",originX:"left",bottom:zErg.bottom}}catch(zz){return null}},lr={brand_photo_gradient:',
+ 'Helfer zFont() (repliziert Pt()s Schriftwahl) und zStapel() (zeichnet mehrzeiligen Text als eigene, nicht verschmolzene Bloecke statt einer auto-umbrechenden Textbox) ergaenzt', 1))
+
+P.append((
+ 'const zSp=BS_KACHEL.lisaTeilen!==0&&!Ye&&!ge.bigWord&&!t.secondaryText&&!kt?zTeilen($e?$e.rest:t.text,!1):null,zOb=zSp?ye(zSp.oben):null,zHt=Pt(zOb?zOb.segments:ht,zOb?zOb.plain:qe,{left:br,top:ae,originX:sr,originY:De,width:r*(Ze?ot:kt?.46:ge.exactWidth||(_t?.82:.86)),maxWidth:Qt?void 0:Ze?r*dt:void 0,fontSize:Qt&&t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):Ze?k()*zGr():t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):c(ve),minFontSize:Ze?T()*zGr():void 0,goldOk:ur,fill:me,accentFill:Oe,textAlign:Ht,lineHeight:ge.bigWord?.98:t.warmEditorial?1.04:1.12,fontWeight:"700",shadow:se(),maxBottom:zSp?Ke-n*.1:Ke});if(zSp&&zUnter(zHt,zSp.unten,me,Ht==="left",br),ge.kicker==="bottom"',
+ 'const zRlG=kt?"normal":zRolle(t.text),zSp=zRlG==="normal"&&BS_KACHEL.lisaTeilen!==0&&!Ye&&!ge.bigWord&&!t.secondaryText&&!kt?zTeilen($e?$e.rest:t.text,!1):null,zOb=zRlG==="normal"&&zSp?ye(zSp.oben):null,zHt=zRlG==="schritt"||zRlG==="liste"?zStapel(zRlG,t.text,{left:br,top:ae,width:r*(Ze?ot:kt?.46:ge.exactWidth||(_t?.82:.86)),fill:me,accentFill:Oe,fontSize:Qt&&t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):Ze?k()*zGr():t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):c(ve),shadow:se(),maxBottom:Ke,fontFamily:zFont($)}):Pt(zOb?zOb.segments:ht,zOb?zOb.plain:qe,{left:br,top:ae,originX:sr,originY:De,width:r*(Ze?ot:kt?.46:ge.exactWidth||(_t?.82:.86)),maxWidth:Qt?void 0:Ze?r*dt:void 0,fontSize:Qt&&t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):Ze?k()*zGr():t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):c(ve),minFontSize:Ze?T()*zGr():void 0,goldOk:ur,fill:me,accentFill:Oe,textAlign:Ht,lineHeight:ge.bigWord?.98:t.warmEditorial?1.04:1.12,fontWeight:"700",shadow:se(),maxBottom:zSp?Ke-n*.1:Ke});if(zRlG==="normal"&&zSp&&zUnter(zHt,zSp.unten,me,Ht==="left",br),ge.kicker==="bottom"',
+ 'gradient-Zweig: bei erkanntem Schritt-/Listentext zStapel() statt Pt() verwenden (grosse Nummer als eigenes Element, jede Original-Zeile eigener Block, Nicht/Sondern-Kontrast gedimmt/betont)', 1))
+
+P.append((
+ 'const zSp=BS_KACHEL.lisaTeilen!==0&&!ge.bigWord&&!t.secondaryText?zTeilen(Qe?Qe.rest:t.text,!1):null;let tt=zInsetUnten>0?zInsetUnten+n*(Number(BS_KACHEL.textFotoLuft)||.05):ge.exactY!=null?n*ge.exactY:BS_KACHEL.lisaUnten===1?((i.slideIndex||0)===0?n*(Number(BS_KACHEL.lisaDeckMitte)||.5)-(zSp?n*(Number(BS_KACHEL.lisaDeckHub)||.045):0):n*(Number(BS_KACHEL.lisaTextMitte)||.58)):ge.textPos==="top"?n*.24:n*.5;const Qt=zInsetUnten>0?"top":ge.textPos==="top"&&BS_KACHEL.lisaUnten!==1?"top":"center";ge.kicker==="top"&&t.secondaryText?Te(t.secondaryText,Ye,tt-n*.14,G(me,.7),et,"center"):t.secondaryText&&ge.textPos!=="top"&&Te(t.secondaryText,Ye,n*.3,G(me,.7),et,"center");const jt=ge.bigWord?t.fontSize||110:t.warmEditorial&&ge.exactFont?ge.exactFont:t.fontSize||ge.exactFont||(t.warmEditorial?46:58),_t=I(w(Fe)),ar=116,kt=t.warmEditorial&&!ge.bigWord&&(i.slideIndex||0)===0;const zOb=zSp?ye(zSp.oben):null,zHt=Pt(zVar?zAkz(zOb?zOb.segments:qe):(zOb?zOb.segments:qe),zOb?zOb.plain:$e,{left:zInsetUnten>0?r/2:Ye,top:tt,originX:zInsetUnten>0?"center":et,originY:Qt,width:r*(zInsetUnten>0?.84:kt?.78:ge.exactWidth||(ht?.8:.74)),maxWidth:kt?r*.82:void 0,fontSize:t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):kt?r*(ar/1080):t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):c(jt)*zGr(),goldOk:_t,minFontSize:kt?r*(56/1080):void 0,fill:me,accentFill:Oe,textAlign:zInsetUnten>0?"center":lt,lineHeight:ge.bigWord?.98:kt?1.16:t.warmEditorial?1.04:1.14,fontWeight:"700",shadow:se(),maxBottom:zSp?(kt?n*.72:Ke)-n*.1:kt?n*.72:Ke});try{if(zInsetUnten>0&&zHt&&zHt.originY==="center"){const zGr2=zInsetUnten+n*.035;let zi2=0;for(;zHt.top-(zHt.height||0)/2<zGr2&&zHt.fontSize>12&&zi2<80;zi2+=1)zHt.set("fontSize",zHt.fontSize-1),zHt.initDimensions&&zHt.initDimensions();if(zHt.top-(zHt.height||0)/2<zGr2){zHt.set("top",zGr2+(zHt.height||0)/2);zHt.setCoords&&zHt.setCoords()}}}catch(zz){}if(zSp&&zUnter(zHt,zSp.unten,me,zInsetUnten>0?!1:lt==="left",Ye),ge.kicker==="bottom"',
+ 'const zSp=BS_KACHEL.lisaTeilen!==0&&!ge.bigWord&&!t.secondaryText?zTeilen(Qe?Qe.rest:t.text,!1):null;let tt=zInsetUnten>0?zInsetUnten+n*(Number(BS_KACHEL.textFotoLuft)||.05):ge.exactY!=null?n*ge.exactY:BS_KACHEL.lisaUnten===1?((i.slideIndex||0)===0?n*(Number(BS_KACHEL.lisaDeckMitte)||.5)-(zSp?n*(Number(BS_KACHEL.lisaDeckHub)||.045):0):n*(Number(BS_KACHEL.lisaTextMitte)||.58)):ge.textPos==="top"?n*.24:n*.5;const Qt=zInsetUnten>0?"top":ge.textPos==="top"&&BS_KACHEL.lisaUnten!==1?"top":"center";ge.kicker==="top"&&t.secondaryText?Te(t.secondaryText,Ye,tt-n*.14,G(me,.7),et,"center"):t.secondaryText&&ge.textPos!=="top"&&Te(t.secondaryText,Ye,n*.3,G(me,.7),et,"center");const jt=ge.bigWord?t.fontSize||110:t.warmEditorial&&ge.exactFont?ge.exactFont:t.fontSize||ge.exactFont||(t.warmEditorial?46:58),_t=I(w(Fe)),ar=116,kt=t.warmEditorial&&!ge.bigWord&&(i.slideIndex||0)===0;const zRl=zInsetUnten<=0?zRolle(t.text):"normal";const zOb=zRl==="normal"&&zSp?ye(zSp.oben):null;const zHt=zRl==="schritt"||zRl==="liste"?zStapel(zRl,t.text,{left:Ye,top:tt,width:r*(kt?.78:ge.exactWidth||.8),fill:me,accentFill:Oe,fontSize:t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):kt?r*(ar/1080):t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):c(jt)*zGr(),shadow:se(),maxBottom:Ke,fontFamily:zFont($)}):Pt(zVar?zAkz(zOb?zOb.segments:qe):(zOb?zOb.segments:qe),zOb?zOb.plain:$e,{left:zInsetUnten>0?r/2:Ye,top:tt,originX:zInsetUnten>0?"center":et,originY:Qt,width:r*(zInsetUnten>0?.84:kt?.78:ge.exactWidth||(ht?.8:.74)),maxWidth:kt?r*.82:void 0,fontSize:t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):kt?r*(ar/1080):t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):c(jt)*zGr(),goldOk:_t,minFontSize:kt?r*(56/1080):void 0,fill:me,accentFill:Oe,textAlign:zInsetUnten>0?"center":lt,lineHeight:ge.bigWord?.98:kt?1.16:t.warmEditorial?1.04:1.14,fontWeight:"700",shadow:se(),maxBottom:zSp?(kt?n*.72:Ke)-n*.1:kt?n*.72:Ke});try{if(zInsetUnten>0&&zHt&&zHt.originY==="center"){const zGr2=zInsetUnten+n*.035;let zi2=0;for(;zHt.top-(zHt.height||0)/2<zGr2&&zHt.fontSize>12&&zi2<80;zi2+=1)zHt.set("fontSize",zHt.fontSize-1),zHt.initDimensions&&zHt.initDimensions();if(zHt.top-(zHt.height||0)/2<zGr2){zHt.set("top",zGr2+(zHt.height||0)/2);zHt.setCoords&&zHt.setCoords()}}}catch(zz){}if(zRl==="normal"&&zSp&&zUnter(zHt,zSp.unten,me,zInsetUnten>0?!1:lt==="left",Ye),ge.kicker==="bottom"',
+ 'plate-Zweig: dieselbe zStapel()-Weiche wie im gradient-Zweig, inklusive Deckblatt (Inhalt statt Folienposition entscheidet)', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
