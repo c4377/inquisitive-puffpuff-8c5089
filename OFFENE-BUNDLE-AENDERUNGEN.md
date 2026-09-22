@@ -9673,3 +9673,38 @@ Gesichtet: ein Tag mit Cover (kein Foto, schwarz, passt zu „Tag 15") und
 einer Folgefolie mit Testfoto und zweiteiligem Satz — Aufbausatz klein,
 Pointe fett und größer, kein Lila-Licht sichtbar, direkt auf dem Foto ohne
 Karte.
+
+## 297 — „Da sind immer noch die Layouts" — Folgefolien immer Foto + Overlay + Aufbau/Pointe
+
+> „Also da sind immer noch die Layouts, es sollte aber so sein: bei denen die
+> ich gut fand bleibt das Licht bei den Fotos weg. Bei den Folgeslides auch
+> der Text slides gehört ein Foto, dunkles Overlay und Text wie auf den
+> Bildern vorher 3&4 von Marina Persano, bei dem Fotoslides generell auch so."
+
+296 griff nur bei Folgefolien, die schon ein Foto hatten und deren Satz sich
+teilen ließ. Alle anderen liefen weiter durch die Rotation aus
+`layoutReihe`/`folgeReihe` (`zLayF`): Text-Plates, Rahmen, Bigword usw. —
+das sind „die Layouts", die sie noch sah.
+
+Jetzt gilt für **jede** Folgefolie (Folie 2+, außer Screenshot-Hook und CTA)
+ein einziger Look:
+
+1. **Ein Layout.** `zLayF` gibt für Folgefolien immer `brand_photo_folge`
+   zurück (gradient-Zweig, zentriert). Keine Rotation mehr.
+2. **Immer ein Foto.** Folgefolien ohne eigenes Foto bekommen beim Zeichnen
+   eins injiziert: bevorzugt das Foto des Tages (dasselbe Bild über das ganze
+   Karussell, wie bei Marina Persano), sonst ein pro Tag festes Bild aus dem
+   Pool. Das Cover (Folie 1) bleibt ohne Foto — Tag-15-Stil.
+3. **Dunkles Overlay + Aufbau/Pointe.** Gleichmäßiges Overlay
+   (`folgeOverlay` .38) über dem Foto; der Text steht immer als Aufbausatz
+   (klein, halbfett) + Pointe (fett, groß), oder nur als Pointe, wenn sich
+   der Satz nicht teilen lässt. Der Block ist um `folgeMitte` (60 % der
+   Höhe) zentriert. Schrittfolgen/Listen laufen weiter über `zStapel`, ebenfalls
+   mit Overlay.
+
+Regler: `folgeFoto` (1 = an), `folgeOverlay`, `folgeMitte`, `folgeLayout`.
+
+Gesichtet: ein Tag mit Cover (schwarz, kein Foto), reiner Textfolie (bekam
+Tagesfoto + Overlay + Aufbau/Pointe), Fotofolie mit Zweisatz und einer
+Einzelsatz-Folie (nur Pointe). Alle ohne Karte, ohne Lila-Licht, alle mit
+demselben Foto.

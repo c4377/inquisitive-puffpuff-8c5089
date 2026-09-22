@@ -10378,6 +10378,72 @@ P.append((
  'title:"Geladene Datei",children:"karten358"',
  'Versionsschild auf karten358', 1))
 
+
+# --- karten359: Folgefolien immer Foto + dunkles Overlay + Aufbau/Pointe,
+#     keine Layout-Rotation mehr ---------------------------------------------
+#
+#     Nach 358: "Also da sind immer noch die Layouts, es sollte aber so sein:
+#     bei denen die ich gut fand bleibt das Licht bei den Fotos weg. Bei den
+#     Folgeslides auch der Text slides gehoert ein Foto, dunkles Overlay und
+#     Text wie auf den Bildern vorher 3&4 von Marina Persano, bei dem
+#     Fotoslides generell auch so."
+#
+#     Die Folgefolien liefen weiter durch die Rotation aus layoutReihe/
+#     folgeReihe (zLayF): Text-Plates, Rahmen, Bigword usw. Jetzt:
+#      1. zLayF gibt fuer jede Folgefolie (ausser Screenshot-Hook und CTA)
+#         dasselbe Layout brand_photo_folge zurueck (gradient, zentriert).
+#      2. Folgefolien ohne eigenes Foto bekommen in Ca() eins injiziert:
+#         bevorzugt das Foto des Tages (__bsTagFoto - dasselbe Bild ueber
+#         das ganze Karussell, wie in der Referenz), sonst ein pro Tag
+#         festes Bild aus dem Pool (__bsBilder). Das Cover (Folie 0) bleibt
+#         ohne Foto - Tag-15-Stil.
+#      3. Im gradient-Zweig legt das Folge-Layout ein gleichmaessiges dunkles
+#         Overlay (folgeOverlay .38) ueber das Foto und zeichnet den Text
+#         immer als Aufbau (klein, 500) + Pointe (fett, gross), oder nur als
+#         Pointe, wenn sich der Satz nicht teilen laesst. Der Block wird um
+#         folgeMitte (.6 der Hoehe) zentriert statt ab einer Oberkante.
+#         Schrittfolgen/Listen laufen weiter ueber zStapel (mit Overlay).
+#     Regler: folgeFoto (1=an), folgeOverlay, folgeMitte, folgeLayout.
+#
+#     GESICHTET: Tag mit Cover (schwarz, kein Foto), reiner Textfolie (bekam
+#     Tagesfoto + Overlay + Aufbau/Pointe), Fotofolie mit Zweisatz und
+#     Einzelsatz-Folie (nur Pointe). Alle ohne Karte, ohne Lila-Licht.
+
+P.append((
+ 'lisaGroesse:1.3,folgeLayouts:1,layoutSchritt:3,',
+ 'lisaGroesse:1.3,folgeLayouts:1,folgeFoto:1,folgeOverlay:.38,folgeMitte:.6,layoutSchritt:3,',
+ 'Regler folgeFoto/folgeOverlay/folgeMitte', 1))
+
+P.append((
+ 't={...t,background:zB[zh%zB.length]}}}catch(zz){}})();const zSat=(()=>{',
+ 't={...t,background:zB[zh%zB.length]}}}catch(zz){}})();(()=>{try{if(t.background||t.karte==="ablauf"||t.overlayIsScreenshot===!0||BS_KACHEL.folgeFoto!==1||(i.slideIndex||0)===0)return;const zReg=(typeof window<"u"&&window.__bsTagFoto)||{},zB=(typeof window<"u"&&window.__bsBilder)||[];let zF=typeof t._tag=="number"?(zReg[String(t._tag)]||""):"";if(!zF&&zB.length){const zs="tag|"+String(typeof t._tag=="number"?t._tag:0);let zh=0;for(let zi=0;zi<zs.length;zi+=1)zh=(zh*31+zs.charCodeAt(zi))%99991;zF=zB[zh%zB.length]}if(zF)t={...t,background:zF,_folgeFoto:!0}}catch(zz){}})();const zSat=(()=>{',
+ 'Foto-Injektion fuer Folgefolien', 1))
+
+P.append((
+ 'if(zCta===!0&&zF&&typeof ea=="string"&&ea.length>5)return "brand_photo_gradient";',
+ 'if(zCta===!0&&zF&&typeof ea=="string"&&ea.length>5)return "brand_photo_gradient";if(zV>0&&zF&&BS_KACHEL.folgeFoto===1&&!(rt&&(rt.overlayIsScreenshot===!0||rt._wasScreenshot===!0)))return BS_KACHEL.folgeLayout||"brand_photo_folge";',
+ 'zLayF: ein Layout fuer alle Folgefolien', 1))
+
+P.append((
+ 'brand_photo_highlight:{base:"gradient",textPos:"top",align:"left",highlight:!0}};',
+ 'brand_photo_highlight:{base:"gradient",textPos:"top",align:"left",highlight:!0},brand_photo_folge:{base:"gradient",textPos:"center",align:"center",scrim:.5,folge:!0}};',
+ 'lr.brand_photo_folge', 1))
+
+P.append((
+ 'zSetupPayoff=(zOben,zUnten,zOpt)=>{try{const zW=zOpt.width,zTop=zOpt.top,zMax=zOpt.maxBottom||n*.92,zFam=BS_KACHEL.lisaSchrift||"HelveticaNeueBrand",zSetupSz=r*(Number(BS_KACHEL.lisaPayoffSetupGroesse)||.032),zPayoffSz=r*(Number(BS_KACHEL.lisaPayoffGroesse)||.058);const zBauen=zScale=>{let zY=zTop;const zSe=new Pe.fabric.Textbox(String(zOben||"").replace(/\\*/g,""),{left:r/2-zW/2,top:zY,originX:"left",originY:"top",width:zW,fontSize:Math.max(10,zSetupSz*zScale),fontFamily:zFam,fontWeight:"500",fill:"#FFFFFF",textAlign:"center",lineHeight:1.24,shadow:zOpt.shadow,selectable:!1});zY+=(zSe.height||0)+zPayoffSz*zScale*.3;const zPa=new Pe.fabric.Textbox(String(zUnten||"").replace(/\\*/g,""),{left:r/2-zW/2,top:zY,originX:"left",originY:"top",width:zW,fontSize:Math.max(10,zPayoffSz*zScale),fontFamily:zFam,fontWeight:"700",fill:"#FFFFFF",textAlign:"center",lineHeight:1.14,shadow:zOpt.shadow,selectable:!1});zY+=(zPa.height||0);return{bx:[zSe,zPa],bottom:zY}};let zScale=1,zErg=zBauen(zScale);for(let zi=0;zi<40&&zErg.bottom>zMax&&zScale>.3;zi+=1)zScale-=.02,zErg=zBauen(zScale);zErg.bx.forEach(zt=>e.add(zt));return{top:zTop,bottom:zErg.bottom}}catch(zz){return null}},',
+ 'zSetupPayoff=(zOben,zUnten,zOpt)=>{try{const zW=zOpt.width,zMax=zOpt.maxBottom||n*.92,zMin=typeof zOpt.minTop=="number"?zOpt.minTop:n*.1,zFam=BS_KACHEL.lisaSchrift||"HelveticaNeueBrand",zSetupSz=r*(Number(BS_KACHEL.lisaPayoffSetupGroesse)||.032),zPayoffSz=r*(Number(BS_KACHEL.lisaPayoffGroesse)||.058),zO=String(zOben||"").replace(/\\*/g,"").trim(),zU=String(zUnten||"").replace(/\\*/g,"").trim();if(!zU)return null;const zBauen=zScale=>{let zY=0;const zBx=[];if(zO){const zSe=new Pe.fabric.Textbox(zO,{left:r/2-zW/2,top:zY,originX:"left",originY:"top",width:zW,fontSize:Math.max(10,zSetupSz*zScale),fontFamily:zFam,fontWeight:"500",fill:"#FFFFFF",textAlign:"center",lineHeight:1.24,shadow:zOpt.shadow,selectable:!1});zY+=(zSe.height||0)+zPayoffSz*zScale*.3;zBx.push(zSe)}const zPa=new Pe.fabric.Textbox(zU,{left:r/2-zW/2,top:zY,originX:"left",originY:"top",width:zW,fontSize:Math.max(10,zPayoffSz*zScale),fontFamily:zFam,fontWeight:"700",fill:"#FFFFFF",textAlign:"center",lineHeight:1.14,shadow:zOpt.shadow,selectable:!1});zY+=(zPa.height||0);zBx.push(zPa);return{bx:zBx,h:zY}};const zRaum=zMax-zMin;let zScale=1,zErg=zBauen(zScale);for(let zi=0;zi<40&&zErg.h>zRaum&&zScale>.3;zi+=1)zScale-=.02,zErg=zBauen(zScale);let zTop=typeof zOpt.mitte=="number"?zOpt.mitte-zErg.h/2:zOpt.top;zTop=Math.max(zMin,Math.min(zTop,zMax-zErg.h));zErg.bx.forEach(zt=>{zt.set("top",zt.top+zTop);zt.setCoords&&zt.setCoords();e.add(zt)});return{top:zTop,bottom:zTop+zErg.h}}catch(zz){return null}},',
+ 'zSetupPayoff: leerer Aufbau, zentriert um Mitte', 1))
+
+P.append((
+ 'if((i.slideIndex||0)>0&&!kt&&!Ye&&!ge.bigWord&&!t.secondaryText&&BS_KACHEL.lisaTeilen!==0&&zRolle(t.text)==="normal"){const zSp2=zTeilen($e?$e.rest:t.text,!1);if(zSp2){zSetupPayoff(zSp2.oben,zSp2.unten,{width:r*(ge.exactWidth||.82),top:ae,maxBottom:Ke,shadow:se()});if(ge.kicker==="bottom"&&(t.footerText||t.secondaryText)&&Te(t.footerText||t.secondaryText,br,n*.8,G(me,.7),sr,"center"),i.globalBrandName,t.overlayImage)try{await Ae(t.overlayImage)}catch{}$e&&be($e.label),Le(),e.renderAll();return}}',
+ 'ge.folge===!0&&(Number(BS_KACHEL.folgeOverlay)||0)>0&&e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:"rgba(0,0,0,"+(Number(BS_KACHEL.folgeOverlay)||.38)+")",selectable:!1,evented:!1}));if((i.slideIndex||0)>0&&!Ye&&!ge.bigWord&&!t.secondaryText&&zRolle(t.text)==="normal"&&(ge.folge===!0||!kt)){const zSp2=BS_KACHEL.lisaTeilen!==0?zTeilen($e?$e.rest:t.text,!1):null;if(zSp2||ge.folge===!0){zSetupPayoff(zSp2?zSp2.oben:"",zSp2?zSp2.unten:($e?$e.rest:t.text),{width:r*(ge.exactWidth||.82),top:ae,mitte:ge.folge===!0?n*(Number(BS_KACHEL.folgeMitte)||.6):void 0,minTop:n*.1,maxBottom:Ke,shadow:se()});if(ge.kicker==="bottom"&&(t.footerText||t.secondaryText)&&Te(t.footerText||t.secondaryText,br,n*.8,G(me,.7),sr,"center"),i.globalBrandName,t.overlayImage)try{await Ae(t.overlayImage)}catch{}$e&&be($e.label),Le(),e.renderAll();return}}',
+ 'Gradient-Zweig: Folge-Overlay + Aufbau/Pointe fuer alle Folgefolien', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten358"',
+ 'title:"Geladene Datei",children:"karten359"',
+ 'Versionsschild auf karten359', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
