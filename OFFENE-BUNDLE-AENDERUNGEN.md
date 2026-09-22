@@ -9443,3 +9443,13 @@ getauscht. Gesichtet: Raster und Karussell auf Schwarz, Weiß und Foto.
 Der Design-Agent aus 285 kannte diesen Teil ihrer Marke nicht. Mit dieser
 Information ist Lila keine zufällige Wahl, sondern bestehende Markenfarbe.
 Zurück auf `#A855F7`, sonst nichts geändert.
+
+## 287 — Lila an ihr Video angeglichen
+
+Screenshot vom Videohintergrund geschickt. Gemessen: der gedimmte Streifen
+liegt bei `#55199E` (gemittelt) bis `#7323D1` (Spitze), Farbton ~267°, fast
+identisch mit dem bisherigen Akzent `#A855F7` (Farbton ~271°) — gleiche
+Familie, ihr Video nur dunkler, weil Umgebungslicht statt Textfarbe.
+`#9142F0` übernimmt denselben Ton, kräftiger und näher am Video, Kontrast
+4.24:1 auf Schwarz und 4.95:1 auf Weiß, beide bestehen WCAG-AA für große
+Schrift.

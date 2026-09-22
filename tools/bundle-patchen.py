@@ -9881,6 +9881,23 @@ P.append((
  'lisaAkzent:"#A855F7",',
  'Regler lisaAkzent: zurueck auf Lila #A855F7', 1))
 
+# 287  Lila an ihr Video angeglichen
+#
+#      Screenshot vom Videohintergrund geschickt. Gemessen: der
+#      gedimmte Streifen links im Bild liegt bei #55199E (gemittelt)
+#      bis #7323D1 (Spitze), Farbton ~267 Grad - fast identisch mit
+#      dem bisherigen Akzent #A855F7 (Farbton ~271 Grad). Gleiche
+#      Lila-Familie, ihr Video nur dunkler, weil Umgebungslicht statt
+#      Textfarbe. #9142F0 nimmt denselben Farbton, angehoben auf
+#      Kontrast 4.24:1 (Schwarz) / 4.95:1 (Weiss) - kraeftiger/naeher
+#      am Video als #A855F7 (5.31 / 3.96), beide bestehen WCAG-AA fuer
+#      grosse Schrift.
+
+P.append((
+ 'lisaAkzent:"#A855F7",',
+ 'lisaAkzent:"#9142F0",',
+ 'Regler lisaAkzent: an ihr Video angeglichen #9142F0', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
