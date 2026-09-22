@@ -9768,6 +9768,46 @@ P.append((
  'const zHt=Pt(zAkz($e),Qe,{left:r/2,top:zIn?',
  'frame-Zweig: Headline durch zAkz', 1))
 
+# 284  Lila-Akzent wieder weg
+#
+#      "Nimm es wieder weg und schalte einen Designer Agent ein, der
+#      entscheidet, welche Farbe besser waere." Genau die fuenf
+#      Aenderungen aus 283 rueckgaengig: Akzentfarbe wieder Textfarbe,
+#      zAkz() nicht mehr aufgerufen (bleibt als tote Funktion stehen),
+#      die drei lisaAkzent*-Regler weg. Schwarzer Grund aus 345 bleibt.
+#      Naechster Schritt: ein Subagent bekommt den Marken-Kontext und
+#      entscheidet ueber eine Akzentfarbe.
+
+P.append((
+ 'me=$?(BS_KACHEL.lisaHell||X(t.color,$,Fe)):zFarbe(Fe),Oe=BS_KACHEL.lisaAkzent||me,',
+ 'me=$?(BS_KACHEL.lisaHell||X(t.color,$,Fe)):zFarbe(Fe),Oe=me,',
+ 'gradient-Zweig: Akzentfarbe zurueck auf Textfarbe', 1))
+
+P.append((
+ 'me=zFarbe(Fe),Oe=BS_KACHEL.lisaAkzent||me;',
+ 'me=zFarbe(Fe),Oe=me;',
+ 'plate- und frame-Zweig: Akzentfarbe zurueck auf Textfarbe', 2))
+
+P.append((
+ 'zHt=Pt(zAkz(zOb?zOb.segments:ht),zOb?zOb.plain:qe,{left:br,',
+ 'zHt=Pt(zOb?zOb.segments:ht,zOb?zOb.plain:qe,{left:br,',
+ 'gradient-Zweig: zAkz()-Aufruf entfernt', 1))
+
+P.append((
+ 'zHt=Pt(zAkz(zOb?zOb.segments:qe),zOb?zOb.plain:$e,{left:zInsetUnten>0?r/2:Ye,',
+ 'zHt=Pt(zOb?zOb.segments:qe,zOb?zOb.plain:$e,{left:zInsetUnten>0?r/2:Ye,',
+ 'plate-Zweig: zAkz()-Aufruf entfernt', 1))
+
+P.append((
+ 'const zHt=Pt(zAkz($e),Qe,{left:r/2,top:zIn?',
+ 'const zHt=Pt($e,Qe,{left:r/2,top:zIn?',
+ 'frame-Zweig: zAkz()-Aufruf entfernt', 1))
+
+P.append((
+ 'lisaGrund:"#000000",lisaAkzent:"#A855F7",lisaAkzentAuto:1,lisaAkzentWorte:2,',
+ 'lisaGrund:"#000000",',
+ 'Regler lisaAkzent/lisaAkzentAuto/lisaAkzentWorte entfernt', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

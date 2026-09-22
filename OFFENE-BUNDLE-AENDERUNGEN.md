@@ -9404,3 +9404,12 @@ bleiben ohne. Gesichtet im Raster und Karussell.
 
 Merke: Prüfläufe nie parallel. Zwei gleichzeitige Läufe haben `site/index.html`
 auf 0 Byte geschrieben; `git checkout -- site/index.html` hat es gerichtet.
+
+## 284 — Lila-Akzent wieder weg
+
+> „Nimm es wieder weg und schalte einen Designer Agent ein, der entscheidet,
+> welche Farbe besser wäre."
+
+Genau die fünf Änderungen aus 283 rückgängig: Akzentfarbe wieder Textfarbe,
+`zAkz()` wird nicht mehr aufgerufen, die drei `lisaAkzent*`-Regler weg.
+Schwarzer Grund aus 345 bleibt.
