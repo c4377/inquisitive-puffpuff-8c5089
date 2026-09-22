@@ -10301,6 +10301,39 @@ P.append((
  '{id:"brand_photo_bottom_left",name:"Foto unten links",icon:CA,description:"Text unten links"},{id:"brand_photo_highlight",name:"Foto Highlight",icon:Xh,description:"Weißer Text, lila Highlight"},',
  'add layout picker UI entry', 1))
 
+
+# --- karten357: gezielt auf Playfair Display warten, bevor das Foto-
+#     Highlight-Layout zeichnet ----------------------------------------
+#
+#     Rueckmeldung nach dem Live-Test von 356: "356 aber kein Playfair"
+#     - das Layout kam an, aber die Schrift fiel auf die Fallback-Schrift
+#     zurueck. Im eigenen Testlauf war das nicht nachzustellen (Playfair
+#     Display war durch den Testablauf laengst geladen), darum ist das
+#     hier eine gezielte Absicherung, kein bestaetigter Fund.
+#
+#     Verdacht: der App-weite Font-Preload laedt rund 15 Schriftfamilien
+#     mit je 6 Schnitten parallel und bricht nach 4 Sekunden ab (Promise.
+#     race gegen einen Timeout), egal ob alles fertig ist. Bei einer
+#     langsameren Verbindung kann Playfair Display dieses Rennen verlieren
+#     - das Highlight-Layout zeichnet dann mit der Fallback-Schrift und
+#     bleibt dabei, weil eine Canvas-Zeichnung sich nicht von selbst neu
+#     zeichnet, wenn eine Schrift erst spaeter eintrudelt.
+#
+#     Deshalb wartet der Highlight-Zweig jetzt zusaetzlich und gezielt auf
+#     genau die Playfair-Schnitte, die zAbschnitte() braucht (400/600/700,
+#     kursiv 400/700), mit eigenem, grosszuegigerem Timeout (8 Sekunden) -
+#     unabhaengig vom Ausgang des allgemeinen Preload-Rennens.
+
+P.append((
+ 'if(ge.highlight===!0){zAbschnitte(t.text,{left:r*.09,top:n*(Number(BS_KACHEL.lisaHighlightOben)||.14),width:r*(ge.exactWidth||.82),maxBottom:Ke,shadow:se()});',
+ 'if(ge.highlight===!0){try{typeof document<"u"&&document.fonts&&document.fonts.load&&await Promise.race([Promise.all(["italic 400","italic 700","400","600","700"].map(zw=>document.fonts.load(`${zw} 44px "Playfair Display"`).catch(()=>{}))),new Promise(zr=>setTimeout(zr,8e3))])}catch(zz){}zAbschnitte(t.text,{left:r*.09,top:n*(Number(BS_KACHEL.lisaHighlightOben)||.14),width:r*(ge.exactWidth||.82),maxBottom:Ke,shadow:se()});',
+ 'Highlight-Layout: gezielt auf Playfair Display warten, statt sich auf das allgemeine 4s-Rennen zu verlassen', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten356"',
+ 'title:"Geladene Datei",children:"karten357"',
+ 'Versionsschild auf karten357', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

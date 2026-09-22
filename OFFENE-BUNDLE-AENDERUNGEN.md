@@ -9621,3 +9621,25 @@ Gesichtet: zwei Abschnitte (Kopfzeile + Absatz) mit je einer markierten
 Kernphrase, über echte App-Daten und den Layout-Wähler ausgewählt — beide
 Marker sichtbar, Playfair kursiv/weiß/lila korrekt, passt ohne Überlauf in
 die Karte.
+
+## 295 — „356 aber kein Playfair"
+
+Nach dem Live-Test von 356 kam die Karte an, aber die Schrift fiel auf die
+Fallback-Schrift zurück statt Playfair Display zu zeigen. Im eigenen
+Testlauf nicht nachstellbar (Playfair war dort durch den Testablauf längst
+geladen) — das hier ist eine gezielte Absicherung, kein bestätigter Fund.
+
+Verdacht: Der App-weite Font-Preload lädt rund 15 Schriftfamilien mit je
+sechs Schnitten parallel und bricht nach 4 Sekunden ab, egal ob alles
+fertig ist. Bei einer langsameren Verbindung kann Playfair Display dieses
+Rennen verlieren — das Highlight-Layout zeichnet dann mit der
+Fallback-Schrift und bleibt dabei, weil eine Canvas-Zeichnung sich nicht
+von selbst neu zeichnet, wenn eine Schrift erst später eintrudelt.
+
+Der Highlight-Zweig wartet jetzt zusätzlich und gezielt auf genau die
+Playfair-Schnitte, die `zAbschnitte()` braucht (400/600/700, kursiv
+400/700), mit eigenem, großzügigerem Timeout (8 Sekunden) — unabhängig
+vom Ausgang des allgemeinen Preload-Rennens.
+
+Falls es danach immer noch nicht klappt, braucht es einen Screenshot von
+ihr, um die eigentliche Ursache zu finden.
