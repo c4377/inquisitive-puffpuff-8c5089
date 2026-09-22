@@ -9463,3 +9463,19 @@ Nach zwei Anläufen (Lila `#A855F7`, dann an ihr Video angeglichen
 wieder Textfarbe, `zAkz()` nicht mehr aufgerufen, die drei
 `lisaAkzent*`-Regler weg. Betonte Wörter sind wieder schlicht kursiv in
 Textfarbe.
+
+## 289 — Lila Licht von links oben
+
+> „Könntest du äh wie so ein lila Licht auf der linken Seite oder linken
+> oberen Seite machen?"
+
+Meint das Umgebungslicht aus ihrem Video, nicht mehr Textfarbe. Ein weicher
+radialer Lichtschein: Mittelpunkt knapp links außerhalb der Karte, oberes
+Drittel, Farbe `#7323D1` (die hellere der beiden aus dem Video gemessenen
+Werte — als Licht darf sie kräftiger sein als als Textfarbe), Stärke .42 in
+der Mitte, nach außen auf 0.
+
+Nur auf dunklem Grund, nur auf Karten ohne eigenes Foto in der Ecke (sonst
+hätte das Licht das Foto eingefärbt). Foto-Deckblätter und
+Screenshot-Folien bleiben unberührt. Regler: `lisaLicht`,
+`lisaLichtStaerke`, `lisaLichtRadius`, `lisaLichtX`, `lisaLichtY`.

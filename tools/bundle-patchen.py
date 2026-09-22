@@ -9937,6 +9937,45 @@ P.append((
  'lisaGrund:"#000000",',
  'Regler lisaAkzent/lisaAkzentAuto/lisaAkzentWorte entfernt', 1))
 
+# 289  Lila Licht von links oben
+#
+#      "Koenntest du aeh wie so ein lila Licht auf der linken Seite
+#      oder linken oberen Seite machen?" - meint das Umgebungslicht
+#      aus ihrem Video (Screenshot 40671fb3, dieselbe Aufnahme, aus
+#      der 287 die Akzentfarbe massa). Kein Textakzent mehr (288 nahm
+#      den zurueck), sondern ein weicher Lichtschein im Bild selbst:
+#      radialer Verlauf, Mittelpunkt knapp links ausserhalb der Karte
+#      und im oberen Drittel (x -.15, y .30 relativ), Radius .85 der
+#      groesseren Kante, Farbe #7323D1 (die hellere der beiden
+#      gemessenen Video-Werte, hier als Licht statt als Textfarbe -
+#      darf kraeftiger sein), Staerke .42 in der Mitte, nach aussen
+#      auf 0.
+#
+#      NUR auf dunklem Grund (w(Fe)<60) - auf Weiss waere es ein
+#      Farbfleck statt Licht. NUR auf Karten ohne eigenes Foto in der
+#      Ecke (plate-Zweig: nicht wenn zTF gesetzt ist) - sonst haette
+#      das Licht das Foto eingefaerbt. Foto-Deckblaetter (gradient-
+#      Zweig) und Screenshot-Folien bleiben unberuehrt.
+#
+#      GESICHTET: Raster (Tag 5 schwarze Textkarte, Tag 3 Rahmen-Layout
+#      mit kleinem Foto - beide mit Licht; Tag 8/2 weiss und die
+#      Foto-Deckblaetter unveraendert) und Karussell.
+
+P.append((
+ 'e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:Fe,selectable:!1}));const zIn=ge.inset===!0&&$,',
+ 'e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:Fe,selectable:!1}));(()=>{try{if(!BS_KACHEL.lisaLicht||!1||w(Fe)>=60)return;const zCx=r*(Number(BS_KACHEL.lisaLichtX)??-.15),zCy=n*(Number(BS_KACHEL.lisaLichtY)??.30),zR=r*(Number(BS_KACHEL.lisaLichtRadius)||.85),zSt=Number(BS_KACHEL.lisaLichtStaerke)||.42;e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,selectable:!1,evented:!1,fill:new Pe.fabric.Gradient({type:"radial",coords:{x1:zCx,y1:zCy,r1:0,x2:zCx,y2:zCy,r2:zR},colorStops:[{offset:0,color:G(BS_KACHEL.lisaLicht,zSt)},{offset:1,color:G(BS_KACHEL.lisaLicht,0)}]})}))}catch(zz){}})();const zIn=ge.inset===!0&&$,',
+ 'frame-Zweig: lila Licht von links oben, direkt nach der Grundflaeche', 1))
+
+P.append((
+ 'zInsetUnten=zY+zH}if(ge.rule&&ee(me)&&BS_KACHEL.lisaRahmen!==0){',
+ 'zInsetUnten=zY+zH}(()=>{try{if(!BS_KACHEL.lisaLicht||zTF||w(Fe)>=60)return;const zCx=r*(Number(BS_KACHEL.lisaLichtX)??-.15),zCy=n*(Number(BS_KACHEL.lisaLichtY)??.30),zR=r*(Number(BS_KACHEL.lisaLichtRadius)||.85),zSt=Number(BS_KACHEL.lisaLichtStaerke)||.42;e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,selectable:!1,evented:!1,fill:new Pe.fabric.Gradient({type:"radial",coords:{x1:zCx,y1:zCy,r1:0,x2:zCx,y2:zCy,r2:zR},colorStops:[{offset:0,color:G(BS_KACHEL.lisaLicht,zSt)},{offset:1,color:G(BS_KACHEL.lisaLicht,0)}]})}))}catch(zz){}})();if(ge.rule&&ee(me)&&BS_KACHEL.lisaRahmen!==0){',
+ 'plate-Zweig: lila Licht von links oben, nach dem optionalen Foto (nur ohne eigenes Kartenfoto)', 1))
+
+P.append((
+ 'lisaGrund:"#000000",',
+ 'lisaGrund:"#000000",lisaLicht:"#7323D1",lisaLichtStaerke:.42,lisaLichtRadius:.85,lisaLichtX:-.15,lisaLichtY:.30,',
+ 'Regler lisaLicht/-Staerke/-Radius/-X/-Y', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
