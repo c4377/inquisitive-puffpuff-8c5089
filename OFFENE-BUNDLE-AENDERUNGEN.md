@@ -9708,3 +9708,29 @@ Gesichtet: ein Tag mit Cover (schwarz, kein Foto), reiner Textfolie (bekam
 Tagesfoto + Overlay + Aufbau/Pointe), Fotofolie mit Zweisatz und einer
 Einzelsatz-Folie (nur Pointe). Alle ohne Karte, ohne Lila-Licht, alle mit
 demselben Foto.
+
+## 298 — „Lila Licht soll an außer bei den Fotos, die Folgeslides sind viel zu klein"
+
+Screenshot einer Schrittfolge („06 — Hör auf, nach Beweisen zu suchen") auf
+Foto: winzig, unten links zusammengedrückt. Dazu: „Lila Licht soll an außer
+bei den Fotos ???, die folgeslides sind viel zu klein vom Schrift Bild."
+
+**Licht.** 296 hatte das Licht global abgeschaltet — gemeint war nur: nicht
+auf Fotos. `lisaLicht` steht wieder auf `#7323D1`; `zLichtZeichnen()` bricht
+zusätzlich ab, sobald die Folie ein Foto hat — auch bei injizierten
+Tagesfotos. Cover ohne Foto leuchten wieder wie in ihrem Content-Plan.
+
+**Zu klein.** Der Stapel startete im Foto-Zweig an der Text-Oberkante (64 %
+Höhe) und musste bis 85 % passen — nur 21 % Höhe Raum, die Schrumpfschleife
+drückte ihn auf etwa 40 %. Jetzt kann `zStapel()` um eine Mitte zentrieren:
+er misst den Block ab null, nutzt den vollen Raum (10 %–85 %) und setzt ihn
+dann um `folgeMitte` (60 %) mittig. Im Folge-Layout gilt außerdem eine
+Mindest-Grundgröße (`folgeStapelBasis`, 6,2 % der Breite), linker Rand 9 %,
+Breite 82 %, und die Zeilen sind relativ zur Grundgröße größer (.6/.68
+statt .54/.64). Aufbau/Pointe ebenfalls etwas größer (3,6 % / 6,4 % der
+Breite). Ohne `mitte` verhält sich `zStapel()` wie bisher — das Cover mit
+Schrittfolge aus 293 ist unverändert.
+
+Gesichtet: Cover (schwarz, Licht wieder da), dieselbe Schrittfolge auf
+injiziertem Tagesfoto (groß, lesbar, mittig, kein Licht), Fotofolie mit
+Aufbau/Pointe (kein Licht).

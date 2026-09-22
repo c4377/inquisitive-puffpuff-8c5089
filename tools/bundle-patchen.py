@@ -10444,6 +10444,84 @@ P.append((
  'title:"Geladene Datei",children:"karten359"',
  'Versionsschild auf karten359', 1))
 
+
+# --- karten360: Lila Licht wieder an (nur nicht auf Fotos), Folgefolien-
+#     Text deutlich groesser --------------------------------------------------
+#
+#     Nach 359 (Screenshot einer Schrittfolge auf Foto, winzig unten links):
+#     "Lila Licht soll an ausser bei den Fotos ???, die folgeslides sind viel
+#     zu klein vom Schrift Bild"
+#
+#     358 hatte das Licht global abgeschaltet - gemeint war nur: nicht auf
+#     Fotos. lisaLicht steht wieder auf #7323D1, zLichtZeichnen bricht
+#     zusaetzlich ab, sobald die Folie ein Foto hat ($) - also auch bei
+#     injizierten Tagesfotos. Cover ohne Foto leuchten wieder.
+#
+#     Zu klein: der Stapel (zStapel) startete im gradient-Zweig an der
+#     Text-Oberkante ae = 64 % Hoehe und musste bis Ke (85 %) passen - nur
+#     21 % Hoehe Raum, die Schrumpfschleife druecke ihn auf ~40 %. Jetzt:
+#      - zStapel kann optional um eine Mitte zentrieren (mitte/minTop): er
+#        misst ab 0, nutzt den vollen Raum minTop..maxBottom und setzt den
+#        Block dann mittig. Ohne mitte verhaelt er sich wie bisher (Cover).
+#      - Im Folge-Layout: mitte = folgeMitte (60 %), minTop 10 %, Grundgroesse
+#        mindestens folgeStapelBasis (.062 der Breite), linker Rand 9 %,
+#        Breite 82 %. Zeilen im Stapel .6/.68 statt .54/.64 der Grundgroesse.
+#      - Aufbau/Pointe etwas groesser (.036 / .064 der Breite).
+#
+#     GESICHTET: Cover (schwarz, Licht wieder da), Schrittfolge "06 - HOER
+#     AUF ..." auf injiziertem Tagesfoto (gross, lesbar, mittig, kein Licht),
+#     Fotofolie mit Aufbau/Pointe (kein Licht).
+
+P.append((
+ 'lisaLicht:"",',
+ 'lisaLicht:"#7323D1",',
+ 'lisaLicht wieder an', 1))
+
+P.append((
+ 'zLichtZeichnen=(zFarbGrund,zAus)=>{try{if(!BS_KACHEL.lisaLicht||zAus)return;',
+ 'zLichtZeichnen=(zFarbGrund,zAus)=>{try{if(!BS_KACHEL.lisaLicht||zAus||$)return;',
+ 'zLichtZeichnen: kein Licht auf Fotos', 1))
+
+P.append((
+ 'zTop=zOpt.top,zMax=zOpt.maxBottom||n*.92,zClean=zq=>zq.replace(/\\*/g,"");const zNumM=',
+ 'zTop=zOpt.top,zMax=zOpt.maxBottom||n*.92,zMitte=typeof zOpt.mitte=="number",zMin=typeof zOpt.minTop=="number"?zOpt.minTop:n*.1,zClean=zq=>zq.replace(/\\*/g,"");const zNumM=',
+ 'zStapel: mitte/minTop lesen', 1))
+
+P.append((
+ 'const zsz=zRl==="schritt"?.54:.64,ztxt=',
+ 'const zsz=zRl==="schritt"?.6:.68,ztxt=',
+ 'zStapel: Zeilen groesser', 1))
+
+P.append((
+ 'const zBauen=zScale=>{let zY=zTop;const zBx=[];for(const zs of zSpecs){zY+=zs.gap*zBase*zScale;',
+ 'const zBauen=zScale=>{let zY=zMitte?0:zTop;const zBx=[];for(const zs of zSpecs){zY+=zs.gap*zBase*zScale;',
+ 'zStapel: bei Mitte ab 0 messen', 1))
+
+P.append((
+ 'for(let zi=0;zi<45&&zErg.bottom>zMax&&zScale>.2;zi+=1)zScale-=.02,zErg=zBauen(zScale);zErg.bx.forEach(zt=>e.add(zt));return{top:zTop,height:zErg.bottom-zTop,originY:"top",originX:"left",bottom:zErg.bottom}}catch(zz){return null}},',
+ 'const zRaum=zMitte?zMax-zMin:zMax;for(let zi=0;zi<45&&zErg.bottom>zRaum&&zScale>.2;zi+=1)zScale-=.02,zErg=zBauen(zScale);let zOff=0;zMitte&&(zOff=Math.max(zMin,Math.min(zOpt.mitte-zErg.bottom/2,zMax-zErg.bottom)));zErg.bx.forEach(zt=>{zOff&&(zt.set("top",zt.top+zOff),zt.setCoords&&zt.setCoords());e.add(zt)});return zMitte?{top:zOff,height:zErg.bottom,originY:"top",originX:"left",bottom:zOff+zErg.bottom}:{top:zTop,height:zErg.bottom-zTop,originY:"top",originX:"left",bottom:zErg.bottom}}catch(zz){return null}},',
+ 'zStapel: um Mitte platzieren, Raum = minTop..maxBottom', 1))
+
+P.append((
+ 'zHt=zRlG==="schritt"||zRlG==="liste"?zStapel(zRlG,t.text,{left:br,top:ae,width:r*(Ze?ot:kt?.46:ge.exactWidth||(_t?.82:.86)),fill:me,accentFill:Oe,fontSize:Qt&&t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):Ze?k()*zGr():t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):c(ve),shadow:se(),maxBottom:Ke,fontFamily:zFont($)}):',
+ 'zHt=zRlG==="schritt"||zRlG==="liste"?zStapel(zRlG,t.text,{left:ge.folge===!0?r*.09:br,top:ae,width:r*(ge.folge===!0?.82:Ze?ot:kt?.46:ge.exactWidth||(_t?.82:.86)),fill:me,accentFill:Oe,fontSize:ge.folge===!0?Math.max(r*(Number(BS_KACHEL.folgeStapelBasis)||.062),c(ve)):Qt&&t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):Ze?k()*zGr():t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):c(ve),mitte:ge.folge===!0?n*(Number(BS_KACHEL.folgeMitte)||.6):void 0,minTop:n*.1,shadow:se(),maxBottom:Ke,fontFamily:zFont($)}):',
+ 'Gradient-Zweig: Folge-Stapel groesser und zentriert', 1))
+
+P.append((
+ 'lisaPayoffSetupGroesse)||.032',
+ 'lisaPayoffSetupGroesse)||.036',
+ 'Aufbausatz groesser', 1))
+
+P.append((
+ 'lisaPayoffGroesse)||.058',
+ 'lisaPayoffGroesse)||.064',
+ 'Pointe groesser', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten359"',
+ 'title:"Geladene Datei",children:"karten360"',
+ 'Versionsschild auf karten360', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
