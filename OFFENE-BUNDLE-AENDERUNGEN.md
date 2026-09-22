@@ -9435,3 +9435,11 @@ Scrim-Abdunklung hinter der Schrift übernimmt das bereits.
 Technisch dieselben fünf Stellen wie in 283 (Akzentfarbe in den drei
 Zeichen-Zweigen, `zAkz()`-Aufruf an drei Headline-Stellen), nur der Farbwert
 getauscht. Gesichtet: Raster und Karussell auf Schwarz, Weiß und Foto.
+
+## 286 — Lila doch richtig: ihre Videos nutzen es schon
+
+> „Ich hab aber bei meinen Videos lila im Hintergrund."
+
+Der Design-Agent aus 285 kannte diesen Teil ihrer Marke nicht. Mit dieser
+Information ist Lila keine zufällige Wahl, sondern bestehende Markenfarbe.
+Zurück auf `#A855F7`, sonst nichts geändert.

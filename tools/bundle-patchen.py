@@ -9866,6 +9866,21 @@ P.append((
  'lisaGrund:"#000000",lisaAkzent:"#B5622C",lisaAkzentAuto:1,lisaAkzentWorte:2,',
  'Regler lisaAkzent Clay Rust #B5622C, lisaAkzentAuto 1, lisaAkzentWorte 2', 1))
 
+# 286  Lila doch richtig - ihre Videos nutzen es schon
+#
+#      "Ich hab aber bei meinen Videos lila im Hintergrund." Der
+#      Design-Agent aus 285 kannte diesen Teil ihrer Marke nicht - fuer
+#      ihn war Lila nur "ein getestetes Neon ohne erkennbaren Grund".
+#      Mit dieser Information ist Lila kein Zufallston, sondern
+#      bestehende Markenfarbe. Zurueck auf #A855F7, sonst nichts
+#      geaendert (zAkz-Mechanik, Kontrast-Ueberlegungen von 283/285
+#      gelten unveraendert weiter).
+
+P.append((
+ 'lisaAkzent:"#B5622C",',
+ 'lisaAkzent:"#A855F7",',
+ 'Regler lisaAkzent: zurueck auf Lila #A855F7', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
