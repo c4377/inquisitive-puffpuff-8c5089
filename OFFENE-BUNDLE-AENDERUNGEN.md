@@ -9773,3 +9773,20 @@ gezielt (8 s) auf die Schnitte 500/600/700, statt sich auf das
 Gesichtet in Chromium: Stapel und Aufbau/Pointe in MontserratBrand
 Bold/Semibold/Medium. Auf iOS muss sie es bestätigen; falls es dort immer
 noch nicht greift, braucht es einen Screenshot.
+
+## 301 — „Löst du das so auf?" — lange Texte sind Prosa, keine Liste
+
+Screenshot ihrer Schlussfolie (9/9): rund zwanzig kurze Zeilen, jede mit
+Gedankenstrich als Listenpunkt gesetzt. Die Listen-Erkennung aus 292 (ab
+drei Zeilen mit stark wechselnder Länge) traf auch fließende Schlusstexte,
+deren Zeilenumbrüche Pausen sind, keine Aufzählung.
+
+Ab acht Zeilen gilt ein Text jetzt als **Prosa**: die Zeilenumbrüche
+bleiben, aber ohne Striche — eine Textbox, linksbündig, Montserrat Medium,
+4 % der Breite, Zeilenabstand 1,3, um `folgeMitte` zentriert, mit
+Auto-Schrumpfung wenn nötig. Keine Satzteilung in Aufbau/Pointe. Auf dem
+Cover fällt Prosa wie „normal" auf die bisherige Textbox zurück. Regler:
+`folgeProsaGroesse`.
+
+Gesichtet: ihr Schlusstext (18 Zeilen) auf Tagesfoto — alles lesbar, keine
+Bullets, passt in die Karte.

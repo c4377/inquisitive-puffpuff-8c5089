@@ -10616,6 +10616,45 @@ P.append((
  'title:"Geladene Datei",children:"karten363"',
  'Versionsschild auf karten363', 1))
 
+
+# --- karten364: lange Mehrzeilen-Texte sind Prosa, keine Liste ---------------
+#
+#     Screenshot ihrer Schlussfolie (9/9): ~20 kurze Zeilen, jede mit
+#     Gedankenstrich als Listenpunkt gesetzt. "Loest du das so auf?" - nein.
+#     Die Listen-Erkennung aus 292 (ab drei Zeilen mit stark wechselnder
+#     Laenge) traf auch fliessende Schlusstexte, deren Zeilenumbrueche Pausen
+#     sind, keine Aufzaehlung.
+#
+#     zRolle liefert ab 8 Zeilen "prosa". Im Folge-Layout laeuft Prosa ueber
+#     zSetupPayoff im Prosa-Modus: Zeilenumbrueche bleiben (eine Textbox mit
+#     \n), keine Striche, linksbuendig, Gewicht 500, folgeProsaGroesse (.04
+#     der Breite), Zeilenabstand 1.3, um folgeMitte zentriert mit
+#     Auto-Schrumpfung. Ohne Satzteilung (Aufbau/Pointe greift nicht).
+#     Im plate-Zweig (Cover) faellt "prosa" wie "normal" auf Pt() zurueck.
+#
+#     GESICHTET: ihr Schlusstext (18 Zeilen) auf Tagesfoto - alles lesbar,
+#     keine Bullets, passt in die Karte.
+
+P.append((
+ 'return"schritt";if(zN<3)return"normal";const zLens=',
+ 'return"schritt";if(zN<3)return"normal";if(zN>7)return"prosa";const zLens=',
+ 'zRolle: >7 Zeilen = prosa', 1))
+
+P.append((
+ 'const zPa=new Pe.fabric.Textbox(zU,{left:r/2-zW/2,top:zY,originX:"left",originY:"top",width:zW,fontSize:Math.max(10,zPayoffSz*zScale),fontFamily:zFam,fontWeight:"700",fill:"#FFFFFF",textAlign:"center",lineHeight:1.14,shadow:zOpt.shadow,selectable:!1});',
+ 'const zPr=zOpt.prosa===!0,zPa=new Pe.fabric.Textbox(zU,{left:r/2-zW/2,top:zY,originX:"left",originY:"top",width:zW,fontSize:Math.max(10,(zPr?r*(Number(BS_KACHEL.folgeProsaGroesse)||.04):zPayoffSz)*zScale),fontFamily:zFam,fontWeight:zPr?"500":"700",fill:"#FFFFFF",textAlign:zPr?"left":"center",lineHeight:zPr?1.3:1.14,shadow:zOpt.shadow,selectable:!1});',
+ 'zSetupPayoff: Prosa-Modus', 1))
+
+P.append((
+ 'if((i.slideIndex||0)>0&&!Ye&&!ge.bigWord&&!t.secondaryText&&zRolle(t.text)==="normal"&&(ge.folge===!0||!kt)){const zSp2=BS_KACHEL.lisaTeilen!==0?zTeilen($e?$e.rest:t.text,!1):null;if(zSp2||ge.folge===!0){zSetupPayoff(zSp2?zSp2.oben:"",zSp2?zSp2.unten:($e?$e.rest:t.text),{width:r*(ge.exactWidth||.82),top:ae,',
+ 'const zRo=zRolle(t.text);if((i.slideIndex||0)>0&&!Ye&&!ge.bigWord&&!t.secondaryText&&(zRo==="normal"||zRo==="prosa")&&(ge.folge===!0||!kt)){const zSp2=zRo!=="prosa"&&BS_KACHEL.lisaTeilen!==0?zTeilen($e?$e.rest:t.text,!1):null;if(zSp2||ge.folge===!0){zSetupPayoff(zSp2?zSp2.oben:"",zSp2?zSp2.unten:($e?$e.rest:t.text),{prosa:zRo==="prosa",width:r*(ge.exactWidth||.82),top:ae,',
+ 'Gradient-Zweig: Prosa ueber zSetupPayoff', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten363"',
+ 'title:"Geladene Datei",children:"karten364"',
+ 'Versionsschild auf karten364', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
