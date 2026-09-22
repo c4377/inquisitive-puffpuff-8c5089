@@ -9413,3 +9413,25 @@ auf 0 Byte geschrieben; `git checkout -- site/index.html` hat es gerichtet.
 Genau die fünf Änderungen aus 283 rückgängig: Akzentfarbe wieder Textfarbe,
 `zAkz()` wird nicht mehr aufgerufen, die drei `lisaAkzent*`-Regler weg.
 Schwarzer Grund aus 345 bleibt.
+
+## 285 — Akzentfarbe per Design-Subagent: Clay Rust statt Lila
+
+> „Nimm es wieder weg und schalte einen Designer Agent ein, der entscheidet,
+> welche Farbe besser wäre."
+
+Ein Subagent, als Brand-/Grafikdesigner gebrieft, hat ihren eigenen Feed,
+lisa.contentdesign (nicht kopieren) und juliaknauber_coaching (ihr Vorbild)
+gesichtet und sich für **eine** Farbe entschieden:
+
+**„Clay Rust" `#B5622C`** — gebranntes Terrakotta/Rostrot.
+
+Begründung: Kontrast rund 5.5:1 auf Schwarz und 3.8:1 auf Weiß (WCAG-AA für
+große/fette Schrift), warm statt „AI-generic" wie das Lila, harmoniert mit
+den warmen Hauttönen ihrer Fotos, klar unterscheidbar von Lisas
+Schokobraun/Creme (dort Flächenfarbe, hier nur punktueller Akzent). Für
+Fotos empfahl der Agent einen leichten Schatten — die bestehende
+Scrim-Abdunklung hinter der Schrift übernimmt das bereits.
+
+Technisch dieselben fünf Stellen wie in 283 (Akzentfarbe in den drei
+Zeichen-Zweigen, `zAkz()`-Aufruf an drei Headline-Stellen), nur der Farbwert
+getauscht. Gesichtet: Raster und Karussell auf Schwarz, Weiß und Foto.

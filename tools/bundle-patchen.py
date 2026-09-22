@@ -9808,6 +9808,64 @@ P.append((
  'lisaGrund:"#000000",',
  'Regler lisaAkzent/lisaAkzentAuto/lisaAkzentWorte entfernt', 1))
 
+# 285  Akzentfarbe per Design-Subagent: Clay Rust statt Lila
+#
+#      "Nimm es wieder weg und schalte einen Designer Agent ein, der
+#      entscheidet, welche Farbe besser waere." 284 hat das Lila
+#      entfernt (zAkz() blieb als tote Funktion stehen). Ein Subagent
+#      (general-purpose, als Brand-/Grafikdesigner gebrieft) hat die
+#      Referenzbilder gesichtet - ihren eigenen Feed, lisa.contentdesign
+#      (die sie nicht kopieren will) und juliaknauber_coaching (ihr
+#      genanntes Vorbild) - und sich fuer GENAU EINE Farbe entschieden:
+#
+#        "Clay Rust" #B5622C - gebranntes Terrakotta/Rostrot.
+#
+#      Begruendung des Agenten: Kontrast ~5.5:1 auf Schwarz und ~3.8:1
+#      auf Weiss (WCAG-AA fuer grosse/fette Schrift), warm statt
+#      "AI-generic" wie das Lila, harmoniert mit den warmen Hauttoenen
+#      ihrer Fotos, klar unterscheidbar von Lisas Schokobraun/Creme
+#      (dort Flaechenfarbe, hier nur punktueller Akzent). Auf Fotos
+#      empfahl der Agent einen leichten Schatten - die bestehende
+#      Scrim-Abdunklung hinter der Schrift (gradient-Zweig) uebernimmt
+#      diese Aufgabe bereits, kein zusaetzlicher Schatten noetig.
+#
+#      UMSETZUNG: dieselben fuenf Stellen wie in 283, nur der
+#      Farbwert getauscht; zAkz() (Auto-Betonung letzte 1-2 Woerter,
+#      Regler lisaAkzentAuto/lisaAkzentWorte) unveraendert aus 283/346.
+#
+#      GESICHTET: Raster und Karussell - Rostrot auf Schwarz, Weiss
+#      und Foto.
+
+P.append((
+ 'me=$?(BS_KACHEL.lisaHell||X(t.color,$,Fe)):zFarbe(Fe),Oe=me,',
+ 'me=$?(BS_KACHEL.lisaHell||X(t.color,$,Fe)):zFarbe(Fe),Oe=BS_KACHEL.lisaAkzent||me,',
+ 'gradient-Zweig: Akzentfarbe lisaAkzent', 1))
+
+P.append((
+ 'me=zFarbe(Fe),Oe=me;',
+ 'me=zFarbe(Fe),Oe=BS_KACHEL.lisaAkzent||me;',
+ 'plate- und frame-Zweig: Akzentfarbe lisaAkzent', 2))
+
+P.append((
+ 'zHt=Pt(zOb?zOb.segments:ht,zOb?zOb.plain:qe,{left:br,',
+ 'zHt=Pt(zAkz(zOb?zOb.segments:ht),zOb?zOb.plain:qe,{left:br,',
+ 'gradient-Zweig: Headline durch zAkz', 1))
+
+P.append((
+ 'zHt=Pt(zOb?zOb.segments:qe,zOb?zOb.plain:$e,{left:zInsetUnten>0?r/2:Ye,',
+ 'zHt=Pt(zAkz(zOb?zOb.segments:qe),zOb?zOb.plain:$e,{left:zInsetUnten>0?r/2:Ye,',
+ 'plate-Zweig: Headline durch zAkz', 1))
+
+P.append((
+ 'const zHt=Pt($e,Qe,{left:r/2,top:zIn?',
+ 'const zHt=Pt(zAkz($e),Qe,{left:r/2,top:zIn?',
+ 'frame-Zweig: Headline durch zAkz', 1))
+
+P.append((
+ 'lisaGrund:"#000000",',
+ 'lisaGrund:"#000000",lisaAkzent:"#B5622C",lisaAkzentAuto:1,lisaAkzentWorte:2,',
+ 'Regler lisaAkzent Clay Rust #B5622C, lisaAkzentAuto 1, lisaAkzentWorte 2', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
