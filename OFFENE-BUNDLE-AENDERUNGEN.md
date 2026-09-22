@@ -9751,3 +9751,25 @@ geschnappt und der Stapel kam hauchdünn heraus. `At()` löst Bereiche jetzt in
 
 Gesichtet: Stapel „06 — Hör auf …" in Montserrat Bold/Semibold, Aufbau/Pointe
 in Montserrat, Cover unverändert.
+
+## 300 — „Das ist nicht Montserrat, stell das ein"
+
+Auf dem iPhone war es nach 299 trotzdem nicht Montserrat, im Chromium-Test
+schon. Befund: die einzige Montserrat-Datei im Projekt ist ein **Variable
+Font** (Gewicht 100–900, Default-Instanz Thin). Safari zeichnet Variable
+Fonts im Canvas nicht zuverlässig — es fällt auf die Systemschrift oder die
+Default-Instanz zurück —, Chromium schon. Daher der Unterschied zwischen
+Test und Handy.
+
+Lösung wie bei Helvetica Neue: aus der Variable-Datei wurden vier
+**statische Schnitte** erzeugt (`site/fonts/MontserratBrand-400/500/600/700
+.woff2`, je ~16 KB) und in `site/index.html` und `site/dunkel/index.html`
+als `@font-face` „MontserratBrand" mit je einem Gewicht eingetragen. Im
+Bundle zeigt `folgeSchrift` auf „MontserratBrand", die Familie steht im
+allgemeinen Font-Preload, und das Folge-Layout wartet vor dem Zeichnen
+gezielt (8 s) auf die Schnitte 500/600/700, statt sich auf das
+4-Sekunden-Preload-Rennen zu verlassen.
+
+Gesichtet in Chromium: Stapel und Aufbau/Pointe in MontserratBrand
+Bold/Semibold/Medium. Auf iOS muss sie es bestätigen; falls es dort immer
+noch nicht greift, braucht es einen Screenshot.

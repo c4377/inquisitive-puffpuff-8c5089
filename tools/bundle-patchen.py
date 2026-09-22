@@ -10566,6 +10566,56 @@ P.append((
  'title:"Geladene Datei",children:"karten361"',
  'Versionsschild auf karten361', 1))
 
+
+# --- karten362/363: "Das ist nicht Montserrat" - statische Montserrat-Schnitte
+#     unter eigenem Namen, gezieltes Warten auf die Folge-Schrift ---------------
+#
+#     Nach 361 auf dem iPhone: "Das ist nicht Montserrat stell das ein". Im
+#     Chromium-Test war es Montserrat; auf iOS offenbar nicht. Befund: die
+#     einzige Montserrat-Datei im Projekt ist ein Variable Font (wght 100-900,
+#     Default-Instanz Thin). Safari zeichnet Variable Fonts im Canvas nicht
+#     zuverlaessig (Fallback bzw. Default-Instanz), Chromium schon - daher
+#     der Unterschied zwischen Test und Handy.
+#
+#     Loesung (nicht im Bundle, sondern in site/): aus der Variable-Datei mit
+#     fontTools vier statische Schnitte erzeugt (site/fonts/MontserratBrand-
+#     400/500/600/700.woff2, je ~16 KB) und in site/index.html sowie
+#     site/dunkel/index.html als @font-face "MontserratBrand" mit je EINEM
+#     Gewicht eingetragen - dasselbe Muster wie HelveticaNeueBrand.
+#
+#     Im Bundle: folgeSchrift zeigt auf "MontserratBrand", die Familie steht
+#     im allgemeinen Font-Preload, und das Folge-Layout wartet vor dem
+#     Zeichnen gezielt (8 s) auf die Schnitte 500/600/700 der Folge-Schrift,
+#     statt sich auf das 4-s-Preload-Rennen zu verlassen (362).
+#
+#     GESICHTET (Chromium): Stapel und Aufbau/Pointe in MontserratBrand
+#     Bold/Semibold/Medium; auf iOS muss sie es bestaetigen.
+
+P.append((
+ 'ge.folge===!0&&(Number(BS_KACHEL.folgeOverlay)||0)>0&&e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:"rgba(0,0,0,"+(Number(BS_KACHEL.folgeOverlay)||.38)+")",selectable:!1,evented:!1}));',
+ 'if(ge.folge===!0){try{const zFS=BS_KACHEL.folgeSchrift||BS_KACHEL.lisaSchrift||"HelveticaNeueBrand";typeof document<"u"&&document.fonts&&document.fonts.load&&await Promise.race([Promise.all(["500","600","700"].map(zw=>document.fonts.load(`${zw} 44px "${zFS}"`).catch(()=>{}))),new Promise(zr=>setTimeout(zr,8e3))])}catch(zz){}}ge.folge===!0&&(Number(BS_KACHEL.folgeOverlay)||0)>0&&e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:"rgba(0,0,0,"+(Number(BS_KACHEL.folgeOverlay)||.38)+")",selectable:!1,evented:!1}));',
+ 'Folge-Layout: gezielt auf folgeSchrift warten, bevor gezeichnet wird', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten361"',
+ 'title:"Geladene Datei",children:"karten362"',
+ 'Versionsschild auf karten362', 1))
+
+P.append((
+ 'folgeSchrift:"Montserrat",',
+ 'folgeSchrift:"MontserratBrand",',
+ 'folgeSchrift -> MontserratBrand (statische Schnitte)', 1))
+
+P.append((
+ '"Anton","Montserrat","Playfair Display"',
+ '"Anton","Montserrat","MontserratBrand","Playfair Display"',
+ 'MontserratBrand in den Font-Preload', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten362"',
+ 'title:"Geladene Datei",children:"karten363"',
+ 'Versionsschild auf karten363', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
