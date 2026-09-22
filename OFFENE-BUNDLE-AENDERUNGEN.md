@@ -9643,3 +9643,33 @@ vom Ausgang des allgemeinen Preload-Rennens.
 
 Falls es danach immer noch nicht klappt, braucht es einen Screenshot von
 ihr, um die eigentliche Ursache zu finden.
+
+## 296 — „Lieb Tag 15 Style Cover, Tag 1 bei Fotos das Lila Licht weg, Folgefolien wie Bild 3&4"
+
+Sie schickte vier Screenshots: zwei aus ihrem eigenen Content-Plan (Tag
+18–1) und zwei von einem Referenz-Account (marina.persano — heller,
+schmaler Aufbausatz oben, darunter eine deutlich fettere, größere Pointe,
+direkt auf dem Foto, keine Karte). Dazu: „Ich lieb Tag 15 Style Cover und
+Tag 1 bei Fotos das Lila licht weg, und der Style der Folge slides eher so
+wie Bild 3&4 vom Schriftbild und Größe und so."
+
+Drei Teile:
+
+1. **Tag 15 als Cover-Stil** (schwarz, kein Foto, fetter weißer Text) —
+   keine Code-Änderung nötig, das ist bereits der bestehende plate-Zweig
+   ohne Foto. Nur als bestätigte Präferenz vermerkt.
+2. **Lila Licht weg.** `lisaLicht` global auf leer gesetzt — das
+   Umgebungslicht (seit 290/291) zeichnet nirgends mehr.
+3. **Folgefolien wie Bild 3&4.** Neuer Helfer `zSetupPayoff()`: Folgefolien
+   (Folie 2+) mit Foto, deren Text sich an einer Satzgrenze in Aufbau +
+   Pointe teilen lässt (dieselbe Erkennung wie beim bestehenden
+   Kicker-Feature), werden jetzt direkt auf dem Foto gezeichnet statt in
+   einer Karte: Aufbausatz normal/kleiner, Pointe fett/größer, beide
+   zentriert mit Schlagschatten. Nur wenn der Text sich wirklich teilen
+   lässt und noch nicht als Schrittfolge/Liste erkannt wurde — sonst
+   unverändert.
+
+Gesichtet: ein Tag mit Cover (kein Foto, schwarz, passt zu „Tag 15") und
+einer Folgefolie mit Testfoto und zweiteiligem Satz — Aufbausatz klein,
+Pointe fett und größer, kein Lila-Licht sichtbar, direkt auf dem Foto ohne
+Karte.

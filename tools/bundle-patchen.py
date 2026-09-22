@@ -10334,6 +10334,50 @@ P.append((
  'title:"Geladene Datei",children:"karten357"',
  'Versionsschild auf karten357', 1))
 
+
+# --- karten358: Lila Licht weg, Folgefolien direkt auf Foto (Aufbau +
+#     fette Pointe) statt Karte, Cover-Feedback bestaetigt ------------------
+#
+#     Sie schickte vier Screenshots ihres eigenen Content-Plans plus einen
+#     Referenz-Account (marina.persano) und schrieb: "Ich lieb Tag 15 Style
+#     Cover und Tag 1 bei Fotos das Lila licht weg, und der Style der Folge
+#     slides eher so wie Bild 3&4 vom Schriftbild und Größe und so."
+#
+#     Drei Teile:
+#      1. Tag 15 als Cover-Stil (schwarz, kein Foto, fetter weisser Text) -
+#         keine Aenderung noetig, das ist bereits der bestehende plate-Zweig
+#         ohne Foto; nur als Bestaetigung/Praeferenz vermerkt.
+#      2. `lisaLicht` global auf leer gesetzt: das lila Umgebungslicht
+#         (zLichtZeichnen, seit 290/291) zeichnet nirgends mehr.
+#      3. Neuer Helfer zSetupPayoff(): fuer Folgefolien (slideIndex>0) mit
+#         Foto, deren Text sich an einer Satzgrenze in Aufbau+Pointe teilen
+#         laesst (zTeilen, dieselbe Erkennung wie beim Kicker-Feature), wird
+#         jetzt direkt auf dem Foto gezeichnet statt in einer Karte: der
+#         Aufbausatz normal/kleiner, die Pointe fett/groesser, beides
+#         zentriert mit Schlagschatten - wie im Referenz-Screenshot (Bild
+#         3&4). Nur wenn sich der Text wirklich teilen laesst und noch nicht
+#         als Schrittfolge/Liste erkannt wurde (zRolle); sonst unveraendert.
+
+P.append((
+ 'lisaLicht:"#7323D1"',
+ 'lisaLicht:""',
+ 'lisaLicht global abgeschaltet', 1))
+
+P.append((
+ 'return{top:zTop,bottom:zErg.bottom}}catch(zz){return null}},lr={brand_photo_gradient:',
+ 'return{top:zTop,bottom:zErg.bottom}}catch(zz){return null}},zSetupPayoff=(zOben,zUnten,zOpt)=>{try{const zW=zOpt.width,zTop=zOpt.top,zMax=zOpt.maxBottom||n*.92,zFam=BS_KACHEL.lisaSchrift||"HelveticaNeueBrand",zSetupSz=r*(Number(BS_KACHEL.lisaPayoffSetupGroesse)||.032),zPayoffSz=r*(Number(BS_KACHEL.lisaPayoffGroesse)||.058);const zBauen=zScale=>{let zY=zTop;const zSe=new Pe.fabric.Textbox(String(zOben||"").replace(/\\*/g,""),{left:r/2-zW/2,top:zY,originX:"left",originY:"top",width:zW,fontSize:Math.max(10,zSetupSz*zScale),fontFamily:zFam,fontWeight:"500",fill:"#FFFFFF",textAlign:"center",lineHeight:1.24,shadow:zOpt.shadow,selectable:!1});zY+=(zSe.height||0)+zPayoffSz*zScale*.3;const zPa=new Pe.fabric.Textbox(String(zUnten||"").replace(/\\*/g,""),{left:r/2-zW/2,top:zY,originX:"left",originY:"top",width:zW,fontSize:Math.max(10,zPayoffSz*zScale),fontFamily:zFam,fontWeight:"700",fill:"#FFFFFF",textAlign:"center",lineHeight:1.14,shadow:zOpt.shadow,selectable:!1});zY+=(zPa.height||0);return{bx:[zSe,zPa],bottom:zY}};let zScale=1,zErg=zBauen(zScale);for(let zi=0;zi<40&&zErg.bottom>zMax&&zScale>.3;zi+=1)zScale-=.02,zErg=zBauen(zScale);zErg.bx.forEach(zt=>e.add(zt));return{top:zTop,bottom:zErg.bottom}}catch(zz){return null}},lr={brand_photo_gradient:',
+ 'insert zSetupPayoff', 1))
+
+P.append((
+ 'const zRlG=kt?"normal":zRolle(t.text),',
+ 'if((i.slideIndex||0)>0&&!kt&&!Ye&&!ge.bigWord&&!t.secondaryText&&BS_KACHEL.lisaTeilen!==0&&zRolle(t.text)==="normal"){const zSp2=zTeilen($e?$e.rest:t.text,!1);if(zSp2){zSetupPayoff(zSp2.oben,zSp2.unten,{width:r*(ge.exactWidth||.82),top:ae,maxBottom:Ke,shadow:se()});if(ge.kicker==="bottom"&&(t.footerText||t.secondaryText)&&Te(t.footerText||t.secondaryText,br,n*.8,G(me,.7),sr,"center"),i.globalBrandName,t.overlayImage)try{await Ae(t.overlayImage)}catch{}$e&&be($e.label),Le(),e.renderAll();return}}const zRlG=kt?"normal":zRolle(t.text),',
+ 'wire setup+payoff into gradient follow-up slides', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten357"',
+ 'title:"Geladene Datei",children:"karten358"',
+ 'Versionsschild auf karten358', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
