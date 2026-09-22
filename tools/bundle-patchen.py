@@ -10142,6 +10142,53 @@ P.append((
  'lineHeight:zIn?.98:t.warmEditorial?1.04:1.12,fontWeight:"700",shadow:se(),maxBottom:zIn?tt-n*.02:Ke});zIn&&zSp',
  'frame-Zweig: Headline fett (700), vorher gar kein Gewicht gesetzt (Vorgabe war 600)', 1))
 
+# 292  Zentriert sieht bei Listentext nicht gut aus - Design-Agent gefragt
+#
+#      "Bei einem solchen Text sieht immer zentriert nicht gut aus.
+#      Mach mit einem Design Agent einen Vorschlag." Dazu 30 Tage
+#      Content geschickt: nummerierte Schritte ("01 - HEADLINE") und
+#      kurze, unterschiedlich lange Zeilen mit bewussten Umbruechen
+#      (Pacing-Stil).
+#
+#      EIN SUBAGENT (als Editorial-/Typedesigner gebrieft, mit fuenf
+#      Beispiel-Folien aus ihrem Text) hat eine Regel vorgeschlagen:
+#      linksbuendig, wenn der Text (an den ORIGINAL-Zeilenumbruechen
+#      gezaehlt) in mindestens drei Zeilen zerfaellt UND die kuerzeste
+#      weniger als halb so lang ist wie die laengste - sonst bleibt es
+#      zentriert. Ein Nummern-Praefix ("01 -", "02 -") erzwingt immer
+#      linksbuendig, auch bei nur einer Zeile, damit eine ganze
+#      Schrittfolge nicht mitten in der Serie die Anmutung wechselt.
+#      Manuell gesetzte Ausrichtung (alignLocked) hat weiterhin Vorrang.
+#
+#      UMGESETZT in gradient- und plate-Zweig (die beiden, die ihren
+#      Text-Content tragen); der frame-Zweig (kleines Foto + grosses
+#      Wort) bleibt bewusst zentriert, dafuer gebaut.
+#
+#      NICHT umgesetzt: der zweite Teil des Vorschlags, die Nummer als
+#      eigene kleinere, abgesetzte Kicker-Zeile ueber dem Rest zu
+#      ziehen - dafuer muesste die Kopfzeile aus dem Fliesstext
+#      herausgeloest und separat platziert werden. Naechster Schritt,
+#      falls gewuenscht.
+#
+#      GESICHTET: vier Beispiel-Folien aus ihrem eigenen Text - drei
+#      erkannt und linksbuendig (Schrittfolge, Einzeiler mit Nummer,
+#      Kontrast-Dialog), ein kurzer Zweisaetzer blieb zentriert.
+
+P.append((
+ 'zGrund=zg=>{',
+ 'zAusrichtung=zx=>{try{const zL=String(zx||"").split(/\\r?\\n/).map(zq=>zq.trim()).filter(Boolean);const zN=zL.length;if(/^\\d{1,2}\\s*[\\u2014\\u2013-]/.test(zL[0]||""))return{left:!0};if(zN<3)return{left:!1};const zLens=zL.map(zq=>zq.replace(/\\*/g,"").length);const zMax=Math.max.apply(null,zLens),zMin=Math.min.apply(null,zLens);if(!(zMax>0))return{left:!1};return{left:zMin/zMax<.5}}catch(zz){return{left:!1}}},zGrund=zg=>{',
+ 'Helfer zAusrichtung(): erkennt Listen-/Schrittfolgen-Text', 1))
+
+P.append((
+ '_t=ge.align==="left",ar=!Qt&&',
+ '_t=ge.align==="left"||(!t.alignLocked&&zAusrichtung(t.text).left),ar=!Qt&&',
+ 'gradient-Zweig: Linksbuendigkeit auch bei erkanntem Listentext', 1))
+
+P.append((
+ 'ht=t.alignLocked&&t.textAlign?t.textAlign==="left":ge.align==="left"&&!(t.warmEditorial&&(i.slideIndex||0)===0),Ye=ht?r*.1:r/2',
+ 'ht=t.alignLocked&&t.textAlign?t.textAlign==="left":(ge.align==="left"&&!(t.warmEditorial&&(i.slideIndex||0)===0))||(!t.alignLocked&&zAusrichtung(t.text).left),Ye=ht?r*.1:r/2',
+ 'plate-Zweig: Linksbuendigkeit auch bei erkanntem Listentext', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

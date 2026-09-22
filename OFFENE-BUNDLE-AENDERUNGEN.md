@@ -9515,3 +9515,21 @@ Karussell, Screenshot-Folie unverändert.
 Die Lila-Karten-Variante aus 290 bleibt als Mechanik stehen, ist aber über
 `lisaGrundDunkelAnteil` 0 abgeschaltet. Licht auf Schwarz, Weiß und Fotos
 bleibt wie zuvor. Headline-Gewicht in allen drei Zeichen-Zweigen auf 700.
+
+## 292 — Zentriert sieht bei Listentext nicht gut aus, Design-Agent gefragt
+
+> „Bei einem solchen Text sieht immer zentriert nicht gut aus. Mach mit
+> einem Design Agent einen Vorschlag."
+
+Ein Subagent (Editorial-/Typedesigner, mit fünf Beispiel-Folien aus ihrem
+30-Tage-Text gebrieft) schlug eine Regel vor: **linksbündig**, wenn der Text
+an den Original-Zeilenumbrüchen in mindestens drei Zeilen zerfällt und die
+kürzeste weniger als halb so lang ist wie die längste — sonst zentriert.
+Ein Nummern-Präfix („01 —", „02 —") erzwingt immer linksbündig, auch bei nur
+einer Zeile. Manuell gesetzte Ausrichtung hat weiterhin Vorrang.
+
+Umgesetzt in gradient- und plate-Zweig. Der frame-Zweig bleibt bewusst
+zentriert. Nicht umgesetzt: die Nummer als eigene, abgesetzte Kicker-Zeile —
+nächster Schritt, falls gewünscht. Gesichtet: vier Beispiel-Folien aus
+ihrem eigenen Text, drei korrekt linksbündig, ein kurzer Zweisatz blieb
+zentriert.
