@@ -9391,3 +9391,16 @@ Rahmen-Layouts, Folgefolien, Schleier hinter den Fotos, Screenshot-Folien
 und Leinwandgrund. Weiß und Off-White bleiben. Ein Regler: `lisaGrund`,
 zurück zu Schwarz mit `#000000`. Gesichtet: Raster, Karussell,
 Screenshot-Folie.
+
+## 283 — Schwarz bleibt, Betonungen leuchtend lila
+
+> „Ok, lass schwarz — mach aber Worte leuchtend lila."
+
+Grund wieder Schwarz. Die kursive Betonung in den Layouts bekommt
+`lisaAkzent` `#A855F7`: bei markierten Wörtern und, wenn nichts markiert ist,
+automatisch bei den letzten zwei Wörtern der Headline samt Satzzeichen
+(`lisaAkzentAuto` 1, `lisaAkzentWorte` 2). Headlines unter drei Wörtern
+bleiben ohne. Gesichtet im Raster und Karussell.
+
+Merke: Prüfläufe nie parallel. Zwei gleichzeitige Läufe haben `site/index.html`
+auf 0 Byte geschrieben; `git checkout -- site/index.html` hat es gerichtet.

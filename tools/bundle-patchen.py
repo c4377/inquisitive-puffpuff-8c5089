@@ -9708,6 +9708,66 @@ P.append((
  'e.clear(),e.setBackgroundColor((zx=>{try{let zh=String(zx).replace("#","");if(zh.length===3)zh=zh.split("").map(zq=>zq+zq).join("");const zl=.2126*parseInt(zh.slice(0,2),16)+.7152*parseInt(zh.slice(2,4),16)+.0722*parseInt(zh.slice(4,6),16);return BS_KACHEL.lisaGrund&&zl<45?BS_KACHEL.lisaGrund:zx}catch(zz){return zx}})(t.backgroundColor||"#ffffff"),()=>{',
  'Leinwandgrund: fast-schwarz -> Lila', 1))
 
+# 283  Schwarz bleibt, Betonungen leuchtend lila
+#
+#      "Ok, lass schwarz - mach aber Worte leuchtend lila."
+#      Grund wieder #000000 (344 war ein Tag lang lila). Die Betonung
+#      in den Layouts - kursiv, bisher in Textfarbe - bekommt jetzt
+#      lisaAkzent #A855F7. Sie greift bei *markierten* Woertern und,
+#      wenn nichts markiert ist, automatisch bei den letzten zwei
+#      Woertern der Headline samt Satzzeichen (zAkz, Regler
+#      lisaAkzentAuto 1 / lisaAkzentWorte 2). Headlines mit weniger
+#      als drei Woertern bleiben ohne. Kursiv ist synthetisch, weil
+#      Playfair nur als Regular liegt.
+#
+#      GESICHTET: Raster und Karussell - letzte zwei Woerter lila
+#      kursiv auf Schwarz, Weiss und Foto.
+
+P.append((
+ 'lisaGrund:"#1E1436",',
+ 'lisaGrund:"#000000",lisaAkzent:"#A855F7",lisaAkzentAuto:1,lisaAkzentWorte:2,',
+ 'Regler: lisaGrund zurueck auf Schwarz, lisaAkzent #A855F7, lisaAkzentAuto 1, lisaAkzentWorte 2', 1))
+
+P.append((
+ 'colors:{primary:"#FFFFFF",secondary:"#1E1436",tertiary:"#8E8E92",accent:"#FFFFFF",neutral:"#1E1436",background:"#1E1436",darkPlate:"#1E1436"}',
+ 'colors:{primary:"#FFFFFF",secondary:"#000000",tertiary:"#8E8E92",accent:"#A855F7",neutral:"#000000",background:"#000000",darkPlate:"#000000"}',
+ 'Stil-Objekt G2: Schwarz zurueck, accent lila', 1))
+
+P.append((
+ 'textTileLight:"#FFFFFF",textTileDark:"#1E1436"',
+ 'textTileLight:"#FFFFFF",textTileDark:"#000000"',
+ 'Textflaechen dunkel: Schwarz', 1))
+
+P.append((
+ 'me=$?(BS_KACHEL.lisaHell||X(t.color,$,Fe)):zFarbe(Fe),Oe=me,',
+ 'me=$?(BS_KACHEL.lisaHell||X(t.color,$,Fe)):zFarbe(Fe),Oe=BS_KACHEL.lisaAkzent||me,',
+ 'gradient-Zweig: Akzentfarbe lisaAkzent', 1))
+
+P.append((
+ 'me=zFarbe(Fe),Oe=me;',
+ 'me=zFarbe(Fe),Oe=BS_KACHEL.lisaAkzent||me;',
+ 'plate- und frame-Zweig: Akzentfarbe lisaAkzent', 2))
+
+P.append((
+ 'zTeilen=(zx,zKurz)=>{',
+ 'zAkz=zs=>{try{if(BS_KACHEL.lisaAkzentAuto!==1||!Array.isArray(zs)||!zs.length||zs.some(zq=>zq&&(zq.accent||zq.bold||zq.gold||zq.big)))return zs;const zt=zs.map(zq=>zq.text||"").join("");const zw=zt.split(/(\\s+)/);const zWo=zw.filter((zq,zi)=>zi%2===0&&zq);if(zWo.length<3)return zs;const zn=Math.max(1,Math.min(Number(BS_KACHEL.lisaAkzentWorte)||2,zWo.length-1));let zc=0,zIdx=zw.length;for(let zi=zw.length-1;zi>=0;zi--){if(zi%2===0&&zw[zi]){zc++;if(zc===zn){zIdx=zi;break}}}const zHead=zw.slice(0,zIdx).join(""),zRest=zw.slice(zIdx).join("");if(!zRest.trim())return zs;const zOut=[];zHead&&zOut.push({text:zHead,accent:!1,bold:!1});zOut.push({text:zRest,accent:!0,bold:!1});return zOut.map(zq=>zq.text).join("")===zt?zOut:zs}catch(zz){return zs}},zTeilen=(zx,zKurz)=>{',
+ 'zAkz(): ohne Markierung die letzten zwei Woerter (samt Satzzeichen) als Akzent', 1))
+
+P.append((
+ 'zHt=Pt(zOb?zOb.segments:ht,zOb?zOb.plain:qe,{left:br,',
+ 'zHt=Pt(zAkz(zOb?zOb.segments:ht),zOb?zOb.plain:qe,{left:br,',
+ 'gradient-Zweig: Headline durch zAkz', 1))
+
+P.append((
+ 'zHt=Pt(zOb?zOb.segments:qe,zOb?zOb.plain:$e,{left:zInsetUnten>0?r/2:Ye,',
+ 'zHt=Pt(zAkz(zOb?zOb.segments:qe),zOb?zOb.plain:$e,{left:zInsetUnten>0?r/2:Ye,',
+ 'plate-Zweig: Headline durch zAkz', 1))
+
+P.append((
+ 'const zHt=Pt($e,Qe,{left:r/2,top:zIn?',
+ 'const zHt=Pt(zAkz($e),Qe,{left:r/2,top:zIn?',
+ 'frame-Zweig: Headline durch zAkz', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
