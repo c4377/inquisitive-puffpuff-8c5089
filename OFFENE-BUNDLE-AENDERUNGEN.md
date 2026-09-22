@@ -9479,3 +9479,30 @@ Nur auf dunklem Grund, nur auf Karten ohne eigenes Foto in der Ecke (sonst
 hätte das Licht das Foto eingefärbt). Foto-Deckblätter und
 Screenshot-Folien bleiben unberührt. Regler: `lisaLicht`,
 `lisaLichtStaerke`, `lisaLichtRadius`, `lisaLichtX`, `lisaLichtY`.
+
+## 290 — Serifenlos, Licht überall und variiert, gelegentlich Lila-Karten
+
+> „Ändere bitte die Schrift in ein Non-Serif, Helvetica oder Inter. Mach
+> bitte auch bei den weißen Slides das lila Licht und auch bei den
+> Fotoslides. Variier ein bisschen, wo du das Licht setzt. Mach bitte
+> manchmal auch eine, ein dunkleres Lila als das Lila fürs Licht als
+> Hintergrund, und dann Lila und weiße Schrift."
+
+Vier Änderungen in einem Schritt:
+
+1. **Schrift.** Playfair Display raus, HelveticaNeueBrand rein — an allen
+   Stellen im aktiven Pfad (Regler, Screenshot-Hook, Fotoschrift, alte
+   Kachel-Folgefolien, Ablauf-Titel, Kasten, Versal- und Inset-Unterzeile).
+2. **Licht überall, variiert.** `zLichtZeichnen()` zeichnet jetzt auch auf
+   hellem Grund (schwächer) und auf Foto-Deckblättern. Die Position kommt
+   aus einem Hash pro Karte, vier Punkte zur Auswahl.
+3. **Gelegentlich Lila-Karten.** `zGrundWahl()` ersetzt mit rund 28 % Chance
+   pro Karte Schwarz durch ein tieferes Lila (`#2A1150`, deutlich dunkler
+   als das Licht-Lila). Weiße Schrift folgt automatisch aus der
+   Dunkelheit; nur auf diesen Karten stehen die letzten ein bis zwei
+   Wörter der Headline in hellem Flieder (`#C4B5FD`, Kontrast 8.8:1).
+
+Kontrastrechner geprüft: `#2A1150` gegen Weiß 16.2:1, `#C4B5FD` gegen
+`#2A1150` 8.8:1. Gesichtet: Raster, ein erzwungenes Beispiel mit
+vorberechnetem Treffer (Flieder-Grund, weißer Text, letztes Wort lila),
+Karussell, Screenshot-Folie unverändert.

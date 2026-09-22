@@ -9976,6 +9976,128 @@ P.append((
  'lisaGrund:"#000000",lisaLicht:"#7323D1",lisaLichtStaerke:.42,lisaLichtRadius:.85,lisaLichtX:-.15,lisaLichtY:.30,',
  'Regler lisaLicht/-Staerke/-Radius/-X/-Y', 1))
 
+# 290  Serifenlos, Licht ueberall und variiert, gelegentlich Lila-Karten
+#
+#      "Aendere bitte die Schrift in ein Non-Serif, Helvetica oder
+#      Inter. Mach bitte auch bei den weissen Slides das lila Licht
+#      und auch bei den Fotoslides. Variier ein bisschen, wo du das
+#      Licht setzt. Mach bitte manchmal auch eine, ein dunkleres Lila
+#      als das Lila fuers Licht als Hintergrund, und dann Lila und
+#      weisse Schrift."
+#
+#      VIER AENDERUNGEN IN EINEM SCHRITT:
+#
+#      1. SCHRIFT: Playfair Display raus, HelveticaNeueBrand rein - an
+#         allen Stellen, die tatsaechlich im aktiven Pfad liegen
+#         (lisaSchrift-Regler, Screenshot-Hook, Fotoschrift, alte
+#         Kachel-Folgefolien, Ablauf-Titel, Kasten, sowie zwei fest
+#         verdrahtete Stellen: die Versal-Unterzeile aus 279 und die
+#         Inset-Unterzeile aus 281 folgen jetzt ebenfalls lisaSchrift
+#         statt eines eigenen Playfair-Literals). Ad-Vorlagen (separate
+#         te==="ad_*"-Zweige) und die boldMode-Sonderfassung in Pt()
+#         bleiben unberuehrt - fuer ihre normalen Slides nie erreicht.
+#
+#      2. LICHT UEBERALL, VARIIERT: zLichtZeichnen() ersetzt die beiden
+#         IIFEs aus 289. Es zeichnet jetzt auch auf hellem Grund
+#         (eigene, schwaechere Staerke lisaLichtStaerkeHell .16 statt
+#         .42) und im gradient-Zweig (Foto-Deckblaetter), direkt nach
+#         der Verlaufsflaeche/Foto. Position kommt aus zLichtPos() -
+#         ein Hash aus Tag, Folienindex und Textanfang waehlt einen von
+#         vier Punkten (links oben, links mitte, ganz oben links eng,
+#         links unten) - je Karte fest, aber uebers Set verteilt.
+#
+#      3. GELEGENTLICH LILA-KARTEN: zGrundWahl() ersetzt in plate- und
+#         frame-Zweig die feste lisaGrund-Grundfarbe. Mit Anteil
+#         lisaGrundDunkelAnteil (.28, per-Karte-Hash) wird statt
+#         Schwarz die tiefere Farbe lisaGrundDunkel (#2A1150) verwendet
+#         - deutlich dunkler als das Licht-Lila #7323D1. zFarbe() liest
+#         diese Karten automatisch als dunkel und setzt weisse Schrift
+#         von selbst. Nur auf diesen Karten (zVar=Fe===lisaGrundDunkel)
+#         wird zAkz() wieder aufgerufen und Oe auf lisaAkzent2 (#C4B5FD,
+#         helles Flieder, Kontrast 8.8:1 auf #2A1150) gesetzt - die
+#         letzten ein bis zwei Woerter der Headline stehen dort lila.
+#         Weisse und Foto-Karten bleiben unveraendert (kein zVar).
+#
+#      GEPRUEFT (Kontrastrechner): lisaGrundDunkel #2A1150 gegen Weiss
+#      16.2:1; lisaAkzent2 #C4B5FD gegen lisaGrundDunkel 8.8:1.
+#
+#      GESICHTET: Raster (Foto-Deckblaetter und Weiss jetzt auch mit
+#      Licht, an unterschiedlichen Stellen), ein erzwungenes
+#      brand_text_left mit vorberechnetem Hash-Treffer (Tag 4:
+#      Flieder-Grund, weisser Fliesstext, "Denken." in Lila-Kursiv),
+#      Karussell, Screenshot-Folie (Schrift sans, kein Licht - wie
+#      zuvor unberuehrt).
+
+P.append((
+ 'deckblattFamilie:"Playfair Display",fotoSchrift:"Playfair Display",',
+ 'deckblattFamilie:"HelveticaNeueBrand",fotoSchrift:"HelveticaNeueBrand",',
+ 'Schrift: Screenshot-Hook und Fotoschrift von Playfair auf Helvetica', 1))
+
+P.append((
+ 'folgeFamilie:"Playfair Display",ablaufTitel:"Playfair Display",',
+ 'folgeFamilie:"HelveticaNeueBrand",ablaufTitel:"HelveticaNeueBrand",',
+ 'Schrift: Folgefolien-Familie (alte Kachel) und Ablauf-Titel auf Helvetica', 1))
+
+P.append((
+ 'lisaSchrift:"Playfair Display",',
+ 'lisaSchrift:"HelveticaNeueBrand",',
+ 'Schrift: lisaSchrift-Regler auf Helvetica', 1))
+
+P.append((
+ 'kastenSchrift:"Playfair Display"',
+ 'kastenSchrift:"HelveticaNeueBrand"',
+ 'Schrift: Kasten-Schrift auf Helvetica', 1))
+
+P.append((
+ 'fontSize:zg,fontFamily:"Playfair Display",fontWeight:"400",fill:G(zF,.92)',
+ 'fontSize:zg,fontFamily:BS_KACHEL.lisaSchrift||"HelveticaNeueBrand",fontWeight:"400",fill:G(zF,.92)',
+ 'Schrift: Versal-Unterzeile (zUnter) folgt lisaSchrift statt Playfair', 1))
+
+P.append((
+ 'fontSize:Math.round(r*(Number(BS_KACHEL.lisaInsetUnten)||.046)),fontFamily:"Playfair Display",fontWeight:"400",fill:me,textAlign:"center"',
+ 'fontSize:Math.round(r*(Number(BS_KACHEL.lisaInsetUnten)||.046)),fontFamily:BS_KACHEL.lisaSchrift||"HelveticaNeueBrand",fontWeight:"400",fill:me,textAlign:"center"',
+ 'Schrift: Inset-Unterzeile (frame-Zweig) folgt lisaSchrift statt Playfair', 1))
+
+P.append((
+ 'zGrund=zg=>{',
+ 'zGrundWahl=()=>{try{const zA=Number(BS_KACHEL.lisaGrundDunkelAnteil)||0,zG=BS_KACHEL.lisaGrund||"#000000";if(!(zA>0))return zG;const zS=String(t._tag)+"|"+String(i.slideIndex||0)+"|"+String(t.text||"").slice(0,16)+"|g";let zh=0;for(let zi=0;zi<zS.length;zi++)zh=(zh*31+zS.charCodeAt(zi))%99991;return (zh%1000)/1000<zA?(BS_KACHEL.lisaGrundDunkel||"#2A1150"):zG}catch(zz){return BS_KACHEL.lisaGrund||"#000000"}},zLichtPos=()=>{try{const zS=String(t._tag)+"|"+String(i.slideIndex||0)+"|"+String(t.text||"").slice(0,16)+"|l";let zh=0;for(let zi=0;zi<zS.length;zi++)zh=(zh*31+zS.charCodeAt(zi))%99991;const zP=[[-.15,.18,.85],[-.20,.46,.80],[-.08,.06,.75],[-.18,.66,.90]];return zP[zh%zP.length]}catch(zz){return[-.15,.30,.85]}},zLichtZeichnen=(zFarbGrund,zAus)=>{try{if(!BS_KACHEL.lisaLicht||zAus)return;const zHell=w(zFarbGrund)>=60,zSt=zHell?(Number(BS_KACHEL.lisaLichtStaerkeHell)??.16):(Number(BS_KACHEL.lisaLichtStaerke)||.42);if(!(zSt>0))return;const zPk=zLichtPos(),zCx=r*zPk[0],zCy=n*zPk[1],zR=r*(zPk[2]||.85);e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,selectable:!1,evented:!1,fill:new Pe.fabric.Gradient({type:"radial",coords:{x1:zCx,y1:zCy,r1:0,x2:zCx,y2:zCy,r2:zR},colorStops:[{offset:0,color:G(BS_KACHEL.lisaLicht,zSt)},{offset:1,color:G(BS_KACHEL.lisaLicht,0)}]})}))}catch(zz){}},zGrund=zg=>{',
+ 'Helfer zGrundWahl/zLichtPos/zLichtZeichnen definiert', 1))
+
+P.append((
+ 'Fe=ge&&ge.plateColor?ge.plateColor:(BS_KACHEL.lisaGrund||zGrund(t.plateOverride||t.backgroundColor||"#E8E8E8")),me=zFarbe(Fe),Oe=me;',
+ 'Fe=ge&&ge.plateColor?ge.plateColor:zGrundWahl(),me=zFarbe(Fe),zVar=Fe===(BS_KACHEL.lisaGrundDunkel||"#2A1150"),Oe=zVar?(BS_KACHEL.lisaAkzent2||"#C4B5FD"):me;',
+ 'plate- und frame-Zweig: Grundfarbe ueber zGrundWahl, Betonungsfarbe/-Variante ueber zVar', 2))
+
+P.append((
+ '(()=>{try{if(!BS_KACHEL.lisaLicht||!1||w(Fe)>=60)return;const zCx=r*(Number(BS_KACHEL.lisaLichtX)??-.15),zCy=n*(Number(BS_KACHEL.lisaLichtY)??.30),zR=r*(Number(BS_KACHEL.lisaLichtRadius)||.85),zSt=Number(BS_KACHEL.lisaLichtStaerke)||.42;e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,selectable:!1,evented:!1,fill:new Pe.fabric.Gradient({type:"radial",coords:{x1:zCx,y1:zCy,r1:0,x2:zCx,y2:zCy,r2:zR},colorStops:[{offset:0,color:G(BS_KACHEL.lisaLicht,zSt)},{offset:1,color:G(BS_KACHEL.lisaLicht,0)}]})}))}catch(zz){}})();',
+ 'zLichtZeichnen(Fe,!1);',
+ 'frame-Zweig: Licht ueber zLichtZeichnen (variierte Position, auch auf Weiss/Foto)', 1))
+
+P.append((
+ 'zInsetUnten=zY+zH}(()=>{try{if(!BS_KACHEL.lisaLicht||zTF||w(Fe)>=60)return;const zCx=r*(Number(BS_KACHEL.lisaLichtX)??-.15),zCy=n*(Number(BS_KACHEL.lisaLichtY)??.30),zR=r*(Number(BS_KACHEL.lisaLichtRadius)||.85),zSt=Number(BS_KACHEL.lisaLichtStaerke)||.42;e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,selectable:!1,evented:!1,fill:new Pe.fabric.Gradient({type:"radial",coords:{x1:zCx,y1:zCy,r1:0,x2:zCx,y2:zCy,r2:zR},colorStops:[{offset:0,color:G(BS_KACHEL.lisaLicht,zSt)},{offset:1,color:G(BS_KACHEL.lisaLicht,0)}]})}))}catch(zz){}})();',
+ 'zInsetUnten=zY+zH}zLichtZeichnen(Fe,!!zTF);',
+ 'plate-Zweig: Licht ueber zLichtZeichnen (kein Licht wenn eigenes Kartenfoto)', 1))
+
+P.append((
+ 'colorStops:jr(er)})}))):e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:Fe,selectable:!1}));const dr=t._autoImage',
+ 'colorStops:jr(er)})}))):e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:Fe,selectable:!1}));zLichtZeichnen(Fe,!1);const dr=t._autoImage',
+ 'gradient-Zweig (Foto-Deckblaetter): Licht dazu', 1))
+
+P.append((
+ 'zHt=Pt(zOb?zOb.segments:qe,zOb?zOb.plain:$e,{left:zInsetUnten>0?r/2:Ye,',
+ 'zHt=Pt(zVar?zAkz(zOb?zOb.segments:qe):(zOb?zOb.segments:qe),zOb?zOb.plain:$e,{left:zInsetUnten>0?r/2:Ye,',
+ 'gradient-Zweig: Headline durch zAkz nur auf der Lila-Karten-Variante', 1))
+
+P.append((
+ 'const zHt=Pt($e,Qe,{left:r/2,top:zIn?',
+ 'const zHt=Pt(zVar?zAkz($e):$e,Qe,{left:r/2,top:zIn?',
+ 'plate-Zweig: Headline durch zAkz nur auf der Lila-Karten-Variante', 1))
+
+P.append((
+ 'lisaLicht:"#7323D1",lisaLichtStaerke:.42,lisaLichtRadius:.85,lisaLichtX:-.15,lisaLichtY:.30,',
+ 'lisaLicht:"#7323D1",lisaLichtStaerke:.42,lisaLichtStaerkeHell:.16,lisaGrundDunkel:"#2A1150",lisaGrundDunkelAnteil:.28,lisaAkzent2:"#C4B5FD",',
+ 'Regler: lisaLichtStaerkeHell, lisaGrundDunkel, lisaGrundDunkelAnteil, lisaAkzent2 (lisaLichtX/Y/Radius entfallen, Position kommt aus zLichtPos)', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
