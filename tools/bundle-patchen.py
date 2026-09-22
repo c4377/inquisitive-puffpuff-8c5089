@@ -9670,6 +9670,44 @@ P.append((
  'lisaTextMitte:.58,lisaDeckMitte:.5,lisaDeckHub:.045,',
  'Regler lisaDeckMitte .5, lisaDeckHub .045', 1))
 
+# 282  Dunkles Lila statt Schwarz
+#
+#      "Koennen wir statt schwarz ein dunkles Lila machen?"
+#      Grundton #1E1436 (tiefes Violett, Leuchtdichte etwa 22). Er geht
+#      ueberall hin, wo bisher Schwarz stand: dunkle Textflaechen,
+#      Rahmen-Layouts, Folgefolien, Schleier hinter den Fotos (zGrund
+#      faengt alles unter Leuchtdichte 45), Screenshot-Folien im
+#      Band-Zweig und der Leinwandgrund. Weiss und Off-White bleiben.
+#      Ein Regler: lisaGrund - zurueck zu Schwarz mit "#000000".
+#
+#      GESICHTET: Raster (Tag 5 und 3 lila, Fotos mit leichtem
+#      Lila-Schleier), Karussell, Screenshot-Folie.
+
+P.append((
+ 'lisaGrund:"#000000",',
+ 'lisaGrund:"#1E1436",',
+ 'Regler lisaGrund: dunkles Lila #1E1436', 1))
+
+P.append((
+ 'colors:{primary:"#FFFFFF",secondary:"#000000",tertiary:"#8E8E92",accent:"#FFFFFF",neutral:"#000000",background:"#000000",darkPlate:"#000000"}',
+ 'colors:{primary:"#FFFFFF",secondary:"#1E1436",tertiary:"#8E8E92",accent:"#FFFFFF",neutral:"#1E1436",background:"#1E1436",darkPlate:"#1E1436"}',
+ 'Stil-Objekt G2: Grund, Sekundaer, Neutral, darkPlate im Lila', 1))
+
+P.append((
+ 'textTileLight:"#FFFFFF",textTileDark:"#000000"',
+ 'textTileLight:"#FFFFFF",textTileDark:"#1E1436"',
+ 'Textflaechen dunkel: Lila', 1))
+
+P.append((
+ 'et=!$e&&Ye.grundFarbe?Ye.grundFarbe:String(t.plateOverride||t.backgroundColor||"#000000"),lt=(zGrundTon=et,!_C(et))',
+ 'et=(zx=>{try{return BS_KACHEL.lisaGrund&&w(zx)<45?BS_KACHEL.lisaGrund:zx}catch(zz){return zx}})(!$e&&Ye.grundFarbe?Ye.grundFarbe:String(t.plateOverride||t.backgroundColor||"#000000")),lt=(zGrundTon=et,!_C(et))',
+ 'Band-Zweig (Screenshot-Folien): fast-schwarzer Grund -> Lila', 1))
+
+P.append((
+ 'e.clear(),e.setBackgroundColor(t.backgroundColor||"#ffffff",()=>{',
+ 'e.clear(),e.setBackgroundColor((zx=>{try{let zh=String(zx).replace("#","");if(zh.length===3)zh=zh.split("").map(zq=>zq+zq).join("");const zl=.2126*parseInt(zh.slice(0,2),16)+.7152*parseInt(zh.slice(2,4),16)+.0722*parseInt(zh.slice(4,6),16);return BS_KACHEL.lisaGrund&&zl<45?BS_KACHEL.lisaGrund:zx}catch(zz){return zx}})(t.backgroundColor||"#ffffff"),()=>{',
+ 'Leinwandgrund: fast-schwarz -> Lila', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

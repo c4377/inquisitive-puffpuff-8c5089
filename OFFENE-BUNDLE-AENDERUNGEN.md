@@ -9381,3 +9381,13 @@ Der Textblock der Textflächen stand seit 333 bei .58. Für das Deckblatt gilt
 jetzt .5; folgt eine Unterzeile, rückt die Headline um .045 hoch, damit der
 Block als Ganzes mittig sitzt. Folgefolien bleiben bei .58. Regler
 `lisaDeckMitte`, `lisaDeckHub`. Gesichtet im Raster (Tag 8, 5, 2).
+
+## 282 — Dunkles Lila statt Schwarz
+
+> „Können wir statt schwarz ein dunkles Lila machen?"
+
+Grundton `#1E1436`. Er ersetzt Schwarz überall: dunkle Textflächen,
+Rahmen-Layouts, Folgefolien, Schleier hinter den Fotos, Screenshot-Folien
+und Leinwandgrund. Weiß und Off-White bleiben. Ein Regler: `lisaGrund`,
+zurück zu Schwarz mit `#000000`. Gesichtet: Raster, Karussell,
+Screenshot-Folie.
