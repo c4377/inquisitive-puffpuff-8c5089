@@ -9898,6 +9898,45 @@ P.append((
  'lisaAkzent:"#9142F0",',
  'Regler lisaAkzent: an ihr Video angeglichen #9142F0', 1))
 
+# 288  Kein Farbakzent - schwarz-weiss
+#
+#      "Nein keine, lass es schwarz weiss." Nach zwei Anlaeufen (Lila
+#      A855F7, dann an ihr Video angeglichen 9142F0) will sie doch
+#      keine Akzentfarbe. Gleicher Rueckbau wie in 284: Akzentfarbe
+#      wieder Textfarbe, zAkz() nicht mehr aufgerufen (bleibt tot
+#      stehen), die drei lisaAkzent*-Regler weg. Betonte Woerter sind
+#      wieder schlicht kursiv in Textfarbe.
+
+P.append((
+ 'me=$?(BS_KACHEL.lisaHell||X(t.color,$,Fe)):zFarbe(Fe),Oe=BS_KACHEL.lisaAkzent||me,',
+ 'me=$?(BS_KACHEL.lisaHell||X(t.color,$,Fe)):zFarbe(Fe),Oe=me,',
+ 'gradient-Zweig: Akzentfarbe zurueck auf Textfarbe', 1))
+
+P.append((
+ 'me=zFarbe(Fe),Oe=BS_KACHEL.lisaAkzent||me;',
+ 'me=zFarbe(Fe),Oe=me;',
+ 'plate- und frame-Zweig: Akzentfarbe zurueck auf Textfarbe', 2))
+
+P.append((
+ 'zHt=Pt(zAkz(zOb?zOb.segments:ht),zOb?zOb.plain:qe,{left:br,',
+ 'zHt=Pt(zOb?zOb.segments:ht,zOb?zOb.plain:qe,{left:br,',
+ 'gradient-Zweig: zAkz()-Aufruf entfernt', 1))
+
+P.append((
+ 'zHt=Pt(zAkz(zOb?zOb.segments:qe),zOb?zOb.plain:$e,{left:zInsetUnten>0?r/2:Ye,',
+ 'zHt=Pt(zOb?zOb.segments:qe,zOb?zOb.plain:$e,{left:zInsetUnten>0?r/2:Ye,',
+ 'plate-Zweig: zAkz()-Aufruf entfernt', 1))
+
+P.append((
+ 'const zHt=Pt(zAkz($e),Qe,{left:r/2,top:zIn?',
+ 'const zHt=Pt($e,Qe,{left:r/2,top:zIn?',
+ 'frame-Zweig: zAkz()-Aufruf entfernt', 1))
+
+P.append((
+ 'lisaGrund:"#000000",lisaAkzent:"#9142F0",lisaAkzentAuto:1,lisaAkzentWorte:2,',
+ 'lisaGrund:"#000000",',
+ 'Regler lisaAkzent/lisaAkzentAuto/lisaAkzentWorte entfernt', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

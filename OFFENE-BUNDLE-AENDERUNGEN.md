@@ -9453,3 +9453,13 @@ Familie, ihr Video nur dunkler, weil Umgebungslicht statt Textfarbe.
 `#9142F0` übernimmt denselben Ton, kräftiger und näher am Video, Kontrast
 4.24:1 auf Schwarz und 4.95:1 auf Weiß, beide bestehen WCAG-AA für große
 Schrift.
+
+## 288 — Kein Farbakzent, schwarz-weiß
+
+> „Nein keine, lass es schwarz weiß."
+
+Nach zwei Anläufen (Lila `#A855F7`, dann an ihr Video angeglichen
+`#9142F0`) doch keine Akzentfarbe. Gleicher Rückbau wie in 284: Akzentfarbe
+wieder Textfarbe, `zAkz()` nicht mehr aufgerufen, die drei
+`lisaAkzent*`-Regler weg. Betonte Wörter sind wieder schlicht kursiv in
+Textfarbe.
