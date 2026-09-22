@@ -9734,3 +9734,20 @@ Schrittfolge aus 293 ist unverändert.
 Gesichtet: Cover (schwarz, Licht wieder da), dieselbe Schrittfolge auf
 injiziertem Tagesfoto (groß, lesbar, mittig, kein Licht), Fotofolie mit
 Aufbau/Pointe (kein Licht).
+
+## 299 — „Bitte lieber Montserrat"
+
+Auf die Frage, welche Sans-Serif die Folgefolien tragen (Helvetica Neue,
+selbst gehostet), kam: „Bitte lieber Montserrat." Neuer Regler
+`folgeSchrift` („Montserrat"), gilt für Aufbau/Pointe und den Stapel im
+Folge-Layout. Das Cover bleibt bei Helvetica Neue.
+
+Dabei ein echter Fehler gefunden: Montserrat liegt als Variable Font vor
+(`font-weight: 100 900`). Der Gewichts-Schnapper `Xt()` fragt `At()` nach
+den verfügbaren Gewichten, und `At()` las nur die erste Zahl des Bereichs —
+als einziges Gewicht galt 100, also wurde jedes gewünschte Gewicht auf 100
+geschnappt und der Stapel kam hauchdünn heraus. `At()` löst Bereiche jetzt in
+100er-Schritte auf; einzelne Gewichte (Helvetica Neue) bleiben unverändert.
+
+Gesichtet: Stapel „06 — Hör auf …" in Montserrat Bold/Semibold, Aufbau/Pointe
+in Montserrat, Cover unverändert.

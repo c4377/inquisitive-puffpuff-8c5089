@@ -10522,6 +10522,50 @@ P.append((
  'title:"Geladene Datei",children:"karten360"',
  'Versionsschild auf karten360', 1))
 
+
+# --- karten361: Folgefolien in Montserrat; Variable-Font-Gewichte richtig
+#     erkennen ----------------------------------------------------------------
+#
+#     "Welche sans serif ist das?" - Helvetica Neue. "Bitte lieber Montserrat."
+#     Neuer Regler folgeSchrift ("Montserrat"), gilt fuer Aufbau/Pointe
+#     (zSetupPayoff) und den Stapel im Folge-Layout. Cover bleibt Helvetica.
+#
+#     Dabei aufgefallen: Montserrat liegt als Variable Font vor (@font-face
+#     font-weight "100 900"). At() las nur die erste Zahl und meldete als
+#     einziges verfuegbares Gewicht 100 - Xt() schnappte deshalb jedes
+#     gewuenschte Gewicht auf 100, der Stapel kam hauchduenn heraus (die
+#     Aufbau/Pointe-Zeilen nicht, sie gehen nicht durch Xt). At() loest
+#     Bereiche jetzt in 100er-Schritte auf; Einzelgewichte wie bei
+#     HelveticaNeueBrand bleiben unveraendert.
+#
+#     GESICHTET: Stapel "06 - HOER AUF ..." in Montserrat Bold/Semibold,
+#     Aufbau/Pointe in Montserrat, Cover unveraendert (Helvetica, Licht).
+
+P.append((
+ 'folgeFoto:1,folgeOverlay:.38,folgeMitte:.6,',
+ 'folgeFoto:1,folgeOverlay:.38,folgeMitte:.6,folgeSchrift:"Montserrat",',
+ 'Regler folgeSchrift', 1))
+
+P.append((
+ 'zFam=BS_KACHEL.lisaSchrift||"HelveticaNeueBrand",zSetupSz=',
+ 'zFam=BS_KACHEL.folgeSchrift||BS_KACHEL.lisaSchrift||"HelveticaNeueBrand",zSetupSz=',
+ 'Aufbau/Pointe in folgeSchrift', 1))
+
+P.append((
+ 'mitte:ge.folge===!0?n*(Number(BS_KACHEL.folgeMitte)||.6):void 0,minTop:n*.1,shadow:se(),maxBottom:Ke,fontFamily:zFont($)}):',
+ 'mitte:ge.folge===!0?n*(Number(BS_KACHEL.folgeMitte)||.6):void 0,minTop:n*.1,shadow:se(),maxBottom:Ke,fontFamily:ge.folge===!0?(BS_KACHEL.folgeSchrift||zFont($)):zFont($)}):',
+ 'Folge-Stapel in folgeSchrift', 1))
+
+P.append((
+ 'At=ge=>{const Fe=[];try{document.fonts.forEach(me=>{if(me.family===ge||me.family===`"${ge}"`){const Oe=parseInt(String(me.weight).split(" ")[0],10);Number.isNaN(Oe)||Fe.push(Oe)}})}catch{}return Fe},',
+ 'At=ge=>{const Fe=[];try{document.fonts.forEach(me=>{if(me.family===ge||me.family===`"${ge}"`){const zW=String(me.weight).trim().split(/\\s+/),Oe=parseInt(zW[0],10),zB=zW.length>1?parseInt(zW[1],10):NaN;if(!Number.isNaN(Oe)&&!Number.isNaN(zB)){for(let zw=Math.min(Oe,zB);zw<=Math.max(Oe,zB);zw+=100)Fe.push(zw)}else Number.isNaN(Oe)||Fe.push(Oe)}})}catch{}return Fe},',
+ 'At(): Variable-Font-Gewichtsbereiche (z.B. 100 900) in Einzelgewichte aufloesen', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten360"',
+ 'title:"Geladene Datei",children:"karten361"',
+ 'Versionsschild auf karten361', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
