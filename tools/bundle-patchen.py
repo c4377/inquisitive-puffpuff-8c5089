@@ -10244,6 +10244,63 @@ P.append((
  'const zSp=BS_KACHEL.lisaTeilen!==0&&!ge.bigWord&&!t.secondaryText?zTeilen(Qe?Qe.rest:t.text,!1):null;let tt=zInsetUnten>0?zInsetUnten+n*(Number(BS_KACHEL.textFotoLuft)||.05):ge.exactY!=null?n*ge.exactY:BS_KACHEL.lisaUnten===1?((i.slideIndex||0)===0?n*(Number(BS_KACHEL.lisaDeckMitte)||.5)-(zSp?n*(Number(BS_KACHEL.lisaDeckHub)||.045):0):n*(Number(BS_KACHEL.lisaTextMitte)||.58)):ge.textPos==="top"?n*.24:n*.5;const Qt=zInsetUnten>0?"top":ge.textPos==="top"&&BS_KACHEL.lisaUnten!==1?"top":"center";ge.kicker==="top"&&t.secondaryText?Te(t.secondaryText,Ye,tt-n*.14,G(me,.7),et,"center"):t.secondaryText&&ge.textPos!=="top"&&Te(t.secondaryText,Ye,n*.3,G(me,.7),et,"center");const jt=ge.bigWord?t.fontSize||110:t.warmEditorial&&ge.exactFont?ge.exactFont:t.fontSize||ge.exactFont||(t.warmEditorial?46:58),_t=I(w(Fe)),ar=116,kt=t.warmEditorial&&!ge.bigWord&&(i.slideIndex||0)===0;const zRl=zInsetUnten<=0?zRolle(t.text):"normal";const zOb=zRl==="normal"&&zSp?ye(zSp.oben):null;const zHt=zRl==="schritt"||zRl==="liste"?zStapel(zRl,t.text,{left:Ye,top:tt,width:r*(kt?.78:ge.exactWidth||.8),fill:me,accentFill:Oe,fontSize:t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):kt?r*(ar/1080):t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):c(jt)*zGr(),shadow:se(),maxBottom:Ke,fontFamily:zFont($)}):Pt(zVar?zAkz(zOb?zOb.segments:qe):(zOb?zOb.segments:qe),zOb?zOb.plain:$e,{left:zInsetUnten>0?r/2:Ye,top:tt,originX:zInsetUnten>0?"center":et,originY:Qt,width:r*(zInsetUnten>0?.84:kt?.78:ge.exactWidth||(ht?.8:.74)),maxWidth:kt?r*.82:void 0,fontSize:t.sizeLocked&&typeof t.fontSize=="number"?c(t.fontSize):kt?r*(ar/1080):t.warmEditorial&&ge.exactFont?r*(ge.exactFont/1080):c(jt)*zGr(),goldOk:_t,minFontSize:kt?r*(56/1080):void 0,fill:me,accentFill:Oe,textAlign:zInsetUnten>0?"center":lt,lineHeight:ge.bigWord?.98:kt?1.16:t.warmEditorial?1.04:1.14,fontWeight:"700",shadow:se(),maxBottom:zSp?(kt?n*.72:Ke)-n*.1:kt?n*.72:Ke});try{if(zInsetUnten>0&&zHt&&zHt.originY==="center"){const zGr2=zInsetUnten+n*.035;let zi2=0;for(;zHt.top-(zHt.height||0)/2<zGr2&&zHt.fontSize>12&&zi2<80;zi2+=1)zHt.set("fontSize",zHt.fontSize-1),zHt.initDimensions&&zHt.initDimensions();if(zHt.top-(zHt.height||0)/2<zGr2){zHt.set("top",zGr2+(zHt.height||0)/2);zHt.setCoords&&zHt.setCoords()}}}catch(zz){}if(zRl==="normal"&&zSp&&zUnter(zHt,zSp.unten,me,zInsetUnten>0?!1:lt==="left",Ye),ge.kicker==="bottom"',
  'plate-Zweig: dieselbe zStapel()-Weiche wie im gradient-Zweig, inklusive Deckblatt (Inhalt statt Folienposition entscheidet)', 1))
 
+
+# --- karten356: Foto-Highlight-Layout (lila Header, weisser Text, Marker
+#     hinter *Wort*) als eigenes, waehlbares Layout ------------------------
+#
+#     Reaktion auf einen Referenz-Screenshot (Instagram-Account, dunkler
+#     Foto-Hintergrund, fetter weisser Text, lila Zwischenueberschriften,
+#     lila Marker-Hervorhebung hinter Kernsaetzen). Erst als Mockup-Artifact
+#     gezeigt (Poppins, dann auf ihren Wunsch Playfair Display, damit es nicht
+#     wie eine Kopie des fremden Accounts aussieht), dann als neues Layout
+#     eingebettet: "Mir hat das Lisa Design ja sehr gefallen mit den Layouts"
+#     - also nicht als globaler Stil-Wechsel, sondern als weitere, manuell
+#     waehlbare Karte im bestehenden Layout-System.
+#
+#     Neuer Helfer zAbschnitte(): trennt den Text an Leerzeilen in Bloecke;
+#     ein Block mit 2+ Zeilen wird zu Kopfzeile (Playfair kursiv, lila) plus
+#     Absatz (Playfair, weiss, fliesst natuerlich um); ein Block mit nur
+#     einer Zeile bleibt reiner Absatz ohne Kopfzeile. Die Hervorhebung nutzt
+#     ihr eigenes, bereits vorhandenes *Wort*-Feature (Editor-Tipp "Nutze
+#     *Wort* fuer Farben") - keine neue Eingabe noetig, nur die Darstellung
+#     ist neu: statt Kursiv/Akzentfarbe zeichnet sie jetzt einen lila
+#     Marker-Hintergrund hinter der markierten Phrase (Fabric Textbox
+#     per-Zeichen textBackgroundColor). Automatische Schrumpfung wie bei
+#     zStapel, falls der Text nicht passt.
+#
+#     Neues Layout brand_photo_highlight in der lr-Tabelle (gradient-Zweig,
+#     linksbuendig) UND im manuellen Layout-Waehler der Bearbeitungsseite
+#     ("Foto Highlight") - taucht dort neben den anderen Foto-Layouts auf,
+#     genau wie sie es von den Lisa-Layouts kennt. Nicht in die automatische
+#     layoutReihe-Rotation aufgenommen: die Textstruktur (Kopfzeile + Absatz)
+#     passt nicht zu ihren Schrittfolgen/Listen, deshalb bewusst nur manuell
+#     waehlbar statt automatisch gemischt.
+#
+#     GESICHTET: zwei Abschnitte (Kopfzeile + Absatz) mit je einer markierten
+#     Kernphrase, echte App-Daten ueber den Layout-Waehler ausgewaehlt -
+#     beide Marker sichtbar, Playfair kursiv/weiss/lila korrekt, passt ohne
+#     Ueberlauf in die Karte.
+
+P.append((
+ 'return{top:zTop,height:zErg.bottom-zTop,originY:"top",originX:"left",bottom:zErg.bottom}}catch(zz){return null}},lr={brand_photo_gradient:',
+ 'return{top:zTop,height:zErg.bottom-zTop,originY:"top",originX:"left",bottom:zErg.bottom}}catch(zz){return null}},zAbschnitte=(zText,zOpt)=>{try{const zBloecke=String(zText||"").split(/\\n\\s*\\n+/).map(zb=>zb.split(/\\r?\\n/).map(zq=>zq.trim()).filter(Boolean)).filter(zb=>zb.length);if(!zBloecke.length)return null;const zFam=BS_KACHEL.lisaHighlightSchrift||"Playfair Display",zHeadFarbe=BS_KACHEL.lisaHighlightHeader||"#B9A3E8",zMarker=BS_KACHEL.lisaHighlightMarker||"#3F2F66",zLeft=zOpt.left,zW=zOpt.width,zTop=zOpt.top,zMax=zOpt.maxBottom||n*.92,zHeadSz=r*(Number(BS_KACHEL.lisaHighlightHeaderGroesse)||.048),zKoerperSz=r*(Number(BS_KACHEL.lisaHighlightGroesse)||.039);const zAkzentSeg=zx=>String(zx||"").split(/(\\*[^*]+\\*)/g).filter(Boolean).map(zp=>{const zAcc=zp.length>2&&zp.startsWith("*")&&zp.endsWith("*");return{text:zAcc?zp.slice(1,-1):zp,accent:zAcc}});const zSpecs=zBloecke.map(zL=>zL.length>=2?{header:zL[0],body:zL.slice(1).join(" ")}:{header:null,body:zL[0]});const zBauen=zScale=>{let zY=zTop;const zBx=[];for(const zs of zSpecs){if(zs.header){const zh=new Pe.fabric.Text(zs.header.replace(/\\*/g,""),{left:zLeft,top:zY,originX:"left",originY:"top",fontSize:Math.max(10,zHeadSz*zScale),fontFamily:zFam,fontWeight:"700",fontStyle:"italic",fill:zHeadFarbe,shadow:zOpt.shadow,selectable:!1});zY+=(zh.height||0)+zKoerperSz*zScale*.22;zBx.push(zh)}const zSeg=zAkzentSeg(zs.body),zPlain=zSeg.map(zq=>zq.text).join("");const zKt=new Pe.fabric.Textbox(zPlain,{left:zLeft,top:zY,originX:"left",originY:"top",width:zW,fontSize:Math.max(10,zKoerperSz*zScale),fontFamily:zFam,fontWeight:"600",fill:"#FFFFFF",textAlign:"left",lineHeight:1.32,shadow:zOpt.shadow,selectable:!1});let zPos=0;zSeg.forEach(zq=>{if(zq.accent)zKt.setSelectionStyles({fill:"#FFFFFF",textBackgroundColor:zMarker},zPos,zPos+zq.text.length);zPos+=zq.text.length});zY+=(zKt.height||0)+zKoerperSz*zScale*.55;zBx.push(zKt)}return{bx:zBx,bottom:zY}};let zScale=1,zErg=zBauen(zScale);for(let zi=0;zi<45&&zErg.bottom>zMax&&zScale>.35;zi+=1)zScale-=.02,zErg=zBauen(zScale);zErg.bx.forEach(zt=>e.add(zt));return{top:zTop,bottom:zErg.bottom}}catch(zz){return null}},lr={brand_photo_gradient:',
+ 'insert zAbschnitte', 1))
+
+P.append((
+ 'we_plate_cream_left:{base:"plate",textPos:"center",align:"left",exactY:.5,exactFont:58,exactWidth:.72,plateColor:"#E8E8E8"}};',
+ 'we_plate_cream_left:{base:"plate",textPos:"center",align:"left",exactY:.5,exactFont:58,exactWidth:.72,plateColor:"#E8E8E8"},brand_photo_highlight:{base:"gradient",textPos:"top",align:"left",highlight:!0}};',
+ 'add lr.brand_photo_highlight', 1))
+
+P.append((
+ 'const zRlG=kt?"normal":zRolle(t.text),',
+ 'if(ge.highlight===!0){zAbschnitte(t.text,{left:r*.09,top:n*(Number(BS_KACHEL.lisaHighlightOben)||.14),width:r*(ge.exactWidth||.82),maxBottom:Ke,shadow:se()});if(ge.kicker==="bottom"&&(t.footerText||t.secondaryText)&&Te(t.footerText||t.secondaryText,r*.09,n*.8,"rgba(255,255,255,0.7)","left","center"),i.globalBrandName,t.overlayImage)try{await Ae(t.overlayImage)}catch{}$e&&be($e.label),Le(),e.renderAll();return}const zRlG=kt?"normal":zRolle(t.text),',
+ 'wire highlight branch into gradient', 1))
+
+P.append((
+ '{id:"brand_photo_bottom_left",name:"Foto unten links",icon:CA,description:"Text unten links"},',
+ '{id:"brand_photo_bottom_left",name:"Foto unten links",icon:CA,description:"Text unten links"},{id:"brand_photo_highlight",name:"Foto Highlight",icon:Xh,description:"Weißer Text, lila Highlight"},',
+ 'add layout picker UI entry', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

@@ -9583,3 +9583,41 @@ Fragenkaskade ohne Nummer (Gedankenstrich-Liste), ein kurzer normaler Satz
 (unverändert zentriert über `Pt()`), dieselbe Schrittfolge im gradient-Zweig
 ohne eigenes Foto (Verlaufshintergrund statt Karte). Alle vier korrekt
 serifenlos in HelveticaNeueBrand, keine Überläufe.
+
+## 294 — Foto-Highlight-Layout: lila Header, weißer Text, Marker hinter *Wort*
+
+Sie zeigte einen Referenz-Screenshot (fremder Instagram-Account): dunkler
+Foto-Hintergrund, fetter weißer Text, lila Zwischenüberschriften, lila
+Marker-Hervorhebung hinter Kernsätzen. „Geh vielleicht zurück und mach's so
+auch ohne Layouts sondern weißer Text auf Fotos."
+
+Erst ein Mockup als Artifact gezeigt (Poppins Bold), dann auf ihren Wunsch
+auf Playfair Display umgestellt: „Das hat halt schon wer also was ginge
+noch, vielleicht doch mit Playfair" — damit es nicht wie eine Kopie des
+fremden Accounts aussieht. Danach die Rückfrage, wie es eingebettet wird:
+„Mir hat das Lisa Design ja sehr gefallen mit den Layouts" — also nicht als
+globaler Stilwechsel, sondern als weiteres, manuell wählbares Layout neben
+den bestehenden.
+
+Neuer Helfer `zAbschnitte()`: trennt den Text an Leerzeilen in Blöcke. Ein
+Block mit zwei oder mehr Zeilen wird zu Kopfzeile (Playfair kursiv, Lila)
+plus natürlich umbrechendem Absatz (Playfair, Weiß); ein Block mit nur
+einer Zeile bleibt reiner Absatz ohne Kopfzeile. Die Hervorhebung nutzt ihr
+eigenes, längst vorhandenes `*Wort*`-Feature aus dem Editor (Tipp „Nutze
+*Wort* für Farben") — keine neue Eingabe nötig, nur die Darstellung ist
+neu: statt Kursiv/Akzentfarbe jetzt ein lila Marker-Hintergrund hinter der
+markierten Phrase (Fabric-Textbox, Hintergrundfarbe pro Zeichenbereich).
+Schrumpft automatisch in Stufen, falls der Text nicht passt.
+
+Neues Layout `brand_photo_highlight` in der Layout-Tabelle (gradient-Zweig,
+linksbündig) **und** im manuellen Layout-Wähler der Bearbeitungsseite als
+„Foto Highlight" — taucht dort neben den anderen Foto-Layouts auf, genau
+wie die Lisa-Layouts. Bewusst nicht in die automatische
+`layoutReihe`-Rotation aufgenommen: die Kopfzeile+Absatz-Struktur passt
+nicht zu ihren Schrittfolgen und Listen, deshalb nur manuell wählbar statt
+automatisch gemischt.
+
+Gesichtet: zwei Abschnitte (Kopfzeile + Absatz) mit je einer markierten
+Kernphrase, über echte App-Daten und den Layout-Wähler ausgewählt — beide
+Marker sichtbar, Playfair kursiv/weiß/lila korrekt, passt ohne Überlauf in
+die Karte.
