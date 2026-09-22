@@ -10098,6 +10098,50 @@ P.append((
  'lisaLicht:"#7323D1",lisaLichtStaerke:.42,lisaLichtStaerkeHell:.16,lisaGrundDunkel:"#2A1150",lisaGrundDunkelAnteil:.28,lisaAkzent2:"#C4B5FD",',
  'Regler: lisaLichtStaerkeHell, lisaGrundDunkel, lisaGrundDunkelAnteil, lisaAkzent2 (lisaLichtX/Y/Radius entfallen, Position kommt aus zLichtPos)', 1))
 
+# 291  Fettes Helvetica, keine Lila-Flaechen mehr
+#
+#      "Lieber fettes Helvetica und bitte keine lila Flaechen, nur
+#      schwarz mit lila Licht und weiss mit lila Licht."
+#
+#      Die Lila-Karten-Variante aus 290 (zGrundWahl/zVar/lisaAkzent2)
+#      bleibt als Mechanik stehen, wird aber ueber lisaGrundDunkelAnteil
+#      0 abgeschaltet - zGrundWahl liefert dann immer lisaGrund
+#      (Schwarz), zVar ist nie wahr, der Lila-Textakzent kommt nicht
+#      mehr vor. Licht (289/290) bleibt unveraendert auf Schwarz, Weiss
+#      und Fotos.
+#
+#      Headline-Gewicht in allen drei Zeichen-Zweigen auf 700 (vorher
+#      400 in gradient/plate, im frame-Zweig war gar kein Gewicht
+#      gesetzt - Pt()s eigene Vorgabe griff dort mit 600).
+#
+#      GESICHTET: Raster - alle dunklen Karten schwarz mit Licht, alle
+#      Ueberschriften fett.
+
+P.append((
+ 'lisaGrundDunkelAnteil:.28,',
+ 'lisaGrundDunkelAnteil:0,',
+ 'Regler lisaGrundDunkelAnteil auf 0 - keine Lila-Flaechen mehr', 1))
+
+P.append((
+ 'lineHeight:ge.bigWord?.98:t.warmEditorial?1.04:1.12,fontWeight:"400",shadow:se(),maxBottom:zSp?Ke-n*.1:Ke});',
+ 'lineHeight:ge.bigWord?.98:t.warmEditorial?1.04:1.12,fontWeight:"700",shadow:se(),maxBottom:zSp?Ke-n*.1:Ke});',
+ 'gradient-Zweig: Headline fett (700)', 1))
+
+P.append((
+ 'lineHeight:ge.bigWord?.98:kt?1.16:t.warmEditorial?1.04:1.14,fontWeight:"400",shadow:se(),maxBottom:zSp?(kt?n*.72:Ke)-n*.1:kt?n*.72:Ke});',
+ 'lineHeight:ge.bigWord?.98:kt?1.16:t.warmEditorial?1.04:1.14,fontWeight:"700",shadow:se(),maxBottom:zSp?(kt?n*.72:Ke)-n*.1:kt?n*.72:Ke});',
+ 'plate-Zweig Hauptfall: Headline fett (700)', 1))
+
+P.append((
+ 'textAlign:t.warmEditorial?"center":"left",lineHeight:1.2,fontWeight:"400",shadow:se(),maxBottom:Me-n*.01}),',
+ 'textAlign:t.warmEditorial?"center":"left",lineHeight:1.2,fontWeight:"700",shadow:se(),maxBottom:Me-n*.01}),',
+ 'plate-Zweig Folgefolien-Sonderfall: Headline fett (700)', 1))
+
+P.append((
+ 'lineHeight:zIn?.98:t.warmEditorial?1.04:1.12,shadow:se(),maxBottom:zIn?tt-n*.02:Ke});zIn&&zSp',
+ 'lineHeight:zIn?.98:t.warmEditorial?1.04:1.12,fontWeight:"700",shadow:se(),maxBottom:zIn?tt-n*.02:Ke});zIn&&zSp',
+ 'frame-Zweig: Headline fett (700), vorher gar kein Gewicht gesetzt (Vorgabe war 600)', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

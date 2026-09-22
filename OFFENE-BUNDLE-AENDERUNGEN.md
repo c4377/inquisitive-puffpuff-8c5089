@@ -9506,3 +9506,12 @@ Kontrastrechner geprüft: `#2A1150` gegen Weiß 16.2:1, `#C4B5FD` gegen
 `#2A1150` 8.8:1. Gesichtet: Raster, ein erzwungenes Beispiel mit
 vorberechnetem Treffer (Flieder-Grund, weißer Text, letztes Wort lila),
 Karussell, Screenshot-Folie unverändert.
+
+## 291 — Fettes Helvetica, keine Lila-Flächen mehr
+
+> „Lieber fettes Helvetica und bitte keine lila Flächen, nur schwarz mit
+> lila Licht und weiß mit lila Licht."
+
+Die Lila-Karten-Variante aus 290 bleibt als Mechanik stehen, ist aber über
+`lisaGrundDunkelAnteil` 0 abgeschaltet. Licht auf Schwarz, Weiß und Fotos
+bleibt wie zuvor. Headline-Gewicht in allen drei Zeichen-Zweigen auf 700.
