@@ -9812,3 +9812,36 @@ Drei Stellen:
 
 Gesichtet: Cover mit gespeichertem Rahmen-Layout und Foto rendert als volles
 Foto mit Text, kein Rahmen.
+
+## 303 — „Der Stil ist irgendwie fad" — zu statisch, keine Energie
+
+Auf „ich finde den Stil irgendwie fad" nachgefragt, was genau: „Zu statisch/
+ruhig, keine Energie". Jede Folgefolie saß exakt gleich — Aufbau klein +
+Pointe fett, immer bei 60 % Höhe, immer zentriert.
+
+Neuer Helfer `zFolgeVar()`: liest `folgeMitteReihe`/`folgeAusrichtungReihe`
+(Pipe-Listen, gleiches Prinzip wie `saettigungReihe`/`tonReihe`) und wählt
+über einen Hash aus Tag, Folienindex und Textanfang eine feste, aber
+zwischen Tagen wechselnde vertikale Position und Ausrichtung (zentriert
+oder linksbündig). `zSetupPayoff()` kennt jetzt einen `align`-Parameter
+(zentriert oder linksbündig ab 9 % Rand) statt immer zu zentrieren; der
+Stapel im Folge-Layout übernimmt dieselbe Mitte, damit Schrittfolgen genauso
+variieren.
+
+Gesichtet: vier Tage mit identischem Folgetext, nur unterschiedliche
+Tag-Nummern — jeweils andere vertikale Position, einer davon linksbündig
+statt zentriert (per Debug-Log bestätigt: der Hash liefert korrekt
+wechselnde Werte pro Tag).
+
+## 304 — „Montserrat auch vorne"
+
+Direkt danach: das Cover war noch nicht Montserrat. Grund: `Ct()` (die
+Basis-Schriftwahl im warmEditorial-Pfad, auch fürs Cover) fiel bisher hart
+auf `HelveticaNeueBrand` zurück, unabhängig vom Regler `lisaSchrift` — der
+wurde dort nie gelesen. Jetzt liest `Ct()` `lisaSchrift`, und der Regler
+steht auf `MontserratBrand`. Damit zeigen Cover und alles ohne
+spezifischere Schrift-Vorgabe einheitlich Montserrat; das Highlight-Layout
+bleibt bei Playfair, die Folgefolien bei `folgeSchrift` (jetzt ohnehin
+derselbe Wert).
+
+Gesichtet: Cover und eine Schrittfolge auf Foto, beide in Montserrat.

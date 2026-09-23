@@ -10704,6 +10704,80 @@ P.append((
  'title:"Geladene Datei",children:"karten365"',
  'Versionsschild auf karten365', 1))
 
+
+# --- karten366/367: Position/Ausrichtung der Folgefolien variiert ("zu statisch"),
+#     Grundschrift jetzt Montserrat auch aufs Cover ----------------------------
+#
+#     "Ich finde den Stil irgendwie fad" -> Nachfrage, was genau: "Zu statisch/
+#     ruhig, keine Energie". Jede Folgefolie sass immer exakt gleich (Aufbau
+#     klein + Pointe fett, immer bei 60% Hoehe, immer zentriert).
+#
+#     Neuer Helfer zFolgeVar(): liest folgeMitteReihe/folgeAusrichtungReihe
+#     (Pipe-Listen, gleiches Prinzip wie saettigungReihe/tonReihe) und waehlt
+#     ueber einen Hash aus Tag+Folienindex+Textanfang eine feste, aber
+#     zwischen Tagen wechselnde vertikale Position und Ausrichtung (zentriert
+#     oder linksbuendig). zSetupPayoff() kennt jetzt einen align-Parameter
+#     (center/links, linksbuendig ab r*.09) statt immer zentriert zu
+#     zeichnen; der Stapel im Folge-Layout uebernimmt dieselbe Mitte.
+#
+#     Danach: "Montserrat auch vorne" - Ct() (Basis-Schriftwahl, auch fuers
+#     Cover) fiel bisher hart auf HelveticaNeueBrand zurueck statt den Regler
+#     zu lesen. Jetzt liest sie lisaSchrift; lisaSchrift steht auf
+#     MontserratBrand, damit Cover und alles ohne spezifischere Schrift-
+#     Vorgabe (Highlight-Layout bleibt Playfair, Folge behaelt folgeSchrift)
+#     einheitlich Montserrat zeigen.
+#
+#     GESICHTET: vier Tage mit identischem Folgetext, unterschiedliche
+#     Tag-Nummern - jeweils andere vertikale Position, einer davon
+#     linksbuendig statt zentriert (per Debug-Log bestaetigt: zFolgeVar()
+#     liefert korrekt wechselnde Werte). Cover + Schrittfolge auf Foto
+#     beide in Montserrat.
+
+P.append((
+ 'folgeFoto:1,folgeOverlay:.38,folgeMitte:.6,folgeSchrift:"MontserratBrand",',
+ 'folgeFoto:1,folgeOverlay:.38,folgeMitte:.6,folgeMitteReihe:".38|.48|.6|.72",folgeAusrichtungReihe:"center|left|center|left",folgeSchrift:"MontserratBrand",',
+ 'Regler folgeMitteReihe/folgeAusrichtungReihe', 1))
+
+P.append((
+ 'zSetupPayoff=(zOben,zUnten,zOpt)=>{try{',
+ 'zFolgeVar=()=>{try{const zS=String(t._tag)+"|"+String(i.slideIndex||0)+"|"+String(t.text||"").slice(0,24)+"|fv";let zh=0;for(let zi=0;zi<zS.length;zi+=1)zh=(zh*31+zS.charCodeAt(zi))%99991;const zM=String(BS_KACHEL.folgeMitteReihe||"").split("|").map(Number).filter(zq=>!isNaN(zq)),zA=String(BS_KACHEL.folgeAusrichtungReihe||"").split("|").filter(Boolean);return{mitte:zM.length?zM[zh%zM.length]:(Number(BS_KACHEL.folgeMitte)||.6),align:zA.length?zA[(zh*7)%zA.length]:"center"}}catch(zz){return{mitte:Number(BS_KACHEL.folgeMitte)||.6,align:"center"}}},zSetupPayoff=(zOben,zUnten,zOpt)=>{try{',
+ 'Helfer zFolgeVar()', 1))
+
+P.append((
+ 'if(!zU)return null;const zBauen=zScale=>{let zY=0;const zBx=[];if(zO){const zSe=new Pe.fabric.Textbox(zO,{left:r/2-zW/2,top:zY,originX:"left",originY:"top",width:zW,fontSize:Math.max(10,zSetupSz*zScale),fontFamily:zFam,fontWeight:"500",fill:"#FFFFFF",textAlign:"center",lineHeight:1.24,shadow:zOpt.shadow,selectable:!1});zY+=(zSe.height||0)+zPayoffSz*zScale*.3;zBx.push(zSe)}const zPr=zOpt.prosa===!0,zPa=new Pe.fabric.Textbox(zU,{left:r/2-zW/2,top:zY,originX:"left",originY:"top",width:zW,fontSize:Math.max(10,(zPr?r*(Number(BS_KACHEL.folgeProsaGroesse)||.04):zPayoffSz)*zScale),fontFamily:zFam,fontWeight:zPr?"500":"700",fill:"#FFFFFF",textAlign:zPr?"left":"center",lineHeight:zPr?1.3:1.14,shadow:zOpt.shadow,selectable:!1});zY+=(zPa.height||0);zBx.push(zPa);return{bx:zBx,h:zY}};',
+ 'if(!zU)return null;const zAlignBase=zOpt.prosa===!0?"left":(zOpt.align||"center"),zLeft=zAlignBase==="left"?(typeof zOpt.leftMargin=="number"?zOpt.leftMargin:r*.09):r/2-zW/2,zTA=zAlignBase==="left"?"left":"center";const zBauen=zScale=>{let zY=0;const zBx=[];if(zO){const zSe=new Pe.fabric.Textbox(zO,{left:zLeft,top:zY,originX:"left",originY:"top",width:zW,fontSize:Math.max(10,zSetupSz*zScale),fontFamily:zFam,fontWeight:"500",fill:"#FFFFFF",textAlign:zTA,lineHeight:1.24,shadow:zOpt.shadow,selectable:!1});zY+=(zSe.height||0)+zPayoffSz*zScale*.3;zBx.push(zSe)}const zPr=zOpt.prosa===!0,zPa=new Pe.fabric.Textbox(zU,{left:zLeft,top:zY,originX:"left",originY:"top",width:zW,fontSize:Math.max(10,(zPr?r*(Number(BS_KACHEL.folgeProsaGroesse)||.04):zPayoffSz)*zScale),fontFamily:zFam,fontWeight:zPr?"500":"700",fill:"#FFFFFF",textAlign:zTA,lineHeight:zPr?1.3:1.14,shadow:zOpt.shadow,selectable:!1});zY+=(zPa.height||0);zBx.push(zPa);return{bx:zBx,h:zY}};',
+ 'zSetupPayoff: align-Parameter (center/left)', 1))
+
+P.append((
+ 'if(zSp2||ge.folge===!0){zSetupPayoff(zSp2?zSp2.oben:"",zSp2?zSp2.unten:($e?$e.rest:t.text),{prosa:zRo==="prosa",width:r*(ge.exactWidth||.82),top:ae,mitte:ge.folge===!0?n*(Number(BS_KACHEL.folgeMitte)||.6):void 0,minTop:n*.1,maxBottom:Ke,shadow:se()});',
+ 'if(zSp2||ge.folge===!0){const zFV=ge.folge===!0?zFolgeVar():null;zSetupPayoff(zSp2?zSp2.oben:"",zSp2?zSp2.unten:($e?$e.rest:t.text),{prosa:zRo==="prosa",align:zFV?zFV.align:void 0,width:r*(ge.exactWidth||.82),top:ae,mitte:zFV?n*zFV.mitte:void 0,minTop:n*.1,maxBottom:Ke,shadow:se()});',
+ 'Aufruf zSetupPayoff mit zFolgeVar()', 1))
+
+P.append((
+ 'mitte:ge.folge===!0?n*(Number(BS_KACHEL.folgeMitte)||.6):void 0,minTop:n*.1,shadow:se(),maxBottom:Ke,fontFamily:ge.folge===!0?(BS_KACHEL.folgeSchrift||zFont($)):zFont($)}):P',
+ 'mitte:ge.folge===!0?n*zFolgeVar().mitte:void 0,minTop:n*.1,shadow:se(),maxBottom:Ke,fontFamily:ge.folge===!0?(BS_KACHEL.folgeSchrift||zFont($)):zFont($)}):P',
+ 'Stapel im Folge-Layout: Mitte ueber zFolgeVar()', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten365"',
+ 'title:"Geladene Datei",children:"karten366"',
+ 'Versionsschild auf karten366', 1))
+
+P.append((
+ 'return Ft.has(Fe)||t.headlineFontChosen===!0&&Fe?Fe:!Fe||We.has(Fe)?"HelveticaNeueBrand":Bt(Fe)?Fe:(console.warn(`[BrandStudio] Schrift "${Fe}" ist nicht geladen — es wird HelveticaNeueBrand gesetzt.`),"HelveticaNeueBrand")},',
+ 'const zDef=BS_KACHEL.lisaSchrift||"HelveticaNeueBrand";return Ft.has(Fe)||t.headlineFontChosen===!0&&Fe?Fe:!Fe||We.has(Fe)?zDef:Bt(Fe)?Fe:(console.warn(`[BrandStudio] Schrift "${Fe}" ist nicht geladen — es wird ${zDef} gesetzt.`),zDef)},',
+ 'Ct(): Grundschrift-Fallback liest lisaSchrift', 1))
+
+P.append((
+ 'lisaSchrift:"HelveticaNeueBrand"',
+ 'lisaSchrift:"MontserratBrand"',
+ 'lisaSchrift -> MontserratBrand (Cover + Grundschrift)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten366"',
+ 'title:"Geladene Datei",children:"karten367"',
+ 'Versionsschild auf karten367', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
