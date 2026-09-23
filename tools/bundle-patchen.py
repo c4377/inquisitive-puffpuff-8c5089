@@ -10778,6 +10778,42 @@ P.append((
  'title:"Geladene Datei",children:"karten367"',
  'Versionsschild auf karten367', 1))
 
+# 368 — Screenshot ihres Instagram-Rasters: "Bitte Bau wieder das und
+# halte mich ab es umzubauen". Der Stil dort (Serifen-Headline + kursive
+# kleine Zeile darunter) ist genau das, was 302 aus der Rotation nahm.
+# DM Serif Display liegt bereits selbst gehostet mit echtem Kursiv-Schnitt
+# vor (site/index.html) - kein neuer Font-Import noetig.
+
+P.append((
+ 'lisaSchrift:"MontserratBrand"',
+ 'lisaSchrift:"DM Serif Display"',
+ 'Cover-Schrift -> DM Serif Display', 1))
+
+P.append((
+ 'folgeSchrift:"MontserratBrand"',
+ 'folgeSchrift:"DM Serif Display"',
+ 'Folgefolien-Schrift -> DM Serif Display', 1))
+
+P.append((
+ 'const zSe=new Pe.fabric.Textbox(zO,{left:zLeft,top:zY,originX:"left",originY:"top",width:zW,fontSize:Math.max(10,zSetupSz*zScale),fontFamily:zFam,fontWeight:"500",fill:"#FFFFFF",textAlign:zTA,lineHeight:1.24,shadow:zOpt.shadow,selectable:!1});',
+ 'const zSe=new Pe.fabric.Textbox(zO,{left:zLeft,top:zY,originX:"left",originY:"top",width:zW,fontSize:Math.max(10,zSetupSz*zScale),fontFamily:zFam,fontWeight:"500",fontStyle:"italic",fill:"#FFFFFF",textAlign:zTA,lineHeight:1.24,shadow:zOpt.shadow,selectable:!1});',
+ 'Aufbau-Zeile kursiv', 1))
+
+P.append((
+ 'await Promise.race([Promise.all(Fe),new Promise(me=>setTimeout(me,4e3))])}}catch{}try{e.clear(),',
+ 'await Promise.race([Promise.all(Fe),new Promise(me=>setTimeout(me,4e3))])}}catch{}'
+ 'try{const zLF=new Set([BS_KACHEL.lisaSchrift,BS_KACHEL.folgeSchrift].filter(Boolean));'
+ 'zLF.size&&typeof document<"u"&&document.fonts&&document.fonts.load&&'
+ 'await Promise.race([Promise.all([...zLF].flatMap(zf=>["400","500","600","700","italic 400"].map(zw=>document.fonts.load(`${zw} 44px "${zf}"`).catch(()=>{})))),'
+ 'new Promise(zr=>setTimeout(zr,8e3))])}catch(zz){}'
+ 'try{e.clear(),',
+ 'gezielt auf lisaSchrift/folgeSchrift warten (normal + kursiv)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten367"',
+ 'title:"Geladene Datei",children:"karten368"',
+ 'Versionsschild auf karten368', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

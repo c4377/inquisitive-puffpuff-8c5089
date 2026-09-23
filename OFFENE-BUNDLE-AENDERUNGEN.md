@@ -9845,3 +9845,32 @@ bleibt bei Playfair, die Folgefolien bei `folgeSchrift` (jetzt ohnehin
 derselbe Wert).
 
 Gesichtet: Cover und eine Schrittfolge auf Foto, beide in Montserrat.
+
+## 305 — „Bau wieder das und halte mich ab es umzubauen"
+
+Screenshot ihres Instagram-Rasters: durchgehend eine Serifen-Headline mit
+einer kursiven kleinen Zeile darunter, auf Foto und auf weißer Fläche.
+Genau der Stil, der in 302 („Rahmen Layout raus und Layouts generell die
+wir nicht verwenden löschen") aus der Rotation genommen wurde — auf
+ausdrücklichen Wunsch also zurück, diesmal fest als Grundschrift statt als
+eines von vielen Layouts.
+
+`lisaSchrift` und `folgeSchrift` stehen jetzt auf „DM Serif Display" statt
+„MontserratBrand" — die Schrift liegt bereits selbst gehostet mit echtem
+Kursiv-Schnitt vor (`site/index.html`/`site/dunkel/index.html`), kein neuer
+Font-Import nötig. Die Aufbau-Zeile in `zSetupPayoff()` (die kleine Zeile
+vor der Pointe) bekommt zusätzlich `fontStyle:"italic"`; die Pointe bleibt
+aufrecht/fett. Wie bei Playfair (357) und Montserrat (362) wartet das
+Zeichnen zusätzlich gezielt (8 s, normal UND kursiv) auf genau diese
+Regler-Schrift, unabhängig vom allgemeinen Preload-Rennen, in dem „DM
+Serif Display" nicht enthalten ist.
+
+Vorsicht aus einem verworfenen Versuch mit einer anderen, neu importierten
+Schrift (Yeseva One) in derselben Sitzung: dort lief der Text bei
+Cover-Länge massiv über den Rand (Fabric.js maß eine Zeile mit über 4000px
+Breite statt der vorgesehenen ~650px) — Ursache nicht abschließend geklärt,
+vermutlich ein Messproblem bei frisch geladenen Schriften. Deshalb bewusst
+„DM Serif Display" gewählt: eine bereits im Projekt vorhandene, seit
+längerem eingebundene Schrift, keine neue Font-Datei. Gesichtet: Cover mit
+langem Text, Folgefolie mit Aufbau/Pointe auf Foto, Text-Fläche auf Weiß —
+alle drei ohne Überlauf, Aufbau-Zeile sichtbar kursiv.
