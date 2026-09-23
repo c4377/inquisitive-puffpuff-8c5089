@@ -9874,3 +9874,36 @@ vermutlich ein Messproblem bei frisch geladenen Schriften. Deshalb bewusst
 längerem eingebundene Schrift, keine neue Font-Datei. Gesichtet: Cover mit
 langem Text, Folgefolie mit Aufbau/Pointe auf Foto, Text-Fläche auf Weiß —
 alle drei ohne Überlauf, Aufbau-Zeile sichtbar kursiv.
+
+## 306 — „Exakt wie am Bild."
+
+305 traf den Stil nur ungefähr (DM Serif Display fett, kursive Zeile). Im
+vergrößerten Raster ist es eindeutig: Überschrift **Playfair Display
+Regular** (nicht fett), zentriert, Satzschreibung; die kleine Zeile darunter
+ist **Handschrift „Nothing You Could Do"** (erkennbar am großen K in
+„aufKommt"). Beide Schriften lagen schon selbst gehostet vor.
+
+Statt die verzweigten Alt-Layouts weiter umzubiegen, zeichnet jetzt ein
+eigener Raster-Zeichner (Regler `rasterStil:1`) jede Folie außer X-Post,
+Text-Bändern und CTA:
+
+- **Mit Foto:** Foto + Verlauf dunkel (oben leicht, unten stärker,
+  `rasterDunkel`), weiße Schrift mit weichem Schatten. Erste Zeile bzw.
+  erster Satz groß in Playfair, der Rest in Handschrift darunter — nur wenn
+  der Rest höchstens `rasterHandMax` (120) Zeichen hat, sonst alles Playfair.
+  Block um `rasterMitte` (57 %) zentriert.
+- **Ohne Foto:** weiße Fläche (`rasterGrund`), alles Playfair in
+  `rasterTinte` (#111), Zeilenumbrüche bleiben, keine Striche/Bullets, Block
+  um `rasterMitteFlaeche` (50 %).
+- Zeilen mit `~` am Anfang und das Feld „Subtext (Zusatz)" sind immer
+  Handschrift. Größen passen sich automatisch an (kein Überlauf).
+
+`lisaSchrift`/`folgeSchrift` stehen auf „Playfair Display", damit auch die
+nicht übernommenen Zweige (CTA) dazu passen.
+
+Ausdrücklicher Wunsch: **„halte mich ab es umzubauen"** — diesen Stil nicht
+wieder umbauen, ohne sie daran zu erinnern.
+
+Gesichtet: „Ich dachte ewig, ich bekomm keine Kundinnen." + Handschrift auf
+Foto, „Meine Kundin war mitten im Launch / und es passierte nichts.",
+weiße Fläche mit drei Sätzen, lange Schrittfolge — alle ohne Überlauf.

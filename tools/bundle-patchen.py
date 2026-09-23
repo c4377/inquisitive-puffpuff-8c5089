@@ -10814,6 +10814,32 @@ P.append((
  'title:"Geladene Datei",children:"karten368"',
  'Versionsschild auf karten368', 1))
 
+
+# 369 — "Exakt wie am Bild": eigener Raster-Zeichner (Regler rasterStil).
+# Playfair Display 400 zentriert, auf Foto darunter Handschrift "Nothing You
+# Could Do" (erster Satz/erste Zeile gross, Rest Handschrift, ~Zeilen und
+# Subtext immer Handschrift); ohne Foto weisse Flaeche, alles Playfair schwarz.
+
+P.append((
+ 'lisaSchrift:"DM Serif Display"',
+ 'lisaSchrift:"Playfair Display",rasterStil:1,rasterSerif:"Playfair Display",rasterHand:"Nothing You Could Do",rasterHandMax:120,rasterMitte:.57,rasterMitteFlaeche:.5,rasterDunkel:1,rasterGrund:"#FFFFFF",rasterTinte:"#111111"',
+ 'Regler rasterStil + Schriften wie im Instagram-Raster', 1))
+
+P.append((
+ 'folgeSchrift:"DM Serif Display"',
+ 'folgeSchrift:"Playfair Display"',
+ 'folgeSchrift -> Playfair Display', 1))
+
+P.append((
+ 'if(t.tileMode==="xpost"){',
+ 'if(Number(BS_KACHEL.rasterStil)===1&&t.tileMode!=="xpost"&&t.textBands!==!0&&t.isCtaSlide!==!0){const zRS=BS_KACHEL.rasterSerif||"Playfair Display",zRH=BS_KACHEL.rasterHand||"Nothing You Could Do";try{typeof document<"u"&&document.fonts&&document.fonts.load&&await Promise.race([Promise.all([`400 44px "${zRS}"`,`400 44px "${zRH}"`].map(zw=>document.fonts.load(zw).catch(()=>{}))),new Promise(zr=>setTimeout(zr,8e3))])}catch(zz){}const zRL=Be(t.text),zRT=String(zRL?zRL.rest:(t.text||"")).replace(/\\*/g,"").replace(/\\r/g,"").trim();let zKopf=zRT,zHand=String(t.secondaryText||"").replace(/\\*/g,"").trim();const zZl=zRT.split("\\n").map(zq=>zq.trim()).filter(Boolean),zTil=zZl.filter(zq=>zq[0]==="~"),zHM=Number(BS_KACHEL.rasterHandMax)||120;if(zTil.length){zKopf=zZl.filter(zq=>zq[0]!=="~").join("\\n");zHand=[zHand,...zTil.map(zq=>zq.slice(1).trim())].filter(Boolean).join(" ")}else if(!zHand&&$){if(zZl.length>1){const zR=zZl.slice(1).join(" ");zR.length<=zHM&&zZl.length<=4&&(zKopf=zZl[0],zHand=zR)}else{const zSz=(zRT.match(/[^.!?…]+[.!?…]+["“”„]*|[^.!?…]+$/g)||[]).map(zq=>zq.trim()).filter(Boolean);if(zSz.length>1){const zR=zSz.slice(1).join(" ");zR.length<=zHM&&(zKopf=zSz[0],zHand=zR)}}}const zFg=$?"#FFFFFF":(BS_KACHEL.rasterTinte||"#111111"),zDk=Number(BS_KACHEL.rasterDunkel);const zDm=isNaN(zDk)?1:zDk;if($){e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,selectable:!1,evented:!1,fill:new Pe.fabric.Gradient({type:"linear",coords:{x1:0,y1:0,x2:0,y2:n},colorStops:[{offset:0,color:"rgba(0,0,0,"+Math.min(.9,.16*zDm)+")"},{offset:.45,color:"rgba(0,0,0,"+Math.min(.9,.34*zDm)+")"},{offset:1,color:"rgba(0,0,0,"+Math.min(.9,.5*zDm)+")"}]})}))}else e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:BS_KACHEL.rasterGrund||"#FFFFFF",selectable:!1,evented:!1}));const zSh=$?new Pe.fabric.Shadow({color:"rgba(0,0,0,0.35)",blur:r*.012,offsetX:0,offsetY:r*.002}):null;const zBox=(zTx,zFam,zSz0,zMin,zW,zMaxH,zLH,zCs)=>{let zSz=zSz0,zB=null;for(let zi=0;zi<80;zi++){zB=new Pe.fabric.Textbox(zTx,{left:r/2,top:0,originX:"center",originY:"top",width:zW,fontSize:zSz,fontFamily:zFam,fontWeight:"400",fill:zFg,textAlign:"center",lineHeight:zLH,charSpacing:zCs,shadow:zSh,selectable:!1});zB.initDimensions&&zB.initDimensions();if((zB.width||0)<=zW+1&&(zB.height||0)<=zMaxH||zSz<=zMin)break;zSz=Math.max(zMin,zSz*.96)}return zB};const zBx=[],zGap=r*.035;let zH=0;if(zKopf){const zK=zBox(zKopf,zRS,r*($?(zHand?.098:.118):.085),r*.04,r*($?.8:.84),n*($?(zHand?.34:.56):.6),$?1.08:1.06,-10);zBx.push(zK);zH+=zK.height||0}if(zHand){const zHd=zBox(zHand,zRH,r*.056,r*.032,r*(zHand.length>60?.6:.5),n*.26,1.2,0);zBx.length&&(zH+=zGap);zBx.push(zHd);zH+=zHd.height||0}const zMit=n*($?(Number(BS_KACHEL.rasterMitte)||.57):(Number(BS_KACHEL.rasterMitteFlaeche)||.5));let zTop=Math.max(n*.08,Math.min(zMit-zH/2,Ke-zH));zBx.forEach(zb=>{zb.set("top",zTop);zb.setCoords&&zb.setCoords();e.add(zb);zTop+=(zb.height||0)+zGap});if(t.overlayImage)try{await Ae(t.overlayImage)}catch{}zRL&&be(zRL.label),Le(),e.renderAll();return}if(t.tileMode==="xpost"){',
+ 'Raster-Zeichner (Playfair + Handschrift, wie Instagram-Raster)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten368"',
+ 'title:"Geladene Datei",children:"karten369"',
+ 'Versionsschild auf karten369', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
