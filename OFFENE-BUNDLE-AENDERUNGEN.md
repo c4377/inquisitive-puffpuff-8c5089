@@ -10007,3 +10007,49 @@ Zweifel." (Mitte etwas größer); „Meine Kundin war _mitten im Launch_" +
 „*und es passierte nichts.*" (Playfair größer, Handschrift darunter);
 „…\n_und es passierte nichts._" (zweite Zeile in Playfair). Die
 Handschriftzeile sitzt mittig (804 zu 800 px), keine Seitenfehler.
+
+## 310 — „Jetzt ist es kursiv aber nicht Playfair bei * * und außerdem sind die Textkacheln plötzlich mit lila Licht"
+
+### Die Ursache: gespeicherte Layouts gingen am Schalter vorbei
+
+Genau der Fehler aus **234**, und er war wieder da. `zLay` fragte:
+
+```
+1. hat die Folie ein brand_-Layout gespeichert?  -> nimm es
+2. ist layoutAn 1?                                -> sonst nichts
+```
+
+Seit 370 steht `layoutAn` auf 0. Folien mit gespeichertem Layout, etwa eine
+Textkachel mit „Text-Fläche hell" aus der Layout-Auswahl, liefen trotzdem in
+den **Layout-Zweig**. Dort gibt es Lila-Licht (`zLichtZeichnen`), `*…*` wird
+kursiv (die Akzent-Segmente in `Pt()`), und die Schrift kommt aus
+`typography.fontFamily` statt Playfair. Mit dem Nachbau aus 369 hat das
+niemand gemerkt, weil der vorher alles abgefangen hat.
+
+Nachgestellt mit `layout:"brand_text_plate"` an der Folie: karten372 zeigte
+genau ihr Bild (Lila-Schein links, fette Serife, „der wirklich trifft."
+kursiv).
+
+**Jetzt fragt `zLay` zuerst den Schalter.** Zusätzlich
+`lisaLichtStaerke`/`lisaLichtStaerkeHell` auf 0, damit auch Wege, die noch
+im Layout-Zweig landen (CTA), kein Lila bekommen.
+
+### Die Textkachel kannte die Zeichen nicht
+
+Die weiße Textkachel (Fassung „marke", Bodoni Moda, schon im Raster so,
+Buchstabe für Buchstabe verglichen) hat `*` gestrichen und `_` stehen
+lassen, und jede Zeile in einem Stück gesetzt. Jetzt merkt sie sich je Wort
+die Markierung (`zHW`) und setzt Zeilen mit markierten Wörtern Wort für Wort:
+
+| Zeichen | auf der Textkachel |
+|---|---|
+| `*…*` | Handschrift, `handAnteil` groß |
+| `_…_` | Playfair, `grossAnteil` (1.1) groß |
+
+Wortabstand zwischen zwei Handschrift-Wörtern in der Handschrift gemessen,
+sonst kleben sie („wirklichtrifft"). Zu breite Zeilen werden gemeinsam
+verkleinert, Zeilen mit großen Wörtern bekommen entsprechend mehr Abstand.
+
+Gesichtet: Textkachel „Meine Kundinnen haben _jede Woche einen Post,_
+*der wirklich trifft.*" — Bodoni, Playfair größer, Handschrift, kein Lila;
+Folgefolie mit `_…_` auf Foto. Keine Seitenfehler.

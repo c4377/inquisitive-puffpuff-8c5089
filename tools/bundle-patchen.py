@@ -10975,6 +10975,41 @@ P.append((
  'title:"Geladene Datei",children:"karten372"',
  'Versionsschild auf karten372', 1))
 
+
+# 373 — "Jetzt ist es kursiv aber nicht Playfair bei * * und die Textkacheln
+# ploetzlich mit lila Licht": zLay fragt den Schalter wieder vor dem
+# gespeicherten Layout (wie 234), Lila-Licht aus, Textkachel versteht *...* und _..._.
+
+P.append((
+ 'const ze=zs&&zs.layout;if(ze&&String(ze).indexOf("brand_")===0)return ze;if(BS_KACHEL.layoutAn!==1)return "";',
+ 'if(BS_KACHEL.layoutAn!==1)return "";const ze=zs&&zs.layout;if(ze&&String(ze).indexOf("brand_")===0)return ze;',
+ 'zLay: Schalter vor gespeichertem Layout', 1))
+
+P.append((
+ 'lisaLichtStaerke:.42',
+ 'lisaLichtStaerke:0',
+ 'Lila-Licht aus', 1))
+
+P.append((
+ 'lisaLichtStaerkeHell:.16',
+ 'lisaLichtStaerkeHell:0',
+ 'Lila-Licht (hell) aus', 1))
+
+P.append((
+ 'const B0=ROH.replace(/\\*/g,"").split(/\\n\\s*\\n/).map(x=>x.trim()).filter(Boolean);',
+ 'const B0=ROH.replace(BS_KACHEL.strichGross===1?/[*_]/g:/\\*/g,"").split(/\\n\\s*\\n/).map(x=>x.trim()).filter(Boolean);const zHW=(()=>{if(BS_KACHEL.sternHand!==1&&BS_KACHEL.strichGross!==1)return null;const zo=[];let zS=!1,zU=!1,zcur="",zm="";const zpu=()=>{zcur&&zo.push({w:zcur,m:zm});zcur="";zm=""};for(const zc of String(ROH||"")){if(zc==="*"&&BS_KACHEL.sternHand===1){zS=!zS;continue}if(zc==="*"){continue}if(zc==="_"&&BS_KACHEL.strichGross===1){zU=!zU;continue}if(/\\s/.test(zc)){zpu();continue}zcur+=zc;zS?zm="h":zU&&!zm&&(zm="g")}zpu();return zo.some(zq=>zq.m)?zo:null})();let zHP=0;',
+ 'Textkachel: markierte Woerter merken (* Handschrift, _ Playfair gross)', 1))
+
+P.append((
+ 'ZL.forEach((blk,ix)=>{const g2=GRO(ix,gr);\nblk.forEach(z=>{txt(z,{left:LI?r*K.rand:r/2,top:y,originX:LI?"left":"center",originY:"center",\nfontSize:g2,fontFamily:FAM(ix),fontWeight:GEW(ix),fill:SCH,\ncharSpacing:LW,maxB:MESS});\ny+=g2*K.zeile});',
+ 'ZL.forEach((blk,ix)=>{const g2=GRO(ix,gr);\nblk.forEach(z=>{const zWs=String(z).split(/\\s+/).filter(Boolean),zFl=zHW?zWs.map(zw=>{const zq=zHW[zHP++];return zq&&zq.w===zw?zq.m:""}):[];if(zFl.some(Boolean)){const zHF=K.handFamilie||K.zweiteFamilie||"Nothing You Could Do",zGF=K.grossFamilie||"Playfair Display",zHS=g2*(Number(K.handAnteil)||1),zGS=g2*(Number(K.grossAnteil)||1.1),zmk=(zw,zf,zq)=>new Pe.fabric.Text(zw,{fontSize:(zf==="h"?zHS:zf==="g"?zGS:g2)*zq,fontFamily:zf==="h"?zHF:zf==="g"?zGF:FAM(ix),fontWeight:zf?"400":GEW(ix),charSpacing:zf==="h"?0:LW,fill:SCH,originX:"left",originY:"center",selectable:!1,evented:!1}),zsm=(zz,zf2)=>{const zo={fontSize:zz,fontFamily:zf2,fontWeight:"400"},zp=new Pe.fabric.Text("M M",zo).width-new Pe.fabric.Text("MM",zo).width;return zp>0&&zp<zz?zp:zz*.28},zsp=zsm(g2,FAM(ix)),zspH=zsm(zHS,zHF),zGp=zi=>zFl[zi]==="h"&&zFl[zi+1]==="h"?zspH:zsp;let zk=1,zTs=zWs.map((zw,zi)=>zmk(zw,zFl[zi],1)),zGs=zWs.slice(0,-1).reduce((za,zw,zi)=>za+zGp(zi),0),zB=zTs.reduce((za,zt)=>za+zt.width,0)+zGs;if(zB>MESS){zk=MESS/zB;zTs=zWs.map((zw,zi)=>zmk(zw,zFl[zi],zk));zB=zTs.reduce((za,zt)=>za+zt.width,0)+zGs*zk}let zx=LI?r*K.rand:r/2-zB/2;zTs.forEach((zt,zi)=>{zt.set({left:zx,top:y});add(zt);zx+=zt.width+zGp(zi)*zk});zFl.includes("g")&&(y+=(zGS*zk-g2)*K.zeile)}else txt(z,{left:LI?r*K.rand:r/2,top:y,originX:LI?"left":"center",originY:"center",\nfontSize:g2,fontFamily:FAM(ix),fontWeight:GEW(ix),fill:SCH,\ncharSpacing:LW,maxB:MESS});\ny+=g2*K.zeile});',
+ 'Textkachel: Zeilen mit markierten Woertern Wort fuer Wort', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten372"',
+ 'title:"Geladene Datei",children:"karten373"',
+ 'Versionsschild auf karten373', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
