@@ -10568,3 +10568,15 @@ Alle vier Adressen laden **karten390**; 384/387/388/389 sind Stubs darauf.
 „Soll doch aber so": `/` setzt jetzt `BS_STIL="v3"` (vorher `"dunkel"`).
 Der alte dunkle Stil bleibt unter `/dunkel/`, Sara-Noir unter `/noir/`.
 Bundle unverändert (karten390).
+
+## 329 — Textaufteilung wie die Testbilder
+
+Auf Fotos ohne Gesicht (Beine, Schuhe) oder mit Gesicht in der Mitte ist der Text
+bisher klein nach oben gerutscht. In v3 gilt jetzt `bandUnten:1`:
+
+- mit Gesicht: das Band **unter** dem Gesicht zuerst, wenn es mindestens
+  `bandMinUnten` (.28) hoch ist, sonst das größere Band;
+- ohne Gesicht: Text unten (ab 40 % bis `randUnten`), nicht mehr am ruhigsten Fleck.
+
+Schwarz-Weiß jede vierte Kachel bleibt. Alle Adressen laden **karten391**;
+384/387/388/389/390 sind Stubs darauf.

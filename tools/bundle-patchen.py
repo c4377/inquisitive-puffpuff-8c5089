@@ -11891,6 +11891,30 @@ P.append((
  'title:"Geladene Datei",children:"karten390"',
  'Versionsschild auf karten390', 1))
 
+
+# 391 — Textaufteilung wie ihre Testbilder: in v3 steht der Text unten (Band unter
+# dem Gesicht zuerst; ohne Gesicht unten statt am ruhigsten Fleck). SW bleibt.
+
+P.append((
+ 'nameText:"Carina",nameSchrift:"CaveatV3"',
+ 'bandUnten:1,bandMinUnten:.28,nameText:"Carina",nameSchrift:"CaveatV3"',
+ 'v3: Text bevorzugt unten', 1))
+
+P.append((
+ 't._freiBand=zhA>=(Number(BS_KACHEL.bandMinOben)||.2)||zhA>=zhB?zA:zB}',
+ 't._freiBand=BS_KACHEL.bandUnten===1?(zhB>=(Number(BS_KACHEL.bandMinUnten)||.28)||zhB>=zhA?zB:zA):zhA>=(Number(BS_KACHEL.bandMinOben)||.2)||zhA>=zhB?zA:zB}',
+ 'Band: unten zuerst, wenn bandUnten', 1))
+
+P.append((
+ 'else if(t._zSpot&&typeof t._zSpot.y=="number"){',
+ 'else if(BS_KACHEL.bandUnten===1){t._freiBand=[Math.max(.4,zu-.46),zu]}else if(t._zSpot&&typeof t._zSpot.y=="number"){',
+ 'ohne Gesicht: Text unten statt am ruhigsten Fleck', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten390"',
+ 'title:"Geladene Datei",children:"karten391"',
+ 'Versionsschild auf karten391', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
