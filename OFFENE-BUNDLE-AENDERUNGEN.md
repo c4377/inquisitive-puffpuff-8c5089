@@ -10053,3 +10053,65 @@ verkleinert, Zeilen mit großen Wörtern bekommen entsprechend mehr Abstand.
 Gesichtet: Textkachel „Meine Kundinnen haben _jede Woche einen Post,_
 *der wirklich trifft.*" — Bodoni, Playfair größer, Handschrift, kein Lila;
 Folgefolie mit `_…_` auf Foto. Keine Seitenfehler.
+
+## 311 — „Schriftbild mehr so und die Fotos auch so zuschneiden, dass das mit dem Text besser passt" (Vorbild juliaknauber_coaching)
+
+**Vorher erinnert** an ihr „halte mich ab es umzubauen" (305). Auf Nachfrage
+ausdrücklich gewählt: **„Alles wie Julia"** — Schrift, Betonungen,
+Handschrift-Einstieg und Zuschnitt.
+
+### Schriftbild
+
+| Regler | vorher | jetzt |
+|---|---|---|
+| `fotoLaufweite` | −20 | **−45** |
+| `fotoZeile` | .98 | **.88** |
+| `spalteBreit` | .93 | **.84** |
+| `folgeGewicht` | 700 | **400** (Folgefolien normal, Betonung sticht heraus) |
+| `geteilt` | 1 | **0** (keine Überschrift-oben/Nachsatz-unten-Kacheln) |
+
+- `**…**` wird **fett-kursiv** (`fettKursiv:1`). Dafür neu
+  `site/fonts/PlayfairDisplay-Italic-Variable.woff2` (Google Fonts, SIL OFL
+  wie die aufrechte, dieselbe lateinische Teilmenge mit Umlauten) und die
+  `@font-face` in beiden `index.html`. Ohne die Datei hätte der Browser die
+  Kursive nur schräg gerechnet.
+- **Ein Block** (`einBlock:1`): Die automatische Teilung in Überschrift +
+  Handschrift-Nachsatz (erste Zeile, Satzende oder Komma/„und" in der Mitte)
+  ist aus. Der ganze Text bleibt Playfair mit ihren Zeilenumbrüchen,
+  Handschrift nur bei `*…*`. Eine Zeile nur aus `*POV*` wird so der
+  handschriftliche Einstieg über dem Text, `*keine*` auf eigener Zeile steht
+  dazwischen.
+- Reine Handschrift-Zeilen bekommen `handZeile` (1.3) mal Abstand, sonst
+  klebt „POV" an der nächsten Zeile.
+- Textkachel: jeder Zeilenumbruch zählt, `**…**` Playfair fett-kursiv.
+
+### Zuschnitt: Gesicht auf die freie Seite
+
+Die Gesichtserkennung (face-api, Modelle unter `site/models`) war da, lief
+aber nur bei schon analysierten Fotos. Jetzt holt der Feed-Zeichner die
+Gesichtslage vor dem Laden selbst (`AK`, je Foto zwischengespeichert,
+höchstens 6 s):
+
+- Gesicht in der oberen Hälfte (bis `textSeiteGrenze` .55) → Text **unten**
+  (Mitte `textUntenMitte` .7), Gesicht auf `gesichtOben` .3 geschoben.
+- Gesicht unten → Text **oben** (`textObenMitte` .27), Gesicht auf
+  `gesichtUnten` .64.
+- Leichter Zoom `zuschnittZoom` 1.12, **außer** das Gesicht sitzt schon ganz
+  oben, sonst wird der Kopf angeschnitten.
+- Nach dem Zuschnitt wird die tatsächliche Gesichtshöhe gemessen; die
+  Textseite richtet sich danach, falls die Bildkante das Verschieben
+  begrenzt hat.
+- Kein Gesicht erkannt: die ruhigste Bildfläche (`textSpot`) entscheidet
+  oben/unten, das Bild bleibt unbeschnitten.
+- Texthöhe auf Fotokacheln auf `textHoeheTextfrei` .4 begrenzt, damit der
+  Text im freien Drittel bleibt statt die Kachel zu füllen.
+
+**Zum Prüfen gemerkt:** der Headless-Browser hier hat kein WebGL, dann
+scheitert face-api („WebGL is not supported"). Mit
+`--use-angle=swiftshader --enable-unsafe-swiftshader` läuft sie. Auf dem
+iPhone ist WebGL da.
+
+Gesichtet mit Porträts aus dem Vorbild (textfrei ausgeschnitten): Gesicht
+oben → Text unten; Gesicht Mitte → Text oben, Gesicht darunter; „POV" als
+Einstieg; „unglücklich", „NIE", „wirklich", „ohne" fett-kursiv; „mit 30"
+Handschrift im Satz; Textkachel mit Umbrüchen. Keine Seitenfehler.

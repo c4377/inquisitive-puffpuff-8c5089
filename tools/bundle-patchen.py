@@ -11010,6 +11010,121 @@ P.append((
  'title:"Geladene Datei",children:"karten373"',
  'Versionsschild auf karten373', 1))
 
+
+# 374 — Julia-Stil (juliaknauber_coaching): enger Satz, **...** fett-kursiv,
+# ein Block ohne automatische Teilung (Handschrift nur bei *...*), Zuschnitt
+# nach Gesicht mit Text auf der freien Seite, Textkachel versteht Umbrueche und **.
+
+P.append((
+ 'fotoLaufweite:-20',
+ 'fotoLaufweite:-45',
+ 'Laufweite Foto -45', 1))
+
+P.append((
+ 'fotoZeile:0.98',
+ 'fotoZeile:0.88',
+ 'Zeilenabstand Foto .88', 1))
+
+P.append((
+ 'spalteBreit:.93',
+ 'spalteBreit:.84',
+ 'Textspalte .84', 1))
+
+P.append((
+ 'geteilt:1,',
+ 'geteilt:0,zuschnittTextfrei:1,zuschnittZoom:1.12,textSeiteGrenze:.55,gesichtOben:.3,gesichtUnten:.64,textUntenMitte:.7,textObenMitte:.27,fettKursiv:1,',
+ 'Regler Zuschnitt/Textseite/fettKursiv, geteilte Kachel aus', 1))
+
+P.append((
+ 'fontStyle:tt.kursiv||xt.kursiv&&!tt.highlight?"italic":"normal"',
+ 'fontStyle:tt.kursiv||xt.kursiv&&!tt.highlight||xt.fett&&BS_KACHEL.fettKursiv===1?"italic":"normal"',
+ '**...** fett-kursiv (zeichnen)', 1))
+
+P.append((
+ 'fontStyle:Tt.kursiv?"italic":"normal"',
+ 'fontStyle:Tt.kursiv||Tt.fett&&BS_KACHEL.fettKursiv===1?"italic":"normal"',
+ '**...** fett-kursiv (messen)', 2))
+
+P.append((
+ 'if(t.background)try{await u(t.background)}catch{}const $e=!!t.background;',
+ 'if(t.background&&BS_KACHEL.zuschnittTextfrei===1&&!(t._autoImage&&t._autoImage.faceZones&&t._autoImage.faceZones.length))try{const zA=await Promise.race([AK([t.background]),new Promise(zr=>setTimeout(()=>zr(null),6e3))]);zA&&zA[0]&&(t._zGes=zA[0].faceZones||[],t._zSpot=zA[0].textSpot||null)}catch(zz){}if(t.background)try{await u(t.background)}catch{}const $e=!!t.background;',
+ 'Gesichtslage vor dem Zuschnitt holen', 1))
+
+P.append((
+ '$e=t._autoImage&&t._autoImage.faceZones||[];let qe=.5,ht=.34;',
+ '$e=t._zGes&&t._zGes.length?t._zGes:t._autoImage&&t._autoImage.faceZones||[];let qe=.5,ht=.34;',
+ 'Zuschnitt nutzt die geholte Gesichtslage', 1))
+
+P.append((
+ 'lt=Ye[Qe===0?zDS:et[Qe%et.length]],[wt,tt,Qt]=lt,',
+ 'lt=BS_KACHEL.zuschnittTextfrei===1&&t.textBands===!0&&!t.imageLocked?(()=>{const zHat=$e.length>0;if(!zHat){const zSp=t._zSpot;t._textSeite=zSp&&typeof zSp.y=="number"&&zSp.y<.45?"oben":"unten";t._zGy=null;return[.5,.5,1]}const zFy=ht,zZ=zFy<.3?1:Number(BS_KACHEL.zuschnittZoom)||1.12,zU=zFy<=(Number(BS_KACHEL.textSeiteGrenze)||.55);t._textSeite=zU?"unten":"oben";t._zGy=zFy;const zTy=zU?(Number(BS_KACHEL.gesichtOben)||.3):(Number(BS_KACHEL.gesichtUnten)||.64),zAr=me.height*Oe*zZ;return[qe,zFy-(zTy*n-n/2)/zAr,zZ]})():Ye[Qe===0?zDS:et[Qe%et.length]],[wt,tt,Qt]=lt,',
+ 'Zuschnitt: Gesicht auf die textfreie Seite', 1))
+
+P.append((
+ 'me.set({originX:"center",originY:"center",left:r/2+pr,top:n/2+jr,scaleX:jt,scaleY:jt,selectable:!1});',
+ 'me.set({originX:"center",originY:"center",left:r/2+pr,top:n/2+jr,scaleX:jt,scaleY:jt,selectable:!1});typeof t._zGy=="number"&&(t._gesichtY=(n/2+jr+(t._zGy-.5)*ar)/n);',
+ 'tatsaechliche Gesichtshoehe nach dem Zuschnitt merken', 1))
+
+P.append((
+ 'BS_KACHEL.textImmerMitte===1&&(De=n*(Number(BS_KACHEL.textMitte)||.5)-ae/2+Et/2);',
+ 'BS_KACHEL.textImmerMitte===1&&(De=n*(Number(BS_KACHEL.textMitte)||.5)-ae/2+Et/2);BS_KACHEL.zuschnittTextfrei===1&&$e&&t._textSeite&&(()=>{const zS=typeof t._gesichtY=="number"?(t._gesichtY<.5?"unten":"oben"):t._textSeite;t._textSeiteEnd=zS;De=n*(zS==="oben"?(Number(BS_KACHEL.textObenMitte)||.27):(Number(BS_KACHEL.textUntenMitte)||.7))-ae/2+Et/2})();',
+ 'Text auf die textfreie Seite', 1))
+
+P.append((
+ 'if(tt.nurErsteZeilePlatte){const zl=String(pr).split(/\\r?\\n/);',
+ 'if(tt.nurErsteZeilePlatte&&BS_KACHEL.einBlock===1){er=pr;pr=""}else if(tt.nurErsteZeilePlatte){const zl=String(pr).split(/\\r?\\n/);',
+ 'einBlock: keine automatische Teilung', 1))
+
+P.append((
+ 'folgeGewicht:"700"',
+ 'folgeGewicht:"400"',
+ 'Folgefolien normal statt fett', 1))
+
+P.append((
+ 'fettKursiv:1,',
+ 'fettKursiv:1,einBlock:1,',
+ 'Regler einBlock', 1))
+
+P.append((
+ 'ae=dr.reduce((zs,zz,ii)=>zs+(zz.length?(tt.nurErsteZeilePlatte&&ii>=Lt?Et2:Et)*zF:(tt.engZeilen?qe*.92:Et)*zF),0)',
+ 'zHZ=zz=>zz&&zz.length&&zz.every(zx=>zx.hand)?(Number(BS_KACHEL.handZeile)||1.3):1,ae=dr.reduce((zs,zz,ii)=>zs+(zz.length?(tt.nurErsteZeilePlatte&&ii>=Lt?Et2:Et)*zF*Math.max(zHZ(zz),zHZ(dr[ii+1])):(tt.engZeilen?qe*.92:Et)*zF),0)',
+ 'Handschrift-Zeilen: mehr Abstand (messen)', 1))
+
+P.append((
+ 'De+=(Ve?Et:Et2)*zF',
+ 'De+=(Ve?Et:Et2)*zF*Math.max(zHZ(Je),zHZ(dr[rt+1]))',
+ 'Handschrift-Zeilen: mehr Abstand (setzen)', 1))
+
+P.append((
+ 'const B0=ROH.replace(BS_KACHEL.strichGross===1?/[*_]/g:/\\*/g,"").split(/\\n\\s*\\n/)',
+ 'const B0=ROH.replace(BS_KACHEL.strichGross===1?/[*_]/g:/\\*/g,"").split(BS_KACHEL.einBlock===1?/\\n/:/\\n\\s*\\n/)',
+ 'Textkachel: jeder Zeilenumbruch zaehlt', 1))
+
+P.append((
+ 'for(const zc of String(ROH||"")){if(zc==="*"&&BS_KACHEL.sternHand===1){zS=!zS;continue}if(zc==="*"){continue}if(zc==="_"&&BS_KACHEL.strichGross===1){zU=!zU;continue}if(/\\s/.test(zc)){zpu();continue}zcur+=zc;zS?zm="h":zU&&!zm&&(zm="g")}',
+ 'let zBo=!1;const zRR=String(ROH||"");for(let zi=0;zi<zRR.length;zi++){const zc=zRR[zi];if(zc==="*"&&zRR[zi+1]==="*"){zBo=!zBo;zi++;continue}if(zc==="*"&&BS_KACHEL.sternHand===1){zS=!zS;continue}if(zc==="*"){continue}if(zc==="_"&&BS_KACHEL.strichGross===1){zU=!zU;continue}if(/\\s/.test(zc)){zpu();continue}zcur+=zc;if(zS)zm="h";else if(zU&&!zm)zm="g";else if(zBo&&!zm)zm="f"}',
+ 'Textkachel: **...** erkennen', 1))
+
+P.append((
+ 'zmk=(zw,zf,zq)=>new Pe.fabric.Text(zw,{fontSize:(zf==="h"?zHS:zf==="g"?zGS:g2)*zq,fontFamily:zf==="h"?zHF:zf==="g"?zGF:FAM(ix),fontWeight:zf?"400":GEW(ix),charSpacing:zf==="h"?0:LW,',
+ 'zmk=(zw,zf,zq)=>new Pe.fabric.Text(zw,{fontSize:(zf==="h"?zHS:zf==="g"?zGS:g2)*zq,fontFamily:zf==="h"?zHF:zf==="g"?zGF:zf==="f"?(K.fettFamilie||"Playfair Display"):FAM(ix),fontWeight:zf==="f"?(K.betontGewicht||"700"):zf?"400":GEW(ix),fontStyle:zf==="f"&&K.fettKursiv===1?"italic":"normal",charSpacing:zf==="h"?0:LW,',
+ 'Textkachel: **...** Playfair fett-kursiv', 1))
+
+P.append((
+ '(BS_KACHEL.textHoehe||.74)',
+ '(BS_KACHEL.zuschnittTextfrei===1&&$e&&t.textBands===!0?(Number(BS_KACHEL.textHoeheTextfrei)||.4):(BS_KACHEL.textHoehe||.74))',
+ 'Texthoehe auf Fotokacheln begrenzen', 1))
+
+P.append((
+ 'fettKursiv:1,einBlock:1,',
+ 'fettKursiv:1,einBlock:1,textHoeheTextfrei:.4,handZeile:1.3,',
+ 'Regler textHoeheTextfrei/handZeile', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten373"',
+ 'title:"Geladene Datei",children:"karten374"',
+ 'Versionsschild auf karten374', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
