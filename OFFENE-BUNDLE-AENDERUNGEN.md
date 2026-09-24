@@ -10630,3 +10630,19 @@ wird auch enger."
 
 v3 überschreibt Größen und Abstände selbst und bleibt, wie es war. Alle Adressen
 laden **karten394**.
+
+## 333 — Hauptadresse größer, Textkacheln mit „/"
+
+„Im normalen sieht's am besten aus — nur größer, und die Textkacheln können mit
+dem / noch nicht."
+
+- **Textkacheln ohne Foto** werden vom Setzer `marke` (in `wt`) gezeichnet, nicht vom
+  Foto-Zeichner. Dort (und im `plate`-Zweig) gilt jetzt dieselbe Schreibweise:
+  erste Zeile in GROSSBUCHSTABEN = kleines Wort oben, Zeile mit `/` = kleine
+  Zeile darunter (Versalien, Fließschrift). Der Satz bleibt ein Block.
+- **v3 größer:** `deckblattGroesse` 150→**172**, `fotoGroesse` 116→**136**,
+  `fotoLaufweite` 0→**−15**, `fotoZeile` 1.0→**.98**, `textHoeheTextfrei` .56→**.64**,
+  `randUnten` → **.9**, neu `bandNutzung` **.98** (vorher fest .9 der freien Höhe).
+  Lange Texte bleiben durch den Platz unter dem Gesicht begrenzt.
+
+Alle Adressen laden **karten395**.

@@ -11972,6 +11972,65 @@ P.append((
  'title:"Geladene Datei",children:"karten394"',
  'Versionsschild auf karten394', 1))
 
+
+# 395 — Textkacheln (Setzer 'marke' und plate) verstehen Kicker + /-Zeile;
+# Hauptadresse (v3): Schrift groesser, enger, mehr Hoehe unter dem Gesicht.
+
+P.append((
+ 'const Qe=Be(t.text),{plain:$e,segments:qe}=ye(Qe?Qe.rest:t.text)',
+ 'const zPL=(()=>{try{if(BS_KACHEL.autoUnter!==1||t.secondaryText)return null;const zl=String(t.text||"").split(/\\r?\\n/);let zk="";if(BS_KACHEL.kickerAn===1&&zl.length>1&&/^[A-ZÄÖÜ0-9 &\\-.:#]{2,24}$/.test(zl[0].trim()))zk=zl.shift().trim();const zu=zl.filter(zq=>/^\\s*\\//.test(zq)).map(zq=>zq.replace(/^\\s*\\/\\s*/,"").trim()).filter(Boolean);if(!zk&&!zu.length)return null;return{k:zk,u:zu.join(" "),text:zl.filter(zq=>!/^\\s*\\//.test(zq)).join("\\n")}}catch(zz){return null}})(),zPTx=zPL?zPL.text:t.text;const Qe=Be(zPTx),{plain:$e,segments:qe}=ye(Qe?Qe.rest:zPTx)',
+ 'Textkachel: Kicker und /-Zeile aus dem Text loesen', 1))
+
+P.append((
+ 'const zSp=BS_KACHEL.lisaTeilen!==0&&!ge.bigWord&&!t.secondaryText?zTeilen(Qe?Qe.rest:t.text,!1):null;',
+ 'const zSp=BS_KACHEL.lisaTeilen!==0&&!ge.bigWord&&!t.secondaryText&&!(zPL&&zPL.u)?zTeilen(Qe?Qe.rest:zPTx,!1):null;',
+ 'Textkachel: nicht selbst teilen, wenn /-Zeile da', 1))
+
+P.append((
+ 'const zRl=zInsetUnten<=0?zRolle(t.text):"normal";',
+ 'const zRl=zInsetUnten<=0?zRolle(zPTx):"normal";',
+ 'Textkachel: Rolle aus dem Satz ohne Zusatzzeilen', 1))
+
+P.append((
+ '}catch(zz){}if(zRl==="normal"&&zSp&&zUnter(zHt,zSp.unten,me,zInsetUnten>0?!1:lt==="left",Ye)',
+ '}catch(zz){}try{if(zPL&&zHt){zHt.initDimensions&&zHt.initDimensions();const zFS=BS_KACHEL.fliessSchrift||"MontserratBrand",zX=zHt.left,zOX=zHt.originX||"center",zW=r*.74,zG=n*.035;let zU=null,zK=null;if(zPL.u){zU=new Pe.fabric.Textbox(zPL.u.toUpperCase(),{left:zX,top:0,originX:zOX,originY:"top",width:zW,fontSize:r*(Number(BS_KACHEL.fliessGroesse)||.026),fontFamily:zFS,fontWeight:"400",fill:G(me,.85),textAlign:et,lineHeight:1.3,selectable:!1});zU.initDimensions&&zU.initDimensions()}if(zPL.k){zK=new Pe.fabric.Text(zPL.k.toUpperCase(),{left:zX,top:0,originX:zOX,originY:"bottom",fontSize:Math.round(r*(Number(BS_KACHEL.kickerGroesse)||.019)),fontFamily:zFS,fontWeight:"400",charSpacing:400,fill:G(me,.8),selectable:!1})}const zH=zHt.height||0,zUH=zU?(zU.height||0)+zG:0,zKH=zK?(zK.height||0)+zG*.7:0;let zTp=(zHt.originY==="center"?zHt.top-zH/2:zHt.top)-(zUH-zKH)/2;zHt.set("top",zHt.originY==="center"?zTp+zH/2:zTp);zHt.setCoords&&zHt.setCoords();zK&&(zK.set("top",zTp-zG*.7),e.add(zK));zU&&(zU.set("top",zTp+zH+zG),e.add(zU))}}catch(zz){}if(zRl==="normal"&&zSp&&zUnter(zHt,zSp.unten,me,zInsetUnten>0?!1:lt==="left",Ye)',
+ 'Textkachel: kleines Wort oben, kleine Zeile unten', 1))
+
+P.append((
+ 'const K=BS_KACHEL;',
+ 'const K=BS_KACHEL;let zMK="",zMU="",ROH2=ROH;try{if(K.autoUnter===1){const zl=String(ROH).split(/\\r?\\n/);if(K.kickerAn===1&&zl.length>1&&/^[A-ZÄÖÜ0-9 &\\-.:#]{2,24}$/.test(zl[0].trim()))zMK=zl.shift().trim();zMU=zl.filter(zq=>/^\\s*\\//.test(zq)).map(zq=>zq.replace(/^\\s*\\/\\s*/,"").trim()).filter(Boolean).join(" ");if(zMK||zMU)ROH2=zl.filter(zq=>!/^\\s*\\//.test(zq)).join(" ")}}catch(zz){}',
+ 'Textkachel (marke): Kicker und /-Zeile loesen', 1))
+
+P.append((
+ 'const B0=ROH.replace(',
+ 'const B0=ROH2.replace(',
+ 'marke: Satz ohne Zusatzzeilen', 1))
+
+P.append((
+ 'const zRR=String(ROH||"")',
+ 'const zRR=String(ROH2||"")',
+ 'marke: Markierungen aus dem Satz', 1))
+
+P.append((
+ 'let y=n*K.mitte-M.h/2+GRO(0,gr)*.5;',
+ 'const zMG=n*.035,zMUb=zMU?new Pe.fabric.Textbox(zMU.toLocaleUpperCase("de-DE"),{left:LI?r*K.rand:r/2,top:0,originX:LI?"left":"center",originY:"top",width:MAXB*.9,fontSize:r*(Number(K.fliessGroesse)||.026),fontFamily:K.fliessSchrift||GLATT,fontWeight:"400",fill:SCH,opacity:.85,textAlign:LI?"left":"center",lineHeight:1.3,selectable:!1,evented:!1}):null;zMUb&&zMUb.initDimensions&&zMUb.initDimensions();const zMKt=zMK?new Pe.fabric.Text(zMK.toLocaleUpperCase("de-DE"),{left:LI?r*K.rand:r/2,top:0,originX:LI?"left":"center",originY:"bottom",fontSize:Math.round(r*(Number(K.kickerGroesse)||.019)),fontFamily:K.fliessSchrift||GLATT,fontWeight:"400",charSpacing:400,fill:SCH,opacity:.8,selectable:!1,evented:!1}):null;const zMV=((zMUb?(zMUb.height||0)+zMG:0)-(zMKt?(zMKt.height||0)+zMG*.7:0))/2,zMTop=n*K.mitte-M.h/2-zMV,zMBot=zMTop+M.h-(NA?gr*K.nameAbstand:0);let y=n*K.mitte-M.h/2+GRO(0,gr)*.5-zMV;zMKt&&(zMKt.set("top",zMTop-zMG*.7),add(zMKt));zMUb&&(zMUb.set("top",zMBot+zMG),add(zMUb));',
+ 'marke: kleines Wort oben, kleine Zeile unten', 1))
+
+P.append((
+ 'fotoLaufweite:0,fotoZeile:1.0,deckblattGroesse:150,fotoGroesse:116,textHoeheTextfrei:.56,',
+ 'fotoLaufweite:-15,fotoZeile:.98,deckblattGroesse:172,fotoGroesse:136,textHoeheTextfrei:.64,bandNutzung:.98,randUnten:.9,',
+ 'v3: Schrift groesser, enger gesetzt, mehr Hoehe', 1))
+
+P.append((
+ '(t._freiBand[1]-t._freiBand[0])*.9)',
+ '(t._freiBand[1]-t._freiBand[0])*(Number(BS_KACHEL.bandNutzung)||.9))',
+ 'Band-Ausnutzung per Regler', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten394"',
+ 'title:"Geladene Datei",children:"karten395"',
+ 'Versionsschild auf karten395', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
