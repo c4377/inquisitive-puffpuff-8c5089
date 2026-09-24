@@ -10461,3 +10461,21 @@ Personen-Freistellung).
 Gesichtet mit ihren Fotos: Kicker „REALTALK"/„INSIGHTS", Akzent
 „Struktur."/„Konsequenz."/„Reihenfolge.", Fließtext, Name mittig; auf der
 hellen Wand dunkle Schrift. Keine Seitenfehler.
+
+## 323 — /noir/: „Man kann nichts wirklich gut lesen … Verlauf nicht dort, wo der Text ist … zu klein … nach klassischen Designregeln"
+
+Nur die Testversion `/noir/` (jetzt **karten386**); `/` und `/dunkel/`
+bleiben auf karten384. Alles über `BS_NOIR`-Regler, sonst wirkungslos.
+
+| Regel | Umsetzung |
+|---|---|
+| feste Ränder | Band oben ab `randOben` .10, unten bis `randUnten` .86 (Luft zum Namen), seitlich 9 %. |
+| Text an den Rand, nicht in die Mitte der Fläche | `randAnker`: Band oben → Block beginnt am oberen Rand (+ Platz für Kicker), Band unten → Block endet am unteren Rand. |
+| Abstand zum Objekt | mind. `gesichtAbstand` .06 zwischen Text und Gesichtsrahmen. |
+| Motiv/Text in Dritteln | Zuschnitt setzt das Gesicht ins obere Drittel (`gesichtOben` .28, `textSeiteGrenze` 1), Text ins untere. Oben nur, wenn dort ≥ `bandMinOben` .38 frei ist. |
+| Lesbarkeit | `textScrim`: eigener Verlauf **genau hinter dem Textblock**, zur Kante hin dunkler, zum Motiv auslaufend (`scrimAuslauf` .14). Stärke aus der gemessenen Helligkeit der Textzeilen (`_hellZeilen`): so viel, dass die Fläche ~`scrimZiel` 70 erreicht (.25–.82). Schrift immer weiß (`dunkelText` 0). |
+| Größe | `deckblattGroesse` 104 (vorher 72), `fotoGroesse` 80 (58), Höhenbudget `textHoeheTextfrei` .46. |
+
+Gesichtet mit ihren Fotos: Cover „Die meisten Coaches …" groß im unteren
+Drittel über dem Kleid, Gesicht frei; Folgefolien gleich aufgebaut; alles
+lesbar. Keine Seitenfehler.

@@ -11689,6 +11689,41 @@ P.append((
  'title:"Geladene Datei",children:"karten385"',
  'Versionsschild auf karten385', 1))
 
+
+# 386 — /noir/: "nichts gut lesbar, zu klein, klassische Designregeln": Text am Rand
+# verankert, Verlauf genau hinter dem Text nach gemessener Helligkeit, groesser,
+# Gesicht oberes Drittel / Text unteres Drittel. Nur mit BS_NOIR-Reglern aktiv.
+
+P.append((
+ 'const zY=zv=>(n/2+jr+(zv-.5)*ar)/n,zo=.08,zu=.9,',
+ 'const zY=zv=>(n/2+jr+(zv-.5)*ar)/n,zo=Number(BS_KACHEL.randOben)||.08,zu=Number(BS_KACHEL.randUnten)||.9,',
+ 'Raender als Regler', 1))
+
+P.append((
+ 'BS_KACHEL.zuschnittTextfrei===1&&$e&&t._freiBand?(De=n*(t._freiBand[0]+t._freiBand[1])/2-ae/2+Et/2)',
+ 'BS_KACHEL.zuschnittTextfrei===1&&$e&&t._freiBand?(De=BS_KACHEL.randAnker===1?(t._freiBand[0]<.3?n*t._freiBand[0]+(t._kicker?r*.05:0)+Et/2:n*t._freiBand[1]-ae+Et/2):n*(t._freiBand[0]+t._freiBand[1])/2-ae/2+Et/2)',
+ 'Text am Rand verankern', 1))
+
+P.append((
+ 'const Ze="carinaannaprav",',
+ 'BS_KACHEL.textScrim===1&&$e&&t._freiBand&&(()=>{try{const zT=(De-Et/2)/n,zB=(De-Et/2+ae)/n,zOb=t._freiBand[0]<.3,zZ=t._hellZeilen||[];let zs=0,zk=0;for(let zi=Math.max(0,Math.floor(zT*16));zi<=Math.min(15,Math.ceil(zB*16)-1);zi++){zs+=zZ[zi]||0;zk++}const zL=zk?zs/zk:128,zA=Math.max(Number(BS_KACHEL.scrimMin)||.25,Math.min(Number(BS_KACHEL.scrimMax)||.82,1-(Number(BS_KACHEL.scrimZiel)||70)/Math.max(1,zL))),zC=BS_KACHEL.bildTon||"0,0,0",zF=Number(BS_KACHEL.scrimAuslauf)||.14;if(zOb){const zE=Math.min(1,zB+zF);e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n*zE,selectable:!1,evented:!1,fill:new Pe.fabric.Gradient({type:"linear",coords:{x1:0,y1:0,x2:0,y2:n*zE},colorStops:[{offset:0,color:`rgba(${zC},${zA})`},{offset:Math.min(.95,zB/zE),color:`rgba(${zC},${zA*.8})`},{offset:1,color:`rgba(${zC},0)`}]})}))}else{const zS=Math.max(0,zT-zF);e.add(new Pe.fabric.Rect({left:0,top:n*zS,width:r,height:n*(1-zS),selectable:!1,evented:!1,fill:new Pe.fabric.Gradient({type:"linear",coords:{x1:0,y1:0,x2:0,y2:n*(1-zS)},colorStops:[{offset:0,color:`rgba(${zC},0)`},{offset:Math.min(.95,(zT-zS)/(1-zS)),color:`rgba(${zC},${zA*.8})`},{offset:1,color:`rgba(${zC},${zA})`}]})}))}}catch(zz){}})();const Ze="carinaannaprav",',
+ 'Verlauf hinter dem Text', 1))
+
+P.append((
+ 'deckblattGroesse:72,fotoGroesse:58,textHoeheTextfrei:.3,',
+ 'deckblattGroesse:104,fotoGroesse:80,textHoeheTextfrei:.46,',
+ 'noir: Schrift groesser', 1))
+
+P.append((
+ 'obenLinks:1,dunkelText:1,',
+ 'obenLinks:1,randAnker:1,textScrim:1,scrimZiel:70,scrimMin:.25,scrimMax:.82,scrimAuslauf:.14,randOben:.1,randUnten:.86,gesichtAbstand:.06,bandMinOben:.38,textSeiteGrenze:1,gesichtOben:.28,dunkelText:0,',
+ 'noir: Raender, Verlauf, immer weiss', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten385"',
+ 'title:"Geladene Datei",children:"karten386"',
+ 'Versionsschild auf karten386', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
