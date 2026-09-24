@@ -10646,3 +10646,19 @@ dem / noch nicht."
   Lange Texte bleiben durch den Platz unter dem Gesicht begrenzt.
 
 Alle Adressen laden **karten395**.
+
+## 334 — Noir: im Feed lesbar
+
+„Im Noir müsste die Schrift so groß sein, dass man sie im Feed lesen kann."
+
+Ursache: Die Größenanpassung auf Fotos hat mit Zeilenabstand 1,3 gerechnet, gesetzt
+wird aber mit `fotoZeile` (Noir 1.02). Der Text galt dadurch als rund 25 % höher,
+als er ist, und wurde unnötig verkleinert. Außerdem gab es keine Untergrenze
+außer 16 px.
+
+- `zeileEcht:1` → die Anpassung rechnet mit `fotoZeile × 1.04`;
+- `fotoMin:.062` → auf Fotos nie kleiner als 6,2 % der Breite;
+- `fliessGroesse` .024→**.032**, `kickerGroesse` **.024** (kleine Zeile, kleines Wort oben).
+
+Gilt in `BS_NOIR`, damit auch für die Hauptadresse (v3 erbt; Fließtext/Kicker
+setzt v3 selbst). Alle Adressen laden **karten396**.

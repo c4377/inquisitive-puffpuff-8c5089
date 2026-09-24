@@ -12031,6 +12031,35 @@ P.append((
  'title:"Geladene Datei",children:"karten395"',
  'Versionsschild auf karten395', 1))
 
+
+# 396 — Lesbar im Feed: Groessenanpassung rechnet mit dem echten Zeilenabstand
+# (zeileEcht), Mindestgroesse auf Fotos (fotoMin); Noir kleine Zeile/Kicker groesser.
+
+P.append((
+ 'if(((Ve.length+pt.length)*qe*1.3<=Je&&',
+ 'if(((Ve.length+pt.length)*qe*(BS_KACHEL.zeileEcht===1&&$e?(Number(BS_KACHEL.fotoZeile)||1.3)*1.04:1.3)<=Je&&',
+ 'Groessenanpassung rechnet mit dem echten Zeilenabstand', 1))
+
+P.append((
+ '||qe<=c(16)||rt++>60)break;',
+ '||qe<=Math.max(c(16),$e?r*(Number(BS_KACHEL.fotoMin)||0):0)||rt++>60)break;',
+ 'Mindestgroesse auf Fotos (fotoMin)', 1))
+
+P.append((
+ 'fliessGroesse:.024,',
+ 'fliessGroesse:.032,kickerGroesse:.024,',
+ 'Noir: kleine Zeile und Kicker groesser', 1))
+
+P.append((
+ 'autoUnter:1,',
+ 'autoUnter:1,zeileEcht:1,fotoMin:.062,',
+ 'Noir: echter Zeilenabstand, Mindestgroesse fuer den Feed', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten395"',
+ 'title:"Geladene Datei",children:"karten396"',
+ 'Versionsschild auf karten396', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
