@@ -10562,3 +10562,9 @@ v3-Schriften größer:
 | `nameAnteil` | .05 | **.06** |
 
 Alle vier Adressen laden **karten390**; 384/387/388/389 sind Stubs darauf.
+
+## 328 — Hauptadresse im v3-Look
+
+„Soll doch aber so": `/` setzt jetzt `BS_STIL="v3"` (vorher `"dunkel"`).
+Der alte dunkle Stil bleibt unter `/dunkel/`, Sara-Noir unter `/noir/`.
+Bundle unverändert (karten390).
