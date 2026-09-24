@@ -10286,3 +10286,36 @@ Farbstärke): schwarzes Kleid 104 / 16 % / 47.9 → **94 / 28 % / 50.2**
 **Test-Lehre:** Kacheln aus ihrem Raster taugen nicht als Testfotos —
 eingebrannter Text, und das Wegspiegeln des Textes verwirrt die
 Gesichtserkennung. Um Originalfotos gebeten.
+
+## 318 — „Es ist zu grau"
+
+Zwei Dinge drückten den Tonwertumfang zusammen:
+
+1. **Schwarze Schichten über hellen Flächen** ergeben Grau, nicht Schwarz. Vor
+   allem der Balken hinter der Schrift (`textGrundZiel`): er misst immer im
+   unteren Bildteil (.55–.92) und verstärkt den Verlauf dort bei hellen Fotos
+   bis `textGrundMax` 1.8-fach — fast deckend, auch wenn der Text inzwischen
+   oben steht. Jetzt `textGrundMax` **1.25**, Verlauf `tiefeOben/Mitte/Unten`
+   **.15 / 0 / .30**.
+2. **Lineares Abdunkeln auf `hellZiel`** zog auch Weiß zu Hellgrau.
+
+**Neu in der Kurve** (ersetzt die aus 315/317): wie „Tonwerte" in einem
+Bildprogramm — dunkelste `schwarzAnteil` (4 %) → Schwarz (höchstens
+`schwarzTiefe`), hellste `weissAnteil` (1 %) → Weiß, dann die **Mitteltöne
+per Gamma** so, dass der Mittelwert `hellZiel` (96) trifft (Gamma zwischen
+`gammaMin` .7 und `gammaMax` 2.4, per Halbierung gesucht). 0 und 255 bleiben
+fest — kein Grauschleier, kein angehobenes Schwarz. Farbabstand wie bisher
+nie größer (`schwarzFarbe` .85).
+
+Gemessen (Mittel / 5 %-Wert / 95 %-Wert / Kontrast als Streuung / Farbe):
+
+| Foto | karten380 | **karten381** |
+|---|---|---|
+| schwarzes Kleid | 94 / 0 / 218 / 72 / 50.2 | 100 / 8 / 194 / 60 / 51.6 |
+| Jeans-Overall | 95 / 1 / 199 / 60 / 16.3 | **99 / 7 / 220 / 64 / 16.4** |
+| stehend, Wand | 99 / 0 / 177 / 47 / 12.7 | **101 / 2 / 224 / 55 / 12.0** |
+| SW, Gesicht oben | 99 / 0 / 149 / 51 / 1.3 | 99 / 0 / 147 / 50 / 1.3 |
+
+Weiß wird wieder weiß, der graue Schleier unten ist weg. Beim Foto mit der
+Leuchtröhre sinkt die Streuung, weil die Röhre nicht mehr allein den
+Weißpunkt setzt.

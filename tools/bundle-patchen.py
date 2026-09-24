@@ -11357,6 +11357,45 @@ P.append((
  'title:"Geladene Datei",children:"karten380"',
  'Versionsschild auf karten380', 1))
 
+
+# 381 — "Es ist zu grau": Tonwerte spreizen (Schwarz-/Weisspunkt, Mitteltoene per
+# Gamma auf hellZiel), schwarze Schichten zurueck (Verlauf .15/0/.30, Balken max 1.25).
+
+P.append((
+ 'const zid=zx.getImageData(0,0,zc.width,zc.height),zd=zid.data,zKo=Number(BS_KACHEL.schwarzKontrast)||1,zH=new Array(256).fill(0);let zn=0;for(let zi=0;zi<zd.length;zi+=4*29){zH[Math.min(255,Math.round(.2126*zd[zi]+.7152*zd[zi+1]+.0722*zd[zi+2]))]++;zn++}let zP=0,zAcc=0;const zQ=zn*(Number(BS_KACHEL.schwarzAnteil)||.02);for(;zP<255&&zAcc+zH[zP]<=zQ;zP++)zAcc+=zH[zP];const zBp=Math.min(zP,Math.max(0,Math.min(.4,Number(BS_KACHEL.schwarzTiefe)||0))*255),zLv=zL=>Math.max(0,(zL-zBp)/(255-zBp))*255;let zs1=0;for(let zb=0;zb<256;zb++)zs1+=zH[zb]*zLv(zb);const zM1=zs1/Math.max(1,zn);const zCu=zL=>{let zv=zLv(zL);zv=zM1+(zv-zM1)*zKo;return zv<0?0:zv>255?255:zv};let zs=0;for(let zb=0;zb<256;zb++)zs+=zH[zb]*zCu(zb);const zm=zs/Math.max(1,zn),zG=Math.max(Number(BS_KACHEL.hellDunkelMin)||.5,Math.min(Number(BS_KACHEL.hellAngleichMax)||2,zZiel/Math.max(1,zm)));for(let zi=0;zi<zd.length;zi+=4){const zr=zd[zi],zg=zd[zi+1],zb=zd[zi+2],zL=.2126*zr+.7152*zg+.0722*zb;if(zL<=.5){zd[zi]=zd[zi+1]=zd[zi+2]=0;continue}const zL2=zCu(zL)*zG,zc=Math.min(1,zL2/zL)*(Number(BS_KACHEL.schwarzFarbe)||1),zk=(zv)=>{const zw=zL2+(zv-zL)*zc;return zw<0?0:zw>255?255:zw};zd[zi]=zk(zr);zd[zi+1]=zk(zg);zd[zi+2]=zk(zb)}',
+ 'const zid=zx.getImageData(0,0,zc.width,zc.height),zd=zid.data,zH=new Array(256).fill(0);let zn=0;for(let zi=0;zi<zd.length;zi+=4*29){zH[Math.min(255,Math.round(.2126*zd[zi]+.7152*zd[zi+1]+.0722*zd[zi+2]))]++;zn++}const zPz=zq=>{let zA=0,zp=0;const zQ=zn*zq;for(;zp<255&&zA+zH[zp]<=zQ;zp++)zA+=zH[zp];return zp};const zBp=Math.min(zPz(Number(BS_KACHEL.schwarzAnteil)||.04),Math.max(0,Math.min(.4,Number(BS_KACHEL.schwarzTiefe)||.2))*255),zWp=Math.max(zBp+40,zPz(1-(Number(BS_KACHEL.weissAnteil)||.01))),zLv=zL=>{const zv=(zL-zBp)/(zWp-zBp);return zv<0?0:zv>1?1:zv};const zMit=zg=>{let zs=0;for(let zb=0;zb<256;zb++)zs+=zH[zb]*Math.pow(zLv(zb),zg)*255;return zs/Math.max(1,zn)};let zlo=Number(BS_KACHEL.gammaMin)||.7,zhi=Number(BS_KACHEL.gammaMax)||2.4;for(let zk=0;zk<24;zk++){const zmid=(zlo+zhi)/2;zMit(zmid)>zZiel?zlo=zmid:zhi=zmid}const zGm=(zlo+zhi)/2;for(let zi=0;zi<zd.length;zi+=4){const zr=zd[zi],zg=zd[zi+1],zb=zd[zi+2],zL=.2126*zr+.7152*zg+.0722*zb;if(zL<=.5){zd[zi]=zd[zi+1]=zd[zi+2]=0;continue}const zL2=255*Math.pow(zLv(zL),zGm),zc3=Math.min(1,zL2/zL)*(Number(BS_KACHEL.schwarzFarbe)||1),zk=(zv)=>{const zw=zL2+(zv-zL)*zc3;return zw<0?0:zw>255?255:zw};zd[zi]=zk(zr);zd[zi+1]=zk(zg);zd[zi+2]=zk(zb)}',
+ 'Tonwerte spreizen: Schwarz- und Weisspunkt, Mitteltoene per Gamma', 1))
+
+P.append((
+ 'schwarzAnteil:.05,',
+ 'schwarzAnteil:.04,weissAnteil:.01,gammaMin:.7,gammaMax:2.4,',
+ 'Regler Weisspunkt/Gamma', 1))
+
+P.append((
+ 'tiefeOben:.35',
+ 'tiefeOben:.15',
+ 'Verlauf oben .15', 1))
+
+P.append((
+ 'tiefeMitte:.12',
+ 'tiefeMitte:0',
+ 'Verlauf Mitte 0', 1))
+
+P.append((
+ 'tiefeUnten:.55',
+ 'tiefeUnten:.3',
+ 'Verlauf unten .30', 1))
+
+P.append((
+ 'textGrundMax:1.8',
+ 'textGrundMax:1.25',
+ 'Balken hinter der Schrift hoechstens 1.25-fach', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten380"',
+ 'title:"Geladene Datei",children:"karten381"',
+ 'Versionsschild auf karten381', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
