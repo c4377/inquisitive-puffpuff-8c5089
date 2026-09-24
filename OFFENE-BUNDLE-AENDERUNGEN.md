@@ -10394,3 +10394,37 @@ Gemessen (Mittel obere Hälfte / 5 %-Wert / Farbstärke):
 
 Das Studiofoto bleibt bewusst dunkel — ein schwarzer Hintergrund auf
 Tageslicht gezogen würde grau.
+
+## 321 — „Unlogisch wo der Text landet und wieso wird kein handschriftlicher Teil davon gebildet"
+
+### Wo der Text landet
+
+Bisher: Gesichtslage nur im Drittel-Raster (3×3), Text auf eine feste Höhe
+(.27 bzw. .7) zentriert — ein langer Textblock lief über den Kopf.
+
+Jetzt:
+- face-api liefert den **echten Gesichtsrahmen** (`faceBox`, in `HV`
+  gesammelt, im Analyse-Ergebnis von `cK` mitgegeben, an der Folie als
+  `_zBox`). Zuschnitt zielt auf dessen Mitte.
+- Nach dem Zuschnitt wird das **freie Band** berechnet: über dem Gesicht
+  `[.08, Oberkante − gesichtAbstand]`, darunter `[Unterkante + Abstand, .9]`.
+  Genommen wird das Band über dem Kopf, wenn es mindestens `bandMinOben`
+  (.28) hoch ist, sonst das größere. Ohne Gesicht: Band von ±.18 um die
+  ruhigste Bildfläche (`textSpot`).
+- Die **Textgröße** richtet sich nach der Bandhöhe (·.9, höchstens
+  `textHoeheTextfrei`), der Block steht **mittig im Band**.
+- Zuschnitt schiebt das Gesicht nach unten (Text über den Kopf), außer es
+  sitzt ganz oben (`textSeiteGrenze` .3).
+- Dabei gefunden: `geteiltAnteil` 25 riss per Zufall jede vierte Kachel
+  auseinander (erste Zeile ganz oben, Rest unten, 95/99) — auf **0**.
+
+### Handschrift
+
+Seit 374 (`einBlock`) gab es Handschrift nur noch bei `*…*`. Jetzt gilt
+`einBlock` nur, wenn der Text Zeichen (`*` oder `_`) enthält; **ohne Zeichen
+wieder die automatische Teilung**: erster Satz Playfair, Rest Handschrift.
+Setzt sie Zeichen, gelten ihre.
+
+Gesichtet mit ihren Fotos und Texten: Kleid → Text unter dem Gesicht, SW →
+über dem Kopf, „Schreib mir STARTEN." + Handschrift „Ich lade dich in die
+Community ein.", „Leg dich fest." + Handschrift. Keine Seitenfehler.

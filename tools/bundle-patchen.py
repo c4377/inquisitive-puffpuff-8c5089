@@ -11510,6 +11510,76 @@ P.append((
  'title:"Geladene Datei",children:"karten383"',
  'Versionsschild auf karten383', 1))
 
+
+# 384 — "Unlogisch wo der Text landet und wieso kein handschriftlicher Teil":
+# echter Gesichtsrahmen, Text ins freie Band ueber/unter dem Gesicht, ohne Zeichen
+# automatischer Handschrift-Nachsatz, Zufalls-Teilung aus.
+
+P.append((
+ 'const u=a.box||a._box||a,d=.15,',
+ 'const u=a.box||a._box||a;{const zx0=u.x/l,zy0=u.y/o,zx1=(u.x+u.width)/l,zy1=(u.y+u.height)/o;r.box=r.box?{x0:Math.min(r.box.x0,zx0),y0:Math.min(r.box.y0,zy0),x1:Math.max(r.box.x1,zx1),y1:Math.max(r.box.y1,zy1)}:{x0:zx0,y0:zy0,x1:zx1,y1:zy1}}const d=.15,',
+ 'face-api: Gesichtsrahmen merken', 1))
+
+P.append((
+ 'faceZones:Array.from(j),hasFace:j.size>0,',
+ 'faceZones:Array.from(j),faceBox:j.box||null,hasFace:j.size>0,',
+ 'Gesichtsrahmen ins Analyse-Ergebnis', 1))
+
+P.append((
+ 'zA&&zA[0]&&(t._zGes=zA[0].faceZones||[],t._zSpot=zA[0].textSpot||null)',
+ 'zA&&zA[0]&&(t._zGes=zA[0].faceZones||[],t._zSpot=zA[0].textSpot||null,t._zBox=zA[0].faceBox||null)',
+ 'Gesichtsrahmen an die Folie', 2))
+
+P.append((
+ 'const zFy=ht,',
+ 'const zBx=t._zBox,zFy=zBx?(zBx.y0+zBx.y1)/2:ht,',
+ 'Zuschnitt: Gesichtsmitte aus Rahmen', 1))
+
+P.append((
+ 'return[qe,zFy-(zTy*n-n/2)/zAr,zZ]',
+ 'return[zBx?(zBx.x0+zBx.x1)/2:qe,zFy-(zTy*n-n/2)/zAr,zZ]',
+ 'Zuschnitt: waagrecht aus Rahmen', 1))
+
+P.append((
+ 'textSeiteGrenze:.55',
+ 'textSeiteGrenze:.3',
+ 'Text ueber dem Kopf, ausser Gesicht ganz oben', 1))
+
+P.append((
+ 'typeof t._zGy=="number"&&(t._gesichtY=(n/2+jr+(t._zGy-.5)*ar)/n);',
+ 'typeof t._zGy=="number"&&(t._gesichtY=(n/2+jr+(t._zGy-.5)*ar)/n);t._freiBand=null;try{if(BS_KACHEL.zuschnittTextfrei===1&&t.textBands===!0){const zY=zv=>(n/2+jr+(zv-.5)*ar)/n,zo=.08,zu=.9,zm=Number(BS_KACHEL.gesichtAbstand)||.035;let zT=null,zU=null;if(t._zBox){zT=zY(t._zBox.y0);zU=zY(t._zBox.y1)}else if($e.length){const zr=$e.map(zq=>Math.floor(zq/3));zT=zY(Math.min(...zr)/3);zU=zY((Math.max(...zr)+1)/3)}if(zT!=null){const zA=[zo,zT-zm],zB=[zU+zm,zu],zhA=zA[1]-zA[0],zhB=zB[1]-zB[0];t._freiBand=zhA>=(Number(BS_KACHEL.bandMinOben)||.2)||zhA>=zhB?zA:zB}else if(t._zSpot&&typeof t._zSpot.y=="number"){const zc=Math.max(zo+.18,Math.min(zu-.18,zY(t._zSpot.y)));t._freiBand=[zc-.18,zc+.18]}}}catch(zz){}',
+ 'freies Band neben dem Gesicht berechnen', 1))
+
+P.append((
+ '(Number(BS_KACHEL.textHoeheTextfrei)||.4)',
+ '(t._freiBand?Math.max(.12,Math.min(Number(BS_KACHEL.textHoeheTextfrei)||.4,(t._freiBand[1]-t._freiBand[0])*.9)):(Number(BS_KACHEL.textHoeheTextfrei)||.4))',
+ 'Texthoehe = freies Band', 1))
+
+P.append((
+ 'BS_KACHEL.zuschnittTextfrei===1&&$e&&t._textSeite&&(()=>{',
+ 'BS_KACHEL.zuschnittTextfrei===1&&$e&&t._freiBand?(De=n*(t._freiBand[0]+t._freiBand[1])/2-ae/2+Et/2):BS_KACHEL.zuschnittTextfrei===1&&$e&&t._textSeite&&(()=>{',
+ 'Text mittig ins freie Band', 1))
+
+P.append((
+ 'if(tt.nurErsteZeilePlatte&&BS_KACHEL.einBlock===1){er=pr;pr=""}',
+ 'if(tt.nurErsteZeilePlatte&&BS_KACHEL.einBlock===1&&/[*_]/.test(String(pr))){er=pr;pr=""}',
+ 'ohne Zeichen: automatischer Handschrift-Nachsatz', 1))
+
+P.append((
+ 'fettKursiv:1,einBlock:1,',
+ 'fettKursiv:1,einBlock:1,gesichtAbstand:.035,bandMinOben:.28,',
+ 'Regler gesichtAbstand/bandMinOben', 1))
+
+P.append((
+ 'geteiltAnteil:25',
+ 'geteiltAnteil:0',
+ 'Zufalls-Teilung (erste Zeile ganz oben) aus', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten383"',
+ 'title:"Geladene Datei",children:"karten384"',
+ 'Versionsschild auf karten384', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
