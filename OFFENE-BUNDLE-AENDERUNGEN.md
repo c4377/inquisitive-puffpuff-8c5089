@@ -10595,3 +10595,21 @@ Deshalb teilt v3 jetzt automatisch (`autoUnter:1`):
 
 Nicht geteilt wird, wenn schon eine Unterzeile da ist, der Text Zeilenumbrüche hat
 oder der Rest kürzer als 12 Zeichen wäre. Alle Adressen laden **karten392**.
+
+## 331 — Satz bleibt ganz, kleine Zeile per „/"
+
+„Schau doch was da darunter steht": Die kleine Zeile auf den Testbildern war ein
+eigener Zusatztext, kein abgeschnittener Teil ihres Satzes. 330 (automatisch teilen)
+ist deshalb zurückgenommen. Jetzt gilt in v3:
+
+```
+Slide 1: REALTALK
+Dir fehlt kein Angebot. Dir fehlt die Frau, die es *verkauft.*
+/ Kopfsache, die Umsatz kostet.
+```
+
+- erste Zeile in GROSSBUCHSTABEN (bis 24 Zeichen) = kleines Wort oben (Kicker);
+- Zeilen mit `/` am Anfang = kleine Zeile darunter (Versalien, Helvetica);
+- alles andere = der große Satz, ungeteilt.
+
+Alle Adressen laden **karten393**.

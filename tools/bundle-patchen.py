@@ -11939,6 +11939,20 @@ P.append((
  'title:"Geladene Datei",children:"karten392"',
  'Versionsschild auf karten392', 1))
 
+
+# 393 — Ihr Satz bleibt ganz gross. Die kleine Zeile darunter kommt nur aus Zeilen,
+# die mit / anfangen (Kicker wie bisher: erste Zeile in GROSSBUCHSTABEN).
+
+P.append((
+ 'try{if(BS_KACHEL.autoUnter===1&&!t.secondaryText&&!/\\n/.test(String(zB||""))){const zS=(String(zB||"").match(/[^.!?…]+[.!?…]+["“”„*_]*|[^.!?…]+$/g)||[]).map(zq=>zq.trim()).filter(Boolean);if(zS.length>1){let zh=zS[0],zk=1;const zMin=Number(BS_KACHEL.autoKopfMin)||20;while(zk<zS.length&&zh.length<zMin){zh+=" "+zS[zk];zk++}const zR=zS.slice(zk).join(" ");if(zR.length>=12&&zh.length<=(Number(BS_KACHEL.autoKopfMax)||80)){t._autoUnter=zR.replace(/(^|[^*])\\*(?!\\*)/g,"$1").replace(/(^|\\s)_|_(?=\\s|$|[.,!?…])/g,"$1");return zh}}}}',
+ 'try{if(BS_KACHEL.autoUnter===1&&!t.secondaryText){const zL=String(zB||"").split(/\\r?\\n/),zU=zL.filter(zq=>/^\\s*\\//.test(zq)).map(zq=>zq.replace(/^\\s*\\/\\s*/,"").trim()).filter(Boolean);if(zU.length){t._autoUnter=zU.join(" ");return zL.filter(zq=>!/^\\s*\\//.test(zq)).join("\\n")}}}',
+ 'v3: Satz bleibt ganz; kleine Zeile nur aus Zeilen mit / am Anfang', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten392"',
+ 'title:"Geladene Datei",children:"karten393"',
+ 'Versionsschild auf karten393', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
