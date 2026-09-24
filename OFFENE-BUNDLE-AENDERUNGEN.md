@@ -10428,3 +10428,36 @@ Setzt sie Zeichen, gelten ihre.
 Gesichtet mit ihren Fotos und Texten: Kleid → Text unter dem Gesicht, SW →
 über dem Kopf, „Schreib mir STARTEN." + Handschrift „Ich lade dich in die
 Community ein.", „Leg dich fest." + Handschrift. Keine Seitenfehler.
+
+## 322 — „Nein nein nein, sieh dir das Ziel-Branding an" (Canva-Vorlage „Sara Noir"), als Testversion
+
+An ihr „halte mich ab es umzubauen" erinnert; auf Nachfrage gewählt: alle
+vier Bereiche, **„zum Test in einer neuen Version"**.
+
+**Testversion unter `/noir/`:** `site/noir/index.html` setzt
+`BS_STIL="noir"` und lädt **karten385**. Die normale Adresse und `/dunkel/`
+bleiben auf **karten384**. Gleiche Daten (Plan, Fotos) — direkt vergleichbar.
+Im Bundle: `BS_NOIR` wird nach `BS_DUNKEL` aufgelegt, nur bei `noir`. Jeder
+Eingriff ist ohne die `BS_NOIR`-Regler wirkungslos. Redirect und
+No-Cache-Kopfzeilen für `/noir/` in `_redirects` und `netlify.toml`.
+
+**Was `BS_NOIR` macht:**
+
+| Bereich | Umsetzung |
+|---|---|
+| Schrift | Bodoni Moda 400, gesperrt (`fotoLaufweite` 30), Zeile 1.08, kleiner (`deckblattGroesse` 72, `fotoGroesse` 58, `textHoeheTextfrei` .3). Kursive nachgeladen: `site/fonts/BodoniModa-Italic-Variable.woff2` (Google Fonts, OFL), `@font-face` in allen drei `index.html`. |
+| Akzent | `*…*` = kursiv in Sand `#C9A27E` (auf hell `#9C7452`) statt Handschrift. Ohne Zeichen: ein Block, **letztes Wort** automatisch Akzent (`akzentAuto`). Keine Handschrift. |
+| Kicker | erste Zeile in kurzen Versalien (`REALTALK`) → klein, gesperrt, Montserrat 600 über dem Block. |
+| Fließtext | Subtext (Zusatz) → Montserrat, 2,4 % der Breite. |
+| Name | `CARINA ANNA PRAV`, Bodoni, gesperrt, mittig unten. |
+| Position | freies Band wie 384; Band oben → linksbündig, unten → mittig. |
+| Farbe | auf heller Fläche (Band-Helligkeit > `dunkelTextAb` 120) dunkelbraune Schrift `#2B1F18` ohne Schatten, sonst weiß. |
+| Fotos | Tönung Schokobraun `30,20,14`, warme Farbmischung `#8B6A4F` 16 %, Sättigung −0.1 (keine SW-Kacheln), Verlauf oben .12 / unten .92. |
+| Textkacheln | dunkles Schokobraun, helle Schrift. |
+
+Nicht umgesetzt: der riesige Magazin-Titel hinter dem Kopf (bräuchte
+Personen-Freistellung).
+
+Gesichtet mit ihren Fotos: Kicker „REALTALK"/„INSIGHTS", Akzent
+„Struktur."/„Konsequenz."/„Reihenfolge.", Fließtext, Name mittig; auf der
+hellen Wand dunkle Schrift. Keine Seitenfehler.

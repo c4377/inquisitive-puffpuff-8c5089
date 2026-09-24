@@ -11580,6 +11580,115 @@ P.append((
  'title:"Geladene Datei",children:"karten384"',
  'Versionsschild auf karten384', 1))
 
+
+# 385 — Sara-Noir-Look als Testversion unter /noir/ (BS_STIL "noir", BS_NOIR).
+# Alle Eingriffe sind ohne die BS_NOIR-Regler wirkungslos.
+
+P.append((
+ 'const BS_DUNKEL={',
+ 'const BS_NOIR={fotoSchrift:"Bodoni Moda",deckblattFamilie:"Bodoni Moda",folgeFamilie:"Bodoni Moda",kastenSchrift:"Bodoni Moda",lisaSchrift:"Bodoni Moda",folgeSchrift:"Bodoni Moda",ablaufTitel:"Bodoni Moda",deckblattGewicht:"400",gewicht:"400",folgeGewicht:"400",fotoLaufweite:30,fotoZeile:1.08,deckblattGroesse:72,fotoGroesse:58,textHoeheTextfrei:.3,spalteBreit:.8,sternHand:0,immerEinBlock:1,akzentAuto:1,akzentFarbe:"#C9A27E",zweiteFamilie:"MontserratBrand",kickerAn:1,fliessSchrift:"MontserratBrand",fliessGroesse:.024,nameMitte:1,nameText:"CARINA ANNA PRAV",nameSchrift:"Bodoni Moda",nameGewicht:"400",nameLaufweite:260,nameAnteil:.02,nameUnten:.95,nameFarbe:"rgba(255,255,255,0.9)",nameDeckkraft:1,obenLinks:1,dunkelText:1,dunkelTextAb:120,dunkelFarbe:"#2B1F18",akzentFarbeDunkel:"#9C7452",tonReihe:"30,20,14",tonNeutral:"30,20,14",bildTon:"30,20,14",saettigungReihe:"-0.1",bildTonung:"#8B6A4F",bildTonungKraft:.16,tiefeOben:.12,tiefeMitte:.04,tiefeUnten:.92,tiefeKnick:.55,auflageReihe:"1",vignetteReihe:"0.4",grundA:"#241A14",grundB:"#241A14",schriftA:"#F3ECE4",schriftB:"#F3ECE4"};const BS_DUNKEL={',
+ 'BS_NOIR-Regler', 1))
+
+P.append((
+ 'if(typeof window<"u"&&window.BS_STIL==="dunkel")Object.assign(BS_KACHEL,BS_DUNKEL);',
+ 'if(typeof window<"u"&&(window.BS_STIL==="dunkel"||window.BS_STIL==="noir"))Object.assign(BS_KACHEL,BS_DUNKEL);if(typeof window<"u"&&window.BS_STIL==="noir")Object.assign(BS_KACHEL,BS_NOIR);',
+ 'Stil noir aktivieren', 1))
+
+P.append((
+ 'let er="",pr=jt(t.text),jr="";',
+ 'let er="",pr=jt((()=>{t._kicker="";const zl=String(t.text||"").split(/\\r?\\n/);if(BS_KACHEL.kickerAn===1&&zl.length>1&&/^[A-ZÄÖÜ0-9 &\\-.:#]{2,24}$/.test(zl[0].trim())){t._kicker=zl[0].trim();return zl.slice(1).join("\\n")}return t.text})()),jr="";',
+ 'Kicker aus der ersten Zeile', 1))
+
+P.append((
+ 'BS_KACHEL.einBlock===1&&/[*_]/.test(String(pr))',
+ 'BS_KACHEL.einBlock===1&&(BS_KACHEL.immerEinBlock===1||/[*_]/.test(String(pr)))',
+ 'noir: immer ein Block', 1))
+
+P.append((
+ '}),rt};let kt=',
+ '}),BS_KACHEL.akzentAuto===1&&Je===er&&!rt.some(zq=>zq.kursiv||zq.fett||zq.hand||zq.gross)&&(()=>{for(let zi=rt.length-1;zi>=0;zi--)if(rt[zi].w){rt[zi].kursiv=!0;break}})(),rt};let kt=',
+ 'Akzent automatisch aufs letzte Wort', 1))
+
+P.append((
+ 'const rr=xt.kursiv&&tt.highlight,Ut=',
+ 'const rr=xt.kursiv&&(BS_KACHEL.akzentFarbe||tt.highlight),Ut=',
+ 'Akzent Farbe (1)', 1))
+
+P.append((
+ 'fill:rr?tt.highlight:',
+ 'fill:rr?(BS_KACHEL.akzentFarbe||tt.highlight):',
+ 'Akzent Farbe (2)', 1))
+
+P.append((
+ 'xt.kursiv&&!tt.highlight',
+ 'xt.kursiv&&(BS_KACHEL.akzentFarbe||!tt.highlight)',
+ 'Akzent kursiv', 1))
+
+P.append((
+ 'St=qe*.86,',
+ 'St=BS_KACHEL.fliessSchrift?r*(Number(BS_KACHEL.fliessGroesse)||.024):qe*.86,',
+ 'Fliesstext Groesse', 1))
+
+P.append((
+ 'fontSize:St,fontFamily:Qe,',
+ 'fontSize:St,fontFamily:BS_KACHEL.fliessSchrift||Qe,',
+ 'Fliesstext Schrift', 2))
+
+P.append((
+ 'dr.forEach((Je,rt)=>{if(zGT&&rt===0)',
+ 'dr.forEach((Je,rt)=>{rt===0&&(t._blockTop=De-Et*zF/2);if(zGT&&rt===0)',
+ 'Blockoberkante merken', 1))
+
+P.append((
+ 'BS_KACHEL.nameZeigen===0||e.add(new Pe.fabric.Text(Ze,{left:_e+(Ye&&Ye.istKarte&&Ye.monogrammFarbe?c(42):0),top:n*(BS_KACHEL.nameUnten||.945),originX:"left",',
+ 't._kicker&&typeof t._blockTop=="number"&&e.add(new Pe.fabric.Text(String(t._kicker).toUpperCase(),{left:tt.ausrichtung==="links"?_e:r/2,top:t._blockTop-r*.03,originX:tt.ausrichtung==="links"?"left":"center",originY:"bottom",fontSize:Math.round(r*.019),fontFamily:BS_KACHEL.fliessSchrift||"MontserratBrand",fontWeight:"600",charSpacing:500,fill:"rgba(255,255,255,0.82)",selectable:!1})),BS_KACHEL.nameZeigen===0||e.add(new Pe.fabric.Text(BS_KACHEL.nameText||Ze,{left:BS_KACHEL.nameMitte===1?r/2:_e+(Ye&&Ye.istKarte&&Ye.monogrammFarbe?c(42):0),top:n*(BS_KACHEL.nameUnten||.945),originX:BS_KACHEL.nameMitte===1?"center":"left",',
+ 'Kicker zeichnen, Name mittig', 1))
+
+P.append((
+ 'BS_KACHEL.zuschnittTextfrei===1&&$e&&t._freiBand?(De=',
+ 'BS_KACHEL.obenLinks===1&&$e&&t._freiBand&&(tt.ausrichtung=t._freiBand[0]<.2?"links":"mitte"),BS_KACHEL.zuschnittTextfrei===1&&$e&&t._freiBand?(De=',
+ 'oben links, unten mittig', 1))
+
+P.append((
+ 'BS_KACHEL.obenLinks===1&&$e&&t._freiBand&&(tt.ausrichtung=',
+ 't._dunkelSchrift=!1,BS_KACHEL.dunkelText===1&&$e&&t._freiBand&&t._hellZeilen&&(()=>{const zZ=t._hellZeilen,za=Math.max(0,Math.floor(t._freiBand[0]*16)),zb=Math.min(15,Math.ceil(t._freiBand[1]*16)-1);let zs=0,zk=0;for(let zi=za;zi<=zb;zi++){zs+=zZ[zi];zk++}if(zs/Math.max(1,zk)>(Number(BS_KACHEL.dunkelTextAb)||145)){tt.schriftFarbe=BS_KACHEL.dunkelFarbe||"#2B1F18";t._dunkelSchrift=!0}})(),BS_KACHEL.obenLinks===1&&$e&&t._freiBand&&(tt.ausrichtung=',
+ 'dunkle Schrift auf heller Flaeche', 1))
+
+P.append((
+ 'shadow:zKa&&Ve?void 0:((ge||!tt.platten)&&!lt?me():void 0)',
+ 'shadow:zKa&&Ve||t._dunkelSchrift?void 0:((ge||!tt.platten)&&!lt?me():void 0)',
+ 'kein Schatten bei dunkler Schrift (1)', 1))
+
+P.append((
+ 'shadow:zKa&&Ve?void 0:((ge||!tt.platten&&(!Ve||tt.ohnePlatteErste))&&!lt?me():void 0)',
+ 'shadow:zKa&&Ve||t._dunkelSchrift?void 0:((ge||!tt.platten&&(!Ve||tt.ohnePlatteErste))&&!lt?me():void 0)',
+ 'kein Schatten bei dunkler Schrift (2)', 1))
+
+P.append((
+ 'fill:rr?(BS_KACHEL.akzentFarbe||tt.highlight):',
+ 'fill:rr?(t._dunkelSchrift&&BS_KACHEL.akzentFarbeDunkel||BS_KACHEL.akzentFarbe||tt.highlight):',
+ 'Akzent dunkler auf hell', 1))
+
+P.append((
+ 'fill:"rgba(255,255,255,0.82)",selectable:!1})),',
+ 'fill:t._dunkelSchrift?"rgba(43,31,24,0.75)":"rgba(255,255,255,0.82)",selectable:!1})),',
+ 'Kicker dunkel auf hell', 1))
+
+P.append((
+ 'fontFamily:BS_KACHEL.fliessSchrift||Qe,fontWeight:"400",fontStyle:pt.kursiv?"italic":"normal",fill:"#FFFFFF",selectable:!1,shadow:new Pe.fabric.Shadow({color:"rgba(0,0,0,0.55)",blur:c(10),offsetX:0,offsetY:c(2)})',
+ 'fontFamily:BS_KACHEL.fliessSchrift||Qe,fontWeight:"400",fontStyle:pt.kursiv?"italic":"normal",fill:t._dunkelSchrift?"rgba(43,31,24,0.85)":"#FFFFFF",selectable:!1,shadow:t._dunkelSchrift?void 0:new Pe.fabric.Shadow({color:"rgba(0,0,0,0.55)",blur:c(10),offsetX:0,offsetY:c(2)})',
+ 'Fliesstext dunkel auf hell (1)', 1))
+
+P.append((
+ 'fontFamily:BS_KACHEL.fliessSchrift||Qe,fontWeight:"400",fill:"#FFFFFF",selectable:!1,shadow:Ve',
+ 'fontFamily:BS_KACHEL.fliessSchrift||Qe,fontWeight:"400",fill:t._dunkelSchrift?"rgba(43,31,24,0.85)":"#FFFFFF",selectable:!1,shadow:t._dunkelSchrift?void 0:Ve',
+ 'Fliesstext dunkel auf hell (2)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten384"',
+ 'title:"Geladene Datei",children:"karten385"',
+ 'Versionsschild auf karten385', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

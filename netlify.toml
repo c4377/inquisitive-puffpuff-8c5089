@@ -15,6 +15,12 @@
   to = "/dunkel/index.html"
   status = 200
 
+# Testversion im Sara-Noir-Look (BS_STIL "noir"), eigener Bundle-Stand.
+[[redirects]]
+  from = "/noir/*"
+  to = "/noir/index.html"
+  status = 200
+
 # Die Profilbilder sind eine eigene Seite, keine Route der App.
 # Ohne diese Regel schluckt die Auffangregel darunter den Pfad und es
 # kaeme die App zurueck statt der Seite.
@@ -58,6 +64,16 @@
 
 [[headers]]
   for = "/dunkel/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/noir/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/noir/index.html"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
