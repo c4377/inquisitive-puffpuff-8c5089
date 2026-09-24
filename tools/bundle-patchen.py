@@ -10840,6 +10840,72 @@ P.append((
  'title:"Geladene Datei",children:"karten369"',
  'Versionsschild auf karten369', 1))
 
+
+# 370 — "Sei genauer und suche in dem Chat nach Handschrift und Aufteilung":
+# ihr Raster stammt aus dem Feed-Zeichner (Stand karten292-296), nicht aus einem
+# Layout. Dessen Regler zurueck (Playfair statt Helvetica, layoutAn 0, textMitte .5,
+# folgeLayouts 0), der Nachbau rasterStil aus. Dazu Helligkeit beidseitig angleichen.
+
+P.append((
+ ',fotoSchrift:"HelveticaNeueBrand"',
+ ',fotoSchrift:"Playfair Display"',
+ 'fotoSchrift -> Playfair Display', 1))
+
+P.append((
+ ',deckblattFamilie:"HelveticaNeueBrand"',
+ ',deckblattFamilie:"Playfair Display"',
+ 'deckblattFamilie -> Playfair Display', 1))
+
+P.append((
+ ',folgeFamilie:"HelveticaNeueBrand"',
+ ',folgeFamilie:"Playfair Display"',
+ 'folgeFamilie -> Playfair Display', 1))
+
+P.append((
+ ',ablaufTitel:"HelveticaNeueBrand"',
+ ',ablaufTitel:"Playfair Display"',
+ 'ablaufTitel -> Playfair Display', 1))
+
+P.append((
+ ',kastenSchrift:"HelveticaNeueBrand"',
+ ',kastenSchrift:"Playfair Display"',
+ 'kastenSchrift -> Playfair Display', 1))
+
+P.append((
+ ',layoutAn:1,',
+ ',layoutAn:0,',
+ 'layoutAn aus', 1))
+
+P.append((
+ ',textMitte:.58,',
+ ',textMitte:.5,',
+ 'textMitte .5', 1))
+
+P.append((
+ ',folgeLayouts:1,',
+ ',folgeLayouts:0,',
+ 'folgeLayouts aus', 1))
+
+P.append((
+ ',rasterStil:1,',
+ ',rasterStil:0,',
+ 'Nachbau rasterStil aus', 1))
+
+P.append((
+ ',hellKraft:.8,',
+ ',hellKraft:.8,hellAngleich:1,hellDunkelMin:.5,hellAngleichMax:2,',
+ 'Regler hellAngleich/hellDunkelMin/hellAngleichMax', 1))
+
+P.append((
+ 'zg=Math.min(zMax,Math.max(1,Math.pow(zZiel/Math.max(1,zm),Number(BS_KACHEL.hellKraft)||.8)));if(zg>1.015){',
+ 'zg=Number(BS_KACHEL.hellAngleich)===1?Math.min(Number(BS_KACHEL.hellAngleichMax)||2,Math.max(1,Math.log(Math.min(.98,Math.max(.02,zm/255)))/Math.log(Math.min(.98,Math.max(.02,zZiel/255))))):Math.min(zMax,Math.max(1,Math.pow(zZiel/Math.max(1,zm),Number(BS_KACHEL.hellKraft)||.8)));if(Number(BS_KACHEL.hellAngleich)===1&&zm>zZiel+2&&Pe.fabric.Image.filters.BlendColor){const zk=Math.max(Number(BS_KACHEL.hellDunkelMin)||.5,zZiel/zm),zgr=Math.round(255*zk).toString(16).padStart(2,"0");me.filters=(me.filters||[]).concat([new Pe.fabric.Image.filters.BlendColor({color:"#"+zgr+zgr+zgr,mode:"multiply",alpha:1})]);me.applyFilters()}if(zg>1.015){',
+ 'Helligkeit angleichen: dunkle per Gamma rauf, helle linear runter', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten369"',
+ 'title:"Geladene Datei",children:"karten370"',
+ 'Versionsschild auf karten370', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

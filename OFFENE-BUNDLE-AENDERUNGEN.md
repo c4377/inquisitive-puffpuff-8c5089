@@ -9907,3 +9907,61 @@ wieder umbauen, ohne sie daran zu erinnern.
 Gesichtet: „Ich dachte ewig, ich bekomm keine Kundinnen." + Handschrift auf
 Foto, „Meine Kundin war mitten im Launch / und es passierte nichts.",
 weiße Fläche mit drei Sätzen, lange Schrittfolge — alle ohne Überlauf.
+
+## 307 — „Sei genauer und suche in dem Chat nach Handschrift und Aufteilung" + „alle Bilder auf dieselbe Helligkeit"
+
+### Was die Suche ergeben hat
+
+Das Instagram-Raster aus 305/306 hat **kein Layout** gezeichnet, sondern der
+**Feed-Zeichner** (Abschnitte 95–295, Stand karten292–296). Der Nachbau aus
+306 (`rasterStil`) hat ihn nur ungefähr getroffen. Die Regeln dazu standen
+längst im Protokoll:
+
+| Wann | Ihre Vorgabe | Wo |
+|---|---|---|
+| 03.09. | Folgeslides „immer fett und nicht fett" | Feed-Zeichner |
+| 05.09. | „zurück auf Playfair und mehr Handschrift im 2. Teil" | 144, `folgeZweitHand` |
+| 08.09. | „nur eine Handschrift, kein Versalien-Wechsel auf dem Cover" | 181: Playfair = Aussage, Bodoni Moda = Textkachel, Nothing You Could Do = Nachsatz |
+| 18.09. | „Die Handschrift darunter ist zu klein" | 219 |
+| 19.09. | „Folgeslides wie gehabt — zentriert, Playfair und Handschrift gemischt" | 233, `textMitte .50` |
+| 19.09. | „Screenshot, Bild und Text besser aufteilen" | 241–244, Screenshot-Folie |
+| 19.09. | dunkle Fotos auf Zielhelligkeit | karten327, `hellZiel` |
+
+### Was sich seitdem verstellt hatte (Regler für Regler verglichen)
+
+Effektive Werte (BS_KACHEL + BS_DUNKEL) karten296 gegen karten369:
+
+| Regler | karten296 | bis 369 | jetzt |
+|---|---|---|---|
+| `fotoSchrift`, `deckblattFamilie`, `folgeFamilie`, `ablaufTitel`, `kastenSchrift` | Playfair Display | HelveticaNeueBrand | **Playfair Display** |
+| `layoutAn` | 0 | 1 | **0** |
+| `textMitte` | .50 | .58 | **.50** |
+| `folgeLayouts` | — | 1 | **0** (Folgefolien wieder im Feed-Zeichner) |
+| `rasterStil` | — | 1 | **0** (Nachbau aus 306 aus) |
+
+**Bewusst stehen gelassen**, weil später ausdrücklich bestellt:
+`saettigungReihe` (jede vierte Kachel schwarzweiß), `folgeAnteil .82`
+(Folgefolien kleiner), `folgeFoto` (Folgefolien mit Foto), `hellZiel`,
+Balken nach Fotohelligkeit.
+
+### Helligkeit angleichen
+
+`hellZiel` (karten327) hat nur **aufgehellt** (Gamma ≥ 1). Helle Fotos
+blieben hell. Neu mit `hellAngleich:1`:
+
+- **dunkler als Ziel:** Gamma über das Log-Verhältnis, damit der
+  Mittelwert wirklich beim Ziel landet (bis `hellAngleichMax` 2).
+- **heller als Ziel:** linear abdunkeln (Multiplizieren mit Grau, bis
+  `hellDunkelMin` .5). Ein Gamma unter 1 hätte die Schatten absaufen lassen
+  und den Kontrast hochgetrieben, das war im Test deutlich zu sehen.
+
+Gemessen, dasselbe Foto dunkel (Mittel 63) und hell (Mittel 182):
+
+| | dunkel | hell |
+|---|---|---|
+| karten369 | 60,7 | 114,6 |
+| **karten370** | **81,1** | **86,1** |
+
+Gesichtet: Cover „Ich dachte ewig …" + Handschrift wie Kachel 1 ihres
+Rasters; Folgefolien fett + Handschrift; lange Schrittfolge; keine
+Seitenfehler.
