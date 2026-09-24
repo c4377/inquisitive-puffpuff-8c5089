@@ -12091,6 +12091,19 @@ P.append((
  'title:"Geladene Datei",children:"karten398"',
  'Versionsschild auf karten398', 1))
 
+
+# 399 — Folgefolien/Textfolien ohne Foto dunkel wie Noir (Farben aus BS_NOIR), Playfair bleibt.
+
+P.append((
+ 'grundA:"#FFFFFF",grundB:"#E0DCD9",schriftA:"#231F20",schriftB:"#231F20",',
+ '',
+ 'v3: Textfolien dunkel wie Noir (Farben von BS_NOIR)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten398"',
+ 'title:"Geladene Datei",children:"karten399"',
+ 'Versionsschild auf karten399', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

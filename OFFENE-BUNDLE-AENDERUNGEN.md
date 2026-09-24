@@ -10697,3 +10697,13 @@ auf ihnen aufbaut (DUNKEL → NOIR → V3). `/dunkel/` (alter dunkler Stil) blei
 „Ja, dunkel auch löschen": `site/dunkel/` ist weg, `/dunkel/*` leitet per 301 auf `/`.
 Es gibt nur noch die Hauptadresse (v3-Look). `BS_DUNKEL` bleibt im Bundle, weil
 v3 darauf aufbaut.
+
+## 339 — Folgefolien wie Noir, in Playfair
+
+„Die Folgefolien bitte so wie bei Noir, aber Playfair oder ALL CAPS Schrift."
+
+Getestet über den echten Bulk Import (5 Folien, v3 gegen Noir): Die Folien mit Foto
+waren gleich aufgebaut, der Unterschied lag bei den Folien **ohne Foto**. In Noir sind
+sie dunkelbraun (#241A14) mit heller Schrift (#F3ECE4), in v3 waren sie weiß/greige
+mit dunkler Schrift. In `BS_V3` sind `grundA/grundB/schriftA/schriftB` deshalb entfernt,
+v3 erbt die Noir-Farben. Schrift bleibt Playfair Display. Alle Adressen laden **karten399**.
