@@ -10240,3 +10240,23 @@ Stellen):
 
 Die Sättigung (Farbstärke) steigt nirgends. Beim Studiofoto wird der graue
 Hintergrund schwarz, das Gesicht bleibt hell.
+
+## 316 — „Meine Bilder sehen so aus, nicht immer ihre nehmen"
+
+**Testfotos ab jetzt von ihr, nicht aus Julias Raster.** Ihre Originale
+liegen in ihrem Supabase-Konto hinter ihrem Login (Zugangsdaten nur in ihrem
+Browser) — nicht erreichbar. Genommen aus ihren Uploads: ein Originalfoto
+in voller Auflösung (schwarzes Kleid, Gesicht in der Mitte, `40671fb3`), ein
+Foto ohne Gesicht (Jeans-Overall, `0ea1e0d7`) und drei Kacheln aus ihrem
+Raster (Tag 23/25/26, mit eingebranntem Text — nur bedingt brauchbar).
+Liegen als `/tmp/an/m1…m5.b64`, Aufruf `jul5w.mjs` (mit WebGL) bzw.
+`jul5.mjs` (ohne WebGL).
+
+**Ergebnis mit karten378:** ihr Gesicht wird mit **und** ohne WebGL
+erkannt (Rückfall aus 314 greift), Text darunter, Gesicht frei; Foto ohne
+Gesicht → ruhigste Fläche entscheidet.
+
+**Dabei gefunden und behoben:** Satzzeichen direkt hinter einer Markierung
+(„Erst **bold**. Dann") wurden als eigenes Wort mit Lücke gesetzt
+(„bold ."). Jetzt hängen sie am markierten Wort (im Tokenizer des
+Feed-Zeichners).

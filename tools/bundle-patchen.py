@@ -11309,6 +11309,19 @@ P.append((
  'title:"Geladene Datei",children:"karten378"',
  'Versionsschild auf karten378', 1))
 
+
+# 379 — Satzzeichen direkt hinter einer Markierung ("**bold**.") ohne Luecke.
+
+P.append((
+ ':String(nr).split(/\\r?\\n/).forEach(',
+ ':String((()=>{let zv=nr;const zlw=rt[rt.length-1];if(zlw&&!zlw.br&&/^\\S/.test(zv)&&(zlw.kursiv||zlw.fett||zlw.hand||zlw.gross)){const zm=zv.match(/^\\S+/)[0];zlw.w+=zm;zv=zv.slice(zm.length)}return zv})()).split(/\\r?\\n/).forEach(',
+ 'Satzzeichen hinter Markierung ohne Luecke', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten378"',
+ 'title:"Geladene Datei",children:"karten379"',
+ 'Versionsschild auf karten379', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
