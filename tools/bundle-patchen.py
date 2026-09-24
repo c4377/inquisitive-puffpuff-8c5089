@@ -11915,6 +11915,30 @@ P.append((
  'title:"Geladene Datei",children:"karten391"',
  'Versionsschild auf karten391', 1))
 
+
+# 392 — Textaufteilung wie ihre Testbilder: ein langer Text ohne Unterzeile wird in v3
+# geteilt - erste Saetze (mind. 20 Zeichen) gross, der Rest als kleine Zeile in Versalien.
+
+P.append((
+ 'pr=jt((()=>{t._kicker="";const zl=String(t.text||"").split(/\\r?\\n/);if(BS_KACHEL.kickerAn===1&&zl.length>1&&/^[A-ZÄÖÜ0-9 &\\-.:#]{2,24}$/.test(zl[0].trim())){t._kicker=zl[0].trim();return zl.slice(1).join("\\n")}return t.text})())',
+ 'pr=jt((()=>{t._autoUnter="";const zB=(()=>{t._kicker="";const zl=String(t.text||"").split(/\\r?\\n/);if(BS_KACHEL.kickerAn===1&&zl.length>1&&/^[A-ZÄÖÜ0-9 &\\-.:#]{2,24}$/.test(zl[0].trim())){t._kicker=zl[0].trim();return zl.slice(1).join("\\n")}return t.text})();try{if(BS_KACHEL.autoUnter===1&&!t.secondaryText&&!/\\n/.test(String(zB||""))){const zS=(String(zB||"").match(/[^.!?…]+[.!?…]+["“”„*_]*|[^.!?…]+$/g)||[]).map(zq=>zq.trim()).filter(Boolean);if(zS.length>1){let zh=zS[0],zk=1;const zMin=Number(BS_KACHEL.autoKopfMin)||20;while(zk<zS.length&&zh.length<zMin){zh+=" "+zS[zk];zk++}const zR=zS.slice(zk).join(" ");if(zR.length>=12&&zh.length<=(Number(BS_KACHEL.autoKopfMax)||80)){t._autoUnter=zR.replace(/(^|[^*])\\*(?!\\*)/g,"$1").replace(/(^|\\s)_|_(?=\\s|$|[.,!?…])/g,"$1");return zh}}}}catch(zz){}return zB})())',
+ 'v3: langer Text -> Kopfzeile + kleine Zeile darunter (autoUnter)', 1))
+
+P.append((
+ 'Zt=t.secondaryText?$t(_t(BS_KACHEL.fliessVersal===1&&(i.slideIndex||0)===0?String(t.secondaryText).toUpperCase():t.secondaryText),St,!1):[]',
+ 'Zt=(t.secondaryText||t._autoUnter)?$t(_t(BS_KACHEL.fliessVersal===1&&(i.slideIndex||0)===0?String(t.secondaryText||t._autoUnter).toUpperCase():(t.secondaryText||t._autoUnter)),St,!1):[]',
+ 'kleine Zeile auch aus autoUnter', 1))
+
+P.append((
+ 'bandUnten:1,bandMinUnten:.28,',
+ 'bandUnten:1,bandMinUnten:.28,autoUnter:1,',
+ 'v3: autoUnter an', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten391"',
+ 'title:"Geladene Datei",children:"karten392"',
+ 'Versionsschild auf karten392', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

@@ -10580,3 +10580,18 @@ bisher klein nach oben gerutscht. In v3 gilt jetzt `bandUnten:1`:
 
 Schwarz-Weiß jede vierte Kachel bleibt. Alle Adressen laden **karten391**;
 384/387/388/389/390 sind Stubs darauf.
+
+## 330 — Textaufteilung: große Zeile + kleine Zeile
+
+„Es sieht die Textaufteilung nur einfach nicht so aus": Ihre Testbilder hatten
+oben einen großen Satz (Cormorant) und darunter eine kleine Zeile in Versalien
+(Helvetica). Ihre importierten Texte sind ein einziger Absatz ohne Unterzeile.
+Deshalb teilt v3 jetzt automatisch (`autoUnter:1`):
+
+- oben: die ersten Sätze, bis mindestens 20 Zeichen (`autoKopfMin`), höchstens
+  80 (`autoKopfMax`);
+- darunter: der Rest als kleine Zeile (einfache `*`/`_`-Markierungen fallen dort weg,
+  `**fett**` bleibt).
+
+Nicht geteilt wird, wenn schon eine Unterzeile da ist, der Text Zeilenumbrüche hat
+oder der Rest kürzer als 12 Zeichen wäre. Alle Adressen laden **karten392**.
