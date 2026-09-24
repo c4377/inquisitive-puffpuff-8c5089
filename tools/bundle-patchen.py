@@ -11738,6 +11738,50 @@ P.append((
  'title:"Geladene Datei",children:"karten387"',
  'Versionsschild auf karten387', 1))
 
+
+# 388 — Versuch 3 unter /v3/ (BS_STIL "v3" = DUNKEL + NOIR + V3): Workbook-Schriften
+# und -Farben, helle warme Fotos. Ohne BS_V3/BS_NOIR wirkungslos.
+
+P.append((
+ 'const BS_NOIR={',
+ 'const BS_V3={fotoSchrift:"CormorantV3",deckblattFamilie:"CormorantV3",folgeFamilie:"CormorantV3",kastenSchrift:"CormorantV3",lisaSchrift:"CormorantV3",folgeSchrift:"CormorantV3",ablaufTitel:"CormorantV3",deckblattGewicht:"500",gewicht:"500",folgeGewicht:"500",fotoLaufweite:0,fotoZeile:1.0,deckblattGroesse:124,fotoGroesse:96,akzentFarbe:"#FFFFFF",akzentFarbeDunkel:"#231F20",akzentGewicht:"700",fliessSchrift:"HelveticaNeueBrand",fliessGroesse:.026,fliessVersal:1,nameText:"Carina",nameSchrift:"CaveatV3",nameGewicht:"500",nameLaufweite:0,nameAnteil:.05,nameUnten:.935,nameFarbe:"#FFFFFF",nameDeckkraft:.95,dunkelFarbe:"#231F20",grundA:"#FFFFFF",grundB:"#E0DCD9",schriftA:"#231F20",schriftB:"#231F20",schriftart:"CormorantV3",unterSchrift:"CormorantV3",tonReihe:"89,77,64",tonNeutral:"89,77,64",bildTon:"89,77,64",saettigungReihe:"-0.2",bildTonung:"#8A7663",bildTonungKraft:.1,tiefeOben:.08,tiefeMitte:0,tiefeUnten:.28,auflageReihe:"1",vignetteReihe:"0",bildVignette:0,bildSchleier:0,bildSchwarzpunkt:.03,textGrundMax:1,hellZiel:132,hellGammaMax:2.2,scrimZiel:82,scrimMin:.2,scrimMax:.7};const BS_NOIR={',
+ 'BS_V3-Regler', 1))
+
+P.append((
+ 'if(typeof window<"u"&&(window.BS_STIL==="dunkel"||window.BS_STIL==="noir"))Object.assign(BS_KACHEL,BS_DUNKEL);if(typeof window<"u"&&window.BS_STIL==="noir")Object.assign(BS_KACHEL,BS_NOIR);',
+ 'if(typeof window<"u"&&(window.BS_STIL==="dunkel"||window.BS_STIL==="noir"||window.BS_STIL==="v3"))Object.assign(BS_KACHEL,BS_DUNKEL);if(typeof window<"u"&&(window.BS_STIL==="noir"||window.BS_STIL==="v3"))Object.assign(BS_KACHEL,BS_NOIR);if(typeof window<"u"&&window.BS_STIL==="v3")Object.assign(BS_KACHEL,BS_V3);',
+ 'Stil v3 aktivieren', 1))
+
+P.append((
+ 'zwg=(xt,zg)=>xt&&xt.fett?',
+ 'zwg=(xt,zg)=>xt&&xt.kursiv&&BS_KACHEL.akzentGewicht?BS_KACHEL.akzentGewicht:xt&&xt.fett?',
+ 'Akzent fett-kursiv', 1))
+
+P.append((
+ '"400","500","600","700","italic 400"',
+ '"400","500","600","700","italic 400","italic 700"',
+ 'Kursiv fett vorladen', 1))
+
+P.append((
+ 'new Set([BS_KACHEL.lisaSchrift,BS_KACHEL.folgeSchrift]',
+ 'new Set([BS_KACHEL.lisaSchrift,BS_KACHEL.folgeSchrift,BS_KACHEL.nameSchrift,BS_KACHEL.fliessSchrift]',
+ 'Name-/Fliesstextschrift vorladen', 1))
+
+P.append((
+ 'fontFamily:BS_KACHEL.fliessSchrift||Qe,fontWeight:"400",fontStyle:pt.kursiv?"italic":"normal"',
+ 'fontFamily:BS_KACHEL.fliessSchrift||Qe,fontWeight:pt.fett?"700":"400",fontStyle:pt.kursiv?"italic":"normal"',
+ 'Fliesstext: **fett**', 1))
+
+P.append((
+ 'Zt=t.secondaryText?$t(_t(t.secondaryText),St,!1):[]',
+ 'Zt=t.secondaryText?$t(_t(BS_KACHEL.fliessVersal===1&&(i.slideIndex||0)===0?String(t.secondaryText).toUpperCase():t.secondaryText),St,!1):[]',
+ 'Subline auf dem Cover in Versalien', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten387"',
+ 'title:"Geladene Datei",children:"karten388"',
+ 'Versionsschild auf karten388', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

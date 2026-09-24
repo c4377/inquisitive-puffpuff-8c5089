@@ -10488,3 +10488,26 @@ dem Text; der **warme Braun-Look** aus 322 ist raus (`tonReihe`, `bildTon`,
 `vignetteReihe` aus `BS_NOIR` entfernt). Damit gilt in `/noir/` dieselbe
 Bildbearbeitung wie in der normalen App (`BS_DUNKEL`, Stand 16.09. +
 Aufhellen dunkler Fotos aus 320). `/noir/` → **karten387**.
+
+## 325 — Versuch 3 unter `/v3/`: Workbook-Branding aus ihrem PDF, „überall sind die Bilder zu dunkel"
+
+`site/v3/index.html` setzt `BS_STIL="v3"`, lädt **karten388**: `BS_DUNKEL`,
+darauf `BS_NOIR` (Aufbau, Ränder, Kicker, Verlauf hinter dem Text), darauf
+`BS_V3`. `/` und `/dunkel/` bleiben karten384, `/noir/` karten387.
+
+| Vorgabe (PDF) | Umsetzung (freie Ersatzschriften) |
+|---|---|
+| Atelier Fleur Regular / Bold Italic | **Cormorant Garamond** (variabel, normal + kursiv, 300–700, Familie `CormorantV3`), Titel 500, Akzentwort (`*…*`, sonst letztes Wort) **fett-kursiv** in Weiß (`akzentGewicht` 700 → `zwg`). |
+| Helvetica Fließtext / Labels | `HelveticaNeueBrand`: Kicker in kleinen Versalien, Subtext (Zusatz) 2,6 %, auf dem Cover in **Versalien** (`fliessVersal`), `**…**` darin fett. |
+| Iris Hand Signatur | **Caveat** (`CaveatV3`): Signatur „Carina" mittig unten. |
+| Text #231F20, Weiß, Greige #E0DCD9 | Textkacheln weiß bzw. greige, Schrift #231F20, Cormorant. |
+| brauner Overlay #594D40 | Verlauf hinter dem Text in `89,77,64` statt Schwarz. |
+| warme, gedeckte, helle Fotos | Sättigung −0.2 (keine SW-Kacheln), Tönung `#8A7663` 10 %, Verlauf oben .08 / unten .28, keine Vignette/Schleier, Schwarzpunkt .03, Aufhellen dunkler Fotos auf `hellZiel` 132, Balken hinter der Schrift höchstens 1-fach; Scrim-Ziel 82. |
+
+Schriftdateien (Google Fonts, OFL): `CormorantGaramond-Variable.woff2`,
+`CormorantGaramond-Italic-Variable.woff2`, `Caveat-Variable.woff2`;
+`@font-face` in allen vier `index.html`. Vorgeladen werden jetzt auch
+Name- und Fließtextschrift sowie „italic 700".
+
+Gesichtet mit ihren Fotos: hell, lesbar, Akzent fett-kursiv, Subline in
+Versalien mit fettem Schlüsselwort, Signatur. Keine Seitenfehler.

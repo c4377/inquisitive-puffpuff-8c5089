@@ -1,5 +1,6 @@
 # Der Zwilling zuerst, sonst schluckt ihn die Regel darunter.
 /dunkel/*    /dunkel/index.html   200
 /noir/*      /noir/index.html     200
+/v3/*        /v3/index.html       200
 /profilbilder/*  /profilbilder/index.html  200
 /*           /index.html          200

@@ -13,7 +13,7 @@
          sie hat die Wurzel wieder hell gemacht. Dunkel gilt jetzt
          ueberall, auch auf /content-planner und in einem alten Tab, in
          dem noch der Grundstil gemerkt war. */
-      localStorage.setItem("BS_STIL","noir");window.BS_STIL="noir";
+      localStorage.setItem("BS_STIL","v3");window.BS_STIL="v3";
       /* Der Schwarz-Regler. Muss VOR dem Modul stehen, weil der Zeichner
          ihn schon bei der ersten Kachel liest. Nichts gesetzt heisst 1. */
       var w=parseFloat(localStorage.getItem("BS_SCHWARZ"));
@@ -28,7 +28,7 @@
          heisst: alles bleibt wie im Bundle. */
       var pal=JSON.parse(localStorage.getItem("BS_PALETTE")||"null");
       if(pal&&typeof pal==="object")window.BS_PALETTE=pal;}catch(e){}</script>
-    <script type="module" crossorigin src="/assets/index-B5karten387.js"></script>
+    <script type="module" crossorigin src="/assets/index-B5karten388.js"></script>
     <!-- Montserrat liegt hier im Projekt, nicht bei Google. Der Zeichner misst
          Texte auf dem Canvas und braucht die Schrift sofort; ueber das Netz
          geladen waere sie beim ersten Bild manchmal noch nicht da. Alle
