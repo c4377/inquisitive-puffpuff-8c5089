@@ -10479,3 +10479,12 @@ bleiben auf karten384. Alles über `BS_NOIR`-Regler, sonst wirkungslos.
 Gesichtet mit ihren Fotos: Cover „Die meisten Coaches …" groß im unteren
 Drittel über dem Kleid, Gesicht frei; Folgefolien gleich aufgebaut; alles
 lesbar. Keine Seitenfehler.
+
+## 324 — /noir/: „Die Bilder aber wieder diese Farbwelt" (ihre zwei Exporte vom 16.09.)
+
+In der Testversion bleiben Schrift, Aufbau, Kicker, Akzent, Verlauf hinter
+dem Text; der **warme Braun-Look** aus 322 ist raus (`tonReihe`, `bildTon`,
+`tonNeutral`, `saettigungReihe`, `bildTonung`, `tiefe*`, `auflageReihe`,
+`vignetteReihe` aus `BS_NOIR` entfernt). Damit gilt in `/noir/` dieselbe
+Bildbearbeitung wie in der normalen App (`BS_DUNKEL`, Stand 16.09. +
+Aufhellen dunkler Fotos aus 320). `/noir/` → **karten387**.

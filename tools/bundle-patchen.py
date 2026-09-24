@@ -11724,6 +11724,20 @@ P.append((
  'title:"Geladene Datei",children:"karten386"',
  'Versionsschild auf karten386', 1))
 
+
+# 387 — /noir/: "Die Bilder aber wieder diese Farbwelt" (Exporte 16.09.): Fotolook aus BS_NOIR
+# entfernt, es gilt die Bildbearbeitung aus BS_DUNKEL (karten276-Stand).
+
+P.append((
+ 'tonReihe:"30,20,14",tonNeutral:"30,20,14",bildTon:"30,20,14",saettigungReihe:"-0.1",bildTonung:"#8B6A4F",bildTonungKraft:.16,tiefeOben:.12,tiefeMitte:.04,tiefeUnten:.92,tiefeKnick:.55,auflageReihe:"1",vignetteReihe:"0.4",',
+ '',
+ 'noir: Fotolook wie 16.09. (BS_DUNKEL)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten386"',
+ 'title:"Geladene Datei",children:"karten387"',
+ 'Versionsschild auf karten387', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
