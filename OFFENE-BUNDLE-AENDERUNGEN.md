@@ -10203,3 +10203,40 @@ die ruhigste Bildfläche.
 
 **Offen:** auf ihrem iPhone nicht selbst prüfbar. Wenn es dort noch nicht
 greift, braucht es einen Screenshot der betroffenen Kachel.
+
+## 315 — „Jetzt sind die Fotos zu grau, wir brauchen ein viel stärkeres Schwarz und trotzdem darf das Foto nicht in der Sättigung stärker werden"
+
+**Warum grau:** das Angleichen auf `hellZiel` hob dunkle Fotos per Gamma an.
+Gamma hebt die Schatten mit — Schwarz wird Anthrazit, das Bild flau. Die
+schwarze Schicht aus 313 machte es dann dunkler, aber nicht tiefer.
+
+**Neu** (`schwarzKurve:1`, im Bildlader `u()` statt des Gamma-Filters), eine
+Rechnung je Bildpunkt auf der Helligkeit L:
+
+1. **Schwarzpunkt** aus dem Foto selbst: die dunkelsten `schwarzAnteil` (2 %)
+   werden Schwarz, höchstens `schwarzTiefe` (.10). Fester Schwarzpunkt hat ein
+   dunkles Studiofoto auf 75 % Schwarz gedrückt — daher je Foto.
+2. **Kontrast** `schwarzKontrast` 1.12 um die **eigene** Bildhelligkeit, nicht
+   um 128 (sonst sackt ein dunkles Foto weiter ab).
+3. **Linear** auf `hellZiel` (jetzt 108) angleichen — Schwarz bleibt Schwarz.
+4. **Farbe nie kräftiger:** Aufhellen verschiebt nur die Helligkeit, der
+   Farbabstand bleibt; Abdunkeln verkleinert ihn anteilig; dazu
+   `schwarzFarbe` .85. Multiplikatives Aufhellen hatte die Haut beim dunklen
+   Foto sichtbar kräftiger gemacht (Farbstärke 18 → 30).
+
+`_hellNetz`/`_hellMittel` werden aus dem bearbeiteten Bild neu gemessen, der
+Balken hinter der Schrift richtet sich also weiter nach dem echten Ergebnis.
+Verlauf etwas kräftiger: `tiefeOben/Mitte/Unten` .35 / .12 / .55.
+
+Gemessen (Helligkeit, Anteil Schwarz < 25, Farbstärke auf den sichtbaren
+Stellen):
+
+| Foto | karten377 | **karten378** |
+|---|---|---|
+| SW, Gesicht oben | 115 / 9.7 % / 1.8 | **110 / 12.0 % / 1.5** |
+| stehend, Farbe | 115 / 4.0 % / 18.9 | **108 / 6.5 % / 14.6** |
+| dunkles Studiofoto | 81 / 2.6 % / 17.9 | **60 / 47.7 % / 17.8** |
+| Farbfoto | 112 / 2.5 % / 14.7 | **106 / 4.7 % / 11.2** |
+
+Die Sättigung (Farbstärke) steigt nirgends. Beim Studiofoto wird der graue
+Hintergrund schwarz, das Gesicht bleibt hell.

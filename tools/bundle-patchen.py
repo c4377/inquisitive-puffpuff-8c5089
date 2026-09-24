@@ -11269,6 +11269,46 @@ P.append((
  'title:"Geladene Datei",children:"karten377"',
  'Versionsschild auf karten377', 1))
 
+
+# 378 — "Zu grau, viel staerkeres Schwarz, Saettigung darf nicht steigen":
+# Tonwertkurve nur auf der Helligkeit (Schwarzpunkt aus den dunkelsten 2 %, Kontrast
+# um die Bildhelligkeit), lineares Angleichen, Farbabstand nie groesser; Verlauf kraeftiger.
+
+P.append((
+ 'try{const zZiel=Number(BS_KACHEL.hellZiel)||0;if(zZiel>0&&Pe.fabric.Image.filters&&Pe.fabric.Image.filters.Gamma){',
+ 'try{const zZiel=Number(BS_KACHEL.hellZiel)||0;if(BS_KACHEL.schwarzKurve===1&&zZiel>0){const zel=me.getElement&&me.getElement();if(zel&&zel.width){const zc=document.createElement("canvas");zc.width=zel.width;zc.height=zel.height;const zx=zc.getContext("2d");zx.drawImage(zel,0,0);const zid=zx.getImageData(0,0,zc.width,zc.height),zd=zid.data,zKo=Number(BS_KACHEL.schwarzKontrast)||1,zH=new Array(256).fill(0);let zn=0;for(let zi=0;zi<zd.length;zi+=4*29){zH[Math.min(255,Math.round(.2126*zd[zi]+.7152*zd[zi+1]+.0722*zd[zi+2]))]++;zn++}let zP=0,zAcc=0;const zQ=zn*(Number(BS_KACHEL.schwarzAnteil)||.02);for(;zP<255&&zAcc+zH[zP]<=zQ;zP++)zAcc+=zH[zP];const zBp=Math.min(zP,Math.max(0,Math.min(.4,Number(BS_KACHEL.schwarzTiefe)||0))*255),zLv=zL=>Math.max(0,(zL-zBp)/(255-zBp))*255;let zs1=0;for(let zb=0;zb<256;zb++)zs1+=zH[zb]*zLv(zb);const zM1=zs1/Math.max(1,zn);const zCu=zL=>{let zv=zLv(zL);zv=zM1+(zv-zM1)*zKo;return zv<0?0:zv>255?255:zv};let zs=0;for(let zb=0;zb<256;zb++)zs+=zH[zb]*zCu(zb);const zm=zs/Math.max(1,zn),zG=Math.max(Number(BS_KACHEL.hellDunkelMin)||.5,Math.min(Number(BS_KACHEL.hellAngleichMax)||2,zZiel/Math.max(1,zm)));for(let zi=0;zi<zd.length;zi+=4){const zr=zd[zi],zg=zd[zi+1],zb=zd[zi+2],zL=.2126*zr+.7152*zg+.0722*zb;if(zL<=.5){zd[zi]=zd[zi+1]=zd[zi+2]=0;continue}const zL2=zCu(zL)*zG,zc=Math.min(1,zL2/zL)*(Number(BS_KACHEL.schwarzFarbe)||1),zk=(zv)=>{const zw=zL2+(zv-zL)*zc;return zw<0?0:zw>255?255:zw};zd[zi]=zk(zr);zd[zi+1]=zk(zg);zd[zi+2]=zk(zb)}zx.putImageData(zid,0,0);me.setElement(zc);const zc2=document.createElement("canvas");zc2.width=zc2.height=16;const zx2=zc2.getContext("2d");zx2.drawImage(zc,0,0,16,16);const zd2=zx2.getImageData(0,0,16,16).data;let zs2=0;const zN=[];for(let zy=0;zy<16;zy++){const zR=[];for(let zq=0;zq<16;zq++){const zi=(zy*16+zq)*4,zl=.2126*zd2[zi]+.7152*zd2[zi+1]+.0722*zd2[zi+2];zR.push(zl);zs2+=zl}zN.push(zR)}t._hellNetz=zN;t._hellMittel=Math.round(zs2/256)}}else if(zZiel>0&&Pe.fabric.Image.filters&&Pe.fabric.Image.filters.Gamma){',
+ 'Tonwertkurve auf der Helligkeit statt Gamma (Saettigung bleibt)', 1))
+
+P.append((
+ 'fettKursiv:1,einBlock:1,',
+ 'fettKursiv:1,einBlock:1,schwarzKurve:1,schwarzTiefe:.1,schwarzAnteil:.02,schwarzKontrast:1.12,schwarzFarbe:.85,',
+ 'Regler schwarzKurve/schwarzTiefe/schwarzKontrast', 1))
+
+P.append((
+ 'hellZiel:115',
+ 'hellZiel:108',
+ 'Helligkeitsziel 108', 1))
+
+P.append((
+ 'tiefeOben:.3',
+ 'tiefeOben:.35',
+ 'Verlauf oben .35', 1))
+
+P.append((
+ 'tiefeMitte:.1',
+ 'tiefeMitte:.12',
+ 'Verlauf Mitte .12', 1))
+
+P.append((
+ 'tiefeUnten:.45',
+ 'tiefeUnten:.55',
+ 'Verlauf unten .55', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten377"',
+ 'title:"Geladene Datei",children:"karten378"',
+ 'Versionsschild auf karten378', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
