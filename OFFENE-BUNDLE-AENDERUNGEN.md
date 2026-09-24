@@ -10681,3 +10681,13 @@ Alle Adressen laden **karten397**.
 400, `nameLaufweite` 60, `nameAnteil` .034. Neu `handleSchrift`: Textkacheln (`wt`)
 setzen ihr „carinaannaprav" unten links damit statt PoppinsBold. Alle Adressen laden
 **karten398**.
+
+## 337 — v3 ist die normale Version, /noir/ und /v3/ gelöscht
+
+„Passt, stell die als normale Version und lösche Noir und v3."
+
+Die Hauptadresse lädt schon den v3-Look (`BS_STIL="v3"`, karten398). Die Test-Seiten
+`site/noir/` und `site/v3/` sind gelöscht. `/noir/*` und `/v3/*` leiten per 301 auf `/`
+weiter (in `_redirects` und `netlify.toml`), damit alte Lesezeichen weiter
+funktionieren. Die Regler `BS_NOIR` und `BS_V3` bleiben im Bundle, weil der v3-Look
+auf ihnen aufbaut (DUNKEL → NOIR → V3). `/dunkel/` (alter dunkler Stil) bleibt.

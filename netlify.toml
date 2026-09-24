@@ -15,17 +15,17 @@
   to = "/dunkel/index.html"
   status = 200
 
-# Testversion im Sara-Noir-Look (BS_STIL "noir"), eigener Bundle-Stand.
+# /noir/ und /v3/ waren Testversionen. Der v3-Look ist jetzt die
+# Hauptadresse; alte Lesezeichen landen dort.
 [[redirects]]
   from = "/noir/*"
-  to = "/noir/index.html"
-  status = 200
+  to = "/"
+  status = 301
 
-# Versuch 3 (Workbook-Look: Cormorant, Helvetica, Caveat, braunes Overlay)
 [[redirects]]
   from = "/v3/*"
-  to = "/v3/index.html"
-  status = 200
+  to = "/"
+  status = 301
 
 # Die Profilbilder sind eine eigene Seite, keine Route der App.
 # Ohne diese Regel schluckt die Auffangregel darunter den Pfad und es
@@ -70,26 +70,6 @@
 
 [[headers]]
   for = "/dunkel/index.html"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/v3/"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/v3/index.html"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/noir/"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/noir/index.html"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
