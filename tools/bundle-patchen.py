@@ -12060,6 +12060,19 @@ P.append((
  'title:"Geladene Datei",children:"karten396"',
  'Versionsschild auf karten396', 1))
 
+
+# 397 — v3 (Hauptadresse): Playfair Display normal + kursiv statt Cormorant, enger gesetzt.
+
+P.append((
+ 'const BS_V3={fotoSchrift:"CormorantV3",deckblattFamilie:"CormorantV3",folgeFamilie:"CormorantV3",kastenSchrift:"CormorantV3",lisaSchrift:"CormorantV3",folgeSchrift:"CormorantV3",ablaufTitel:"CormorantV3",deckblattGewicht:"500",gewicht:"500",folgeGewicht:"500",fotoLaufweite:-15,fotoZeile:.98,deckblattGroesse:172,fotoGroesse:136,textHoeheTextfrei:.64,bandNutzung:.98,randUnten:.9,kickerGroesse:.024,akzentFarbe:"#FFFFFF",akzentFarbeDunkel:"#231F20",akzentGewicht:"700",fliessSchrift:"HelveticaNeueBrand",fliessGroesse:.032,fliessVersal:1,bandUnten:1,bandMinUnten:.28,autoUnter:1,nameText:"Carina",nameSchrift:"CaveatV3",nameGewicht:"500",nameLaufweite:0,nameAnteil:.06,nameUnten:.935,nameFarbe:"#FFFFFF",nameDeckkraft:.95,dunkelFarbe:"#231F20",grundA:"#FFFFFF",grundB:"#E0DCD9",schriftA:"#231F20",schriftB:"#231F20",schriftart:"CormorantV3",unterSchrift:"CormorantV3",scrimZiel:82',
+ 'const BS_V3={fotoSchrift:"Playfair Display",deckblattFamilie:"Playfair Display",folgeFamilie:"Playfair Display",kastenSchrift:"Playfair Display",lisaSchrift:"Playfair Display",folgeSchrift:"Playfair Display",ablaufTitel:"Playfair Display",deckblattGewicht:"400",gewicht:"400",folgeGewicht:"400",fotoLaufweite:-25,fotoZeile:.96,deckblattGroesse:172,fotoGroesse:136,textHoeheTextfrei:.64,bandNutzung:.98,randUnten:.9,kickerGroesse:.024,akzentFarbe:"#FFFFFF",akzentFarbeDunkel:"#231F20",akzentGewicht:"500",fliessSchrift:"HelveticaNeueBrand",fliessGroesse:.032,fliessVersal:1,bandUnten:1,bandMinUnten:.28,autoUnter:1,nameText:"Carina",nameSchrift:"CaveatV3",nameGewicht:"500",nameLaufweite:0,nameAnteil:.06,nameUnten:.935,nameFarbe:"#FFFFFF",nameDeckkraft:.95,dunkelFarbe:"#231F20",grundA:"#FFFFFF",grundB:"#E0DCD9",schriftA:"#231F20",schriftB:"#231F20",schriftart:"Playfair Display",unterSchrift:"Playfair Display",scrimZiel:82',
+ 'v3: Playfair Display (normal + kursiv), enger gesetzt', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten396"',
+ 'title:"Geladene Datei",children:"karten397"',
+ 'Versionsschild auf karten397', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

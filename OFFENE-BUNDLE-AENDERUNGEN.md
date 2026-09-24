@@ -10662,3 +10662,14 @@ außer 16 px.
 
 Gilt in `BS_NOIR`, damit auch für die Hauptadresse (v3 erbt; Fließtext/Kicker
 setzt v3 selbst). Alle Adressen laden **karten396**.
+
+## 335 — v3 in Playfair
+
+„Bei der v3 macht bitte Playfair draus und auch Playfair kursiv und stelle es enger."
+
+In `BS_V3` sind alle Familien (`fotoSchrift`, `deckblattFamilie`, `folgeFamilie`,
+`kastenSchrift`, `lisaSchrift`, `folgeSchrift`, `ablaufTitel`, `schriftart`,
+`unterSchrift`) jetzt **"Playfair Display"** statt CormorantV3. Betonte Wörter sind
+Playfair Display Italic (liegt selbst gehostet bei). Gewichte 500→**400**,
+`akzentGewicht` 700→**500**, `fotoLaufweite` −15→**−25**, `fotoZeile` .98→**.96**.
+Alle Adressen laden **karten397**.
