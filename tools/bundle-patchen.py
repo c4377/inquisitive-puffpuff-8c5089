@@ -10906,6 +10906,35 @@ P.append((
  'title:"Geladene Datei",children:"karten370"',
  'Versionsschild auf karten370', 1))
 
+
+# 371 — "Mit * und hinter dem letzten Wort * werden alle Worte dazwischen
+# handschriftlich": *...* setzt im Feed-Zeichner Handschrift statt kursiv.
+
+P.append((
+ ',rasterStil:0,',
+ ',rasterStil:0,sternHand:1,',
+ 'Regler sternHand', 1))
+
+P.append((
+ 'rt.push({w:ct,kursiv:zk,fett:zf,hand:zh})',
+ 'rt.push({w:ct,kursiv:zk&&BS_KACHEL.sternHand!==1,fett:zf,hand:zh||zk&&BS_KACHEL.sternHand===1})',
+ '*...* setzt Handschrift statt kursiv', 1))
+
+P.append((
+ '"Tipp: Wörter in *Sternchen* werden hervorgehoben."',
+ '"Tipp: *vor dem ersten und nach dem letzten Wort* – alles dazwischen wird Handschrift."',
+ 'Editor-Tipp', 1))
+
+P.append((
+ 'title:"Wort markieren für Highlights",children:[v.jsx(ke,{icon:oK,className:"mr-1"})," Highlight (*Wort*)"]',
+ 'title:"Wörter in Handschrift setzen",children:[v.jsx(ke,{icon:oK,className:"mr-1"})," Handschrift (*…*)"]',
+ 'Editor-Knopf', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten370"',
+ 'title:"Geladene Datei",children:"karten371"',
+ 'Versionsschild auf karten371', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

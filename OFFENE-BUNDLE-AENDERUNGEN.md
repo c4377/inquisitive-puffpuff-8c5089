@@ -9965,3 +9965,19 @@ Gemessen, dasselbe Foto dunkel (Mittel 63) und hell (Mittel 182):
 Gesichtet: Cover „Ich dachte ewig …" + Handschrift wie Kachel 1 ihres
 Rasters; Folgefolien fett + Handschrift; lange Schrittfolge; keine
 Seitenfehler.
+
+## 308 — „Mit * und hinter dem letzten Wort * werden alle Worte dazwischen handschriftlich"
+
+Der Feed-Zeichner kannte drei Markierungen, jeweils über beliebig viele
+Wörter: `**…**` fett, `*…*` kursiv (Abschnitt 7), `_…_` Handschrift. Jetzt
+setzt auch `*…*` **Handschrift** (Nothing You Could Do, dieselbe Größe wie
+`_…_`, also `handAnteil`). `**…**` bleibt fett. Regler `sternHand:1`,
+`0` holt kursiv zurück.
+
+Im Editor heißt der Knopf jetzt „Handschrift (*…*)", der Tipp darunter
+erklärt die Regel.
+
+Gesichtet: „Ich dachte ewig, *ich bekomm keine Kundinnen.* Nicht als
+Zweifel." — die drei Wörter mitten im Satz in Handschrift, davor und
+danach Playfair; „…Launch\n*und es passierte nichts.*" — zweite Zeile ganz
+in Handschrift. Keine Seitenfehler.
