@@ -10319,3 +10319,50 @@ Gemessen (Mittel / 5 %-Wert / 95 %-Wert / Kontrast als Streuung / Farbe):
 Weiß wird wieder weiß, der graue Schleier unten ist weg. Beim Foto mit der
 Leuchtröhre sinkt die Streuung, weil die Röhre nicht mehr allein den
 Weißpunkt setzt.
+
+## 319 — „Katastrophe!!! Also die Bilder sollten aussehen wie das" (zwei Exporte vom 16.09., 17:02)
+
+Am 16.09. war **karten276** live (letzter Commit 14.09., nächster erst am
+18.09.). Die Exporte zeigen natürliche Farben, gleichmäßig abgedunkelt,
+nichts überstrahlt. 313–318 (Helligkeitsausgleich, Tonwertkurven,
+abgeschwächte Schichten) haben das zerstört — ausgebrannte Wände, hart.
+
+### Bildbearbeitung exakt auf karten276
+
+Effektive Werte (BS_KACHEL + BS_DUNKEL) Regler für Regler gegen karten276
+verglichen und zurückgestellt: `bildSchleier` .06, `bildTon` / `tonReihe` /
+`tonNeutral` (warme Fast-Schwarz-Töne), `bildSchwarzpunkt` .07,
+`bildVignette` .6, `vignetteReihe`, `auflageReihe` 1|.2|.65|.35,
+`tiefeOben/Mitte/Unten` .55/.08/.85, `textGrundMax` 1.8, Sättigung +0.1 auf
+Farbkacheln. **Aus:** `schwarzKurve` 0, `hellZiel` 0 (den Ausgleich gab es
+am 16.09. nicht). **Behalten** (später ausdrücklich bestellt): jede vierte
+statt jede zweite Kachel schwarzweiß. `textSeiteGrenze` zurück auf .55.
+
+### Der eigentliche Fehler seit 374: das Foto wird zweimal geladen
+
+`Ca` lädt das Foto einmal ganz am Anfang (`if($&&!E)await u(t.background)`)
+und der Feed-Zeichner ein zweites Mal. Jedes geladene Foto wandert per
+`sendToBack` nach hinten — **das erste liegt obenauf**. Die Gesichtslage
+(311) wurde erst vor dem zweiten Laden geholt:
+
+- sichtbar war der Zuschnitt **ohne** Gesicht, die Textseite richtete sich
+  nach dem unsichtbaren → Text auf dem Gesicht (ihre Kacheln Tag 2, 4, 26);
+- die Farbschichten (Schwarzpunkt/Farbneutral) beider Fotos lagen versetzt
+  übereinander → farbiger Doppelschatten im Gesicht.
+
+Jetzt wird die Gesichtslage **vor dem ersten** Laden geholt; beide Fotos
+sind identisch zugeschnitten.
+
+Gemessen, dieselben Fotos (Mittel / 5 % / 95 % / Farbstärke):
+
+| Foto | karten276 | **karten382** | karten381 |
+|---|---|---|---|
+| Jeans-Overall | 86 / 13 / 162 / 21.7 | **86 / 13 / 159 / 21.5** | 99 / 7 / 220 / 16.4 |
+| schwarzes Kleid | 68 / 0 / 147 / 77.5 | **71 / 1 / 163 / 70.0** | 100 / 8 / 194 / 51.6 |
+| stehend, Wand | 104 / 1 / 180 / 22.0 | **100 / 7 / 177 / 18.9** | 101 / 2 / 224 / 12.0 |
+
+Ohne WebGL gleich (Gesicht erkannt, Text darunter).
+
+**Lehre:** Bei der Bildbearbeitung nicht weiter nach Worten („zu dunkel",
+„zu grau") drehen, sondern an einem Referenzbild von ihr messen. Die
+Referenz ist jetzt karten276.

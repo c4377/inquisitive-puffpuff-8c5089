@@ -11396,6 +11396,91 @@ P.append((
  'title:"Geladene Datei",children:"karten381"',
  'Versionsschild auf karten381', 1))
 
+
+# 382 — "Katastrophe, die Bilder sollten aussehen wie das" (Exporte vom 16.09. =
+# karten276): Bildbearbeitung exakt auf 276 zurueck, Kurve/Ausgleich aus; Gesichtslage
+# vor dem ERSTEN Laden des Fotos (sonst Zuschnitt ohne Gesicht + Doppelschatten).
+
+P.append((
+ 'bildSchleier:0,',
+ 'bildSchleier:.06,',
+ 'Schleier wie 276', 1))
+
+P.append((
+ 'bildTon:"0,0,0"',
+ 'bildTon:"14,13,12"',
+ 'Bildton wie 276', 1))
+
+P.append((
+ 'tonReihe:"0,0,0"',
+ 'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20"',
+ 'Toenung wie 276', 1))
+
+P.append((
+ 'tonNeutral:"0,0,0"',
+ 'tonNeutral:"13,13,13"',
+ 'Toenung SW wie 276', 1))
+
+P.append((
+ 'bildSchwarzpunkt:0,',
+ 'bildSchwarzpunkt:.07,',
+ 'Schwarzpunkt wie 276', 1))
+
+P.append((
+ 'bildVignette:0,',
+ 'bildVignette:.6,',
+ 'Vignette wie 276', 1))
+
+P.append((
+ 'textGrundMax:1.25',
+ 'textGrundMax:1.8',
+ 'Balken wie 276', 1))
+
+P.append((
+ 'auflageReihe:"1"',
+ 'auflageReihe:"1|0.2|0.65|0.35"',
+ 'Auflage wie 276', 1))
+
+P.append((
+ 'vignetteReihe:"0"',
+ 'vignetteReihe:"1|0|0.55|0.25"',
+ 'Vignettenreihe wie 276', 1))
+
+P.append((
+ 'tiefeOben:.15,tiefeKnickOben:.16,tiefeMitte:0,tiefeKnick:.60,tiefeKnickUnten:.999,tiefeUnten:.3,',
+ 'tiefeOben:.55,tiefeKnickOben:.16,tiefeMitte:.08,tiefeKnick:.60,tiefeKnickUnten:.999,tiefeUnten:.85,',
+ 'Tiefenverlauf wie 276', 1))
+
+P.append((
+ 'saettigungReihe:"-1|0|0|0|-1|0|0|0|-1|0|0|0|-1|0|0|0|-1|0|0|0|-1|0|0|0|-1|0|0|0|-1|0|0|0|-1|0|0|0|-1|0|0|0"',
+ 'saettigungReihe:"-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1"',
+ 'Saettigung wie 276 (+0.1), jede vierte SW bleibt', 1))
+
+P.append((
+ 'schwarzKurve:1,',
+ 'schwarzKurve:0,',
+ 'Tonwertkurve aus', 1))
+
+P.append((
+ 'hellZiel:96',
+ 'hellZiel:0',
+ 'Helligkeitsausgleich aus (gab es am 16.09. nicht)', 1))
+
+P.append((
+ 'textSeiteGrenze:.4',
+ 'textSeiteGrenze:.55',
+ 'Text oben erst ab Gesichtshoehe .55', 1))
+
+P.append((
+ 'if($&&!E)try{await u(t.background)}catch{}',
+ 'if($&&!E&&t.textBands===!0&&BS_KACHEL.zuschnittTextfrei===1&&!(t._autoImage&&t._autoImage.faceZones&&t._autoImage.faceZones.length))try{const zA=await Promise.race([AK([t.background]),new Promise(zr=>setTimeout(()=>zr(null),Number(BS_KACHEL.gesichtWarten)||12e3))]);zA&&zA[0]&&(t._zGes=zA[0].faceZones||[],t._zSpot=zA[0].textSpot||null)}catch(zz){}if($&&!E)try{await u(t.background)}catch{}',
+ 'Gesichtslage vor dem ersten Laden des Fotos', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten381"',
+ 'title:"Geladene Datei",children:"karten382"',
+ 'Versionsschild auf karten382', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
