@@ -9,14 +9,13 @@
   # und der wuerde die App aus dem veralteten src/ neu bauen.
   command = ""
 
-# Der Zwilling zuerst, sonst schluckt ihn die Regel darunter.
+# /dunkel/, /noir/ und /v3/ waren eigene Versionen. Es gibt nur noch die
+# Hauptadresse im v3-Look; alte Lesezeichen landen dort.
 [[redirects]]
   from = "/dunkel/*"
-  to = "/dunkel/index.html"
-  status = 200
+  to = "/"
+  status = 301
 
-# /noir/ und /v3/ waren Testversionen. Der v3-Look ist jetzt die
-# Hauptadresse; alte Lesezeichen landen dort.
 [[redirects]]
   from = "/noir/*"
   to = "/"
@@ -60,16 +59,6 @@
 
 [[headers]]
   for = "/stil-schalter.js"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/dunkel/"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/dunkel/index.html"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 

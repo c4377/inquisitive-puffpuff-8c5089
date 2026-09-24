@@ -10691,3 +10691,9 @@ Die Hauptadresse lädt schon den v3-Look (`BS_STIL="v3"`, karten398). Die Test-S
 weiter (in `_redirects` und `netlify.toml`), damit alte Lesezeichen weiter
 funktionieren. Die Regler `BS_NOIR` und `BS_V3` bleiben im Bundle, weil der v3-Look
 auf ihnen aufbaut (DUNKEL → NOIR → V3). `/dunkel/` (alter dunkler Stil) bleibt.
+
+## 338 — /dunkel/ gelöscht
+
+„Ja, dunkel auch löschen": `site/dunkel/` ist weg, `/dunkel/*` leitet per 301 auf `/`.
+Es gibt nur noch die Hauptadresse (v3-Look). `BS_DUNKEL` bleibt im Bundle, weil
+v3 darauf aufbaut.

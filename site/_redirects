@@ -1,5 +1,5 @@
-# Der Zwilling zuerst, sonst schluckt ihn die Regel darunter.
-/dunkel/*    /dunkel/index.html   200
+# Alte Versionen zuerst auf die Hauptadresse, sonst schluckt sie die Regel darunter.
+/dunkel/*    /                    301
 /noir/*      /                    301
 /v3/*        /                    301
 /profilbilder/*  /profilbilder/index.html  200
