@@ -10613,3 +10613,20 @@ Dir fehlt kein Angebot. Dir fehlt die Frau, die es *verkauft.*
 - alles andere = der große Satz, ungeteilt.
 
 Alle Adressen laden **karten393**.
+
+## 332 — Noir: Schrift größer und enger
+
+„In Noir finde ich es schöner, aber Schrift muss größer und damit sie nicht breiter
+wird auch enger."
+
+| Regler (`BS_NOIR`) | vorher | jetzt |
+|---|---|---|
+| `deckblattGroesse` / `fotoGroesse` | 104 / 80 | **132 / 104** |
+| `fotoLaufweite` (Buchstabenabstand) | 30 | **−15** |
+| `fotoZeile` (Zeilenabstand) | 1.08 | **1.02** |
+| `textHoeheTextfrei` | .46 | **.56** |
+| `gesichtAbstand` / `randUnten` | .06 / .86 | **.025 / .885** (mehr Höhe unter dem Kinn) |
+| `autoUnter` | – | **1** (`/`-Zeile = kleine Zeile, wie v3) |
+
+v3 überschreibt Größen und Abstände selbst und bleibt, wie es war. Alle Adressen
+laden **karten394**.

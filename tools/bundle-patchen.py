@@ -11953,6 +11953,25 @@ P.append((
  'title:"Geladene Datei",children:"karten393"',
  'Versionsschild auf karten393', 1))
 
+
+# 394 — /noir/: Schrift groesser und enger gesetzt, mehr Hoehe fuer den Text;
+# / -Zeile auch in Noir als kleine Zeile.
+
+P.append((
+ 'fotoLaufweite:30,fotoZeile:1.08,deckblattGroesse:104,fotoGroesse:80,textHoeheTextfrei:.46,',
+ 'fotoLaufweite:-15,fotoZeile:1.02,deckblattGroesse:132,fotoGroesse:104,textHoeheTextfrei:.56,autoUnter:1,',
+ 'Noir: Schrift groesser, enger gesetzt; / -Zeile als kleine Zeile', 1))
+
+P.append((
+ 'randUnten:.86,gesichtAbstand:.06,',
+ 'randUnten:.885,gesichtAbstand:.025,',
+ 'Noir: mehr Hoehe fuer den Text (naeher ans Kinn, etwas tiefer)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten393"',
+ 'title:"Geladene Datei",children:"karten394"',
+ 'Versionsschild auf karten394', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
