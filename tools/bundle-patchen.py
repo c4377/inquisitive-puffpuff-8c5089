@@ -11782,6 +11782,60 @@ P.append((
  'title:"Geladene Datei",children:"karten388"',
  'Versionsschild auf karten388', 1))
 
+
+# 389 — "Ueberall heller": Helligkeit aus /v3/ in BS_DUNKEL (/, /dunkel/, /noir/),
+# Verlauf hinter dem Text auch in der normalen App. Alle Adressen auf karten389.
+
+P.append((
+ 'tiefeOben:.55,',
+ 'tiefeOben:.08,',
+ 'Verlauf oben .08', 1))
+
+P.append((
+ 'tiefeMitte:.08,',
+ 'tiefeMitte:0,',
+ 'Verlauf Mitte 0', 1))
+
+P.append((
+ 'tiefeUnten:.85,',
+ 'tiefeUnten:.28,',
+ 'Verlauf unten .28', 1))
+
+P.append((
+ 'bildVignette:.6,',
+ 'bildVignette:0,',
+ 'keine Vignette', 1))
+
+P.append((
+ 'vignetteReihe:"1|0|0.55|0.25"',
+ 'vignetteReihe:"0"',
+ 'keine Vignettenreihe', 1))
+
+P.append((
+ 'bildSchleier:.06,',
+ 'bildSchleier:0,',
+ 'kein Schleier', 1))
+
+P.append((
+ 'bildSchwarzpunkt:.07,',
+ 'bildSchwarzpunkt:.03,',
+ 'Schwarzpunkt .03', 1))
+
+P.append((
+ 'textGrundMax:1.8,',
+ 'textGrundMax:1,',
+ 'Balken hoechstens 1-fach', 1))
+
+P.append((
+ 'hellZiel:118,',
+ 'hellZiel:132,textScrim:1,scrimZiel:82,scrimMin:.2,scrimMax:.7,scrimAuslauf:.14,',
+ 'Aufhellen auf 132, Verlauf hinter dem Text', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten388"',
+ 'title:"Geladene Datei",children:"karten389"',
+ 'Versionsschild auf karten389', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

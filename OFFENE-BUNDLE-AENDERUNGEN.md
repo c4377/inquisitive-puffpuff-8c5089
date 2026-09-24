@@ -10511,3 +10511,25 @@ Name- und Fließtextschrift sowie „italic 700".
 
 Gesichtet mit ihren Fotos: hell, lesbar, Akzent fett-kursiv, Subline in
 Versalien mit fettem Schlüsselwort, Signatur. Keine Seitenfehler.
+
+## 326 — „Überall heller"
+
+Die Helligkeit aus `/v3/` gilt jetzt in `BS_DUNKEL`, also für `/`,
+`/dunkel/` und `/noir/` (`/v3/` hatte sie schon). Die Farbwelt vom 16.09.
+(Töne, jede vierte Kachel SW) bleibt.
+
+| Regler | vorher | jetzt |
+|---|---|---|
+| `tiefeOben/Mitte/Unten` | .55 / .08 / .85 | **.08 / 0 / .28** |
+| `bildVignette`, `vignetteReihe` | .6, 1\|0\|.55\|.25 | **0** |
+| `bildSchleier` | .06 | **0** |
+| `bildSchwarzpunkt` | .07 | **.03** |
+| `textGrundMax` | 1.8 | **1** |
+| `hellZiel` (dunkle Fotos anheben) | 118 | **132** |
+| `textScrim` | – | **1** (Verlauf nur hinter dem Text, Ziel 82, .2–.7) |
+
+Alle vier Adressen laden **karten389**; 384/387/388 sind Stubs darauf.
+
+Gemessen (mittlere Helligkeit der ganzen Kachel, ihre Fotos):
+Kleid 101 → **126**, SW 101 → **109**, Jeans 94 → **110**; das Foto mit
+heller Wand 98 → 90, weil dort der Verlauf hinter dem weißen Text greift.
