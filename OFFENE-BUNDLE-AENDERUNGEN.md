@@ -10673,3 +10673,11 @@ In `BS_V3` sind alle Familien (`fotoSchrift`, `deckblattFamilie`, `folgeFamilie`
 Playfair Display Italic (liegt selbst gehostet bei). Gewichte 500→**400**,
 `akzentGewicht` 700→**500**, `fotoLaufweite` −15→**−25**, `fotoZeile` .98→**.96**.
 Alle Adressen laden **karten397**.
+
+## 336 — carinaannaprav statt Carina
+
+„Carinaannaprav statt Carina & in Playfair": In `BS_V3` ist `nameText`
+**"carinaannaprav"** (klein, wie der Instagram-Name), `nameSchrift` **Playfair Display**
+400, `nameLaufweite` 60, `nameAnteil` .034. Neu `handleSchrift`: Textkacheln (`wt`)
+setzen ihr „carinaannaprav" unten links damit statt PoppinsBold. Alle Adressen laden
+**karten398**.

@@ -12073,6 +12073,24 @@ P.append((
  'title:"Geladene Datei",children:"karten397"',
  'Versionsschild auf karten397', 1))
 
+
+# 398 — v3: carinaannaprav in Playfair statt Carina (Fotos und Textkacheln).
+
+P.append((
+ 'nameText:"Carina",nameSchrift:"CaveatV3",nameGewicht:"500",nameLaufweite:0,nameAnteil:.06,',
+ 'nameText:"carinaannaprav",nameSchrift:"Playfair Display",nameGewicht:"400",nameLaufweite:60,nameAnteil:.034,handleSchrift:"Playfair Display",',
+ 'v3: carinaannaprav in Playfair statt Carina', 1))
+
+P.append((
+ 'fontSize:c(14),fontFamily:FETT,fontWeight:"700",charSpacing:140,',
+ 'fontSize:BS_KACHEL.handleSchrift?c(17):c(14),fontFamily:BS_KACHEL.handleSchrift||FETT,fontWeight:BS_KACHEL.handleSchrift?"400":"700",charSpacing:BS_KACHEL.handleSchrift?60:140,',
+ 'Textkacheln: Name in handleSchrift', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten397"',
+ 'title:"Geladene Datei",children:"karten398"',
+ 'Versionsschild auf karten398', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
