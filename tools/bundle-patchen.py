@@ -11481,6 +11481,35 @@ P.append((
  'title:"Geladene Datei",children:"karten382"',
  'Versionsschild auf karten382', 1))
 
+
+# 383 — "Die dunkleren Fotos grundsaetzlich aufhellen auf die Tageslicht-Fotos":
+# nur aufhellen, Ziel 118, linear mit weicher Schulter, Farbabstand gleich.
+
+P.append((
+ 'try{const zZiel=Number(BS_KACHEL.hellZiel)||0;if(BS_KACHEL.schwarzKurve===1&&zZiel>0){',
+ 'try{const zZiel=Number(BS_KACHEL.hellZiel)||0;if(BS_KACHEL.aufhellModus===1&&zZiel>0){const zel=me.getElement&&me.getElement();if(zel&&zel.width){const zc=document.createElement("canvas");zc.width=zel.width;zc.height=zel.height;const zx=zc.getContext("2d");zx.drawImage(zel,0,0);const zid=zx.getImageData(0,0,zc.width,zc.height),zd=zid.data;let zs=0,zn=0;for(let zi=0;zi<zd.length;zi+=4*29){zs+=.2126*zd[zi]+.7152*zd[zi+1]+.0722*zd[zi+2];zn++}const zm=zs/Math.max(1,zn),zG=Math.min(Number(BS_KACHEL.hellGammaMax)||2.2,zZiel/Math.max(1,zm));if(zG>1.02){const zT=Number(BS_KACHEL.aufhellSchulter)||.8,zSc=zL=>{const zv=zL*zG/255;return 255*(zv<=zT?zv:zT+(1-zT)*(1-Math.exp(-(zv-zT)/(1-zT))))};for(let zi=0;zi<zd.length;zi+=4){const zr=zd[zi],zg=zd[zi+1],zb=zd[zi+2],zL=.2126*zr+.7152*zg+.0722*zb;if(zL<=.5)continue;const zL2=zSc(zL),zk=(zv)=>{const zw=zL2+(zv-zL);return zw<0?0:zw>255?255:zw};zd[zi]=zk(zr);zd[zi+1]=zk(zg);zd[zi+2]=zk(zb)}zx.putImageData(zid,0,0);me.setElement(zc)}const zc2=document.createElement("canvas");zc2.width=zc2.height=16;const zx2=zc2.getContext("2d");zx2.drawImage(me.getElement(),0,0,16,16);const zd2=zx2.getImageData(0,0,16,16).data;let zs2=0;const zN=[];for(let zy=0;zy<16;zy++){const zR=[];for(let zq=0;zq<16;zq++){const zi=(zy*16+zq)*4,zl=.2126*zd2[zi]+.7152*zd2[zi+1]+.0722*zd2[zi+2];zR.push(zl);zs2+=zl}zN.push(zR)}t._hellNetz=zN;t._hellMittel=Math.round(zs2/256)}}else if(BS_KACHEL.schwarzKurve===1&&zZiel>0){',
+ 'Aufhellen auf Tageslicht: linear mit Schulter, nur nach oben', 1))
+
+P.append((
+ 'hellZiel:0',
+ 'hellZiel:118',
+ 'Ziel: Tageslicht-Niveau 118', 1))
+
+P.append((
+ 'hellGammaMax:1.7',
+ 'hellGammaMax:2.2',
+ 'sehr dunkle Fotos bis 2.2-fach', 1))
+
+P.append((
+ 'schwarzKurve:0,',
+ 'schwarzKurve:0,aufhellModus:1,aufhellSchulter:.8,',
+ 'Regler aufhellModus/aufhellSchulter', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten382"',
+ 'title:"Geladene Datei",children:"karten383"',
+ 'Versionsschild auf karten383', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

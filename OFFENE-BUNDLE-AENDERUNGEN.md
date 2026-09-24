@@ -10366,3 +10366,31 @@ Ohne WebGL gleich (Gesicht erkannt, Text darunter).
 **Lehre:** Bei der Bildbearbeitung nicht weiter nach Worten („zu dunkel",
 „zu grau") drehen, sondern an einem Referenzbild von ihr messen. Die
 Referenz ist jetzt karten276.
+
+## 320 — „Die dunkleren Fotos grundsätzlich aufhellen auf die Tageslicht-Fotos"
+
+Referenz bleibt karten276 (319). In ihrem Raster gemessen (obere
+Kachelhälfte, ohne Text): Tageslicht-Kacheln (Tag 23/25/27) ~115–120,
+dunklere (Tag 24/26/28/30) 65–87.
+
+**Nur aufhellen, nie abdunkeln** (`aufhellModus:1`, im Bildlader vor der
+Bearbeitung aus karten276): Rohhelligkeit des Fotos messen; liegt sie unter
+`hellZiel` **118** (Tageslicht-Niveau), linear anheben, höchstens
+`hellGammaMax` 2.2-fach. Linear hält Schwarz schwarz (kein Grauschleier —
+ein erster Versuch per Gamma hob beim Innenfoto das 5-%-Niveau von 6 auf 43).
+Oberhalb `aufhellSchulter` .8 läuft die Kurve weich in Weiß aus, nichts
+brennt aus. Der Farbabstand bleibt gleich → Farbe nicht kräftiger. Helle
+Fotos bleiben unberührt; danach läuft die 276-Bearbeitung wie gehabt.
+
+Gemessen (Mittel obere Hälfte / 5 %-Wert / Farbstärke):
+
+| Foto | karten382 | **karten383** |
+|---|---|---|
+| Innenfoto, schwarzes Kleid | 81 / 6 / 75.9 | **116 / 21 / 67.9** |
+| Tageslicht, Jeans | 88 / 11 / 20.8 | 101 / 16 / 20.0 |
+| hell, Wand | 92 / 10 / 21.3 | 92 / 10 / 21.3 (unberührt) |
+| hell, SW | 108 / 7 / 2.2 | 113 / 8 / 2.3 |
+| Studio, schwarzer Hintergrund | 27 / 0 / 1.4 | 32 / 0 / 5.4 (Deckel 2.2) |
+
+Das Studiofoto bleibt bewusst dunkel — ein schwarzer Hintergrund auf
+Tageslicht gezogen würde grau.
