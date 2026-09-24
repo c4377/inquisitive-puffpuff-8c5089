@@ -10260,3 +10260,29 @@ Gesicht → ruhigste Fläche entscheidet.
 („Erst **bold**. Dann") wurden als eigenes Wort mit Lücke gesetzt
 („bold ."). Jetzt hängen sie am markierten Wort (im Tokenizer des
 Feed-Zeichners).
+
+## 317 — „So wie bei dir im Bild sieht das nicht aus" (Screenshot ihres Rasters, karten378)
+
+Ihr Raster lief mit karten378 (Kacheln werden nur pro Sitzung gemerkt).
+Drei Unterschiede zu meinen Testbildern:
+
+1. **Ihre Fotos sind hell und luftig**, die Testfotos (Julia) dunkle
+   Studiobilder. Die Kurve aus 315 schnitt bei hellen Fotos kaum Schwarz ab.
+   Jetzt `hellZiel` 96 (statt 108), `schwarzAnteil` .05, `schwarzTiefe` bis
+   .20, `schwarzKontrast` 1.22. Farbstärke steigt weiter nicht.
+2. **Text auf der Person** (Tag 2, 4, 9: Person klein in der Mitte). Regel
+   war: Gesicht in der oberen Hälfte → Text unten — also auf den Körper.
+   Bei Julia geht der Text über den Kopf, sobald das Gesicht nicht ganz oben
+   sitzt. `textSeiteGrenze` .55 → **.4**.
+3. **Ihre Texte haben keine Markierungen** — ohne `**…**`/`*…*` gibt es keine
+   fett-kursiven Wörter und keine Handschrift, die das Julia-Bild ausmachen.
+   Nicht geändert, ihr gesagt.
+
+Gemessen an ihren zwei echten Fotos (Helligkeit / Anteil Schwarz /
+Farbstärke): schwarzes Kleid 104 / 16 % / 47.9 → **94 / 28 % / 50.2**
+(Farbe praktisch gleich), Jeans-Overall 106 / 6 % / 16.4 → **95 / 13 % /
+16.3**.
+
+**Test-Lehre:** Kacheln aus ihrem Raster taugen nicht als Testfotos —
+eingebrannter Text, und das Wegspiegeln des Textes verwirrt die
+Gesichtserkennung. Um Originalfotos gebeten.

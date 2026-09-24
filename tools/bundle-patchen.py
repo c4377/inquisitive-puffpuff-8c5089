@@ -11322,6 +11322,41 @@ P.append((
  'title:"Geladene Datei",children:"karten379"',
  'Versionsschild auf karten379', 1))
 
+
+# 380 — "So wie bei dir im Bild sieht das nicht aus": Text ueber den Kopf ab
+# Gesichtshoehe .4; helle Fotos bekommen mehr echtes Schwarz (Ziel 96, Schwarzpunkt
+# bis .20 aus den dunkelsten 5 %, Kontrast 1.22).
+
+P.append((
+ 'textSeiteGrenze:.55',
+ 'textSeiteGrenze:.4',
+ 'Text oben ab Gesichtshoehe .4', 1))
+
+P.append((
+ 'hellZiel:108',
+ 'hellZiel:96',
+ 'Helligkeitsziel 96', 1))
+
+P.append((
+ 'schwarzTiefe:.1',
+ 'schwarzTiefe:.2',
+ 'Schwarzpunkt bis .20', 1))
+
+P.append((
+ 'schwarzAnteil:.02',
+ 'schwarzAnteil:.05',
+ 'dunkelste 5 % werden Schwarz', 1))
+
+P.append((
+ 'schwarzKontrast:1.12',
+ 'schwarzKontrast:1.22',
+ 'Kontrast 1.22', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten379"',
+ 'title:"Geladene Datei",children:"karten380"',
+ 'Versionsschild auf karten380', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
