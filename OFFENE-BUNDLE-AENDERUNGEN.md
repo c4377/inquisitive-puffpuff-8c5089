@@ -9981,3 +9981,29 @@ Gesichtet: „Ich dachte ewig, *ich bekomm keine Kundinnen.* Nicht als
 Zweifel." — die drei Wörter mitten im Satz in Handschrift, davor und
 danach Playfair; „…Launch\n*und es passierte nichts.*" — zweite Zeile ganz
 in Handschrift. Keine Seitenfehler.
+
+## 309 — „Mit _ vor dem ersten und hinter dem letzten Wort_ wird alles dazwischen 10% größer in der Playfair Schrift"
+
+`_…_` war Handschrift (Abschnitt 106/181). Seit 308 übernimmt `*…*` die
+Handschrift, also bekommt `_…_` eine eigene Rolle: **Playfair**, die
+Hauptschrift der Kachel (`grossFamilie`, leer = Hauptschrift), und
+**`grossAnteil` 1.1** mal so groß wie der Text drumherum. In der ersten
+Zeile also 10 % größer als die Überschrift, in der zweiten Zeile 10 % größer
+als die zweite Zeile, dann aber in Playfair statt Handschrift. Regler
+`strichGross:1`, `0` holt die alte Handschrift-Bedeutung zurück.
+
+### Nebenbei repariert: Wortabstände in der zweiten Zeile
+
+Sobald in einer Zeile ein markiertes Wort steht, setzt der Zeichner Wort für
+Wort. Der Abstand dazwischen war dabei immer `ot`, der Wortabstand der
+**großen Überschrift**, auch in der kleinen zweiten Zeile. Das gab Lücken
+(„und  es  passierte  nichts."). Jetzt misst die zweite Zeile den Abstand je
+Wort in dessen eigener Schrift und Größe, beim Zeichnen **und** beim
+Zentrieren (`Ht`), sonst sitzt die Zeile schief. Die erste Zeile ist
+unverändert.
+
+Gesichtet: „Ich dachte ewig, _ich bekomm keine Kundinnen._ Nicht als
+Zweifel." (Mitte etwas größer); „Meine Kundin war _mitten im Launch_" +
+„*und es passierte nichts.*" (Playfair größer, Handschrift darunter);
+„…\n_und es passierte nichts._" (zweite Zeile in Playfair). Die
+Handschriftzeile sitzt mittig (804 zu 800 px), keine Seitenfehler.

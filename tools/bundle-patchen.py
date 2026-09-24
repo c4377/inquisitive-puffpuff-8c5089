@@ -10935,6 +10935,46 @@ P.append((
  'title:"Geladene Datei",children:"karten371"',
  'Versionsschild auf karten371', 1))
 
+
+# 372 — "Mit _ vor dem ersten und hinter dem letzten Wort_ wird alles dazwischen
+# 10% groesser in der Playfair Schrift". Dazu Wortabstaende in der zweiten Zeile
+# (Zeichnen und Zentrieren) je Wort in dessen eigener Schrift und Groesse.
+
+P.append((
+ ',sternHand:1,',
+ ',sternHand:1,strichGross:1,grossAnteil:1.1,',
+ 'Regler strichGross/grossAnteil', 1))
+
+P.append((
+ 'rt.push({w:ct,kursiv:zk&&BS_KACHEL.sternHand!==1,fett:zf,hand:zh||zk&&BS_KACHEL.sternHand===1})',
+ 'rt.push({w:ct,kursiv:zk&&BS_KACHEL.sternHand!==1,fett:zf,hand:zh&&BS_KACHEL.strichGross!==1||zk&&BS_KACHEL.sternHand===1,gross:zh&&BS_KACHEL.strichGross===1})',
+ '_..._ setzt Playfair +10% statt Handschrift', 1))
+
+P.append((
+ 'sr=Je=>Je.some(rt=>rt.kursiv||rt.fett||rt.hand),zwf=(xt,zg)=>xt&&xt.hand?(BS_KACHEL.handFamilie||BS_KACHEL.zweiteFamilie||zg):zg,',
+ 'sr=Je=>Je.some(rt=>rt.kursiv||rt.fett||rt.hand||rt.gross),zwf=(xt,zg)=>xt&&xt.gross?(BS_KACHEL.grossFamilie||Qe):xt&&xt.hand?(BS_KACHEL.handFamilie||BS_KACHEL.zweiteFamilie||zg):zg,',
+ 'zwf: grosse Woerter in der Hauptschrift', 1))
+
+P.append((
+ 'zws=(xt,zg)=>xt&&xt.hand?zg*(BS_KACHEL.handAnteil||1):zg,',
+ 'zws=(xt,zg)=>xt&&xt.gross?zg*(Number(BS_KACHEL.grossAnteil)||1.1):xt&&xt.hand?zg*(BS_KACHEL.handAnteil||1):zg,',
+ 'zws: grosse Woerter +10%', 1))
+
+P.append((
+ 'e.add(Ut),Vt+=Ut.width+ot})',
+ 'e.add(Ut),Vt+=Ut.width+(Ve?ot:(()=>{const zo={fontSize:Ut.fontSize,fontFamily:Ut.fontFamily,fontWeight:Ut.fontWeight},zp=new Pe.fabric.Text("M M",zo).width-new Pe.fabric.Text("MM",zo).width;return zp>0&&zp<Ut.fontSize?zp:Ut.fontSize*.25})())})',
+ 'Wortabstand in der zweiten Zeile', 1))
+
+P.append((
+ 'return Je.reduce((Vt,Tt)=>Vt+new Pe.fabric.Text(Tt.w,{...pt,fontFamily:zwf(Tt,pt.fontFamily),fontWeight:zwg(Tt,pt.fontWeight),fontSize:zws(Tt,pt.fontSize),fontStyle:Tt.kursiv?"italic":"normal"}).width,0)+ct*Math.max(0,Je.length-1)}',
+ 'if(!Ve)return Je.reduce((Vt,Tt,Ti)=>{const zo={...pt,fontFamily:zwf(Tt,pt.fontFamily),fontWeight:zwg(Tt,pt.fontWeight),fontSize:zws(Tt,pt.fontSize),fontStyle:Tt.kursiv?"italic":"normal"},zsp=new Pe.fabric.Text("M M",zo).width-new Pe.fabric.Text("MM",zo).width;return Vt+new Pe.fabric.Text(Tt.w,zo).width+(Ti<Je.length-1?(zsp>0&&zsp<zo.fontSize?zsp:zo.fontSize*.25):0)},0);return Je.reduce((Vt,Tt)=>Vt+new Pe.fabric.Text(Tt.w,{...pt,fontFamily:zwf(Tt,pt.fontFamily),fontWeight:zwg(Tt,pt.fontWeight),fontSize:zws(Tt,pt.fontSize),fontStyle:Tt.kursiv?"italic":"normal"}).width,0)+ct*Math.max(0,Je.length-1)}',
+ 'Zentrieren misst Wortabstaende wie beim Zeichnen', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten371"',
+ 'title:"Geladene Datei",children:"karten372"',
+ 'Versionsschild auf karten372', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
