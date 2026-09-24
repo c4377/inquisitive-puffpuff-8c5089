@@ -11144,6 +11144,101 @@ P.append((
  'title:"Geladene Datei",children:"karten375"',
  'Versionsschild auf karten375', 1))
 
+
+# 376 — "Bilder teilweise zu dunkel, wenn dunkel mit Schwarz und nicht mehr
+# Saettigung oder was auch immer": Toenung, Schwarzpunkt, Vignette, Schleier, Kanten,
+# Saettigungsanhebung aus; nur noch ein reinschwarzer Verlauf; Helligkeitsziel 115.
+
+P.append((
+ 'bildSchwarzpunkt:.07',
+ 'bildSchwarzpunkt:0',
+ 'Schwarzpunkt aus', 1))
+
+P.append((
+ 'bildVignette:.6',
+ 'bildVignette:0',
+ 'Vignette aus', 1))
+
+P.append((
+ 'bildSchleier:.06',
+ 'bildSchleier:0',
+ 'Schleier aus', 1))
+
+P.append((
+ 'tonReihe:"14,13,12|26,20,16|12,16,20|22,14,20"',
+ 'tonReihe:"0,0,0"',
+ 'Toenung: reines Schwarz', 1))
+
+P.append((
+ 'tonNeutral:"13,13,13"',
+ 'tonNeutral:"0,0,0"',
+ 'Toenung SW: reines Schwarz', 1))
+
+P.append((
+ 'bildTon:"14,13,12"',
+ 'bildTon:"0,0,0"',
+ 'Bildton: reines Schwarz', 1))
+
+P.append((
+ 'auflageReihe:"1|0.2|0.65|0.35"',
+ 'auflageReihe:"1"',
+ 'Abdunklung auf jeder Kachel gleich', 1))
+
+P.append((
+ 'vignetteReihe:"1|0|0.55|0.25"',
+ 'vignetteReihe:"0"',
+ 'Vignettenreihe aus', 1))
+
+P.append((
+ 'tiefeOben:.55',
+ 'tiefeOben:.3',
+ 'Verlauf oben .30', 1))
+
+P.append((
+ 'tiefeMitte:.08',
+ 'tiefeMitte:.1',
+ 'Verlauf Mitte .10', 1))
+
+P.append((
+ 'tiefeUnten:.85',
+ 'tiefeUnten:.45',
+ 'Verlauf unten .45', 1))
+
+P.append((
+ 'kanteOben:.34',
+ 'kanteOben:0',
+ 'Kante oben aus', 1))
+
+P.append((
+ 'kanteUnten:.40',
+ 'kanteUnten:0',
+ 'Kante unten aus', 1))
+
+P.append((
+ 'hellZiel:105',
+ 'hellZiel:115',
+ 'Helligkeitsziel 115', 1))
+
+P.append((
+ 'saettigungReihe:"-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1|-1|0.1|0.1|0.1"',
+ 'saettigungReihe:"-1|0|0|0|-1|0|0|0|-1|0|0|0|-1|0|0|0|-1|0|0|0|-1|0|0|0|-1|0|0|0|-1|0|0|0|-1|0|0|0|-1|0|0|0"',
+ 'keine Saettigungsanhebung (jede vierte SW bleibt)', 1))
+
+P.append((
+ 'e.add(Ut),Vt+=Ut.width+(Ve?ot:',
+ 'e.add(Ut),Vt+=Ut.width+(Ve&&!(xt.hand&&Je[Je.indexOf(xt)+1]&&Je[Je.indexOf(xt)+1].hand)?ot:',
+ 'Handschrift-Abstand Ueberschrift (setzen)', 1))
+
+P.append((
+ '.width,0)+ct*Math.max(0,Je.length-1)}',
+ '.width,0)+Je.slice(0,-1).reduce((zs,zq,zi)=>zs+(zq.hand&&Je[zi+1].hand?(()=>{const zo={fontSize:zws({hand:1},rt),fontFamily:zwf({hand:1},Qe)},zp=new Pe.fabric.Text("M M",zo).width-new Pe.fabric.Text("MM",zo).width;return zp>0?zp:rt*.3})():ct),0)}',
+ 'Handschrift-Abstand Ueberschrift (messen)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten375"',
+ 'title:"Geladene Datei",children:"karten376"',
+ 'Versionsschild auf karten376', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

@@ -10142,3 +10142,36 @@ Schriftfamilie unverändert: `typography.bodyFontFamily` (über
 Gesichtet: oben „Woher weiß ich, **wann** …", unten „*und warum*
 _fühlt es sich so schwer an?_"; zweite Folie mit Umbruch und Handschrift.
 Keine Seitenfehler.
+
+## 313 — „Die Bilder sind teilweise zu dunkel, bitte wenn dunkel mit Schwarz und nicht mehr Sättigung oder was auch immer du machst"
+
+Auf jedem Foto lag ein ganzer Stapel Bildbearbeitung. Jetzt:
+
+| Ebene | vorher | jetzt |
+|---|---|---|
+| Tönung (`tonReihe`, `tonNeutral`, `bildTon`) | vier Brauntöne je Kachel | **reines Schwarz** `0,0,0` |
+| Stärke je Kachel (`auflageReihe`) | 1 / .2 / .65 / .35 | **1** (überall gleich) |
+| Tiefenverlauf (`tiefeOben/Mitte/Unten`) | .55 / .08 / .85 | **.30 / .10 / .45** |
+| Kanten (`kanteOben/Unten`) | .34 / .40 | **0** |
+| Schwarzpunkt (color-burn, `bildSchwarzpunkt`) | .07 | **0** (damit auch die Farbneutralisierung danach aus) |
+| Vignette (`bildVignette`, `vignetteReihe`) | .6 | **0** |
+| Schleier (`bildSchleier`) | .06 | **0** |
+| Sättigung Farbfotos (`saettigungReihe`) | +0.1 | **0** |
+| Helligkeitsziel (`hellZiel`) | 105 | **115** |
+
+**Bleibt:** jede vierte Kachel schwarzweiß (262, ausdrücklich bestellt),
+der Balken hinter der Schrift (`textGrundZiel`, schwarz), der
+Helligkeitsausgleich aus 307 (dunkle Fotos heben, helle linear dämpfen).
+
+Gemessen, dieselben Fotos, mittlere Helligkeit der ganzen Kachel:
+
+| Foto | karten375 | **karten376** |
+|---|---|---|
+| Gesicht oben (SW) | 88.9 | **115.1** |
+| stehend | 88.8 | **115.9** |
+| dunkles Studiofoto | 57.4 | **81.5** |
+| Farbfoto | 85.4 | **112.2** |
+
+Nebenbei: zwei Handschrift-Wörter nebeneinander in der Überschrift
+(„IST OK") klebten zusammen — Abstand jetzt in der Handschrift gemessen,
+beim Setzen und beim Zentrieren.
