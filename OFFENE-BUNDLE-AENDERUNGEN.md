@@ -10115,3 +10115,30 @@ Gesichtet mit Porträts aus dem Vorbild (textfrei ausgeschnitten): Gesicht
 oben → Text unten; Gesicht Mitte → Text oben, Gesicht darunter; „POV" als
 Einstieg; „unglücklich", „NIE", „wirklich", „ohne" fett-kursiv; „mit 30"
 Handschrift im Satz; Textkachel mit Umbrüchen. Keine Seitenfehler.
+
+## 312 — Geteilt-Folie: „ohne weißen Hintergrund und Schrift fett und weiß"
+
+**So funktioniert sie** (Chip „Geteilt" im Stilmenü eines Tages,
+`tileMode:"split"` → `splitBands`): alle Folien des Tages werden zweigeteilt,
+oben das Foto der Folie, unten `splitImage` aus dem Bilderpool. Text vor
+`||` steht oben, nach `||` unten (ohne `||` unten der Subtext). Eigener
+Zweig mit eigenem Bildladen — die Zuschnitt- und Satzänderungen aus 311
+greifen dort nicht (gerendert: karten373 und 374 identisch).
+
+**Neu** (`splitPlatten:0`, `1` holt die Plättchen zurück):
+
+- keine weißen Plättchen hinter den Zeilen
+- Schrift **fett** (`splitGewicht` 700) und **weiß** (`splitFarbe`), weicher
+  Schatten; die Hälfte mit Text um `splitDunkel` .22 abgedunkelt
+- Zeichen wie im Feed: `*…*` Handschrift, `**…**` fett-kursiv, `_…_`
+  Playfair größer; vorher blieben bei `**…**` Sternchen stehen und `*…*` war
+  kursiv
+- Zeilenumbrüche zählen („Sich zu trennen" / „IST OK")
+- Wortabstand zwischen Handschrift-Wörtern in der Handschrift gemessen
+
+Schriftfamilie unverändert: `typography.bodyFontFamily` (über
+`splitSchrift` überschreibbar).
+
+Gesichtet: oben „Woher weiß ich, **wann** …", unten „*und warum*
+_fühlt es sich so schwer an?_"; zweite Folie mit Umbruch und Handschrift.
+Keine Seitenfehler.
