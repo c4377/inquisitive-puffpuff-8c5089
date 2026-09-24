@@ -10533,3 +10533,32 @@ Alle vier Adressen laden **karten389**; 384/387/388 sind Stubs darauf.
 Gemessen (mittlere Helligkeit der ganzen Kachel, ihre Fotos):
 Kleid 101 → **126**, SW 101 → **109**, Jeans 94 → **110**; das Foto mit
 heller Wand 98 → 90, weil dort der Verlauf hinter dem weißen Text greift.
+
+## 327 — „V3 ist zu hell, diese Nuance für alle" + „Schriften von v3 größer"
+
+Vorlage: ihre Story im Jeans-Overall. Gemessen: oberes Drittel etwas
+dunkler, Mitte frei, ab etwa 60 % Höhe ein kräftiger Verlauf fast bis Schwarz,
+keine Vignette an den Seiten, natürliche Sättigung. Das gilt jetzt in `BS_DUNKEL`
+für alle Adressen. `/v3/` hat keine eigenen Bildwerte mehr.
+
+| Regler | vorher | jetzt |
+|---|---|---|
+| `tiefeOben / Mitte / Unten` | .08 / 0 / .28 | **.38 / .03 / .85** |
+| `auflageReihe` | 1\|.2\|.65\|.35 | **1** (jede Kachel gleich) |
+| `hellZiel` | 132 | **118** |
+| v3: Ton/Tönung/Sättigung/Helligkeit | eigene Werte | **raus** (wie alle) |
+
+Die Stärke des Verlaufs hängt zusätzlich am Schwarz-Regler in der App.
+
+v3-Schriften größer:
+
+| Regler (`BS_V3`) | vorher | jetzt |
+|---|---|---|
+| `deckblattGroesse` | 124 | **150** |
+| `fotoGroesse` | 96 | **116** |
+| `textHoeheTextfrei` | .46 | **.56** (Platz für die größere Schrift) |
+| `fliessGroesse` | .026 | **.032** |
+| `kickerGroesse` (neu, sonst .019) | – | **.024** |
+| `nameAnteil` | .05 | **.06** |
+
+Alle vier Adressen laden **karten390**; 384/387/388/389 sind Stubs darauf.

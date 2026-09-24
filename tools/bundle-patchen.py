@@ -11836,6 +11836,61 @@ P.append((
  'title:"Geladene Datei",children:"karten389"',
  'Versionsschild auf karten389', 1))
 
+
+# 390 — "V3 ist zu hell, diese Nuance fuer alle" (Referenz-Story im Jeans-Overall):
+# Verlauf oben/unten wie das Referenzbild, auf jeder Kachel gleich stark; v3 ohne
+# eigene Bildwerte. Dazu "Schriften von v3 groesser". Alle Adressen auf karten390.
+
+P.append((
+ 'tonReihe:"89,77,64",tonNeutral:"89,77,64",bildTon:"89,77,64",saettigungReihe:"-0.2",bildTonung:"#8A7663",bildTonungKraft:.1,',
+ '',
+ 'v3: Farbwerte raus', 1))
+
+P.append((
+ 'tiefeOben:.08,tiefeMitte:0,tiefeUnten:.28,auflageReihe:"1",vignetteReihe:"0",bildVignette:0,bildSchleier:0,bildSchwarzpunkt:.03,textGrundMax:1,hellZiel:132,hellGammaMax:2.2,scrimZiel:82,scrimMin:.2,scrimMax:.7',
+ 'scrimZiel:82',
+ 'v3: Helligkeitswerte raus', 1))
+
+P.append((
+ 'bildSpreizung:.28,tiefeOben:.08,tiefeKnickOben:.16,tiefeMitte:0,tiefeKnick:.60,tiefeKnickUnten:.999,tiefeUnten:.28,',
+ 'bildSpreizung:.28,tiefeOben:.38,tiefeKnickOben:.16,tiefeMitte:.03,tiefeKnick:.60,tiefeKnickUnten:.999,tiefeUnten:.85,',
+ 'Verlauf wie ihr Referenzbild: oben .38, Mitte .03, unten .85', 1))
+
+P.append((
+ 'bildHeben:0,hellZiel:132,',
+ 'bildHeben:0,hellZiel:118,',
+ 'Aufhellen auf 118', 1))
+
+P.append((
+ 'auflageReihe:"1|0.2|0.65|0.35"',
+ 'auflageReihe:"1"',
+ 'Verlauf auf jeder Kachel gleich stark', 1))
+
+P.append((
+ 'deckblattGroesse:124,fotoGroesse:96,',
+ 'deckblattGroesse:150,fotoGroesse:116,textHoeheTextfrei:.56,kickerGroesse:.024,',
+ 'v3: Titel groesser', 1))
+
+P.append((
+ 'fliessGroesse:.026,',
+ 'fliessGroesse:.032,',
+ 'v3: Fliesstext groesser', 1))
+
+P.append((
+ 'nameAnteil:.05,',
+ 'nameAnteil:.06,',
+ 'v3: Name groesser', 1))
+
+P.append((
+ 'fontSize:Math.round(r*.019)',
+ 'fontSize:Math.round(r*(Number(BS_KACHEL.kickerGroesse)||.019))',
+ 'Kicker-Groesse per Regler', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten389"',
+ 'title:"Geladene Datei",children:"karten390"',
+ 'Versionsschild auf karten390', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
