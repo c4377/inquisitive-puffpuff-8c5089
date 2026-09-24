@@ -11239,6 +11239,36 @@ P.append((
  'title:"Geladene Datei",children:"karten376"',
  'Versionsschild auf karten376', 1))
 
+
+# 377 — "Wieso wird der Text nicht um mein Gesicht herum gebaut?": face-api
+# faellt ohne WebGL auf wasm (Dateien fehlen) -> keine Gesichter. Jetzt WebGL,
+# sonst CPU; laenger warten; etwas empfindlicher.
+
+P.append((
+ 'Zh=await Rd(()=>import("./face-api.esm-CT-VR31B.js"),[],import.meta.url),await Zh.nets.tinyFaceDetector.loadFromUri(MV)',
+ 'Zh=await Rd(()=>import("./face-api.esm-CT-VR31B.js"),[],import.meta.url),await(async()=>{try{const zT=Zh.tf;let zok=!1;try{zok=await zT.setBackend("webgl")}catch(zz){}zok||await zT.setBackend("cpu");await zT.ready()}catch(zz){}})(),await Zh.nets.tinyFaceDetector.loadFromUri(MV)',
+ 'Gesichtserkennung: WebGL, sonst CPU', 1))
+
+P.append((
+ 'new Promise(zr=>setTimeout(()=>zr(null),6e3))',
+ 'new Promise(zr=>setTimeout(()=>zr(null),Number(BS_KACHEL.gesichtWarten)||12e3))',
+ 'beim ersten Mal laenger auf die Erkennung warten', 1))
+
+P.append((
+ 'fettKursiv:1,einBlock:1,',
+ 'fettKursiv:1,einBlock:1,gesichtWarten:12000,',
+ 'Regler gesichtWarten', 1))
+
+P.append((
+ 'new Zh.TinyFaceDetectorOptions({inputSize:320,scoreThreshold:.5})',
+ 'new Zh.TinyFaceDetectorOptions({inputSize:416,scoreThreshold:.4})',
+ 'Gesichtserkennung etwas empfindlicher', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten376"',
+ 'title:"Geladene Datei",children:"karten377"',
+ 'Versionsschild auf karten377', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

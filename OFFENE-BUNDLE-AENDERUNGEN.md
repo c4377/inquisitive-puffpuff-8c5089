@@ -10175,3 +10175,31 @@ Gemessen, dieselben Fotos, mittlere Helligkeit der ganzen Kachel:
 Nebenbei: zwei Handschrift-Wörter nebeneinander in der Überschrift
 („IST OK") klebten zusammen — Abstand jetzt in der Handschrift gemessen,
 beim Setzen und beim Zentrieren.
+
+## 314 — „Wieso wird der Text immer noch nicht um mein Gesicht herum gebaut, so wie bei Julia?"
+
+Ohne Gesicht nimmt der Zuschnitt aus 311 an, es sitze oben, und setzt den
+Text unten — auch über das Gesicht. Die Erkennung lieferte offenbar keins.
+
+**Ursache, nachgestellt:** face-api bringt tfjs mit drei Rechenwegen mit:
+`cpu` (Rang 1), `webgl` (2), `wasm` (2). Scheitert WebGL — im Headless-Test
+immer, auf iPhones für tfjs erfahrungsgemäß öfter —, versucht tfjs `wasm`.
+Dessen `.wasm`-Dateien liegen nicht im Projekt, und face-api ruft ohne
+`tf.ready()`: „The highest priority backend 'wasm' has not yet been
+initialized". Ergebnis: keine Gesichter, still.
+
+**Jetzt:** nach dem Laden `tf.setBackend("webgl")`, gelingt das nicht,
+`tf.setBackend("cpu")`, dann `tf.ready()` — erst danach das Modell. Dazu:
+
+- erste Erkennung darf `gesichtWarten` (12 s) statt 6 s dauern (CPU ist
+  langsamer; das Ergebnis wird je Foto gemerkt)
+- Erkennung etwas empfindlicher: Raster 416 statt 320, Schwelle .4 statt .5
+
+**Geprüft ohne WebGL:** karten376 → keine Gesichter, Warnung wie oben;
+karten377 → Gesicht erkannt (Zonen 1,2,4,5 bzw. 0,1), Text unten, Gesicht
+oben. Zwei Testausschnitte (aus einem Screenshot, ~300 px, Kopf schräg bzw.
+angeschnitten) findet sie auch empfindlich nicht — dort entscheidet weiter
+die ruhigste Bildfläche.
+
+**Offen:** auf ihrem iPhone nicht selbst prüfbar. Wenn es dort noch nicht
+greift, braucht es einen Screenshot der betroffenen Kachel.
