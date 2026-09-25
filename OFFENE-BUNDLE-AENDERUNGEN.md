@@ -10786,3 +10786,19 @@ Farbton 4°, Sättigung .27–.34, also klar rot. Alle Adressen laden **karten40
 „Overlay nicht einfärben und wärmeres Rot." `ueberzugModus` wieder **source-over**
 (halbtransparente Fläche über dem SW-Foto), `ueberzugTon` **194,64,28** (Farbton ~13°,
 Richtung Ziegelrot), Stärke **.4**. Alle Adressen laden **karten405**.
+
+## 346 — Foto darunter farbig, starkes Schwarz
+
+„Das Bild darunter bleibt farbig mit starkem Schwarzwert."
+
+- Der Overlay gilt jetzt auch auf farbigen Fotos, sobald `ueberzugReihe` gesetzt ist
+  (vorher nur auf SW).
+- Overlay-Kacheln bekommen eigenen Kontrast und eigene Helligkeit (`ueberzugKontrast`
+  **.22**, `ueberzugHell` **−.05**), angewendet beim Laden des Fotos.
+- Bordeaux-Looks: `saettigungReihe` **-1|0.1|0.1|-1|0.1** (Overlay-Tage farbig),
+  `ueberzugModus` **overlay** (wie in Photoshop „Ineinanderkopieren": Schwarz bleibt
+  schwarz, das Rot liegt in den Mitteltönen), `ueberzugReihe` **0|.7|0|0|.7**, Ton
+  194,64,28.
+- Gemessen: dunkelste 5 % bei 10 statt 46, Farbton ~5° (rot).
+
+Alle Adressen laden **karten406**.
