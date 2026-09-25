@@ -10757,3 +10757,18 @@ Ticken größer."
   `fotoMin` .062→**.07**.
 
 Alle Adressen laden **karten402**.
+
+## 343 — Weniger farbige Fotos, roter Überzug, noch mehr Textposts
+
+„Nur wenige farbige Bilder, mach mehr Schwarz-Weiß oder mit rotem Overlay, und mehr
+Textposts."
+
+- Neu `ueberzugReihe`: Der Farbüberzug (`bildUeberzug`, bisher für alle SW-Bilder gleich)
+  wechselt jetzt pro Tag (`t._tag` modulo Reihe).
+- Bordeaux-Looks (`bordeaux`, `bordeauxgloock`, `bordeauxmix`): `saettigungReihe`
+  **-1|-1|0.1|-1|-1**, `ueberzugReihe` **0|.45|0|0|.45**, `ueberzugTon` 128,30,26,
+  `ueberzugModus` multiply. Von fünf Fotos sind damit zwei SW, zwei SW mit rotem
+  Überzug und eins farbig.
+- `BS_V3.textJede` 3→**2**: Jeder 2. Tag ist ein Textpost, im Raster ein Schachbrett.
+
+Alle Adressen laden **karten403**.
