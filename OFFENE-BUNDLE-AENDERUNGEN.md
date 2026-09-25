@@ -10802,3 +10802,18 @@ Richtung Ziegelrot), Stärke **.4**. Alle Adressen laden **karten405**.
 - Gemessen: dunkelste 5 % bei 10 statt 46, Farbton ~5° (rot).
 
 Alle Adressen laden **karten406**.
+
+## 347 — Lange Texte laufen nicht mehr über
+
+Screenshot (Bordeaux, Folie 2/6): Ein langer Absatz in Versalien füllte das ganze Bild
+und lief in „carinaannaprav". Ursache war `fotoMin` (396/402): Die Größenanpassung
+stoppte bei der Mindestgröße, auch wenn der Text dann nicht mehr passte.
+
+- `fotoMin` greift nur noch, solange der Text bei dieser Größe höchstens
+  `fotoMinHoehe` (.62) der Bildhöhe braucht. Lange Texte werden weiter verkleinert.
+- Neu `versalMaxZeichen`: Versalien nur für kurze Texte (Bordeaux: **120** Zeichen).
+- Bordeaux-Looks: `randUnten` **.86**, damit der Text über der Handschrift-Unterschrift
+  endet. Overlay wärmer und schwächer (196,78,26 bei .58), damit helle Wände nicht ins
+  Rosa kippen.
+
+Alle Adressen laden **karten407**.
