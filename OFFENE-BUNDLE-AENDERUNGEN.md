@@ -10780,3 +10780,9 @@ auf dem SW-Bild ein rötliches Grau (Farbton 5°, Sättigung ~.1). Auf dem Handy
 als Mauve/Lila. Jetzt: `ueberzugModus` **color** (Farbton und Sättigung vom Rot,
 Helligkeit vom Foto), `ueberzugTon` **196,38,26**, Stärke **.85**. Gemessen danach
 Farbton 4°, Sättigung .27–.34, also klar rot. Alle Adressen laden **karten404**.
+
+## 345 — Overlay statt Einfärben, wärmeres Rot
+
+„Overlay nicht einfärben und wärmeres Rot." `ueberzugModus` wieder **source-over**
+(halbtransparente Fläche über dem SW-Foto), `ueberzugTon` **194,64,28** (Farbton ~13°,
+Richtung Ziegelrot), Stärke **.4**. Alle Adressen laden **karten405**.
