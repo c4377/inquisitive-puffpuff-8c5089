@@ -10817,3 +10817,19 @@ stoppte bei der Mindestgröße, auch wenn der Text dann nicht mehr passte.
   Rosa kippen.
 
 Alle Adressen laden **karten407**.
+
+## 348 — Farbe natürlich und Duoton
+
+„Es ist bei allen falsch mit Overlay, das Foto ist komplett falsch gefiltert." 406/407
+hatten farbige Fotos mit Overlay-Mischung und Extrakontrast, das ergab orange, körnige
+Haut. Ihr wurden fünf Richtungen als Bild gezeigt; gewählt: **Farbe natürlich** und
+**Duoton**.
+
+- Neu `duoReihe`, `duoDunkel`, `duoHell`: Auf SW-Kacheln eines Duoton-Tags wird das
+  Grau linear auf dunkel→hell abgebildet (Multiply mit hell−dunkel, dann „lighter"
+  mit dunkel).
+- Bordeaux-Looks: `saettigungReihe` **-1|-1|0|0**, `duoReihe` **1|1|0|0** (nach Tag
+  modulo 4), Duoton 40,6,8 → 246,228,214. Die übrigen Fotos bleiben natürliche Farbe
+  ohne Tönung (`bildTonungKraft` 0). `ueberzug*` entfernt.
+
+Alle Adressen laden **karten408**.
