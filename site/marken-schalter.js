@@ -13,6 +13,7 @@
     ["", "Aktuell"],
     ["bordeaux", "Bordeaux"],
     ["bordeauxgloock", "Bordeaux + Waldgrün-Schrift"],
+    ["bordeauxmix", "Bordeaux: Text Bordeaux, Fotos Waldgr\u00fcn"],
     ["creme", "Creme & Espresso"]
   ];
   function jetzt() {

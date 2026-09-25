@@ -12141,6 +12141,40 @@ P.append((
  'title:"Geladene Datei",children:"karten401"',
  'Versionsschild auf karten401', 1))
 
+
+# 402 — Look bordeauxmix (Textposts Instrument Serif, Fotos Gloock), platteFamilie fuer Textposts,
+# v3: Fotoschrift einen Ticken groesser (190/150, fotoMin .07), jeder 3. Tag ein Textpost (textJede 3).
+
+P.append((
+ 'const FAM=ix=>FOLGE?K.folgeFamilie:(ix===0?K.schriftart:(K.unterSchrift||K.schriftart));',
+ 'const FAM=ix=>K.platteFamilie?K.platteFamilie:FOLGE?K.folgeFamilie:(ix===0?K.schriftart:(K.unterSchrift||K.schriftart));',
+ 'Textposts: eigene Schrift (platteFamilie) statt folgeFamilie', 1))
+
+P.append((
+ 'zFont=(zHatFoto)=>{try{',
+ 'zFont=(zHatFoto)=>{try{if(!zHatFoto&&BS_KACHEL.platteFamilie)return BS_KACHEL.platteFamilie;',
+ 'Textkachel-Zweig: platteFamilie', 1))
+
+P.append((
+ 'deckblattGroesse:172,fotoGroesse:136,',
+ 'deckblattGroesse:190,fotoGroesse:150,fotoMin:.07,textJede:3,',
+ 'v3: Schrift auf Fotos einen Ticken groesser, jeder 3. Tag ein Textpost', 1))
+
+P.append((
+ 'const BS_MARKEN={"bordeaux":{"fotoSchrift":"Instrument Serif","deckblattFamilie":"Instrument Serif","folgeFamilie":"Instrument Serif","kastenSchrift":"Instrument Serif","lisaSchrift":"Instrument Serif","folgeSchrift":"Instrument Serif","ablaufTitel":"Instrument Serif","schriftart":"Instrument Serif","unterSchrift":"Instrument Serif","grundA":"#6B1E1A","grundB":"#6B1E1A","schriftA":"#F4EDE1","schriftB":"#F4EDE1","fliessSchrift":"Courier Prime","fliessVersal":0,"fliessGroesse":0.03,"nameText":"carinaannaprav","nameSchrift":"Mrs Saint Delafield","nameAnteil":0.075,"nameLaufweite":0,"nameGewicht":"400","handleSchrift":"Mrs Saint Delafield","gewicht":"400","deckblattGewicht":"400","folgeGewicht":"400","bildTonung":"#6B1E1A","bildTonungKraft":0.2,"versalAnteil":100,"versalFamilie":"Instrument Serif","versalLaufweite":0,"versalGroesse":0,"handGroesse":1,"fotoLaufweite":0,"akzentFarbe":"#F1D9C9","akzentGewicht":"400"},"bordeauxgloock":{"fotoSchrift":"Gloock","deckblattFamilie":"Gloock","folgeFamilie":"Gloock","kastenSchrift":"Gloock","lisaSchrift":"Gloock","folgeSchrift":"Gloock","ablaufTitel":"Gloock","schriftart":"Gloock","unterSchrift":"Gloock","grundA":"#6B1E1A","grundB":"#6B1E1A","schriftA":"#F4EDE1","schriftB":"#F4EDE1","fliessSchrift":"Courier Prime","fliessVersal":0,"fliessGroesse":0.03,"nameText":"carinaannaprav","nameSchrift":"Mrs Saint Delafield","nameAnteil":0.075,"nameLaufweite":0,"nameGewicht":"400","handleSchrift":"Mrs Saint Delafield","gewicht":"400","deckblattGewicht":"400","folgeGewicht":"400","bildTonung":"#6B1E1A","bildTonungKraft":0.2,"fotoLaufweite":-10,"akzentFarbe":"#F1D9C9","akzentGewicht":"400"},"creme":{"fotoSchrift":"Bodoni Moda SC","deckblattFamilie":"Bodoni Moda SC","folgeFamilie":"Bodoni Moda SC","kastenSchrift":"Bodoni Moda SC","lisaSchrift":"Bodoni Moda SC","folgeSchrift":"Bodoni Moda SC","ablaufTitel":"Bodoni Moda SC","schriftart":"Bodoni Moda SC","unterSchrift":"Bodoni Moda SC","fotoLaufweite":10,"akzentFarbe":"#F3D6C2","akzentGewicht":"400","grundA":"#F1E9DC","grundB":"#F1E9DC","schriftA":"#2B1D14","schriftB":"#2B1D14","akzentFarbeDunkel":"#8B3A2B","fliessSchrift":"Courier Prime","fliessVersal":0,"fliessGroesse":0.03,"nameText":"carinaannaprav","nameSchrift":"Mrs Saint Delafield","nameAnteil":0.075,"nameLaufweite":0,"nameGewicht":"400","handleSchrift":"Mrs Saint Delafield","gewicht":"400","deckblattGewicht":"400","folgeGewicht":"400"}}',
+ 'const BS_MARKEN={"bordeaux":{"fotoSchrift":"Instrument Serif","deckblattFamilie":"Instrument Serif","folgeFamilie":"Instrument Serif","kastenSchrift":"Instrument Serif","lisaSchrift":"Instrument Serif","folgeSchrift":"Instrument Serif","ablaufTitel":"Instrument Serif","schriftart":"Instrument Serif","unterSchrift":"Instrument Serif","grundA":"#6B1E1A","grundB":"#6B1E1A","schriftA":"#F4EDE1","schriftB":"#F4EDE1","fliessSchrift":"Courier Prime","fliessVersal":0,"fliessGroesse":0.03,"nameText":"carinaannaprav","nameSchrift":"Mrs Saint Delafield","nameAnteil":0.075,"nameLaufweite":0,"nameGewicht":"400","handleSchrift":"Mrs Saint Delafield","gewicht":"400","deckblattGewicht":"400","folgeGewicht":"400","bildTonung":"#6B1E1A","bildTonungKraft":0.2,"versalAnteil":100,"versalFamilie":"Instrument Serif","versalLaufweite":0,"versalGroesse":0,"handGroesse":1,"fotoLaufweite":0,"akzentFarbe":"#F1D9C9","akzentGewicht":"400"},"bordeauxgloock":{"fotoSchrift":"Gloock","deckblattFamilie":"Gloock","folgeFamilie":"Gloock","kastenSchrift":"Gloock","lisaSchrift":"Gloock","folgeSchrift":"Gloock","ablaufTitel":"Gloock","schriftart":"Gloock","unterSchrift":"Gloock","grundA":"#6B1E1A","grundB":"#6B1E1A","schriftA":"#F4EDE1","schriftB":"#F4EDE1","fliessSchrift":"Courier Prime","fliessVersal":0,"fliessGroesse":0.03,"nameText":"carinaannaprav","nameSchrift":"Mrs Saint Delafield","nameAnteil":0.075,"nameLaufweite":0,"nameGewicht":"400","handleSchrift":"Mrs Saint Delafield","gewicht":"400","deckblattGewicht":"400","folgeGewicht":"400","bildTonung":"#6B1E1A","bildTonungKraft":0.2,"fotoLaufweite":-10,"akzentFarbe":"#F1D9C9","akzentGewicht":"400"},"creme":{"fotoSchrift":"Bodoni Moda SC","deckblattFamilie":"Bodoni Moda SC","folgeFamilie":"Bodoni Moda SC","kastenSchrift":"Bodoni Moda SC","lisaSchrift":"Bodoni Moda SC","folgeSchrift":"Bodoni Moda SC","ablaufTitel":"Bodoni Moda SC","schriftart":"Bodoni Moda SC","unterSchrift":"Bodoni Moda SC","fotoLaufweite":10,"akzentFarbe":"#F3D6C2","akzentGewicht":"400","grundA":"#F1E9DC","grundB":"#F1E9DC","schriftA":"#2B1D14","schriftB":"#2B1D14","akzentFarbeDunkel":"#8B3A2B","fliessSchrift":"Courier Prime","fliessVersal":0,"fliessGroesse":0.03,"nameText":"carinaannaprav","nameSchrift":"Mrs Saint Delafield","nameAnteil":0.075,"nameLaufweite":0,"nameGewicht":"400","handleSchrift":"Mrs Saint Delafield","gewicht":"400","deckblattGewicht":"400","folgeGewicht":"400"},"bordeauxmix":{"fotoSchrift":"Gloock","deckblattFamilie":"Gloock","folgeFamilie":"Gloock","kastenSchrift":"Instrument Serif","lisaSchrift":"Instrument Serif","folgeSchrift":"Gloock","ablaufTitel":"Gloock","schriftart":"Instrument Serif","unterSchrift":"Instrument Serif","grundA":"#6B1E1A","grundB":"#6B1E1A","schriftA":"#F4EDE1","schriftB":"#F4EDE1","fliessSchrift":"Courier Prime","fliessVersal":0,"fliessGroesse":0.03,"nameText":"carinaannaprav","nameSchrift":"Mrs Saint Delafield","nameAnteil":0.075,"nameLaufweite":0,"nameGewicht":"400","handleSchrift":"Mrs Saint Delafield","gewicht":"400","deckblattGewicht":"400","folgeGewicht":"400","bildTonung":"#6B1E1A","bildTonungKraft":0.2,"fotoLaufweite":-10,"akzentFarbe":"#F1D9C9","akzentGewicht":"400","platteFamilie":"Instrument Serif"}}',
+ 'Look bordeauxmix: Textposts Instrument Serif, Fotos Gloock', 1))
+
+P.append((
+ 'BS_KACHEL.fotoSchrift,BS_KACHEL.schriftart].filter(Boolean))',
+ 'BS_KACHEL.fotoSchrift,BS_KACHEL.schriftart,BS_KACHEL.platteFamilie,BS_KACHEL.deckblattFamilie].filter(Boolean))',
+ 'Textpost- und Titelschrift vorladen', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten401"',
+ 'title:"Geladene Datei",children:"karten402"',
+ 'Versionsschild auf karten402', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

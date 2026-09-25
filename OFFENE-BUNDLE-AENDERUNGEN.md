@@ -10739,3 +10739,21 @@ eigener Adressen:
 - Neue Schriften in `site/fonts` (Google Fonts, SIL OFL, Lizenztexte daneben).
 
 Alle Adressen laden **karten401**.
+
+## 342 — Mehr Textposts, Mischlook, Fotoschrift größer
+
+„Mehr Textposts, und lass mich die Schrift für Textposts von Bordeaux und die
+Waldschrift auf Fotos auch sehen als Brand, und bei Fotos muss die Schrift einen
+Ticken größer."
+
+- **Mehr Textposts:** `BS_DUNKEL.textJede` war 7 (jeder 7. Tag ohne Foto). In `BS_V3` ist
+  es jetzt **3**. Beim Import ist also jeder 3. Tag ein Textpost; im 3er-Raster ergibt das
+  eine Spalte. Wirkt beim nächsten Import bzw. „Neu laden", nicht rückwirkend.
+- **Neuer Look `bordeauxmix`** („Bordeaux: Text Bordeaux, Fotos Waldgrün"): Bordeaux-Farben,
+  Textposts in Instrument Serif, Fotos in Gloock. Dafür neu `platteFamilie`: Textposts
+  (Setzer `marke` und `plate`-Zweig) nehmen diese Schrift statt `folgeFamilie`, damit
+  Folgefolien mit Foto und Textposts verschiedene Schriften haben können.
+- **Fotoschrift größer:** `deckblattGroesse` 172→**190**, `fotoGroesse` 136→**150**,
+  `fotoMin` .062→**.07**.
+
+Alle Adressen laden **karten402**.
