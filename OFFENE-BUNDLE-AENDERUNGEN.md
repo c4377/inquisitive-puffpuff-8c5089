@@ -10833,3 +10833,11 @@ Haut. Ihr wurden fünf Richtungen als Bild gezeigt; gewählt: **Farbe natürlich
   ohne Tönung (`bildTonungKraft` 0). `ueberzug*` entfernt.
 
 Alle Adressen laden **karten408**.
+
+## 349 — Kleine Zeile verschoben
+
+„Verschoben unten" (Bordeaux): Die kleine Zeile stand rechts von der Mitte. `Ht`
+maß sie mit `zweiteFamilie` (Montserrat), gezeichnet wurde sie aber in `fliessSchrift`
+(Courier Prime, deutlich breiter). Jetzt setzt der Zeichner beim Umbruch und beim
+Zentrieren der kleinen Zeile `t._zMF`, und `Ht` misst dann in `fliessSchrift` ohne
+Laufweite. Alle Adressen laden **karten409**.

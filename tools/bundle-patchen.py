@@ -12290,6 +12290,29 @@ P.append((
  'title:"Geladene Datei",children:"karten408"',
  'Versionsschild auf karten408', 1))
 
+
+# 409 — kleine Zeile wird mit der Fliessschrift gemessen (Umbruch und Zentrierung), nicht mit der Headline-/Zweitschrift.
+
+P.append((
+ ',Ht=(Je,rt,Ve)=>{const pt={fontSize:rt,fontFamily:Ve?Qe:((zVS&&BS_KACHEL.versalFamilie)||BS_KACHEL.zweiteFamilie||Qe),fontWeight:Ve?kt:"400",charSpacing:zCS};',
+ ',Ht=(Je,rt,Ve)=>{const pt={fontSize:rt,fontFamily:Ve?Qe:(t._zMF?(BS_KACHEL.fliessSchrift||Qe):((zVS&&BS_KACHEL.versalFamilie)||BS_KACHEL.zweiteFamilie||Qe)),fontWeight:Ve?kt:"400",charSpacing:t._zMF&&!Ve?0:zCS};',
+ 'Messung der kleinen Zeile in der Fliessschrift (t._zMF)', 1))
+
+P.append((
+ 'Zt=(t.secondaryText||t._autoUnter)?$t(_t(BS_KACHEL.fliessVersal===1&&(i.slideIndex||0)===0?String(t.secondaryText||t._autoUnter).toUpperCase():(t.secondaryText||t._autoUnter)),St,!1):[]',
+ 'Zt=(()=>{t._zMF=1;try{return (t.secondaryText||t._autoUnter)?$t(_t(BS_KACHEL.fliessVersal===1&&(i.slideIndex||0)===0?String(t.secondaryText||t._autoUnter).toUpperCase():(t.secondaryText||t._autoUnter)),St,!1):[]}finally{t._zMF=0}})()',
+ 'Umbruch der kleinen Zeile mit der Fliessschrift messen', 1))
+
+P.append((
+ 'let rt=tt.ausrichtung==="links"?_e:r/2-Ht(Je,St,!1)/2;const Ve=new Pe.fabric.Shadow(',
+ 'let rt=tt.ausrichtung==="links"?_e:r/2-(()=>{t._zMF=1;try{return Ht(Je,St,!1)}finally{t._zMF=0}})()/2;const Ve=new Pe.fabric.Shadow(',
+ 'Zentrieren der kleinen Zeile mit der Fliessschrift', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten408"',
+ 'title:"Geladene Datei",children:"karten409"',
+ 'Versionsschild auf karten409', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
