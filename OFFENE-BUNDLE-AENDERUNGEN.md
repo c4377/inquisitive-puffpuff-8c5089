@@ -10716,3 +10716,26 @@ hatte `obenLinks:1`: Liegt der freie Platz am Rand, wird linksbündig gesetzt. N
 Text immer linksbündig am Rand, also unten links unter dem Gesicht. Textfolien ohne
 Foto: `folgeAusrichtung:"links"`. Das Titelbild bleibt mittig. Alle Adressen laden
 **karten400**.
+
+## 341 — Look-Schalter
+
+„Ich hab das Gefühl, das könnte jede sein … Ich will mit Farben und Schriften sehen,
+was geht." Nach fünf Proben im Chat hat sie drei gewählt, dazu ein Schalter statt
+eigener Adressen:
+
+| Look | Grund / Schrift auf Grund | Schrift | Kleine Zeile | Name |
+|---|---|---|---|---|
+| Aktuell | #241A14 / #F3ECE4 | Playfair Display | Helvetica, Versalien | carinaannaprav, Playfair |
+| `bordeaux` | #6B1E1A / #F4EDE1 | Instrument Serif, auf Fotos in VERSALIEN, Akzent #F1D9C9 kursiv | Courier Prime | Mrs Saint Delafield |
+| `bordeauxgloock` | wie bordeaux | Gloock (die „Waldgrün-Schrift") | Courier Prime | Mrs Saint Delafield |
+| `creme` | #F1E9DC / #2B1D14 | Bodoni Moda SC (Kapitälchen) | Courier Prime | Mrs Saint Delafield |
+
+- Bundle: `BS_MARKEN` wird nach `BS_V3` über `BS_KACHEL` gelegt, wenn `window.BS_MARKE`
+  gesetzt ist. Preload-Liste um `handleSchrift`, `versalFamilie`, `fotoSchrift`,
+  `schriftart` erweitert.
+- `site/marken-schalter.js`: Knopf „Look: …" links unten über dem Schwarz-Regler,
+  merkt die Wahl in `localStorage.BS_MARKE` und lädt neu. `?look=bordeaux` in der
+  Adresse wählt direkt (`?look=` = Aktuell).
+- Neue Schriften in `site/fonts` (Google Fonts, SIL OFL, Lizenztexte daneben).
+
+Alle Adressen laden **karten401**.

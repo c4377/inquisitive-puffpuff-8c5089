@@ -16,6 +16,10 @@
          ueberall, auch auf /content-planner und in einem alten Tab, in
          dem noch der Grundstil gemerkt war. */
       localStorage.setItem("BS_STIL","v3");window.BS_STIL="v3";
+      /* Der Look-Schalter (marken-schalter.js). ?look=bordeaux in der
+         Adresse waehlt ihn auch direkt. Leer = der normale Look. */
+      try{var lq=new URLSearchParams(location.search).get("look");if(lq!==null){lq?localStorage.setItem("BS_MARKE",lq):localStorage.removeItem("BS_MARKE")}}catch(e){}
+      window.BS_MARKE=localStorage.getItem("BS_MARKE")||"";
       /* Der Schwarz-Regler. Muss VOR dem Modul stehen, weil der Zeichner
          ihn schon bei der ersten Kachel liest. Nichts gesetzt heisst 1. */
       var w=parseFloat(localStorage.getItem("BS_SCHWARZ"));
@@ -30,7 +34,7 @@
          heisst: alles bleibt wie im Bundle. */
       var pal=JSON.parse(localStorage.getItem("BS_PALETTE")||"null");
       if(pal&&typeof pal==="object")window.BS_PALETTE=pal;}catch(e){}</script>
-    <script type="module" crossorigin src="/assets/index-B5karten400.js"></script>
+    <script type="module" crossorigin src="/assets/index-B5karten401.js"></script>
     <!-- Montserrat liegt hier im Projekt, nicht bei Google. Der Zeichner misst
          Texte auf dem Canvas und braucht die Schrift sofort; ueber das Netz
          geladen waere sie beim ersten Bild manchmal noch nicht da. Alle
@@ -103,11 +107,13 @@
       @font-face{font-family:"Cormorant Garamond";src:url(/fonts/CormorantGaramond-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
     </style>
     <link rel="stylesheet" crossorigin href="/assets/index-DOWuwd9i.css">
+      <style>/* Schriften fuer den Look-Schalter (Google Fonts, SIL OFL, Lizenzen in /fonts) */@font-face{font-family:"Instrument Serif";src:url(/fonts/InstrumentSerif-Italic.woff2) format("woff2");font-weight:400;font-style:italic;font-display:block}@font-face{font-family:"Instrument Serif";src:url(/fonts/InstrumentSerif-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}@font-face{font-family:"Courier Prime";src:url(/fonts/CourierPrime-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}@font-face{font-family:"Mrs Saint Delafield";src:url(/fonts/MrsSaintDelafield-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}@font-face{font-family:"Gloock";src:url(/fonts/Gloock-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}@font-face{font-family:"Bodoni Moda SC";src:url(/fonts/BodoniModaSC-Italic.woff2) format("woff2");font-weight:400;font-style:italic;font-display:block}@font-face{font-family:"Bodoni Moda SC";src:url(/fonts/BodoniModaSC-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}</style>
   </head>
   <body>
     <div id="root"></div>
     <!-- Der Umschalter zwischen den zwei Feeds. Haengt neben der App am
          body, nicht in ihr, und ist deshalb auf jeder Seite da. -->
     <script src="/stil-schalter.js" defer></script>
+    <script src="/marken-schalter.js" defer></script>
   </body>
 </html>

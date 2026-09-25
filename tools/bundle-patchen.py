@@ -12122,6 +12122,25 @@ P.append((
  'title:"Geladene Datei",children:"karten400"',
  'Versionsschild auf karten400', 1))
 
+
+# 401 — Look-Schalter: BS_MARKEN (bordeaux, bordeauxgloock, creme) ueber v3, gewaehlt per window.BS_MARKE
+# (marken-schalter.js / ?look=). Mehr Schriften vorladen.
+
+P.append((
+ 'if(typeof window<"u"&&window.BS_STIL==="v3")Object.assign(BS_KACHEL,BS_V3);',
+ 'if(typeof window<"u"&&window.BS_STIL==="v3")Object.assign(BS_KACHEL,BS_V3);const BS_MARKEN={"bordeaux":{"fotoSchrift":"Instrument Serif","deckblattFamilie":"Instrument Serif","folgeFamilie":"Instrument Serif","kastenSchrift":"Instrument Serif","lisaSchrift":"Instrument Serif","folgeSchrift":"Instrument Serif","ablaufTitel":"Instrument Serif","schriftart":"Instrument Serif","unterSchrift":"Instrument Serif","grundA":"#6B1E1A","grundB":"#6B1E1A","schriftA":"#F4EDE1","schriftB":"#F4EDE1","fliessSchrift":"Courier Prime","fliessVersal":0,"fliessGroesse":0.03,"nameText":"carinaannaprav","nameSchrift":"Mrs Saint Delafield","nameAnteil":0.075,"nameLaufweite":0,"nameGewicht":"400","handleSchrift":"Mrs Saint Delafield","gewicht":"400","deckblattGewicht":"400","folgeGewicht":"400","bildTonung":"#6B1E1A","bildTonungKraft":0.2,"versalAnteil":100,"versalFamilie":"Instrument Serif","versalLaufweite":0,"versalGroesse":0,"handGroesse":1,"fotoLaufweite":0,"akzentFarbe":"#F1D9C9","akzentGewicht":"400"},"bordeauxgloock":{"fotoSchrift":"Gloock","deckblattFamilie":"Gloock","folgeFamilie":"Gloock","kastenSchrift":"Gloock","lisaSchrift":"Gloock","folgeSchrift":"Gloock","ablaufTitel":"Gloock","schriftart":"Gloock","unterSchrift":"Gloock","grundA":"#6B1E1A","grundB":"#6B1E1A","schriftA":"#F4EDE1","schriftB":"#F4EDE1","fliessSchrift":"Courier Prime","fliessVersal":0,"fliessGroesse":0.03,"nameText":"carinaannaprav","nameSchrift":"Mrs Saint Delafield","nameAnteil":0.075,"nameLaufweite":0,"nameGewicht":"400","handleSchrift":"Mrs Saint Delafield","gewicht":"400","deckblattGewicht":"400","folgeGewicht":"400","bildTonung":"#6B1E1A","bildTonungKraft":0.2,"fotoLaufweite":-10,"akzentFarbe":"#F1D9C9","akzentGewicht":"400"},"creme":{"fotoSchrift":"Bodoni Moda SC","deckblattFamilie":"Bodoni Moda SC","folgeFamilie":"Bodoni Moda SC","kastenSchrift":"Bodoni Moda SC","lisaSchrift":"Bodoni Moda SC","folgeSchrift":"Bodoni Moda SC","ablaufTitel":"Bodoni Moda SC","schriftart":"Bodoni Moda SC","unterSchrift":"Bodoni Moda SC","fotoLaufweite":10,"akzentFarbe":"#F3D6C2","akzentGewicht":"400","grundA":"#F1E9DC","grundB":"#F1E9DC","schriftA":"#2B1D14","schriftB":"#2B1D14","akzentFarbeDunkel":"#8B3A2B","fliessSchrift":"Courier Prime","fliessVersal":0,"fliessGroesse":0.03,"nameText":"carinaannaprav","nameSchrift":"Mrs Saint Delafield","nameAnteil":0.075,"nameLaufweite":0,"nameGewicht":"400","handleSchrift":"Mrs Saint Delafield","gewicht":"400","deckblattGewicht":"400","folgeGewicht":"400"}};try{if(typeof window<"u"&&window.BS_STIL==="v3"&&window.BS_MARKE&&BS_MARKEN[window.BS_MARKE])Object.assign(BS_KACHEL,BS_MARKEN[window.BS_MARKE])}catch(zz){}',
+ 'Look-Schalter: BS_MARKEN ueber v3 legen (window.BS_MARKE)', 1))
+
+P.append((
+ 'new Set([BS_KACHEL.lisaSchrift,BS_KACHEL.folgeSchrift,BS_KACHEL.nameSchrift,BS_KACHEL.fliessSchrift].filter(Boolean))',
+ 'new Set([BS_KACHEL.lisaSchrift,BS_KACHEL.folgeSchrift,BS_KACHEL.nameSchrift,BS_KACHEL.fliessSchrift,BS_KACHEL.handleSchrift,BS_KACHEL.versalFamilie,BS_KACHEL.fotoSchrift,BS_KACHEL.schriftart].filter(Boolean))',
+ 'auch Namens-, Versal- und Fotoschrift vorladen', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten400"',
+ 'title:"Geladene Datei",children:"karten401"',
+ 'Versionsschild auf karten401', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
