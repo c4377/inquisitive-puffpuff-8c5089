@@ -12104,6 +12104,24 @@ P.append((
  'title:"Geladene Datei",children:"karten399"',
  'Versionsschild auf karten399', 1))
 
+
+# 400 — Folgefolien wie das fruehe Noir: Text linksbuendig ins Eck (folgeEck), Titelbild bleibt mittig.
+
+P.append((
+ 'BS_KACHEL.obenLinks===1&&$e&&t._freiBand&&(tt.ausrichtung=t._freiBand[0]<.2?"links":"mitte"),',
+ 'BS_KACHEL.obenLinks===1&&$e&&t._freiBand&&(tt.ausrichtung=t._freiBand[0]<.2?"links":"mitte"),BS_KACHEL.folgeEck===1&&$e&&t.folienRolle&&t.folienRolle!=="deckblatt"&&(tt.ausrichtung="links"),',
+ 'Folgefolien auf Foto: Text linksbuendig ins Eck (folgeEck)', 1))
+
+P.append((
+ 'bandUnten:1,',
+ 'bandUnten:1,folgeEck:1,folgeAusrichtung:"links",',
+ 'v3: Folgefolien ins Eck, Textfolien linksbuendig', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten399"',
+ 'title:"Geladene Datei",children:"karten400"',
+ 'Versionsschild auf karten400', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

@@ -10707,3 +10707,12 @@ waren gleich aufgebaut, der Unterschied lag bei den Folien **ohne Foto**. In Noi
 sie dunkelbraun (#241A14) mit heller Schrift (#F3ECE4), in v3 waren sie weiß/greige
 mit dunkler Schrift. In `BS_V3` sind `grundA/grundB/schriftA/schriftB` deshalb entfernt,
 v3 erbt die Noir-Farben. Schrift bleibt Playfair Display. Alle Adressen laden **karten399**.
+
+## 340 — Folgefolien im Eck
+
+„Aber es war auch eben nicht zentriert, sondern im Eck." Das frühe Noir (karten385)
+hatte `obenLinks:1`: Liegt der freie Platz am Rand, wird linksbündig gesetzt. Neu ist
+`folgeEck:1` in `BS_V3`: Auf Folgefolien mit Foto (`folienRolle` ≠ deckblatt) steht der
+Text immer linksbündig am Rand, also unten links unter dem Gesicht. Textfolien ohne
+Foto: `folgeAusrichtung:"links"`. Das Titelbild bleibt mittig. Alle Adressen laden
+**karten400**.
