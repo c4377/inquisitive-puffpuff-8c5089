@@ -12545,6 +12545,21 @@ P.append((
  'title:"Geladene Datei",children:"karten416"',
  'Versionsschild auf karten416', 1))
 
+P.append((
+ 'fotoMin:.07,textJede:3,fotoRotation:1,',
+ 'fotoMin:.07,textJede:2,fotoRotation:1,fotoProFolie:1,',
+ 'v3: Textpost wieder jeden 2. Tag, ein eigenes Foto pro Folie', 1))
+
+P.append((
+ 's=e.length<=3?1:e.length<=8?2:3',
+ 's=BS_KACHEL.fotoProFolie===1?Math.max(1,e.length):e.length<=3?1:e.length<=8?2:3',
+ 'Verteilen: jede Folie bekommt ihr eigenes Foto (solange der Pool reicht)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten416"',
+ 'title:"Geladene Datei",children:"karten417"',
+ 'Versionsschild auf karten417', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

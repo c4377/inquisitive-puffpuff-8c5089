@@ -10964,3 +10964,15 @@ dran waren. Tag 1 dreimal und Tag 2 fünfmal neu geladen: jedes Mal ein anderes 
 Pendeln zwischen zwei Fotos.
 
 Alle Adressen laden **karten416**.
+
+## 357 — Eigenes Foto pro Folie, Textposts wieder jeden 2. Tag
+
+- `fotoProFolie:1` (`BS_V3`): `ed` wählt pro Karussell so viele Fotos wie Folien (bisher
+  1 Foto bis 3 Folien, 2 bis 8, sonst 3). Welche Fotos, entscheidet weiter der Zähler aus
+  356. Detail-Ausschnitte (`detailReihe`) gelten weiter pro Folie.
+- `textJede` 3 → **2** (wie vor 355). Textposts behalten das Foto auf der letzten Folie.
+
+Test (18 Tage à 3 Folien, 9 Fotos): Textposts an jedem ungeraden Tag, innerhalb eines
+Karussells nie dasselbe Foto, jedes Foto genau viermal.
+
+Alle Adressen laden **karten417**.
