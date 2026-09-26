@@ -12500,6 +12500,51 @@ P.append((
  'title:"Geladene Datei",children:"karten415"',
  'Versionsschild auf karten415', 1))
 
+P.append((
+ 'fotoMin:.07,textJede:3,',
+ 'fotoMin:.07,textJede:3,fotoRotation:1,',
+ 'v3: Fotos der Reihe nach verteilen (am wenigsten genutztes zuerst)', 1))
+
+P.append((
+ 'hK=(e,t,r)=>e?',
+ 'zNutzSaat=zTage=>{try{const zm=new Map(),zl=new Map();let zt=0;(Array.isArray(zTage)?zTage:[]).forEach(zd=>{zt+=1;const zs=new Set();((zd&&zd.slides)||[]).forEach(zf=>{const zb=zf&&zf.background;typeof zb=="string"&&zb.length>5&&zs.add(zb)});zs.forEach(zb=>{zm.set(zb,(zm.get(zb)||0)+1),zl.set(zb,zt)})});window.__zNutz=zm,window.__zZul=zl,window.__zTick=zt}catch(zz){window.__zNutz=new Map(),window.__zZul=new Map(),window.__zTick=0}},hK=(e,t,r)=>e?',
+ 'Hilfsfunktion: Fotozaehler aus dem Plan', 1))
+
+P.append((
+ 'l=Array.from({length:Math.min(s,i)},(u,d)=>n[(r+d)%i]),zCov=(()=>{',
+ 'zRot=BS_KACHEL.fotoRotation===1,zNz=window.__zNutz||(window.__zNutz=new Map()),zZl=window.__zZul||(window.__zZul=new Map()),zCnt=zx=>zNz.get(zx&&zx.src)||0,zLst=zx=>zZl.get(zx&&zx.src)||0,l=zRot?n.map((zx,zi)=>({zx,zk:((zi-r)%i+i)%i})).filter(zq=>zq.zx&&zq.zx.src).sort((za,zb)=>(zCnt(za.zx)-zCnt(zb.zx))||(zLst(za.zx)-zLst(zb.zx))||(za.zk-zb.zk)).slice(0,Math.min(s,i)).map(zq=>zq.zx):Array.from({length:Math.min(s,i)},(u,d)=>n[(r+d)%i]),zCov=(()=>{',
+ 'Verteilen: zuerst die Fotos, die am seltensten und am laengsten nicht dran waren', 1))
+
+P.append((
+ 'const zW=zGut[(r*7+3)%zGut.length].x;',
+ 'let zW=zGut[(r*7+3)%zGut.length].x;if(zRot){zW=[...zGut].sort((za,zb)=>(zCnt(za.x)-zCnt(zb.x))||(zLst(za.x)-zLst(zb.x)))[0].x;if(zCnt(zW)>zCnt(l[0]))return 0}',
+ 'Cover-Gesicht: am wenigsten genutztes, und nur wenn es nicht oefter dran war als die anderen', 1))
+
+P.append((
+ '})(),o=[1,1.22,1.1,1.35,1.16,1.28]',
+ '})(),zMark=(()=>{try{if(zRot&&e.length>0){window.__zTick=(window.__zTick||0)+1;new Set(l).forEach(zx=>{zx&&zx.src&&(zNz.set(zx.src,zCnt(zx)+1),zZl.set(zx.src,window.__zTick))})}}catch(zz){}return 0})(),o=[1,1.22,1.1,1.35,1.16,1.28]',
+ 'Verteilen: gewaehlte Fotos zaehlen', 1))
+
+P.append((
+ 'const ve=e.currentBrandConfig,He=xo(e);let De=0,Ze=0;const ot=[];',
+ 'const ve=e.currentBrandConfig,He=xo(e);let De=0,Ze=0;const ot=[];zNutzSaat(_e==="replace"?[]:e.contentPlan||[]);',
+ 'Import: Zaehler aus dem bestehenden Plan', 1))
+
+P.append((
+ 'const He=[];let De=0;const Ze=ri(e.currentBrandConfig);for(let ut=0;ut<i.length;ut++)',
+ 'const He=[];let De=0;const Ze=ri(e.currentBrandConfig);zNutzSaat(i.filter(zt=>zt&&zt.locked));for(let ut=0;ut<i.length;ut++)',
+ 'Alles neu laden: Zaehler nur aus gesperrten Tagen', 1))
+
+P.append((
+ 'if(De!==-1){Le(ae);try{const Ze=xo(e),',
+ 'if(De!==-1){Le(ae);try{zNutzSaat(He);try{const zNz0=window.__zNutz,zPen=(zd,zw)=>{new Set(((zd&&zd.slides)||[]).map(zf=>zf&&zf.background).filter(zb=>typeof zb=="string"&&zb.length>5)).forEach(zb=>zNz0.set(zb,(zNz0.get(zb)||0)+zw))};zPen(He[De],1000),zPen(He[De-1],500),zPen(He[De+1],500);const zVl=window.__zVerl||(window.__zVerl={}),zH=zVl[ae]||[];zH.forEach((zb,zj)=>zNz0.set(zb,(zNz0.get(zb)||0)+200+50*zj));const zJetzt=[...new Set(((He[De]&&He[De].slides)||[]).map(zf=>zf&&zf.background).filter(zb=>typeof zb=="string"&&zb.length>5))];zVl[ae]=[...zH.filter(zb=>!zJetzt.includes(zb)),...zJetzt].slice(-6)}catch(zz){}const Ze=xo(e),',
+ 'Neu laden: Zaehler aus dem ganzen Plan, alte Fotos des Tages (auch die letzten 6) und der Nachbartage nur im Notfall', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten415"',
+ 'title:"Geladene Datei",children:"karten416"',
+ 'Versionsschild auf karten416', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

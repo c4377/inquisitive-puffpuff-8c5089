@@ -10940,3 +10940,27 @@ Tag 1 und Tag 2 zweimal neu geladen: Tag 1 bleibt Text mit neuem Endfoto, Tag 2 
 Foto mit neuem Foto.
 
 Alle Adressen laden **karten415**.
+
+## 356 — Fotos nicht so oft wiederholen
+
+Bisher hat `ed` die Fotos über den Tag-Versatz gewählt (`n[(r+d)%i]`). Die Cover-Regel aus
+413 hat zu 75 % eines der wenigen hellen Gesichtsfotos genommen. Dadurch kamen im Test
+zwei Fotos an fast jedem Tag.
+
+Neu mit `fotoRotation:1` (`BS_V3`):
+- Zähler `window.__zNutz` (wie oft pro Tag benutzt) und `window.__zZul` (wann zuletzt).
+  `ed` nimmt die Fotos, die am seltensten und am längsten nicht dran waren. Der Versatz
+  entscheidet nur noch bei Gleichstand.
+- Cover-Gesicht: das am wenigsten genutzte gute Gesichtsfoto, und nur wenn es nicht öfter
+  dran war als das Foto, das ohnehin käme.
+- `zNutzSaat(tage)` füllt den Zähler aus dem Plan: beim Import aus dem bestehenden Plan
+  (bei „Ersetzen“ leer), bei „Alles neu laden“ aus den gesperrten Tagen, beim Neu laden
+  eines Tages aus dem ganzen Plan. Beim Neu laden zählen die Fotos des Tages selbst
+  (+1000), die der Nachbartage (+500) und die letzten 6 Fotos dieses Tages
+  (`window.__zVerl`) nur im Notfall.
+
+Test (18 Tage, 9 Fotos): Jedes Foto kommt genau zweimal, erst wieder, wenn alle anderen
+dran waren. Tag 1 dreimal und Tag 2 fünfmal neu geladen: jedes Mal ein anderes Foto, kein
+Pendeln zwischen zwei Fotos.
+
+Alle Adressen laden **karten416**.
