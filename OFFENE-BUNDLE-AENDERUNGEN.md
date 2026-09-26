@@ -10919,3 +10919,24 @@ Wirkt beim Import und beim Neu-Laden eines Tages. Alle Adressen laden **karten41
 - Dieselbe Regel gilt in Feed Studio (`v2/`, `detailTitel` leer, `zuschnitt`).
 
 Alle Adressen laden **karten414**, `/v2/` neu gebaut.
+
+## 355 — Neu laden behält das Format, Textposts mit Foto am Ende, weniger Textposts
+
+- **Neu laden (ein Tag):** Bisher hat `jr` über `Oe` (Würfel pro Tag) neu entschieden, ob
+  der Tag Text oder Foto wird. Mit `neuLadenFormat:1` zählt jetzt der Tag, wie er ist:
+  Hat eine Folie außer der letzten ein Foto (oder ist `tileMode` „photo“/„split“), bleibt
+  er ein Fotopost, sonst ein Textpost. Neu laden heißt immer neue Fotos: Das Titelfoto
+  bzw. das Endfoto wechselt (bis zu 5 Versuche mit anderem Versatz).
+- **Textposts mit Foto am Ende** (`textEndFoto:1`, Hilfsfunktion `zEndFoto`): Bei
+  Textposts mit mindestens 2 Folien bekommt nur die letzte Folie ein Foto (ganzes Bild wie
+  beim Cover, Gesicht bevorzugt) und ein Foto-Layout. Gilt beim Import, bei „Alles neu
+  laden“ und beim Neu laden eines Tages.
+- **Weniger Textposts:** `textJede` 2 → **3** (jeder dritte Tag ist ein Textpost).
+- „Alles neu laden“: `qt` war `const` und wurde trotzdem zugewiesen, wenn nicht jede Folie
+  ein Foto bekam. Das hätte das Neu laden abgebrochen. Jetzt `let`.
+
+Test (9 Tage à 3 Folien): Textposts an Tag 1, 4 und 7, jeweils nur Folie 3 mit Foto.
+Tag 1 und Tag 2 zweimal neu geladen: Tag 1 bleibt Text mit neuem Endfoto, Tag 2 bleibt
+Foto mit neuem Foto.
+
+Alle Adressen laden **karten415**.

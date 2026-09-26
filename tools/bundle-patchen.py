@@ -12445,6 +12445,61 @@ P.append((
  'title:"Geladene Datei",children:"karten414"',
  'Versionsschild auf karten414', 1))
 
+P.append((
+ 'fotoMin:.07,textJede:2,',
+ 'fotoMin:.07,textJede:3,neuLadenFormat:1,textEndFoto:1,',
+ 'v3: Textpost jeden 3. Tag, Neu laden behaelt Format, Foto am Ende von Textposts', 1))
+
+P.append((
+ 'ed=async(e,t=[],r=0)=>{',
+ 'zEndFoto=async(zS,zP,zO,zAlt)=>{try{if(BS_KACHEL.textEndFoto!==1||!Array.isArray(zS)||zS.length<2||!zP||!zP.length)return null;const zLz=zS[zS.length-1];let zR=null,zV=0;do{zR=await ed([zLz],zP,zO+zV*5);zV++}while(zV<5&&zP.length>1&&zAlt&&zR&&zR[0]&&zR[0].background===zAlt);return zR&&zR[0]&&typeof zR[0].background=="string"&&zR[0].background.length>5?zR[0]:null}catch(zz){return null}},ed=async(e,t=[],r=0)=>{',
+ 'Hilfsfunktion: Endfoto fuer Textposts (neues Foto beim Neu laden)', 1))
+
+P.append((
+ 'if(Vt)try{Tt=await ed(Tt,He,pt),Ze+=Tt.length}catch{}const xt=ri(ve);Tt=Tt.map(rr=>{let Ut={...rr};const Ir=Vt&&typeof Ut.background=="string"&&Ut.background.length>5;',
+ 'let zEF=-1;if(Vt)try{Tt=await ed(Tt,He,pt),Ze+=Tt.length}catch{}else if(He.length>0){const zE=await zEndFoto(Tt,He,pt);zE&&(Tt=[...Tt.slice(0,-1),zE],zEF=Tt.length-1)}const xt=ri(ve);Tt=Tt.map((rr,zI)=>{let Ut={...rr};const Ir=(Vt||zI===zEF)&&typeof Ut.background=="string"&&Ut.background.length>5;',
+ 'Import: Textposts bekommen nur auf der letzten Folie ein Foto', 1))
+
+P.append((
+ 'let Mt=xt[De%xt.length];return qt&&Ir&&(Mt=Lr(Mt)),',
+ 'let Mt=xt[De%xt.length];return qt&&Ir&&(Mt=Lr(Mt)),zI===zEF&&Ir&&!(typeof Mt=="string"&&(Mt.includes("photo")||Mt.includes("frame")))&&(Mt=qt?"we_photo_bottom":"brand_photo_gradient"),',
+ 'Import: Endfoto bekommt ein Foto-Layout', 1))
+
+P.append((
+ 'pt=(Ve==null?void 0:Ve.editorialNoir)===!0||(Ve==null?void 0:Ve.warmEditorial)===!0,qt=(It||(BS_KACHEL.textJede',
+ 'pt=(Ve==null?void 0:Ve.editorialNoir)===!0||(Ve==null?void 0:Ve.warmEditorial)===!0;let qt=(It||(BS_KACHEL.textJede',
+ 'Alles neu laden: qt veraenderbar (vorher const, Zuweisung waere abgestuerzt)', 1))
+
+P.append((
+ 'hatAlle||(qt=!1)}const Tt=Vt.map((xt,rr)=>{',
+ 'hatAlle||(qt=!1)}let zEF2=-1;if(!qt&&ae.length>0){const zE=await zEndFoto(Vt,ae,ve);zE&&(Vt=[...Vt.slice(0,-1),zE],zEF2=Vt.length-1,ve+=1)}const Tt=Vt.map((xt,rr)=>{',
+ 'Alles neu laden: Textposts mit Foto am Ende', 1))
+
+P.append((
+ 'qt&&(Ir=Lr(Ir));let Hr=typeof Ir=="string"&&(Ir.includes("photo")||Ir.includes("frame"));qt&&!Hr&&(Ir=pt?"we_photo_bottom":"brand_photo_gradient",Hr=!0);const Br=qt&&(Hr||It)&&',
+ 'const zQ=qt||rr===zEF2;zQ&&(Ir=Lr(Ir));let Hr=typeof Ir=="string"&&(Ir.includes("photo")||Ir.includes("frame"));zQ&&!Hr&&(Ir=pt?"we_photo_bottom":"brand_photo_gradient",Hr=!0);const Br=zQ&&(Hr||It)&&',
+ 'Alles neu laden: Endfoto bekommt ein Foto-Layout', 1))
+
+P.append((
+ 'st=!Oe(ot,De)&&Ze.length>0&&!istReminder;',
+ 'zAlt=He[De]||{},zSl=zAlt.slides||[],zHatF=zAlt.tileMode==="photo"||zAlt.tileMode==="split"?!0:zAlt.tileMode==="text"?!1:zSl.some((zx,zi)=>(zi<zSl.length-1||zSl.length===1)&&typeof(zx&&zx.background)=="string"&&zx.background.length>5),st=(BS_KACHEL.neuLadenFormat===1?zHatF:!Oe(ot,De))&&Ze.length>0&&!istReminder,zTF=!st&&Ze.length>0&&!istReminder&&zSl.length>1;',
+ 'Neu laden: Format des Tages bleibt (Foto bleibt Foto, Text bleibt Text)', 1))
+
+P.append((
+ 'let Je=ot.slides||[],stJa=st;if(stJa){Je=await ed(Je,Ze,It);',
+ 'let Je=ot.slides||[],stJa=st,zEF3=-1;if(stJa){let zV=0;const zC0=zSl[0]&&zSl[0].background;do{Je=await ed(ot.slides||[],Ze,It+zV*3);zV++}while(zV<5&&Ze.length>1&&zC0&&Je[0]&&Je[0].background===zC0);',
+ 'Neu laden: immer ein anderes Titelfoto', 1))
+
+P.append((
+ '||(stJa=!1)}const rt=Je.map((pt,ct)=>{var Hr,Br;const qt={...pt},Vt=stJa&&',
+ '||(stJa=!1)}if(zTF){const zLb=zSl[zSl.length-1],zE=await zEndFoto(Je,Ze,It,zLb&&zLb.background);zE&&(Je=[...Je.slice(0,-1),zE],zEF3=Je.length-1)}const rt=Je.map((pt,ct)=>{var Hr,Br;const qt={...pt},Vt=(stJa||ct===zEF3)&&',
+ 'Neu laden: Textpost bekommt ein neues Foto auf der letzten Folie', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten414"',
+ 'title:"Geladene Datei",children:"karten415"',
+ 'Versionsschild auf karten415', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
