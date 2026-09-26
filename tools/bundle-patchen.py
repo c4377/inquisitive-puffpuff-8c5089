@@ -12645,6 +12645,56 @@ P.append((
  'if(zCnt(zW)>zCnt(l[0])||!zOhneCover&&(zCc(zW)>zCc(l[0])||zCc(zW)===zCc(l[0])&&zCc(zW)>0&&zCz(zW)-zCz(l[0])>i/2))return 0}',
  'Cover-Gesicht: kein Gesichtsfoto, das erst kurz vorher Cover war', 1))
 
+P.append((
+ 'fotoRotation:1,fotoProFolie:1,',
+ 'fotoRotation:1,fotoProFolie:1,fotoDoppelt:1,',
+ 'v3: gleich aussehende Fotos zaehlen als ein Foto', 1))
+
+P.append((
+ 'zEndFoto=async(',
+ 'zFpHol=zs=>{const zc=window.__zFp||(window.__zFp=new Map());if(zc.has(zs))return zc.get(zs);const zp=new Promise(zok=>{try{const zim=new Image;let zfe=0;const zto=setTimeout(()=>{zfe||(zfe=1,zok(null))},6000);zim.crossOrigin="anonymous";zim.onload=()=>{if(zfe)return;zfe=1;clearTimeout(zto);try{const zcv=document.createElement("canvas");zcv.width=72;zcv.height=64;const zcx=zcv.getContext("2d",{willReadFrequently:!0});zcx.imageSmoothingEnabled=!0;zcx.imageSmoothingQuality="high";zcx.drawImage(zim,0,0,72,64);const zd=zcx.getImageData(0,0,72,64).data,zg=new Array(72).fill(0);for(let zy=0;zy<64;zy++)for(let zq=0;zq<72;zq++){const zo=(zy*72+zq)*4;zg[(zy>>3)*9+((zq/8)|0)]+=zd[zo]*.299+zd[zo+1]*.587+zd[zo+2]*.114}const zb=[];for(let zy=0;zy<8;zy++)for(let zq=0;zq<8;zq++)zb.push(zg[zy*9+zq]<zg[zy*9+zq+1]?1:0);zok(zb)}catch(ze){zok(null)}};zim.onerror=()=>{zfe||(zfe=1,clearTimeout(zto),zok(null))};zim.src=zs}catch(ze){zok(null)}});zc.set(zs,zp);return zp},zGruppen=async zn=>{const zm=new Map();try{if(BS_KACHEL.fotoDoppelt!==1)return zm;const zGr=Number(BS_KACHEL.fotoDoppeltGrenze)||10,zl=[...new Set(zn.filter(zx=>zx&&zx.src).map(zx=>zx.src))],zh=await Promise.all(zl.map(zFpHol)),zpar=zl.map((_,zi)=>zi),zf=zi=>{for(;zpar[zi]!==zi;)zi=zpar[zi]=zpar[zpar[zi]];return zi};for(let za=0;za<zl.length;za++){if(!zh[za])continue;for(let zb=za+1;zb<zl.length;zb++){if(!zh[zb])continue;let zd=0;for(let zk=0;zk<64&&zd<=zGr;zk++)zh[za][zk]!==zh[zb][zk]&&zd++;zd<=zGr&&(zpar[zf(zb)]=zf(za))}}const zg=new Map();zl.forEach((zs,zi)=>{const zr=zf(zi);zg.has(zr)||zg.set(zr,[]);zg.get(zr).push(zs)});zg.forEach(zarr=>zarr.forEach(zs=>zm.set(zs,zarr)));window.__zGruppen=zm}catch(ze){}return zm},zEndFoto=async(',
+ 'Hilfsfunktion: Fingerabdruck (dHash 8x8) und Gruppen gleich aussehender Fotos', 1))
+
+P.append((
+ 'const n=zMisch(await AK(t));if(n.length===0)return e;const i=n.length,',
+ 'const n=zMisch(await AK(t));if(n.length===0)return e;const zGrp=await zGruppen(n),i=n.length,',
+ 'Verteilen: Gruppen bilden', 1))
+
+P.append((
+ 'zCnt=zx=>zNz.get(zx&&zx.src)||0,zLst=zx=>zZl.get(zx&&zx.src)||0,l=zRot?n.map(',
+ 'zG=zx=>zGrp.get(zx&&zx.src)||[zx&&zx.src],zCnt=zx=>zG(zx).reduce((za,zs)=>za+(zNz.get(zs)||0),0),zLst=zx=>Math.max(0,...zG(zx).map(zs=>zZl.get(zs)||0)),zPick=(zarr,zk)=>{const zo=[],zse=new Set();for(const zx of zarr){const zg=zG(zx)[0];if(zse.has(zg))continue;zse.add(zg);zo.push(zx);if(zo.length>=zk)break}for(const zx of zarr){if(zo.length>=zk)break;zo.includes(zx)||zo.push(zx)}return zo},l=zRot?zPick(n.map(',
+ 'Zaehler pro Gruppe, im Karussell keine zwei gleich aussehenden Fotos', 1))
+
+P.append((
+ '.slice(0,Math.min(s,i)).map(zq=>zq.zx):Array.from',
+ '.map(zq=>zq.zx),Math.min(s,i)):Array.from',
+ 'Auswahl ueber zPick', 1))
+
+P.append((
+ 'zCc=zx=>zCv.get(zx&&zx.src)||0,',
+ 'zCc=zx=>zG(zx).reduce((za,zs)=>za+(zCv.get(zs)||0),0),',
+ 'Cover-Zaehler pro Gruppe', 1))
+
+P.append((
+ 'zCz=zx=>zCvZ.get(zx&&zx.src)||0,',
+ 'zCz=zx=>Math.max(0,...zG(zx).map(zs=>zCvZ.get(zs)||0)),',
+ 'Cover-Zeitpunkt pro Gruppe', 1))
+
+P.append((
+ 'zNz.set(zx.src,zCnt(zx)+1)',
+ 'zNz.set(zx.src,(zNz.get(zx.src)||0)+1)',
+ 'Zaehlen pro Datei', 1))
+
+P.append((
+ 'zCv.set(l[0].src,zCc(l[0])+1)',
+ 'zCv.set(l[0].src,(zCv.get(l[0].src)||0)+1)',
+ 'Cover zaehlen pro Datei', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten418"',
+ 'title:"Geladene Datei",children:"karten420"',
+ 'Versionsschild auf karten420', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

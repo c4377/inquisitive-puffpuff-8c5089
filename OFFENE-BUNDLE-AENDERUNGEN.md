@@ -11005,3 +11005,27 @@ später Cover war als das Foto, das ohnehin käme. Ergebnis mit 12 Fotos: Abstan
 mindestens 18 Tage, meist 24.
 
 Alle Adressen laden **karten419**.
+
+## 360 — Gleich aussehende Fotos zählen als ein Foto
+
+Rückmeldung: 91 Fotos, 60 Posts, trotzdem dasselbe Cover dreimal. Mit 91 verschiedenen
+Dateien reicht die Rotation aus 356–359 für 30 Cover. Wahrscheinlich liegt dasselbe Foto
+mehrfach im Pool (z. B. einmal aus der Galerie, einmal als Kopie oder neu komprimiert).
+Das sind verschiedene Dateien, also bisher verschiedene Fotos.
+
+Neu (`fotoDoppelt:1`):
+- `zFpHol(src)`: Fingerabdruck (dHash): Bild auf 72×64 verkleinern (Glättung „high“), in
+  9×8 Felder mitteln, 64 Bits „links dunkler als rechts“. Wird pro Datei einmal berechnet
+  (`window.__zFp`).
+- `zGruppen(n)`: Fotos mit höchstens `fotoDoppeltGrenze` (Standard 10) abweichenden Bits
+  bilden eine Gruppe (`window.__zGruppen`).
+- Alle Zähler (Nutzung, zuletzt, Cover, Cover zuletzt) werden in `ed` pro Gruppe gelesen.
+  Gezählt wird weiter pro Datei. `zPick` nimmt pro Karussell höchstens ein Foto je Gruppe,
+  solange es genug Gruppen gibt.
+- Versionsschild: karten419 zeigte noch „karten418“ an, jetzt „karten420“.
+
+Test (9 Fotos + dieselben 9 verkleinert und neu komprimiert, 18 Tage): 8 Gruppen erkannt
+(m9 und m9dunkel sind dasselbe Motiv). Kein Karussell mit zwei gleichen Motiven, die ersten
+8 Cover alle verschieden.
+
+Alle Adressen laden **karten420**.
