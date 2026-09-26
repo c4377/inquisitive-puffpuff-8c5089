@@ -30,7 +30,10 @@ export function zuschnitt(bw, bh, W, H, { gesicht, detail, hand }) {
     fx = (gesicht.x0 + gesicht.x1) / 2;
     fy = (gesicht.y0 + gesicht.y1) / 2;
     zoom = fy < 0.3 ? 1 : 1.12;
-    zx = 0.5; zy = 0.3;
+    // grosses Gesicht (Nahaufnahme): nicht zoomen, und oben immer Luft lassen
+    const hoehe = (z) => ((gesicht.y1 - gesicht.y0) * bh * basis * z) / H;
+    if (hoehe(zoom) > 0.42) zoom = 1;
+    zx = 0.5; zy = Math.max(0.3, hoehe(zoom) / 2 + 0.07);
   }
   const s = basis * zoom;
   const dw = bw * s, dh = bh * s;

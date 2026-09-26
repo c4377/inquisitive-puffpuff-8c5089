@@ -12422,6 +12422,29 @@ P.append((
  'title:"Geladene Datei",children:"karten413"',
  'Versionsschild auf karten413', 1))
 
+
+# 414 — Cover ohne Detail-Ausschnitt; Gesichts-Zuschnitt: grosses Gesicht nicht zoomen, oben immer Luft (Gesicht nie abgeschnitten).
+
+P.append((
+ 'deckblattDetailReihe:"-|-|-|bust",',
+ '',
+ 'v3: keine Detail-Ausschnitte auf dem Cover (Gesicht bleibt ganz)', 1))
+
+P.append((
+ 'zZ=zFy<.3?1:Number(BS_KACHEL.zuschnittZoom)||1.12,',
+ 'zZ0=zFy<.3?1:Number(BS_KACHEL.zuschnittZoom)||1.12,zZ=zBx&&(zBx.y1-zBx.y0)*me.height*Oe*zZ0/n>.42?1:zZ0,',
+ 'Grosses Gesicht: nicht zoomen', 1))
+
+P.append((
+ 'const zTy=zU?(Number(BS_KACHEL.gesichtOben)||.3):(Number(BS_KACHEL.gesichtUnten)||.64),zAr=me.height*Oe*zZ;',
+ 'const zFh=zBx?(zBx.y1-zBx.y0)*me.height*Oe*zZ/n:0,zTy=Math.max(zU?(Number(BS_KACHEL.gesichtOben)||.3):(Number(BS_KACHEL.gesichtUnten)||.64),zFh/2+.07),zAr=me.height*Oe*zZ;',
+ 'Ueber dem Gesicht immer Luft', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten413"',
+ 'title:"Geladene Datei",children:"karten414"',
+ 'Versionsschild auf karten414', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

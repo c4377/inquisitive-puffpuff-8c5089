@@ -60,7 +60,7 @@ export const STANDARD = {
   schwarz: 0.85,        // Staerke des dunklen Verlaufs unten auf Fotos
   schriftFaktor: 1,     // 1 = normal, groesser/kleiner in den Einstellungen
   detailFolge: ["-", "lower", "-", "bust", "-", "close", "lower"],
-  detailTitel: ["-", "-", "-", "bust"],
+  detailTitel: [],      // Cover nie als Detail: das Gesicht bleibt ganz
   ueberText: true,      // Text in der Ecke auf Folgefolien
 };
 

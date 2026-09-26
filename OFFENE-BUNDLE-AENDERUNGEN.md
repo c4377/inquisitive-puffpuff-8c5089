@@ -10907,3 +10907,15 @@ Test (9 Tage, Pool: ohne Gesicht / Gesicht abgedunkelt / Gesicht hell): Tag 2, 4
 bekamen das helle Gesicht, Tag 8 das Foto ohne Gesicht, das dunkle Gesicht nie.
 
 Wirkt beim Import und beim Neu-Laden eines Tages. Alle Adressen laden **karten413**.
+
+## 354 — Am Cover nicht das Gesicht wegschneiden
+
+- `deckblattDetailReihe` aus `BS_V3` entfernt: Cover bekommen keinen Detail-Ausschnitt mehr
+  (der Brust-Ausschnitt aus 412 hat das Gesicht oben angeschnitten). Details gibt es nur
+  noch auf Folgefolien.
+- Gesichts-Zuschnitt: Ist das Gesicht nach dem Zoom höher als 42 % der Kachel
+  (Nahaufnahme), wird nicht gezoomt. Die Gesichtsmitte sitzt mindestens bei halber
+  Gesichtshöhe + 7 %, damit über dem Kopf Luft bleibt.
+- Dieselbe Regel gilt in Feed Studio (`v2/`, `detailTitel` leer, `zuschnitt`).
+
+Alle Adressen laden **karten414**, `/v2/` neu gebaut.
