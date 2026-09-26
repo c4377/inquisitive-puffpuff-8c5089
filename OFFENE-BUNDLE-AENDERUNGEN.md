@@ -10889,3 +10889,21 @@ siehe 96/97) wurde dadurch übersprungen.
 - Von Hand gesetzte Ausschnitte (`imageLocked`) gewinnen weiterhin.
 
 Alle Adressen laden **karten412**.
+
+## 353 — Cover mit sichtbarem, gut beleuchtetem Gesicht
+
+„Nimm bei den Covers bitte zu 75 % die Bilder, wo mein Gesicht sichtbar und gut
+beleuchtet ist."
+
+Beim Verteilen der Fotos (`ed`) liegt für jedes Foto schon die Analyse aus `cK` vor:
+`hasFace`, `faceZones` (3×3-Raster) und `zoneBrightness`. Neu (`zCov`): Bei
+`coverGesichtAnteil` Prozent der Tage (aus dem Versatz `r` gewürfelt) wird das Foto der
+ersten Folie durch eines mit erkanntem Gesicht ersetzt, dessen Gesichtszonen im Mittel
+mindestens `coverGesichtHell` hell sind. Gibt es keins, zählt die hellere Hälfte der
+Gesichtsfotos. Ist das zugeteilte Foto schon passend, bleibt es. `BS_V3`: **75 %**,
+Helligkeit **95**.
+
+Test (9 Tage, Pool: ohne Gesicht / Gesicht abgedunkelt / Gesicht hell): Tag 2, 4 und 6
+bekamen das helle Gesicht, Tag 8 das Foto ohne Gesicht, das dunkle Gesicht nie.
+
+Wirkt beim Import und beim Neu-Laden eines Tages. Alle Adressen laden **karten413**.

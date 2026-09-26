@@ -12404,6 +12404,24 @@ P.append((
  'title:"Geladene Datei",children:"karten412"',
  'Versionsschild auf karten412', 1))
 
+
+# 413 — Cover: zu coverGesichtAnteil % (75) ein Foto mit erkanntem, hellem Gesicht (Gesichtszonen >= coverGesichtHell 95).
+
+P.append((
+ 'l=Array.from({length:Math.min(s,i)},(u,d)=>n[(r+d)%i]),',
+ 'l=Array.from({length:Math.min(s,i)},(u,d)=>n[(r+d)%i]),zCov=(()=>{try{const zAnteil=Number(BS_KACHEL.coverGesichtAnteil);if(!(zAnteil>0)||!l.length)return 0;if(((r*13+5)%100)>=zAnteil)return 0;const zHell=zx=>{const zb=zx&&zx.zoneBrightness,zf=(zx&&zx.faceZones)||[];if(!Array.isArray(zb)||!zf.length)return 0;let zs=0,zk=0;zf.forEach(zq=>{const zv=Number(zb[zq]);isFinite(zv)&&(zs+=zv,zk+=1)});return zk?zs/zk:0};const zMit=n.filter(zx=>zx&&zx.hasFace).map(zx=>({x:zx,h:zHell(zx)})).sort((za,zb)=>zb.h-za.h);if(!zMit.length)return 0;const zMin=Number(BS_KACHEL.coverGesichtHell)||95;let zGut=zMit.filter(zq=>zq.h>=zMin);if(!zGut.length)zGut=zMit.slice(0,Math.max(1,Math.ceil(zMit.length/2)));if(l[0]&&zGut.some(zq=>zq.x===l[0]))return 0;const zW=zGut[(r*7+3)%zGut.length].x;const zAlt=l.indexOf(zW);zAlt>0?(l[zAlt]=l[0],l[0]=zW):(l[0]=zW);return 1}catch(zz){return 0}})(),',
+ 'Cover: zu coverGesichtAnteil % ein Foto mit sichtbarem, hellem Gesicht', 1))
+
+P.append((
+ 'textJede:2,',
+ 'textJede:2,coverGesichtAnteil:75,coverGesichtHell:95,',
+ 'v3: 75 % der Cover mit gut beleuchtetem Gesicht', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten412"',
+ 'title:"Geladene Datei",children:"karten413"',
+ 'Versionsschild auf karten413', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
