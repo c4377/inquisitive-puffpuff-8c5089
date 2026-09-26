@@ -12605,6 +12605,46 @@ P.append((
  'title:"Geladene Datei",children:"karten418"',
  'Versionsschild auf karten418', 1))
 
+P.append((
+ 'const zm=new Map(),zl=new Map(),zcv=new Map();let zt=0;',
+ 'const zm=new Map(),zl=new Map(),zcv=new Map(),zcz=new Map();let zt=0;',
+ 'Zaehler: wann zuletzt Cover', 1))
+
+P.append((
+ 'typeof zc=="string"&&zc.length>5&&zcv.set(zc,(zcv.get(zc)||0)+1);',
+ 'typeof zc=="string"&&zc.length>5&&(zcv.set(zc,(zcv.get(zc)||0)+1),zcz.set(zc,zt));',
+ 'Zaehler: Cover-Zeitpunkt aus dem Plan', 1))
+
+P.append((
+ 'window.__zCov=zcv,window.__zTick=zt}catch(zz){window.__zNutz=new Map(),window.__zZul=new Map(),window.__zCov=new Map(),',
+ 'window.__zCov=zcv,window.__zCovZ=zcz,window.__zTick=zt}catch(zz){window.__zNutz=new Map(),window.__zZul=new Map(),window.__zCov=new Map(),window.__zCovZ=new Map(),',
+ 'Zaehler: Cover-Zeitpunkt speichern', 1))
+
+P.append((
+ 'zCc=zx=>zCv.get(zx&&zx.src)||0,zCvW=(()=>{',
+ 'zCc=zx=>zCv.get(zx&&zx.src)||0,zCvZ=window.__zCovZ||(window.__zCovZ=new Map()),zCz=zx=>zCvZ.get(zx&&zx.src)||0,zCvW=(()=>{',
+ 'Cover: Zeitpunkt lesen', 1))
+
+P.append((
+ '.sort((za,zb)=>(zCc(za.zx)-zCc(zb.zx))||(zCnt(za.zx)-zCnt(zb.zx))',
+ '.sort((za,zb)=>(zCc(za.zx)-zCc(zb.zx))||(zCz(za.zx)-zCz(zb.zx))||(zCnt(za.zx)-zCnt(zb.zx))',
+ 'Cover: bei Gleichstand das, das am laengsten nicht Cover war', 1))
+
+P.append((
+ '(zOhneCover?0:zCc(za.x)-zCc(zb.x))||',
+ '(zOhneCover?0:(zCc(za.x)-zCc(zb.x))||(zCz(za.x)-zCz(zb.x)))||',
+ 'Cover-Gesicht: ebenso', 1))
+
+P.append((
+ '!zOhneCover&&l[0]&&l[0].src&&zCv.set(l[0].src,zCc(l[0])+1);',
+ '!zOhneCover&&l[0]&&l[0].src&&(zCv.set(l[0].src,zCc(l[0])+1),zCvZ.set(l[0].src,window.__zTick));',
+ 'Cover: Zeitpunkt merken', 1))
+
+P.append((
+ 'if(zCnt(zW)>zCnt(l[0])||!zOhneCover&&zCc(zW)>zCc(l[0]))return 0}',
+ 'if(zCnt(zW)>zCnt(l[0])||!zOhneCover&&(zCc(zW)>zCc(l[0])||zCc(zW)===zCc(l[0])&&zCc(zW)>0&&zCz(zW)-zCz(l[0])>i/2))return 0}',
+ 'Cover-Gesicht: kein Gesichtsfoto, das erst kurz vorher Cover war', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

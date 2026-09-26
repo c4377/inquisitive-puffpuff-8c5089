@@ -10990,3 +10990,18 @@ Test (18 Tage, 9 Fotoposts, 9 Fotos): 9 verschiedene Cover. Erst wenn alle Fotos
 Cover waren, kommt eins wieder (beim Neu laden das am längsten nicht genutzte).
 
 Alle Adressen laden **karten418**.
+
+## 359 — Cover gleichmäßig im Kreis, wenn es weniger Fotos als Fotoposts gibt
+
+Rückmeldung: 60 Posts, dasselbe Cover dreimal. Test mit 60 Tagen (30 Fotoposts):
+- 35 Fotos: 30 verschiedene Cover, beim Import und bei „Alles neu laden“.
+- 12 Fotos: Jedes Cover kommt zwangsläufig 2–3 Mal. Bisher lagen Wiederholungen teils
+  nur 6 Tage auseinander.
+
+Neu: `window.__zCovZ` merkt sich, wann ein Foto zuletzt Cover war (auch aus dem Plan
+gefüllt). Bei gleichem Cover-Zähler kommt das Foto, das am längsten nicht Cover war. Die
+Gesichtsregel darf kein Gesichtsfoto vorziehen, das mehr als eine halbe Poolgröße
+später Cover war als das Foto, das ohnehin käme. Ergebnis mit 12 Fotos: Abstand
+mindestens 18 Tage, meist 24.
+
+Alle Adressen laden **karten419**.
