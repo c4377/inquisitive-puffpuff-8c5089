@@ -12326,6 +12326,55 @@ P.append((
  'title:"Geladene Datei",children:"karten410"',
  'Versionsschild auf karten410', 1))
 
+
+# 411 — Absaetze: Import behaelt Leerzeilen innerhalb einer Folie; Textkacheln: Zeilenumbruch = neue Zeile,
+# Leerzeile = Absatz mit Luft (absatzEcht, absatzLuft), in die Groessenanpassung eingerechnet.
+
+P.append((
+ 'zKap=!1}if(!a)return;const u=a.match(/^(?:Tag|Day|Woche)',
+ 'zKap=!1}if(!a){s.length&&s[s.length-1]!==""&&s.push("");return}const u=a.match(/^(?:Tag|Day|Woche)',
+ 'Import: Leerzeilen innerhalb einer Folie bleiben als Absatz', 1))
+
+P.append((
+ 'const umbruch=(x,gr,fam,max,gew)=>{const w=String(x).split(/\\s+/).filter(Boolean),z=[];',
+ 'const umbruch=(x,gr,fam,max,gew)=>{if(/\\n/.test(String(x)))return String(x).split("\\n").reduce((za,zt)=>za.concat(zt.trim()?umbruch(zt,gr,fam,max,gew):[]),[]);const w=String(x).split(/\\s+/).filter(Boolean),z=[];',
+ 'Textkacheln: Zeilenumbruch im Text bleibt ein Umbruch', 1))
+
+P.append((
+ '.split(BS_KACHEL.einBlock===1?/\\n/:/\\n\\s*\\n/)',
+ '.split(BS_KACHEL.absatzEcht===1?/\\n\\s*\\n/:BS_KACHEL.einBlock===1?/\\n/:/\\n\\s*\\n/)',
+ 'Textkacheln: Leerzeile = Absatz (absatzEcht)', 1))
+
+P.append((
+ 'if(zMK||zMU)ROH2=zl.filter(zq=>!/^\\s*\\//.test(zq)).join(" ")',
+ 'if(zMK||zMU)ROH2=zl.filter(zq=>!/^\\s*\\//.test(zq)).join(K.absatzEcht===1?"\\n":" ")',
+ 'Textkacheln: Umbrueche bleiben auch mit Kicker/Zusatzzeile', 1))
+
+P.append((
+ 'const BL=BS_KACHEL.kachelSatzUmbruch?B0.reduce((za,zb)=>za.concat(zSatz(zb)),[]):',
+ 'const zPE=[];const BL=BS_KACHEL.kachelSatzUmbruch?B0.reduce((za,zb)=>{const zq=zSatz(zb);zq.forEach((zx,zi)=>zPE.push(zi===zq.length-1));return za.concat(zq)},[]):',
+ 'Textkacheln: merken, wo ein Absatz endet', 1))
+
+P.append((
+ '+(BL.length-1)*g*K.absatz+(NA?g*K.nameAbstand:0);',
+ '+BL.slice(0,-1).reduce((za,zx,zi)=>za+g*(K.absatzEcht===1&&(zPE.length?zPE[zi]:!0)?(Number(K.absatzLuft)||.6):K.absatz),0)+(NA?g*K.nameAbstand:0);',
+ 'Textkacheln: Absatz-Luft in die Hoehe einrechnen', 1))
+
+P.append((
+ 'if(ix<ZL.length-1)y+=gr*K.absatz});',
+ 'if(ix<ZL.length-1)y+=gr*(K.absatzEcht===1&&(zPE.length?zPE[ix]:!0)?(Number(K.absatzLuft)||.6):K.absatz)});',
+ 'Textkacheln: Luft nur zwischen Absaetzen', 1))
+
+P.append((
+ 'textJede:2,',
+ 'textJede:2,absatzEcht:1,',
+ 'v3: Absaetze echt', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten410"',
+ 'title:"Geladene Datei",children:"karten411"',
+ 'Versionsschild auf karten411', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

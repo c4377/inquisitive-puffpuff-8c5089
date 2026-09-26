@@ -10848,3 +10848,23 @@ Laufweite. Alle Adressen laden **karten409**.
 `duoDunkel` und `duoHell` entfernt. Die Tage mit `saettigungReihe` −1 sind wieder
 normales SW, die anderen natürliche Farbe (-1|-1|0|0). Der Duoton-Code bleibt im
 Bundle, ist aber ohne `duoReihe` wirkungslos. Alle Adressen laden **karten410**.
+
+## 351 — Absätze bleiben erhalten
+
+„Wenn ich einen Text mit Absätzen reingebe … ich brauche Absätze drin. Alles, was nach
+Slide 1 kommt bis Slide 2, gehört dazu, auch mit Absatz dazwischen."
+
+- **Import** (`JK`): Leerzeilen innerhalb einer Folie werden nicht mehr verworfen, sondern
+  als Absatz behalten (`\n\n`). Alles zwischen `Slide n:` und dem nächsten Marker gehört
+  zur Folie.
+- **Fotos**: Der Zeichner hat `\n` schon als Umbruch und eine Leerzeile als Leerzeile
+  behandelt und in die Größenanpassung eingerechnet. Das kam nur nicht an, weil der
+  Import die Leerzeilen entfernt hat.
+- **Textkacheln** (Setzer `marke`): Neu `absatzEcht` (in `BS_V3`). Die Blöcke werden an
+  Leerzeilen getrennt, `umbruch` hält einfache Zeilenumbrüche ein. Zwischen Sätzen im
+  selben Absatz bleibt `absatz` (0), zwischen Absätzen gilt `absatzLuft` (.6 × Schrift).
+  Die Luft zählt bei der Höhenanpassung mit, damit nichts über den Rand läuft.
+- Kicker/`/`-Zeile auf Textkacheln: Die übrigen Zeilen werden mit `\n` statt Leerzeichen
+  zusammengesetzt.
+
+Alle Adressen laden **karten411**.
