@@ -12375,6 +12375,35 @@ P.append((
  'title:"Geladene Datei",children:"karten411"',
  'Versionsschild auf karten411', 1))
 
+
+# 412 — Detail-Ausschnitte zurueck: detailReihe/deckblattDetailReihe waehlen lower/bust/close vor dem Gesichts-Zuschnitt;
+# liegt das Gesicht ausserhalb des Ausschnitts, steht der Text unten.
+
+P.append((
+ 'lt=BS_KACHEL.zuschnittTextfrei===1&&t.textBands===!0&&!t.imageLocked?(()=>{',
+ 'zDet=(()=>{try{if(t.imageLocked)return null;const zl=String((Qe===0?BS_KACHEL.deckblattDetailReihe:BS_KACHEL.detailReihe)||"").split("|").filter(Boolean);if(!zl.length)return null;const zs=String(t.background||"")+"|"+String(t.text||"");let zh=0;for(let zi=0;zi<zs.length;zi+=1)zh=(zh*31+zs.charCodeAt(zi))%99991;const zm=zl[(zh*7+Qe*3+1)%zl.length];return Ye[zm]?zm:null}catch(zz){return null}})(),lt=zDet?(t._zDetail=zDet,t._zGy=null,(()=>{const zb=t._zBox,zx=zb?(zb.x0+zb.x1)/2:qe,zy=zb?(zb.y0+zb.y1)/2:ht;return zDet==="face"?[zx,zy,2.3]:zDet==="close"?[zx,zy+.06,1.85]:zDet==="bust"?[zx,Math.min(.95,zy+.22),1.7]:Ye[zDet]})()):(t._zDetail=null,BS_KACHEL.zuschnittTextfrei===1&&t.textBands===!0&&!t.imageLocked?(()=>{',
+ 'Detail-Ausschnitte (detailReihe / deckblattDetailReihe) vor dem Gesichts-Zuschnitt', 1))
+
+P.append((
+ ':Ye[Qe===0?zDS:et[Qe%et.length]],[wt,tt,Qt]=lt',
+ ':Ye[Qe===0?zDS:et[Qe%et.length]]),[wt,tt,Qt]=lt',
+ 'Klammer zu', 1))
+
+P.append((
+ 'if(zT!=null){const zA=[zo,zT-zm],zB=[zU+zm,zu]',
+ 'if(zT!=null&&(zU<zo+.05||zT>zu-.05)){t._freiBand=[Math.max(.4,zu-.46),zu]}else if(zT!=null){const zA=[zo,zT-zm],zB=[zU+zm,zu]',
+ 'Gesicht ausserhalb des Ausschnitts: Text unten', 1))
+
+P.append((
+ 'textJede:2,',
+ 'textJede:2,detailReihe:"-|lower|-|bust|-|close|lower",deckblattDetailReihe:"-|-|-|bust",',
+ 'v3: Details auf Folgefolien (lower/bust/close), ab und zu auf dem Titelbild', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten411"',
+ 'title:"Geladene Datei",children:"karten412"',
+ 'Versionsschild auf karten412', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

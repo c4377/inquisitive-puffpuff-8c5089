@@ -10868,3 +10868,24 @@ Slide 1 kommt bis Slide 2, gehört dazu, auch mit Absatz dazwischen."
   zusammengesetzt.
 
 Alle Adressen laden **karten411**.
+
+## 352 — Detail-Ausschnitte wieder da
+
+„Mir kommt vor, als würdest du die Bilder nicht mehr zurechtschneiden. Wir hatten was
+drin, wo du Details rausgeschnitten hast."
+
+Seit 374 (`zuschnittTextfrei`) wurde jedes Foto auf das Gesicht zugeschnitten (Zoom
+1,12). Der alte Wechsel `Ye`/`et` (full, wide, bust, lower, close, face bis Zoom 2,3,
+siehe 96/97) wurde dadurch übersprungen.
+
+- Neu `detailReihe` (Folgefolien) und `deckblattDetailReihe` (Titelbild): Pro Folie wird
+  aus Bild und Text gewürfelt. Steht dort ein Ausschnitt-Name, gilt er vor dem
+  Gesichts-Zuschnitt, `-` = Gesichts-Zuschnitt wie bisher. `face`/`close`/`bust` richten
+  sich nach der erkannten Gesichtsbox.
+- Liegt das Gesicht nach dem Zuschnitt außerhalb des Bildes, steht der Text unten
+  ([.4 … randUnten]).
+- `BS_V3`: `detailReihe` **-|lower|-|bust|-|close|lower** (etwa jede zweite Folgefolie
+  ein Detail), `deckblattDetailReihe` **-|-|-|bust** (jedes vierte Titelbild).
+- Von Hand gesetzte Ausschnitte (`imageLocked`) gewinnen weiterhin.
+
+Alle Adressen laden **karten412**.
