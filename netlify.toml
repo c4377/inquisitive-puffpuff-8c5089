@@ -11,6 +11,13 @@
 
 # /dunkel/, /noir/ und /v3/ waren eigene Versionen. Es gibt nur noch die
 # Hauptadresse im v3-Look; alte Lesezeichen landen dort.
+# Feed Studio (Version 2 zum Verkaufen) liegt fertig gebaut unter /v2/.
+# Ohne Schraegstrich wuerden die relativen Pfade nicht stimmen.
+[[redirects]]
+  from = "/v2"
+  to = "/v2/"
+  status = 301
+
 [[redirects]]
   from = "/dunkel/*"
   to = "/"
@@ -59,6 +66,16 @@
 
 [[headers]]
   for = "/stil-schalter.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/v2/"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/v2/index.html"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 

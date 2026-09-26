@@ -1,0 +1,13 @@
+/* Alle Schriften sind frei lizenziert (SIL Open Font License 1.1).
+   Die Lizenztexte liegen in diesem Ordner neben den Dateien. */
+@font-face{font-family:"Playfair Display";src:url(PlayfairDisplay-Variable.woff2) format("woff2");font-weight:400 900;font-style:normal;font-display:block}
+@font-face{font-family:"Playfair Display";src:url(PlayfairDisplay-Italic-Variable.woff2) format("woff2");font-weight:400 900;font-style:italic;font-display:block}
+@font-face{font-family:"Instrument Serif";src:url(InstrumentSerif-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
+@font-face{font-family:"Instrument Serif";src:url(InstrumentSerif-Italic.woff2) format("woff2");font-weight:400;font-style:italic;font-display:block}
+@font-face{font-family:"Gloock";src:url(Gloock-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
+@font-face{font-family:"Bodoni Moda SC";src:url(BodoniModaSC-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
+@font-face{font-family:"Bodoni Moda SC";src:url(BodoniModaSC-Italic.woff2) format("woff2");font-weight:400;font-style:italic;font-display:block}
+@font-face{font-family:"Courier Prime";src:url(CourierPrime-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
+@font-face{font-family:"Mrs Saint Delafield";src:url(MrsSaintDelafield-Regular.woff2) format("woff2");font-weight:400;font-style:normal;font-display:block}
+@font-face{font-family:"Caveat";src:url(Caveat-Variable.woff2) format("woff2");font-weight:400 700;font-style:normal;font-display:block}
+@font-face{font-family:"Inter";src:url(Inter-Variable.woff2) format("woff2");font-weight:300 700;font-style:normal;font-display:block}
