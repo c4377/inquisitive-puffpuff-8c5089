@@ -10976,3 +10976,17 @@ Test (18 Tage à 3 Folien, 9 Fotos): Textposts an jedem ungeraden Tag, innerhalb
 Karussells nie dasselbe Foto, jedes Foto genau viermal.
 
 Alle Adressen laden **karten417**.
+
+## 358 — Kein Coverbild doppelt
+
+- Eigener Cover-Zähler `window.__zCov` (aus dem Plan gefüllt: erste Folie jedes Tages mit
+  Foto). `ed` setzt als Cover zuerst das Foto, das am seltensten Cover war (dann der
+  allgemeine Zähler, dann wann zuletzt). Solange es Fotos gibt, die noch nie Cover waren,
+  wiederholt sich kein Cover.
+- Die Gesichtsregel für das Cover nimmt nur ein Gesichtsfoto, das nicht öfter Cover war.
+- Das Endfoto von Textposts (`ed(...,1)`) zählt nicht als Cover.
+
+Test (18 Tage, 9 Fotoposts, 9 Fotos): 9 verschiedene Cover. Erst wenn alle Fotos einmal
+Cover waren, kommt eins wieder (beim Neu laden das am längsten nicht genutzte).
+
+Alle Adressen laden **karten418**.

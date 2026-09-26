@@ -12560,6 +12560,51 @@ P.append((
  'title:"Geladene Datei",children:"karten417"',
  'Versionsschild auf karten417', 1))
 
+P.append((
+ 'ed=async(e,t=[],r=0)=>{',
+ 'ed=async(e,t=[],r=0,zOhneCover=0)=>{',
+ 'ed: Schalter fuer Aufrufe ohne Cover (Endfoto)', 1))
+
+P.append((
+ 'zR=await ed([zLz],zP,zO+zV*5)',
+ 'zR=await ed([zLz],zP,zO+zV*5,1)',
+ 'Endfoto zaehlt nicht als Cover', 1))
+
+P.append((
+ 'zNutzSaat=zTage=>{try{const zm=new Map(),zl=new Map();let zt=0;',
+ 'zNutzSaat=zTage=>{try{const zm=new Map(),zl=new Map(),zcv=new Map();let zt=0;',
+ 'Zaehler: Cover-Zaehler anlegen', 1))
+
+P.append((
+ 'zs.forEach(zb=>{zm.set(zb,(zm.get(zb)||0)+1),zl.set(zb,zt)})',
+ 'const zc=zd&&zd.slides&&zd.slides[0]&&zd.slides[0].background;typeof zc=="string"&&zc.length>5&&zcv.set(zc,(zcv.get(zc)||0)+1);zs.forEach(zb=>{zm.set(zb,(zm.get(zb)||0)+1),zl.set(zb,zt)})',
+ 'Zaehler: Cover aus dem Plan zaehlen', 1))
+
+P.append((
+ 'window.__zNutz=zm,window.__zZul=zl,window.__zTick=zt}catch(zz){window.__zNutz=new Map(),window.__zZul=new Map(),window.__zTick=0}',
+ 'window.__zNutz=zm,window.__zZul=zl,window.__zCov=zcv,window.__zTick=zt}catch(zz){window.__zNutz=new Map(),window.__zZul=new Map(),window.__zCov=new Map(),window.__zTick=0}',
+ 'Zaehler: Cover-Zaehler speichern', 1))
+
+P.append((
+ '.slice(0,Math.min(s,i)).map(zq=>zq.zx):Array.from({length:Math.min(s,i)},(u,d)=>n[(r+d)%i]),zCov=(()=>{',
+ '.slice(0,Math.min(s,i)).map(zq=>zq.zx):Array.from({length:Math.min(s,i)},(u,d)=>n[(r+d)%i]),zCv=window.__zCov||(window.__zCov=new Map()),zCc=zx=>zCv.get(zx&&zx.src)||0,zCvW=(()=>{try{if(!zRot||zOhneCover||!l.length)return 0;const zK=n.map((zx,zi)=>({zx,zk:((zi-r)%i+i)%i})).filter(zq=>zq.zx&&zq.zx.src).sort((za,zb)=>(zCc(za.zx)-zCc(zb.zx))||(zCnt(za.zx)-zCnt(zb.zx))||(zLst(za.zx)-zLst(zb.zx))||(za.zk-zb.zk))[0];if(!zK||zK.zx===l[0])return 0;const zP=l.indexOf(zK.zx);zP>0&&l.splice(zP,1);l.unshift(zK.zx);l.length>Math.min(s,i)&&(l.length=Math.min(s,i));return 1}catch(zz){return 0}})(),zCov=(()=>{',
+ 'Cover: zuerst ein Foto, das noch nie Cover war', 1))
+
+P.append((
+ 'if(zRot){zW=[...zGut].sort((za,zb)=>(zCnt(za.x)-zCnt(zb.x))||(zLst(za.x)-zLst(zb.x)))[0].x;if(zCnt(zW)>zCnt(l[0]))return 0}',
+ 'if(zRot){zW=[...zGut].sort((za,zb)=>(zOhneCover?0:zCc(za.x)-zCc(zb.x))||(zCnt(za.x)-zCnt(zb.x))||(zLst(za.x)-zLst(zb.x)))[0].x;if(zCnt(zW)>zCnt(l[0])||!zOhneCover&&zCc(zW)>zCc(l[0]))return 0}',
+ 'Cover-Gesicht: nur ein Gesichtsfoto, das nicht oefter Cover war', 1))
+
+P.append((
+ 'zMark=(()=>{try{if(zRot&&e.length>0){window.__zTick=(window.__zTick||0)+1;',
+ 'zMark=(()=>{try{if(zRot&&e.length>0){window.__zTick=(window.__zTick||0)+1;!zOhneCover&&l[0]&&l[0].src&&zCv.set(l[0].src,zCc(l[0])+1);',
+ 'Cover zaehlen', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten417"',
+ 'title:"Geladene Datei",children:"karten418"',
+ 'Versionsschild auf karten418', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
