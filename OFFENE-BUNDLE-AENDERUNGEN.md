@@ -10841,3 +10841,10 @@ maß sie mit `zweiteFamilie` (Montserrat), gezeichnet wurde sie aber in `fliessS
 (Courier Prime, deutlich breiter). Jetzt setzt der Zeichner beim Umbruch und beim
 Zentrieren der kleinen Zeile `t._zMF`, und `Ht` misst dann in `fliessSchrift` ohne
 Laufweite. Alle Adressen laden **karten409**.
+
+## 350 — Duoton zurück zu Schwarz-Weiß
+
+„Duoton wieder zurück in Schwarz-Weiß." In den Bordeaux-Looks sind `duoReihe`,
+`duoDunkel` und `duoHell` entfernt. Die Tage mit `saettigungReihe` −1 sind wieder
+normales SW, die anderen natürliche Farbe (-1|-1|0|0). Der Duoton-Code bleibt im
+Bundle, ist aber ohne `duoReihe` wirkungslos. Alle Adressen laden **karten410**.
