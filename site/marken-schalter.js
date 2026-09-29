@@ -14,7 +14,8 @@
     ["bordeaux", "Bordeaux"],
     ["bordeauxgloock", "Bordeaux + Waldgrün-Schrift"],
     ["bordeauxmix", "Bordeaux: Text Bordeaux, Fotos Waldgr\u00fcn"],
-    ["creme", "Creme & Espresso"]
+    ["creme", "Creme & Espresso"],
+    ["kino", "Kino: Fotos warm, Gesicht nah"]
   ];
   function jetzt() {
     try { return localStorage.getItem("BS_MARKE") || ""; } catch (e) { return ""; }

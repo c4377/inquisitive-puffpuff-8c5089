@@ -11029,3 +11029,31 @@ Test (9 Fotos + dieselben 9 verkleinert und neu komprimiert, 18 Tage): 8 Gruppen
 8 Cover alle verschieden.
 
 Alle Adressen laden **karten420**.
+
+## 361 — Neuer Look „Kino“ (Vorlage: Karussell von @ronjasimon_)
+
+Im Look-Schalter als „Kino: Fotos warm, Gesicht nah“ (`?look=kino`). Der bisherige
+Look bleibt als „Aktuell“.
+
+- **Schrift:** DM Serif Display für alle Titel, Unterzeile in Helvetica Neue (nicht in
+  Versalien).
+- **Akzent (`*Wort*`):** gerade statt kursiv (`akzentGerade`), weiß auf einer abgerundeten
+  Mauve-Markierung `#A86C94` (`akzentPille`, Farbe aus der Vorlage gemessen). Gezeichnet im
+  textBands-Zeichner direkt vor dem Wort. Die Text-Kacheln (Platten) haben keine Markierung.
+- **Fotos (`kino:1`):** Pixel-Durchgang nach allen Filtern (`me.setElement`):
+  - Blau-Test im Bereich unter dem Gesicht (ohne Gesicht: untere Bildmitte). Ab 25 %
+    blauen Punkten (`kinoBlauAnteil`) wird das Foto schwarz-weiß mit etwas mehr
+    Kontrast. Offline gemessen: Jeans-Fotos 34–87 %, andere 0–5 %.
+  - Sonst Kino-Farben: Sättigung 72 %, warm (Lichter bernstein, Schatten braun),
+    Schwarz auf 16 angehoben, Kontrast 1,06.
+- **Zuschnitt nah:** `zuschnittZoom` 1,6, auch wenn das Gesicht oben im Bild ist
+  (`zoomOben`). Statt bei großem Gesicht gar nicht zu zoomen, wird bis zu einer
+  Gesichtshöhe von 45 % gezoomt (`gesichtMaxHoehe`). Über dem Kopf bleiben 13 % Luft
+  (`gesichtLuft`, vorher fest 7 %). Folgefolien: `detailReihe` „close|-|close|-“.
+- **Text über dem Kinn:** `gesichtAbstand` darf negativ sein (Kino: −0,1), damit das
+  Textband wie in der Vorlage über Kinn und Hals beginnt.
+
+Test (6 Tage, Jeans-Fotos + dieselben Fotos mit brauner Kleidung): Jeans schwarz-weiß,
+die anderen warm und gedämpft, Gesichter nah, Markierung hinter dem Akzentwort.
+
+Alle Adressen laden **karten421**.

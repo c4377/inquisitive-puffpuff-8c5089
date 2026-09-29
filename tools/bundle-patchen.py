@@ -12695,6 +12695,46 @@ P.append((
  'title:"Geladene Datei",children:"karten420"',
  'Versionsschild auf karten420', 1))
 
+P.append((
+ '"randUnten":0.86}};try{if(typeof window<"u"&&window.BS_STIL==="v3"&&window.BS_MARKE',
+ '"randUnten":0.86},"kino":{"fotoSchrift":"DM Serif Display","deckblattFamilie":"DM Serif Display","folgeFamilie":"DM Serif Display","kastenSchrift":"DM Serif Display","lisaSchrift":"DM Serif Display","folgeSchrift":"DM Serif Display","ablaufTitel":"DM Serif Display","schriftart":"DM Serif Display","unterSchrift":"DM Serif Display","gewicht":"400","deckblattGewicht":"400","folgeGewicht":"400","fotoLaufweite":-15,"fotoZeile":0.92,"akzentFarbe":"#FFFFFF","akzentGewicht":"400","akzentPille":"#A86C94","akzentGerade":1,"fliessSchrift":"HelveticaNeueBrand","fliessVersal":0,"fliessGroesse":0.03,"kino":1,"kinoSaettigung":0.72,"kinoHeben":16,"kinoKontrast":1.06,"kinoWarm":1,"kinoBlauAnteil":0.25,"zuschnittZoom":1.6,"zoomOben":1,"gesichtMaxHoehe":0.45,"gesichtLuft":0.13,"gesichtAbstand":-0.1,"detailReihe":"close|-|close|-","saettigungReihe":"0","saettigungWechsel":1}};try{if(typeof window<"u"&&window.BS_STIL==="v3"&&window.BS_MARKE',
+ 'Neuer Look kino: DM Serif Display, Mauve-Markierung, Kino-Farben, nah aufs Gesicht', 1))
+
+P.append((
+ '}catch{}e.add(me),e.sendToBack(me);const St=t.editorialDark',
+ '}catch{}(()=>{try{if(BS_KACHEL.kino!==1||!t.background)return;const zel=me.getElement&&me.getElement();if(!zel||!(zel.width>0))return;const zKa=Number(BS_KACHEL.kinoKante)||1600,zf=Math.min(1,zKa/Math.max(zel.width,zel.height)),zW=Math.max(1,Math.round(zel.width*zf)),zH2=Math.max(1,Math.round(zel.height*zf)),zc=document.createElement("canvas");zc.width=zW;zc.height=zH2;const zx=zc.getContext("2d",{willReadFrequently:!0});zx.drawImage(zel,0,0,zW,zH2);const zD=zx.getImageData(0,0,zW,zH2),zd=zD.data,zb=t._zBox;let zx0=.2,zx1=.8,zy0=.55,zy1=.97;if(zb&&zb.y1>zb.y0){const zbw=zb.x1-zb.x0,zbh=zb.y1-zb.y0;zx0=Math.max(0,zb.x0-zbw*.8);zx1=Math.min(1,zb.x1+zbw*.8);zy0=Math.min(.95,zb.y1+zbh*.5);zy1=Math.min(1,zb.y1+zbh*3.5)}let zn=0,zbl=0;const zst=Math.max(1,Math.round(zW/120));for(let zy=Math.floor(zy0*zH2);zy<Math.floor(zy1*zH2);zy+=zst)for(let zq=Math.floor(zx0*zW);zq<Math.floor(zx1*zW);zq+=zst){const zo=(zy*zW+zq)*4,zr=zd[zo],zg=zd[zo+1],zbb=zd[zo+2],zmx=Math.max(zr,zg,zbb),zmn=Math.min(zr,zg,zbb);zn++;zmx>30&&zbb===zmx&&zbb-zr>14&&(zmx-zmn)/zmx>.12&&zbl++}const zSwK=zn>0&&zbl/zn>=(Number(BS_KACHEL.kinoBlauAnteil)||.25);t._kinoSw=zSwK;t._kinoBlau=zn?Math.round(zbl/zn*100)/100:0;const zSa=BS_KACHEL.kinoSaettigung==null?.72:Number(BS_KACHEL.kinoSaettigung),zL=BS_KACHEL.kinoHeben==null?16:Number(BS_KACHEL.kinoHeben),zWa=BS_KACHEL.kinoWarm==null?1:Number(BS_KACHEL.kinoWarm),zK=Number(BS_KACHEL.kinoKontrast)||1.06,zlut=new Float32Array(256);for(let zv=0;zv<256;zv++){let zu=.5+(zv/255-.5)*(zSwK?zK*1.08:zK);zu=zu<0?0:zu>1?1:zu;zlut[zv]=zL+zu*(255-zL-8)}const zC=zv=>zlut[zv<0?0:zv>255?255:Math.round(zv)];for(let zo=0;zo<zd.length;zo+=4){let zr=zd[zo],zg=zd[zo+1],zbb=zd[zo+2];const zy=.2126*zr+.7152*zg+.0722*zbb;if(zSwK){const zv=zC(zy);zd[zo]=zd[zo+1]=zd[zo+2]=zv;continue}const zt=zy/255;zr=zy+(zr-zy)*zSa+zWa*(10*zt+6*(1-zt));zg=zy+(zg-zy)*zSa+zWa*(4*zt+1*(1-zt));zbb=zy+(zbb-zy)*zSa-zWa*(10*zt+4*(1-zt));zd[zo]=zC(zr);zd[zo+1]=zC(zg);zd[zo+2]=zC(zbb)}zx.putImageData(zD,0,0);const zw0=me.width,zsX=me.scaleX,zsY=me.scaleY;me.filters=[];me.setElement(zc);const zk2=zw0/(me.width||zW);me.set({scaleX:zsX*zk2,scaleY:zsY*zk2})}catch(zz){}})();e.add(me),e.sendToBack(me);const St=t.editorialDark',
+ 'Kino-Farben: warm, weniger Saettigung, Schwarz angehoben; blaue Kleidung -> Schwarz-Weiss', 1))
+
+P.append((
+ 'zZ0=zFy<.3?1:Number(BS_KACHEL.zuschnittZoom)||1.12,zZ=zBx&&(zBx.y1-zBx.y0)*me.height*Oe*zZ0/n>.42?1:zZ0,',
+ 'zZ0=zFy<.3&&BS_KACHEL.zoomOben!==1?1:Number(BS_KACHEL.zuschnittZoom)||1.12,zGM=Number(BS_KACHEL.gesichtMaxHoehe)||0,zGh=zBx?(zBx.y1-zBx.y0)*me.height*Oe/n:0,zZ=zGM>0?(zGh*zZ0>zGM?Math.max(1,zGM/Math.max(.001,zGh)):zZ0):zBx&&zGh*zZ0>.42?1:zZ0,',
+ 'Zuschnitt: nah aufs Gesicht (Zoom bis zur Gesichtshoehe gesichtMaxHoehe)', 1))
+
+P.append((
+ 'fontStyle:tt.kursiv||xt.kursiv&&(BS_KACHEL.akzentFarbe||!tt.highlight)||xt.fett&&BS_KACHEL.fettKursiv===1?"italic":"normal",fill:rr?',
+ 'fontStyle:tt.kursiv||xt.kursiv&&BS_KACHEL.akzentGerade!==1&&(BS_KACHEL.akzentFarbe||!tt.highlight)||xt.fett&&BS_KACHEL.fettKursiv===1?"italic":"normal",fill:rr?',
+ 'Akzent: gerade statt kursiv (akzentGerade)', 1))
+
+P.append((
+ 'e.add(Ut),Vt+=Ut.width+(Ve&&!(xt.hand',
+ '(rr&&BS_KACHEL.akzentPille&&(()=>{try{const zfs=Ut.fontSize,zpx=zfs*(Number(BS_KACHEL.pilleRand)||.14);e.add(new Pe.fabric.Rect({left:Vt-zpx,top:De+zfs*(Number(BS_KACHEL.pilleVersatz)||.05),originX:"left",originY:"center",width:Ut.width+2*zpx,height:zfs*(Number(BS_KACHEL.pilleHoehe)||.9),rx:zfs*.28,ry:zfs*.28,fill:BS_KACHEL.akzentPille,selectable:!1,evented:!1}))}catch(zz){}})()),e.add(Ut),Vt+=Ut.width+(Ve&&!(xt.hand',
+ 'Akzent: farbige Markierung hinter dem Wort (akzentPille)', 1))
+
+P.append((
+ 'zFh/2+.07',
+ 'zFh/2+(Number(BS_KACHEL.gesichtLuft)||.07)',
+ 'Zuschnitt: Luft ueber dem Gesicht einstellbar (gesichtLuft)', 1))
+
+P.append((
+ 'zm=Number(BS_KACHEL.gesichtAbstand)||.035',
+ 'zm=BS_KACHEL.gesichtAbstand==null?.035:Number(BS_KACHEL.gesichtAbstand)',
+ 'Textband: Abstand zum Gesicht darf negativ sein (Text ueber dem Kinn)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten420"',
+ 'title:"Geladene Datei",children:"karten421"',
+ 'Versionsschild auf karten421', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
