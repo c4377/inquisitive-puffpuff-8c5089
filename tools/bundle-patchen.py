@@ -12735,6 +12735,16 @@ P.append((
  'title:"Geladene Datei",children:"karten421"',
  'Versionsschild auf karten421', 1))
 
+P.append((
+ '"akzentPille":"#A86C94",',
+ '',
+ 'Kino: keine Mauve-Markierung, Akzentwort nur in der Schrift', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten421"',
+ 'title:"Geladene Datei",children:"karten422"',
+ 'Versionsschild auf karten422', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

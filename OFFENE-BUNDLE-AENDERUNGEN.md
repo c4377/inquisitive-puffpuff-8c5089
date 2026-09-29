@@ -11057,3 +11057,11 @@ Test (6 Tage, Jeans-Fotos + dieselben Fotos mit brauner Kleidung): Jeans schwarz
 die anderen warm und gedämpft, Gesichter nah, Markierung hinter dem Akzentwort.
 
 Alle Adressen laden **karten421**.
+
+## 362 — Kino ohne Mauve-Markierung
+
+`akzentPille` aus dem Look „kino“ entfernt. Das Akzentwort steht nur in der Schrift
+(DM Serif Display, gerade, weiß). Der Zeichner für `akzentPille` bleibt im Bundle und ist
+nur aus.
+
+Alle Adressen laden **karten422**.
