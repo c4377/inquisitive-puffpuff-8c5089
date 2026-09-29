@@ -12775,6 +12775,31 @@ P.append((
  'title:"Geladene Datei",children:"karten424"',
  'Versionsschild auf karten424', 1))
 
+P.append((
+ 'let zx0=.2,zx1=.8,zy0=.55,zy1=.97;if(zb&&zb.y1>zb.y0){const zbw=zb.x1-zb.x0,zbh=zb.y1-zb.y0;zx0=Math.max(0,zb.x0-zbw*.8);zx1=Math.min(1,zb.x1+zbw*.8);zy0=Math.min(.95,zb.y1+zbh*.5);zy1=Math.min(1,zb.y1+zbh*3.5)}',
+ 'let zx0=0,zx1=1,zy0=.45,zy1=1;if(zb&&zb.y1>zb.y0){zy0=Math.min(.6,Math.max(.25,zb.y1))}',
+ 'Blau-Test: ganze Bildbreite ab dem Kinn (ohne Gesicht: untere 55 %)', 1))
+
+P.append((
+ 'zmx>30&&zbb===zmx&&zbb-zr>14&&(zmx-zmn)/zmx>.12&&zbl++',
+ 'zmx>25&&zbb>=zg-3&&zbb-zr>7&&(zmx-zmn)/zmx>.07&&zbl++',
+ 'Blau-Test: auch graublau und helle Jeans', 1))
+
+P.append((
+ '"kinoBlauAnteil":0.25',
+ '"kinoBlauAnteil":0.18',
+ 'Blau-Test: Grenze 18 %', 1))
+
+P.append((
+ '"kino":{"fotoSchrift":"Castoro","deckblattFamilie":"Castoro","folgeFamilie":"Castoro","kastenSchrift":"Castoro","lisaSchrift":"Castoro","folgeSchrift":"Castoro","ablaufTitel":"Castoro","schriftart":"Castoro","unterSchrift":"Castoro","gewicht":"400","deckblattGewicht":"400","folgeGewicht":"400","fotoLaufweite":-30,"fotoZeile":0.9,"akzentFarbe":"#FFFFFF","akzentGewicht":"400","akzentGerade":1,"fliessSchrift":"HelveticaNeueBrand","fliessVersal":0,"fliessGroesse":0.03,"kino":1,"kinoSaettigung":0.9,"kinoHeben":0,"kinoKontrast":1.08,"kinoWarm":0.6,"kinoSchwarz":8,"kinoWeiss":245,"kinoGamma":1.1,"kinoSplit":1,"kinoVignette":0.3,"kinoBlauAnteil":0.18,"zuschnittZoom":1.6,"zoomOben":1,"gesichtMaxHoehe":0.45,"gesichtLuft":0.13,"gesichtAbstand":-0.1,"detailReihe":"close|-|close|-","saettigungReihe":"0","saettigungWechsel":1}',
+ '"kino":{"fotoSchrift":"Roxborough CF","deckblattFamilie":"Roxborough CF","folgeFamilie":"Roxborough CF","kastenSchrift":"Roxborough CF","lisaSchrift":"Roxborough CF","folgeSchrift":"Roxborough CF","ablaufTitel":"Roxborough CF","schriftart":"Roxborough CF","unterSchrift":"Roxborough CF","gewicht":"400","deckblattGewicht":"400","folgeGewicht":"400","fotoLaufweite":-15,"fotoZeile":0.9,"akzentFarbe":"#FFFFFF","akzentGewicht":"400","akzentGerade":1,"fliessSchrift":"HelveticaNeueBrand","fliessVersal":0,"fliessGroesse":0.03,"kino":1,"kinoSaettigung":0.9,"kinoHeben":0,"kinoKontrast":1.08,"kinoWarm":0.6,"kinoSchwarz":8,"kinoWeiss":245,"kinoGamma":1.1,"kinoSplit":1,"kinoVignette":0.3,"kinoBlauAnteil":0.18,"zuschnittZoom":1.6,"zoomOben":1,"gesichtMaxHoehe":0.45,"gesichtLuft":0.13,"gesichtAbstand":-0.1,"detailReihe":"close|-|close|-","saettigungReihe":"0","saettigungWechsel":1}',
+ 'Kino: Roxborough CF (von Carina) statt Castoro', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten424"',
+ 'title:"Geladene Datei",children:"karten425"',
+ 'Versionsschild auf karten425', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

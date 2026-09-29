@@ -11109,3 +11109,22 @@ Kino-Durchgang:
 - Ohne `kinoSplit` und die neuen Regler rechnet der Durchgang wie in 361.
 
 Alle Adressen laden **karten424**.
+
+## 365 — Kino: Blau sicher erkennen, Roxborough CF
+
+- **Blau → Schwarz-Weiß** hat bei Carinas Fotos nicht gegriffen. Bisher wurde nur ein
+  schmaler Bereich direkt unter dem Gesicht geprüft, mit kräftigem Blau (b = max,
+  b−r > 14, Sättigung > 0,12, Grenze 25 %). Graublaue Oberteile und Nahaufnahmen fielen
+  durch.
+  - Neu: Die ganze Bildbreite ab dem Kinn wird geprüft (ohne Gesicht: untere 55 %).
+  - Ein Punkt gilt als blau bei Helligkeit > 25, b ≥ g−3, b−r > 7 und Sättigung > 0,07.
+  - Ab 18 % blauen Punkten wird das Foto schwarz-weiß.
+  - Offline gemessen: blaue und graublaue Kleidung 22–73 %. Nicht blau höchstens 10 %
+    (weiße Bluse, Carinas Reel mit Lederjacke, Vorlage von @ronjasimon_).
+- **Roxborough CF** (von Carina geschickt, TTF → `site/fonts/RoxboroughCF-Regular.woff2`)
+  ersetzt im Look „kino“ Castoro, `fotoLaufweite` −15. Nur der normale Schnitt liegt vor.
+  Die `@font-face`-Einträge für Italic und Bold (Dateien fehlten) sind aus `index.html`
+  entfernt, der Browser erzeugt Kursiv und Fett selbst. Roxborough ist kaufpflichtig
+  (Connary Fagen): nur in Carinas App, nicht in `v2/`.
+
+Alle Adressen laden **karten425**.
