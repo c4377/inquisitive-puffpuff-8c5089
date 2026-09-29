@@ -11087,3 +11087,25 @@ Castoro, `fotoLaufweite` −30, `fotoZeile` 0,9 (eng wie die Vorlage).
 Hinweis: „Roxborough CF“ steht in `index.html`, die Datei fehlt aber in `site/fonts`.
 
 Alle Adressen laden **karten423**.
+
+## 364 — Kino-Grading nach Carinas Reel
+
+Vorlage: ein Standbild aus Carinas eigenem Reel (dunkler Raum, schwarze Lederjacke).
+Gemessen (ohne die Textbereiche):
+- Helligkeit: 1 %-Wert 0, Median 23, 99 %-Wert 160. Tiefe Schwarztöne, keine grellen
+  Lichter.
+- Mitteltöne (Helligkeit 40–130): r−g +19 bis +30, b−g −10 bis −18, also warm und
+  orange. Schatten neutral. Sättigung 0,42–0,46.
+- Die Ränder sind dunkler.
+
+Das Grading aus 361 (Schwarz angehoben, Sättigung 72 %) war das Gegenteil. Neu im
+Kino-Durchgang:
+- Kurve mit Schwarzpunkt `kinoSchwarz` 8, Weißpunkt `kinoWeiss` 245, `kinoGamma` 1,1,
+  Kontrast 1,08, `kinoHeben` 0.
+- `kinoSplit:1`: Wärme vor allem in den Mitteltönen (Gewicht 4t(1−t)): r +16, g +3,
+  b −14, dazu leicht in den Lichtern. Stärke `kinoWarm` 0,6, Sättigung 0,9.
+- `kinoVignette` 0,3: Ränder abgedunkelt (quadratisch zum Abstand von der Mitte), auch
+  bei den Schwarz-Weiß-Fotos.
+- Ohne `kinoSplit` und die neuen Regler rechnet der Durchgang wie in 361.
+
+Alle Adressen laden **karten424**.

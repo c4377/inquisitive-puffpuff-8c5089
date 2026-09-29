@@ -12755,6 +12755,26 @@ P.append((
  'title:"Geladene Datei",children:"karten423"',
  'Versionsschild auf karten423', 1))
 
+P.append((
+ 'zlut=new Float32Array(256);for(let zv=0;zv<256;zv++){let zu=.5+(zv/255-.5)*(zSwK?zK*1.08:zK);zu=zu<0?0:zu>1?1:zu;zlut[zv]=zL+zu*(255-zL-8)}',
+ 'zBp=Number(BS_KACHEL.kinoSchwarz)||0,zWp=Number(BS_KACHEL.kinoWeiss)||247,zGa=Number(BS_KACHEL.kinoGamma)||1,zVg=Number(BS_KACHEL.kinoVignette)||0,zSp=BS_KACHEL.kinoSplit===1,zlut=new Float32Array(256);for(let zv=0;zv<256;zv++){let zu=Math.pow(Math.max(0,(zv-zBp)/(255-zBp)),zGa);zu=.5+(zu-.5)*(zSwK?zK*1.08:zK);zu=zu<0?0:zu>1?1:zu;zlut[zv]=zL+zu*(zWp-zL)}',
+ 'Kino-Kurve: Schwarzpunkt, Weisspunkt, Gamma (dunkler, stimmungsvoller)', 1))
+
+P.append((
+ 'for(let zo=0;zo<zd.length;zo+=4){let zr=zd[zo],zg=zd[zo+1],zbb=zd[zo+2];const zy=.2126*zr+.7152*zg+.0722*zbb;if(zSwK){const zv=zC(zy);zd[zo]=zd[zo+1]=zd[zo+2]=zv;continue}const zt=zy/255;zr=zy+(zr-zy)*zSa+zWa*(10*zt+6*(1-zt));zg=zy+(zg-zy)*zSa+zWa*(4*zt+1*(1-zt));zbb=zy+(zbb-zy)*zSa-zWa*(10*zt+4*(1-zt));zd[zo]=zC(zr);zd[zo+1]=zC(zg);zd[zo+2]=zC(zbb)}',
+ 'const zcx=zW/2,zcy=zH2/2,zrr=1/(zcx*zcx+zcy*zcy);for(let zo=0,zp=0;zo<zd.length;zo+=4,zp++){let zr=zd[zo],zg=zd[zo+1],zbb=zd[zo+2];const zy=.2126*zr+.7152*zg+.0722*zbb;let zvf=1;if(zVg>0){const zdx=zp%zW-zcx,zdy=(zp/zW|0)-zcy;zvf=1-zVg*(zdx*zdx+zdy*zdy)*zrr}if(zSwK){const zv=zC(zy)*zvf;zd[zo]=zd[zo+1]=zd[zo+2]=zv;continue}const zt=zy/255;if(zSp){const zm=4*zt*(1-zt);zr=zy+(zr-zy)*zSa+zWa*(16*zm+6*zt);zg=zy+(zg-zy)*zSa+zWa*3*zm;zbb=zy+(zbb-zy)*zSa-zWa*(14*zm+4*zt)}else{zr=zy+(zr-zy)*zSa+zWa*(10*zt+6*(1-zt));zg=zy+(zg-zy)*zSa+zWa*(4*zt+1*(1-zt));zbb=zy+(zbb-zy)*zSa-zWa*(10*zt+4*(1-zt))}zd[zo]=zC(zr)*zvf;zd[zo+1]=zC(zg)*zvf;zd[zo+2]=zC(zbb)*zvf}',
+ 'Kino-Farben: warme Mitteltoene (Split), Vignette', 1))
+
+P.append((
+ '"kino":1,"kinoSaettigung":0.72,"kinoHeben":16,"kinoKontrast":1.06,"kinoWarm":1,',
+ '"kino":1,"kinoSaettigung":0.9,"kinoHeben":0,"kinoKontrast":1.08,"kinoWarm":0.6,"kinoSchwarz":8,"kinoWeiss":245,"kinoGamma":1.1,"kinoSplit":1,"kinoVignette":0.3,',
+ 'Kino: Grading nach Carinas Reel (tiefe Schwarztoene, warme Mitten, Vignette)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten423"',
+ 'title:"Geladene Datei",children:"karten424"',
+ 'Versionsschild auf karten424', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
