@@ -11065,3 +11065,25 @@ Alle Adressen laden **karten421**.
 nur aus.
 
 Alle Adressen laden **karten422**.
+
+## 363 — Kino: Castoro statt DM Serif Display
+
+Rückmeldung: Die Schrift in der Vorlage ist dünner. Vergleich über die Pixel-Überdeckung
+des Worts „Insulinresistenz“ aus der Vorlage (Schnittmenge / Vereinigung):
+
+| Schrift | Wert |
+|---|---|
+| Castoro | 0,62 |
+| Newsreader | 0,57 |
+| Prata | 0,54 |
+| Playfair Display 550 | 0,50 |
+| DM Serif Display | 0,34 |
+
+Auch mit dem Auge passt Castoro am besten (Strichstärke, „g“, „k“). Neu:
+`site/fonts/Castoro-Regular.woff2` (Google Fonts, latin, SIL OFL,
+`Castoro-LICENSE.txt`), `@font-face` in `index.html`. Look „kino“: alle Titelschriften
+Castoro, `fotoLaufweite` −30, `fotoZeile` 0,9 (eng wie die Vorlage).
+
+Hinweis: „Roxborough CF“ steht in `index.html`, die Datei fehlt aber in `site/fonts`.
+
+Alle Adressen laden **karten423**.

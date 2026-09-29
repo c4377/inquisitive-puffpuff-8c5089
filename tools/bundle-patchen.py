@@ -12745,6 +12745,16 @@ P.append((
  'title:"Geladene Datei",children:"karten422"',
  'Versionsschild auf karten422', 1))
 
+P.append((
+ '"kino":{"fotoSchrift":"DM Serif Display","deckblattFamilie":"DM Serif Display","folgeFamilie":"DM Serif Display","kastenSchrift":"DM Serif Display","lisaSchrift":"DM Serif Display","folgeSchrift":"DM Serif Display","ablaufTitel":"DM Serif Display","schriftart":"DM Serif Display","unterSchrift":"DM Serif Display","gewicht":"400","deckblattGewicht":"400","folgeGewicht":"400","fotoLaufweite":-15,"fotoZeile":0.92,"akzentFarbe":"#FFFFFF","akzentGewicht":"400","akzentGerade":1,"fliessSchrift":"HelveticaNeueBrand","fliessVersal":0,"fliessGroesse":0.03,"kino":1,"kinoSaettigung":0.72,"kinoHeben":16,"kinoKontrast":1.06,"kinoWarm":1,"kinoBlauAnteil":0.25,"zuschnittZoom":1.6,"zoomOben":1,"gesichtMaxHoehe":0.45,"gesichtLuft":0.13,"gesichtAbstand":-0.1,"detailReihe":"close|-|close|-","saettigungReihe":"0","saettigungWechsel":1}',
+ '"kino":{"fotoSchrift":"Castoro","deckblattFamilie":"Castoro","folgeFamilie":"Castoro","kastenSchrift":"Castoro","lisaSchrift":"Castoro","folgeSchrift":"Castoro","ablaufTitel":"Castoro","schriftart":"Castoro","unterSchrift":"Castoro","gewicht":"400","deckblattGewicht":"400","folgeGewicht":"400","fotoLaufweite":-30,"fotoZeile":0.9,"akzentFarbe":"#FFFFFF","akzentGewicht":"400","akzentGerade":1,"fliessSchrift":"HelveticaNeueBrand","fliessVersal":0,"fliessGroesse":0.03,"kino":1,"kinoSaettigung":0.72,"kinoHeben":16,"kinoKontrast":1.06,"kinoWarm":1,"kinoBlauAnteil":0.25,"zuschnittZoom":1.6,"zoomOben":1,"gesichtMaxHoehe":0.45,"gesichtLuft":0.13,"gesichtAbstand":-0.1,"detailReihe":"close|-|close|-","saettigungReihe":"0","saettigungWechsel":1}',
+ 'Kino: Castoro statt DM Serif Display (duenner, wie die Vorlage), enger gesetzt', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten422"',
+ 'title:"Geladene Datei",children:"karten423"',
+ 'Versionsschild auf karten423', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
