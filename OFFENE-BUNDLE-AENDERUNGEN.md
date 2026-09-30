@@ -11282,3 +11282,32 @@ gemessen (Median der Flächen):
 Test (15 Tage): Tag 1 Terrakotta, 3 Taupe, 5 Creme, 7 Mokka, 9 Terrakotta …
 
 Alle Adressen laden **karten433**.
+
+## 374 — Kino: Schwarz/Weiß-Kacheln, Name in Gold, unscharfes Foto auf dem Textpost-Cover
+
+Wunsch: schwarz auf weiß und weiß auf schwarz, der Name in Gold, unscharfe Fotos auch auf
+dem Cover der Textkacheln.
+
+- `platteReihe` „#FFFFFF/#141414|#0F0F0F/#FFFFFF“ (mit `platteReiheSchritt` 2 wechselt
+  jeder Textpost).
+- Name: auf Fotos `nameFarbe` #D4AF6A, auf Kacheln neu `nameGold` #B8924A (vor der
+  Kachel-Schriftfarbe).
+- Neu `platteBlurDeckblatt:1`: Die erste Folie eines Textposts bekommt als Hintergrund ein
+  unscharfes Foto mit Abdunklung (`platteBlurDunkel` 0,42) und weißer Schrift.
+  - Welches Foto: Der Plan-Normalisierer `Rt` setzt am Cover `_blurBild` = Foto der
+    letzten Folie desselben Tages (das Endfoto). Ohne Endfoto: ein Foto aus
+    `__bsBilder` per Hash auf den Tag.
+  - Unschärfe: auf 40 px Breite verkleinern, über 160 px auf volle Größe ziehen
+    (Glättung „high“). Das läuft auch in Safari ohne `ctx.filter`.
+  - Wird vor dem Aufruf des „marke“-Zeichners (`wt`) geladen (async, Zeitlimit 6 s) und
+    über `window.__zBlurFuer` (WeakMap je Zeichenfläche) übergeben, nicht an der Folie.
+    Ein Canvas am Folienobjekt würde im gespeicherten Plan landen.
+- **Fehler in den Rasterkacheln behoben:** Der Zeichen-Effekt hing an `[e,…]`. Die Seite
+  übergibt bei jedem Neuaufbau ein neues, gleiches Objekt
+  (`{...Ze,slideNumber:void 0,_tag}`), also wurde jede Kachel ständig neu gezeichnet. Mit
+  den langsameren Covern (Foto laden) kam die Warteschlange (4 Plätze) nicht mehr hinterher,
+  und Tag 5–1 blieben leer. Jetzt hängt der Effekt am Fingerabdruck `zFing`. Der
+  Fingerabdruck nimmt bei langen Zeichenketten jetzt auch die letzten 24 Zeichen mit, damit
+  ein Fotowechsel sicher erkannt wird.
+
+Alle Adressen laden **karten434**.

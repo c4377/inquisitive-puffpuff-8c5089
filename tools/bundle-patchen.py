@@ -13015,6 +13015,51 @@ P.append((
  'title:"Geladene Datei",children:"karten433"',
  'Versionsschild auf karten433', 1))
 
+P.append((
+ '"grundA":"#DCD3CB","grundB":"#DCD3CB","schriftA":"#4A3D33","schriftB":"#4A3D33","platteReihe":"#663723/#F3E8DC|#75675A/#F4ECE3|#DCD3CB/#4A3D33|#9B7A67/#FEF5EB","platteReiheSchritt":2,',
+ '"grundA":"#FFFFFF","grundB":"#FFFFFF","schriftA":"#141414","schriftB":"#141414","platteReihe":"#FFFFFF/#141414|#0F0F0F/#FFFFFF","platteReiheSchritt":2,"nameGold":"#B8924A","platteBlurDeckblatt":1,"platteBlurDunkel":0.42,',
+ 'Kino: Kacheln schwarz auf weiss / weiss auf schwarz, Name in Gold, Textpost-Cover mit unscharfem Foto', 1))
+
+P.append((
+ '"nameFarbe":"#FFFFFF","nameSchatten"',
+ '"nameFarbe":"#D4AF6A","nameSchatten"',
+ 'Kino: Name auf Fotos in Gold', 1))
+
+P.append((
+ 'slides:zd.slides.map(zs=>zs&&typeof zs=="object"?{...zs,_tag:zd.day}:zs)',
+ 'slides:zd.slides.map((zs,zi,za)=>{if(!zs||typeof zs!="object")return zs;const zo={...zs,_tag:zd.day};delete zo._blurC;const zl=za[za.length-1];if(zi===0&&za.length>1&&!(typeof zs.background=="string"&&zs.background.length>5)&&zl&&typeof zl.background=="string"&&zl.background.length>5)zo._blurBild=zl.background;else delete zo._blurBild;return zo})',
+ 'Plan: Cover eines Textposts bekommt das Endfoto des Tages als _blurBild', 1))
+
+P.append((
+ 'if(!$e&&Ye.grundFarbe&&(Ye.rolle=t.folienRolle,',
+ 'try{const zBM=window.__zBlurFuer||(window.__zBlurFuer=new WeakMap());zBM.delete(e);if(!$e&&Ye.grundFarbe&&BS_KACHEL.platteBlurDeckblatt===1&&(i.slideIndex||0)===0&&t.overlayIsScreenshot!==!0&&t.karte!=="ablauf"){let zF=typeof t._blurBild=="string"&&t._blurBild.length>5?t._blurBild:"";if(!zF){const zB=(typeof window<"u"&&window.__bsBilder)||[];if(zB.length){let zh=0;const zs=String(typeof t._tag=="number"?t._tag:t.text||"");for(let zi=0;zi<zs.length;zi++)zh=(zh*31+zs.charCodeAt(zi))%99991;zF=zB[zh%zB.length]}}if(zF){const zBl=await new Promise(zr=>{let zd=!1;const zf=zv=>{zd||(zd=!0,zr(zv))};setTimeout(()=>zf(null),6e3);try{const zim=new Image;zim.crossOrigin="anonymous";zim.onload=()=>{try{const zw=40,zh=Math.max(1,Math.round(zw*n/r)),zc=document.createElement("canvas");zc.width=zw;zc.height=zh;const zx=zc.getContext("2d"),zk=Math.max(zw/zim.width,zh/zim.height);zx.drawImage(zim,(zw-zim.width*zk)/2,(zh-zim.height*zk)*.35,zim.width*zk,zim.height*zk);const zm=document.createElement("canvas");zm.width=zw*4;zm.height=zh*4;const zmx=zm.getContext("2d");zmx.imageSmoothingEnabled=!0;zmx.imageSmoothingQuality="high";zmx.drawImage(zc,0,0,zm.width,zm.height);const zo=document.createElement("canvas");zo.width=Math.max(1,Math.round(r));zo.height=Math.max(1,Math.round(n));const zox=zo.getContext("2d");zox.imageSmoothingEnabled=!0;zox.imageSmoothingQuality="high";zox.drawImage(zm,0,0,zo.width,zo.height);zf(zo)}catch(ze){zf(null)}};zim.onerror=()=>zf(null);zim.src=zF}catch(ze){zf(null)}});zBl&&zBM.set(e,zBl)}}}catch(zz){}if(!$e&&Ye.grundFarbe&&(Ye.rolle=t.folienRolle,',
+ 'Textpost-Cover: unscharfes Foto laden (verkleinern und wieder vergroessern)', 1))
+
+P.append((
+ 'zPR&&e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:zPR[0],selectable:!1,evented:!1}));const SCH=zPR?zPR[1]:Je.schriftFarbe||"#141210";',
+ 'const zBC=(window.__zBlurFuer&&window.__zBlurFuer.get(e))||null;zBC&&window.__zBlurFuer.delete(e);zBC?(e.add(new Pe.fabric.Image(zBC,{left:0,top:0,originX:"left",originY:"top",scaleX:r/zBC.width,scaleY:n/zBC.height,selectable:!1,evented:!1})),e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:"rgba(0,0,0,"+(Number(K.platteBlurDunkel)||.42)+")",selectable:!1,evented:!1}))):zPR&&e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:zPR[0],selectable:!1,evented:!1}));const SCH=zBC?"#FFFFFF":zPR?zPR[1]:Je.schriftFarbe||"#141210";',
+ 'Textkachel: unscharfes Foto mit Abdunklung, weisse Schrift', 1))
+
+P.append((
+ 'fill:zPR?SCH:(K.platteNameFarbe||K.nameFarbe||SCH),',
+ 'fill:K.nameGold||(zPR?SCH:(K.platteNameFarbe||K.nameFarbe||SCH)),',
+ 'Textkachel: Name in Gold (nameGold)', 1))
+
+P.append((
+ 'zFing=(()=>{try{return JSON.stringify(e,(zk,zv)=>typeof zv=="string"&&zv.length>64?zv.length+":"+zv.slice(0,24):zv)}catch(zz){return""}})()',
+ 'zFing=(()=>{try{return JSON.stringify(e,(zk,zv)=>typeof zv=="string"&&zv.length>64?zv.length+":"+zv.slice(0,24)+zv.slice(-24):zv)}catch(zz){return""}})()',
+ 'Kachel-Fingerabdruck: auch das Ende langer Texte/Bilder', 1))
+
+P.append((
+ '},[e,u,n,zNeu]),v.jsx("div",{className:"bs-canvas-fit',
+ '},[zFing,u,n,zNeu]),v.jsx("div",{className:"bs-canvas-fit',
+ 'Rasterkachel zeichnet nur neu, wenn sich ihr Inhalt aendert (nicht bei jedem Neuaufbau der Seite)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten433"',
+ 'title:"Geladene Datei",children:"karten434"',
+ 'Versionsschild auf karten434', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
