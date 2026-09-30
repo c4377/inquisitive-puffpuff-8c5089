@@ -11323,3 +11323,13 @@ Erst danach wird es über 360 px auf volle Größe gezogen. Weil das Bild vorher
 ist, entstehen dabei keine Blöcke mehr. Name bleibt in `nameGold` (Carina: nicht heller).
 
 Alle Adressen laden **karten435**.
+
+## 376 — Kino: Terrakotta und Mokka zurück
+
+Missverständnis in 374: Carina hatte nur Creme und Taupe markiert, die sollten raus.
+Terrakotta und Mokka sollten bleiben. `platteReihe` jetzt: Weiß/#141414 |
+Terrakotta #663723/#F3E8DC | Schwarz/#FFFFFF | Mokka #9B7A67/#FEF5EB. Mit
+`platteReiheSchritt` 2 bekommt jeder Textpost die nächste Farbe. Das Cover eines
+Textposts bleibt das unscharfe Foto.
+
+Alle Adressen laden **karten436**.
