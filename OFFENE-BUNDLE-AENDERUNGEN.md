@@ -11216,3 +11216,23 @@ Kein Gold, kein Rahmen, keine Farbakzente.
   Akzent auf Fotos wieder weiß.
 
 Alle Adressen laden **karten430**.
+
+## 371 — Kino: Schrift wie laura.hersche_ (Playfair Display, eng)
+
+Vergleich über die Pixel-Überdeckung von „76k Aufrufe in“ aus Lauras Raster
+(Schnittmenge / Vereinigung):
+
+| Schrift | Wert |
+|---|---|
+| Playfair Display 400, Laufweite −5 % | 0,55 |
+| Playfair Display 400, normale Laufweite | 0,48 |
+| Radley | 0,37 |
+| Instrument Serif | 0,31 |
+| Roxborough CF | ≈ 0,1 |
+
+Auch mit dem Auge passt es: gleiche Mediävalziffern (hängende 7), gleiches k und f,
+gleiche Strichstärke. Der Look „kino“ setzt alle Titel in Playfair Display 400:
+`fotoLaufweite` −50, `fotoZeile` 0,95, auf den Kacheln `laufweite` −50 und `zeile` 0,98.
+Roxborough bleibt in `site/fonts`, ist aber nicht mehr eingestellt.
+
+Alle Adressen laden **karten431**.
