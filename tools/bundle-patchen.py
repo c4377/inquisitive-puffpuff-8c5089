@@ -13110,6 +13110,16 @@ P.append((
  'title:"Geladene Datei",children:"karten438"',
  'Versionsschild auf karten438', 1))
 
+P.append((
+ '"grundA":"#FFFFFF","grundB":"#FFFFFF","schriftA":"#141414","schriftB":"#141414","platteReihe":"#FFFFFF/#141414|#DCD3CB/#4A3D33|#0F0F0F/#FFFFFF|#75675A/#F4ECE3",',
+ '"grundA":"#DCD3CB","grundB":"#DCD3CB","schriftA":"#4A3D33","schriftB":"#4A3D33","platteReihe":"#DCD3CB/#4A3D33|#0F0F0F/#FFFFFF|#75675A/#F4ECE3",',
+ 'Kino: kein Weiss mehr, Kacheln Creme / Schwarz / Taupe', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten438"',
+ 'title:"Geladene Datei",children:"karten439"',
+ 'Versionsschild auf karten439', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

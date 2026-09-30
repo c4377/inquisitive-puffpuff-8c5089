@@ -11356,3 +11356,11 @@ wird.
 Test (15 Tage): Tag 1 Weiß, 3 Foto, 5 Creme, 7 Foto, 9 Schwarz, 11 Foto, 13 Taupe.
 
 Alle Adressen laden **karten438**.
+
+## 379 — Kino: kein Weiß neben Creme
+
+Rückmeldung: Wenn Creme dabei ist, kein Weiß. `platteReihe`: Creme #DCD3CB/#4A3D33 |
+Schwarz #0F0F0F/#FFFFFF | Taupe #75675A/#F4ECE3. `grundA`/`grundB` (Fallback) Creme.
+Mit `platteBlurJede` 2 ergibt sich: Creme, Foto, Schwarz, Foto, Taupe, Foto …
+
+Alle Adressen laden **karten439**.
