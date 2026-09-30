@@ -13090,6 +13090,26 @@ P.append((
  'title:"Geladene Datei",children:"karten437"',
  'Versionsschild auf karten437', 1))
 
+P.append((
+ '"platteBlurDeckblatt":1,',
+ '"platteBlurDeckblatt":1,"platteBlurJede":2,',
+ 'Kino: nur jeder 2. Textpost bekommt das unscharfe Foto-Cover', 1))
+
+P.append((
+ 'if(!$e&&Ye.grundFarbe&&BS_KACHEL.platteBlurDeckblatt===1&&(i.slideIndex||0)===0&&',
+ 'if(!$e&&Ye.grundFarbe&&BS_KACHEL.platteBlurDeckblatt===1&&(i.slideIndex||0)===0&&(!(BS_KACHEL.platteBlurJede>1)||Math.floor((Number(t._tag)||0)/(BS_KACHEL.platteReiheSchritt>1?BS_KACHEL.platteReiheSchritt:1))%BS_KACHEL.platteBlurJede===BS_KACHEL.platteBlurJede-1)&&',
+ 'Unscharfes Cover nur bei jedem n-ten Textpost (platteBlurJede)', 1))
+
+P.append((
+ 'const zt0=typeof t._tag=="number"?t._tag:0,zt=K.platteReiheSchritt>1?Math.floor(zt0/K.platteReiheSchritt):zt0;',
+ 'const zt0=typeof t._tag=="number"?t._tag:0,zt1=K.platteReiheSchritt>1?Math.floor(zt0/K.platteReiheSchritt):zt0,zt=K.platteBlurDeckblatt===1&&K.platteBlurJede>1?Math.floor(zt1/K.platteBlurJede):zt1;',
+ 'Kachelfarben laufen nur ueber die Textposts ohne unscharfes Cover weiter', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten437"',
+ 'title:"Geladene Datei",children:"karten438"',
+ 'Versionsschild auf karten438', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

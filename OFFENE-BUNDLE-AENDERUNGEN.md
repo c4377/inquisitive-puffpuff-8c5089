@@ -11341,3 +11341,18 @@ Mokka nicht. `platteReihe`: Weiß/#141414 | Creme #DCD3CB/#4A3D33 | Schwarz/#FFF
 Taupe #75675A/#F4ECE3.
 
 Alle Adressen laden **karten437**.
+
+## 378 — Textkacheln im Raster wieder sichtbar
+
+Rückmeldung: Im Raster sieht man keine Textkacheln mehr. Seit 374 war jedes
+Textpost-Cover ein unscharfes Foto, und das Raster zeigt nur Cover.
+
+Neu `platteBlurJede` (Kino: 2): Nur jeder zweite Textpost bekommt das unscharfe
+Foto-Cover. Gezählt wird mit dem Textpost-Zähler `floor(tag/platteReiheSchritt)`, das
+Foto gibt es, wenn Zähler % 2 = 1. Die übrigen Textposts zeigen die farbige Kachel. Die
+Kachelfarbe läuft nur über diese Posts weiter (Zähler / 2), damit keine Farbe übersprungen
+wird.
+
+Test (15 Tage): Tag 1 Weiß, 3 Foto, 5 Creme, 7 Foto, 9 Schwarz, 11 Foto, 13 Taupe.
+
+Alle Adressen laden **karten438**.
