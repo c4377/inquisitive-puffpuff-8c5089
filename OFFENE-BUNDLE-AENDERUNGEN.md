@@ -11195,3 +11195,24 @@ ist zu kalt und hart, es fehlt ein Wiedererkennungswert („von mir aus umdrehen
   weiße `nameFarbe` für Fotos wäre auf Elfenbein unsichtbar.
 
 Alle Adressen laden **karten429**.
+
+## 370 — Kino nach dem Branding von @laura.hersche_
+
+Vorlage: Profilraster von laura.hersche_. Wechselnde, ruhige Textkacheln (gebrochenes
+Weiß, Schwarz, dunkles Oliv), große Serifenschrift linksbündig, darunter eine kleine
+Zeile ohne Serifen in Versalien, unten mittig eine winzige Signatur „BY LAURA HERSCHE“.
+Kein Gold, kein Rahmen, keine Farbakzente.
+
+- Neu `platteReihe` („Grund/Schrift|…“): Die „marke“-Kachel malt ihren Hintergrund
+  selbst und nimmt die Schriftfarbe aus der Reihe. Die Farbe wechselt pro Tag
+  (`t._tag` modulo Länge), alle Folien eines Tages gleich. Kino:
+  #ECE9E4/#1A1714 | #0F0F0F/#F2EFEA | #2B2E28/#EEEAE2. Im Block wird `SCH` neu gesetzt
+  (überdeckt die äußere Konstante).
+- Neu `platteLinks:1`: Kacheltext immer linksbündig.
+- Signatur: `name` und `nameText` „BY CARINA ANNA PRAV“, Helvetica Neue 500, Laufweite
+  220, Größe 0,021, mittig (`nameMitte`, jetzt auch auf Kacheln), auf Kacheln in der
+  Schriftfarbe der Kachel.
+- `platteGold` und `platteRahmen` aus 367/369 im Look entfernt (Code bleibt, ist aus).
+  Akzent auf Fotos wieder weiß.
+
+Alle Adressen laden **karten430**.

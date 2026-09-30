@@ -12910,6 +12910,41 @@ P.append((
  'title:"Geladene Datei",children:"karten429"',
  'Versionsschild auf karten429', 1))
 
+P.append((
+ '"akzentFarbe":"#D4AF6A","akzentGewicht":"400","akzentGerade":1,"grundA":"#F4EEE3","grundB":"#F4EEE3","schriftA":"#16120E","schriftB":"#16120E","platteGold":"#A8823A","platteRahmen":"#B8924A","platteNameFarbe":"#16120E",',
+ '"akzentFarbe":"#FFFFFF","akzentGewicht":"400","akzentGerade":1,"grundA":"#ECE9E4","grundB":"#ECE9E4","schriftA":"#1A1714","schriftB":"#1A1714","platteReihe":"#ECE9E4/#1A1714|#0F0F0F/#F2EFEA|#2B2E28/#EEEAE2","platteLinks":1,"name":"BY CARINA ANNA PRAV",',
+ 'Kino nach Laura Hersche: Kacheln im Wechsel gebrochenes Weiss / Schwarz / Oliv, linksbuendig, kein Gold, kein Rahmen', 1))
+
+P.append((
+ '"nameAnteil":0.046,"nameDeckkraft":1,"nameFarbe":"#FFFFFF","nameSchatten":"rgba(0,0,0,0.85)",',
+ '"nameAnteil":0.021,"nameDeckkraft":0.92,"nameFarbe":"#FFFFFF","nameSchatten":"rgba(0,0,0,0.6)","nameText":"BY CARINA ANNA PRAV","nameSchrift":"HelveticaNeueBrand","nameGewicht":"500","nameLaufweite":220,"nameMitte":1,"nameUnten":0.945,',
+ 'Kino: Signatur BY CARINA ANNA PRAV, klein, Versalien, gesperrt, mittig', 1))
+
+P.append((
+ 'if(FA==="marke"){\nconst K=BS_KACHEL;K.platteRahmen&&',
+ 'if(FA==="marke"){\nconst K=BS_KACHEL;const zPR=(()=>{try{const zl=String(K.platteReihe||"").split("|").map(zq=>zq.split("/")).filter(zq=>zq.length===2);if(!zl.length)return null;const zt=typeof t._tag=="number"?t._tag:0;return zl[((zt%zl.length)+zl.length)%zl.length]}catch(zz){return null}})();zPR&&e.add(new Pe.fabric.Rect({left:0,top:0,width:r,height:n,fill:zPR[0],selectable:!1,evented:!1}));const SCH=zPR?zPR[1]:Je.schriftFarbe||"#141210";K.platteRahmen&&',
+ 'Textkachel: Hintergrund und Schrift aus platteReihe, wechselt pro Tag', 1))
+
+P.append((
+ 'const LI=FOLGE&&K.folgeAusrichtung==="links"',
+ 'const LI=K.platteLinks===1||FOLGE&&K.folgeAusrichtung==="links"',
+ 'Textkachel: linksbuendig (platteLinks)', 1))
+
+P.append((
+ 'if(NA)txt(NA,{left:LI?r*K.rand:r/2,top:n*(K.nameUnten||.945),originX:LI?"left":"center"',
+ 'if(NA)txt(NA,{left:LI&&K.nameMitte!==1?r*K.rand:r/2,top:n*(K.nameUnten||.945),originX:LI&&K.nameMitte!==1?"left":"center"',
+ 'Textkachel: Signatur mittig (nameMitte)', 1))
+
+P.append((
+ 'fill:K.platteNameFarbe||K.nameFarbe||SCH,opacity:(K.nameDeckkraft||.55),maxB:MAXB});',
+ 'fill:zPR?SCH:(K.platteNameFarbe||K.nameFarbe||SCH),opacity:(K.nameDeckkraft||.55),maxB:MAXB});',
+ 'Textkachel: Signatur in der Schriftfarbe der Kachel', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten429"',
+ 'title:"Geladene Datei",children:"karten430"',
+ 'Versionsschild auf karten430', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
