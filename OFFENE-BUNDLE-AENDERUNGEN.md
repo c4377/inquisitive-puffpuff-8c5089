@@ -11257,3 +11257,28 @@ Alle Adressen laden **karten431**.
   Gilt nach der nächsten Änderung am Plan, also Import oder Neu laden.
 
 Alle Adressen laden **karten432**.
+
+## 373 — Kino: Kachelfarben wie „Koyo“
+
+Vorlage: Pinterest-Pin „Koyo Brand Design“ (Post Theory). Farben aus dem Screenshot
+gemessen (Median der Flächen):
+
+| Fläche | Farbe |
+|---|---|
+| Terrakotta/Cognac | #663723 |
+| Taupe | #75675A / #76695B |
+| Mokka | #9B7A67 (#85604D) |
+| Creme | #DCD3CB |
+| Helle Schrift | #FEF5EB |
+
+- `platteReihe` im Look „kino“:
+  #663723/#F3E8DC | #75675A/#F4ECE3 | #DCD3CB/#4A3D33 | #9B7A67/#FEF5EB. Auf Creme ist
+  die Schrift dunkler als in der Vorlage (#716358 wäre zu schwach), damit sie lesbar
+  bleibt.
+- Neu `platteReiheSchritt` (Kino: 2): Die Farbe richtet sich nach `floor(tag/2)`.
+  Textposts liegen auf ungeraden Tagen, mit 4 Farben kämen sonst nur 2 vor. So bekommt
+  jeder Textpost die nächste Farbe.
+
+Test (15 Tage): Tag 1 Terrakotta, 3 Taupe, 5 Creme, 7 Mokka, 9 Terrakotta …
+
+Alle Adressen laden **karten433**.

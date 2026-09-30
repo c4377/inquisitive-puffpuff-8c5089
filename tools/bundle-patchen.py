@@ -13000,6 +13000,21 @@ P.append((
  'title:"Geladene Datei",children:"karten432"',
  'Versionsschild auf karten432', 1))
 
+P.append((
+ '"grundA":"#ECE9E4","grundB":"#ECE9E4","schriftA":"#1A1714","schriftB":"#1A1714","platteReihe":"#ECE9E4/#1A1714|#0F0F0F/#F2EFEA|#2B2E28/#EEEAE2",',
+ '"grundA":"#DCD3CB","grundB":"#DCD3CB","schriftA":"#4A3D33","schriftB":"#4A3D33","platteReihe":"#663723/#F3E8DC|#75675A/#F4ECE3|#DCD3CB/#4A3D33|#9B7A67/#FEF5EB","platteReiheSchritt":2,',
+ 'Kino: Kachelfarben wie Koyo (Terrakotta, Taupe, Creme, Mokka)', 1))
+
+P.append((
+ 'const zt=typeof t._tag=="number"?t._tag:0;return zl[((zt%zl.length)+zl.length)%zl.length]',
+ 'const zt0=typeof t._tag=="number"?t._tag:0,zt=K.platteReiheSchritt>1?Math.floor(zt0/K.platteReiheSchritt):zt0;return zl[((zt%zl.length)+zl.length)%zl.length]',
+ 'Kachelfarben: Schritt (jeder Textpost die naechste Farbe)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten432"',
+ 'title:"Geladene Datei",children:"karten433"',
+ 'Versionsschild auf karten433', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
