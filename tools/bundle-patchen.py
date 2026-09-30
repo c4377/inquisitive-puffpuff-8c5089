@@ -12875,6 +12875,21 @@ P.append((
  'title:"Geladene Datei",children:"karten427"',
  'Versionsschild auf karten427', 1))
 
+P.append((
+ '"kinoSaettigung":0.9,"kinoHeben":0,"kinoKontrast":1.08,"kinoWarm":0.6,"kinoSchwarz":8,"kinoWeiss":245,"kinoGamma":1.1,"kinoSplit":1,"kinoVignette":0.3,',
+ '"kinoSaettigung":1.02,"kinoHeben":0,"kinoKontrast":1.1,"kinoWarm":0.3,"kinoSchwarz":4,"kinoWeiss":254,"kinoGamma":0.9,"kinoSplit":1,"kinoVignette":0.12,',
+ 'Kino frischer: heller (Gamma 0,9), klares Weiss, weniger Waerme, leichte Vignette', 1))
+
+P.append((
+ '"scrimZiel":30,"scrimMin":0.6,"scrimMax":0.92,"scrimAuslauf":0.22,',
+ '"scrimZiel":42,"scrimMin":0.42,"scrimMax":0.85,"scrimAuslauf":0.2,',
+ 'Kino frischer: leichtere Abdunklung hinter dem Text', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten427"',
+ 'title:"Geladene Datei",children:"karten428"',
+ 'Versionsschild auf karten428', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

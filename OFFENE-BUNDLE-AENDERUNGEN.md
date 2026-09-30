@@ -11162,3 +11162,19 @@ Wunsch: Die Textkacheln sollen auch lesbarer sein. Carina mag Gold, Weiß und Sc
   sind nicht betroffen, dort hat jede Folie ihr eigenes Foto (`fotoProFolie`).
 
 Alle Adressen laden **karten427**.
+
+## 368 — Kino frischer
+
+Rückmeldung: Der Look muss frischer aussehen. Das Grading aus 364/366 (nach dem dunklen
+Reel) war zu schwer.
+
+- Kurve: `kinoGamma` 0,9 (heller, vorher 1,1), `kinoWeiss` 254 (klares Weiß, vorher
+  245), `kinoSchwarz` 4, Kontrast 1,1.
+- Farbe: `kinoWarm` 0,3 (vorher 0,6), Sättigung 1,02.
+- `kinoVignette` 0,12 (vorher 0,3).
+- Abdunklung hinter dem Text leichter: `scrimZiel` 42, `scrimMin` 0,42, `scrimMax` 0,85.
+
+Gemessen an denselben Testfotos (obere Bildhälfte): Median der Helligkeit 72–96 →
+100–123.
+
+Alle Adressen laden **karten428**.
