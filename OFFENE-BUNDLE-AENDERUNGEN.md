@@ -11144,3 +11144,21 @@ Roxborough stand weiß auf mittelhellem, warmem Foto. Die Abdunklung hinter dem 
   weiß, neuer Schatten `nameSchatten` rgba(0,0,0,0,85).
 
 Alle Adressen laden **karten426**.
+
+## 367 — Kino in Schwarz, Weiß und Gold; Textposts ohne fremdes Foto
+
+Wunsch: Die Textkacheln sollen auch lesbarer sein. Carina mag Gold, Weiß und Schwarz.
+
+- Look „kino“: Textkacheln `grundA`/`grundB` #0B0B0B, `schriftA`/`schriftB` #FFFFFF.
+- Neues `platteGold` (#D4AF6A) für die Textkachel („marke“):
+  - Kicker (erste Zeile in Versalien) und `/`-Unterzeile in Gold, volle Deckkraft.
+  - `*Wort*` wird auf der Kachel markiert (wie `sternHand`, aber in derselben Schrift
+    und Größe) und in Gold gesetzt.
+- Auf Fotos: `akzentFarbe` Gold statt Weiß.
+- **Fehler behoben:** Bei Textposts bekam Folie 2 beim Zeichnen doch ein Foto. `folgeFoto`
+  (aus DUNKEL) gab jeder Folgefolie ohne Foto das Foto des Tages oder, wenn es keins gab,
+  irgendein Foto aus `__bsBilder`. Mit `textEndFoto:1` ist `folgeFoto` jetzt aus. Das
+  Endfoto eines Textposts wird außerdem nicht mehr als Foto des Tages gemerkt. Fotoposts
+  sind nicht betroffen, dort hat jede Folie ihr eigenes Foto (`fotoProFolie`).
+
+Alle Adressen laden **karten427**.

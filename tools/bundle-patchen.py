@@ -12820,6 +12820,61 @@ P.append((
  'title:"Geladene Datei",children:"karten426"',
  'Versionsschild auf karten426', 1))
 
+P.append((
+ '"akzentFarbe":"#FFFFFF","akzentGewicht":"400","akzentGerade":1,',
+ '"akzentFarbe":"#D4AF6A","akzentGewicht":"400","akzentGerade":1,"grundA":"#0B0B0B","grundB":"#0B0B0B","schriftA":"#FFFFFF","schriftB":"#FFFFFF","platteGold":"#D4AF6A",',
+ 'Kino: Textkacheln schwarz mit weisser Schrift, Gold fuer Akzente (auch auf Fotos)', 1))
+
+P.append((
+ 'if(BS_KACHEL.sternHand!==1&&BS_KACHEL.strichGross!==1)return null;const zo=[];let zS=!1',
+ 'if(BS_KACHEL.sternHand!==1&&BS_KACHEL.strichGross!==1&&!BS_KACHEL.platteGold)return null;const zo=[];let zS=!1',
+ 'Textkachel: *Wort* markieren, wenn platteGold', 1))
+
+P.append((
+ 'if(zc==="*"&&BS_KACHEL.sternHand===1){zS=!zS;continue}',
+ 'if(zc==="*"&&(BS_KACHEL.sternHand===1||BS_KACHEL.platteGold)){zS=!zS;continue}',
+ 'Textkachel: *Wort* als Akzent', 1))
+
+P.append((
+ 'const zHF=K.handFamilie||K.zweiteFamilie||"Nothing You Could Do"',
+ 'const zHF=K.platteGold?FAM(ix):K.handFamilie||K.zweiteFamilie||"Nothing You Could Do"',
+ 'Textkachel: Akzent in derselben Schrift', 1))
+
+P.append((
+ 'zHS=g2*(Number(K.handAnteil)||1)',
+ 'zHS=g2*(K.platteGold?1:Number(K.handAnteil)||1)',
+ 'Textkachel: Akzent in derselben Groesse', 1))
+
+P.append((
+ 'charSpacing:zf==="h"?0:LW,fill:SCH,originX:"left"',
+ 'charSpacing:zf==="h"&&!K.platteGold?0:LW,fill:zf==="h"&&K.platteGold?K.platteGold:SCH,originX:"left"',
+ 'Textkachel: Akzentwort in Gold', 1))
+
+P.append((
+ 'charSpacing:400,fill:SCH,opacity:.8,',
+ 'charSpacing:400,fill:K.platteGold||SCH,opacity:K.platteGold?1:.8,',
+ 'Textkachel: kleine Zeile oben in Gold', 1))
+
+P.append((
+ 'fontWeight:"400",fill:SCH,opacity:.85,textAlign:LI',
+ 'fontWeight:"400",fill:K.platteGold||SCH,opacity:K.platteGold?1:.85,textAlign:LI',
+ 'Textkachel: Unterzeile in Gold', 1))
+
+P.append((
+ 'if(typeof t._tag=="number"&&((i.slideIndex||0)===0||!(window.__bsTagFoto||{})[String(t._tag)])){',
+ 'if(typeof t._tag=="number"&&((i.slideIndex||0)===0||!(window.__bsTagFoto||{})[String(t._tag)]&&!(BS_KACHEL.textEndFoto===1&&(Number(i.totalSlides)||1)>1&&(i.slideIndex||0)===(Number(i.totalSlides)||1)-1))){',
+ 'Endfoto eines Textposts wird nicht zum Foto des Tages (Folie 2 bleibt Textkachel)', 1))
+
+P.append((
+ 'if(t.background||t.karte==="ablauf"||t.overlayIsScreenshot===!0||BS_KACHEL.folgeFoto!==1||(i.slideIndex||0)===0)return;',
+ 'if(t.background||t.karte==="ablauf"||t.overlayIsScreenshot===!0||BS_KACHEL.folgeFoto!==1||BS_KACHEL.textEndFoto===1||(i.slideIndex||0)===0)return;',
+ 'Textposts: Folgefolien ohne Foto bleiben Textkacheln (folgeFoto aus, wenn textEndFoto)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten426"',
+ 'title:"Geladene Datei",children:"karten427"',
+ 'Versionsschild auf karten427', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
