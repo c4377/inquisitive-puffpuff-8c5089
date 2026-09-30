@@ -11333,3 +11333,11 @@ Terrakotta #663723/#F3E8DC | Schwarz/#FFFFFF | Mokka #9B7A67/#FEF5EB. Mit
 Textposts bleibt das unscharfe Foto.
 
 Alle Adressen laden **karten436**.
+
+## 377 — Kino: Creme und Taupe statt Terrakotta und Mokka
+
+Korrektur zu 376: Die markierten Farben (Creme, Taupe) sollten bleiben, Terrakotta und
+Mokka nicht. `platteReihe`: Weiß/#141414 | Creme #DCD3CB/#4A3D33 | Schwarz/#FFFFFF |
+Taupe #75675A/#F4ECE3.
+
+Alle Adressen laden **karten437**.
