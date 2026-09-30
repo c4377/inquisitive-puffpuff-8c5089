@@ -12955,6 +12955,51 @@ P.append((
  'title:"Geladene Datei",children:"karten431"',
  'Versionsschild auf karten431', 1))
 
+P.append((
+ '"kinoBlauAnteil":0.18,',
+ '"kinoBlauAnteil":0.35,"versalJede":5,"versalFamilie":"Inter","versalGewicht":"250","versalLaufweite":60,"versalMaxZeichen":160,',
+ 'Kino: weniger Schwarz-Weiss (Blau ab 35 %), jeder 5. Post in duennen Versalien (Inter)', 1))
+
+P.append((
+ 'if(!$e||!BS_KACHEL.versalAnteil)return!1;',
+ 'if(!$e)return!1;if(BS_KACHEL.versalJede>0){if(typeof t._tag!="number"||t._tag%BS_KACHEL.versalJede!==0)return!1;return!(BS_KACHEL.versalMaxZeichen&&String(t.text||"").replace(/\\s+/g," ").length>BS_KACHEL.versalMaxZeichen)}if(!BS_KACHEL.versalAnteil)return!1;',
+ 'Fotos: Versalien fuer jeden n-ten Tag (versalJede)', 1))
+
+P.append((
+ 'const SCH=zPR?zPR[1]:Je.schriftFarbe||"#141210";',
+ 'const SCH=zPR?zPR[1]:Je.schriftFarbe||"#141210";const zVT=K.versalJede>0&&typeof t._tag=="number"&&t._tag%K.versalJede===0&&!(K.versalMaxZeichen&&String(ROH||"").replace(/\\s+/g," ").length>K.versalMaxZeichen);',
+ 'Textkachel: Versalien-Tag erkennen', 1))
+
+P.append((
+ 'const LW=K.laufweite||0',
+ 'const LW=zVT?(K.versalLaufweite||0):(K.laufweite||0)',
+ 'Textkachel: Laufweite fuer Versalien', 1))
+
+P.append((
+ 'const FAM=ix=>K.platteFamilie?',
+ 'const FAM=ix=>zVT&&K.versalFamilie?K.versalFamilie:K.platteFamilie?',
+ 'Textkachel: Versalien-Schrift', 1))
+
+P.append((
+ 'const GEW=ix=>ix===0?(K.gewicht||"700"):(K.unterGewicht||"400");',
+ 'const GEW=ix=>zVT&&K.versalGewicht?K.versalGewicht:ix===0?(K.gewicht||"700"):(K.unterGewicht||"400");',
+ 'Textkachel: Versalien-Gewicht', 1))
+
+P.append((
+ 'if(zMK||zMU)ROH2=zl.filter(zq=>!/^\\s*\\//.test(zq)).join(K.absatzEcht===1?"\\n":" ")}}catch(zz){}',
+ 'if(zMK||zMU)ROH2=zl.filter(zq=>!/^\\s*\\//.test(zq)).join(K.absatzEcht===1?"\\n":" ")}}catch(zz){}zVT&&(ROH2=ROH2.toLocaleUpperCase("de-DE"));',
+ 'Textkachel: Text in Versalien', 1))
+
+P.append((
+ ',Rt=(ae,_e)=>{if(!_e||!ae)return[];const ve=_e.colors||',
+ ',Rt=(ae,_e)=>{const zR=Rt0(ae,_e);return Array.isArray(zR)?zR.map(zd=>zd&&Array.isArray(zd.slides)&&typeof zd.day=="number"?{...zd,slides:zd.slides.map(zs=>zs&&typeof zs=="object"?{...zs,_tag:zd.day}:zs)}:zd):zR},Rt0=(ae,_e)=>{if(!_e||!ae)return[];const ve=_e.colors||',
+ 'Plan: jede Folie bekommt die Tagesnummer (_tag), damit Editor und Export wie das Raster aussehen', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten431"',
+ 'title:"Geladene Datei",children:"karten432"',
+ 'Versionsschild auf karten432', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

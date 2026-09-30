@@ -11236,3 +11236,24 @@ gleiche Strichstärke. Der Look „kino“ setzt alle Titel in Playfair Display 
 Roxborough bleibt in `site/fonts`, ist aber nicht mehr eingestellt.
 
 Alle Adressen laden **karten431**.
+
+## 372 — Kino: weniger Schwarz-Weiß, jeder 5. Post in dünnen Versalien (Inter)
+
+- **Weniger Schwarz-Weiß:** `kinoBlauAnteil` 0,18 → 0,35. Nur Fotos mit viel Blau werden
+  schwarz-weiß (gemessen: Jeans-Fotos 0,41–0,73). Graublaue Oberteile und Fotos mit wenig
+  Jeans (0,22–0,31) bleiben farbig.
+- **Versalien jeden n-ten Tag** (`versalJede` 5): An Tag 5, 10, 15 … stehen die Titel auf
+  Fotos und Kacheln in Versalien, Inter 250, Laufweite 60. Bei mehr als 160 Zeichen
+  (`versalMaxZeichen`) bleibt es bei Playfair.
+  - Fotos: `zVS` wählt über `versalJede` statt über den Hash (`versalAnteil`).
+  - Kachel („marke“): `zVT`. `ROH2` wird in Versalien gesetzt. `FAM`, `GEW` und `LW`
+    nehmen `versalFamilie`, `versalGewicht` und `versalLaufweite`.
+- Neu: `site/fonts/Inter-Variable.woff2` (aus `v2/`, Gewichte 100–900, SIL OFL).
+  `@font-face` „Inter“ in `index.html`.
+- **Fehler behoben:** Nur das Raster gab den Folien die Tagesnummer (`_tag`) mit. Editor,
+  „Tag sichern“ und andere Exporte zeichneten ohne `_tag`. Dadurch fielen alles, was nach
+  Tag wechselt, auf Tag 0 zurück: Kachelfarben aus 370, Versalien, `saettigungReihe`. Der
+  Plan-Normalisierer `Rt` hängt jetzt an jede Folie `_tag = day` (Original als `Rt0`).
+  Gilt nach der nächsten Änderung am Plan, also Import oder Neu laden.
+
+Alle Adressen laden **karten432**.
