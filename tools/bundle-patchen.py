@@ -13120,6 +13120,16 @@ P.append((
  'title:"Geladene Datei",children:"karten439"',
  'Versionsschild auf karten439', 1))
 
+P.append((
+ 'const zw=90,zh=Math.max(1,Math.round(zw*n/r))',
+ 'const zw=Number(BS_KACHEL.platteBlurBreite)||128,zh=Math.max(1,Math.round(zw*n/r))',
+ 'Unschaerfe 30 % weniger (Arbeitsbreite 128 statt 90 px, einstellbar platteBlurBreite)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten439"',
+ 'title:"Geladene Datei",children:"karten440"',
+ 'Versionsschild auf karten440', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

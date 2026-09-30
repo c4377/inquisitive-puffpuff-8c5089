@@ -11364,3 +11364,11 @@ Schwarz #0F0F0F/#FFFFFF | Taupe #75675A/#F4ECE3. `grundA`/`grundB` (Fallback) Cr
 Mit `platteBlurJede` 2 ergibt sich: Creme, Foto, Schwarz, Foto, Taupe, Foto …
 
 Alle Adressen laden **karten439**.
+
+## 380 — Unscharfes Cover: 30 % weniger Unschärfe
+
+Arbeitsbreite des Weichzeichners 90 → 128 px (`platteBlurBreite`), Radius bleibt 3,
+drei Durchgänge. Die Unschärfe im Verhältnis zur Bildbreite sinkt damit um etwa 30 %
+(3/128 statt 3/90).
+
+Alle Adressen laden **karten440**.
