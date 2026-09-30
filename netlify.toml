@@ -41,17 +41,6 @@
   to = "/profilbilder/index.html"
   status = 200
 
-# Die Reel-Werkstatt ist wie die Profilbilder eine eigene Seite.
-[[redirects]]
-  from = "/reels"
-  to = "/reels/"
-  status = 301
-
-[[redirects]]
-  from = "/reels/*"
-  to = "/reels/index.html"
-  status = 200
-
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -67,16 +56,6 @@
 # im Browser haengen. Beide Pfade brauchen die Regel.
 [[headers]]
   for = "/"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/reels/*"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/reels-link.js"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
