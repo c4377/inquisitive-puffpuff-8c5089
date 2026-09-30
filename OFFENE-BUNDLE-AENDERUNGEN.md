@@ -11178,3 +11178,20 @@ Gemessen an denselben Testfotos (obere Bildhälfte): Median der Helligkeit 72–
 100–123.
 
 Alle Adressen laden **karten428**.
+
+## 369 — Kino-Textkacheln umgedreht: Elfenbein, Schwarz, Gold
+
+Rückmeldung zu 367: Mit „frischer“ waren die Textkacheln gemeint. Schwarz mit weißem Text
+ist zu kalt und hart, es fehlt ein Wiedererkennungswert („von mir aus umdrehen“). 368
+(hellere Fotos) bleibt trotzdem drin.
+
+- Kacheln: Grund Elfenbein #F4EEE3, Schrift fast schwarz #16120E.
+- `platteGold` tiefer: #A8823A (auf Elfenbein lesbar). Gilt für Kicker, `/`-Unterzeile
+  und `*Wort*`. Auf Fotos bleibt der Akzent bei #D4AF6A.
+- Neu `platteRahmen` #B8924A: feine goldene Rahmenlinie im Abstand von 4,5 % der Breite
+  (`platteRahmenAbstand`), Stärke 0,28 % (`platteRahmenBreite`). Wird zu Beginn des
+  „marke“-Zeichners gesetzt.
+- Neu `platteNameFarbe` #16120E: Der Name auf der Kachel hat eine eigene Farbe. Das
+  weiße `nameFarbe` für Fotos wäre auf Elfenbein unsichtbar.
+
+Alle Adressen laden **karten429**.

@@ -12890,6 +12890,26 @@ P.append((
  'title:"Geladene Datei",children:"karten428"',
  'Versionsschild auf karten428', 1))
 
+P.append((
+ '"grundA":"#0B0B0B","grundB":"#0B0B0B","schriftA":"#FFFFFF","schriftB":"#FFFFFF","platteGold":"#D4AF6A",',
+ '"grundA":"#F4EEE3","grundB":"#F4EEE3","schriftA":"#16120E","schriftB":"#16120E","platteGold":"#A8823A","platteRahmen":"#B8924A","platteNameFarbe":"#16120E",',
+ 'Kino-Textkacheln umgedreht: Elfenbein, fast schwarze Schrift, tiefes Gold, goldene Rahmenlinie', 1))
+
+P.append((
+ 'if(FA==="marke"){\nconst K=BS_KACHEL;',
+ 'if(FA==="marke"){\nconst K=BS_KACHEL;K.platteRahmen&&(()=>{try{const zi=r*(Number(K.platteRahmenAbstand)||.045);e.add(new Pe.fabric.Rect({left:zi,top:zi,width:r-2*zi,height:n-2*zi,fill:"",stroke:K.platteRahmen,strokeWidth:Math.max(1,r*(Number(K.platteRahmenBreite)||.0028)),selectable:!1,evented:!1}))}catch(zz){}})();',
+ 'Textkachel: feine Rahmenlinie (platteRahmen)', 1))
+
+P.append((
+ 'fill:K.nameFarbe||SCH,opacity:(K.nameDeckkraft||.55),maxB:MAXB});',
+ 'fill:K.platteNameFarbe||K.nameFarbe||SCH,opacity:(K.nameDeckkraft||.55),maxB:MAXB});',
+ 'Textkachel: eigene Farbe fuer den Namen (platteNameFarbe)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten428"',
+ 'title:"Geladene Datei",children:"karten429"',
+ 'Versionsschild auf karten429', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
