@@ -11128,3 +11128,19 @@ Alle Adressen laden **karten424**.
   (Connary Fagen): nur in Carinas App, nicht in `v2/`.
 
 Alle Adressen laden **karten425**.
+
+## 366 — Kino: Text und Name aus der Entfernung lesbar
+
+Rückmeldung: Im Kino-Look ist das Branding von Weitem schlecht lesbar. Die dünne
+Roxborough stand weiß auf mittelhellem, warmem Foto. Die Abdunklung hinter dem Text
+(`textScrim`, Werte aus NOIR) war zu schwach, der Name klein und ohne Schatten.
+
+- Abdunklung hinter dem Text: `scrimZiel` 30, `scrimMin` 0,6, `scrimMax` 0,92,
+  `scrimAuslauf` 0,22, Farbe `bildTon` „16,11,8“ (warmes Fast-Schwarz statt Braun
+  „74,58,44“). Gemessen hinter dem Text: Helligkeit etwa 45 statt etwa 70.
+- Textschatten auf Fotos einstellbar (`textSchatten`, `textSchattenBlur`), Kino:
+  rgba(0,0,0,0,8), Unschärfe 18 (Standard 0,5 / 14).
+- Name „carinaannaprav“ auf Fotos: `nameAnteil` 0,046 (vorher 0,034), Deckkraft 1,
+  weiß, neuer Schatten `nameSchatten` rgba(0,0,0,0,85).
+
+Alle Adressen laden **karten426**.

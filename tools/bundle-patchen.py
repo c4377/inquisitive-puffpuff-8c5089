@@ -12800,6 +12800,26 @@ P.append((
  'title:"Geladene Datei",children:"karten425"',
  'Versionsschild auf karten425', 1))
 
+P.append((
+ 'me=()=>new Pe.fabric.Shadow({color:"rgba(0,0,0,0.5)",blur:c(14),offsetX:0,offsetY:c(2)}),Oe=t.fontFamily||t.plateFont',
+ 'me=()=>new Pe.fabric.Shadow({color:BS_KACHEL.textSchatten||"rgba(0,0,0,0.5)",blur:c(Number(BS_KACHEL.textSchattenBlur)||14),offsetX:0,offsetY:c(2)}),Oe=t.fontFamily||t.plateFont',
+ 'Textschatten auf Fotos einstellbar (textSchatten, textSchattenBlur)', 1))
+
+P.append((
+ '"kinoBlauAnteil":0.18,',
+ '"kinoBlauAnteil":0.18,"scrimZiel":30,"scrimMin":0.6,"scrimMax":0.92,"scrimAuslauf":0.22,"bildTon":"16,11,8","textSchatten":"rgba(0,0,0,0.8)","textSchattenBlur":18,"nameAnteil":0.046,"nameDeckkraft":1,"nameFarbe":"#FFFFFF","nameSchatten":"rgba(0,0,0,0.85)",',
+ 'Kino: kraeftige, warm-schwarze Abdunklung hinter dem Text und staerkerer Schatten', 1))
+
+P.append((
+ 'opacity:(BS_KACHEL.nameDeckkraft||.55),selectable:!1})),Le(),t.overlayImage',
+ 'opacity:(BS_KACHEL.nameDeckkraft||.55),shadow:BS_KACHEL.nameSchatten&&$e&&!tt.platten?new Pe.fabric.Shadow({color:BS_KACHEL.nameSchatten,blur:r*.008,offsetX:0,offsetY:r*.0015}):void 0,selectable:!1})),Le(),t.overlayImage',
+ 'Name auf Fotos: Schatten einstellbar (nameSchatten)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten425"',
+ 'title:"Geladene Datei",children:"karten426"',
+ 'Versionsschild auf karten426', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
