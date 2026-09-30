@@ -11311,3 +11311,15 @@ dem Cover der Textkacheln.
   ein Fotowechsel sicher erkannt wird.
 
 Alle Adressen laden **karten434**.
+
+## 375 — Unscharfes Cover: echter Weichzeichner
+
+Rückmeldung (Screenshot vom iPhone): Das Cover sah blockig aus, nicht unscharf. Safari
+glättet beim Vergrößern von 40 px auf die volle Größe zu wenig.
+
+Neu: Das Foto wird auf 90 px Breite gezeichnet und dreimal mit einem Box-Blur (Radius 3,
+`platteBlurRadius`) weichgezeichnet. Drei Durchgänge kommen einer Gauß-Unschärfe nahe.
+Erst danach wird es über 360 px auf volle Größe gezogen. Weil das Bild vorher schon weich
+ist, entstehen dabei keine Blöcke mehr. Name bleibt in `nameGold` (Carina: nicht heller).
+
+Alle Adressen laden **karten435**.

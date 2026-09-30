@@ -13060,6 +13060,16 @@ P.append((
  'title:"Geladene Datei",children:"karten434"',
  'Versionsschild auf karten434', 1))
 
+P.append((
+ 'const zw=40,zh=Math.max(1,Math.round(zw*n/r)),zc=document.createElement("canvas");zc.width=zw;zc.height=zh;const zx=zc.getContext("2d"),zk=Math.max(zw/zim.width,zh/zim.height);zx.drawImage(zim,(zw-zim.width*zk)/2,(zh-zim.height*zk)*.35,zim.width*zk,zim.height*zk);',
+ 'const zw=90,zh=Math.max(1,Math.round(zw*n/r)),zc=document.createElement("canvas");zc.width=zw;zc.height=zh;const zx=zc.getContext("2d",{willReadFrequently:!0}),zk=Math.max(zw/zim.width,zh/zim.height);zx.drawImage(zim,(zw-zim.width*zk)/2,(zh-zim.height*zk)*.35,zim.width*zk,zim.height*zk);const zBox=(zd,zW,zH,zR)=>{const zt=new Float32Array(zd.length),zn=2*zR+1;for(let zy=0;zy<zH;zy++)for(let zq=0;zq<3;zq++){let zs=0;for(let zi=-zR;zi<=zR;zi++)zs+=zd[(zy*zW+Math.min(zW-1,Math.max(0,zi)))*4+zq];for(let zi=0;zi<zW;zi++){zt[(zy*zW+zi)*4+zq]=zs/zn;zs+=zd[(zy*zW+Math.min(zW-1,zi+zR+1))*4+zq]-zd[(zy*zW+Math.max(0,zi-zR))*4+zq]}}for(let zi=0;zi<zW;zi++)for(let zq=0;zq<3;zq++){let zs=0;for(let zy=-zR;zy<=zR;zy++)zs+=zt[(Math.min(zH-1,Math.max(0,zy))*zW+zi)*4+zq];for(let zy=0;zy<zH;zy++){zd[(zy*zW+zi)*4+zq]=zs/zn;zs+=zt[(Math.min(zH-1,zy+zR+1)*zW+zi)*4+zq]-zt[(Math.max(0,zy-zR)*zW+zi)*4+zq]}}};const zID=zx.getImageData(0,0,zw,zh),zRad=Number(BS_KACHEL.platteBlurRadius)||3;for(let zp=0;zp<3;zp++)zBox(zID.data,zw,zh,zRad);zx.putImageData(zID,0,0);',
+ 'Unschaerfe: echter Weichzeichner (3x Box-Blur auf 90 px), dann vergroessern - keine Bloecke mehr auf dem iPhone', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten434"',
+ 'title:"Geladene Datei",children:"karten435"',
+ 'Versionsschild auf karten435', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
