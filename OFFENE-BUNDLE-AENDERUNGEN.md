@@ -11372,3 +11372,24 @@ drei Durchgänge. Die Unschärfe im Verhältnis zur Bildbreite sinkt damit um et
 (3/128 statt 3/90).
 
 Alle Adressen laden **karten440**.
+
+## 381 — Kino: Neon-Akzent in Goldgelb (Konzept A)
+
+Aus den Neon-Konzepten (Entwürfe A–E, Farben Pink/Rot/Koralle/Eisblau/Warmweiß, dann
+Gelb/Grün) hat Carina **A · Neon-Wort** in Gelb/Gold gewählt.
+
+- Look „kino“: `akzentNeon` #FFC83D (Leuchten), `akzentNeonKern` #FFF4D2 (Buchstaben),
+  `akzentNeonHell` #A87410 (helle Kacheln).
+- **Fotos und unscharfes Cover** (textBands-Zeichner): Vor das Akzentwort kommt eine Kopie
+  in Neonfarbe mit großem Schatten (Unschärfe 0,7 × Schriftgröße, Deckkraft 0,85). Das Wort
+  selbst bekommt die Kernfarbe und einen engen Schein (0,22 ×). Gilt auch für das
+  automatische Akzentwort (`akzentAuto`).
+- **Kacheln** („marke“): `*Wort*` wird jetzt markiert (wie bei `platteGold`), in derselben
+  Schrift und Größe. Auf dunklen Kacheln (Schwarz, Taupe, unscharfes Cover):
+  Kernfarbe mit Neon-Schein (0,55 ×). Auf hellen Kacheln (Creme, Helligkeit > 150):
+  kräftiges Gold #A87410 mit leichtem Schein.
+
+Test: Creme → Gold, Foto „Umsatz.“, unscharfes Cover „keiner.“, Schwarz/Versalien
+„VERKAUFT.“, Taupe „Nope.“ leuchten.
+
+Alle Adressen laden **karten441**.

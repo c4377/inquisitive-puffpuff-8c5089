@@ -13130,6 +13130,51 @@ P.append((
  'title:"Geladene Datei",children:"karten440"',
  'Versionsschild auf karten440', 1))
 
+P.append((
+ '"akzentFarbe":"#FFFFFF","akzentGewicht":"400","akzentGerade":1,',
+ '"akzentFarbe":"#FFFFFF","akzentGewicht":"400","akzentGerade":1,"akzentNeon":"#FFC83D","akzentNeonKern":"#FFF4D2","akzentNeonHell":"#A87410",',
+ 'Kino: Akzentwort in Goldgelb-Neon (Konzept A)', 1))
+
+P.append((
+ '),e.add(Ut),Vt+=Ut.width+(Ve&&!(xt.hand',
+ '),(rr&&BS_KACHEL.akzentNeon&&!t._dunkelSchrift&&(()=>{try{const zfs=Ut.fontSize,zN=BS_KACHEL.akzentNeon;e.add(new Pe.fabric.Text(xt.w,{left:Ut.left,top:Ut.top,originX:Ut.originX,originY:Ut.originY,fontSize:zfs,fontFamily:Ut.fontFamily,fontWeight:Ut.fontWeight,fontStyle:Ut.fontStyle,charSpacing:Ut.charSpacing,fill:zN,opacity:.85,shadow:new Pe.fabric.Shadow({color:zN,blur:zfs*.7,offsetX:0,offsetY:0}),selectable:!1,evented:!1}));Ut.set({fill:BS_KACHEL.akzentNeonKern||"#FFFFFF",shadow:new Pe.fabric.Shadow({color:zN,blur:zfs*.22,offsetX:0,offsetY:0})})}catch(zz){}})()),e.add(Ut),Vt+=Ut.width+(Ve&&!(xt.hand',
+ 'Fotos: Akzentwort leuchtet (Neon-Kern + weiches Leuchten)', 1))
+
+P.append((
+ 'if(BS_KACHEL.sternHand!==1&&BS_KACHEL.strichGross!==1&&!BS_KACHEL.platteGold)return null;',
+ 'if(BS_KACHEL.sternHand!==1&&BS_KACHEL.strichGross!==1&&!BS_KACHEL.platteGold&&!BS_KACHEL.akzentNeon)return null;',
+ 'Kachel: *Wort* markieren bei akzentNeon', 1))
+
+P.append((
+ 'if(zc==="*"&&(BS_KACHEL.sternHand===1||BS_KACHEL.platteGold)){zS=!zS;continue}',
+ 'if(zc==="*"&&(BS_KACHEL.sternHand===1||BS_KACHEL.platteGold||BS_KACHEL.akzentNeon)){zS=!zS;continue}',
+ 'Kachel: *Wort* als Akzent bei akzentNeon', 1))
+
+P.append((
+ 'const zHF=K.platteGold?FAM(ix):',
+ 'const zHF=K.platteGold||K.akzentNeon?FAM(ix):',
+ 'Kachel: Neon-Akzent in derselben Schrift', 1))
+
+P.append((
+ 'zHS=g2*(K.platteGold?1:Number(K.handAnteil)||1)',
+ 'zHS=g2*(K.platteGold||K.akzentNeon?1:Number(K.handAnteil)||1)',
+ 'Kachel: Neon-Akzent in derselben Groesse', 1))
+
+P.append((
+ 'const SCH=zBC?"#FFFFFF":zPR?zPR[1]:Je.schriftFarbe||"#141210";',
+ 'const SCH=zBC?"#FFFFFF":zPR?zPR[1]:Je.schriftFarbe||"#141210";const zNH=(()=>{try{if(zBC||!zPR)return!1;const zh=String(zPR[0]).replace("#","");return .2126*parseInt(zh.slice(0,2),16)+.7152*parseInt(zh.slice(2,4),16)+.0722*parseInt(zh.slice(4,6),16)>150}catch(zz){return!1}})();',
+ 'Kachel: helle Kachel erkennen (dort kraeftiges Gold statt Leuchten)', 1))
+
+P.append((
+ 'charSpacing:zf==="h"&&!K.platteGold?0:LW,fill:zf==="h"&&K.platteGold?K.platteGold:SCH,originX:"left"',
+ 'charSpacing:zf==="h"&&!(K.platteGold||K.akzentNeon)?0:LW,fill:zf==="h"&&K.akzentNeon?(zNH?(K.akzentNeonHell||K.akzentNeon):(K.akzentNeonKern||"#FFFFFF")):zf==="h"&&K.platteGold?K.platteGold:SCH,shadow:zf==="h"&&K.akzentNeon?new Pe.fabric.Shadow({color:zNH?"rgba(255,200,61,0.45)":K.akzentNeon,blur:g2*(zNH?.25:.55)*zq,offsetX:0,offsetY:0}):void 0,originX:"left"',
+ 'Kachel: Akzentwort leuchtet (dunkel) bzw. kraeftiges Gold (hell)', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten440"',
+ 'title:"Geladene Datei",children:"karten441"',
+ 'Versionsschild auf karten441', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
