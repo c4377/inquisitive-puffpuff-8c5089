@@ -11407,3 +11407,11 @@ wieder **karten441**.
 rgba(198,255,61,0,45).
 
 Alle Adressen laden **karten442**.
+
+## 385 — Kino: Creme raus
+
+`platteReihe`: Schwarz #0F0F0F/#FFFFFF | Taupe #75675A/#F4ECE3. `grundA`/`grundB`
+(Fallback) Schwarz. Mit `platteBlurJede` 2: Schwarz, Foto, Taupe, Foto … Das
+Limetten-Neon leuchtet jetzt auf allen Kacheln (keine hellen Kacheln mehr).
+
+Alle Adressen laden **karten443**.

@@ -13190,6 +13190,16 @@ P.append((
  'title:"Geladene Datei",children:"karten442"',
  'Versionsschild auf karten442', 1))
 
+P.append((
+ '"grundA":"#DCD3CB","grundB":"#DCD3CB","schriftA":"#4A3D33","schriftB":"#4A3D33","platteReihe":"#DCD3CB/#4A3D33|#0F0F0F/#FFFFFF|#75675A/#F4ECE3",',
+ '"grundA":"#0F0F0F","grundB":"#0F0F0F","schriftA":"#FFFFFF","schriftB":"#FFFFFF","platteReihe":"#0F0F0F/#FFFFFF|#75675A/#F4ECE3",',
+ 'Kino: Creme raus, Kacheln Schwarz / Taupe', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten442"',
+ 'title:"Geladene Datei",children:"karten443"',
+ 'Versionsschild auf karten443', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
