@@ -11393,3 +11393,9 @@ Test: Creme → Gold, Foto „Umsatz.“, unscharfes Cover „keiner.“, Schwar
 „VERKAUFT.“, Taupe „Nope.“ leuchten.
 
 Alle Adressen laden **karten441**.
+
+## 383 — Doch karten441 (Neon-Akzent)
+
+Missverständnis: Mit „Nein 440“ meinte Carina, dass bei ihr noch 440 angezeigt wurde.
+Neon war gewünscht. 441 ist wieder hergestellt (aus Commit 08990c8), alle Adressen laden
+wieder **karten441**.
