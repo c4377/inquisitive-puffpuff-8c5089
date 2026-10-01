@@ -13175,6 +13175,21 @@ P.append((
  'title:"Geladene Datei",children:"karten441"',
  'Versionsschild auf karten441', 1))
 
+P.append((
+ '"akzentNeon":"#FFC83D","akzentNeonKern":"#FFF4D2","akzentNeonHell":"#A87410",',
+ '"akzentNeon":"#C6FF3D","akzentNeonKern":"#F7FFE2","akzentNeonHell":"#6E9400",',
+ 'Kino: Neon-Akzent in Limette statt Goldgelb', 1))
+
+P.append((
+ 'color:zNH?"rgba(255,200,61,0.45)":K.akzentNeon',
+ 'color:zNH?"rgba(198,255,61,0.45)":K.akzentNeon',
+ 'Kachel hell: Schein in Limette', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten441"',
+ 'title:"Geladene Datei",children:"karten442"',
+ 'Versionsschild auf karten442', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.

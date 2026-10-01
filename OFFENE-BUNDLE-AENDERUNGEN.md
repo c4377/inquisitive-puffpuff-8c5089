@@ -11399,3 +11399,11 @@ Alle Adressen laden **karten441**.
 Missverständnis: Mit „Nein 440“ meinte Carina, dass bei ihr noch 440 angezeigt wurde.
 Neon war gewünscht. 441 ist wieder hergestellt (aus Commit 08990c8), alle Adressen laden
 wieder **karten441**.
+
+## 384 — Neon-Akzent in Limette
+
+„Weniger Gold, mehr Lime“: `akzentNeon` #C6FF3D, `akzentNeonKern` #F7FFE2,
+`akzentNeonHell` #6E9400 (helle Kacheln). Schein auf hellen Kacheln jetzt
+rgba(198,255,61,0,45).
+
+Alle Adressen laden **karten442**.
