@@ -11415,3 +11415,15 @@ Alle Adressen laden **karten442**.
 Limetten-Neon leuchtet jetzt auf allen Kacheln (keine hellen Kacheln mehr).
 
 Alle Adressen laden **karten443**.
+
+## 386 — Limette gedämpft statt leuchtend
+
+„Statt leuchtendes Neon etwas dumpfer“:
+
+- Kernfarbe der Buchstaben jetzt limettenfarben #CDE38A statt fast weiß.
+- Scheinfarbe #A9C95A statt #C6FF3D.
+- Neu einstellbar: `akzentNeonGlanz` (Deckkraft der Scheinkopie, Kino 0,35, vorher
+  0,85), `akzentNeonWeite` (weiter Schein, Kino 0,4 × Schriftgröße, vorher 0,7; auf
+  Kacheln vorher 0,55), `akzentNeonNah` (enger Schein, Kino 0,1, vorher 0,22).
+
+Alle Adressen laden **karten444**.

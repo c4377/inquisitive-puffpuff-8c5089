@@ -13200,6 +13200,31 @@ P.append((
  'title:"Geladene Datei",children:"karten443"',
  'Versionsschild auf karten443', 1))
 
+P.append((
+ '"akzentNeon":"#C6FF3D","akzentNeonKern":"#F7FFE2",',
+ '"akzentNeon":"#A9C95A","akzentNeonKern":"#CDE38A","akzentNeonGlanz":0.35,"akzentNeonWeite":0.4,"akzentNeonNah":0.1,',
+ 'Kino: Limette gedaempft (Buchstaben limettenfarben, Schein schwaecher)', 1))
+
+P.append((
+ 'fill:zN,opacity:.85,shadow:new Pe.fabric.Shadow({color:zN,blur:zfs*.7,offsetX:0,offsetY:0})',
+ 'fill:zN,opacity:BS_KACHEL.akzentNeonGlanz==null?.85:Number(BS_KACHEL.akzentNeonGlanz),shadow:new Pe.fabric.Shadow({color:zN,blur:zfs*(Number(BS_KACHEL.akzentNeonWeite)||.7),offsetX:0,offsetY:0})',
+ 'Fotos: Schein-Staerke und -Weite einstellbar', 1))
+
+P.append((
+ 'Ut.set({fill:BS_KACHEL.akzentNeonKern||"#FFFFFF",shadow:new Pe.fabric.Shadow({color:zN,blur:zfs*.22,offsetX:0,offsetY:0})})',
+ 'Ut.set({fill:BS_KACHEL.akzentNeonKern||"#FFFFFF",shadow:new Pe.fabric.Shadow({color:zN,blur:zfs*(Number(BS_KACHEL.akzentNeonNah)||.22),offsetX:0,offsetY:0})})',
+ 'Fotos: enger Schein einstellbar', 1))
+
+P.append((
+ 'blur:g2*(zNH?.25:.55)*zq',
+ 'blur:g2*(zNH?.25:(Number(K.akzentNeonWeite)||.55))*zq',
+ 'Kacheln: Schein-Weite einstellbar', 1))
+
+P.append((
+ 'title:"Geladene Datei",children:"karten443"',
+ 'title:"Geladene Datei",children:"karten444"',
+ 'Versionsschild auf karten444', 1))
+
 # Nicht mehr ersetzen, nur noch nachsehen: Aenderungen, die die
 # Bau-Session inzwischen selbst mitliefert. Verschwinden sie wieder,
 # bricht das Skript ab, statt sie stillschweigend zu verlieren.
