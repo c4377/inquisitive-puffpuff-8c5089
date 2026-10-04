@@ -16,13 +16,13 @@ def ersetze(alt, neu, anzahl=1):
     s = s.replace(alt, neu)
 
 BEERE = '#4F6E5D'  # gedecktes Grün aus Carinas Pinterest-Foto (vorher Beere #A3215F)
-SERIF = 'Instrument Serif'
+SERIF = 'Poppins'  # vorher Instrument Serif
 frech = {
     **{k: SERIF for k in ['fotoSchrift', 'deckblattFamilie', 'folgeFamilie', 'kastenSchrift', 'lisaSchrift',
                           'folgeSchrift', 'ablaufTitel', 'schriftart', 'unterSchrift']},
-    'gewicht': '400', 'deckblattGewicht': '400', 'folgeGewicht': '400',
-    'fotoLaufweite': -15, 'fotoZeile': 0.92, 'laufweite': -15, 'zeile': 0.94,
-    'akzentFarbe': '#FFFFFF', 'akzentGewicht': '400', 'akzentKursiv': 1,
+    'gewicht': '600', 'unterGewicht': '600', 'deckblattGewicht': '600', 'folgeGewicht': '600',
+    'fotoLaufweite': -25, 'fotoZeile': 1.0, 'laufweite': -25, 'zeile': 1.02,
+    'akzentFarbe': '#FFFFFF', 'akzentGewicht': '600', 'akzentKursiv': 1,
     'akzentFarbeDunkel': BEERE, 'akzentPlatte': '#FFFFFF',
     'grundA': BEERE, 'grundB': BEERE, 'schriftA': '#FFFFFF', 'schriftB': '#FFFFFF',
     'platteReihe': BEERE + '/#FFFFFF|#F7EFE8/#17100F', 'platteReiheSchritt': 2, 'platteLinks': 1,
@@ -53,8 +53,10 @@ ersetze('zHF=K.platteGold||K.akzentNeon?FAM(ix)', 'zHF=K.platteGold||K.akzentNeo
 ersetze('zHS=g2*(K.platteGold||K.akzentNeon?1', 'zHS=g2*(K.platteGold||K.akzentNeon||K.akzentKursiv?1')
 ersetze('fontStyle:zf==="f"&&K.fettKursiv===1?"italic":"normal",charSpacing:zf==="h"&&!(K.platteGold||K.akzentNeon)?0:LW,',
         'fontStyle:zf==="f"&&K.fettKursiv===1||zf==="h"&&K.akzentKursiv?"italic":"normal",charSpacing:zf==="h"&&!(K.platteGold||K.akzentNeon||K.akzentKursiv)?0:LW,')
+ersetze('fontWeight:zf==="f"?(K.betontGewicht||"700"):zf?"400":GEW(ix),',
+        'fontWeight:zf==="f"?(K.betontGewicht||"700"):zf==="h"&&K.akzentKursiv?GEW(ix):zf?"400":GEW(ix),')
 ersetze(':zf==="h"&&K.platteGold?K.platteGold:SCH,',
         ':zf==="h"&&K.akzentKursiv?(zNH?(K.akzentFarbeDunkel||SCH):(K.akzentPlatte||SCH)):zf==="h"&&K.platteGold?K.platteGold:SCH,')
-ersetze('title:"Geladene Datei",children:"karten444"', 'title:"Geladene Datei",children:"karten446"')
+ersetze('title:"Geladene Datei",children:"karten444"', 'title:"Geladene Datei",children:"karten447"')
 open(Z, 'w', encoding='utf-8').write(s)
 print('ok')

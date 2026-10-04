@@ -11456,3 +11456,14 @@ Akzentwörter auf Creme und Verlauf unter dem Fototext (`bildTon` 79,110,93).
 Look-Schalter: „Frech: Grün & Creme“ (Schlüssel bleibt `frech`).
 
 Alle Adressen laden **karten446**.
+
+## 389 — Frech: Poppins statt Serif
+
+„Schrift mehr Poppins“: alle Titel im Look `frech` in Poppins SemiBold (600),
+Laufweite −25, Zeile 1,0/1,02. Akzentwörter weiter kursiv (Poppins 600 italic).
+Poppins 400/500/600 normal + kursiv liegt jetzt selbst unter `/fonts`
+(SIL OFL, `Poppins-LICENSE.txt`), mit `@font-face` in der index.html.
+Kachel-Zeichner: Sternwörter bei `akzentKursiv` in derselben Stärke wie der Titel
+statt 400.
+
+Alle Adressen laden **karten447**.
