@@ -42,6 +42,8 @@ frech = {
     'saettigungReihe': '0', 'saettigungWechsel': 1,
     # größer und frecher als Kino
     'groesseAnteil': 0.15, 'maxhoehe': 0.6, 'deckblattGroesse': 230, 'fotoGroesse': 175,
+    # ab und zu eine kleine, schicke Kachel: klein, Regular, mittig
+    'kleinReihe': '0|1|0|0|1', 'kleinAnteil': 0.055, 'kleinGewicht': '400', 'kleinLaufweite': 10, 'kleinMitte': 1,
 }
 ersetze('}};try{if(typeof window<"u"&&window.BS_STIL==="v3"&&window.BS_MARKE&&BS_MARKEN[window.BS_MARKE])',
         '},"frech":' + json.dumps(frech, ensure_ascii=False, separators=(',', ':')) +
@@ -58,6 +60,14 @@ ersetze('fontWeight:zf==="f"?(K.betontGewicht||"700"):zf?"400":GEW(ix),',
         'fontWeight:zf==="f"?(K.betontGewicht||"700"):zf==="h"&&K.akzentKursiv?GEW(ix):zf?"400":GEW(ix),')
 ersetze(':zf==="h"&&K.platteGold?K.platteGold:SCH,',
         ':zf==="h"&&K.akzentKursiv?(zNH?(K.akzentFarbeDunkel||SCH):(K.akzentPlatte||SCH)):zf==="h"&&K.platteGold?K.platteGold:SCH,')
-ersetze('title:"Geladene Datei",children:"karten444"', 'title:"Geladene Datei",children:"karten448"')
+ersetze('length>K.versalMaxZeichen);K.platteRahmen&&',
+        'length>K.versalMaxZeichen);const zKL=(()=>{try{if(!K.kleinReihe)return!1;const zl=String(K.kleinReihe).split("|"),zt0=typeof t._tag=="number"?t._tag:0,zt1=K.platteReiheSchritt>1?Math.floor(zt0/K.platteReiheSchritt):zt0;return zl[((zt1%zl.length)+zl.length)%zl.length]==="1"}catch(zz){return!1}})();K.platteRahmen&&')
+ersetze('const LW=zVT?(K.versalLaufweite||0):(K.laufweite||0),MESS',
+        'const LW=zVT?(K.versalLaufweite||0):zKL&&K.kleinLaufweite!=null?K.kleinLaufweite:(K.laufweite||0),MESS')
+ersetze('const GEW=ix=>zVT&&K.versalGewicht?K.versalGewicht:',
+        'const GEW=ix=>zKL&&K.kleinGewicht?K.kleinGewicht:zVT&&K.versalGewicht?K.versalGewicht:')
+ersetze('const LI=K.platteLinks===1||FOLGE&&K.folgeAusrichtung==="links",GA=(FOLGE&&K.folgeGroesseAnteil)||K.groesseAnteil||.098',
+        'const LI=!(zKL&&K.kleinMitte===1)&&(K.platteLinks===1||FOLGE&&K.folgeAusrichtung==="links"),GA=zKL&&K.kleinAnteil?K.kleinAnteil:(FOLGE&&K.folgeGroesseAnteil)||K.groesseAnteil||.098')
+ersetze('title:"Geladene Datei",children:"karten444"', 'title:"Geladene Datei",children:"karten449"')
 open(Z, 'w', encoding='utf-8').write(s)
 print('ok')

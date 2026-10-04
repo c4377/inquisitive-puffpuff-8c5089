@@ -11480,3 +11480,15 @@ Farben aus Carinas Canva-Screenshot: Lime #CEDF92, Hellgrau #C9D1D8, Petrol #5C8
 - Look-Schalter: „Frech: Lime, Petrol & Grau“ (Schlüssel bleibt `frech`).
 
 Alle Adressen laden **karten448**.
+
+## 391 — Frech: ab und zu klein und schick
+
+„Zeitweise echt kleiner und schicker“: neue Einstellungen im Kachel-Zeichner,
+gezählt wie `platteReihe` (Tag ÷ `platteReiheSchritt`):
+
+- `kleinReihe` — Muster, welche Textkachel klein wird (`frech`: „0|1|0|0|1“ = 2 von 5;
+  Länge 5 gegen 3 Farben, damit die kleinen Kacheln nicht immer dieselbe Farbe haben).
+- `kleinAnteil` 0,055 (statt 0,15), `kleinGewicht` „400“, `kleinLaufweite` 10,
+  `kleinMitte` 1 (mittig statt linksbündig). Kursive Sternwörter bleiben.
+
+Alle Adressen laden **karten449**.
