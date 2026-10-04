@@ -11492,3 +11492,18 @@ gezählt wie `platteReihe` (Tag ÷ `platteReiheSchritt`):
   `kleinMitte` 1 (mittig statt linksbündig). Kursive Sternwörter bleiben.
 
 Alle Adressen laden **karten449**.
+
+## 392 — Zehn Schwestern von „Frech“
+
+„10 Brands mit derselben Wirkung und diesen Kontrastabständen“: `tools/frech-look.py`
+legt neben `frech` zehn Looks `frech-<name>` an, alle mit denselben Einstellungen
+(Poppins, kursive Sternwörter, ab und zu kleine Kacheln), nur andere Farben.
+Je Palette: A hell und frisch, B gedeckt-mitteldunkel mit weißer Schrift, C helles
+Neutral. Das Skript zieht die Kontraste nach (Weiß auf B ≥ 4, Akzent auf A und C
+≥ 4,5) und leitet die dunkle Schrift aus B ab (B × 0,28).
+
+Zitrone & Navy, Pfirsich & Tanne, Mint & Pflaume, Rosé & Olive, Himmelblau &
+Terracotta, Lavendel & Moos, Vanille & Bordeaux, Aqua & Schiefer, Apricot & Petrol,
+Pistazie & Mokka. Die Liste im Look-Schalter scrollt jetzt (max. 70 % Bildhöhe).
+
+Alle Adressen laden **karten450**.
