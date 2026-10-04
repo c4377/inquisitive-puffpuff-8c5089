@@ -11427,3 +11427,23 @@ Alle Adressen laden **karten443**.
   Kacheln vorher 0,55), `akzentNeonNah` (enger Schein, Kino 0,1, vorher 0,22).
 
 Alle Adressen laden **karten444**.
+
+## 387 — Neuer Look „Frech: Beere & Creme“
+
+Nach dem Pinterest-Entwurf, „nicht knallrot, nicht orange“. Neuer Eintrag
+`BS_MARKEN["frech"]` (im Look-Schalter: „Frech: Beere & Creme“), gebaut mit
+`tools/frech-look.py`:
+
+- Textkacheln im Wechsel Beere #A3215F mit weißer Schrift und Creme #F7EFE8 mit
+  fast schwarzer Schrift (`platteReihe`, `platteReiheSchritt` 2), linksbündig, kein Blur.
+- Alles in Instrument Serif. *Sternwörter* stehen kursiv in derselben Schrift:
+  auf Creme in Beere (`akzentFarbeDunkel`), auf Beere in Weiß (`akzentPlatte`),
+  auf Fotos weiß kursiv.
+- Neu im Kachel-Zeichner: `akzentKursiv` (Sternwörter kursiv in der Titelschrift
+  statt Handschrift/Neon).
+- Fotos hell und klar (Kino-Pass mit Gamma 0,85, wenig Wärme, ohne Vignette, nie
+  Schwarz-Weiß), Verlauf unter dem Text in Beere (`bildTon` 163,33,95), Zuschnitt
+  weniger eng als Kino.
+- Schrift größer als Kino: `groesseAnteil` 0,15, `maxhoehe` 0,6.
+
+Alle Adressen laden **karten445**.
