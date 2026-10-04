@@ -11507,3 +11507,12 @@ Terracotta, Lavendel & Moos, Vanille & Bordeaux, Aqua & Schiefer, Apricot & Petr
 Pistazie & Mokka. Die Liste im Look-Schalter scrollt jetzt (max. 70 % Bildhöhe).
 
 Alle Adressen laden **karten450**.
+
+## 393 — Zurück auf 448
+
+„448 zurück, kein Schick“: die kleinen Kacheln (391) und die zehn Schwester-Looks
+(392) sind wieder raus. 448 ist wieder vollständig (aus Commit 93f8939), 449 und 450
+sind nur noch Verweise darauf; Look-Schalter, index.html und `tools/frech-look.py`
+stehen wieder auf dem Stand von 448.
+
+Alle Adressen laden **karten448**.
