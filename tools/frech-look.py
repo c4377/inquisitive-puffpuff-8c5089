@@ -15,7 +15,7 @@ def ersetze(alt, neu, anzahl=1):
         sys.exit(f'{n}x statt {anzahl}x: {alt[:80]}')
     s = s.replace(alt, neu)
 
-BEERE = '#A3215F'
+BEERE = '#4F6E5D'  # gedecktes Grün aus Carinas Pinterest-Foto (vorher Beere #A3215F)
 SERIF = 'Instrument Serif'
 frech = {
     **{k: SERIF for k in ['fotoSchrift', 'deckblattFamilie', 'folgeFamilie', 'kastenSchrift', 'lisaSchrift',
@@ -28,15 +28,15 @@ frech = {
     'platteReihe': BEERE + '/#FFFFFF|#F7EFE8/#17100F', 'platteReiheSchritt': 2, 'platteLinks': 1,
     'name': 'CARINA ANNA PRAV', 'nameText': 'CARINA ANNA PRAV', 'nameSchrift': 'HelveticaNeueBrand',
     'nameGewicht': '500', 'nameLaufweite': 220, 'nameAnteil': 0.021, 'nameDeckkraft': 0.9,
-    'nameFarbe': '#FFFFFF', 'nameMitte': 1, 'nameUnten': 0.945, 'nameSchatten': 'rgba(60,0,25,0.35)',
+    'nameFarbe': '#FFFFFF', 'nameMitte': 1, 'nameUnten': 0.945, 'nameSchatten': 'rgba(20,35,28,0.35)',
     'fliessSchrift': 'HelveticaNeueBrand', 'fliessVersal': 0, 'fliessGroesse': 0.03,
     # Fotos hell und klar, kein Schwarz-Weiß
     'kino': 1, 'kinoSaettigung': 1.05, 'kinoHeben': 6, 'kinoKontrast': 1.05, 'kinoWarm': 0.1,
     'kinoSchwarz': 2, 'kinoWeiss': 255, 'kinoGamma': 0.85, 'kinoSplit': 1, 'kinoVignette': 0,
     'kinoBlauAnteil': 2,
     # Verlauf unter dem Text in Beere
-    'scrimZiel': 42, 'scrimMin': 0.35, 'scrimMax': 0.8, 'scrimAuslauf': 0.2, 'bildTon': '163,33,95',
-    'textSchatten': 'rgba(60,0,25,0.45)', 'textSchattenBlur': 14,
+    'scrimZiel': 42, 'scrimMin': 0.35, 'scrimMax': 0.8, 'scrimAuslauf': 0.2, 'bildTon': '79,110,93',
+    'textSchatten': 'rgba(20,35,28,0.45)', 'textSchattenBlur': 14,
     'zuschnittZoom': 1.25, 'zoomOben': 1, 'gesichtMaxHoehe': 0.4, 'gesichtLuft': 0.14, 'gesichtAbstand': -0.05,
     'saettigungReihe': '0', 'saettigungWechsel': 1,
     # größer und frecher als Kino
@@ -55,6 +55,6 @@ ersetze('fontStyle:zf==="f"&&K.fettKursiv===1?"italic":"normal",charSpacing:zf==
         'fontStyle:zf==="f"&&K.fettKursiv===1||zf==="h"&&K.akzentKursiv?"italic":"normal",charSpacing:zf==="h"&&!(K.platteGold||K.akzentNeon||K.akzentKursiv)?0:LW,')
 ersetze(':zf==="h"&&K.platteGold?K.platteGold:SCH,',
         ':zf==="h"&&K.akzentKursiv?(zNH?(K.akzentFarbeDunkel||SCH):(K.akzentPlatte||SCH)):zf==="h"&&K.platteGold?K.platteGold:SCH,')
-ersetze('title:"Geladene Datei",children:"karten444"', 'title:"Geladene Datei",children:"karten445"')
+ersetze('title:"Geladene Datei",children:"karten444"', 'title:"Geladene Datei",children:"karten446"')
 open(Z, 'w', encoding='utf-8').write(s)
 print('ok')

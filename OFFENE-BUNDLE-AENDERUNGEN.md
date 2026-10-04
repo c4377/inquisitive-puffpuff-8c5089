@@ -11447,3 +11447,12 @@ Nach dem Pinterest-Entwurf, „nicht knallrot, nicht orange“. Neuer Eintrag
 - Schrift größer als Kino: `groesseAnteil` 0,15, `maxhoehe` 0,6.
 
 Alle Adressen laden **karten445**.
+
+## 388 — Frech: Grün statt Beere
+
+„Die Farbe!“ (Pinterest-Foto mit grünem Studiohintergrund): Beere #A3215F ersetzt
+durch gedecktes Grün **#4F6E5D** (aus dem Foto gemessen) — Kacheln, kursive
+Akzentwörter auf Creme und Verlauf unter dem Fototext (`bildTon` 79,110,93).
+Look-Schalter: „Frech: Grün & Creme“ (Schlüssel bleibt `frech`).
+
+Alle Adressen laden **karten446**.
