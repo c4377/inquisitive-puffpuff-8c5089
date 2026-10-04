@@ -11467,3 +11467,16 @@ Kachel-Zeichner: Sternwörter bei `akzentKursiv` in derselben Stärke wie der Ti
 statt 400.
 
 Alle Adressen laden **karten447**.
+
+## 390 — Frech: Canva-Palette Lime, Petrol, Grau
+
+Farben aus Carinas Canva-Screenshot: Lime #CEDF92, Hellgrau #C9D1D8, Petrol #5C808C.
+
+- Kacheln im Wechsel: Lime mit Schrift #1E2B30, Petrol mit weißer Schrift, Grau mit
+  Schrift #1E2B30.
+- Kursive Sternwörter: auf Lime/Grau in dunklerem Petrol #46697A (lesbarer als
+  #5C808C auf Lime), auf Petrol und auf Fotos in Lime.
+- Verlauf unter dem Fototext in Petrol (`bildTon` 92,128,140).
+- Look-Schalter: „Frech: Lime, Petrol & Grau“ (Schlüssel bleibt `frech`).
+
+Alle Adressen laden **karten448**.
