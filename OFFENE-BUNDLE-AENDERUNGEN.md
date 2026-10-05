@@ -11788,3 +11788,12 @@ Laufweite 40. „&“-Zeile 0,1 und möglichst einzeilig (schrumpft bis 0,072, e
 Umbruch).
 
 Alle Adressen laden **karten469**.
+
+## 413 — Editorial: Wort-Mix raus
+
+„Sieht genau gleich unruhig aus“: `wortmix` ist aus `magFeed` entfernt, an seiner
+Stelle steht ein ruhiges `serif`-Deckblatt (Reihe bleibt 13 lang, damit gleiche
+Typen nicht in derselben Rasterspalte landen). Der Code für `wortmix` bleibt,
+wird aber nicht mehr verwendet.
+
+Alle Adressen laden **karten470**.

@@ -47,7 +47,7 @@ SER, SANS, BREIT = 'Roxborough CF', 'Poppins', 'Syne Mag'  # Carinas eigene Lize
 look.update({k: SER for k in ['fotoSchrift', 'deckblattFamilie', 'folgeFamilie', 'kastenSchrift', 'lisaSchrift',
                               'folgeSchrift', 'ablaufTitel', 'schriftart', 'unterSchrift']})
 look.update({
-    'magazin': 1, 'magSerif': SER, 'magSans': SANS, 'magBreit': BREIT, 'magMonogramm': 'cp', 'magCoverWechsel': 1, 'magHand': 'Nothing You Could Do', 'magHandGewicht': '400', 'magCover': 'serif', 'magFeed': 'serif|kringel|flaeche|chat|pop|sticker|band|wortmix|durch|mitte|marker|zettel|zahl', 'magSticker': 'REAL TALK|15 JAHRE BÜHNE|SALES TALK|EHRLICH JETZT|KLAR TEXT', 'magDurchWorte': 'Ertappt.|Kenn ich.|Ups.|Same.|Echt jetzt?', 'magFlaeche': '#CEDF92', 'magFlaecheText': '#1E2B30', 'magFlaecheAkzent': '#3F6E78', 'magBand': 'rgba(18,16,15,0.86)', 'magCoverSerif': 'DMSerif Mag', 'magSerifGewicht': '400', 'magAkzent': '#CEDF92',
+    'magazin': 1, 'magSerif': SER, 'magSans': SANS, 'magBreit': BREIT, 'magMonogramm': 'cp', 'magCoverWechsel': 1, 'magHand': 'Nothing You Could Do', 'magHandGewicht': '400', 'magCover': 'serif', 'magFeed': 'serif|kringel|flaeche|chat|pop|sticker|band|serif|durch|mitte|marker|zettel|zahl', 'magSticker': 'REAL TALK|15 JAHRE BÜHNE|SALES TALK|EHRLICH JETZT|KLAR TEXT', 'magDurchWorte': 'Ertappt.|Kenn ich.|Ups.|Same.|Echt jetzt?', 'magFlaeche': '#CEDF92', 'magFlaecheText': '#1E2B30', 'magFlaecheAkzent': '#3F6E78', 'magBand': 'rgba(18,16,15,0.86)', 'magCoverSerif': 'DMSerif Mag', 'magSerifGewicht': '400', 'magAkzent': '#CEDF92',
     'magDunkel': 0.2, 'magDunkelCover': 0.14, 'magAusrichtung': 'links',
     'versalFamilie': BREIT, 'versalAnteil': 0, 'fliessSchrift': SANS,
     # jede Folie bekommt ein Foto
