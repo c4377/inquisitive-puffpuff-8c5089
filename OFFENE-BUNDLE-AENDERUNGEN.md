@@ -11597,3 +11597,20 @@ Alle Adressen laden **karten455**.
 Deckblatt kräftiger (0,42, Weichzeichnung 0,018 × Breite).
 
 Alle Adressen laden **karten456**.
+
+## 400 — Editorial: Deckblatt-Stile B und E
+
+„B und E“ aus den Lesbarkeits-Vorschlägen (mit Carinas echten Fotos getestet):
+
+- `magCover`: „serif“ (B: großer Titel in DM Serif Display, `magCoverSerif`
+  „DMSerif Mag“, 0,13 × Breite), „pop“ (E: Poppins SemiBold 0,105 × Breite, letztes
+  Wort in der Akzentfarbe) oder „wechsel“ (gerade Tage B, ungerade E).
+- Looks: `editorial` (B), `editorial-pop` (E), `editorial-wechsel`; die
+  Akzent-Varianten Pfirsich/Himmelblau/Butter nutzen B.
+- Deckblatt-Titel ab 50 Zeichen gekürzt: am ersten Komma (Zeichen 15–60) oder vor
+  „und/oder/weil/aber/statt/bis/wenn/obwohl/damit/während/nachdem/sobald“
+  (Zeichen 18–60), nie innerhalb von Anführungszeichen. Der Rest steht klein
+  darunter, ein kurzer letzter Teil (≤ 48 Zeichen) in Versalien.
+- Innenfolien bleiben in Roxborough. Schrift `DMSerifDisplay-Mag-400.woff2` (SIL OFL).
+
+Alle Adressen laden **karten457**.
