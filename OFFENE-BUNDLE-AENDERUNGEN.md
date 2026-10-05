@@ -11553,3 +11553,18 @@ dem Ergebnis von `tools/frech-look.py`:
   `Syne-Mag-800.woff2`, Familien „Fraunces Mag“ / „Syne Mag“.
 
 Alle Adressen laden **karten452**.
+
+## 396 — Editorial: Deckblätter groß und heller
+
+„Die Cover sind daneben und zu dunkel“: Ihre echten Deckblatt-Texte sind lange Sätze,
+die bisher komplett in den Titel gingen und auf winzige Schrift schrumpften.
+
+- Deckblatt ohne Auszeichnung: bis 70 Zeichen alles Titel; sonst erster Satz als
+  großer Serif-Titel (bei über 90 Zeichen am ersten Komma nach 30 Zeichen
+  geteilt), Rest als Fließtext darunter, kurze Schlusszeile (≤ 48 Zeichen) in
+  Versalien. Titel höchstens 5 Zeilen, nie kleiner als 0,085 × Breite.
+- Abdunklung: Deckblatt nur 0,06 (`magDunkelCover`) plus Verlauf nach unten (0,5),
+  Folgefolien 0,2 (`magDunkel`) plus Verlauf 0,3. Fotos heller (`kinoGamma` 0,88,
+  `kinoHeben` 8).
+
+Alle Adressen laden **karten453**.
