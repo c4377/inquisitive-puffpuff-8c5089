@@ -11589,3 +11589,11 @@ Alle Adressen laden **karten454**.
 - Fotos frischer: `kinoSaettigung` 1,06, `kinoWarm` 0,04, keine Vignette.
 
 Alle Adressen laden **karten455**.
+
+## 399 — Editorial: Deckblatt etwas dunkler
+
+„Ein bissi mehr abdunkeln, dass man es lesen kann“: `magDunkelCover` 0,14 (vorher
+0,06), Verlauf unten auf dem Deckblatt 0,58 (vorher 0,36), Textschatten auf dem
+Deckblatt kräftiger (0,42, Weichzeichnung 0,018 × Breite).
+
+Alle Adressen laden **karten456**.
