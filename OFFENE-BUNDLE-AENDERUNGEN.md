@@ -11694,3 +11694,23 @@ Gimmicks gelten nur fürs Deckblatt; die Folgefolien nehmen den Grundstil
   (`#`, `>` …) gibt es keine Gimmicks.
 
 Alle Adressen laden **karten462**.
+
+## 406 — Editorial: alles etwas premiumer, „&“ in Handschrift
+
+„Ziemlich genial, aber alles bissi mehr premium“:
+
+- Mehr Luft: Rand 0,11 × Breite, Textbreite 0,78/0,76; Titel kleiner (DM Serif 0,115,
+  Poppins 0,088, Roxborough 0,13), Handschrift 0,08, Fließtext 0,031 mit Laufweite 15
+  und Zeilenhöhe 1,65, Versalien 0,033 mit Laufweite 140.
+- Feinere Linien bei Kringel, Durchstreichen, Unterstreichung und Riesenzahl; Marker
+  schlanker; Chat-Blasen kleiner mit weichem Schatten.
+- Sticker kleiner (0,112) mit feinem Innenring, feine gesperrte Schrift; Notizzettel
+  kleiner (0,38), ruhiger (2,5°), dezentes Klebeband. Beide sitzen immer über dem
+  Titel, nie darauf; der Titelblock wird dafür auf höchstens 52 % der Höhe begrenzt.
+- Monogramm kleiner; neu oben links „N° 012“ (Tag) auf dem Deckblatt und „02 / 05“
+  auf den Folgefolien, gesperrt in Poppins.
+- Deckblatt: Text ab „&“ (z. B. „& so löst du das.“) steht als eigene Zeile in
+  Handschrift am Ende; der „und“-Teil wandert dann in den Fließtext. „Durchgestrichen“
+  streicht nie die „&“-Zeile (dann Kringel).
+
+Alle Adressen laden **karten463**.
