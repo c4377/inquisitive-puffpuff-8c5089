@@ -16,6 +16,7 @@
     ["bordeauxmix", "Bordeaux: Text Bordeaux, Fotos Waldgr\u00fcn"],
     ["creme", "Creme & Espresso"],
     ["kino", "Kino: Fotos warm, Gesicht nah"],
+    ["editorial", "Editorial: Foto, Serif & breite Versalien"],
     ["frech", "Frech: Lime, Petrol & Grau"],
     ["frech-zitrone", "Frech: Zitrone & Navy · Montserrat"],
     ["frech-pfirsich", "Frech: Pfirsich & Tanne · DM Sans"],

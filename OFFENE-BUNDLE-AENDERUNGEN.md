@@ -11533,3 +11533,23 @@ Apricot & Petrol · Be Vietnam Pro, Pistazie & Mokka · Archivo (Familienname
 Bei den Schwestern `versalAnteil` 0. `frech` (Lime, Petrol & Grau, Poppins) bleibt wie 448.
 
 Alle Adressen laden **karten451**.
+
+## 395 — Neuer Look „Editorial“ (Foto, Serif & breite Versalien)
+
+Nach Carinas Magazin-Karussell-Vorlage. Gebaut mit `tools/editorial-look.py` auf
+dem Ergebnis von `tools/frech-look.py`:
+
+- `BS_MARKEN["editorial"]` (Look-Schalter „Editorial: Foto, Serif & breite
+  Versalien“): jede Folie ein Foto (`textJede` 0, `textAnteil` 0), abgedunkelt
+  (`magDunkel` 0,34 + leichter Verlauf), Monogramm „cp“ oben rechts (`magMonogramm`).
+- Eigener Textzeichner im Foto-Weg (`magazin` 1), vor dem Ablauf-Zweig: Fraunces
+  Light für Titel, Syne ExtraBold für breite Versalien, Poppins für Fließtext.
+  Auszeichnung pro Zeile: `#` / `##` Serif, `>` Versalien, `-`/`→` Pfeilliste,
+  `!` fetter Satz, `|` Trennstrich, `[mitte]`/`[links]`; im Text `**fett**`,
+  `*fett + handgezogen unterstrichen*`, `__unterstrichen__`. Ohne Auszeichnung
+  teilt der Zeichner selbst auf (Deckblatt: Titel + kurze Versalienzeile;
+  Folgefolien: erster Satz Serif, Rest Fließtext).
+- Schriften selbst gehostet (SIL OFL): `Fraunces-Mag-300(-italic).woff2`,
+  `Syne-Mag-800.woff2`, Familien „Fraunces Mag“ / „Syne Mag“.
+
+Alle Adressen laden **karten452**.
