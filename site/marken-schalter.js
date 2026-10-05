@@ -10,36 +10,19 @@
  */
 (function () {
   var LOOKS = [
-    ["", "Aktuell"],
-    ["bordeaux", "Bordeaux"],
-    ["bordeauxgloock", "Bordeaux + Waldgrün-Schrift"],
-    ["bordeauxmix", "Bordeaux: Text Bordeaux, Fotos Waldgr\u00fcn"],
-    ["creme", "Creme & Espresso"],
-    ["kino", "Kino: Fotos warm, Gesicht nah"],
-    ["editorial", "Editorial: Feed-Mix (5 Deckblatt-Typen)"],
+    ["editorial", "Editorial: Feed-Mix"],
     ["editorial-b", "Editorial: nur kräftige Serif"],
     ["editorial-pop", "Editorial: nur Poppins"],
     ["editorial-pfirsich", "Editorial Feed-Mix: Akzent Pfirsich"],
     ["editorial-himmel", "Editorial Feed-Mix: Akzent Himmelblau"],
-    ["editorial-butter", "Editorial Feed-Mix: Akzent Butter"],
-    ["frech", "Frech: Lime, Petrol & Grau"],
-    ["frech-zitrone", "Frech: Zitrone & Navy · Montserrat"],
-    ["frech-pfirsich", "Frech: Pfirsich & Tanne · DM Sans"],
-    ["frech-mint", "Frech: Mint & Pflaume · Plus Jakarta Sans"],
-    ["frech-rose", "Frech: Rosé & Olive · Figtree"],
-    ["frech-himmel", "Frech: Himmelblau & Terracotta · Urbanist"],
-    ["frech-lavendel", "Frech: Lavendel & Moos · Work Sans"],
-    ["frech-vanille", "Frech: Vanille & Bordeaux · Raleway"],
-    ["frech-aqua", "Frech: Aqua & Schiefer · Red Hat Display"],
-    ["frech-apricot", "Frech: Apricot & Petrol · Be Vietnam Pro"],
-    ["frech-pistazie", "Frech: Pistazie & Mokka · Archivo"]
+    ["editorial-butter", "Editorial Feed-Mix: Akzent Butter"]
   ];
   function jetzt() {
-    try { return localStorage.getItem("BS_MARKE") || ""; } catch (e) { return ""; }
+    try { var k = localStorage.getItem("BS_MARKE") || ""; return /^editorial/.test(k) ? k : "editorial"; } catch (e) { return "editorial"; }
   }
   function name(k) {
     for (var i = 0; i < LOOKS.length; i++) if (LOOKS[i][0] === k) return LOOKS[i][1];
-    return "Aktuell";
+    return "Editorial: Feed-Mix";
   }
   function setze(k) {
     try { k ? localStorage.setItem("BS_MARKE", k) : localStorage.removeItem("BS_MARKE"); } catch (e) {}

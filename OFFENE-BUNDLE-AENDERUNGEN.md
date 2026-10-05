@@ -11765,3 +11765,16 @@ Das „&“ am Anfang der „&“-Zeile wird in Fraunces Light kursiv gezeichnet
 „Nothing You Could Do“ sieht es aus wie ein „$“), der Rest bleibt Handschrift.
 
 Alle Adressen laden **karten467**.
+
+## 411 — Nur noch Editorial; Deckblatt abwechselnd zentriert
+
+„Lösche alle bis auf die Editorial“: Der Look-Schalter zeigt nur noch die sechs
+Editorial-Looks (Feed-Mix, nur Serif, nur Poppins, Akzent Pfirsich/Himmelblau/Butter).
+`index.html` setzt jeden anderen gespeicherten oder per `?look=` gewählten Look auf
+`editorial` (auch „Aktuell“/leer). Die übrigen Looks stehen weiter im Bundle, sind
+aber nicht mehr erreichbar.
+
+Deckblatt: `magCoverWechsel` 1 → an ungeraden Tagen zentriert, an geraden
+linksbündig (außer Chat; Typ `mitte` bleibt immer zentriert).
+
+Alle Adressen laden **karten468**.
