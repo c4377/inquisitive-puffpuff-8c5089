@@ -11714,3 +11714,24 @@ Alle Adressen laden **karten462**.
   streicht nie die „&“-Zeile (dann Kringel).
 
 Alle Adressen laden **karten463**.
+
+## 407 — Editorial: Folgefolien automatisch wie in der Vorlage aufgeteilt
+
+„In den Folgefolien wieder diese genialen Aufteilungen“: Folgefolien ohne
+Auszeichnung werden jetzt aus dem Text komponiert (Variante = (Tag + Folie) mod 3):
+
+- Listen: ≥ 3 kurze Zeilen (≤ 70 Zeichen, ohne Satzende oder nummeriert), optional
+  mit Einleitungszeile auf „:“ → bei kurzen Punkten (≤ 26 Zeichen, ≤ 7) breite
+  Versalien, sonst Pfeilliste; danach Fließtext, ein kurzer Schlusssatz (≤ 48) in
+  Versalien. Ebenso „Einleitung: a, b, c und d.“ in einem Satz (Einleitung ohne
+  Satzende, Teile ≤ 42 Zeichen).
+- 1 Satz: Serif-Titel (bei Variante 0 mittig) oder Fließtext.
+- 2 Sätze: mittig Titel | Strich | Pointe — oder Intro klein + Serif-Titel — oder
+  Titel + Fließtext.
+- ≥ 3 Sätze: wie die Vorlage — mittig Titel, Satz, Strich, Rest; oder Intro klein,
+  Serif-Titel, Satz auf „:“ fett, Rest; oder Titel + Rest. Kurzer Schlusssatz
+  (≤ 45) in Versalien.
+- Im letzten Fließtext wird automatisch der Teil nach dem letzten Komma (8–55
+  Zeichen), sonst die letzten drei Wörter, fett und handgezogen unterstrichen.
+
+Alle Adressen laden **karten464**.
