@@ -11656,3 +11656,17 @@ Bandes liegt beim Typ `band` eine fast schwarze Fläche über dem ganzen Foto
 Roxborough.
 
 Alle Adressen laden **karten460**.
+
+## 404 — Editorial: Folgefolien im Stil ihres Deckblatts
+
+„Die Folgefolien bleiben im Stil der Coverfolie“: Der Typ aus `magFeed` gilt jetzt
+für alle Folien eines Tages (nach `_tag`, nicht nur Folie 1):
+
+- `band` → alle Folien fast schwarz, `flaeche` → alle Folien Lime mit dunkler Schrift
+  und Petrol-Akzent, `mitte` → alle mittig und dunkler (Lime-Strich nur auf dem
+  Deckblatt).
+- Zwischentitel (`##` bzw. erster Satz) folgen der Deckblatt-Schrift: Poppins
+  SemiBold bei `pop`, DM Serif bei `serif`/`mitte`/`flaeche`, Roxborough bei `band`.
+  Ohne `magFeed` entscheidet `magCover`.
+
+Alle Adressen laden **karten461**.
