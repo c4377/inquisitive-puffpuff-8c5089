@@ -11831,3 +11831,14 @@ Look-Schalter), die anderen bleiben.
   Laufweite).
 
 Alle Adressen laden **karten472**.
+
+## 416 — Vorher/Nachher-Paare
+
+„Das Nachher gehört vor den zweiten Pfeil“: Folgen in einer Folgefolie mindestens
+zweimal ein kurzes Label mit Doppelpunkt (≤ 28 Zeichen, z. B. „Vorher:“,
+„Nachher:“) und direkt danach ein Zitat („…“), wird daraus ein Paar-Layout: Label in
+Versalien in der Akzentfarbe, darunter das Zitat als Serif-Zwischentitel, enger
+Abstand im Paar, größerer zwischen den Paaren. Text davor wird Fließtext, der Rest
+danach Fließtext mit automatischer Unterstreichung.
+
+Alle Adressen laden **karten473**.
