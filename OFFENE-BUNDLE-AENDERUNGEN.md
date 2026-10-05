@@ -11629,3 +11629,21 @@ Neu in der Auszeichnung: `~ Text` = Handschriftzeile (auch auf Innenfolien).
 Einstellung `magHand` (Schriftfamilie).
 
 Alle Adressen laden **karten458**.
+
+## 402 — Editorial: Feed-Mix mit 5 Deckblatt-Typen
+
+„Wir brauchen einen ganzen Feed-Look, jeder Post sieht gleich aus“: `magFeed`
+legt die Reihenfolge der Deckblatt-Typen fest (nach Tag, Reihe der Länge 5 gegen
+3 Spalten, damit gleiche Typen nie übereinander stehen):
+
+1. `serif` — Foto, DM-Serif-Titel unten links + Handschrift
+2. `band` — Foto oben frei, Titel in Roxborough auf dunklem Band (`magBand`)
+3. `pop` — Foto, Poppins-Titel + Handschrift
+4. `mitte` — Foto etwas dunkler, alles mittig, kurzer Lime-Strich über dem Titel
+5. `flaeche` — Lime-Fläche statt Foto (`magFlaeche`), dunkle Schrift
+   (`magFlaecheText`), Handschrift in Petrol (`magFlaecheAkzent`), ohne Schatten
+
+Looks: `editorial` = Feed-Mix (auch die Akzent-Varianten), `editorial-b` nur Serif,
+`editorial-pop` nur Poppins. `editorial-wechsel` entfällt.
+
+Alle Adressen laden **karten459**.

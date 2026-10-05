@@ -47,7 +47,7 @@ SER, SANS, BREIT = 'Roxborough CF', 'Poppins', 'Syne Mag'  # Carinas eigene Lize
 look.update({k: SER for k in ['fotoSchrift', 'deckblattFamilie', 'folgeFamilie', 'kastenSchrift', 'lisaSchrift',
                               'folgeSchrift', 'ablaufTitel', 'schriftart', 'unterSchrift']})
 look.update({
-    'magazin': 1, 'magSerif': SER, 'magSans': SANS, 'magBreit': BREIT, 'magMonogramm': 'cp', 'magCover': 'serif', 'magCoverSerif': 'DMSerif Mag', 'magSerifGewicht': '400', 'magAkzent': '#CEDF92',
+    'magazin': 1, 'magSerif': SER, 'magSans': SANS, 'magBreit': BREIT, 'magMonogramm': 'cp', 'magCover': 'serif', 'magFeed': 'serif|band|pop|mitte|flaeche', 'magFlaeche': '#CEDF92', 'magFlaecheText': '#1E2B30', 'magFlaecheAkzent': '#3F6E78', 'magBand': 'rgba(30,26,23,0.94)', 'magCoverSerif': 'DMSerif Mag', 'magSerifGewicht': '400', 'magAkzent': '#CEDF92',
     'magDunkel': 0.2, 'magDunkelCover': 0.14, 'magAusrichtung': 'links',
     'versalFamilie': BREIT, 'versalAnteil': 0, 'fliessSchrift': SANS,
     # jede Folie bekommt ein Foto
@@ -58,23 +58,23 @@ look.update({
     'kinoBlauAnteil': 2, 'zuschnittZoom': 1.1,
 })
 AKZENTE = [('pfirsich', '#F6C8A8'), ('himmel', '#BFDDF0'), ('butter', '#F1E3B8')]
-weitere = ''.join(',"editorial-' + k + '":' + json.dumps({**look, 'magCover': c}, ensure_ascii=False, separators=(',', ':')) for k, c in [('pop', 'pop'), ('wechsel', 'wechsel')]) + ''.join(',"editorial-' + k + '":' + json.dumps({**look, 'magAkzent': f}, ensure_ascii=False, separators=(',', ':')) for k, f in AKZENTE)
+weitere = ''.join(',"editorial-' + k + '":' + json.dumps({**look, **v}, ensure_ascii=False, separators=(',', ':')) for k, v in [('b', {'magFeed': ''}), ('pop', {'magFeed': '', 'magCover': 'pop'})]) + ''.join(',"editorial-' + k + '":' + json.dumps({**look, 'magAkzent': f}, ensure_ascii=False, separators=(',', ':')) for k, f in AKZENTE)
 ersetze('},"frech":', '},"editorial":' + json.dumps(look, ensure_ascii=False, separators=(',', ':')) + weitere + ',"frech":')
 
 ZEICHNER = r'''if($e&&BS_KACHEL.magazin===1){const zFb=Pe.fabric,K=BS_KACHEL,zW=r,zH=n;
 const SER=K.magSerif||"Fraunces Mag",HAND=K.magHand||"CaveatV3",CSER=K.magCoverSerif||SER,SW=String(K.magSerifGewicht||"300"),SANS=K.magSans||"Poppins",WIDE=K.magBreit||"Syne Mag";
 try{await Promise.race([Promise.all([`${SW} 40px "${SER}"`,`400 40px "${CSER}"`,`700 40px "${HAND}"`,`400 40px "${SANS}"`,`600 40px "${SANS}"`,`800 40px "${WIDE}"`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,5e3))])}catch(zz){}
-const zNo={selectable:!1,evented:!1},AK=K.magAkzent||"#FFFFFF";
+const zNo={selectable:!1,evented:!1};let AK=K.magAkzent||"#FFFFFF",TXT="#FFFFFF";
 const zD=((i&&i.slideIndex)||0)===0?(K.magDunkelCover==null?.06:K.magDunkelCover):(K.magDunkel==null?.2:K.magDunkel);e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:`rgba(0,0,0,${zD})`,...zNo}));
 e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,...zNo,fill:new zFb.Gradient({type:"linear",coords:{x1:0,y1:0,x2:0,y2:zH},colorStops:[{offset:0,color:"rgba(0,0,0,0.08)"},{offset:.22,color:"rgba(0,0,0,0)"},{offset:.5,color:"rgba(0,0,0,0.04)"},{offset:1,color:`rgba(0,0,0,${((i&&i.slideIndex)||0)===0?.58:.3})`}]})}));
 const zCx=document.createElement("canvas").getContext("2d");
 const zMs=(zs,zf,zfs,zcs)=>{zCx.font=zf;return zCx.measureText(zs).width+String(zs).length*(zcs||0)*zfs/1e3};
 const zCover=((i&&i.slideIndex)||0)===0;
 const ST={hand:{fam:HAND,w:"700",fs:.095,lh:.98,cs:0,max:3,min:.062},h1:{fam:SER,w:SW,fs:.15,lh:.93,cs:-20,max:5,min:.085},h2:{fam:SER,w:SW,fs:.08,lh:1.02,cs:-15,max:5},caps:{fam:WIDE,w:"800",fs:.043,lh:1.45,cs:20,up:1},lead:{fam:SANS,w:"600",fs:.035,lh:1.5,cs:0},body:{fam:SANS,w:"400",fs:.035,lh:1.55,cs:0},li:{fam:SANS,w:"400",fs:.036,lh:1.45,cs:0}};
-const zStil=K.magCover==="pop"||(K.magCover==="wechsel"&&(Number(t._tag)||0)%2===1)?"pop":"serif";if(zStil==="pop")ST.h1={fam:SANS,w:"600",fs:.105,lh:1.04,cs:-25,max:5,min:.075,pop:1};else if(K.magCoverSerif)ST.h1={...ST.h1,fam:CSER,w:String(K.magCoverSerifGewicht||"400"),fs:.13,lh:.98,cs:-10};
+const zFR=String(K.magFeed||"").split("|").filter(Boolean),zTyp=zCover&&zFR.length?zFR[((Number(t._tag)||0)%zFR.length+zFR.length)%zFR.length]:"";const zStil=zTyp?(zTyp==="pop"?"pop":"serif"):K.magCover==="pop"||(K.magCover==="wechsel"&&(Number(t._tag)||0)%2===1)?"pop":"serif";if(zStil==="pop")ST.h1={fam:SANS,w:"600",fs:.105,lh:1.04,cs:-25,max:5,min:.075,pop:1};else if(K.magCoverSerif)ST.h1={...ST.h1,fam:CSER,w:String(K.magCoverSerifGewicht||"400"),fs:.13,lh:.98,cs:-10};if(zTyp==="band")ST.h1={...ST.h1,fam:SER,w:SW,fs:.105,lh:1.0,cs:-15,pop:0};if(zTyp==="mitte")e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:"rgba(0,0,0,0.24)",...zNo}));if(zTyp==="flaeche"){e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:K.magFlaeche||"#CEDF92",...zNo}));TXT=K.magFlaecheText||"#1E2B30";AK=K.magFlaecheAkzent||"#3F6E78"}
 const zRuns=zs=>{const zo=[];let zb=!1,zu=!1,zc="";const zp=()=>{zc&&zo.push({t:zc,b:zb||zu,u:zu});zc=""};for(let k=0;k<zs.length;k++){const ch=zs[k];if(ch==="*"&&zs[k+1]==="*"){zp();zb=!zb;k++;continue}if(ch==="_"&&zs[k+1]==="_"){zp();zu=!zu;k++;continue}if(ch==="*"){zp();zu=!zu;continue}zc+=ch}zp();return zo};
 const zSaetze=zx=>{const zr=[];let za="";String(zx||"").split(/\s+/).filter(Boolean).forEach(zw=>{za=za?za+" "+zw:zw;if(/[.!?:…]["»”)’]?$/.test(zw)){zr.push(za);za=""}});za&&zr.push(za);return zr};
-let zAus=K.magAusrichtung||"links";const zBl=[];
+let zAus=zTyp==="mitte"?"mitte":(K.magAusrichtung||"links");const zBl=[];
 const zRoh=String(t.text||"").replace(/\r/g,"");const zZl=zRoh.split("\n");
 const zMark=zZl.some(zq=>/^\s*(#{1,2}\s|>\s|[-•→]\s|->\s|!\s|~\s|\|\s*$|\[(mitte|links)\]\s*$)/i.test(zq));
 if(zMark){zZl.forEach(zq=>{const z=zq.trim();if(!z){zBl.push({k:"gap"});return}let m;
@@ -100,8 +100,8 @@ return{...zb,st,fs,lines,h:lines.length*fs*st.lh}});const zBau=()=>{const zb0=zB
 const zGap=(za,zb)=>za.k==="h1"&&zb.k==="hand"?zH*.014:za.k==="hand"?zH*.026:za.k==="caps"&&zb.k==="caps"?zH*.008:za.k==="li"&&zb.k==="li"?zH*.026:zb.k==="div"||za.k==="div"?zH*.03:za.k==="h1"?zH*.03:za.k==="h2"?zH*.038:za.k==="caps"?zH*.03:za.k==="lead"?zH*.02:zH*.028;
 let zB=zBau(),zT=0;const zSum=()=>{zT=zB.reduce((za,zb,zx)=>za+zb.h+(zx<zB.length-1?zGap(zb,zB[zx+1]):0),0)};zSum();
 for(let k=0;k<30&&zT>zH*.74&&zK>.72;k++){zK*=.94;zB=zBau();zSum()}
-let y=zCover?Math.max(zH*.14,zH*.86-zT):Math.max(zH*.14,zH*.56-zT/2);
-const zSch=new zFb.Shadow({color:zCover?"rgba(0,0,0,0.42)":"rgba(0,0,0,0.28)",blur:zW*(zCover?.018:.012),offsetX:0,offsetY:0});
+let y=zCover?(zTyp==="mitte"||zTyp==="flaeche"?Math.max(zH*.14,zH*.53-zT/2):Math.max(zH*.14,zH*(zTyp==="band"?.9:.86)-zT)):Math.max(zH*.14,zH*.56-zT/2);zTyp==="band"&&e.add(new zFb.Rect({left:0,top:y-zH*.055,width:zW,height:zH-(y-zH*.055),fill:K.magBand||"rgba(30,26,23,0.94)",...zNo}));zTyp==="mitte"&&e.add(new zFb.Line([zW/2-zW*.05,y-zH*.045,zW/2+zW*.05,y-zH*.045],{stroke:AK,strokeWidth:Math.max(2,zW*.004),...zNo}));
+let zSch=new zFb.Shadow({color:zCover?"rgba(0,0,0,0.42)":"rgba(0,0,0,0.28)",blur:zW*(zCover?.018:.012),offsetX:0,offsetY:0});zTyp==="flaeche"&&(zSch=void 0);
 const zStrich=(x1,x2,yy,fs)=>{let zh=0;const zs=String(t.text||"")+x1;for(let k=0;k<zs.length;k++)zh=(zh*31+zs.charCodeAt(k))%9973;const zj=k=>((zh*(k+3))%7-3)/3*fs*.035;const sw=Math.max(1.5,zW*.0032);
 e.add(new zFb.Path(`M ${x1} ${yy+zj(1)} Q ${(x1+x2)/2} ${yy+zj(2)+fs*.03} ${x2} ${yy+zj(3)}`,{fill:"",stroke:AK,strokeWidth:sw,strokeLineCap:"round",...zNo}));
 e.add(new zFb.Path(`M ${x1+fs*.15} ${yy+fs*.09+zj(4)} Q ${(x1+x2)/2} ${yy+fs*.06+zj(5)} ${x2-fs*.1} ${yy+fs*.1+zj(6)}`,{fill:"",stroke:AK,strokeWidth:sw*.6,strokeLineCap:"round",opacity:.85,...zNo}))};
@@ -109,10 +109,10 @@ zB.forEach((zb,zx)=>{if(zb.k==="div"){const xx=zAus==="mitte"?zW/2:L+zW*.01;e.ad
 else if(zb.lines.length){const st=zb.st,fs=zb.fs,lh=fs*st.lh;zb.lines.forEach((zl,zi)=>{const yc=y+lh*zi+lh/2;const x0=zb.k==="li"?L+LI:zAus==="mitte"?(zW-zl.w)/2:L;
 if(zb.k==="li"&&zi===0){const ax=L,aw=zW*.058,sw=Math.max(1.5,zW*.0032);e.add(new zFb.Line([ax,yc,ax+aw,yc],{stroke:AK,strokeWidth:sw,strokeLineCap:"round",...zNo}));e.add(new zFb.Polyline([{x:ax+aw-fs*.32,y:yc-fs*.22},{x:ax+aw,y:yc},{x:ax+aw-fs*.32,y:yc+fs*.22}],{fill:"",stroke:AK,strokeWidth:sw,strokeLineCap:"round",strokeLineJoin:"round",...zNo}))}
 let xx=x0;const zg=[];zl.segs.forEach(sg=>{const zq=zg[zg.length-1];zq&&zq.b===sg.b&&zq.u===sg.u&&zq.c===sg.c?(zq.t+=sg.t,zq.w+=sg.w):zg.push({...sg})});
-zg.forEach(sg=>{e.add(new zFb.Text(sg.t,{left:xx,top:yc,originX:"left",originY:"center",fontFamily:st.fam,fontWeight:sg.b&&st.fam===SANS?"600":st.w,fontSize:fs,charSpacing:st.cs||0,fill:sg.c||zb.k==="caps"||zb.k==="hand"?AK:"#FFFFFF",angle:zb.k==="hand"?-3:0,shadow:zSch,...zNo}));
+zg.forEach(sg=>{e.add(new zFb.Text(sg.t,{left:xx,top:yc,originX:"left",originY:"center",fontFamily:st.fam,fontWeight:sg.b&&st.fam===SANS?"600":st.w,fontSize:fs,charSpacing:st.cs||0,fill:sg.c||zb.k==="caps"||zb.k==="hand"?AK:TXT,angle:zb.k==="hand"?-3:0,shadow:zSch,...zNo}));
 if(sg.u){const tw=sg.w-zMs((/\s+$/.exec(sg.t)||[""])[0],`600 ${fs}px "${st.fam}"`,fs,0);zStrich(xx,xx+tw,yc+fs*.62,fs)}xx+=sg.w})})}
 y+=zb.h+(zx<zB.length-1?zGap(zb,zB[zx+1]):0)});
-K.magMonogramm&&e.add(new zFb.Text(String(K.magMonogramm),{left:zW*.905,top:zH*.105,originX:"right",originY:"center",fontFamily:SER,fontWeight:SW,fontSize:zW*.095,charSpacing:-40,fill:"#FFFFFF",shadow:zSch,...zNo}));
+K.magMonogramm&&e.add(new zFb.Text(String(K.magMonogramm),{left:zW*.905,top:zH*.105,originX:"right",originY:"center",fontFamily:SER,fontWeight:SW,fontSize:zW*.095,charSpacing:-40,fill:TXT,shadow:zSch,...zNo}));
 t.overlayImage&&await Ae(t.overlayImage).catch(()=>{});e.renderAll();return}'''
 ANKER = 'if($e&&(t.karte==="ablauf"||t.reminderArt==="ablauf")){const Ab=T1('
 ersetze(ANKER, ZEICHNER.replace('\n', '') + ANKER)
