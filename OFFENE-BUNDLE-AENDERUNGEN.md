@@ -11754,3 +11754,14 @@ noch, wenn die Handschriftzeile höchstens 1,9 Titelzeilen unter dem umkringelte
 Wort steht. Die „&“-Zeile bekommt nie diesen Pfeil (sie hat ihren eigenen).
 
 Alle Adressen laden **karten466**.
+
+## 410 — Editorial: Handschrift „Nothing You Could Do“
+
+„Der handschriftliche Font ist mir zu fett“: Handschrift im Editorial-Look jetzt
+„Nothing You Could Do“ (liegt schon unter /fonts, SIL OFL) in Stärke 400 statt
+Caveat Bold. Neue Einstellungen `magHand` / `magHandGewicht`. Größen leicht
+angehoben (Handschrift 0,086, „&“-Zeile 0,115), weil die Schrift kleiner läuft.
+Das „&“ am Anfang der „&“-Zeile wird in Fraunces Light kursiv gezeichnet (in
+„Nothing You Could Do“ sieht es aus wie ein „$“), der Rest bleibt Handschrift.
+
+Alle Adressen laden **karten467**.
