@@ -11778,3 +11778,13 @@ Deckblatt: `magCoverWechsel` 1 → an ungeraden Tagen zentriert, an geraden
 linksbündig (außer Chat; Typ `mitte` bleibt immer zentriert).
 
 Alle Adressen laden **karten468**.
+
+## 412 — Editorial: Wort-Mix und „&“-Zeile ruhiger
+
+„Die find ich zu chaotisch“ (Wort-Mix mit riesigem „DIR“ + zweizeiliger
+„&“-Zeile): Wort-Mix ausgewogener — kursives erstes Wort 0,095 (statt 0,13),
+Mittelteil 0,085, letztes Wort in Syne-Versalien nur noch 0,1 (statt 0,24) mit
+Laufweite 40. „&“-Zeile 0,1 und möglichst einzeilig (schrumpft bis 0,072, erst dann
+Umbruch).
+
+Alle Adressen laden **karten469**.
