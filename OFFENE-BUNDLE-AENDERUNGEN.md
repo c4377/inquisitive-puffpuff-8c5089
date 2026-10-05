@@ -11670,3 +11670,27 @@ für alle Folien eines Tages (nach `_tag`, nicht nur Folie 1):
   Ohne `magFeed` entscheidet `magCover`.
 
 Alle Adressen laden **karten461**.
+
+## 405 — Editorial: acht Gimmicks im Feed-Mix
+
+„Mehr Personality und funny Gimmicks — bau alle ein“: `magFeed` ist jetzt eine
+13er-Reihe `serif|kringel|flaeche|chat|pop|sticker|band|wortmix|durch|mitte|marker|zettel|zahl`.
+Gimmicks gelten nur fürs Deckblatt; die Folgefolien nehmen den Grundstil
+(kringel/durch/sticker/zettel/wortmix → serif, marker/chat/zahl → pop).
+
+- `kringel` — letztes Titelwort mit Lime umkringelt, Kritzelpfeil zur Handschrift
+- `durch` — Handschrift-Teil wird durchgestrichen, darüber ein Kommentar in Handschrift
+  aus `magDurchWorte` („Ertappt.|Kenn ich.|Ups.|Same.|Echt jetzt?“, nach Tag)
+- `sticker` — runder Lime-Stempel, −14°, Text aus `magSticker` (nach Tag), auf der
+  Seite gegenüber dem Gesicht (`_zBox`)
+- `marker` — letzte Titelwörter (≥ 12 Zeichen) mit Lime-Marker hinterlegt
+- `chat` — Titel als weiße Nachricht links, Handschrift-Teil als Lime-Antwort rechts
+- `zahl` — erste Zahl im Text als riesige Kontur (Syne), Satzanfang klein davor,
+  Rest in Versalien danach; ohne Zahl → `kringel`
+- `zettel` — Handschrift-Teil auf einem Notizzettel mit Lime-Klebeband
+- `wortmix` — Titel aufgeteilt: erstes Wort Fraunces kursiv, Mitte DM Serif,
+  letztes Wort riesig in Syne-Versalien in Lime
+- `durch`/`zettel` ohne Handschrift-Teil → `kringel`. Mit eigener Auszeichnung
+  (`#`, `>` …) gibt es keine Gimmicks.
+
+Alle Adressen laden **karten462**.
