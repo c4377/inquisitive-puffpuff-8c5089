@@ -11568,3 +11568,12 @@ die bisher komplett in den Titel gingen und auf winzige Schrift schrumpften.
   `kinoHeben` 8).
 
 Alle Adressen laden **karten453**.
+
+## 397 — Editorial: eine Akzentfarbe
+
+„Wir brauchen noch eine Farbe“: neue Einstellung `magAkzent` für breite Versalien,
+handgezogene Unterstreichungen, Pfeile und Trennstrich (Serif-Titel, Fließtext und
+Monogramm bleiben weiß). Vier Varianten im Look-Schalter: `editorial` Lime #CEDF92,
+`editorial-pfirsich` #F6C8A8, `editorial-himmel` #BFDDF0, `editorial-butter` #F1E3B8.
+
+Alle Adressen laden **karten454**.
