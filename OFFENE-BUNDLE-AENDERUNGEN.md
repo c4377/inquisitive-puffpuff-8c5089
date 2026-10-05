@@ -11745,3 +11745,12 @@ Pfeil dahinter (wenn Platz). Mehr Abstand davor (0,036 × Höhe). Kurze Antworte
 (≤ 20 Zeichen, z. B. „Nö.“) bleiben trotz „&“-Zeile in Handschrift.
 
 Alle Adressen laden **karten465**.
+
+## 409 — Editorial: Kringel-Pfeil nur bei direkter Handschrift
+
+„Soll das ein Pfeil sein?“: Der Kritzelpfeil vom Kringel zur Handschrift lief bei
+langem Fließtext dazwischen als dünne Linie durch den Text. Er erscheint jetzt nur
+noch, wenn die Handschriftzeile höchstens 1,9 Titelzeilen unter dem umkringelten
+Wort steht. Die „&“-Zeile bekommt nie diesen Pfeil (sie hat ihren eigenen).
+
+Alle Adressen laden **karten466**.
