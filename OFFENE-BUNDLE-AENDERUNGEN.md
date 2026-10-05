@@ -11647,3 +11647,12 @@ Looks: `editorial` = Feed-Mix (auch die Akzent-Varianten), `editorial-b` nur Ser
 `editorial-pop` nur Poppins. `editorial-wechsel` entfällt.
 
 Alle Adressen laden **karten459**.
+
+## 403 — Editorial: Typ „band“ jetzt fast schwarz
+
+„Nur schwarz oder so starkes Overlay, dass man das Foto kaum sieht“: Statt des
+Bandes liegt beim Typ `band` eine fast schwarze Fläche über dem ganzen Foto
+(`magBand` rgba(18,16,15,0,86)); Text mittig in der Höhe, linksbündig, Titel in
+Roxborough.
+
+Alle Adressen laden **karten460**.
