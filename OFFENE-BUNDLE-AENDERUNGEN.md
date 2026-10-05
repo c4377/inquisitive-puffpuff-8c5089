@@ -11614,3 +11614,18 @@ Alle Adressen laden **karten456**.
 - Innenfolien bleiben in Roxborough. Schrift `DMSerifDisplay-Mag-400.woff2` (SIL OFL).
 
 Alle Adressen laden **karten457**.
+
+## 401 — Editorial: ab „und“ in Handschrift
+
+Deckblatt ohne Auszeichnung: großer Titel = erster Satzteil (Trennung wie in 400);
+der abgetrennte Teil ab „und“/Komma — oder, wenn nicht getrennt wurde, der zweite
+Satz bis 70 Zeichen — steht in **Handschrift** (Caveat Bold, Familie „CaveatV3“,
+0,095 × Breite, −3° geneigt, in der Akzentfarbe Lime). Der Rest bleibt klein in
+Poppins. Die alte Versalien-Schlusszeile auf dem Deckblatt entfällt (mit `>` weiter
+möglich). Bei Stil E wird das letzte Titelwort nicht mehr eingefärbt, wenn es eine
+Handschriftzeile gibt.
+
+Neu in der Auszeichnung: `~ Text` = Handschriftzeile (auch auf Innenfolien).
+Einstellung `magHand` (Schriftfamilie).
+
+Alle Adressen laden **karten458**.

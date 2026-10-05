@@ -62,28 +62,28 @@ weitere = ''.join(',"editorial-' + k + '":' + json.dumps({**look, 'magCover': c}
 ersetze('},"frech":', '},"editorial":' + json.dumps(look, ensure_ascii=False, separators=(',', ':')) + weitere + ',"frech":')
 
 ZEICHNER = r'''if($e&&BS_KACHEL.magazin===1){const zFb=Pe.fabric,K=BS_KACHEL,zW=r,zH=n;
-const SER=K.magSerif||"Fraunces Mag",CSER=K.magCoverSerif||SER,SW=String(K.magSerifGewicht||"300"),SANS=K.magSans||"Poppins",WIDE=K.magBreit||"Syne Mag";
-try{await Promise.race([Promise.all([`${SW} 40px "${SER}"`,`400 40px "${CSER}"`,`400 40px "${SANS}"`,`600 40px "${SANS}"`,`800 40px "${WIDE}"`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,5e3))])}catch(zz){}
+const SER=K.magSerif||"Fraunces Mag",HAND=K.magHand||"CaveatV3",CSER=K.magCoverSerif||SER,SW=String(K.magSerifGewicht||"300"),SANS=K.magSans||"Poppins",WIDE=K.magBreit||"Syne Mag";
+try{await Promise.race([Promise.all([`${SW} 40px "${SER}"`,`400 40px "${CSER}"`,`700 40px "${HAND}"`,`400 40px "${SANS}"`,`600 40px "${SANS}"`,`800 40px "${WIDE}"`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,5e3))])}catch(zz){}
 const zNo={selectable:!1,evented:!1},AK=K.magAkzent||"#FFFFFF";
 const zD=((i&&i.slideIndex)||0)===0?(K.magDunkelCover==null?.06:K.magDunkelCover):(K.magDunkel==null?.2:K.magDunkel);e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:`rgba(0,0,0,${zD})`,...zNo}));
 e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,...zNo,fill:new zFb.Gradient({type:"linear",coords:{x1:0,y1:0,x2:0,y2:zH},colorStops:[{offset:0,color:"rgba(0,0,0,0.08)"},{offset:.22,color:"rgba(0,0,0,0)"},{offset:.5,color:"rgba(0,0,0,0.04)"},{offset:1,color:`rgba(0,0,0,${((i&&i.slideIndex)||0)===0?.58:.3})`}]})}));
 const zCx=document.createElement("canvas").getContext("2d");
 const zMs=(zs,zf,zfs,zcs)=>{zCx.font=zf;return zCx.measureText(zs).width+String(zs).length*(zcs||0)*zfs/1e3};
 const zCover=((i&&i.slideIndex)||0)===0;
-const ST={h1:{fam:SER,w:SW,fs:.15,lh:.93,cs:-20,max:5,min:.085},h2:{fam:SER,w:SW,fs:.08,lh:1.02,cs:-15,max:5},caps:{fam:WIDE,w:"800",fs:.043,lh:1.45,cs:20,up:1},lead:{fam:SANS,w:"600",fs:.035,lh:1.5,cs:0},body:{fam:SANS,w:"400",fs:.035,lh:1.55,cs:0},li:{fam:SANS,w:"400",fs:.036,lh:1.45,cs:0}};
+const ST={hand:{fam:HAND,w:"700",fs:.095,lh:.98,cs:0,max:3,min:.062},h1:{fam:SER,w:SW,fs:.15,lh:.93,cs:-20,max:5,min:.085},h2:{fam:SER,w:SW,fs:.08,lh:1.02,cs:-15,max:5},caps:{fam:WIDE,w:"800",fs:.043,lh:1.45,cs:20,up:1},lead:{fam:SANS,w:"600",fs:.035,lh:1.5,cs:0},body:{fam:SANS,w:"400",fs:.035,lh:1.55,cs:0},li:{fam:SANS,w:"400",fs:.036,lh:1.45,cs:0}};
 const zStil=K.magCover==="pop"||(K.magCover==="wechsel"&&(Number(t._tag)||0)%2===1)?"pop":"serif";if(zStil==="pop")ST.h1={fam:SANS,w:"600",fs:.105,lh:1.04,cs:-25,max:5,min:.075,pop:1};else if(K.magCoverSerif)ST.h1={...ST.h1,fam:CSER,w:String(K.magCoverSerifGewicht||"400"),fs:.13,lh:.98,cs:-10};
 const zRuns=zs=>{const zo=[];let zb=!1,zu=!1,zc="";const zp=()=>{zc&&zo.push({t:zc,b:zb||zu,u:zu});zc=""};for(let k=0;k<zs.length;k++){const ch=zs[k];if(ch==="*"&&zs[k+1]==="*"){zp();zb=!zb;k++;continue}if(ch==="_"&&zs[k+1]==="_"){zp();zu=!zu;k++;continue}if(ch==="*"){zp();zu=!zu;continue}zc+=ch}zp();return zo};
 const zSaetze=zx=>{const zr=[];let za="";String(zx||"").split(/\s+/).filter(Boolean).forEach(zw=>{za=za?za+" "+zw:zw;if(/[.!?:…]["»”)’]?$/.test(zw)){zr.push(za);za=""}});za&&zr.push(za);return zr};
 let zAus=K.magAusrichtung||"links";const zBl=[];
 const zRoh=String(t.text||"").replace(/\r/g,"");const zZl=zRoh.split("\n");
-const zMark=zZl.some(zq=>/^\s*(#{1,2}\s|>\s|[-•→]\s|->\s|!\s|\|\s*$|\[(mitte|links)\]\s*$)/i.test(zq));
+const zMark=zZl.some(zq=>/^\s*(#{1,2}\s|>\s|[-•→]\s|->\s|!\s|~\s|\|\s*$|\[(mitte|links)\]\s*$)/i.test(zq));
 if(zMark){zZl.forEach(zq=>{const z=zq.trim();if(!z){zBl.push({k:"gap"});return}let m;
 if(/^\[mitte\]$/i.test(z)){zAus="mitte";return}if(/^\[links\]$/i.test(z)){zAus="links";return}
 if(m=/^##\s+(.*)$/.exec(z))return zBl.push({k:"h2",s:m[1]});if(m=/^#\s+(.*)$/.exec(z))return zBl.push({k:zCover?"h1":"h2",s:m[1]});
 if(m=/^>\s+(.*)$/.exec(z))return zBl.push({k:"caps",s:m[1]});if(m=/^(?:[-•→]|->)\s+(.*)$/.exec(z))return zBl.push({k:"li",s:m[1]});
-if(m=/^!\s+(.*)$/.exec(z))return zBl.push({k:"lead",s:m[1]});if(/^\|$/.test(z))return zBl.push({k:"div"});zBl.push({k:"body",s:z})})}
+if(m=/^~\s+(.*)$/.exec(z))return zBl.push({k:"hand",s:m[1]});if(m=/^!\s+(.*)$/.exec(z))return zBl.push({k:"lead",s:m[1]});if(/^\|$/.test(z))return zBl.push({k:"div"});zBl.push({k:"body",s:z})})}
 else{const zP=zRoh.split(/\n/).map(zq=>zq.trim()).filter(Boolean);
-if(zCover){const zAll=zP.join(" "),zS=zSaetze(zAll),zL=(zS[zS.length-1]||"").replace(/\*/g,"");if(zAll.replace(/\*/g,"").length<=70&&!(zS.length>1&&zL.length<=48))zBl.push({k:"h1",s:zAll});else{let zh=zS[0]||"",zr=zS.slice(1);if(zh.replace(/\*/g,"").length>50){let zc=-1;const zIn=zx=>{const zv=zh.slice(0,zx);return(zv.match(/[\u201e\u00bb]/g)||[]).length>(zv.match(/[\u201c\u201d\u00ab]/g)||[]).length||((zv.match(/"/g)||[]).length%2===1)};const zk=zh.indexOf(", ",15);if(zk>0&&zk<=60&&!zIn(zk))zc=zk;else{const zm=/\s(und|oder|weil|aber|statt|bis|wenn|obwohl|damit|während|nachdem|sobald)\s/g;let zq;while((zq=zm.exec(zh))){if(zq.index>=18&&zq.index<=60&&!zIn(zq.index)){zc=zq.index;break}}}if(zc>0){zr=[zh.slice(zc).replace(/^[,\s]+/,""),...zr];zh=zh.slice(0,zc)}}zBl.push({k:"h1",s:zh});let zcap="";zr.length&&zr[zr.length-1].replace(/\*/g,"").length<=48&&(zcap=zr.pop());zr.length&&zBl.push({k:"body",s:zr.join(" ")});zcap&&zBl.push({k:"caps",s:zcap})}}
+if(zCover){const zAll=zP.join(" "),zS=zSaetze(zAll);let zh=zS[0]||"",zr=zS.slice(1),zHand="";if(zh.replace(/\*/g,"").length>50){let zc=-1;const zIn=zx=>{const zv=zh.slice(0,zx);return(zv.match(/[\u201e\u00bb]/g)||[]).length>(zv.match(/[\u201c\u201d\u00ab]/g)||[]).length||((zv.match(/"/g)||[]).length%2===1)};const zk=zh.indexOf(", ",15);if(zk>0&&zk<=60&&!zIn(zk))zc=zk;else{const zm=/\s(und|oder|weil|aber|statt|bis|wenn|obwohl|damit|während|nachdem|sobald)\s/g;let zq;while((zq=zm.exec(zh))){if(zq.index>=18&&zq.index<=60&&!zIn(zq.index)){zc=zq.index;break}}}if(zc>0){zHand=zh.slice(zc).replace(/^[,\s]+/,"");zh=zh.slice(0,zc)}}if(!zHand&&zr.length&&zr[0].replace(/\*/g,"").length<=70)zHand=zr.shift();zBl.push({k:"h1",s:zh});zHand&&zBl.push({k:"hand",s:zHand});zr.length&&zBl.push({k:"body",s:zr.join(" ")})}
 else if(zP.length>1){zBl.push({k:zP[0].length>110?"body":"h2",s:zP[0]});zP.slice(1).forEach(zq=>/^\d+[.)]\s+/.test(zq)?zBl.push({k:"li",s:zq.replace(/^\d+[.)]\s+/,"")}):zBl.push({k:"body",s:zq}))}
 else{const zS=zSaetze(zP[0]||"");if(zS.length<2||(zS[0]||"").length>110)zBl.push({k:(zP[0]||"").length>140?"body":"h2",s:zP[0]||""});else{zBl.push({k:"h2",s:zS[0]});zBl.push({k:"body",s:zS.slice(1).join(" ")})}}}
 while(zBl.length&&zBl[zBl.length-1].k==="gap")zBl.pop();while(zBl.length&&zBl[0].k==="gap")zBl.shift();
@@ -94,10 +94,10 @@ const zend=()=>{while(zc.length&&zc[zc.length-1].sp)zcw-=zc.pop().w;zc.length&&z
 zws.forEach(zd=>{const zw=zMs(zd.t,zf(zd.b),fs,st.cs);if(zd.sp){zc.length&&(zc.push({...zd,w:zw}),zcw+=zw);return}if(zcw+zw>mw&&zc.length)zend();zc.push({...zd,w:zw});zcw+=zw});zend();return zl};
 zBl.forEach((zb,zx)=>{zb.k==="caps"&&((zBl[zx-1]||{}).k==="caps"||(zBl[zx+1]||{}).k==="caps")&&(zb.reihe=1)});let zK=1;const zBau0=()=>zBl.map(zb=>{if(zb.k==="gap"||zb.k==="div")return{...zb,h:zb.k==="div"?zH*.095:zH*.012,lines:[]};const st=ST[zb.k];let fs=zW*st.fs*zK;
 let txt=String(zb.s||"");if(st.fam!==SANS||zb.k==="h1")txt=txt.replace(/\*+|__/g,"");if(st.up)txt=txt.toLocaleUpperCase("de-DE");
-const zr=st.fam===SANS?zRuns(txt):[{t:txt,b:!1,u:!1}];if(st.pop&&zr.length){const zl0=zr[zr.length-1],zi=zl0.t.trimEnd().lastIndexOf(" ");zi>0?zr.splice(zr.length-1,1,{...zl0,t:zl0.t.slice(0,zi+1)},{...zl0,t:zl0.t.slice(zi+1),c:1}):(zl0.c=1)}const mw=zb.k==="li"?MAXW-LI:MAXW;let lines=zWrap(zr,st,fs,mw);
+const zr=st.fam===SANS?zRuns(txt):[{t:txt,b:!1,u:!1}];if(st.pop&&zr.length&&!zBl.some(zq=>zq.k==="hand")){const zl0=zr[zr.length-1],zi=zl0.t.trimEnd().lastIndexOf(" ");zi>0?zr.splice(zr.length-1,1,{...zl0,t:zl0.t.slice(0,zi+1)},{...zl0,t:zl0.t.slice(zi+1),c:1}):(zl0.c=1)}const mw=zb.k==="li"?MAXW-LI:MAXW;let lines=zWrap(zr,st,fs,mw);
 if(st.max)for(let k=0;k<40&&(lines.length>st.max||lines.some(zl=>zl.w>mw))&&!(st.min&&fs<=zW*st.min*zK&&!lines.some(zl=>zl.w>mw));k++){fs*=.94;lines=zWrap(zr,st,fs,mw)}if(zb.reihe)for(let k=0;k<20&&lines.length>1&&fs>zW*.03;k++){fs*=.95;lines=zWrap(zr,st,fs,mw)}
 return{...zb,st,fs,lines,h:lines.length*fs*st.lh}});const zBau=()=>{const zb0=zBau0();const zm=Math.min(...zb0.filter(zq=>zq.reihe).map(zq=>zq.fs),1e9);return zm<1e9?zb0.map(zq=>{if(!zq.reihe||zq.fs===zm)return zq;const lines=zWrap([{t:String(zq.s).replace(/\*+|__/g,"").toLocaleUpperCase("de-DE"),b:!1,u:!1}],zq.st,zm,MAXW);return{...zq,fs:zm,lines,h:lines.length*zm*zq.st.lh}}):zb0};
-const zGap=(za,zb)=>za.k==="caps"&&zb.k==="caps"?zH*.008:za.k==="li"&&zb.k==="li"?zH*.026:zb.k==="div"||za.k==="div"?zH*.03:za.k==="h1"?zH*.03:za.k==="h2"?zH*.038:za.k==="caps"?zH*.03:za.k==="lead"?zH*.02:zH*.028;
+const zGap=(za,zb)=>za.k==="h1"&&zb.k==="hand"?zH*.014:za.k==="hand"?zH*.026:za.k==="caps"&&zb.k==="caps"?zH*.008:za.k==="li"&&zb.k==="li"?zH*.026:zb.k==="div"||za.k==="div"?zH*.03:za.k==="h1"?zH*.03:za.k==="h2"?zH*.038:za.k==="caps"?zH*.03:za.k==="lead"?zH*.02:zH*.028;
 let zB=zBau(),zT=0;const zSum=()=>{zT=zB.reduce((za,zb,zx)=>za+zb.h+(zx<zB.length-1?zGap(zb,zB[zx+1]):0),0)};zSum();
 for(let k=0;k<30&&zT>zH*.74&&zK>.72;k++){zK*=.94;zB=zBau();zSum()}
 let y=zCover?Math.max(zH*.14,zH*.86-zT):Math.max(zH*.14,zH*.56-zT/2);
@@ -109,7 +109,7 @@ zB.forEach((zb,zx)=>{if(zb.k==="div"){const xx=zAus==="mitte"?zW/2:L+zW*.01;e.ad
 else if(zb.lines.length){const st=zb.st,fs=zb.fs,lh=fs*st.lh;zb.lines.forEach((zl,zi)=>{const yc=y+lh*zi+lh/2;const x0=zb.k==="li"?L+LI:zAus==="mitte"?(zW-zl.w)/2:L;
 if(zb.k==="li"&&zi===0){const ax=L,aw=zW*.058,sw=Math.max(1.5,zW*.0032);e.add(new zFb.Line([ax,yc,ax+aw,yc],{stroke:AK,strokeWidth:sw,strokeLineCap:"round",...zNo}));e.add(new zFb.Polyline([{x:ax+aw-fs*.32,y:yc-fs*.22},{x:ax+aw,y:yc},{x:ax+aw-fs*.32,y:yc+fs*.22}],{fill:"",stroke:AK,strokeWidth:sw,strokeLineCap:"round",strokeLineJoin:"round",...zNo}))}
 let xx=x0;const zg=[];zl.segs.forEach(sg=>{const zq=zg[zg.length-1];zq&&zq.b===sg.b&&zq.u===sg.u&&zq.c===sg.c?(zq.t+=sg.t,zq.w+=sg.w):zg.push({...sg})});
-zg.forEach(sg=>{e.add(new zFb.Text(sg.t,{left:xx,top:yc,originX:"left",originY:"center",fontFamily:st.fam,fontWeight:sg.b&&st.fam===SANS?"600":st.w,fontSize:fs,charSpacing:st.cs||0,fill:sg.c||zb.k==="caps"?AK:"#FFFFFF",shadow:zSch,...zNo}));
+zg.forEach(sg=>{e.add(new zFb.Text(sg.t,{left:xx,top:yc,originX:"left",originY:"center",fontFamily:st.fam,fontWeight:sg.b&&st.fam===SANS?"600":st.w,fontSize:fs,charSpacing:st.cs||0,fill:sg.c||zb.k==="caps"||zb.k==="hand"?AK:"#FFFFFF",angle:zb.k==="hand"?-3:0,shadow:zSch,...zNo}));
 if(sg.u){const tw=sg.w-zMs((/\s+$/.exec(sg.t)||[""])[0],`600 ${fs}px "${st.fam}"`,fs,0);zStrich(xx,xx+tw,yc+fs*.62,fs)}xx+=sg.w})})}
 y+=zb.h+(zx<zB.length-1?zGap(zb,zB[zx+1]):0)});
 K.magMonogramm&&e.add(new zFb.Text(String(K.magMonogramm),{left:zW*.905,top:zH*.105,originX:"right",originY:"center",fontFamily:SER,fontWeight:SW,fontSize:zW*.095,charSpacing:-40,fill:"#FFFFFF",shadow:zSch,...zNo}));
