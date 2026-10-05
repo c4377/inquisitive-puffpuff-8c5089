@@ -11,6 +11,9 @@
 (function () {
   var LOOKS = [
     ["editorial", "Editorial: Feed-Mix"],
+    ["editorial-zitrone-hell", "Editorial: Zitrone hell"],
+    ["editorial-zitrone-kraeftig", "Editorial: Zitrone kräftig"],
+    ["editorial-zitrone-pastell", "Editorial: Zitrone pastell"],
     ["editorial-b", "Editorial: nur kräftige Serif"],
     ["editorial-pop", "Editorial: nur Poppins"],
     ["editorial-pfirsich", "Editorial Feed-Mix: Akzent Pfirsich"],

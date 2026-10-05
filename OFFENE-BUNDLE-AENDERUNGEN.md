@@ -11797,3 +11797,16 @@ Typen nicht in derselben Rasterspalte landen). Der Code für `wortmix` bleibt,
 wird aber nicht mehr verwendet.
 
 Alle Adressen laden **karten470**.
+
+## 414 — Zitat-Listen und drei Zitronen-Looks
+
+- Folgefolien: Stehen mindestens zwei Sätze komplett in Anführungszeichen („…“),
+  werden sie zur Pfeilliste; der Satz davor wird Serif-Titel (≤ 110 Zeichen), Sätze
+  danach Fließtext. Satzende erkennt jetzt auch „…“ / ‚…‘ als Abschluss.
+- Versalien-Liste nur noch bei Punkten bis 20 Zeichen (vorher 26), sonst Pfeilliste —
+  verhindert umbrechende Versalien.
+- Neue Looks `editorial-zitrone-hell` (#F4EE6E), `-kraeftig` (#EDE64C), `-pastell`
+  (#F1F0A0): Akzent und Farbfläche in kühlem Zitronengelb, Schrift auf der Fläche
+  #1E2426, Akzent auf der Fläche bleibt Petrol.
+
+Alle Adressen laden **karten471**.
