@@ -11810,3 +11810,24 @@ Alle Adressen laden **karten470**.
   #1E2426, Akzent auf der Fläche bleibt Petrol.
 
 Alle Adressen laden **karten471**.
+
+## 415 — Editorial Premium
+
+„Geht es in einer mehr Premium-Version?“: neuer Look `editorial-premium` (oben im
+Look-Schalter), die anderen bleiben.
+
+- Ruhigere Deckblatt-Reihe (11): serif|mitte|band|serif|kringel|flaeche|serif|durch|mitte|zettel|band
+  — keine Sticker, Marker, Chat, Riesenzahl, Poppins-Titel.
+- Titel in Roxborough (`magCoverSerif`), alles kleiner und luftiger:
+  `magTitelSkala` 0,9, `magTextSkala` 0,92, `magTextLaufweite` 30,
+  `magHandSkala` 0,9, `magCapsLaufweite` 240.
+- Feiner Haarlinien-Rahmen (`magRahmen`, 4,5 % Abstand, 38 % Deckkraft).
+- Akzent Zitrone pastell #F1F0A0; Farbfläche Elfenbein #EEECE5 mit dunkler Schrift und
+  Petrol-Akzent.
+- Fotos weicher und filmischer: Sättigung 0,9, Kontrast 0,98, Schwarz angehoben 14,
+  leichte Vignette 0,08; Deckblatt-Abdunklung 0,18.
+- Zeichner allgemein: Nach jedem Textstück wird um die tatsächlich gezeichnete Breite
+  weitergerückt (verhinderte fehlende Leerzeichen vor fetten Stellen bei größerer
+  Laufweite).
+
+Alle Adressen laden **karten472**.

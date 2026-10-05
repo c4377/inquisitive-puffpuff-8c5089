@@ -10,6 +10,7 @@
  */
 (function () {
   var LOOKS = [
+    ["editorial-premium", "Editorial Premium"],
     ["editorial", "Editorial: Feed-Mix"],
     ["editorial-zitrone-hell", "Editorial: Zitrone hell"],
     ["editorial-zitrone-kraeftig", "Editorial: Zitrone kräftig"],
