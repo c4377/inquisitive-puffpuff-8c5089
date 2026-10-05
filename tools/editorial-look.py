@@ -43,18 +43,18 @@ while True:
         if tiefe == 0: break
     j += 1
 look = json.loads(s[i:j + 1])
-SER, SANS, BREIT = 'Fraunces Mag', 'Poppins', 'Syne Mag'
+SER, SANS, BREIT = 'Roxborough CF', 'Poppins', 'Syne Mag'  # Carinas eigene Lizenz (nur ihre App)
 look.update({k: SER for k in ['fotoSchrift', 'deckblattFamilie', 'folgeFamilie', 'kastenSchrift', 'lisaSchrift',
                               'folgeSchrift', 'ablaufTitel', 'schriftart', 'unterSchrift']})
 look.update({
-    'magazin': 1, 'magSerif': SER, 'magSans': SANS, 'magBreit': BREIT, 'magMonogramm': 'cp', 'magAkzent': '#CEDF92',
+    'magazin': 1, 'magSerif': SER, 'magSans': SANS, 'magBreit': BREIT, 'magMonogramm': 'cp', 'magSerifGewicht': '400', 'magAkzent': '#CEDF92',
     'magDunkel': 0.2, 'magDunkelCover': 0.06, 'magAusrichtung': 'links',
     'versalFamilie': BREIT, 'versalAnteil': 0, 'fliessSchrift': SANS,
     # jede Folie bekommt ein Foto
     'textJede': 0, 'textAnteil': 0,
     # Fotos natürlich, leicht gedämpft, nicht so nah wie Kino
-    'kino': 1, 'kinoSaettigung': 0.92, 'kinoHeben': 8, 'kinoKontrast': 1.04, 'kinoWarm': 0.15,
-    'kinoSchwarz': 2, 'kinoWeiss': 252, 'kinoGamma': 0.88, 'kinoSplit': 1, 'kinoVignette': 0.1,
+    'kino': 1, 'kinoSaettigung': 1.06, 'kinoHeben': 8, 'kinoKontrast': 1.04, 'kinoWarm': 0.04,
+    'kinoSchwarz': 2, 'kinoWeiss': 252, 'kinoGamma': 0.88, 'kinoSplit': 1, 'kinoVignette': 0,
     'kinoBlauAnteil': 2, 'zuschnittZoom': 1.1,
 })
 AKZENTE = [('pfirsich', '#F6C8A8'), ('himmel', '#BFDDF0'), ('butter', '#F1E3B8')]
@@ -62,15 +62,15 @@ weitere = ''.join(',"editorial-' + k + '":' + json.dumps({**look, 'magAkzent': f
 ersetze('},"frech":', '},"editorial":' + json.dumps(look, ensure_ascii=False, separators=(',', ':')) + weitere + ',"frech":')
 
 ZEICHNER = r'''if($e&&BS_KACHEL.magazin===1){const zFb=Pe.fabric,K=BS_KACHEL,zW=r,zH=n;
-const SER=K.magSerif||"Fraunces Mag",SANS=K.magSans||"Poppins",WIDE=K.magBreit||"Syne Mag";
-try{await Promise.race([Promise.all([`300 40px "${SER}"`,`400 40px "${SANS}"`,`600 40px "${SANS}"`,`800 40px "${WIDE}"`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,5e3))])}catch(zz){}
+const SER=K.magSerif||"Fraunces Mag",SW=String(K.magSerifGewicht||"300"),SANS=K.magSans||"Poppins",WIDE=K.magBreit||"Syne Mag";
+try{await Promise.race([Promise.all([`${SW} 40px "${SER}"`,`400 40px "${SANS}"`,`600 40px "${SANS}"`,`800 40px "${WIDE}"`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,5e3))])}catch(zz){}
 const zNo={selectable:!1,evented:!1},AK=K.magAkzent||"#FFFFFF";
 const zD=((i&&i.slideIndex)||0)===0?(K.magDunkelCover==null?.06:K.magDunkelCover):(K.magDunkel==null?.2:K.magDunkel);e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:`rgba(0,0,0,${zD})`,...zNo}));
-e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,...zNo,fill:new zFb.Gradient({type:"linear",coords:{x1:0,y1:0,x2:0,y2:zH},colorStops:[{offset:0,color:"rgba(0,0,0,0.12)"},{offset:.22,color:"rgba(0,0,0,0)"},{offset:.5,color:"rgba(0,0,0,0.04)"},{offset:1,color:`rgba(0,0,0,${((i&&i.slideIndex)||0)===0?.5:.3})`}]})}));
+e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,...zNo,fill:new zFb.Gradient({type:"linear",coords:{x1:0,y1:0,x2:0,y2:zH},colorStops:[{offset:0,color:"rgba(0,0,0,0.08)"},{offset:.22,color:"rgba(0,0,0,0)"},{offset:.5,color:"rgba(0,0,0,0.04)"},{offset:1,color:`rgba(0,0,0,${((i&&i.slideIndex)||0)===0?.36:.3})`}]})}));
 const zCx=document.createElement("canvas").getContext("2d");
 const zMs=(zs,zf,zfs,zcs)=>{zCx.font=zf;return zCx.measureText(zs).width+String(zs).length*(zcs||0)*zfs/1e3};
 const zCover=((i&&i.slideIndex)||0)===0;
-const ST={h1:{fam:SER,w:"300",fs:.145,lh:.98,cs:-20,max:5,min:.085},h2:{fam:SER,w:"300",fs:.08,lh:1.05,cs:-15,max:5},caps:{fam:WIDE,w:"800",fs:.043,lh:1.45,cs:20,up:1},lead:{fam:SANS,w:"600",fs:.035,lh:1.5,cs:0},body:{fam:SANS,w:"400",fs:.035,lh:1.55,cs:0},li:{fam:SANS,w:"400",fs:.036,lh:1.45,cs:0}};
+const ST={h1:{fam:SER,w:SW,fs:.15,lh:.93,cs:-20,max:5,min:.085},h2:{fam:SER,w:SW,fs:.08,lh:1.02,cs:-15,max:5},caps:{fam:WIDE,w:"800",fs:.043,lh:1.45,cs:20,up:1},lead:{fam:SANS,w:"600",fs:.035,lh:1.5,cs:0},body:{fam:SANS,w:"400",fs:.035,lh:1.55,cs:0},li:{fam:SANS,w:"400",fs:.036,lh:1.45,cs:0}};
 const zRuns=zs=>{const zo=[];let zb=!1,zu=!1,zc="";const zp=()=>{zc&&zo.push({t:zc,b:zb||zu,u:zu});zc=""};for(let k=0;k<zs.length;k++){const ch=zs[k];if(ch==="*"&&zs[k+1]==="*"){zp();zb=!zb;k++;continue}if(ch==="_"&&zs[k+1]==="_"){zp();zu=!zu;k++;continue}if(ch==="*"){zp();zu=!zu;continue}zc+=ch}zp();return zo};
 const zSaetze=zx=>{const zr=[];let za="";String(zx||"").split(/\s+/).filter(Boolean).forEach(zw=>{za=za?za+" "+zw:zw;if(/[.!?:…]["»”)’]?$/.test(zw)){zr.push(za);za=""}});za&&zr.push(za);return zr};
 let zAus=K.magAusrichtung||"links";const zBl=[];
@@ -99,7 +99,7 @@ return{...zb,st,fs,lines,h:lines.length*fs*st.lh}});const zBau=()=>{const zb0=zB
 const zGap=(za,zb)=>za.k==="caps"&&zb.k==="caps"?zH*.008:za.k==="li"&&zb.k==="li"?zH*.026:zb.k==="div"||za.k==="div"?zH*.03:za.k==="h1"?zH*.03:za.k==="h2"?zH*.038:za.k==="caps"?zH*.03:za.k==="lead"?zH*.02:zH*.028;
 let zB=zBau(),zT=0;const zSum=()=>{zT=zB.reduce((za,zb,zx)=>za+zb.h+(zx<zB.length-1?zGap(zb,zB[zx+1]):0),0)};zSum();
 for(let k=0;k<30&&zT>zH*.74&&zK>.72;k++){zK*=.94;zB=zBau();zSum()}
-let y=zCover?Math.max(zH*.14,zH*.885-zT):Math.max(zH*.14,zH*.56-zT/2);
+let y=zCover?Math.max(zH*.14,zH*.86-zT):Math.max(zH*.14,zH*.56-zT/2);
 const zSch=new zFb.Shadow({color:"rgba(0,0,0,0.28)",blur:zW*.012,offsetX:0,offsetY:0});
 const zStrich=(x1,x2,yy,fs)=>{let zh=0;const zs=String(t.text||"")+x1;for(let k=0;k<zs.length;k++)zh=(zh*31+zs.charCodeAt(k))%9973;const zj=k=>((zh*(k+3))%7-3)/3*fs*.035;const sw=Math.max(1.5,zW*.0032);
 e.add(new zFb.Path(`M ${x1} ${yy+zj(1)} Q ${(x1+x2)/2} ${yy+zj(2)+fs*.03} ${x2} ${yy+zj(3)}`,{fill:"",stroke:AK,strokeWidth:sw,strokeLineCap:"round",...zNo}));
@@ -111,7 +111,7 @@ let xx=x0;const zg=[];zl.segs.forEach(sg=>{const zq=zg[zg.length-1];zq&&zq.b===s
 zg.forEach(sg=>{e.add(new zFb.Text(sg.t,{left:xx,top:yc,originX:"left",originY:"center",fontFamily:st.fam,fontWeight:sg.b&&st.fam===SANS?"600":st.w,fontSize:fs,charSpacing:st.cs||0,fill:zb.k==="caps"?AK:"#FFFFFF",shadow:zSch,...zNo}));
 if(sg.u){const tw=sg.w-zMs((/\s+$/.exec(sg.t)||[""])[0],`600 ${fs}px "${st.fam}"`,fs,0);zStrich(xx,xx+tw,yc+fs*.62,fs)}xx+=sg.w})})}
 y+=zb.h+(zx<zB.length-1?zGap(zb,zB[zx+1]):0)});
-K.magMonogramm&&e.add(new zFb.Text(String(K.magMonogramm),{left:zW*.905,top:zH*.105,originX:"right",originY:"center",fontFamily:SER,fontWeight:"300",fontSize:zW*.095,charSpacing:-40,fill:"#FFFFFF",shadow:zSch,...zNo}));
+K.magMonogramm&&e.add(new zFb.Text(String(K.magMonogramm),{left:zW*.905,top:zH*.105,originX:"right",originY:"center",fontFamily:SER,fontWeight:SW,fontSize:zW*.095,charSpacing:-40,fill:"#FFFFFF",shadow:zSch,...zNo}));
 t.overlayImage&&await Ae(t.overlayImage).catch(()=>{});e.renderAll();return}'''
 ANKER = 'if($e&&(t.karte==="ablauf"||t.reminderArt==="ablauf")){const Ab=T1('
 ersetze(ANKER, ZEICHNER.replace('\n', '') + ANKER)

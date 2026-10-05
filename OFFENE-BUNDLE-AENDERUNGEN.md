@@ -11577,3 +11577,15 @@ Monogramm bleiben weiß). Vier Varianten im Look-Schalter: `editorial` Lime #CED
 `editorial-pfirsich` #F6C8A8, `editorial-himmel` #BFDDF0, `editorial-butter` #F1E3B8.
 
 Alle Adressen laden **karten454**.
+
+## 398 — Editorial in Roxborough, Deckblatt näher an der Vorlage
+
+„Cover noch nicht ganz dort, Schrift bitte Roxborough“:
+
+- Serif-Titel, Zwischentitel und Monogramm in **Roxborough CF** (Carinas eigene
+  Lizenz, nur in ihrer App, nicht in v2), Stärke über `magSerifGewicht` (400).
+- Deckblatt: Titel 0,15 × Breite, Zeilenabstand 0,93, Block endet bei 86 % der Höhe;
+  Verlauf unten nur noch 0,36.
+- Fotos frischer: `kinoSaettigung` 1,06, `kinoWarm` 0,04, keine Vignette.
+
+Alle Adressen laden **karten455**.
