@@ -16,7 +16,17 @@
     ["bordeauxmix", "Bordeaux: Text Bordeaux, Fotos Waldgr\u00fcn"],
     ["creme", "Creme & Espresso"],
     ["kino", "Kino: Fotos warm, Gesicht nah"],
-    ["frech", "Frech: Lime, Petrol & Grau"]
+    ["frech", "Frech: Lime, Petrol & Grau"],
+    ["frech-zitrone", "Frech: Zitrone & Navy · Montserrat"],
+    ["frech-pfirsich", "Frech: Pfirsich & Tanne · DM Sans"],
+    ["frech-mint", "Frech: Mint & Pflaume · Plus Jakarta Sans"],
+    ["frech-rose", "Frech: Rosé & Olive · Figtree"],
+    ["frech-himmel", "Frech: Himmelblau & Terracotta · Urbanist"],
+    ["frech-lavendel", "Frech: Lavendel & Moos · Work Sans"],
+    ["frech-vanille", "Frech: Vanille & Bordeaux · Raleway"],
+    ["frech-aqua", "Frech: Aqua & Schiefer · Red Hat Display"],
+    ["frech-apricot", "Frech: Apricot & Petrol · Be Vietnam Pro"],
+    ["frech-pistazie", "Frech: Pistazie & Mokka · Archivo"]
   ];
   function jetzt() {
     try { return localStorage.getItem("BS_MARKE") || ""; } catch (e) { return ""; }
@@ -39,7 +49,7 @@
       'background:rgba(20,16,14,.82);color:rgba(255,255,255,.9);font:inherit;' +
       'box-shadow:0 2px 10px rgba(0,0,0,.25)}' +
       '#bs-look ul{list-style:none;margin:0 0 6px;padding:6px;border-radius:14px;' +
-      'background:rgba(20,16,14,.94);box-shadow:0 4px 18px rgba(0,0,0,.3);display:none}' +
+      'background:rgba(20,16,14,.94);box-shadow:0 4px 18px rgba(0,0,0,.3);display:none;max-height:70vh;overflow-y:auto}' +
       '#bs-look.offen ul{display:block}' +
       '#bs-look li{padding:10px 12px;border-radius:9px;color:rgba(255,255,255,.85);cursor:pointer;white-space:nowrap}' +
       '#bs-look li.an{background:rgba(255,255,255,.14);color:#fff}';

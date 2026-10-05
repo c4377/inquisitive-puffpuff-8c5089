@@ -11516,3 +11516,20 @@ sind nur noch Verweise darauf; Look-Schalter, index.html und `tools/frech-look.p
 stehen wieder auf dem Stand von 448.
 
 Alle Adressen laden **karten448**.
+
+## 394 — Zehn Farbwelten zurück, jede mit eigener Schrift
+
+„Die 10 Farbwelten und Fonts bitte“: die zehn `frech-<name>`-Looks sind wieder da
+(ohne die kleinen Kacheln aus 391 — `kleinReihe` ist nirgends gesetzt), jede mit
+eigener Schrift in Bold 700 (normal + kursiv, SIL OFL, selbst gehostet unter
+`/fonts/<Name>-Frech-700-*.woff2`, Familienname „<Name> Frech“):
+
+Zitrone & Navy · Montserrat, Pfirsich & Tanne · DM Sans, Mint & Pflaume · Plus
+Jakarta Sans, Rosé & Olive · Figtree, Himmelblau & Terracotta · Urbanist, Lavendel &
+Moos · Work Sans, Vanille & Bordeaux · Raleway, Aqua & Schiefer · Red Hat Display,
+Apricot & Petrol · Be Vietnam Pro, Pistazie & Mokka · Archivo (Familienname
+„ArchivSans Frech“, weil der Zeichner alles mit /Archivo|Anton/ in Versalien setzt).
+
+Bei den Schwestern `versalAnteil` 0. `frech` (Lime, Petrol & Grau, Poppins) bleibt wie 448.
+
+Alle Adressen laden **karten451**.
