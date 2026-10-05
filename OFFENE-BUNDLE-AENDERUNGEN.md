@@ -11735,3 +11735,13 @@ Auszeichnung werden jetzt aus dem Text komponiert (Variante = (Tag + Folie) mod 
   Zeichen), sonst die letzten drei Wörter, fett und handgezogen unterstrichen.
 
 Alle Adressen laden **karten464**.
+
+## 408 — Editorial: „&“-Zeile als Hingucker
+
+„& so löst du das muss auffallen“: Die „&“-Zeile auf dem Deckblatt ist ein eigener
+Block `amp` — Handschrift 0,11 × Breite (statt 0,08), −3° geneigt, in der
+Akzentfarbe, mit doppeltem handgezogenem Schwung darunter und einem gekritzelten
+Pfeil dahinter (wenn Platz). Mehr Abstand davor (0,036 × Höhe). Kurze Antworten
+(≤ 20 Zeichen, z. B. „Nö.“) bleiben trotz „&“-Zeile in Handschrift.
+
+Alle Adressen laden **karten465**.
