@@ -11942,3 +11942,13 @@ Alle Adressen laden **karten478**.
   Wiederholungen im Raster.
 
 Alle Adressen laden **karten479**.
+
+## 423 — „Wie mein Feed“: Deckblatt knapp
+
+„Es liegt unfassbar viel über den Posts“ (Test mit 100 echten Posts): Neue Einstellung
+`magCoverKnapp` 1 — auf dem Deckblatt (ohne eigene Auszeichnung) bleiben nur Rubrik,
+Titel und **eine** Zeile darunter: die „&“-Zeile, sonst die zweite Zeile; eine sehr
+kurze zweite Zeile (≤ 20 Zeichen, z. B. „Nö.“) bleibt zusätzlich. Fließtext fällt auf
+dem Deckblatt weg. Titelgrößen gemäßigt: `magTitelReihe` „1|1.12|0.86|1.05|0.92“.
+
+Alle Adressen laden **karten480**.

@@ -73,7 +73,7 @@ FEED = {'magCoverSerif': 'Instrument Serif', 'magSerif': 'Instrument Serif', 'ma
         'magKursiv': 'Instrument Serif', 'magKursivGewicht': '400', 'magKursivSkala': 1.25,
         'magSans': 'HelveticaNeueBrand', 'magSansGewicht': '300', 'magBreit': 'HelveticaNeueBrand', 'magBreitGewicht': '500',
         'fliessSchrift': 'HelveticaNeueBrand', 'magTitelSkala': 1.12, 'magTextSkala': 0.95, 'magTextLaufweite': 20, 'magCapsLaufweite': 300,
-        'magHandArt': 'schreib|kursiv|schreibversal|schreib|kursiv', 'magKicker': 'REALTALK|SALES|STANDING', 'magKursivBetonung': 1, 'magLage': 'unten|oben|links|mitte|oben|unten|links', 'magTitelReihe': '1|1.32|0.82|1.12|0.9',
+        'magHandArt': 'schreib|kursiv|schreibversal|schreib|kursiv', 'magKicker': 'REALTALK|SALES|STANDING', 'magKursivBetonung': 1, 'magLage': 'unten|oben|links|mitte|oben|unten|links', 'magTitelReihe': '1|1.12|0.86|1.05|0.92', 'magCoverKnapp': 1,
         'magFeed': 'serif|serif|band|serif|flaeche|serif|serif|band|serif|serif|flaeche', 'magAusrichtung': 'mitte', 'magCoverWechsel': 0,
         'magMonogramm': '', 'magNummer': 0, 'magRahmen': 0, 'magSignatur': 'schrift|caps',
         'magMono': '', 'magAkzent': '#FFFFFF', 'magFlaeche': '#63241E', 'magFlaecheText': '#F4EEE8', 'magFlaecheAkzent': '#F4EEE8',
@@ -131,6 +131,7 @@ if(zGim==="zettel"){zGimZettel=zBl[zIH].s;zBl.splice(zIH,1)}
 if(zGim==="chat"&&zI1>=0){zBl[zI1].k="bl";zIH>=0&&(zBl[zIH].k="br")}
 if(zGim==="wortmix"&&zI1>=0){const zw=String(zBl[zI1].s).replace(/\*+/g,"").trim().split(/\s+/);const zn=[];zw.length>1&&zn.push({k:"wm1",s:zw[0]});zw.length>2&&zn.push({k:"wm2",s:zw.slice(1,-1).join(" ")});zn.push({k:"wm3",s:zw[zw.length-1]});zBl.splice(zI1,1,...zn)}}
 if(zCover&&!zMark&&K.magKicker){const zKw=zKickT||zWahl(K.magKicker,"");zKw&&zBl.unshift({k:"kick",s:zKw})}
+if(zCover&&!zMark&&K.magCoverKnapp===1){const zA=zBl.find(q=>q.k==="amp"),zHd=zBl.find(q=>q.k==="hand"&&!q.kom),zEin=zA||zHd,zKeep=new Set(zBl.filter(q=>q.k==="kick"||q.k==="h1"||q.k==="strike"||q.kom||q===zEin||q===zHd&&String(q.s).replace(/\*/g,"").length<=20));for(let zi=zBl.length-1;zi>=0;zi--)!zKeep.has(zBl[zi])&&zBl.splice(zi,1)}
 
 const L=zW*.11,MAXW=zW*(zCover?.78:.76),LI=zW*.105;
 const zWrap=(zruns,st,fs,mw)=>{const zws=[];zruns.forEach(ru=>String(ru.t).split(/(\s+)/).forEach(zw=>{zw&&zws.push({t:zw,b:ru.b,u:ru.u,c:ru.c,i:ru.i,sp:/^\s+$/.test(zw)})}));
