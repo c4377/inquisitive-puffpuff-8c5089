@@ -11952,3 +11952,13 @@ kurze zweite Zeile (≤ 20 Zeichen, z. B. „Nö.“) bleibt zusätzlich. Fließ
 dem Deckblatt weg. Titelgrößen gemäßigt: `magTitelReihe` „1|1.12|0.86|1.05|0.92“.
 
 Alle Adressen laden **karten480**.
+
+## 424 — Instagram-Ansicht
+
+„Blend alles aus, damit es wie auf Instagram aussieht“: neues Skript
+`site/insta-ansicht.js` (in index.html nach `marken-schalter.js`). Knopf
+„Instagram-Ansicht“ links unten über dem Look-Schalter; setzt `body.bs-insta` und
+blendet aus: „Tag N“ und Folienzahl auf den Kacheln, ⋮-Knöpfe, Look-Schalter,
+Schwarz-Regler, „?“-Knopf; Raster randlos. Knopf wird dann klein und blass
+(„App-Ansicht“ holt alles zurück). Zustand in `localStorage` (`BS_INSTA`).
+Kein Bundle-Eingriff, Version bleibt **karten480**.
