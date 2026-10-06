@@ -11913,3 +11913,17 @@ Look-Schalter):
   Reihe `serif|band|serif|flaeche|kringel|serif|band|flaeche`.
 
 Alle Adressen laden **karten477**.
+
+## 421 — „Wie mein Feed“ nach Designer-Regeln
+
+- Betonung über Schrift statt Farbe: `magKursivBetonung` 1 → *Sternwörter* in
+  Serif-Titeln/Zwischentiteln stehen kursiv in derselben Schrift (Instrument Serif
+  Italic), kein grünes Wort.
+- Kein Kringel mehr; Rhythmus ca. 2 Fotos : 1 Kachel
+  (`serif|serif|band|serif|flaeche|serif|serif|band|serif|serif|flaeche`, Länge 11).
+- Feste Rubriken als Kicker: `magKicker` „REALTALK|SALES|STANDING“ im Wechsel; eigene
+  Rubrik mit `[SALES]` o. ä. ganz am Anfang des Folientexts (wird entfernt und als
+  Kicker gesetzt; `[mitte]`/`[links]` bleiben Ausrichtung).
+- Satzende wird jetzt auch vor schließendem Sternchen erkannt („*Satz.*“).
+
+Alle Adressen laden **karten478**.
