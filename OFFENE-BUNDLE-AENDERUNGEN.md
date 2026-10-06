@@ -11855,3 +11855,22 @@ Schrift dort ≈ #FDFBD2): neue Einstellung `magMono` setzt Text **und** Akzent
   serif|mitte|band|serif|kringel|band|serif|durch|mitte|serif|band. Sonst wie Premium.
 
 Alle Adressen laden **karten474**.
+
+## 418 — Zweite Zeile im Wechsel statt immer schräger Handschrift
+
+„Dass die handschriftliche Zeile überall gleich ausschaut … wirkt wie KI-Slop“: Die
+zweite Zeile (ab „und …“) und die „&“-Zeile haben jetzt vier Behandlungen, die pro
+Post wechseln (`magHandArt` nach Tag, Reihe der Länge 7 gegen 3 Spalten):
+`kursiv|versal|balken|kursiv|hand|versal|balken`
+
+- `kursiv` — Fraunces Light kursiv, gerade, Akzentfarbe (0,076 / „&“ 0,086)
+- `versal` — Syne ExtraBold Versalien, weit gesperrt (0,036 / 0,04)
+- `balken` — Poppins 500 auf einem Balken in der Akzentfarbe je Zeile, dunkle Schrift
+- `hand` — wie bisher Handschrift, −3°, mit Schwung (nur noch 1 von 7)
+
+Schräge Neigung, Fraunces-„&“, Schwung und Kringel-Pfeil nur noch bei `hand`; sonst
+ein feiner gerader Pfeil hinter der „&“-Zeile. Der Kommentar über Durchgestrichenem
+bleibt immer Handschrift (Stil `kom`). Gilt für alle Editorial-Looks und alle Folien
+eines Posts.
+
+Alle Adressen laden **karten475**.
