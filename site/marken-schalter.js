@@ -10,6 +10,8 @@
  */
 (function () {
   var LOOKS = [
+    ["editorial-premium-gelb", "Premium ruhig: alles Creme-Gelb"],
+    ["editorial-premium-weiss", "Premium ruhig: alles Weiß"],
     ["editorial-premium", "Editorial Premium"],
     ["editorial", "Editorial: Feed-Mix"],
     ["editorial-zitrone-hell", "Editorial: Zitrone hell"],

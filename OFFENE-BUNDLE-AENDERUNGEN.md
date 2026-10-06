@@ -11842,3 +11842,16 @@ Abstand im Paar, größerer zwischen den Paaren. Text davor wird Fließtext, der
 danach Fließtext mit automatischer Unterstreichung.
 
 Alle Adressen laden **karten473**.
+
+## 417 — Premium ruhig: einfarbig Creme-Gelb oder Weiß
+
+„Etwas ruhiger, lieber alles weiß oder in diesem Gelb“ (Vorlage thevaleriaramirez,
+Schrift dort ≈ #FDFBD2): neue Einstellung `magMono` setzt Text **und** Akzent
+(Handschrift, Linien, Pfeile, Versalien, Kringel) auf eine Farbe.
+
+- `editorial-premium-gelb`: alles #F7F1C4 (Creme-Gelb)
+- `editorial-premium-weiss`: alles #FFFFFF
+- Beide ohne Elfenbein-Fläche und ohne Notizzettel: Reihe
+  serif|mitte|band|serif|kringel|band|serif|durch|mitte|serif|band. Sonst wie Premium.
+
+Alle Adressen laden **karten474**.
