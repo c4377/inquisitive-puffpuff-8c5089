@@ -11962,3 +11962,22 @@ blendet aus: „Tag N“ und Folienzahl auf den Kacheln, ⋮-Knöpfe, Look-Schal
 Schwarz-Regler, „?“-Knopf; Raster randlos. Knopf wird dann klein und blass
 („App-Ansicht“ holt alles zurück). Zustand in `localStorage` (`BS_INSTA`).
 Kein Bundle-Eingriff, Version bleibt **karten480**.
+
+## 425 — Look „Ruhig: Versal-Cover“
+
+Nach Referenz (alisa.vanzaam), „komplett ruhig, nur Pfeile, unterstrichen und Strich“
+(`editorial-ruhig`, ganz oben im Look-Schalter):
+
+- Deckblatt: Titel in Helvetica Neue Bold Versalien (`magTitelVersal`, `magTitelGewicht`,
+  `magTitelFs` 0,074, `magTitelLaufweite`), die zweite Zeile läuft kursiv und leicht
+  im selben Block weiter (`magCoverInline` + `magKursivBetonung`,
+  `magKursivLaufGewicht` 300). Darunter höchstens die „&“-Zeile mit geradem Pfeil.
+- Textblock unten rechts oder unten links (`magLage` „rechts|links|…“; neue Lage
+  `rechts`: Spalte ab 43 % Breite, weicht bei Gesicht rechts nach links aus).
+- Keine Rubrik, Signatur, Monogramm, Nummer, Rahmen, Handschrift, Gimmicks. Nur
+  Pfeile, Unterstreichungen und Trennstrich. Alles Weiß (`magMono`).
+- Fotos hell und in Farbe, kaum abgedunkelt (`magVerlaufCover` 0,38 statt 0,58);
+  jede ~3. Kachel fast schwarz.
+- Innenfolien: Zwischentitel Helvetica Neue Bold, Text Inter Light.
+
+Alle Adressen laden **karten481**.
