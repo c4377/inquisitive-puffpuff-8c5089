@@ -11893,3 +11893,23 @@ Syne, DM Serif und Handschrift (`magHandArt` ohne `hand`, Feed ohne `durch`):
 - `editorial-typo-modern` Modern: Aspekta, Bodoni Moda Italic
 
 Alle Adressen laden **karten476**.
+
+## 420 — Look „Wie mein Feed“
+
+Aus Carinas echtem Instagram-Raster abgeleitet (`editorial-feed`, ganz oben im
+Look-Schalter):
+
+- Fotos schwarz-weiß (`kinoSaettigung` 0, `kinoWarm` 0, Kontrast 1,1).
+- Titel und Zwischentitel in **Instrument Serif** (schmale, hohe Serif), alles zentriert.
+- Kicker über dem Deckblatt-Titel: neue Einstellung `magKicker` („REALTALK“, Liste mit
+  | wechselt nach Tag), klein, Helvetica Neue, Laufweite 520.
+- Zweite Zeile im Wechsel `schreib|kursiv|schreibversal|schreib|kursiv` — neue
+  Behandlungen `schreib` (Courier Prime) und `schreibversal` (Courier-Versalien);
+  kursiv = Instrument Serif Italic.
+- Unten Signatur statt Monogramm/Nummer: neue Einstellung `magSignatur`
+  („schrift|caps“ = „carinaannaprav“ in Mrs Saint Delafield bzw. „BY CARINA ANNA
+  PRAV“ gesperrt), `magNummer` 0 blendet „N° / 02 / 05“ aus.
+- Farbkacheln Bordeaux #63241E (aus dem Feed gemessen) und Schwarz #0F0F0F;
+  Reihe `serif|band|serif|flaeche|kringel|serif|band|flaeche`.
+
+Alle Adressen laden **karten477**.

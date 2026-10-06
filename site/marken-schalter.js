@@ -10,6 +10,7 @@
  */
 (function () {
   var LOOKS = [
+    ["editorial-feed", "Wie mein Feed: SW, Bordeaux, Realtalk"],
     ["editorial-typo", "Premium Typo: Klassik (Helvetica + Cormorant)"],
     ["editorial-typo-mode", "Premium Typo: Mode (Jost + Instrument)"],
     ["editorial-typo-modern", "Premium Typo: Modern (Aspekta + Bodoni)"],
