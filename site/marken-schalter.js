@@ -10,6 +10,9 @@
  */
 (function () {
   var LOOKS = [
+    ["editorial-typo", "Premium Typo: Klassik (Helvetica + Cormorant)"],
+    ["editorial-typo-mode", "Premium Typo: Mode (Jost + Instrument)"],
+    ["editorial-typo-modern", "Premium Typo: Modern (Aspekta + Bodoni)"],
     ["editorial-premium-gelb", "Premium ruhig: alles Creme-Gelb"],
     ["editorial-premium-weiss", "Premium ruhig: alles Weiß"],
     ["editorial-premium", "Editorial Premium"],

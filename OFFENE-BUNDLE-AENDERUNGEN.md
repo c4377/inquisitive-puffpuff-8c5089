@@ -11874,3 +11874,22 @@ bleibt immer Handschrift (Stil `kom`). Gilt für alle Editorial-Looks und alle F
 eines Posts.
 
 Alle Adressen laden **karten475**.
+
+## 419 — Premium Typo (drei Varianten)
+
+„Bau Premium Typo, aber ergänze Fonts“: Schriften im Editorial-Zeichner jetzt frei
+einstellbar — `magSansGewicht`, `magBreitGewicht` (Versalien/Zahl/Sticker),
+`magKursiv` / `magKursivGewicht` / `magKursivSkala` (kursive Zeile und „&“; vorher
+fest Fraunces). Ergänzt: **Jost** 300/400/500 (`/fonts/Jost-*.woff2`, Familie
+„Jost Mag“, SIL OFL) und das kursive **Cormorant Garamond** (vorhandene
+Italic-Variable-Datei, jetzt mit `@font-face`).
+
+Drei Looks, alle Basis „Premium ruhig Creme-Gelb“, Titel Roxborough, ohne Poppins,
+Syne, DM Serif und Handschrift (`magHandArt` ohne `hand`, Feed ohne `durch`):
+
+- `editorial-typo` Klassik: Helvetica Neue Light (Text), Helvetica Neue Medium
+  (Versalien), Cormorant Garamond Italic
+- `editorial-typo-mode` Mode: Jost Light/Medium, Instrument Serif Italic
+- `editorial-typo-modern` Modern: Aspekta, Bodoni Moda Italic
+
+Alle Adressen laden **karten476**.
