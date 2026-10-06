@@ -11927,3 +11927,18 @@ Alle Adressen laden **karten477**.
 - Satzende wird jetzt auch vor schließendem Sternchen erkannt („*Satz.*“).
 
 Alle Adressen laden **karten478**.
+
+## 422 — „Wie mein Feed“: weniger vorhersehbar
+
+„Alles zu vorhersehbar“: Schrift und Farbe bleiben, der Aufbau des Deckblatts wechselt.
+
+- `magLage` „unten|oben|links|mitte|oben|unten|links“ (nach Tag, Länge 7): Textblock
+  unten, oben (mit Verlauf von oben), mittig oder links unten wie eine Bildunterschrift.
+  „oben“ wird bei Fotos zu „unten“, wenn das erkannte Gesicht (`_zBox.y0`) in der
+  oberen Bildhälfte beginnt.
+- `magTitelReihe` „1|1.32|0.82|1.12|0.9“ (Länge 5): Titelgröße je Post von zurückhaltend
+  bis plakativ.
+- Zusammen mit der Kachel-Reihe (11) und der zweiten Zeile (5) ergeben sich kaum
+  Wiederholungen im Raster.
+
+Alle Adressen laden **karten479**.
