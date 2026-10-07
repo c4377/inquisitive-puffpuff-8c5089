@@ -12040,3 +12040,19 @@ Nach ihrer Farbpalette (Schwarz, Graphit, Oxblood, Taupe, Beige, Off-White, Grau
 - Neue Sticker: `r1`–`r5` mit Oxblood-Kontur, `w1`–`w4` mit Off-White-Kontur.
 
 Alle Adressen laden **karten485**.
+
+## 430 — Oxblood-Look: edlere Schrift (Roxborough)
+
+„Die Schrift noch edler, also Roxborough“ – im Look `editorial-ruhig-oxblood`:
+
+- Foto-Cover: Titel in Roxborough CF (normal, keine fetten Versalien mehr,
+  `magTitelVersal` 0, `magTitelSkala` 0,74), der kursive Weiterlauf in Cormorant Garamond
+  kursiv. Neu dafür: `magKursivLaufSchrift` – eigene Schrift für den kursiven Teil im Titel
+  (vorher immer dieselbe Familie, schräg gestellt).
+- Folgefolien: Zwischentitel Roxborough.
+- Scrapbook-Kacheln: Titel Roxborough, Weiterlauf Cormorant kursiv, Label-Streifen in
+  Helvetica Medium mit weiter Laufweite statt Schreibmaschine. Neue Schrift-Parameter in
+  `scrapFarben` (`tf`, `tw`, `tup`, `tsk`, `tlh`, `tcs`, `rf`, `rw`, `rsk`, `lf`, `lw`, `lcs`).
+  Kassabon bleibt Schreibmaschine.
+
+Alle Adressen laden **karten486**.
