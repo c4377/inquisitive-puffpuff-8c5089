@@ -11981,3 +11981,13 @@ Nach Referenz (alisa.vanzaam), „komplett ruhig, nur Pfeile, unterstrichen und 
 - Innenfolien: Zwischentitel Helvetica Neue Bold, Text Inter Light.
 
 Alle Adressen laden **karten481**.
+
+## 426 — „Ruhig“: Schrift kleiner
+
+Am Handy war die Schrift zu groß. Im Look `editorial-ruhig`:
+
+- Deckblatt-Titel `magTitelFs` 0,074 → 0,062 (rund 16 % kleiner).
+- Kursiver Weiterlauf `magKursivSkala` 0,8 → 0,72.
+- Text auf den Innenfolien `magTextSkala` 1 → 0,92.
+
+Alle Adressen laden **karten482**.
