@@ -12077,3 +12077,17 @@ Neuer Look `editorial-klar`, ganz oben im Look-Schalter.
 - Fotos natürlich in Farbe, Deckblatt nicht abgedunkelt.
 
 Alle Adressen laden **karten487**.
+
+## 432 — „Klar“: Text weiß, Schachbrett hell/dunkel, Cutouts auf Schwarz und Weiß
+
+- Text auf Fotos immer weiß (mit weichem Schatten), oben zentriert wie bisher.
+- Schachbrett über `magKlarFeed` („dunkel|hell|dunkel|cutweiss|cutschwarz|hell|dunkel|hell“):
+  dunkle Felder bekommen ein stärkeres Overlay (`magKlarDunkel` 0,3), helle eine Nuance
+  weniger (`magKlarHell` 0,1); der Verlauf hinter dem Text oben passt sich an.
+- Cutout-Kacheln: Carina freigestellt (ohne Kontur) unten mittig auf Schwarz (Text weiß,
+  dunkle Felder) oder Weiß (Text schwarz, helle Felder); Cutouts `k1`–`k8` in `site/scrap/`
+  (`magKlarCut`). Folgefolien dieser Posts: einfarbig Schwarz bzw. Weiß.
+- Folgefolien der Foto-Posts: Overlay 0,52 (dunkel) bzw. 0,38 (hell), Text weiß.
+- Zeichner-Modul in `tools/klar-zeichner.js`.
+
+Alle Adressen laden **karten488**.

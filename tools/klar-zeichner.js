@@ -1,0 +1,9 @@
+/* Look „Klar“: Schachbrett aus dunklerem und hellerem Foto-Overlay (Text weiß) und
+   Cutout-Kacheln auf Weiß (Text schwarz) oder Schwarz (Text weiß). Steuerung über
+   magKlarFeed (dunkel|hell|cutweiss|cutschwarz), Cutouts aus /scrap/ über magKlarCut.
+   Wird von editorial-look.py eingesetzt; alle Zeilenumbrüche werden entfernt. */
+let zkObenA=null,zkKeinSchatten=!1;
+if(K.magKlarFeed){const zkL=String(K.magKlarFeed).split("|").filter(Boolean),zkTg=Number(t._tag)||0,zkTyp=zkL[(zkTg%zkL.length+zkL.length)%zkL.length];
+if(zkTyp==="dunkel"||zkTyp==="hell"){const zkA=zCover?(zkTyp==="dunkel"?Number(K.magKlarDunkel||.3):Number(K.magKlarHell||.1)):(zkTyp==="dunkel"?.52:.38);e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:`rgba(0,0,0,${zkA})`,...zNo}));zkObenA=zkTyp==="dunkel"?.42:.28}
+else if(zkTyp==="cutweiss"||zkTyp==="cutschwarz"){const zkW=zkTyp==="cutweiss";e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:zkW?(K.magKlarWeiss||"#FAFAF8"):(K.magKlarSchwarz||"#0E0E0E"),...zNo}));TXT=AK=zkW?"#111111":"#FFFFFF";zkKeinSchatten=!0;zkObenA=0;
+if(zCover){zLage2="oben";const zkCL=String(K.magKlarCut||"").split("|").filter(Boolean);if(zkCL.length){const zkN=zkCL[(zkTg%zkCL.length+zkCL.length)%zkCL.length];const zkIm=await new Promise(zr=>{const zi=new Image();zi.onload=()=>zr(zi);zi.onerror=()=>zr(null);zi.src="/scrap/"+zkN+".webp"});if(zkIm){const zks=Math.min(zW*.92/zkIm.width,zH*.6/zkIm.height);e.add(new zFb.Image(zkIm,{left:zW/2,top:zH-zkIm.height*zks/2,originX:"center",originY:"center",scaleX:zks,scaleY:zks,shadow:new zFb.Shadow({color:zkW?"rgba(0,0,0,0.16)":"rgba(0,0,0,0)",blur:zW*.03,offsetX:0,offsetY:zW*.01}),...zNo}))}}}}}
