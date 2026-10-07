@@ -10,6 +10,7 @@
  */
 (function () {
   var LOOKS = [
+    ["editorial-klar", "Klar: Instrument Serif + Handschrift, Fotos natürlich"],
     ["editorial-ruhig-oxblood", "Ruhig + Scrapbook: Oxblood, Taupe, Beige"],
     ["editorial-ruhig", "Ruhig + Scrapbook: Lime & Zitrone"],
     ["editorial-ruhig-pur", "Ruhig: Versal-Cover, nur Pfeile & Linien"],

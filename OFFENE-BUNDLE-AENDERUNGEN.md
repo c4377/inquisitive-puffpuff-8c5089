@@ -12056,3 +12056,24 @@ Alle Adressen laden **karten485**.
   Kassabon bleibt Schreibmaschine.
 
 Alle Adressen laden **karten486**.
+
+## 431 — Look „Klar“: Instrument Serif + Handschrift, Fotos natürlich
+
+Nach Carinas Referenz (ruhige Studio-Cover mit Serifensatz und Schreibschrift-Zeile),
+aber mit eigener zweiter Schrift (Variante F: „Nothing You Could Do“) und Fotos in Farbe.
+Neuer Look `editorial-klar`, ganz oben im Look-Schalter.
+
+- Deckblatt: der ganze Hook als ein Titel (`magCoverEinTitel`), oben zentriert
+  (`magLage` „oben“, `magObenY` 0,1, `magCoverBreite` 0,86), Instrument Serif, eng
+  (`magSerifLaufweite` -45, `magCoverFs` 0,076), dunkle Schrift ohne Schatten
+  (`magCoverTextFarbe`) auf leichtem hellen Schleier (`magObenHell`).
+- Darunter die „&“-Zeile in Handschrift mit Pfeil (neue Handschrift-Art `skript`); das
+  „&“ selbst fällt weg (sieht in der Schrift wie „#“ aus). Ohne „&“-Zeile kommt eine aus
+  `magSkriptStandard` („schau mal“, „lies weiter“, „so geht's“, „ehrlich jetzt“).
+- Liegt das Gesicht im oberen Drittel (`magObenGesicht` 0,34), rutscht der Text nach unten,
+  wird weiß und bekommt einen dunklen Verlauf.
+- Folgefolien: Foto abgedunkelt (`magDunkel` 0,45), weißer Text, Zwischentitel in
+  Instrument Serif (`magH2Fs` 0,088).
+- Fotos natürlich in Farbe, Deckblatt nicht abgedunkelt.
+
+Alle Adressen laden **karten487**.
