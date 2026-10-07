@@ -12091,3 +12091,11 @@ Alle Adressen laden **karten487**.
 - Zeichner-Modul in `tools/klar-zeichner.js`.
 
 Alle Adressen laden **karten488**.
+
+## 433 — „Klar“: Text auf Fotos unten
+
+- Foto-Kacheln: Text unten zentriert (`magLage` „unten“) mit weichem dunklen Verlauf
+  von unten, auf dunklen Feldern etwas kräftiger als auf hellen.
+- Cutout-Kacheln (Schwarz/Weiß) behalten den Text oben über dem Cutout.
+
+Alle Adressen laden **karten489**.

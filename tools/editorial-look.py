@@ -105,7 +105,7 @@ OXBLOOD = {'magBand': 'rgba(92,28,34,0.96)',
 KLAR = {'magTitelVersal': 0, 'magCoverSerif': 'Instrument Serif', 'magCoverSerifGewicht': '400', 'magSerif': 'Instrument Serif', 'magSerifGewicht': '400',
         'magTitelSkala': 1, 'magCoverFs': 0.076, 'magH2Fs': 0.088, 'magSerifLaufweite': -45, 'magCoverInline': 0, 'magCoverKnapp': 0, 'magCoverEinTitel': 1,
         'magSkriptStandard': "schau mal|lies weiter|so geht's|ehrlich jetzt", 'magHandArt': 'skript', 'magHand': 'Nothing You Could Do', 'magHandGewicht': '400', 'magHandSkala': 1,
-        'magLage': 'oben', 'magAusrichtung': 'mitte', 'magObenY': 0.1, 'magObenGesicht': 0.34,
+        'magLage': 'unten', 'magAusrichtung': 'mitte', 'magObenY': 0.1, 'magObenGesicht': 0.34,
         'magKlarFeed': 'dunkel|hell|dunkel|cutweiss|cutschwarz|hell|dunkel|hell', 'magKlarDunkel': 0.3, 'magKlarHell': 0.1, 'magKlarCut': 'k1|k2|k3|k4|k5|k6|k7|k8',
         'magCoverBreite': 0.86, 'magTextMaxH': 0.34, 'magFeed': '', 'magMono': '#FFFFFF', 'magAkzent': '#FFFFFF',
         'magDunkelCover': 0, 'magVerlaufCover': 0.1, 'magDunkel': 0, 'magKursivBetonung': 0}
