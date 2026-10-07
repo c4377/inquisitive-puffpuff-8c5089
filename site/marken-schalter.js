@@ -10,7 +10,8 @@
  */
 (function () {
   var LOOKS = [
-    ["editorial-ruhig", "Ruhig + Scrapbook (jede 2. Kachel)"],
+    ["editorial-ruhig-oxblood", "Ruhig + Scrapbook: Oxblood, Taupe, Beige"],
+    ["editorial-ruhig", "Ruhig + Scrapbook: Lime & Zitrone"],
     ["editorial-ruhig-pur", "Ruhig: Versal-Cover, nur Pfeile & Linien"],
     ["editorial-feed", "Wie mein Feed: SW, Bordeaux, Realtalk"],
     ["editorial-typo", "Premium Typo: Klassik (Helvetica + Cormorant)"],

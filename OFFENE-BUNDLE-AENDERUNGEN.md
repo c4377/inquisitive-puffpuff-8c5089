@@ -12026,3 +12026,17 @@ mit Witz, und zwar an jeder zweiten Stelle im Feed.
   der bisherige Ruhig-Look ohne Scrapbook bleibt als `editorial-ruhig-pur`.
 
 Alle Adressen laden **karten484**.
+
+## 429 — Scrapbook in Carinas Farbpalette (Oxblood, Taupe, Beige)
+
+Nach ihrer Farbpalette (Schwarz, Graphit, Oxblood, Taupe, Beige, Off-White, Grau):
+
+- Neuer Look `editorial-ruhig-oxblood` („Ruhig + Scrapbook: Oxblood, Taupe, Beige“, ganz
+  oben im Look-Schalter). Riss: Off-White mit Titel auf Oxblood-Papier; Polaroid: Beige;
+  Kassabon: Oxblood mit Beige-Akzent; To-do: Off-White-Karopapier. Tape in Beige und
+  Off-White, Papier Off-White. Das fast schwarze Band der Fotokacheln ist hier Oxblood.
+- Die Scrapbook-Farben sind jetzt ein Look-Parameter (`scrapFarben`: Hintergründe,
+  Papier, Tape, Akzent, Karo- und Heftlinien, Sticker-Sätze); ohne ihn bleibt Lime/Zitrone.
+- Neue Sticker: `r1`–`r5` mit Oxblood-Kontur, `w1`–`w4` mit Off-White-Kontur.
+
+Alle Adressen laden **karten485**.
