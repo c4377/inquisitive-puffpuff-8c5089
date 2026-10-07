@@ -10,7 +10,8 @@
  */
 (function () {
   var LOOKS = [
-    ["editorial-ruhig", "Ruhig: Versal-Cover, nur Pfeile & Linien"],
+    ["editorial-ruhig", "Ruhig + Scrapbook (jede 2. Kachel)"],
+    ["editorial-ruhig-pur", "Ruhig: Versal-Cover, nur Pfeile & Linien"],
     ["editorial-feed", "Wie mein Feed: SW, Bordeaux, Realtalk"],
     ["editorial-typo", "Premium Typo: Klassik (Helvetica + Cormorant)"],
     ["editorial-typo-mode", "Premium Typo: Mode (Jost + Instrument)"],

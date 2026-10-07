@@ -12001,3 +12001,28 @@ mit ‚Hallo ihr Lieben‘ …“ zeigte nur den Titel). Im Look `editorial-ruhi
 Fließtext darunter, dann die „&“-Zeile.
 
 Alle Adressen laden **karten483**.
+
+## 428 — Scrapbook-Kacheln: jede zweite Kachel im Look „Ruhig“
+
+Carina wollte Scrapbook-Content („Dinge übereinander, auf manchen steht was drauf“)
+mit Witz, und zwar an jeder zweiten Stelle im Feed.
+
+- Neuer Kacheltyp `scrap` in `magFeed`; Zeichner in `tools/scrap-zeichner.js`, wird von
+  `editorial-look.py` vor der Inline-Zusammenführung des Deckblatts eingesetzt.
+- Vier Varianten im Wechsel (je Scrapbook-Kachel eine weiter):
+  - **Riss**: Creme-Papier mit Körnung, Titel auf gerissenem schwarzem Papier mit Tape,
+    Rest als Label-Streifen (Courier), Cutout von Carina, Handschrift-Notiz mit Pfeil.
+  - **Polaroid**: Lime, das Foto der Kachel als Polaroid mit Bildunterschrift, Titel auf
+    weißem Papierfetzen, Label-Streifen, roter Schuh oder Globus als Sticker.
+  - **Kassabon**: Schwarz, witziger Bon („Dein Feed: Gesicht gezeigt 0 … Summe:
+    unsichtbar“, vier Varianten), Cutout mit grüner Kontur, Titel weiß + kursiv lime.
+  - **To-do**: Karopapier, Notizbuchseite mit durchgestrichenen Punkten und eingekreistem
+    „einfach posten“ (vier Varianten), Cutout mit schwarzer Kontur.
+- Folgefolien von Scrapbook-Posts: Text dunkel auf gerissenem Papier mit Tape in der
+  Farbe des Deckblatts, unten eine Handschrift-Notiz („weiter →“, letzte Folie
+  „speichern nicht vergessen ;)“).
+- Sticker: 15 Cutouts aus Carinas Fotos als WebP in `site/scrap/` (zusammen ca. 540 KB).
+- Look-Schalter: `editorial-ruhig` heißt jetzt „Ruhig + Scrapbook (jede 2. Kachel)“;
+  der bisherige Ruhig-Look ohne Scrapbook bleibt als `editorial-ruhig-pur`.
+
+Alle Adressen laden **karten484**.
