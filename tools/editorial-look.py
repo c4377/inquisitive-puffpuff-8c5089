@@ -81,7 +81,7 @@ FEED = {'magCoverSerif': 'Instrument Serif', 'magSerif': 'Instrument Serif', 'ma
         'kino': 1, 'kinoSaettigung': 0, 'kinoWarm': 0, 'kinoKontrast': 1.1, 'kinoHeben': 8, 'kinoGamma': 0.92, 'kinoVignette': 0.1, 'kinoSplit': 0}
 RUHIG = {'magCoverSerif': 'HelveticaNeueBrand', 'magSerif': 'HelveticaNeueBrand', 'magSerifGewicht': '700', 'magCoverSerifGewicht': '700',
          'magTitelVersal': 1, 'magTitelGewicht': '700', 'magTitelFs': 0.062, 'magTitelLaufweite': -15, 'magTitelSkala': 1, 'magTitelReihe': '',
-         'magKursivBetonung': 1, 'magKursivLaufGewicht': '300', 'magCoverInline': 1, 'magCoverKnapp': 1,
+         'magKursivBetonung': 1, 'magKursivLaufGewicht': '300', 'magCoverInline': 1, 'magCoverKnapp': 0,
          'magSans': 'Inter', 'magSansGewicht': '300', 'magBreit': 'HelveticaNeueBrand', 'magBreitGewicht': '500', 'fliessSchrift': 'Inter',
          'magKursiv': 'HelveticaNeueBrand', 'magKursivGewicht': '300', 'magKursivSkala': 0.72, 'magHandArt': 'versal',
          'magTextSkala': 0.92, 'magTextLaufweite': 10, 'magCapsLaufweite': 260,

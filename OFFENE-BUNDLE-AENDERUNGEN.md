@@ -11991,3 +11991,13 @@ Am Handy war die Schrift zu groß. Im Look `editorial-ruhig`:
 - Text auf den Innenfolien `magTextSkala` 1 → 0,92.
 
 Alle Adressen laden **karten482**.
+
+## 427 — „Ruhig“: Cover-Text wird nicht mehr gekürzt
+
+Beim Versal-Cover verschwand Text: `magCoverKnapp` behielt nur Titel und „&“-Zeile.
+Längere zweite Zeilen und der Fließtext fielen weg (z. B. „Du beginnst deinen Post
+mit ‚Hallo ihr Lieben‘ …“ zeigte nur den Titel). Im Look `editorial-ruhig` steht
+`magCoverKnapp` jetzt auf 0: Titel in Versalien, Weiterlauf kursiv, der Rest als
+Fließtext darunter, dann die „&“-Zeile.
+
+Alle Adressen laden **karten483**.
