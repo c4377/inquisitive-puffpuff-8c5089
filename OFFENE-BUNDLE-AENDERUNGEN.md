@@ -12099,3 +12099,22 @@ Alle Adressen laden **karten488**.
 - Cutout-Kacheln (Schwarz/Weiß) behalten den Text oben über dem Cutout.
 
 Alle Adressen laden **karten489**.
+
+## 434 — „Klar“: Premium-Scrapbook in Oxblood
+
+Neue Kacheltypen in `magKlarFeed` (Zeichner `tools/premium-zeichner.js`), im Schachbrett
+passend einsortiert (12er-Zyklus „dunkel|hell|pabzug|cutweiss|dunkel|prahmen|cutschwarz|
+hell|pkarte|hell|dunkel|hell“):
+
+- **pabzug** (Oxblood): zwei Abzüge des Post-Fotos – Schwarz-Weiß-Ausschnitt ums Gesicht
+  und Farbe – mit weißem Rand und Pergament-Tape; erster Satz in Instrument Serif auf
+  gerissenem Büttenpapier, Rest kursiv in Oxblood; „&“-Zeile in Handschrift; runder Stempel
+  „Carina Pravits · Business Coaching“ (`magStempel`, Mitte `magStempelMitte` „C“).
+- **prahmen** (Off-White): Rubrik + Nummer, Titel mit letztem Wort kursiv in Oxblood, ein
+  Cutout ragt oben aus einem Oxblood-Rahmen (`magPremiumCut`), Rest auf kleinem Zettel.
+- **pkarte** (dunkles Oxblood): linierte Karteikarte „Was du sagst · Was sie hört“ (vier
+  feste Varianten), Schwarz-Weiß-Abzug, Titel in Off-White.
+- Folgefolien dieser Posts: Büttenpapier mit Pergament-Tape auf dem Hintergrund, Text dunkel.
+- Cutout-Liste ohne seitlich angeschnittene Cutouts (`k2|k3|k4|k7`).
+
+Alle Adressen laden **karten490**.

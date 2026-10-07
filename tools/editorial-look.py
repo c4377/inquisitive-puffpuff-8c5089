@@ -106,7 +106,8 @@ KLAR = {'magTitelVersal': 0, 'magCoverSerif': 'Instrument Serif', 'magCoverSerif
         'magTitelSkala': 1, 'magCoverFs': 0.076, 'magH2Fs': 0.088, 'magSerifLaufweite': -45, 'magCoverInline': 0, 'magCoverKnapp': 0, 'magCoverEinTitel': 1,
         'magSkriptStandard': "schau mal|lies weiter|so geht's|ehrlich jetzt", 'magHandArt': 'skript', 'magHand': 'Nothing You Could Do', 'magHandGewicht': '400', 'magHandSkala': 1,
         'magLage': 'unten', 'magAusrichtung': 'mitte', 'magObenY': 0.1, 'magObenGesicht': 0.34,
-        'magKlarFeed': 'dunkel|hell|dunkel|cutweiss|cutschwarz|hell|dunkel|hell', 'magKlarDunkel': 0.3, 'magKlarHell': 0.1, 'magKlarCut': 'k1|k2|k3|k4|k5|k6|k7|k8',
+        'magKlarFeed': 'dunkel|hell|pabzug|cutweiss|dunkel|prahmen|cutschwarz|hell|pkarte|hell|dunkel|hell', 'magKlarDunkel': 0.3, 'magKlarHell': 0.1, 'magKlarCut': 'k2|k3|k4|k7',
+        'magPremiumCut': 'k3|k2|k7|k4',
         'magCoverBreite': 0.86, 'magTextMaxH': 0.34, 'magFeed': '', 'magMono': '#FFFFFF', 'magAkzent': '#FFFFFF',
         'magDunkelCover': 0, 'magVerlaufCover': 0.1, 'magDunkel': 0, 'magKursivBetonung': 0}
 ZITRONE = [('zitrone-hell', '#F4EE6E'), ('zitrone-kraeftig', '#EDE64C'), ('zitrone-pastell', '#F1F0A0')]
@@ -200,7 +201,8 @@ K.magRahmen&&e.add(new zFb.Rect({left:zW*.045,top:zW*.045,width:zW*.91,height:zH
 t.overlayImage&&await Ae(t.overlayImage).catch(()=>{});e.renderAll();return}'''
 SCRAP = open(__file__.rsplit('/', 1)[0] + '/scrap-zeichner.js', encoding='utf-8').read().split('*/', 1)[1].strip()
 KLARZ = open(__file__.rsplit('/', 1)[0] + '/klar-zeichner.js', encoding='utf-8').read().split('*/', 1)[1].strip()
-ZEICHNER = ZEICHNER.replace('if(zCover&&!zMark&&K.magCoverInline===1)', KLARZ + SCRAP + 'if(zCover&&!zMark&&K.magCoverInline===1)', 1).replace('zTyp==="flaeche"&&(zSch=void 0);', '(zTyp==="flaeche"||zTyp0==="scrap")&&(zSch=void 0);', 1)
+PREMZ = open(__file__.rsplit('/', 1)[0] + '/premium-zeichner.js', encoding='utf-8').read().split('*/', 1)[1].strip()
+ZEICHNER = ZEICHNER.replace('if(zCover&&!zMark&&K.magCoverInline===1)', KLARZ + PREMZ + SCRAP + 'if(zCover&&!zMark&&K.magCoverInline===1)', 1).replace('zTyp==="flaeche"&&(zSch=void 0);', '(zTyp==="flaeche"||zTyp0==="scrap")&&(zSch=void 0);', 1)
 ANKER = 'if($e&&(t.karte==="ablauf"||t.reminderArt==="ablauf")){const Ab=T1('
 ersetze(ANKER, ZEICHNER.replace('\n', '') + ANKER)
 ersetze('title:"Geladene Datei",children:"karten451"', f'title:"Geladene Datei",children:"karten{VERSION}"')
