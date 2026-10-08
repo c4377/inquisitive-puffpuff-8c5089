@@ -12137,3 +12137,13 @@ und blendet die drei Knöpfe solange aus. Kein Bundle-Eingriff, Version bleibt *
   Aufzählungen und Sprechblasen), in den Premium- und den Scrapbook-Kacheln.
 
 Alle Adressen laden **karten491**.
+
+## 437 — Text-Posts nicht nur in der Ecke
+
+In den Ruhig-Looks (Oxblood, Lime, Pur) stand der Text fast immer schmal rechts unten.
+- Neue Lagen: `zentrum` (vertikal mittig, zentriert, volle Breite, leichtes Abdunkeln;
+  liegt das Gesicht im mittleren Bereich, rutscht der Text nach `untenmitte`) und
+  `untenmitte` (unten, zentriert, volle Breite).
+- `magLage` jetzt „zentrum|rechts|untenmitte|oben|links|zentrum|untenmitte|rechts|oben“.
+
+Alle Adressen laden **karten492**.
