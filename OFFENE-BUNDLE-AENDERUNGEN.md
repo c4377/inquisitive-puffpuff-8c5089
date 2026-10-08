@@ -12172,3 +12172,13 @@ Gebaut als **karten493**, zusammen mit karten494 live gestellt.
 - Rahmen-Kachel: Cutout bleibt unter dem Titel.
 
 Live: alle Adressen laden **karten494**.
+
+## 440 — Riss-Kachel aufgeräumt
+
+Text und Sticker lagen übereinander (Zettel, Sticker, Handschrift-Notiz, Pfeil).
+- Langer Text: schmaler Zettel links (46 % Breite), Sticker rechts daneben (max. 44 %),
+  dafür wird automatisch ein hohes Cutout gewählt; keine Handschrift-Notiz.
+- Ohne Zusatztext: großer Sticker; Notiz mit Pfeil nur, wenn darüber genug Platz ist.
+- „&“-Zeile als Label unten links.
+
+Alle Adressen laden **karten495**.
