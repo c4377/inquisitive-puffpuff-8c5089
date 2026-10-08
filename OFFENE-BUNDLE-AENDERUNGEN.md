@@ -12126,3 +12126,14 @@ Schwarz-Regler über der Auswahl-Leiste der App („100 ausgewählt“, Sperren,
 `site/insta-ansicht.js` prüft jetzt, ob die Leiste offen ist (Klasse `bs-auswahl` am body),
 und blendet die drei Knöpfe solange aus. Kein Bundle-Eingriff, Version bleibt **karten490**
 (`insta-ansicht.js?v=2` in `index.html`, damit der Browser die neue Datei lädt).
+
+## 436 — Sinnvoll umbrechen
+
+- Premium-Kacheln: Sätze werden nur noch an echten Satzenden getrennt (`zSaetze`, wortweise);
+  „100.000“ wurde vorher am Punkt zerteilt („… mit 100.“ / „000 längst …“).
+- Ausgeglichener Umbruch statt „so viel wie möglich in die erste Zeile“: mehrzeilige
+  Textblöcke werden auf die schmalste Breite gesetzt, die dieselbe Zeilenzahl ergibt –
+  gleich lange Zeilen, kein einzelnes Wort allein am Ende. Gilt im Hauptzeichner (außer
+  Aufzählungen und Sprechblasen), in den Premium- und den Scrapbook-Kacheln.
+
+Alle Adressen laden **karten491**.
