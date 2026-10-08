@@ -10,29 +10,11 @@
  */
 (function () {
   var LOOKS = [
-    ["editorial-klar", "Klar: Instrument Serif + Handschrift, Fotos natürlich"],
-    ["editorial-ruhig-oxblood", "Ruhig + Scrapbook: Oxblood, Taupe, Beige"],
-    ["editorial-ruhig", "Ruhig + Scrapbook: Lime & Zitrone"],
-    ["editorial-ruhig-pur", "Ruhig: Versal-Cover, nur Pfeile & Linien"],
-    ["editorial-feed", "Wie mein Feed: SW, Bordeaux, Realtalk"],
-    ["editorial-typo", "Premium Typo: Klassik (Helvetica + Cormorant)"],
-    ["editorial-typo-mode", "Premium Typo: Mode (Jost + Instrument)"],
-    ["editorial-typo-modern", "Premium Typo: Modern (Aspekta + Bodoni)"],
-    ["editorial-premium-gelb", "Premium ruhig: alles Creme-Gelb"],
-    ["editorial-premium-weiss", "Premium ruhig: alles Weiß"],
-    ["editorial-premium", "Editorial Premium"],
-    ["editorial", "Editorial: Feed-Mix"],
-    ["editorial-zitrone-hell", "Editorial: Zitrone hell"],
-    ["editorial-zitrone-kraeftig", "Editorial: Zitrone kräftig"],
-    ["editorial-zitrone-pastell", "Editorial: Zitrone pastell"],
-    ["editorial-b", "Editorial: nur kräftige Serif"],
-    ["editorial-pop", "Editorial: nur Poppins"],
-    ["editorial-pfirsich", "Editorial Feed-Mix: Akzent Pfirsich"],
-    ["editorial-himmel", "Editorial Feed-Mix: Akzent Himmelblau"],
-    ["editorial-butter", "Editorial Feed-Mix: Akzent Butter"]
+    ["editorial-klar", "Klar · Instrument Serif"],
+    ["editorial-klar-playfair", "Klar · Playfair"]
   ];
   function jetzt() {
-    try { var k = localStorage.getItem("BS_MARKE") || ""; return /^editorial/.test(k) ? k : "editorial"; } catch (e) { return "editorial"; }
+    try { var k = localStorage.getItem("BS_MARKE") || ""; return /^editorial-klar/.test(k) ? k : "editorial-klar"; } catch (e) { return "editorial-klar"; }
   }
   function name(k) {
     for (var i = 0; i < LOOKS.length; i++) if (LOOKS[i][0] === k) return LOOKS[i][1];

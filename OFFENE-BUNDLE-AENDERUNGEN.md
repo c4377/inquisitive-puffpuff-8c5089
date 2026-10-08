@@ -12182,3 +12182,20 @@ Text und Sticker lagen übereinander (Zettel, Sticker, Handschrift-Notiz, Pfeil)
 - „&“-Zeile als Label unten links.
 
 Alle Adressen laden **karten495**.
+
+## 441 — Nur noch Klar (Instrument + Playfair), Oxblood als Leitfarbe
+
+- Look-Schalter zeigt nur noch „Klar · Instrument Serif“ (`editorial-klar`) und
+  „Klar · Playfair“ (`editorial-klar-playfair`). Jeder andere gespeicherte Look fällt auf
+  `editorial-klar` zurück (`index.html`, `marken-schalter.js?v=2`). Die alten Looks
+  bleiben im Bundle, sind aber nicht mehr wählbar.
+- Oxblood führt: Premium wieder auf Oxblood (`premiumHell` 0), Rahmen-Kachel auf Oxblood
+  mit schwarzem Rahmen, Titel hell, letztes Wort orange (`premiumRahmenDunkel`); Scrapbook
+  Riss/Polaroid/To-do auf Oxblood (Riss-Papier schwarz, Notizen und To-do-Text hell:
+  `notiz`, `todoText`), Kassabon auf Schwarz. Weiß nur noch beim Cutout auf Weiß.
+- 16er-Zyklus „dunkel|pabzug|sbon|sriss|dunkel|prahmen|cutschwarz|hell|dunkel|pkarte|
+  sbon|spol|cutschwarz|stodo|pur|cutweiss“ (gerade Felder dunkel, ungerade Oxblood/hell).
+- Playfair-Variante: Titel, Zwischentitel, Premium (`premiumSerif`) und Scrapbook-Titel
+  in Playfair Display, etwas weiter gesetzt (`magSerifLaufweite` -15, `magCoverFs` 0,066).
+
+Alle Adressen laden **karten496**.

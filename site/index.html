@@ -19,7 +19,7 @@
       /* Der Look-Schalter (marken-schalter.js). ?look=bordeaux in der
          Adresse waehlt ihn auch direkt. Leer = der normale Look. */
       try{var lq=new URLSearchParams(location.search).get("look");if(lq!==null){lq?localStorage.setItem("BS_MARKE",lq):localStorage.removeItem("BS_MARKE")}}catch(e){}
-      window.BS_MARKE=localStorage.getItem("BS_MARKE")||"";/* Nur noch die Editorial-Looks; alles andere faellt auf Editorial zurueck. */if(!/^editorial/.test(window.BS_MARKE)){window.BS_MARKE="editorial";try{localStorage.setItem("BS_MARKE","editorial")}catch(e){}}
+      window.BS_MARKE=localStorage.getItem("BS_MARKE")||"";/* Nur noch die Klar-Looks; alles andere faellt auf Klar zurueck. */if(!/^editorial-klar/.test(window.BS_MARKE)){window.BS_MARKE="editorial-klar";try{localStorage.setItem("BS_MARKE","editorial-klar")}catch(e){}}
       /* Der Schwarz-Regler. Muss VOR dem Modul stehen, weil der Zeichner
          ihn schon bei der ersten Kachel liest. Nichts gesetzt heisst 1. */
       var w=parseFloat(localStorage.getItem("BS_SCHWARZ"));
@@ -34,7 +34,7 @@
          heisst: alles bleibt wie im Bundle. */
       var pal=JSON.parse(localStorage.getItem("BS_PALETTE")||"null");
       if(pal&&typeof pal==="object")window.BS_PALETTE=pal;}catch(e){}</script>
-    <script type="module" crossorigin src="/assets/index-B5karten495.js"></script>
+    <script type="module" crossorigin src="/assets/index-B5karten496.js"></script>
     <!-- Montserrat liegt hier im Projekt, nicht bei Google. Der Zeichner misst
          Texte auf dem Canvas und braucht die Schrift sofort; ueber das Netz
          geladen waere sie beim ersten Bild manchmal noch nicht da. Alle
@@ -114,7 +114,7 @@
     <!-- Der Umschalter zwischen den zwei Feeds. Haengt neben der App am
          body, nicht in ihr, und ist deshalb auf jeder Seite da. -->
     <script src="/stil-schalter.js" defer></script>
-    <script src="/marken-schalter.js" defer></script>
+    <script src="/marken-schalter.js?v=2" defer></script>
     <script src="/insta-ansicht.js?v=2" defer></script>
   </body>
 </html>
