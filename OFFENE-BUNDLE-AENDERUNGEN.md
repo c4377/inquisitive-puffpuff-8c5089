@@ -12118,3 +12118,11 @@ hell|pkarte|hell|dunkel|hell“):
 - Cutout-Liste ohne seitlich angeschnittene Cutouts (`k2|k3|k4|k7`).
 
 Alle Adressen laden **karten490**.
+
+## 435 — Knöpfe unten nicht mehr über der Auswahl-Leiste
+
+Beim Auswählen von Posts lagen „Instagram-Ansicht“, der Look-Schalter und der
+Schwarz-Regler über der Auswahl-Leiste der App („100 ausgewählt“, Sperren, Löschen …).
+`site/insta-ansicht.js` prüft jetzt, ob die Leiste offen ist (Klasse `bs-auswahl` am body),
+und blendet die drei Knöpfe solange aus. Kein Bundle-Eingriff, Version bleibt **karten490**
+(`insta-ansicht.js?v=2` in `index.html`, damit der Browser die neue Datei lädt).

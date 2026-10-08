@@ -4,7 +4,8 @@
  * aus, was die App über das Raster legt – „Tag 12“, Folienzahl, ⋮-Knöpfe,
  * Look-Schalter, Schwarz-Regler und „?“ – und zieht das Raster bis an den Rand,
  * damit es aussieht wie das Profil auf Instagram. Nochmal tippen holt alles zurück.
- * Der Zustand bleibt im Browser gespeichert (BS_INSTA).
+ * Der Zustand bleibt im Browser gespeichert (BS_INSTA). Ist die Auswahl-Leiste der App
+ * offen, verschwinden die schwebenden Knöpfe, damit nichts übereinander liegt.
  */
 (function () {
   var KEY = "BS_INSTA";
@@ -31,7 +32,9 @@
       'body.bs-insta button.fixed.bottom-4.right-4{display:none!important}' +
       'body.bs-insta main .max-w-4xl{padding-left:0!important;padding-right:0!important;max-width:none!important}' +
       'body.bs-insta [id^="tag-"]{background:#fff!important}' +
-      'body.bs-insta [id^="tag-"] .bs-canvas-fit{box-shadow:none!important}';
+      'body.bs-insta [id^="tag-"] .bs-canvas-fit{box-shadow:none!important}' +
+      /* Auswahl-Leiste der App offen: unsere Knöpfe weg, sonst liegen sie darüber */
+      'body.bs-auswahl #bs-insta-knopf,body.bs-auswahl #bs-look,body.bs-auswahl #bs-schwarz{display:none!important}';
     document.head.appendChild(css);
     knopf = document.createElement("button");
     knopf.id = "bs-insta-knopf";
@@ -39,6 +42,16 @@
     knopf.addEventListener("click", function () { setze(!document.body.classList.contains("bs-insta")); });
     document.body.appendChild(knopf);
     setze(an());
+    setInterval(pruefeAuswahl, 400);
+  }
+  // Die Auswahl-Leiste („12 ausgewählt“, Sperren, Löschen …) sitzt unten fixiert –
+  // solange sie offen ist, blenden wir Look-Schalter, Schwarz-Regler und diesen Knopf aus.
+  function pruefeAuswahl() {
+    var offen = false, spans = document.querySelectorAll("span.font-bold");
+    for (var i = 0; i < spans.length; i++) {
+      if (/^\d+ ausgewählt$/.test(spans[i].textContent.trim()) && spans[i].offsetParent) { offen = true; break; }
+    }
+    document.body.classList.toggle("bs-auswahl", offen);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", bau);
   else bau();
