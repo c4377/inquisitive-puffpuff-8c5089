@@ -12155,8 +12155,7 @@ Alle Adressen laden **karten492**.
 - `magSkriptJede` 2: die Standard-Handschriftzeile („schau mal“ …) nur auf jedem zweiten
   Post; eigene „&“-Zeilen aus dem Text bleiben immer.
 
-Gebaut als **karten493**, nur auf dem Arbeitszweig – noch nicht live (main zeigt karten492),
-bis Carina zustimmt.
+Gebaut als **karten493**, zusammen mit karten494 live gestellt.
 
 ## 439 — „Klar“: Premium weiß, gemischt mit Scrapbook, Farben Oxblood/Schwarz/Orange/Weiß (Entwurf)
 
@@ -12172,4 +12171,4 @@ bis Carina zustimmt.
   dunkel|hell|sbon|stodo|dunkel|pur“ – dunkle und helle Felder im Schachbrett.
 - Rahmen-Kachel: Cutout bleibt unter dem Titel.
 
-Gebaut als **karten494**, nur auf dem Arbeitszweig – noch nicht live (main zeigt karten492).
+Live: alle Adressen laden **karten494**.
