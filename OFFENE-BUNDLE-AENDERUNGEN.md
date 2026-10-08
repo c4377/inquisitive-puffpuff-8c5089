@@ -12157,3 +12157,19 @@ Alle Adressen laden **karten492**.
 
 Gebaut als **karten493**, nur auf dem Arbeitszweig – noch nicht live (main zeigt karten492),
 bis Carina zustimmt.
+
+## 439 — „Klar“: Premium weiß, gemischt mit Scrapbook, Farben Oxblood/Schwarz/Orange/Weiß (Entwurf)
+
+- Premium-Kacheln auf Weiß (`premiumHell`): Papier leicht warm, Text dunkel, Akzente,
+  Handschrift und Stempel in Oxblood, Tape orange.
+- Scrapbook-Kacheln im Klar-Feed (`sriss`, `spol`, `sbon`, `stodo` in `magKlarFeed`; der
+  Scrapbook-Zeichner läuft dafür auch ohne `magFeed` „scrap“). Farben über `scrapFarben`:
+  Riss weiß mit Oxblood-Papier, Polaroid auf Oxblood, Kassabon auf Schwarz mit Orange,
+  To-do auf weißem Karo; Titel in Instrument Serif; ohne zweite Zeile wird der Hook in
+  ersten Satz + Rest geteilt.
+- Neue Sticker `y1`–`y4` mit oranger Kontur (für Schwarz).
+- 16er-Zyklus „dunkel|pabzug|sbon|cutweiss|dunkel|sriss|cutschwarz|prahmen|spol|pkarte|
+  dunkel|hell|sbon|stodo|dunkel|pur“ – dunkle und helle Felder im Schachbrett.
+- Rahmen-Kachel: Cutout bleibt unter dem Titel.
+
+Gebaut als **karten494**, nur auf dem Arbeitszweig – noch nicht live (main zeigt karten492).
