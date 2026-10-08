@@ -12147,3 +12147,13 @@ In den Ruhig-Looks (Oxblood, Lime, Pur) stand der Text fast immer schmal rechts 
 - `magLage` jetzt „zentrum|rechts|untenmitte|oben|links|zentrum|untenmitte|rechts|oben“.
 
 Alle Adressen laden **karten492**.
+
+## 438 — „Klar“: Foto ohne Text, Handschrift nur auf jedem zweiten Post (Entwurf)
+
+- Neuer Kacheltyp `pur` in `magKlarFeed`: Foto ganz ohne Text (Folgefolien wie „dunkel“);
+  im Zyklus an Stelle 8 (helles Feld).
+- `magSkriptJede` 2: die Standard-Handschriftzeile („schau mal“ …) nur auf jedem zweiten
+  Post; eigene „&“-Zeilen aus dem Text bleiben immer.
+
+Gebaut als **karten493**, nur auf dem Arbeitszweig – noch nicht live (main zeigt karten492),
+bis Carina zustimmt.

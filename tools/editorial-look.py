@@ -106,7 +106,7 @@ KLAR = {'magTitelVersal': 0, 'magCoverSerif': 'Instrument Serif', 'magCoverSerif
         'magTitelSkala': 1, 'magCoverFs': 0.076, 'magH2Fs': 0.088, 'magSerifLaufweite': -45, 'magCoverInline': 0, 'magCoverKnapp': 0, 'magCoverEinTitel': 1,
         'magSkriptStandard': "schau mal|lies weiter|so geht's|ehrlich jetzt", 'magHandArt': 'skript', 'magHand': 'Nothing You Could Do', 'magHandGewicht': '400', 'magHandSkala': 1,
         'magLage': 'unten', 'magAusrichtung': 'mitte', 'magObenY': 0.1, 'magObenGesicht': 0.34,
-        'magKlarFeed': 'dunkel|hell|pabzug|cutweiss|dunkel|prahmen|cutschwarz|hell|pkarte|hell|dunkel|hell', 'magKlarDunkel': 0.3, 'magKlarHell': 0.1, 'magKlarCut': 'k2|k3|k4|k7',
+        'magKlarFeed': 'dunkel|hell|pabzug|cutweiss|dunkel|prahmen|cutschwarz|pur|pkarte|hell|dunkel|hell', 'magSkriptJede': 2, 'magKlarDunkel': 0.3, 'magKlarHell': 0.1, 'magKlarCut': 'k2|k3|k4|k7',
         'magPremiumCut': 'k3|k2|k7|k4',
         'magCoverBreite': 0.86, 'magTextMaxH': 0.34, 'magFeed': '', 'magMono': '#FFFFFF', 'magAkzent': '#FFFFFF',
         'magDunkelCover': 0, 'magVerlaufCover': 0.1, 'magDunkel': 0, 'magKursivBetonung': 0}
@@ -163,7 +163,7 @@ if(zGim==="zettel"){zGimZettel=zBl[zIH].s;zBl.splice(zIH,1)}
 if(zGim==="chat"&&zI1>=0){zBl[zI1].k="bl";zIH>=0&&(zBl[zIH].k="br")}
 if(zGim==="wortmix"&&zI1>=0){const zw=String(zBl[zI1].s).replace(/\*+/g,"").trim().split(/\s+/);const zn=[];zw.length>1&&zn.push({k:"wm1",s:zw[0]});zw.length>2&&zn.push({k:"wm2",s:zw.slice(1,-1).join(" ")});zn.push({k:"wm3",s:zw[zw.length-1]});zBl.splice(zI1,1,...zn)}}
 if(zCover&&!zMark&&K.magKicker){const zKw=zKickT||zWahl(K.magKicker,"");zKw&&zBl.unshift({k:"kick",s:zKw})}
-if(zCover&&!zMark&&K.magCoverEinTitel===1){const zRw=zRoh.split(/\n/).map(q=>q.trim()).filter(Boolean).join(" "),zAi=zRw.search(/(^|\s)&\s/),zTit=(zAi>=0?zRw.slice(0,zAi):zRw).replace(/\*+|__/g,"").trim(),zAm=(zAi>=0?zRw.slice(zAi).replace(/\*+|__/g,"").trim():zWahl(K.magSkriptStandard,"")).replace(/^&\s*/,"");zBl.length=0;zTit&&zBl.push({k:"h1",s:zTit});zAm&&zBl.push({k:"amp",s:zAm})}
+if(zCover&&!zMark&&K.magCoverEinTitel===1){const zRw=zRoh.split(/\n/).map(q=>q.trim()).filter(Boolean).join(" "),zAi=zRw.search(/(^|\s)&\s/),zTit=(zAi>=0?zRw.slice(0,zAi):zRw).replace(/\*+|__/g,"").trim(),zAm=(zAi>=0?zRw.slice(zAi).replace(/\*+|__/g,"").trim():(K.magSkriptJede&&(Number(t._tag)||0)%Number(K.magSkriptJede)!==0?"":zWahl(K.magSkriptStandard,""))).replace(/^&\s*/,"");zBl.length=0;zTit&&zBl.push({k:"h1",s:zTit});zAm&&zBl.push({k:"amp",s:zAm})}
 if(zCover&&!zMark&&K.magCoverInline===1){const zT1=zBl.find(q=>q.k==="h1"),zHd=zBl.find(q=>q.k==="hand"&&!q.kom);if(zT1&&zHd){zT1.s=String(zT1.s).replace(/\*/g,"").trim()+" *"+String(zHd.s).replace(/\*/g,"").trim()+"*";zBl.splice(zBl.indexOf(zHd),1)}}
 if(zCover&&!zMark&&K.magCoverKnapp===1){const zA=zBl.find(q=>q.k==="amp"),zHd=zBl.find(q=>q.k==="hand"&&!q.kom),zEin=zA||zHd,zKeep=new Set(zBl.filter(q=>q.k==="kick"||q.k==="h1"||q.k==="strike"||q.kom||q===zEin||q===zHd&&String(q.s).replace(/\*/g,"").length<=20));for(let zi=zBl.length-1;zi>=0;zi--)!zKeep.has(zBl[zi])&&zBl.splice(zi,1)}
 
