@@ -211,5 +211,10 @@ ZEICHNER = ZEICHNER.replace('if(zCover&&!zMark&&K.magCoverInline===1)', KLARZ + 
 ANKER = 'if($e&&(t.karte==="ablauf"||t.reminderArt==="ablauf")){const Ab=T1('
 ersetze(ANKER, ZEICHNER.replace('\n', '') + ANKER)
 ersetze('title:"Geladene Datei",children:"karten451"', f'title:"Geladene Datei",children:"karten{VERSION}"')
+# 2 Kommentare zum Kopieren: Platzhalter, die site/kommentare.js befüllt
+ZK = 'JSON.stringify((%s||[]).map(x=>x&&(x.text||x.content)||"").filter(Boolean)).slice(0,6000)'
+ersetze("""'wird mit „Plan Speichern" gesichert'})]})""", """'wird mit „Plan Speichern" gesichert'})]}),v.jsx("div",{"data-bs-komm":String(R||""),"data-titel":q||"","data-cap":K||"","data-slides":""" + ZK % '$' + """})""")
+ersetze('v.jsx("p",{className:"text-[11px] leading-relaxed text-gray-800 whitespace-pre-wrap flex-1",children:ae.caption||"Keine Caption verfügbar."})',
+        'v.jsxs("div",{className:"flex-1 min-w-0",children:[v.jsx("p",{className:"text-[11px] leading-relaxed text-gray-800 whitespace-pre-wrap",children:ae.caption||"Keine Caption verfügbar."}),v.jsx("div",{"data-bs-komm":String(ae.day||""),"data-titel":ae.title||"","data-cap":ae.caption||"","data-slides":' + ZK % 'ae.slides' + '})]})')
 open(Z, 'w', encoding='utf-8').write(s)
 print('ok')

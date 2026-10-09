@@ -12296,3 +12296,20 @@ Alle Adressen laden **karten500**.
 - Gezeichnet wird reihum auf **einer** Leinwand; die Vorschauen sind fertige Bilder.
 - Anzeige „Bilder werden vorbereitet … 3 von 6“ → „Alle 6 Bilder bereit ✓“.
 - `site/story-studio.js` (`?v=4`). Bundle unverändert (**karten500**).
+
+## 450 — 2 Kommentare zum Kopieren bei jedem Post
+
+- Unter jeder Caption (Post-Editor → Sprechblasen-Knopf „Caption“, und im Feed beim
+  Aufklappen der Caption) steht jetzt „2 Kommentare zum Kopieren“:
+  - **Anpinnen**: Gesprächsstarter zum Post, in einem Wort / A-B / Emoji beantwortbar.
+  - **Nachlegen**: ein Gedanke, der noch nicht in Caption oder Slides steht, plus ein
+    sanfter nächster Schritt (speichern, Freundin schicken oder STARTEN per DM).
+- Je Kommentar ein „Kopieren“-Knopf, oben „↻ Neu schreiben“.
+- Geschrieben von der neuen Netlify-Funktion `netlify/functions/kommentare.mjs` (Gemini,
+  `GEMINI_API_KEY`), in Carinas Stimme; keine erfundenen Zahlen oder Kundinnen-Geschichten,
+  nur echte Angebote. Pro Post im Browser gemerkt (Titel + erste Slide), ändert sich die
+  erste Slide, kommen neue.
+- Bundle: zwei Platzhalter `data-bs-komm` (`tools/editorial-look.py`), befüllt von
+  `site/kommentare.js` (in `index.html` eingebunden).
+
+Alle Adressen laden **karten501**.
