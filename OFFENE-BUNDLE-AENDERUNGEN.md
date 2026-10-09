@@ -12220,3 +12220,22 @@ Auf den Scrapbook-Folgefolien lag „bleib dran →“ über dem Text. Die Notiz
 rechtsbündig unten rechts im Papier (rechter Rand bei 89 %, Höhe 87,5 %).
 
 Alle Adressen laden **karten498**.
+
+## 444 — Story-Studio (eigenes Menü für Instagram-Stories)
+
+- Knopf „✦ Stories“ links unten (`site/story-studio.js`, in `index.html` eingebunden;
+  ausgeblendet in der Instagram-Ansicht und bei offener Auswahl-Leiste).
+- Menü: Thema eintragen, 5–7 Stories wählen, „Stories schreiben“ → neue Netlify-Funktion
+  `netlify/functions/story-studio.mjs` mit Carinas Story-Prompt wörtlich (Gemini, Schlüssel
+  `GEMINI_API_KEY` wie bei den anderen Funktionen). Antwort als JSON: Text + optionaler
+  Umfrage-/Fragesticker (📊/💬).
+- Jede Story wird als Bild 1080×1920 im Klar-Stil gesetzt (Schrift je nach gewähltem Look
+  Instrument oder Playfair): Foto aus „Meine Bilder“ mit weißem Text, Oxblood mit
+  Gold-Element, Büttenpapier mit orangem Tape, Schwarz mit Gold-Element. Story 1 mit Foto,
+  letzte Story Oxblood mit goldenem „Schreib mir STARTEN ↓“-Knopf. Platz für Sticker
+  gestrichelt frei gelassen (in Instagram setzen). Instagram-Sicherheitsränder frei.
+- Texte direkt editierbar (Bild zieht nach), „Design wechseln“, „Bild speichern“,
+  „Alle Bilder speichern“ (am Handy über Teilen → Bilder sichern), Texte kopieren.
+- „Eigene Texte einfügen“: „Story 1 … Story 2 …“ einfügen und setzen, ohne KI.
+
+Bundle unverändert (**karten498**).

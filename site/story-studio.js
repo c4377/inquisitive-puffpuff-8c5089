@@ -1,0 +1,286 @@
+/* Story-Studio.
+ *
+ * Knopf „✦ Stories“ links unten öffnet ein eigenes Menü: Thema eintragen, Anzahl
+ * wählen, „Stories schreiben“. Die Texte kommen aus /.netlify/functions/story-studio
+ * (Carinas Story-Prompt, Gemini). Jede Story wird als Bild 1080×1920 im Klar-Stil
+ * gesetzt: Foto mit weißem Text, Oxblood mit Gold-Element, Büttenpapier oder Schwarz.
+ * Texte sind direkt editierbar, das Bild zieht sofort nach. Eigene Texte lassen sich
+ * auch einfügen („Story 1 … Story 2 …“), dann braucht es keine KI.
+ */
+(function () {
+  var W = 1080, H = 1920, OX = "#5E1A21", OX2 = "#4A1219", SW = "#0E0E0E", OFF = "#F3EEE7", INK = "#17110F";
+  var DESIGNS = ["foto", "oxblood", "papier", "schwarz"];
+  var ELEMENTE = ["e1", "e3", "e7", "e11", "e15", "e2", "e8", "e14", "e10", "e9", "e13", "e4", "e12", "e5"];
+  var stories = [], fotos = [], bilder = {}, panel = null, liste = null, status = null;
+
+  function serif() {
+    var m = ""; try { m = localStorage.getItem("BS_MARKE") || ""; } catch (e) {}
+    return m === "editorial-klar-playfair" ? "Playfair Display" : "Instrument Serif";
+  }
+  function ladeBild(src) {
+    if (bilder[src]) return bilder[src];
+    bilder[src] = new Promise(function (ok) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = function () { ok(null); }; i.src = src; });
+    return bilder[src];
+  }
+  function ladeFotos() {
+    return new Promise(function (ok) {
+      try {
+        var r = indexedDB.open("BrandStudioDB");
+        r.onerror = function () { ok([]); };
+        r.onsuccess = function () {
+          var db = r.result;
+          if (!db.objectStoreNames.contains("assets")) { db.close(); return ok([]); }
+          var g = db.transaction("assets", "readonly").objectStore("assets").get("brand_images");
+          g.onsuccess = function () {
+            db.close();
+            var a = Array.isArray(g.result) ? g.result : [];
+            ok(a.map(function (x) { return typeof x === "string" ? x : (x && (x.src || x.dataUrl || x.url || x.data)) || ""; })
+                .filter(function (x) { return /^(data:image|blob:|https?:|\/)/.test(x); }));
+          };
+          g.onerror = function () { db.close(); ok([]); };
+        };
+      } catch (e) { ok([]); }
+    });
+  }
+
+  // ── Text setzen ──────────────────────────────────────────────────────────
+  function umbruch(ctx, text, breite) {
+    var worte = String(text).split(/\s+/).filter(Boolean), zeilen = [], z = "";
+    worte.forEach(function (w) {
+      var t = z ? z + " " + w : w;
+      if (z && ctx.measureText(t).width > breite) { zeilen.push(z); z = w; } else z = t;
+    });
+    z && zeilen.push(z);
+    return zeilen;
+  }
+  function ausgeglichen(ctx, text, breite) {
+    var n = umbruch(ctx, text, breite).length;
+    if (n < 2) return umbruch(ctx, text, breite);
+    var lo = breite * 0.5, hi = breite;
+    for (var k = 0; k < 10; k++) { var m = (lo + hi) / 2; umbruch(ctx, text, m).length > n ? (lo = m) : (hi = m); }
+    return umbruch(ctx, text, hi);
+  }
+  function setzeText(ctx, absaetze, box, farbe, fam) {
+    var sk = 1, plan;
+    for (var k = 0; k < 40; k++) {
+      plan = []; var h = 0;
+      absaetze.forEach(function (a, i) {
+        var fs = (i === 0 ? 76 : 56) * sk, lh = fs * (i === 0 ? 1.04 : 1.16);
+        ctx.font = "400 " + fs + "px \"" + fam + "\"";
+        var z = ausgeglichen(ctx, a, box.w);
+        if (i) h += fs * 0.75;
+        plan.push({ fs: fs, lh: lh, zeilen: z, y: h });
+        h += z.length * lh;
+      });
+      if (h <= box.h) break;
+      sk *= 0.95;
+    }
+    var hoehe = plan.length ? plan[plan.length - 1].y + plan[plan.length - 1].zeilen.length * plan[plan.length - 1].lh : 0;
+    var y0 = box.anker === "unten" ? box.y + box.h - hoehe : box.y + (box.h - hoehe) / 2;
+    ctx.fillStyle = farbe; ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+    plan.forEach(function (p) {
+      ctx.font = "400 " + p.fs + "px \"" + fam + "\"";
+      p.zeilen.forEach(function (z, j) { ctx.fillText(z, W / 2, y0 + p.y + p.lh * j + p.fs * 0.82); });
+    });
+    return { oben: y0, unten: y0 + hoehe };
+  }
+  function riss(ctx, x, y, w, h) {
+    ctx.beginPath(); var s = 0;
+    function j() { s = (s * 9301 + 49297) % 233280; return s / 233280; }
+    s = Math.round(w + h);
+    ctx.moveTo(x, y + j() * 8);
+    for (var i = 1; i <= 60; i++) ctx.lineTo(x + w * i / 60, y + j() * 8);
+    for (i = 1; i <= 80; i++) ctx.lineTo(x + w - j() * 5, y + h * i / 80);
+    for (i = 59; i >= 0; i--) ctx.lineTo(x + w * i / 60, y + h - j() * 12);
+    for (i = 79; i > 0; i--) ctx.lineTo(x + j() * 5, y + h * i / 80);
+    ctx.closePath();
+  }
+  function korn(ctx, alpha) {
+    var c = document.createElement("canvas"); c.width = c.height = 200;
+    var x = c.getContext("2d"), d = x.createImageData(200, 200);
+    for (var k = 0; k < d.data.length; k += 4) { var v = Math.random() > 0.5 ? 255 : 0; d.data[k] = d.data[k + 1] = d.data[k + 2] = v; d.data[k + 3] = Math.random() * alpha; }
+    x.putImageData(d, 0, 0); ctx.fillStyle = ctx.createPattern(c, "repeat"); ctx.fillRect(0, 0, W, H);
+  }
+
+  // ── Eine Story zeichnen ──────────────────────────────────────────────────
+  function zeichne(st, i, n, canvas) {
+    var ctx = canvas.getContext("2d"), fam = serif();
+    var zeilen = String(st.text || "").split(/\n+/).map(function (z) { return z.trim(); }).filter(Boolean);
+    var cta = "";
+    zeilen = zeilen.filter(function (z) { if (/STARTEN/.test(z) && z.length < 60) { cta = z; return false; } return true; });
+    var design = st.design || DESIGNS[0];
+    var foto = design === "foto" && fotos.length ? fotos[(i * 3 + 1) % fotos.length] : "";
+    if (design === "foto" && !foto) design = "oxblood";
+    return Promise.all([
+      foto ? ladeBild(foto) : null,
+      design === "oxblood" || design === "schwarz" ? ladeBild("/scrap/" + ELEMENTE[(i * 5 + (st.el || 0)) % ELEMENTE.length] + ".webp") : null,
+      document.fonts.load("400 60px \"" + fam + "\""), document.fonts.load("500 30px \"HelveticaNeueBrand\""), document.fonts.load("400 40px \"Nothing You Could Do\"")
+    ].map(function (p) { return Promise.resolve(p).catch(function () { return null; }); })).then(function (r) {
+      var bild = r[0], el = r[1], weiss = design !== "papier";
+      ctx.clearRect(0, 0, W, H);
+      if (design === "foto" && bild) {
+        var s = Math.max(W / bild.width, H / bild.height), bw = bild.width * s, bh = bild.height * s;
+        ctx.drawImage(bild, (W - bw) / 2, Math.min(0, (H - bh) * 0.3), bw, bh);
+        ctx.fillStyle = "rgba(0,0,0," + (i % 2 ? 0.3 : 0.42) + ")"; ctx.fillRect(0, 0, W, H);
+        var g = ctx.createLinearGradient(0, H * 0.35, 0, H); g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, "rgba(0,0,0,.72)");
+        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      } else {
+        ctx.fillStyle = design === "schwarz" ? SW : design === "papier" ? OX2 : OX; ctx.fillRect(0, 0, W, H);
+        korn(ctx, design === "schwarz" ? 14 : 22);
+      }
+      if (design === "papier") {
+        ctx.save(); ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = 40; ctx.shadowOffsetY = 18;
+        ctx.fillStyle = "#FBF8F3"; riss(ctx, 80, 300, W - 160, H - 640); ctx.fill(); ctx.restore();
+        ctx.save(); ctx.translate(W / 2, 300); ctx.rotate(-0.05); ctx.fillStyle = "rgba(227,106,44,.85)"; ctx.fillRect(-120, -26, 240, 52); ctx.restore();
+      }
+      // Absender oben, dezent
+      ctx.font = "500 26px \"HelveticaNeueBrand\""; ctx.textAlign = "center";
+      ctx.fillStyle = weiss ? "rgba(255,255,255,.72)" : "rgba(23,17,15,.6)";
+      if ("letterSpacing" in ctx) ctx.letterSpacing = "9px";
+      ctx.fillText("CARINA ANNA PRAV", W / 2, design === "papier" ? 400 : 200);
+      if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
+      if (el) { var es = 230 / Math.max(el.width, el.height); ctx.save(); ctx.translate(W - 190, 330); ctx.rotate(0.14); ctx.drawImage(el, -el.width * es / 2, -el.height * es / 2, el.width * es, el.height * es); ctx.restore(); }
+      var unten = H - 360 - (st.sticker ? 330 : 0) - (cta ? 170 : 0);
+      var box = design === "papier" ? { y: 460, h: Math.min(unten, H - 420) - 460, w: W - 300, anker: "mitte" }
+        : design === "foto" ? { y: 520, h: unten - 520, w: W - 200, anker: "unten" }
+        : { y: 470, h: unten - 470, w: W - 200, anker: "mitte" };
+      setzeText(ctx, zeilen, box, weiss ? "#FFFFFF" : INK, fam);
+      if (st.sticker) {
+        var sy = unten + 40;
+        ctx.save(); ctx.setLineDash([14, 12]); ctx.lineWidth = 3; ctx.strokeStyle = weiss ? "rgba(255,255,255,.35)" : "rgba(23,17,15,.3)";
+        ctx.strokeRect(170, sy, W - 340, 250); ctx.restore();
+      }
+      if (cta) {
+        var cy = H - 360 - 130;
+        ctx.font = "600 44px \"HelveticaNeueBrand\""; var tw = ctx.measureText(cta).width + 110;
+        var gg = ctx.createLinearGradient(W / 2 - tw / 2, 0, W / 2 + tw / 2, 0);
+        gg.addColorStop(0, "#9C7A33"); gg.addColorStop(0.35, "#E8CC86"); gg.addColorStop(0.55, "#F7E6B0"); gg.addColorStop(1, "#A47D31");
+        ctx.save(); ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = 24; ctx.shadowOffsetY = 8;
+        ctx.fillStyle = gg; ctx.beginPath(); var rx = W / 2 - tw / 2, rh = 104;
+        ctx.moveTo(rx + 52, cy); ctx.arcTo(rx + tw, cy, rx + tw, cy + rh, 52); ctx.arcTo(rx + tw, cy + rh, rx, cy + rh, 52); ctx.arcTo(rx, cy + rh, rx, cy, 52); ctx.arcTo(rx, cy, rx + tw, cy, 52); ctx.fill(); ctx.restore();
+        ctx.fillStyle = "#3a2608"; ctx.textAlign = "center"; ctx.fillText(cta, W / 2, cy + 68);
+      }
+    });
+  }
+
+  // ── Menü ─────────────────────────────────────────────────────────────────
+  function knopf(text, primaer) {
+    var b = document.createElement("button"); b.type = "button"; b.textContent = text;
+    b.style.cssText = "border:0;border-radius:999px;padding:12px 18px;font:600 14px/1 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;cursor:pointer;" +
+      (primaer ? "background:" + OX + ";color:#fff" : "background:#fff;color:" + OX + ";box-shadow:inset 0 0 0 1.5px " + OX);
+    return b;
+  }
+  function parseEigen(t) {
+    var teile = String(t).split(/\n?\s*Story\s*\d+\s*[:.\-–]?\s*\n?/i).map(function (x) { return x.trim(); }).filter(Boolean);
+    return teile.map(function (x) {
+      var st = "", z = x.split("\n").filter(function (l) { if (/^\s*(📊|💬)/.test(l)) { st = l.trim(); return false; } return true; });
+      return { text: z.join("\n").trim(), sticker: st };
+    }).filter(function (s) { return s.text; });
+  }
+  function startDesigns() {
+    stories.forEach(function (s, i) {
+      s.design = i === stories.length - 1 ? "oxblood" : i === 0 ? (fotos.length ? "foto" : "oxblood") : ["oxblood", "foto", "papier", "schwarz"][(i - 1) % 4];
+    });
+  }
+  function zeigeStories() {
+    liste.innerHTML = "";
+    if (!stories.length) return;
+    var leiste = document.createElement("div"); leiste.style.cssText = "display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px";
+    var alle = knopf("Alle Bilder speichern", true); alle.onclick = alleSpeichern; leiste.appendChild(alle);
+    var tx = knopf("Alle Texte kopieren"); tx.onclick = function () { kopiere(stories.map(function (s, i) { return "Story " + (i + 1) + "\n" + s.text + (s.sticker ? "\n" + s.sticker : ""); }).join("\n\n"), tx); }; leiste.appendChild(tx);
+    liste.appendChild(leiste);
+    stories.forEach(function (st, i) {
+      var karte = document.createElement("div");
+      karte.style.cssText = "background:#fff;border-radius:18px;padding:14px;margin-bottom:16px;box-shadow:0 2px 14px rgba(0,0,0,.06);display:flex;gap:14px;flex-wrap:wrap";
+      var cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+      cv.style.cssText = "width:170px;height:302px;border-radius:12px;background:#ddd;flex:none";
+      var rechts = document.createElement("div"); rechts.style.cssText = "flex:1;min-width:200px;display:flex;flex-direction:column;gap:8px";
+      var kopf = document.createElement("div"); kopf.textContent = "Story " + (i + 1); kopf.style.cssText = "font:700 13px/1 -apple-system,sans-serif;color:" + OX + ";letter-spacing:.08em;text-transform:uppercase";
+      var ta = document.createElement("textarea"); ta.value = st.text; ta.rows = 8;
+      ta.style.cssText = "width:100%;border:1px solid #e5ddd8;border-radius:12px;padding:10px;font:15px/1.45 -apple-system,sans-serif;resize:vertical";
+      var stk = document.createElement("div"); stk.style.cssText = "font:13px/1.4 -apple-system,sans-serif;color:#5b4a46";
+      stk.textContent = st.sticker ? "Sticker in Instagram setzen (gestrichelter Platz): " + st.sticker : "";
+      var reihe = document.createElement("div"); reihe.style.cssText = "display:flex;gap:6px;flex-wrap:wrap";
+      var b1 = knopf("Bild speichern", true), b2 = knopf("Design wechseln"), b3 = knopf("Text kopieren");
+      var neu = function () { zeichne(st, i, stories.length, cv); };
+      var t; ta.oninput = function () { st.text = ta.value; clearTimeout(t); t = setTimeout(neu, 250); };
+      b1.onclick = function () { speichere([{ cv: cv, name: "story-" + (i + 1) + ".png" }]); };
+      b2.onclick = function () { var k = DESIGNS.indexOf(st.design); st.design = DESIGNS[(k + 1) % DESIGNS.length]; if (st.design === "foto" && !fotos.length) st.design = DESIGNS[(k + 2) % DESIGNS.length]; st.el = (st.el || 0) + 1; neu(); };
+      b3.onclick = function () { kopiere(st.text + (st.sticker ? "\n" + st.sticker : ""), b3); };
+      reihe.appendChild(b1); reihe.appendChild(b2); reihe.appendChild(b3);
+      rechts.appendChild(kopf); rechts.appendChild(ta); rechts.appendChild(stk); rechts.appendChild(reihe);
+      karte.appendChild(cv); karte.appendChild(rechts); liste.appendChild(karte);
+      st._cv = cv; neu();
+    });
+  }
+  function kopiere(t, b) {
+    try { navigator.clipboard.writeText(t); var a = b.textContent; b.textContent = "Kopiert ✓"; setTimeout(function () { b.textContent = a; }, 1400); } catch (e) {}
+  }
+  function speichere(teile) {
+    Promise.all(teile.map(function (p) { return new Promise(function (ok) { p.cv.toBlob(function (bl) { ok(new File([bl], p.name, { type: "image/png" })); }, "image/png"); }); }))
+      .then(function (files) {
+        if (navigator.canShare && navigator.canShare({ files: files })) return navigator.share({ files: files }).catch(function () {});
+        files.forEach(function (f, k) { setTimeout(function () { var a = document.createElement("a"); a.href = URL.createObjectURL(f); a.download = f.name; document.body.appendChild(a); a.click(); a.remove(); }, k * 400); });
+      });
+  }
+  function alleSpeichern() { speichere(stories.map(function (s, i) { return { cv: s._cv, name: "story-" + (i + 1) + ".png" }; })); }
+
+  function oeffne() {
+    if (!panel) baue();
+    panel.style.display = "block"; document.body.style.overflow = "hidden";
+    ladeFotos().then(function (f) { fotos = f; });
+  }
+  function schliesse() { panel.style.display = "none"; document.body.style.overflow = ""; }
+  function baue() {
+    panel = document.createElement("div"); panel.id = "bs-story";
+    panel.style.cssText = "position:fixed;inset:0;z-index:2147483002;background:#F6F2EE;overflow:auto;display:none;-webkit-overflow-scrolling:touch";
+    var kopf = document.createElement("div");
+    kopf.style.cssText = "position:sticky;top:0;z-index:2;background:" + OX + ";color:#fff;display:flex;align-items:center;justify-content:space-between;padding:14px 18px";
+    kopf.innerHTML = "<div style=\"font:400 26px/1 'Instrument Serif',serif\">Story-Studio</div>";
+    var zu = document.createElement("button"); zu.type = "button"; zu.textContent = "✕"; zu.style.cssText = "border:0;background:none;color:#fff;font:600 22px/1 sans-serif;cursor:pointer;padding:6px 10px"; zu.onclick = schliesse;
+    kopf.appendChild(zu); panel.appendChild(kopf);
+    var inhalt = document.createElement("div"); inhalt.style.cssText = "max-width:760px;margin:0 auto;padding:18px 16px 60px";
+    inhalt.innerHTML = "<div style=\"font:600 13px/1 -apple-system,sans-serif;color:" + OX + ";letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px\">Thema heute</div>";
+    var thema = document.createElement("textarea"); thema.rows = 3; thema.placeholder = "z. B. Warum du nicht bereit sein musst, um zu verkaufen";
+    thema.style.cssText = "width:100%;border:1px solid #e5ddd8;border-radius:14px;padding:12px;font:16px/1.4 -apple-system,sans-serif;background:#fff";
+    try { thema.value = localStorage.getItem("BS_STORY_THEMA") || ""; } catch (e) {}
+    var zeile = document.createElement("div"); zeile.style.cssText = "display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0";
+    var anz = document.createElement("select"); anz.style.cssText = "border:1px solid #e5ddd8;border-radius:999px;padding:11px 14px;font:600 14px -apple-system,sans-serif;background:#fff";
+    [5, 6, 7].forEach(function (n) { var o = document.createElement("option"); o.value = n; o.textContent = n + " Stories"; n === 6 && (o.selected = true); anz.appendChild(o); });
+    var los = knopf("Stories schreiben", true);
+    status = document.createElement("div"); status.style.cssText = "font:14px/1.4 -apple-system,sans-serif;color:#5b4a46;min-height:20px;margin:6px 0";
+    los.onclick = function () {
+      var t = thema.value.trim(); if (!t) { status.textContent = "Bitte zuerst ein Thema eintragen."; return; }
+      try { localStorage.setItem("BS_STORY_THEMA", t); } catch (e) {}
+      los.disabled = true; status.textContent = "Schreibe Stories … (dauert etwa 20 Sekunden)";
+      fetch("/.netlify/functions/story-studio", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ thema: t, count: Number(anz.value) }) })
+        .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d && d.error || "Fehlgeschlagen"); return d; }); })
+        .then(function (d) { stories = d.stories || []; return ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length + " Stories fertig. Texte kannst du direkt ändern."; }); })
+        .catch(function (e) { status.textContent = "Fehler: " + (e.message || e); })
+        .then(function () { los.disabled = false; });
+    };
+    zeile.appendChild(anz); zeile.appendChild(los);
+    var eigen = document.createElement("details"); eigen.style.cssText = "margin:4px 0 16px;font:14px -apple-system,sans-serif;color:#5b4a46";
+    eigen.innerHTML = "<summary style=\"cursor:pointer\">Eigene Texte einfügen (Story 1 … Story 2 …)</summary>";
+    var eta = document.createElement("textarea"); eta.rows = 6; eta.placeholder = "Story 1\nText …\n\nStory 2\nText …";
+    eta.style.cssText = "width:100%;margin-top:8px;border:1px solid #e5ddd8;border-radius:12px;padding:10px;font:15px/1.4 -apple-system,sans-serif;background:#fff";
+    var eb = knopf("Als Stories setzen"); eb.style.marginTop = "8px";
+    eb.onclick = function () { stories = parseEigen(eta.value); ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length ? stories.length + " Stories gesetzt." : "Keine Stories erkannt – schreib „Story 1“, „Story 2“ … davor."; }); };
+    eigen.appendChild(eta); eigen.appendChild(eb);
+    liste = document.createElement("div");
+    inhalt.appendChild(thema); inhalt.appendChild(zeile); inhalt.appendChild(status); inhalt.appendChild(eigen); inhalt.appendChild(liste);
+    panel.appendChild(inhalt); document.body.appendChild(panel);
+  }
+  function start() {
+    if (document.getElementById("bs-story-knopf")) return;
+    var css = document.createElement("style");
+    css.textContent = "#bs-story-knopf{position:fixed;left:10px;bottom:154px;z-index:2147483001;border:0;border-radius:999px;padding:9px 13px;cursor:pointer;" +
+      "background:" + OX + ";color:#fff;font:600 12px/1 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.25)}" +
+      "body.bs-insta #bs-story-knopf,body.bs-auswahl #bs-story-knopf{display:none}";
+    document.head.appendChild(css);
+    var b = document.createElement("button"); b.id = "bs-story-knopf"; b.type = "button"; b.textContent = "✦ Stories"; b.onclick = oeffne;
+    document.body.appendChild(b);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
+  window.BS_STORY_TEST = { setze: function (a) { stories = a; startDesigns(); zeigeStories(); }, oeffne: oeffne, fotos: function (f) { fotos = f; } };
+})();
