@@ -12261,3 +12261,15 @@ Alle Adressen laden **karten499**.
 - `site/story-studio.js` (eingebunden mit `?v=2`).
 
 Bundle unverändert (**karten499**).
+
+## 447 — Handschrift-Notiz weicht dem Text immer aus
+
+- Auf den Scrapbook-Folgeslides konnte die Notiz („bleib dran →“) auf der letzten Textzeile
+  liegen, wenn der Text weit nach unten reicht.
+- Jetzt prüft die Folie nach dem Zeichnen, ob die Notiz irgendetwas berührt. Wenn ja, sucht
+  sie der Reihe nach einen freien Platz: unten rechts, unten links, direkt unter dem Text,
+  oben rechts, oben links, immer im Papier. Ist nirgends Platz, entfällt die Notiz.
+  Getestet: freie Folie (bleibt unten rechts), Text unten (wandert nach oben rechts), volle
+  Folie (Notiz entfällt). `tools/scrap-zeichner.js`.
+
+Alle Adressen laden **karten500**.
