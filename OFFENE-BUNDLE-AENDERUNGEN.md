@@ -12213,3 +12213,10 @@ Foto), Leo-Herz, Laptop LIVE, Podcast-Mikro, Ringlicht, Konfetti, Kirschen, Cat-
   (`premiumElAbzug`, `premiumElRahmen`, `premiumElKarte`).
 
 Alle Adressen laden **karten497**.
+
+## 443 — Handschrift-Notiz auf Folgefolien weiter rechts
+
+Auf den Scrapbook-Folgefolien lag „bleib dran →“ über dem Text. Die Notiz steht jetzt
+rechtsbündig unten rechts im Papier (rechter Rand bei 89 %, Höhe 87,5 %).
+
+Alle Adressen laden **karten498**.
