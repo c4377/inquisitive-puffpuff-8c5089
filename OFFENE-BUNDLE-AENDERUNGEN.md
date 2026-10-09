@@ -12239,3 +12239,13 @@ Alle Adressen laden **karten498**.
 - „Eigene Texte einfügen“: „Story 1 … Story 2 …“ einfügen und setzen, ohne KI.
 
 Bundle unverändert (**karten498**).
+
+## 445 — Handschrift-Notiz auf den Scrapbook-Folgeslides sichtbar
+
+- Die handschriftliche Zeile unten rechts auf den Folgeslides (z. B. „schick's der
+  Freundin, die das braucht“) wurde bei zwei Zeilen unten vom Papier abgeschnitten.
+- Jetzt ist die Notiz an ihrer Unterkante verankert (Unterkante bei 90 % Höhe, rechte Kante
+  bei 89 % Breite): ein- und zweizeilige Notizen stehen vollständig im Papier
+  (`tools/scrap-zeichner.js`).
+
+Alle Adressen laden **karten499**.
