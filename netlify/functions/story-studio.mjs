@@ -1,6 +1,7 @@
 // Netlify Function: Story-Studio — Instagram-Stories nach Carinas eigenem Prompt.
 // Der Schluessel bleibt SERVERSEITIG (GEMINI_API_KEY) — nie in der App.
 // POST { thema: "…", count: 5..7 }  ->  { stories: [{ text, sticker }] }
+// Optional post: { titel, slides: ["…"], caption } → die Stories führen zu diesem Feed-Post hin.
 //
 // Der Prompt unten ist Carinas Vorlage, woertlich. Geaendert wird er NUR hier.
 // Angehaengt ist nur der technische Teil (JSON-Ausgabe), damit die App die
@@ -60,6 +61,21 @@ Antworte NUR mit JSON, ohne Vorwort, ohne Markdown:
   Der Sticker-Text steht NICHT zusätzlich in "text".
 - Die CTA „Schreib mir STARTEN ↓" steht als letzte Zeile im "text" der letzten Story.`;
 
+const ZUM_POST = `
+
+STORIES ZUM POST (für diese Serie gilt zusätzlich):
+Diese Stories führen zu meinem neuen Feed-Post hin. Der Post ist das Ende der Serie.
+- Bau Neugier und das Problem des Posts auf, nimm aber die Lösung aus dem Post NICHT vorweg.
+- Die letzte Story kündigt den Post an und schickt sie hin. Sie endet statt mit „Schreib mir STARTEN ↓" mit genau dieser Zeile: „Neuer Post ↓"
+- STARTEN kommt in dieser Serie nicht vor.
+
+DER POST:
+Titel: {{PTITEL}}
+Slides:
+{{PSLIDES}}
+Caption:
+{{PCAPTION}}`;
+
 export default async (req) => {
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'POST only' }), { status: 405 });
@@ -68,17 +84,28 @@ export default async (req) => {
   if (!key) {
     return new Response(JSON.stringify({ error: 'GEMINI_API_KEY fehlt (Netlify → Environment variables).' }), { status: 500 });
   }
-  let thema = '', count = 6;
+  let thema = '', count = 6, post = null;
   try {
     const body = await req.json();
     thema = String(body.thema || '').replace(/\s+/g, ' ').trim().slice(0, 600);
     count = Math.min(Math.max(parseInt(body.count, 10) || 6, 5), 7);
+    if (body.post && typeof body.post === 'object') {
+      const sl = (Array.isArray(body.post.slides) ? body.post.slides : []).map((x) => String(x || '').trim()).filter(Boolean).slice(0, 12);
+      post = { titel: String(body.post.titel || '').trim().slice(0, 200), slides: sl, caption: String(body.post.caption || '').trim().slice(0, 3000) };
+      if (!post.slides.length && !post.caption) post = null;
+    }
   } catch {
     return new Response(JSON.stringify({ error: 'Ungültiger Body' }), { status: 400 });
   }
   if (!thema) return new Response(JSON.stringify({ error: 'Bitte ein Thema eintragen.' }), { status: 400 });
 
-  const prompt = PROMPT.replace('{{THEMA}}', thema).replace('{{ANZAHL}}', String(count)) + TECHNIK;
+  let prompt = PROMPT.replace('{{THEMA}}', thema).replace('{{ANZAHL}}', String(count));
+  if (post) {
+    prompt += ZUM_POST.replace('{{PTITEL}}', post.titel || '—')
+      .replace('{{PSLIDES}}', post.slides.length ? post.slides.map((x, k) => `${k + 1}. ${x.slice(0, 500)}`).join('\n') : '—')
+      .replace('{{PCAPTION}}', post.caption || '—');
+  }
+  prompt += post ? TECHNIK.replace('Die CTA „Schreib mir STARTEN ↓" steht als letzte Zeile im "text" der letzten Story.', 'Die Zeile „Neuer Post ↓" steht als letzte Zeile im "text" der letzten Story.') : TECHNIK;
 
   // Wie in write-stories: Modelle der Reihe nach, falls Google eines umbenennt.
   const MODELLE = ['gemini-3.6-flash', 'gemini-3-flash', 'gemini-flash-latest', 'gemini-2.5-flash'];

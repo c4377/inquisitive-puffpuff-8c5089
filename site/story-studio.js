@@ -6,12 +6,15 @@
  * gesetzt: Foto mit weißem Text, Oxblood mit Gold-Element, Büttenpapier oder Schwarz.
  * Texte sind direkt editierbar, das Bild zieht sofort nach. Eigene Texte lassen sich
  * auch einfügen („Story 1 … Story 2 …“), dann braucht es keine KI.
+ * „Stories zum Post“: Tag aus dem Content-Plan wählen, die Stories führen zu diesem Post
+ * hin; die letzte Story zeigt das Titelbild des Posts als Karte mit „Neuer Post ↓“.
  */
 (function () {
   var W = 1080, H = 1920, OX = "#5E1A21", OX2 = "#4A1219", SW = "#0E0E0E", OFF = "#F3EEE7", INK = "#17110F";
   var DESIGNS = ["foto", "oxblood", "papier", "schwarz"];
   var ELEMENTE = ["e1", "e3", "e7", "e11", "e15", "e2", "e8", "e14", "e10", "e9", "e13", "e4", "e12", "e5"];
   var stories = [], fotos = [], bilder = {}, panel = null, liste = null, status = null;
+  var tage = [], zumPost = null, postFuer = null, fuelleTage = null;
 
   function serif() {
     var m = ""; try { m = localStorage.getItem("BS_MARKE") || ""; } catch (e) {}
@@ -48,6 +51,39 @@
   }
 
   // ── Text setzen ──────────────────────────────────────────────────────────
+  // ── Content-Plan (Tag 1 … x) aus der App-Datenbank ─────────────────────────
+  function hookAus(t) {
+    t = String(t || "").replace(/^\s*\[[^\]\n]{1,24}\]\s*/, "").replace(/\*+|__/g, "").replace(/\s+/g, " ").trim();
+    var a = t.search(/(^|\s)&\s/); if (a > 0) t = t.slice(0, a).trim();
+    var m = /^(.{12,}?[.!?])\s/.exec(t + " "); if (m) t = m[1];
+    return t.length > 110 ? t.slice(0, t.lastIndexOf(" ", 107)) + " …" : t;
+  }
+  function ladePlan() {
+    return new Promise(function (ok) {
+      try {
+        var r = indexedDB.open("BrandStudioDB");
+        r.onerror = function () { ok([]); };
+        r.onsuccess = function () {
+          var db = r.result;
+          if (!db.objectStoreNames.contains("assets")) { db.close(); return ok([]); }
+          var g = db.transaction("assets", "readonly").objectStore("assets").get("content_plan");
+          g.onsuccess = function () {
+            db.close();
+            var v = g.result, gal = [], days = [];
+            if (Array.isArray(v)) days = v; else if (v && Array.isArray(v.days)) { days = v.days; gal = v.gallery || []; }
+            ok(days.filter(function (d) { return d && Array.isArray(d.slides) && d.slides.length; }).map(function (d, k) {
+              var sl = d.slides.map(function (x) { return String(x && (x.text || x.content) || "").trim(); }).filter(Boolean);
+              var bg = String(d.slides[0] && d.slides[0].background || ""), m = /^@@img:(\d+)$/.exec(bg);
+              var bild = m ? gal[+m[1]] : /^(data:image|blob:|https?:|\/)/.test(bg) ? bg : "";
+              return { tag: d.day || k + 1, titel: d.title || "", caption: d.caption || "", slides: sl, bild: typeof bild === "string" ? bild : "", hook: hookAus(sl[0] || d.title || "") };
+            }).sort(function (a, b) { return a.tag - b.tag; }));
+          };
+          g.onerror = function () { db.close(); ok([]); };
+        };
+      } catch (e) { ok([]); }
+    });
+  }
+
   function umbruch(ctx, text, breite) {
     var worte = String(text).split(/\s+/).filter(Boolean), zeilen = [], z = "";
     worte.forEach(function (w) {
@@ -106,21 +142,67 @@
     x.putImageData(d, 0, 0); ctx.fillStyle = ctx.createPattern(c, "repeat"); ctx.fillRect(0, 0, W, H);
   }
 
+  function pille(ctx, cta, cy) {
+    ctx.font = "600 44px \"HelveticaNeueBrand\""; var tw = ctx.measureText(cta).width + 110;
+    var gg = ctx.createLinearGradient(W / 2 - tw / 2, 0, W / 2 + tw / 2, 0);
+    gg.addColorStop(0, "#9C7A33"); gg.addColorStop(0.35, "#E8CC86"); gg.addColorStop(0.55, "#F7E6B0"); gg.addColorStop(1, "#A47D31");
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = 24; ctx.shadowOffsetY = 8;
+    ctx.fillStyle = gg; ctx.beginPath(); var rx = W / 2 - tw / 2, rh = 104;
+    ctx.moveTo(rx + 52, cy); ctx.arcTo(rx + tw, cy, rx + tw, cy + rh, 52); ctx.arcTo(rx + tw, cy + rh, rx, cy + rh, 52); ctx.arcTo(rx, cy + rh, rx, cy, 52); ctx.arcTo(rx, cy, rx + tw, cy, 52); ctx.fill(); ctx.restore();
+    ctx.fillStyle = "#3a2608"; ctx.textAlign = "center"; ctx.fillText(cta, W / 2, cy + 68);
+  }
+  // Letzte Story „zum Post“: Text oben, Titelbild des Posts als Karte, goldene Pille.
+  function zeichnePost(ctx, st, zeilen, cta, bild, fam) {
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = OX; ctx.fillRect(0, 0, W, H); korn(ctx, 22);
+    ctx.font = "500 26px \"HelveticaNeueBrand\""; ctx.textAlign = "center"; ctx.fillStyle = "rgba(255,255,255,.72)";
+    if ("letterSpacing" in ctx) ctx.letterSpacing = "9px";
+    ctx.fillText("CARINA ANNA PRAV", W / 2, 200);
+    if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
+    if (zeilen.length) setzeText(ctx, zeilen, { y: 270, h: 420, w: W - 200, anker: "mitte" }, "#FFFFFF", fam);
+    var cw = 600, ch = 750, top = 745, p = st.post || {};
+    ctx.save(); ctx.translate(W / 2, top + ch / 2); ctx.rotate(-0.025);
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.45)"; ctx.shadowBlur = 50; ctx.shadowOffsetY = 22;
+    ctx.fillStyle = "#FBF8F3"; ctx.fillRect(-cw / 2 - 16, -ch / 2 - 16, cw + 32, ch + 32); ctx.restore();
+    ctx.save(); ctx.beginPath(); ctx.rect(-cw / 2, -ch / 2, cw, ch); ctx.clip();
+    if (bild) {
+      var sk = Math.max(cw / bild.width, ch / bild.height), bw = bild.width * sk, bh = bild.height * sk;
+      ctx.drawImage(bild, -bw / 2, -ch / 2 + Math.min(0, (ch - bh) * 0.3), bw, bh);
+      var g = ctx.createLinearGradient(0, 0, 0, ch / 2); g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, "rgba(0,0,0,.75)");
+      ctx.fillStyle = g; ctx.fillRect(-cw / 2, 0, cw, ch / 2);
+    } else { ctx.fillStyle = SW; ctx.fillRect(-cw / 2, -ch / 2, cw, ch); }
+    var hook = p.hook || p.titel || "";
+    if (hook) {
+      ctx.font = "400 54px \"" + fam + "\""; ctx.fillStyle = "#FFFFFF"; ctx.textAlign = "center";
+      var zl = umbruch(ctx, hook, cw - 90).slice(0, 4), lh = 60;
+      zl.forEach(function (z, k) { ctx.fillText(z, 0, ch / 2 - 50 - (zl.length - 1 - k) * lh); });
+    }
+    ctx.restore();
+    ctx.save(); ctx.translate(0, -ch / 2 - 6); ctx.rotate(0.04); ctx.fillStyle = "rgba(227,106,44,.92)"; ctx.fillRect(-150, -30, 300, 60);
+    ctx.font = "600 26px \"HelveticaNeueBrand\""; ctx.fillStyle = "#FFFFFF"; ctx.textAlign = "center";
+    if ("letterSpacing" in ctx) ctx.letterSpacing = "6px";
+    ctx.fillText("NEUER POST", 3, 10);
+    if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
+    ctx.restore(); ctx.restore();
+    pille(ctx, cta || "Neuer Post ↓", 1565);
+  }
+
   // ── Eine Story zeichnen ──────────────────────────────────────────────────
   function zeichne(st, i, n, canvas) {
     var ctx = canvas.getContext("2d"), fam = serif();
     var zeilen = String(st.text || "").split(/\n+/).map(function (z) { return z.trim(); }).filter(Boolean);
     var cta = "";
-    zeilen = zeilen.filter(function (z) { if (/STARTEN/.test(z) && z.length < 60) { cta = z; return false; } return true; });
+    zeilen = zeilen.filter(function (z) { if ((/STARTEN/.test(z) || /^Neuer Post\b/i.test(z)) && z.length < 60) { cta = z; return false; } return true; });
     var design = st.design || DESIGNS[0];
     var foto = design === "foto" && fotos.length && !st._ohneFoto ? fotos[(i * 3 + 1) % fotos.length] : "";
     if (design === "foto" && !foto) design = "oxblood";
     return Promise.all([
-      foto ? ladeBild(foto) : null,
+      foto ? ladeBild(foto) : design === "post" && st.post && st.post.bild ? ladeBild(st.post.bild) : null,
       design === "oxblood" || design === "schwarz" ? ladeBild("/scrap/" + ELEMENTE[(i * 5 + (st.el || 0)) % ELEMENTE.length] + ".webp") : null,
       document.fonts.load("400 60px \"" + fam + "\""), document.fonts.load("500 30px \"HelveticaNeueBrand\""), document.fonts.load("400 40px \"Nothing You Could Do\"")
     ].map(function (p) { return Promise.resolve(p).catch(function () { return null; }); })).then(function (r) {
       var bild = r[0], el = r[1], weiss = design !== "papier";
+      if (design === "post") { zeichnePost(ctx, st, zeilen, cta, bild, fam); return; }
       ctx.clearRect(0, 0, W, H);
       if (design === "foto" && bild) {
         var s = Math.max(W / bild.width, H / bild.height), bw = bild.width * s, bh = bild.height * s;
@@ -154,16 +236,7 @@
         ctx.save(); ctx.setLineDash([14, 12]); ctx.lineWidth = 3; ctx.strokeStyle = weiss ? "rgba(255,255,255,.35)" : "rgba(23,17,15,.3)";
         ctx.strokeRect(170, sy, W - 340, 250); ctx.restore();
       }
-      if (cta) {
-        var cy = H - 360 - 130;
-        ctx.font = "600 44px \"HelveticaNeueBrand\""; var tw = ctx.measureText(cta).width + 110;
-        var gg = ctx.createLinearGradient(W / 2 - tw / 2, 0, W / 2 + tw / 2, 0);
-        gg.addColorStop(0, "#9C7A33"); gg.addColorStop(0.35, "#E8CC86"); gg.addColorStop(0.55, "#F7E6B0"); gg.addColorStop(1, "#A47D31");
-        ctx.save(); ctx.shadowColor = "rgba(0,0,0,.35)"; ctx.shadowBlur = 24; ctx.shadowOffsetY = 8;
-        ctx.fillStyle = gg; ctx.beginPath(); var rx = W / 2 - tw / 2, rh = 104;
-        ctx.moveTo(rx + 52, cy); ctx.arcTo(rx + tw, cy, rx + tw, cy + rh, 52); ctx.arcTo(rx + tw, cy + rh, rx, cy + rh, 52); ctx.arcTo(rx, cy + rh, rx, cy, 52); ctx.arcTo(rx, cy, rx + tw, cy, 52); ctx.fill(); ctx.restore();
-        ctx.fillStyle = "#3a2608"; ctx.textAlign = "center"; ctx.fillText(cta, W / 2, cy + 68);
-      }
+      if (cta) pille(ctx, cta, H - 360 - 130);
     });
   }
 
@@ -233,7 +306,8 @@
   }
   function startDesigns() {
     stories.forEach(function (s, i) {
-      s.design = i === stories.length - 1 ? "oxblood" : i === 0 ? (fotos.length ? "foto" : "oxblood") : ["oxblood", "foto", "papier", "schwarz"][(i - 1) % 4];
+      s.post = postFuer || null;
+      s.design = i === stories.length - 1 ? (postFuer ? "post" : "oxblood") : i === 0 ? (fotos.length ? "foto" : "oxblood") : ["oxblood", "foto", "papier", "schwarz"][(i - 1) % 4];
     });
   }
   function zeigeStories() {
@@ -259,7 +333,7 @@
       var neu = function () { rendere(st, i); };
       var t; ta.oninput = function () { st.text = ta.value; clearTimeout(t); t = setTimeout(neu, 250); };
       b1.onclick = function () { speichere([st]); };
-      b2.onclick = function () { var k = DESIGNS.indexOf(st.design); st.design = DESIGNS[(k + 1) % DESIGNS.length]; if (st.design === "foto" && !fotos.length) st.design = DESIGNS[(k + 2) % DESIGNS.length]; st.el = (st.el || 0) + 1; neu(); };
+      b2.onclick = function () { var D = st.post ? DESIGNS.concat(["post"]) : DESIGNS, k = D.indexOf(st.design); st.design = D[(k + 1) % D.length]; if (st.design === "foto" && !fotos.length) st.design = D[(k + 2) % D.length]; st.el = (st.el || 0) + 1; neu(); };
       b3.onclick = function () { kopiere(st.text + (st.sticker ? "\n" + st.sticker : ""), b3); };
       reihe.appendChild(b1); reihe.appendChild(b2); reihe.appendChild(b3);
       rechts.appendChild(kopf); rechts.appendChild(ta); rechts.appendChild(stk); rechts.appendChild(reihe);
@@ -335,6 +409,7 @@
     if (!panel) baue();
     panel.style.display = "block"; document.body.style.overflow = "hidden";
     ladeFotos().then(function (f) { fotos = f; });
+    ladePlan().then(function (t) { tage = t; fuelleTage && fuelleTage(); });
   }
   function schliesse() { panel.style.display = "none"; document.body.style.overflow = ""; }
   function baue() {
@@ -352,7 +427,7 @@
     try { thema.value = localStorage.getItem("BS_STORY_TAG") === heute() ? localStorage.getItem("BS_STORY_THEMA") || "" : ""; } catch (e) {}
     if (!thema.value) thema.value = themaDesTages();
     var chipCss = "border:0;border-radius:999px;padding:9px 13px;margin:0 6px 6px 0;font:500 13px/1.25 -apple-system,sans-serif;cursor:pointer;text-align:left;background:#fff;color:#3b2a27;box-shadow:inset 0 0 0 1px #e5ddd8";
-    function waehle(t) { thema.value = t; try { localStorage.setItem("BS_STORY_THEMA", t); localStorage.setItem("BS_STORY_TAG", heute()); } catch (e) {} thema.focus(); }
+    function waehle(t) { setzePost(null); thema.value = t; try { localStorage.setItem("BS_STORY_THEMA", t); localStorage.setItem("BS_STORY_TAG", heute()); } catch (e) {} thema.focus(); }
     var tagesZeile = document.createElement("div"); tagesZeile.style.cssText = "display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0";
     var tagesB = knopf("☀ Thema des Tages"); tagesB.style.padding = "9px 14px"; tagesB.style.fontSize = "13px";
     tagesB.onclick = function () { waehle(themaDesTages()); };
@@ -369,6 +444,30 @@
       g.t.forEach(function (t) { var c = document.createElement("button"); c.type = "button"; c.textContent = t; c.style.cssText = chipCss; c.onclick = function () { waehle(t); themen.open = false; window.scrollTo && panel.scrollTo({ top: 0, behavior: "smooth" }); }; w.appendChild(c); });
       themen.appendChild(w);
     });
+    var postBlock = document.createElement("div"); postBlock.style.cssText = "margin:0 0 18px";
+    postBlock.innerHTML = "<div style=\"font:600 13px/1 -apple-system,sans-serif;color:" + OX + ";letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px\">Stories zum Post</div><div style=\"font:13px/1.4 -apple-system,sans-serif;color:#7a6a66;margin-bottom:8px\">Tag wählen: die Stories führen zu diesem Post, der Post ist das Ende.</div>";
+    var tagReihe = document.createElement("div"); tagReihe.style.cssText = "display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px";
+    var tagInfo = document.createElement("div"); tagInfo.style.cssText = "font:13px/1.4 -apple-system,sans-serif;color:#3b2a27;margin-top:6px;min-height:0";
+    postBlock.appendChild(tagReihe); postBlock.appendChild(tagInfo);
+    function setzePost(d) {
+      zumPost = d;
+      [].forEach.call(tagReihe.children, function (c) { var an = d && c.__tag === d.tag; c.style.background = an ? OX : "#fff"; c.style.color = an ? "#fff" : OX; });
+      tagInfo.textContent = d ? "Führt zu Tag " + d.tag + ": „" + d.hook + "“" : "";
+    }
+    fuelleTage = function () {
+      tagReihe.innerHTML = "";
+      if (!tage.length) { tagReihe.innerHTML = "<div style=\"font:13px -apple-system,sans-serif;color:#9a8a86\">Noch kein Plan mit Posts – erst einen Plan erstellen.</div>"; return; }
+      tage.forEach(function (d) {
+        var c = knopf("Tag " + d.tag); c.__tag = d.tag; c.style.padding = "9px 14px"; c.style.fontSize = "13px"; c.style.flex = "none";
+        c.onclick = function () {
+          if (zumPost && zumPost.tag === d.tag) { setzePost(null); return; }
+          setzePost(d); thema.value = "Hinführung zu meinem neuen Post: " + d.hook;
+        };
+        tagReihe.appendChild(c);
+      });
+      if (zumPost) setzePost(tage.filter(function (d) { return d.tag === zumPost.tag; })[0] || null);
+    };
+    fuelleTage();
     var zeile = document.createElement("div"); zeile.style.cssText = "display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0";
     var anz = document.createElement("select"); anz.style.cssText = "border:1px solid #e5ddd8;border-radius:999px;padding:11px 14px;font:600 14px -apple-system,sans-serif;background:#fff";
     [5, 6, 7].forEach(function (n) { var o = document.createElement("option"); o.value = n; o.textContent = n + " Stories"; n === 6 && (o.selected = true); anz.appendChild(o); });
@@ -378,9 +477,9 @@
       var t = thema.value.trim(); if (!t) { status.textContent = "Bitte zuerst ein Thema eintragen."; return; }
       try { localStorage.setItem("BS_STORY_THEMA", t); localStorage.setItem("BS_STORY_TAG", heute()); } catch (e) {}
       los.disabled = true; status.textContent = "Schreibe Stories … (dauert etwa 20 Sekunden)";
-      fetch("/.netlify/functions/story-studio", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ thema: t, count: Number(anz.value) }) })
+      fetch("/.netlify/functions/story-studio", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ thema: t, count: Number(anz.value), post: zumPost ? { titel: zumPost.titel, slides: zumPost.slides, caption: zumPost.caption } : undefined }) })
         .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d && d.error || "Fehlgeschlagen"); return d; }); })
-        .then(function (d) { stories = d.stories || []; return ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length + " Stories fertig. Texte kannst du direkt ändern."; }); })
+        .then(function (d) { stories = d.stories || []; postFuer = zumPost; return ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length + " Stories fertig. Texte kannst du direkt ändern."; }); })
         .catch(function (e) { status.textContent = "Fehler: " + (e.message || e); })
         .then(function () { los.disabled = false; });
     };
@@ -390,10 +489,10 @@
     var eta = document.createElement("textarea"); eta.rows = 6; eta.placeholder = "Story 1\nText …\n\nStory 2\nText …";
     eta.style.cssText = "width:100%;margin-top:8px;border:1px solid #e5ddd8;border-radius:12px;padding:10px;font:15px/1.4 -apple-system,sans-serif;background:#fff";
     var eb = knopf("Als Stories setzen"); eb.style.marginTop = "8px";
-    eb.onclick = function () { stories = parseEigen(eta.value); ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length ? stories.length + " Stories gesetzt." : "Keine Stories erkannt – schreib „Story 1“, „Story 2“ … davor."; }); };
+    eb.onclick = function () { stories = parseEigen(eta.value); postFuer = zumPost; ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length ? stories.length + " Stories gesetzt." : "Keine Stories erkannt – schreib „Story 1“, „Story 2“ … davor."; }); };
     eigen.appendChild(eta); eigen.appendChild(eb);
     liste = document.createElement("div");
-    inhalt.appendChild(thema); inhalt.appendChild(tagesZeile); inhalt.appendChild(themen); inhalt.appendChild(zeile); inhalt.appendChild(status); inhalt.appendChild(eigen); inhalt.appendChild(liste);
+    inhalt.insertBefore(postBlock, inhalt.firstChild); inhalt.appendChild(thema); inhalt.appendChild(tagesZeile); inhalt.appendChild(themen); inhalt.appendChild(zeile); inhalt.appendChild(status); inhalt.appendChild(eigen); inhalt.appendChild(liste);
     panel.appendChild(inhalt); document.body.appendChild(panel);
   }
   function start() {
@@ -407,5 +506,5 @@
     document.body.appendChild(b);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
-  window.BS_STORY_TEST = { setze: function (a) { stories = a; startDesigns(); zeigeStories(); }, oeffne: oeffne, fotos: function (f) { fotos = f; } };
+  window.BS_STORY_TEST = { setze: function (a, post) { stories = a; postFuer = post || null; startDesigns(); zeigeStories(); }, oeffne: oeffne, fotos: function (f) { fotos = f; } };
 })();

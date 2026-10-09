@@ -12336,3 +12336,17 @@ Alle Adressen laden **karten501**.
   getippt wurde. Kleine Korrekturen lösen nichts aus. `site/kommentare.js` (`?v=3`).
 
 Alle Adressen laden **karten502**.
+
+## 453 — Story-Studio: Stories zum Post (Tag 1 … x)
+
+- Oben im Story-Studio: „Stories zum Post“ mit einem Knopf je Tag aus dem Content-Plan
+  (gelesen aus der App-Datenbank, `content_plan`). Tag antippen → das Thema wird
+  „Hinführung zu meinem neuen Post: …“, nochmal antippen hebt die Auswahl auf.
+- „Stories schreiben“ schickt den Post (Titel, Slide-Texte, Caption) mit. Die Funktion
+  `story-studio.mjs` hängt an Carinas Prompt einen Abschnitt an: Neugier und Problem des
+  Posts aufbauen, Lösung nicht vorwegnehmen, letzte Story kündigt den Post an und endet mit
+  „Neuer Post ↓“ (statt STARTEN).
+- Letzte Story im Design „post“: Text oben, darunter das Titelbild des Posts als Karte mit
+  Hook und orangem „NEUER POST“-Tape, goldene Pille „Neuer Post ↓“. Über „Design wechseln“
+  erreichbar wie die anderen Designs. Klammer-Kennungen wie „[SALES]“ werden entfernt.
+- `site/story-studio.js` (`?v=5`). Bundle unverändert (**karten502**).
