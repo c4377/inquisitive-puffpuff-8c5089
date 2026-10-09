@@ -94,7 +94,7 @@
     laufend[k] = true; delete fehler[k]; alleZeigen(el);
     fetch("/.netlify/functions/kommentare", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ art: teil.art, caption: cap, titel: el.getAttribute("data-titel") || "", slides: slides }) })
       .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d && d.error || "Fehlgeschlagen"); return d; }); })
-      .then(function (d) { merke(k, { k: teil.liste(d[teil.feld] || []) }); })
+      .then(function (d) { merke(k, { k: teil.liste(d[teil.feld] || []), capText: cap.slice(0, 3000) }); })
       .catch(function (e) { fehler[k] = "Gerade nicht möglich: " + (e.message || e) + " — „Neu schreiben“ tippen."; })
       .then(function () { delete laufend[k]; alleZeigen(el); });
   }
@@ -103,11 +103,35 @@
     document.querySelectorAll("[data-bs-komm]").forEach(function (el) { if (schluessel(el) === k) zeige(el); });
   }
 
+  // „Deutlich geändert“: viele Wörter anders oder >40 Zeichen Längenunterschied.
+  function deutlich(alt, neu) {
+    alt = String(alt || "").trim(); neu = String(neu || "").trim();
+    if (alt === neu) return false;
+    if (Math.abs(alt.length - neu.length) > 40) return true;
+    var wa = alt.toLowerCase().split(/\W+/).filter(Boolean), wb = neu.toLowerCase().split(/\W+/).filter(Boolean);
+    var a = {}, gleich = 0, alle = {};
+    wa.forEach(function (w) { a[w] = 1; alle[w] = 1; });
+    wb.forEach(function (w) { if (a[w] && !alle["#" + w]) { gleich++; alle["#" + w] = 1; } alle[w] = 1; });
+    var n = Object.keys(alle).filter(function (x) { return x[0] !== "#"; }).length;
+    return n > 0 && gleich / n < 0.8;
+  }
+  function captionGeaendert(el) {
+    var cap = el.getAttribute("data-cap") || "";
+    var veraltet = TEILE.filter(function (teil) { var d = lies(tk(el, teil)); return d && d.k && deutlich(d.capText || "", cap); });
+    clearTimeout(el.__bsT);
+    if (!veraltet.length) return;
+    // erst schreiben, wenn sie 3 Sekunden nicht mehr tippt
+    el.__bsT = setTimeout(function () {
+      if (!document.body.contains(el)) return;
+      var jetzt = el.getAttribute("data-cap") || "";
+      veraltet.forEach(function (teil) { var d = lies(tk(el, teil)); if (d && d.k && deutlich(d.capText || "", jetzt)) schreibe(el, teil, true); });
+    }, 3000);
+  }
   function pruefe() {
     document.querySelectorAll("[data-bs-komm]").forEach(function (el) {
       var k = schluessel(el);
       var leer = !String(el.getAttribute("data-cap") || "").trim() && (el.getAttribute("data-slides") || "[]") === "[]";
-      if (el.__bsK === k && !(el.__bsLeer && !leer)) return;
+      if (el.__bsK === k && !(el.__bsLeer && !leer)) { if (!leer) captionGeaendert(el); return; }
       el.__bsK = k; el.__bsLeer = leer;
       TEILE.forEach(function (teil) {
         var kt = tk(el, teil);

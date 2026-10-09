@@ -211,6 +211,9 @@ ZEICHNER = ZEICHNER.replace('if(zCover&&!zMark&&K.magCoverInline===1)', KLARZ + 
 ANKER = 'if($e&&(t.karte==="ablauf"||t.reminderArt==="ablauf")){const Ab=T1('
 ersetze(ANKER, ZEICHNER.replace('\n', '') + ANKER)
 ersetze('title:"Geladene Datei",children:"karten451"', f'title:"Geladene Datei",children:"karten{VERSION}"')
+# Caption-Bereich im Editor scrollbar (Kommentare + Alternativtexte machen ihn lang)
+ersetze('className:"p-4 max-w-3xl mx-auto space-y-3",children:v.jsxs("div",{children:[v.jsxs("div",{className:"flex items-center justify-between mb-1",children:[v.jsx("label",{className:"text-xs font-bold text-gray-700 uppercase tracking-wider",children:"Caption"})',
+        'className:"p-4 max-w-3xl mx-auto space-y-3",style:{maxHeight:"55vh",overflowY:"auto",WebkitOverflowScrolling:"touch",overscrollBehavior:"contain"},children:v.jsxs("div",{children:[v.jsxs("div",{className:"flex items-center justify-between mb-1",children:[v.jsx("label",{className:"text-xs font-bold text-gray-700 uppercase tracking-wider",children:"Caption"})')
 # 2 Kommentare zum Kopieren: Platzhalter, die site/kommentare.js befüllt
 ZK = 'JSON.stringify((%s||[]).map(x=>x&&(x.text||x.content)||"").filter(Boolean)).slice(0,6000)'
 ersetze("""'wird mit „Plan Speichern" gesichert'})]})""", """'wird mit „Plan Speichern" gesichert'})]}),v.jsx("div",{"data-bs-komm":String(R||""),"data-titel":q||"","data-cap":K||"","data-slides":""" + ZK % '$' + """})""")

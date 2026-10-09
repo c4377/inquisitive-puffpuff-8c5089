@@ -12324,3 +12324,15 @@ Alle Adressen laden **karten501**.
   sicher weiß (keine Farben, Personen, Fotos), keine Hashtags, keine erfundenen Zahlen.
 - Gleiche Netlify-Funktion `kommentare.mjs` mit `art: "alt"`; `site/kommentare.js` (`?v=2`).
   Bundle unverändert (**karten501**).
+
+## 452 — Caption-Bereich scrollbar, Kommentare/Alternativtext folgen der Caption
+
+- Post-Editor: der Caption-Bereich (Caption, 2 Kommentare, Alternativtexte) ist jetzt höchstens
+  55 % der Bildschirmhöhe hoch und in sich scrollbar. Vorher wurde er am Handy unten
+  abgeschnitten (Alternativtext ab Slide 2 nicht erreichbar). `tools/editorial-look.py`.
+- Kommentare und Alternativtexte merken sich, zu welcher Caption sie geschrieben wurden.
+  Ändert sich die Caption deutlich (über 40 Zeichen Längenunterschied oder weniger als 80 %
+  gleiche Wörter), werden beide automatisch neu geschrieben, sobald 3 Sekunden nicht mehr
+  getippt wurde. Kleine Korrekturen lösen nichts aus. `site/kommentare.js` (`?v=3`).
+
+Alle Adressen laden **karten502**.
