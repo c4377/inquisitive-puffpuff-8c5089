@@ -12199,3 +12199,17 @@ Alle Adressen laden **karten495**.
   in Playfair Display, etwas weiter gesetzt (`magSerifLaufweite` -15, `magCoverFs` 0,066).
 
 Alle Adressen laden **karten496**.
+
+## 442 — Gold-Elemente (Feiern, Online-Coach, Frau, Wild)
+
+15 plastische Elemente in Gold/Oxblood/Schwarz als WebP in `site/scrap/` (`e1`–`e15`):
+Champagnerglas, Champagner, Discokugel, Kussmund, Lippenstift, rote Pumps (aus Carinas
+Foto), Leo-Herz, Laptop LIVE, Podcast-Mikro, Ringlicht, Konfetti, Kirschen, Cat-Eye-Brille,
+„Yes!“, Blitz. Im Look Klar (beide Schriften):
+- Kassabon-Kacheln (u. a. Tag 2): Element statt Carinas Cutout (`scrapFarben.bonEl`).
+- Polaroid: Kussmund, Pumps, Kirschen, Brille oder Lippenstift statt Globus.
+- Riss und To-do: zusätzliches Element als Akzent (`scrapFarben.el`).
+- Premium: Abzüge, Rahmen und Karteikarte bekommen je ein Element
+  (`premiumElAbzug`, `premiumElRahmen`, `premiumElKarte`).
+
+Alle Adressen laden **karten497**.
