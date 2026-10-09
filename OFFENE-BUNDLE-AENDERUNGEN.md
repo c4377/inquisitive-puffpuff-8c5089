@@ -12283,3 +12283,16 @@ Alle Adressen laden **karten500**.
 - Falls Teilen trotzdem scheitert: Ersatz-Ansicht mit allen Bildern groß, „Bild lange
   drücken → Zu Fotos hinzufügen“. Am Computer weiterhin Download.
 - `site/story-studio.js` (`?v=3`). Bundle unverändert (**karten500**).
+
+## 449 — Story-Studio: Speichern blieb bei „wird vorbereitet“ hängen
+
+- Wahrscheinliche Ursache am iPhone: Fotos aus „Meine Bilder“, die als Web-Adresse auf einem
+  anderen Server liegen, machen die Zeichenfläche für den Export gesperrt (Browser-Sicherheit).
+  Das Erzeugen der Bilddatei schlug dann still fehl, die Story blieb ewig „in Vorbereitung“.
+  Dazu kommt das knappe Zeichenflächen-Budget von Safari (vorher 7 große Leinwände parallel).
+- Jetzt: fremde Fotos werden mit `crossOrigin` geladen; ist der Export trotzdem gesperrt,
+  wird die Story ohne dieses Foto (Oxblood) neu gesetzt statt hängen zu bleiben. Leere
+  Ergebnisse werden einmal wiederholt.
+- Gezeichnet wird reihum auf **einer** Leinwand; die Vorschauen sind fertige Bilder.
+- Anzeige „Bilder werden vorbereitet … 3 von 6“ → „Alle 6 Bilder bereit ✓“.
+- `site/story-studio.js` (`?v=4`). Bundle unverändert (**karten500**).

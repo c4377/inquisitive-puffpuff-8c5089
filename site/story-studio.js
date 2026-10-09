@@ -19,7 +19,11 @@
   }
   function ladeBild(src) {
     if (bilder[src]) return bilder[src];
-    bilder[src] = new Promise(function (ok) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = function () { ok(null); }; i.src = src; });
+    bilder[src] = new Promise(function (ok) {
+      var fremd = /^https?:/i.test(src) && src.indexOf(location.origin) !== 0;
+      var i = new Image(); if (fremd) i.crossOrigin = "anonymous";
+      i.onload = function () { ok(i); }; i.onerror = function () { ok(null); }; i.src = src;
+    });
     return bilder[src];
   }
   function ladeFotos() {
@@ -109,7 +113,7 @@
     var cta = "";
     zeilen = zeilen.filter(function (z) { if (/STARTEN/.test(z) && z.length < 60) { cta = z; return false; } return true; });
     var design = st.design || DESIGNS[0];
-    var foto = design === "foto" && fotos.length ? fotos[(i * 3 + 1) % fotos.length] : "";
+    var foto = design === "foto" && fotos.length && !st._ohneFoto ? fotos[(i * 3 + 1) % fotos.length] : "";
     if (design === "foto" && !foto) design = "oxblood";
     return Promise.all([
       foto ? ladeBild(foto) : null,
@@ -242,8 +246,8 @@
     stories.forEach(function (st, i) {
       var karte = document.createElement("div");
       karte.style.cssText = "background:#fff;border-radius:18px;padding:14px;margin-bottom:16px;box-shadow:0 2px 14px rgba(0,0,0,.06);display:flex;gap:14px;flex-wrap:wrap";
-      var cv = document.createElement("canvas"); cv.width = W; cv.height = H;
-      cv.style.cssText = "width:170px;height:302px;border-radius:12px;background:#ddd;flex:none";
+      var cv = document.createElement("img"); cv.alt = "Story " + (i + 1);
+      cv.style.cssText = "width:170px;height:302px;border-radius:12px;background:#ddd;flex:none;object-fit:cover";
       var rechts = document.createElement("div"); rechts.style.cssText = "flex:1;min-width:200px;display:flex;flex-direction:column;gap:8px";
       var kopf = document.createElement("div"); kopf.textContent = "Story " + (i + 1); kopf.style.cssText = "font:700 13px/1 -apple-system,sans-serif;color:" + OX + ";letter-spacing:.08em;text-transform:uppercase";
       var ta = document.createElement("textarea"); ta.value = st.text; ta.rows = 8;
@@ -252,7 +256,7 @@
       stk.textContent = st.sticker ? "Sticker in Instagram setzen (gestrichelter Platz): " + st.sticker : "";
       var reihe = document.createElement("div"); reihe.style.cssText = "display:flex;gap:6px;flex-wrap:wrap";
       var b1 = knopf("Bild speichern", true), b2 = knopf("Design wechseln"), b3 = knopf("Text kopieren");
-      var neu = function () { st._file = null; st._nr = (st._nr || 0) + 1; zeichne(st, i, stories.length, cv).then(function () { bereite(st, i); }); };
+      var neu = function () { rendere(st, i); };
       var t; ta.oninput = function () { st.text = ta.value; clearTimeout(t); t = setTimeout(neu, 250); };
       b1.onclick = function () { speichere([st]); };
       b2.onclick = function () { var k = DESIGNS.indexOf(st.design); st.design = DESIGNS[(k + 1) % DESIGNS.length]; if (st.design === "foto" && !fotos.length) st.design = DESIGNS[(k + 2) % DESIGNS.length]; st.el = (st.el || 0) + 1; neu(); };
@@ -260,7 +264,7 @@
       reihe.appendChild(b1); reihe.appendChild(b2); reihe.appendChild(b3);
       rechts.appendChild(kopf); rechts.appendChild(ta); rechts.appendChild(stk); rechts.appendChild(reihe);
       karte.appendChild(cv); karte.appendChild(rechts); liste.appendChild(karte);
-      st._cv = cv; neu();
+      st._img = cv; neu();
     });
   }
   function kopiere(t, b) {
@@ -268,15 +272,45 @@
   }
   // Bilder werden nach jedem Zeichnen schon als Datei vorbereitet: iPhone/Safari erlaubt
   // „Teilen → Bilder sichern“ nur direkt beim Tippen, ohne Warten dazwischen.
-  function bereite(st, i) {
-    var cv = st._cv; if (!cv) return;
-    var nr = (st._nr = (st._nr || 0) + 1);
-    st._file = null;
-    cv.toBlob(function (bl) { if (bl && nr === st._nr) st._file = new File([bl], "story-" + (i + 1) + ".jpg", { type: "image/jpeg" }); }, "image/jpeg", 0.92);
+  var leinwand = null, schlange = [], laeuft = false;
+  function rendere(st, i) {
+    st._file = null; st._nr = (st._nr || 0) + 1;
+    schlange = schlange.filter(function (q) { return q.st !== st; }); schlange.push({ st: st, i: i });
+    fortschritt(); arbeite();
+  }
+  function arbeite() {
+    if (laeuft || !schlange.length) return;
+    laeuft = true;
+    var q = schlange.shift(), st = q.st, nr = st._nr;
+    if (!leinwand) { leinwand = document.createElement("canvas"); leinwand.width = W; leinwand.height = H; }
+    var weiter = function () { laeuft = false; fortschritt(); setTimeout(arbeite, 0); };
+    zeichne(st, q.i, stories.length, leinwand).then(function () {
+      if (nr !== st._nr) return weiter();
+      try {
+        leinwand.toBlob(function (bl) {
+          if (nr === st._nr) {
+            if (bl) {
+              st._file = new File([bl], "story-" + (q.i + 1) + ".jpg", { type: "image/jpeg" });
+              if (st._img) { if (st._url) URL.revokeObjectURL(st._url); st._url = URL.createObjectURL(bl); st._img.src = st._url; }
+            } else if (!st._nochmal) { st._nochmal = 1; schlange.push(q); st._nr++; }
+          }
+          weiter();
+        }, "image/jpeg", 0.92);
+      } catch (e) {
+        if (!st._ohneFoto) { st._ohneFoto = true; st._nr++; schlange.unshift(q); }
+        weiter();
+      }
+    }).catch(function () { weiter(); });
+  }
+  function fortschritt() {
+    if (!stories.length || !status) return;
+    var fertig = stories.filter(function (s) { return s._file; }).length;
+    if (fertig < stories.length) status.textContent = "Bilder werden vorbereitet … " + fertig + " von " + stories.length;
+    else if (/vorbereitet/.test(status.textContent)) status.textContent = "Alle " + stories.length + " Bilder bereit ✓";
   }
   function speichere(liste) {
     var files = liste.map(function (s) { return s._file; });
-    if (files.some(function (f) { return !f; })) { status.textContent = "Bilder werden noch vorbereitet … gleich nochmal tippen."; return; }
+    if (files.some(function (f) { return !f; })) { fortschritt(); arbeite(); return; }
     if (navigator.share && navigator.canShare && navigator.canShare({ files: files })) {
       navigator.share({ files: files }).catch(function (e) { if (!e || e.name !== "AbortError") galerie(files); });
       return;
