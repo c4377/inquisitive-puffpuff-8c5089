@@ -12313,3 +12313,14 @@ Alle Adressen laden **karten500**.
   `site/kommentare.js` (in `index.html` eingebunden).
 
 Alle Adressen laden **karten501**.
+
+## 451 — Alternativtext für Instagram bei jedem Post
+
+- Unter den 2 Kommentaren steht jetzt „Alternativtext für Instagram“: pro Slide ein Text
+  (höchstens 100 Zeichen, mit Zeichenzahl), je mit „Kopieren“ und „↻ Neu schreiben“.
+- Inhalt: Kernsatz der Slide plus das Thema in natürlichen Suchbegriffen, damit Instagram
+  den Post richtig einordnet (und für Barrierefreiheit). Slide 1 beginnt mit „Carina Anna
+  Prav, Business-Mentorin für Coaches:“. Es wird nichts beschrieben, was die App nicht
+  sicher weiß (keine Farben, Personen, Fotos), keine Hashtags, keine erfundenen Zahlen.
+- Gleiche Netlify-Funktion `kommentare.mjs` mit `art: "alt"`; `site/kommentare.js` (`?v=2`).
+  Bundle unverändert (**karten501**).
