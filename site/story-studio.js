@@ -252,9 +252,9 @@
       stk.textContent = st.sticker ? "Sticker in Instagram setzen (gestrichelter Platz): " + st.sticker : "";
       var reihe = document.createElement("div"); reihe.style.cssText = "display:flex;gap:6px;flex-wrap:wrap";
       var b1 = knopf("Bild speichern", true), b2 = knopf("Design wechseln"), b3 = knopf("Text kopieren");
-      var neu = function () { zeichne(st, i, stories.length, cv); };
+      var neu = function () { st._file = null; st._nr = (st._nr || 0) + 1; zeichne(st, i, stories.length, cv).then(function () { bereite(st, i); }); };
       var t; ta.oninput = function () { st.text = ta.value; clearTimeout(t); t = setTimeout(neu, 250); };
-      b1.onclick = function () { speichere([{ cv: cv, name: "story-" + (i + 1) + ".png" }]); };
+      b1.onclick = function () { speichere([st]); };
       b2.onclick = function () { var k = DESIGNS.indexOf(st.design); st.design = DESIGNS[(k + 1) % DESIGNS.length]; if (st.design === "foto" && !fotos.length) st.design = DESIGNS[(k + 2) % DESIGNS.length]; st.el = (st.el || 0) + 1; neu(); };
       b3.onclick = function () { kopiere(st.text + (st.sticker ? "\n" + st.sticker : ""), b3); };
       reihe.appendChild(b1); reihe.appendChild(b2); reihe.appendChild(b3);
@@ -266,14 +266,36 @@
   function kopiere(t, b) {
     try { navigator.clipboard.writeText(t); var a = b.textContent; b.textContent = "Kopiert ✓"; setTimeout(function () { b.textContent = a; }, 1400); } catch (e) {}
   }
-  function speichere(teile) {
-    Promise.all(teile.map(function (p) { return new Promise(function (ok) { p.cv.toBlob(function (bl) { ok(new File([bl], p.name, { type: "image/png" })); }, "image/png"); }); }))
-      .then(function (files) {
-        if (navigator.canShare && navigator.canShare({ files: files })) return navigator.share({ files: files }).catch(function () {});
-        files.forEach(function (f, k) { setTimeout(function () { var a = document.createElement("a"); a.href = URL.createObjectURL(f); a.download = f.name; document.body.appendChild(a); a.click(); a.remove(); }, k * 400); });
-      });
+  // Bilder werden nach jedem Zeichnen schon als Datei vorbereitet: iPhone/Safari erlaubt
+  // „Teilen → Bilder sichern“ nur direkt beim Tippen, ohne Warten dazwischen.
+  function bereite(st, i) {
+    var cv = st._cv; if (!cv) return;
+    var nr = (st._nr = (st._nr || 0) + 1);
+    st._file = null;
+    cv.toBlob(function (bl) { if (bl && nr === st._nr) st._file = new File([bl], "story-" + (i + 1) + ".jpg", { type: "image/jpeg" }); }, "image/jpeg", 0.92);
   }
-  function alleSpeichern() { speichere(stories.map(function (s, i) { return { cv: s._cv, name: "story-" + (i + 1) + ".png" }; })); }
+  function speichere(liste) {
+    var files = liste.map(function (s) { return s._file; });
+    if (files.some(function (f) { return !f; })) { status.textContent = "Bilder werden noch vorbereitet … gleich nochmal tippen."; return; }
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: files })) {
+      navigator.share({ files: files }).catch(function (e) { if (!e || e.name !== "AbortError") galerie(files); });
+      return;
+    }
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) { galerie(files); return; }
+    files.forEach(function (f, k) { setTimeout(function () { var a = document.createElement("a"); a.href = URL.createObjectURL(f); a.download = f.name; document.body.appendChild(a); a.click(); a.remove(); }, k * 400); });
+  }
+  // Ersatz, falls Teilen nicht geht: alle Bilder groß zeigen, lange drücken → „Zu Fotos hinzufügen“.
+  function galerie(files) {
+    var g = document.createElement("div");
+    g.style.cssText = "position:fixed;inset:0;z-index:2147483003;background:#1d0b0e;overflow:auto;-webkit-overflow-scrolling:touch;padding:16px 16px 40px";
+    var kopf = document.createElement("div"); kopf.style.cssText = "position:sticky;top:-16px;z-index:1;background:#1d0b0e;padding:12px 0;display:flex;justify-content:space-between;align-items:center;color:#fff;font:15px/1.4 -apple-system,sans-serif;margin:-16px 0 14px;gap:10px";
+    kopf.innerHTML = "<div><b>Bild lange drücken</b> → „Zu Fotos hinzufügen“</div>";
+    var zu = document.createElement("button"); zu.type = "button"; zu.textContent = "Fertig"; zu.style.cssText = "border:0;border-radius:999px;padding:10px 16px;font:600 14px -apple-system,sans-serif;background:#fff;color:" + OX;
+    zu.onclick = function () { g.remove(); }; kopf.appendChild(zu); g.appendChild(kopf);
+    files.forEach(function (f) { var im = document.createElement("img"); im.src = URL.createObjectURL(f); im.alt = f.name; im.style.cssText = "display:block;width:100%;max-width:420px;margin:0 auto 16px;border-radius:12px"; g.appendChild(im); });
+    document.body.appendChild(g);
+  }
+  function alleSpeichern() { speichere(stories); }
 
   function oeffne() {
     if (!panel) baue();

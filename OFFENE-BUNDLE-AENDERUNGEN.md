@@ -12273,3 +12273,13 @@ Bundle unverändert (**karten499**).
   Folie (Notiz entfällt). `tools/scrap-zeichner.js`.
 
 Alle Adressen laden **karten500**.
+
+## 448 — Story-Studio: „Alle Bilder speichern“ am iPhone
+
+- Ursache: Safari erlaubt „Teilen → Bilder sichern“ nur unmittelbar beim Tippen. Die Bilder
+  wurden erst nach dem Tippen erzeugt, dadurch verfiel die Erlaubnis und nichts passierte.
+- Jetzt wird jedes Story-Bild direkt nach dem Zeichnen als JPEG (1080×1920) vorbereitet;
+  beim Tippen öffnet sich sofort das Teilen-Menü mit allen Bildern („x Bilder sichern“).
+- Falls Teilen trotzdem scheitert: Ersatz-Ansicht mit allen Bildern groß, „Bild lange
+  drücken → Zu Fotos hinzufügen“. Am Computer weiterhin Download.
+- `site/story-studio.js` (`?v=3`). Bundle unverändert (**karten500**).
