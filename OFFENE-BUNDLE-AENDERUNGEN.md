@@ -12249,3 +12249,15 @@ Bundle unverändert (**karten498**).
   (`tools/scrap-zeichner.js`).
 
 Alle Adressen laden **karten499**.
+
+## 446 — Story-Studio: Themen aus Carinas Narrativ
+
+- Beim Öffnen steht automatisch ein **Thema des Tages** im Feld (wechselt täglich, reihum
+  durch alle Säulen). Ein selbst gewähltes Thema bleibt für den Tag stehen.
+- Knöpfe „☀ Thema des Tages“ und „↻ Anderes Thema“ (zufällig aus der Liste).
+- Aufklappbar „Themen aus deinem Narrativ“: 27 Themen in sechs Säulen (Ja zu dir, Meine
+  Geschichte, Umsetzen, Angebot & Preis, Mama & Business, Ergebnisse & Angebote). Tippen
+  setzt das Thema ins Feld. Nur Material aus Carinas Story-Prompt, keine erfundenen Zahlen.
+- `site/story-studio.js` (eingebunden mit `?v=2`).
+
+Bundle unverändert (**karten499**).

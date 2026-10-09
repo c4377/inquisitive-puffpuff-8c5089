@@ -163,6 +163,56 @@
     });
   }
 
+  // ── Themen aus Carinas Narrativ (nur Material aus ihrem Prompt, nichts erfunden) ──
+  var THEMEN = [
+    { s: "Ja zu dir", t: [
+      "Ja sagen, bevor du dich bereit fühlst",
+      "Warten aufs Bereitsein kostet dich mehr als jedes Programm",
+      "Du bist nicht zu viel. Du bist nur noch nicht sichtbar genug",
+      "Woran du eine Ja-Sagerin erkennst",
+      "Der Moment, in dem du Ja zu dir sagst, obwohl alle anderen zögern"
+    ] },
+    { s: "Meine Geschichte", t: [
+      "Mit 15 der Traum Amerika, mit 21 dort: was mir das über Ja-Sagen beigebracht hat",
+      "Ich hatte als Kind keine Mentorin und hab mir meine Mentoren immer selbst gesucht",
+      "Zweimal ohne Mentoring im Business: was mich das gekostet hat",
+      "Bühne, US-Radio, TV: Sichtbarkeit kann man trainieren",
+      "18 Jahre in Businesses jeder Größe, vom Millionenprojekt bis zum kleinen Business Case"
+    ] },
+    { s: "Umsetzen", t: [
+      "Wissen sammeln ohne Umsetzen ist der teuerste Fehler fähiger Frauen",
+      "Ich judge nichts. Außer, wenn du's nicht umsetzt",
+      "Ich schau jedes Video meiner Mentees an und sag die Lücke sofort",
+      "Allein rumprobieren fühlt sich sparsam an und ist das Teuerste überhaupt",
+      "Der nächste Kurs ist nicht dein Problem. Dein Umsetzen ist es"
+    ] },
+    { s: "Angebot & Preis", t: [
+      "Rabattieren fühlt sich nett an und kostet dich deinen Wert",
+      "Was ein Angebot hat, das sich verkauft",
+      "Content, der verkauft, statt Content, der nur gefällt",
+      "Warum du deinen Content nicht selbst schreiben musst (Done-for-you Content)",
+      "Vom Wissen im Kopf zum fertigen Angebot (Offer Incubator)"
+    ] },
+    { s: "Mama & Business", t: [
+      "Mama, Job, Business: meine Videos entstehen auch mal am Abend",
+      "Du brauchst keinen perfekten Tag, um dein Business zu bauen",
+      "Wenn das Kind schläft und du trotzdem Ja zu dir sagst"
+    ] },
+    { s: "Ergebnisse & Angebote", t: [
+      "Was meine Kundinnen umgesetzt haben: Membership-Plätze, 1:1-Plätze, vierstellige Umsätze",
+      "Das Intensive: für wen es ist und für wen nicht",
+      "Das 1:1: wann es sich für dich lohnt",
+      "Für wen ich nicht die Richtige bin"
+    ] }
+  ];
+  var ALLE_THEMEN = THEMEN.reduce(function (a, g) { return a.concat(g.t); }, []);
+  function heute() { var d = new Date(); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); }
+  function themaDesTages() {
+    var tag = Math.floor((Date.now() - new Date().getTimezoneOffset() * 60000) / 86400000);
+    var g = THEMEN[tag % THEMEN.length];
+    return g.t[Math.floor(tag / THEMEN.length) % g.t.length];
+  }
+
   // ── Menü ─────────────────────────────────────────────────────────────────
   function knopf(text, primaer) {
     var b = document.createElement("button"); b.type = "button"; b.textContent = text;
@@ -243,7 +293,26 @@
     inhalt.innerHTML = "<div style=\"font:600 13px/1 -apple-system,sans-serif;color:" + OX + ";letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px\">Thema heute</div>";
     var thema = document.createElement("textarea"); thema.rows = 3; thema.placeholder = "z. B. Warum du nicht bereit sein musst, um zu verkaufen";
     thema.style.cssText = "width:100%;border:1px solid #e5ddd8;border-radius:14px;padding:12px;font:16px/1.4 -apple-system,sans-serif;background:#fff";
-    try { thema.value = localStorage.getItem("BS_STORY_THEMA") || ""; } catch (e) {}
+    try { thema.value = localStorage.getItem("BS_STORY_TAG") === heute() ? localStorage.getItem("BS_STORY_THEMA") || "" : ""; } catch (e) {}
+    if (!thema.value) thema.value = themaDesTages();
+    var chipCss = "border:0;border-radius:999px;padding:9px 13px;margin:0 6px 6px 0;font:500 13px/1.25 -apple-system,sans-serif;cursor:pointer;text-align:left;background:#fff;color:#3b2a27;box-shadow:inset 0 0 0 1px #e5ddd8";
+    function waehle(t) { thema.value = t; try { localStorage.setItem("BS_STORY_THEMA", t); localStorage.setItem("BS_STORY_TAG", heute()); } catch (e) {} thema.focus(); }
+    var tagesZeile = document.createElement("div"); tagesZeile.style.cssText = "display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0";
+    var tagesB = knopf("☀ Thema des Tages"); tagesB.style.padding = "9px 14px"; tagesB.style.fontSize = "13px";
+    tagesB.onclick = function () { waehle(themaDesTages()); };
+    var zufallB = knopf("↻ Anderes Thema"); zufallB.style.padding = "9px 14px"; zufallB.style.fontSize = "13px";
+    zufallB.onclick = function () { var t; do { t = ALLE_THEMEN[Math.floor(Math.random() * ALLE_THEMEN.length)]; } while (t === thema.value && ALLE_THEMEN.length > 1); waehle(t); };
+    tagesZeile.appendChild(tagesB); tagesZeile.appendChild(zufallB);
+    var themen = document.createElement("details"); themen.style.cssText = "margin:10px 0 0;font:14px -apple-system,sans-serif;color:#5b4a46";
+    themen.innerHTML = "<summary style=\"cursor:pointer;font-weight:600;color:" + OX + "\">Themen aus deinem Narrativ</summary>";
+    THEMEN.forEach(function (g) {
+      var h = document.createElement("div"); h.textContent = g.s;
+      h.style.cssText = "font:600 11px/1 -apple-system,sans-serif;color:" + OX + ";letter-spacing:.08em;text-transform:uppercase;margin:14px 0 8px";
+      themen.appendChild(h);
+      var w = document.createElement("div");
+      g.t.forEach(function (t) { var c = document.createElement("button"); c.type = "button"; c.textContent = t; c.style.cssText = chipCss; c.onclick = function () { waehle(t); themen.open = false; window.scrollTo && panel.scrollTo({ top: 0, behavior: "smooth" }); }; w.appendChild(c); });
+      themen.appendChild(w);
+    });
     var zeile = document.createElement("div"); zeile.style.cssText = "display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0";
     var anz = document.createElement("select"); anz.style.cssText = "border:1px solid #e5ddd8;border-radius:999px;padding:11px 14px;font:600 14px -apple-system,sans-serif;background:#fff";
     [5, 6, 7].forEach(function (n) { var o = document.createElement("option"); o.value = n; o.textContent = n + " Stories"; n === 6 && (o.selected = true); anz.appendChild(o); });
@@ -251,7 +320,7 @@
     status = document.createElement("div"); status.style.cssText = "font:14px/1.4 -apple-system,sans-serif;color:#5b4a46;min-height:20px;margin:6px 0";
     los.onclick = function () {
       var t = thema.value.trim(); if (!t) { status.textContent = "Bitte zuerst ein Thema eintragen."; return; }
-      try { localStorage.setItem("BS_STORY_THEMA", t); } catch (e) {}
+      try { localStorage.setItem("BS_STORY_THEMA", t); localStorage.setItem("BS_STORY_TAG", heute()); } catch (e) {}
       los.disabled = true; status.textContent = "Schreibe Stories … (dauert etwa 20 Sekunden)";
       fetch("/.netlify/functions/story-studio", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ thema: t, count: Number(anz.value) }) })
         .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d && d.error || "Fehlgeschlagen"); return d; }); })
@@ -268,7 +337,7 @@
     eb.onclick = function () { stories = parseEigen(eta.value); ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length ? stories.length + " Stories gesetzt." : "Keine Stories erkannt – schreib „Story 1“, „Story 2“ … davor."; }); };
     eigen.appendChild(eta); eigen.appendChild(eb);
     liste = document.createElement("div");
-    inhalt.appendChild(thema); inhalt.appendChild(zeile); inhalt.appendChild(status); inhalt.appendChild(eigen); inhalt.appendChild(liste);
+    inhalt.appendChild(thema); inhalt.appendChild(tagesZeile); inhalt.appendChild(themen); inhalt.appendChild(zeile); inhalt.appendChild(status); inhalt.appendChild(eigen); inhalt.appendChild(liste);
     panel.appendChild(inhalt); document.body.appendChild(panel);
   }
   function start() {
