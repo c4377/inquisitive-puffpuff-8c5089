@@ -10,11 +10,12 @@
  */
 (function () {
   var LOOKS = [
+    ["editorial-kontrast", "Oxblood · Kontrast"],
     ["editorial-klar", "Klar · Instrument Serif"],
     ["editorial-klar-playfair", "Klar · Playfair"]
   ];
   function jetzt() {
-    try { var k = localStorage.getItem("BS_MARKE") || ""; return /^editorial-klar/.test(k) ? k : "editorial-klar"; } catch (e) { return "editorial-klar"; }
+    try { var k = localStorage.getItem("BS_MARKE") || ""; return /^editorial-(klar|kontrast)/.test(k) ? k : "editorial-kontrast"; } catch (e) { return "editorial-kontrast"; }
   }
   function name(k) {
     for (var i = 0; i < LOOKS.length; i++) if (LOOKS[i][0] === k) return LOOKS[i][1];

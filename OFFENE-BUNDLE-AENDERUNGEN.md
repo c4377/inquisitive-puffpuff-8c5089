@@ -12350,3 +12350,24 @@ Alle Adressen laden **karten502**.
   Hook und orangem „NEUER POST“-Tape, goldene Pille „Neuer Post ↓“. Über „Design wechseln“
   erreichbar wie die anderen Designs. Klammer-Kennungen wie „[SALES]“ werden entfernt.
 - `site/story-studio.js` (`?v=5`). Bundle unverändert (**karten502**).
+
+## 454 — Neuer Look „Oxblood · Kontrast“ (jetzt Standard)
+
+- Neuer Look `editorial-kontrast` nach Carinas freigegebenem Entwurf: reines Schwarz, Weiß und
+  Oxblood (#5E1A21), Fotos in hartem Schwarz-Weiß (Oxblood bleibt die einzige Farbe),
+  Instrument Serif aufrecht und kursiv gemischt.
+- Deckblätter im Wechsel (`magKontrastFeed`, neues Modul `tools/kontrast-zeichner.js`):
+  - **fotozeilen**: S/W-Foto, Text in schwarzen Zeilen-Kästchen, letzter Satz kursiv auf Oxblood.
+  - **papier**: weißes Papier auf Schwarz, letztes Wort jedes Satzes kursiv (das erste in Oxblood).
+  - **cutwort**: Weiß, letztes Wort des Hooks riesig kursiv in Oxblood hinter einem S/W-Cutout,
+    der ganze Satz klein in Versalien darüber.
+  - **flaeche**: Oxblood-Fläche, große weiße Schrift, erster Satz kursiv.
+  - **fotoetikett**: wie fotozeilen, darüber ein weißes Etikett (Kicker aus „[SALES]“ oder Rubrik).
+  - **weiss**: Weiß, riesige Schrift, Anfang kursiv Oxblood, Ende schwarz.
+  - Sternchen-Wörter (*so*) werden kursiv/Oxblood; „& …“ wird zur kleinen Unterzeile.
+- Folgefolien: Weiß mit schwarzer Schrift, letzte Folie Oxblood mit weißer Schrift. Fließtext
+  größer und normal statt dünn (`magTextSkala` 1.14, Gewicht 400).
+- Look-Menü: „Oxblood · Kontrast“ zuerst, Klar-Looks weiter wählbar. Beim ersten Öffnen wird
+  einmalig auf den neuen Look umgestellt (`BS_KONTRAST_EIN`), danach bleibt die eigene Wahl.
+
+Alle Adressen laden **karten503**.
