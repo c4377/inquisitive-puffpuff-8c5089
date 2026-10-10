@@ -12655,3 +12655,12 @@ Alle Adressen laden **karten524**.
   + Verlauf unten (70 %). @carinaannaprav-Pille oben.
 
 Alle Adressen laden **karten525**.
+
+## 479 — Kontrast in Anthrazit statt Oxblood (karten526)
+
+- Carina nach Vorschau-Vergleich: „Ja mach.“
+- kontrastOx #5E1A21 → #33363A, Schreibschrift auf der Fläche #E9D8C4 (warmes Hell),
+  Kopf-/Fußzeilen auf der Fläche #C9CCCF / #B3B7BA, Grautöne neutral (#85898C, #64686B),
+  Papier-Grund #E7E6E3. Schrift bleibt #0A0706, Foto-Kacheln unverändert (Text unten, Vignette).
+
+Alle Adressen laden **karten526**.
