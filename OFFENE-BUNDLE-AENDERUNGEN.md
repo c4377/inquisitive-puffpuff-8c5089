@@ -12632,3 +12632,16 @@ Alle Adressen laden **karten522**.
   Kopf-/Fußzeilen auf Grün #B9CEC4 / #A6BCB2, Grautöne kühl (#6E7773, #535B57), Papier-Grund #ECEFED.
 
 Alle Adressen laden **karten523**.
+
+## 477 — Kontrast: Foto-Kacheln wie Carinas Referenz (karten524)
+
+- Carina (Referenz eva.siebenhaar): „Das sieht nicht gleich, lieber so.“
+- fotozeilen und fotoetikett zeichnen jetzt: Foto in Farbe, oben dunkler Verlauf, kleine Versalzeile
+  (Helvetica) → Kern des Hooks groß in Instrument Serif weiß → Fortsetzung wieder in Versalien →
+  Handschrift. Keine Zeilen-Kästchen und kein schwarzes Etikett mehr.
+- Kern: Zitat in „…“ (davor = obere Zeile, danach = untere), sonst *Sternchen*-Teil ab 14 Zeichen,
+  sonst erster Satz (nach einer „…:“-Einleitung der zweite). Ohne obere Zeile steht die Rubrik oben.
+- Liegt das erkannte Gesicht (t._zBox.y0 < 0,4) oben, rutscht der Text nach unten mit Verlauf von unten.
+- @carinaannaprav-Pille unten (bzw. oben, wenn der Text unten steht).
+
+Alle Adressen laden **karten524**.

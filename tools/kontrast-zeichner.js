@@ -3,8 +3,9 @@
    aufrecht + kursiv, gesperrtes Etikett, feine Schreibschrift (Text nach „&“) immer unter dem Hook, Absender unten.
    papier: weißes Papier auf Hellbeige, Text schwarz, Akzentwort kursiv Oxblood.
    flaeche: Oxblood-Fläche, große weiße Schrift, erster Satz kursiv.
-   fotozeilen: Foto, Text in weißen Zeilen-Kästchen, letzter Satz Oxblood kursiv.
-   fotoetikett: wie fotozeilen, darüber schwarzes Etikett (Kicker oder Rubrik).
+   fotozeilen/fotoetikett (seit 10.10.): Foto, oben (Gesicht oben: unten) kleine Versalzeile, Hook-Kern groß in
+   Instrument Serif weiß, Fortsetzung wieder in Versalien, Handschrift darunter. Kern = Zitat „…“, *Sternchen* (ab 14 Zeichen)
+   oder erster Satz (nach „…:“-Einleitung der zweite).
    weiss: reinweiß, riesige Schrift, Anfang kursiv Oxblood, Ende schwarz.
    cutwort: reinweiß, letztes Wort riesig kursiv Oxblood hinter einem Cutout.
    Absender @carinaannaprav auf jeder Kachel und Folgefolie.
@@ -49,8 +50,18 @@ if(zxTyp==="papier"){const zpw=zW*.84,zph=zH*.86,zpc=document.createElement("can
 e.add(new zFb.Image(zpc,{left:zW/2,top:zH/2,originX:"center",originY:"center",scaleX:zpw/420,scaleY:zph/520,angle:-.8,shadow:zxSh(.22,.045),...zNo}));
 const ztb=zxBox(zxSegs(zxTitel,"wort"),zW*.11,zpw*.8,zph*.5,"#000000",zxOX);const zteile=[zxKick(zxOX),ztb];zxSkriptT&&zteile.push(zxSkr(zxOX));zxStapel(zteile,zH*.47,null,-.8);zxFuss("#535B57",zH*.87)}
 else if(zxTyp==="flaeche"){const ztb=zxBox(zxSegs(zxTitel,"erster"),zW*.16,zW*.86,zH*.5,"#FFFFFF","#FFFFFF");const zteile=[zxKick("#B9CEC4"),ztb];zxSkriptT&&zteile.push(zxSkr(zxOR));zxStapel(zteile,zH*.47);zxFuss("#A6BCB2",zH*.925)}
-else if(zxTyp==="fotozeilen"||zxTyp==="fotoetikett"){zxFotoBG(zxSW(zxFoto,1.38));zxHandle(zH*.04);const zsk=zxSkriptT?zxSkr("#FFFFFF",1):null,zskh=zsk?(zsk.height||0)*.85:0,zoben=zxZeilen(zxSegs(zxTitel,"wort"),zW*.062,zW*.82,zH*.92-zskh,zxOX);zsk&&zxStapel([zsk],null,zH*.955);
-if(zxTyp==="fotoetikett"){const zkt=zxKickT,zt=new zFb.Text(zkt,{fontFamily:zxHN,fontWeight:"700",fontSize:zW*.034,charSpacing:300,fill:"#FFFFFF",originX:"center",left:zW/2,...zNo}),zbw=(zt.width||0)+zW*.06,zbh=zW*.034*1.9,zby=zoben-zbh-zH*.03;e.add(new zFb.Rect({left:zW/2-zbw/2,top:zby,width:zbw,height:zbh,fill:"#000000",...zNo}));zt.set({top:zby+(zbh-(zt.height||0))/2+zW*.002});e.add(zt)}}
+else if(zxTyp==="fotozeilen"||zxTyp==="fotoetikett"){zxFotoBG(zxSW(zxFoto,1.1));
+const zpl=zxTitel.replace(/\s+/g," ").trim();let zob="",zmi="",zun="";const zqm=/[„"»][^„"»“”«]{3,}[“”"«][.!?…]*/.exec(zpl.replace(/\*/g,"")),zsm0=/\*([^*]+)\*/.exec(zpl),zsm=zsm0&&zsm0[1].trim().length>=14?zsm0:null,zpp=zpl.replace(/\*/g,"");
+if(zqm){zob=zpp.slice(0,zqm.index);zmi=zqm[0];zun=zpp.slice(zqm.index+zqm[0].length)}else if(zsm){zob=zpl.slice(0,zsm.index).replace(/\*/g,"");zmi=zsm[1];zun=zpl.slice(zsm.index+zsm[0].length).replace(/\*/g,"")}else{const zS=zSaetze(zpp);if(zS.length>=3&&/:$/.test(zS[0])){zob=zS[0];zmi=zS[1];zun=zS.slice(2).join(" ")}else if(zS.length>=2){zmi=zS[0];zun=zS.slice(1).join(" ")}else zmi=zpp}
+zob=zob.trim();zmi=zmi.trim();zun=zun.trim();zmi||(zmi=zob||zun,zob=zmi===zob?"":zob,zun=zmi===zun?"":zun);
+const zfb=t._zBox,zunten=!!(zfb&&typeof zfb.y0==="number"&&zfb.y0<.4);
+e.add(new zFb.Rect({left:0,top:zunten?zH*.35:0,width:zW,height:zH*.65,...zNo,fill:new zFb.Gradient({type:"linear",coords:{x1:0,y1:0,x2:0,y2:zH*.65},colorStops:zunten?[{offset:0,color:"rgba(0,0,0,0)"},{offset:1,color:"rgba(0,0,0,0.62)"}]:[{offset:0,color:"rgba(0,0,0,0.6)"},{offset:1,color:"rgba(0,0,0,0)"}]})}));
+const zcaps=(ztx,zfs)=>new zFb.Textbox(ztx.toLocaleUpperCase("de-DE"),{width:zW*.86,fontFamily:zxHN,fontWeight:"400",fontSize:zfs,lineHeight:1.05,charSpacing:10,fill:"#FFFFFF",textAlign:"center",shadow:new zFb.Shadow({color:"rgba(0,0,0,0.35)",blur:zW*.012,offsetX:0,offsetY:1}),...zNo});
+let zsk=1,zteile=[];for(let k=0;k<40;k++){const zbig=new zFb.Textbox(zmi,{width:zW*.9,fontFamily:zxIS,fontWeight:"400",fontSize:zW*.15*zsk,lineHeight:.84,charSpacing:-30,fill:"#FFFFFF",textAlign:"center",shadow:new zFb.Shadow({color:"rgba(0,0,0,0.3)",blur:zW*.015,offsetX:0,offsetY:1}),...zNo});const zlw=Math.max(0,...zmi.split(/\s+/).filter(Boolean).map(zwd=>new zFb.Text(zwd,{fontFamily:zxIS,fontSize:zW*.15*zsk,charSpacing:-30}).width||0));
+zteile=[];zob?zteile.push(zcaps(zob,zW*.044*Math.max(zsk,.7))):zteile.push(zxKick("#FFFFFF",1));zteile.push(zbig);zun&&zteile.push(zcaps(zun,zW*.044*Math.max(zsk,.7)));zxSkriptT&&zteile.push(zxSkr("#FFFFFF",1));
+const zh=zteile.reduce((za,zo)=>za+(zo.height||0),0)+(zteile.length-1)*zW*.022;if(zlw<=zW*.88&&zh<=zH*.56)break;zsk*=.94}
+if(zunten)zxStapel(zteile,null,zH*.9);else{let zy=zH*.075;zteile.forEach(zo=>{zo.set({originX:"center",originY:"top",left:zW/2,top:zy});e.add(zo);zy+=(zo.height||0)+zW*.022})}
+zxHandle(zunten?zH*.04:zH*.925)}
 else if(zxTyp==="weiss"){const ztb=zxBox(zxSegs(zxTitel,"erster"),zW*.17,zW*.86,zH*.5,"#000000",zxOX);const zteile=[zxKick(zxOX),ztb];zxSkriptT&&zteile.push(zxSkr(zxOX));zxStapel(zteile,zH*.47);zxFuss("#6E7773",zH*.925)}
 else{const zplain=zxTitel.replace(/\*+/g,"").trim(),zwd=(zplain.split(/\s+/).pop()||"Ja.").replace(/^[„"»]+|[“"«]+$/g,"");
 const zwo=new zFb.Text(zwd,{fontFamily:zxIS,fontStyle:"italic",fontSize:zW*.6,charSpacing:-40,fill:zxOX,originX:"center",left:zW/2,top:zH*.1,...zNo});const zww=zwo.width||1;zww>zW*.96&&zwo.set({fontSize:zW*.6*zW*.96/zww});e.add(zwo);
