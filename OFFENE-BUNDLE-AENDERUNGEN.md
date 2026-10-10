@@ -12400,3 +12400,22 @@ Alle Adressen laden **karten504**.
 - Look-Menü: „Carinas Stift“ zuerst; einmalige Umstellung über `BS_STIFT_EIN`.
 
 Alle Adressen laden **karten505**.
+
+## 457 — Neuer Look „Papier & Porträt“ (jetzt Standard)
+
+- Carina wählte aus drei Richtungen „2 & 3“ (Papier + Porträt) nach ihren Referenzen
+  (Schrift, Aufteilung, Stimmung).
+- Schriften: Playfair Display aufrecht + kursiv (Headlines, auch Folgefolien), Mrs Saint Delafield
+  als feine Schreibschrift, gesperrte Helvetica-Versalien als Etikett und Absender.
+- Aufteilung: Etikett → Schreibschrift → Headline (→ Absender), zentriert.
+- Deckblätter im Wechsel (`magCarinaFeed`, neues Modul `tools/carina-zeichner.js`):
+  portraet (Farbfoto, Verlauf unten, weiße Headline, Schreibschrift orange), papier
+  (zerknittertes Creme-Papier `site/scrap/papier-creme.webp`, kursives Wort Oxblood), abzug (Papier +
+  Foto-Abzug der Kachel), oxblood (Fläche mit cremefarbener Schrift), trend (fette Versal-Headline,
+  Abzug, Liste, Pfeil; nur ab drei Sätzen, sonst abzug).
+- Kursiv: *Sternchen*-Wörter, sonst letzter Satz bzw. letztes Wort. Text nach „&“ = Schreibschrift.
+- Etiketten aus „[TAG]“ oder eigener Rubrikliste (Ehrlich jetzt, Klartext, Ja-Sagerinnen wissen …).
+- Folgefolien: Papier mit dunkler Schrift, letzte Folie Oxblood. Look-Menü: „Papier & Porträt“ zuerst,
+  einmalige Umstellung über `BS_CARINA_EIN`.
+
+Alle Adressen laden **karten506**.

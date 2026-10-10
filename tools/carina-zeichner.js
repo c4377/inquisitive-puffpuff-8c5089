@@ -1,0 +1,46 @@
+/* Look „Papier & Porträt“ (magCarinaFeed): Playfair Display aufrecht + kursiv, feine
+   Schreibschrift (Mrs Saint Delafield), gesperrte Versal-Etiketten.
+   portraet: Farbfoto, leichter Verlauf unten, Etikett + Schreibschrift (orange) + weiße Headline.
+   papier: zerknittertes Creme-Papier, dunkle Headline, kursives Wort in Oxblood.
+   abzug: Papier + Foto-Abzug der Kachel oben, Schreibschrift + Headline darunter.
+   oxblood: Oxblood-Fläche, Etikett, Schreibschrift orange, cremefarbene Headline.
+   trend: Papier, fette Versal-Headline (erster Satz), Abzug links, restliche Sätze rechts, Pfeil.
+   Kursiv: *Sternchen*-Wörter, sonst der letzte Satz (bei mehreren) bzw. das letzte Wort.
+   Text nach „&“ wird zur Schreibschrift-Zeile. Folgefolien: Papier, letzte Folie Oxblood.
+   Wird von editorial-look.py eingesetzt; alle Zeilenumbrüche werden entfernt. */
+if(K.magCarinaFeed){const zcL=String(K.magCarinaFeed).split("|").filter(Boolean),zcTg=Number(t._tag)||0;let zcTyp=zcL[(zcTg%zcL.length+zcL.length)%zcL.length];
+const zcOX=K.carinaOx||"#5E1A21",zcOR=K.carinaOrange||"#F4A06C",zcCR="#F3EAE3",zcINK="#1E1612",zcPF=K.carinaSerif||"Playfair Display",zcSC=K.carinaSkriptFont||"Mrs Saint Delafield",zcHN="HelveticaNeueBrand";
+const zcPapier=async()=>{const zim=await new Promise(zr=>{const zq=new Image();zq.onload=()=>zr(zq);zq.onerror=()=>zr(null);zq.src="/scrap/papier-creme.webp"});if(zim){const zs=Math.max(zW/zim.width,zH/zim.height);e.add(new zFb.Image(zim,{left:zW/2,top:zH/2,originX:"center",originY:"center",scaleX:zs,scaleY:zs,...zNo}))}else e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:"#E9E2D8",...zNo}))};
+if(!zCover){const zcN=(i&&i.slideIndex)||0,zcTot=(i&&i.totalSlides)||0,zcLetzte=zcTot>1&&zcN>=zcTot-1;if(zcLetzte)e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:zcOX,...zNo}));else await zcPapier();TXT=zcLetzte?zcCR:zcINK;AK=zcLetzte?zcOR:zcOX;zkKeinSchatten=!0;zkObenA=0}
+else{
+try{await Promise.race([Promise.all([`400 40px "${zcPF}"`,`italic 400 40px "${zcPF}"`,`400 40px "${zcSC}"`,`500 40px "${zcHN}"`,`700 40px "${zcHN}"`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,4e3))])}catch(zz){}
+const zcW=(za,zl)=>za[((zl%za.length)+za.length)%za.length],zcI=Math.floor(zcTg/zcL.length);
+const zcRaw=String(zRoh||t.text||"").split(/\n/).map(q=>q.trim()).filter(Boolean).join(" "),zcAi=zcRaw.search(/(^|\s)&\s/);
+const zcTitelRoh=(zcAi>=0?zcRaw.slice(0,zcAi):zcRaw).replace(/__/g,"").trim(),zcNotiz=zcAi>=0?zcRaw.slice(zcAi).replace(/^\s*&\s*/,"").replace(/\*+|__/g,"").trim():"";
+const zcKick=String(zKickT||zcW(String(K.carinaRubrik||"Ehrlich jetzt|Klartext|Ja-Sagerinnen wissen|Notiz an dich|Aus meinem Alltag").split("|"),zcTg+zcI)).toLocaleUpperCase("de-DE");
+const zcSkript=zcNotiz||zcW(String(K.carinaSkript||"hör mal|ehrlich jetzt|merk dir das|Achtung").split("|"),zcI+zcTg*3);
+let zcPlain="";const zcIt={};const zcStar=/\*[^*]+\*/.test(zcTitelRoh);zcTitelRoh.split(/(\*[^*]+\*)/).filter(Boolean).forEach(zp=>{const zk=/^\*.*\*$/.test(zp),ztx=zk?zp.slice(1,-1):zp;for(let k=0;k<ztx.length;k++)zk&&(zcIt[zcPlain.length+k]=1);zcPlain+=ztx});
+if(!zcStar){const zsz=zSaetze(zcPlain);if(zsz.length>1){const zl=zsz[zsz.length-1].trim(),zi=zcPlain.lastIndexOf(zl);if(zi>=0)for(let k=zi;k<zi+zl.length;k++)zcIt[k]=1}else{const zw=zcPlain.trim(),zl=zw.lastIndexOf(" ");for(let k=zl>0?zl+1:0;k<zw.length;k++)zcIt[k]=1}}
+const zcBal=(zo,zw)=>{const zn=(zo.textLines||[]).length;if(zn<2)return;let lo=zw*.5,hi=zw;for(let k=0;k<10;k++){const zm=(lo+hi)/2;zo.set({width:zm});zo.initDimensions();(zo.textLines.length>zn||Math.max(...(zo.__lineWidths||[0]))>zm*1.01)?lo=zm:hi=zm}zo.set({width:hi});zo.initDimensions()};
+const zcHead=(zfs,zw,zmaxH,zfill,zak)=>{let zsk=1,ztb=null;for(let k=0;k<45;k++){const zst={};Object.keys(zcIt).forEach(zk=>{zst[zk]={fontStyle:"italic",...(zak?{fill:zak}:{})}});ztb=new zFb.Textbox(zcPlain,{width:zw,fontFamily:zcPF,fontWeight:"400",fontSize:zfs*zsk,lineHeight:1.0,charSpacing:-35,fill:zfill,textAlign:"center",styles:{0:zst},...zNo});zcBal(ztb,zw);const zlw=Math.max(0,...zcPlain.split(/\s+/).filter(Boolean).map(zwd=>new zFb.Text(zwd,{fontFamily:zcPF,fontStyle:"italic",fontSize:zfs*zsk,charSpacing:-35}).width||0));if(zlw<=zw*.98&&ztb.height<=zmaxH)break;zsk*=.94}return ztb};
+const zcKicker=(zfill)=>new zFb.Text(zcKick,{fontFamily:zcHN,fontWeight:"500",fontSize:zW*.019,charSpacing:400,fill:zfill,originX:"center",left:zW/2,...zNo});
+const zcSchrift=(ztx,zfill,zfs)=>new zFb.Text(ztx,{fontFamily:zcSC,fontSize:zfs||zW*.078,fill:zfill,originX:"center",left:zW/2,angle:-4,...zNo});
+const zcFuss=(ztx,zfill,zy)=>e.add(new zFb.Text(ztx,{fontFamily:zcHN,fontWeight:"500",fontSize:zW*.0145,charSpacing:450,fill:zfill,originX:"center",left:zW/2,top:zy,...zNo}));
+const zcStapel=(zteile,zmitte,zunten)=>{const zgap=zW*.02;let zh=0;zteile.forEach((zo,k)=>{zh+=(zo.height||0)+(k?zgap:0)});let zy=zunten!=null?zunten-zh:zmitte-zh/2;zteile.forEach(zo=>{zo.set({top:zy,left:zo.originX==="center"?zW/2:(zW-(zo.width||0))/2});e.add(zo);zy+=(zo.height||0)+zgap});return zy};
+const zcFotoCanvas=()=>{let zc=null;e.getObjects().forEach(zo=>{zo.type!=="image"&&(zo.visible=!1)});try{zc=e.toCanvasElement(1)}catch(zz){}return zc};
+const zcAbzug=(zsrc,zcx,zcy,zw,zh,zang)=>{if(!zsrc)return;const zfb=t._zBox;let zfx=.5,zfy=.35;zfb&&typeof zfb.x0==="number"&&(zfx=(zfb.x0+zfb.x1)/2,zfy=(zfb.y0+zfb.y1)/2);const zW2=zsrc.width,zH2=zsrc.height;let zcw=zW2*.92,zch=zcw*zh/zw;zch>zH2&&(zch=zH2,zcw=zch*zw/zh);const zx0=Math.max(0,Math.min(zW2-zcw,zfx*zW2-zcw/2)),zy0=Math.max(0,Math.min(zH2-zch,zfy*zH2-zch*.4)),zb=zW*.013;
+const zg=new zFb.Group([new zFb.Rect({left:0,top:0,width:zw+zb*2,height:zh+zb*2,fill:"#F6F3EE"}),new zFb.Image(zsrc,{left:zb,top:zb,cropX:zx0,cropY:zy0,width:zcw,height:zch,scaleX:zw/zcw,scaleY:zh/zch})],{left:zcx,top:zcy,originX:"center",originY:"center",angle:zang,shadow:new zFb.Shadow({color:"rgba(40,25,15,0.35)",blur:zW*.035,offsetX:0,offsetY:zW*.015}),...zNo});e.add(zg)};
+const zcSaetze=zSaetze(zcPlain);if(zcTyp==="trend"&&zcSaetze.length<3)zcTyp="abzug";
+if(zcTyp==="portraet"){const zc=zcFotoCanvas();e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:"#2A2421",...zNo}));if(zc)e.add(new zFb.Image(zc,{left:0,top:0,scaleX:zW/zc.width,scaleY:zH/zc.height,...zNo}));
+e.add(new zFb.Rect({left:0,top:zH*.42,width:zW,height:zH*.58,...zNo,fill:new zFb.Gradient({type:"linear",coords:{x1:0,y1:0,x2:0,y2:zH*.58},colorStops:[{offset:0,color:"rgba(30,18,12,0)"},{offset:.35,color:"rgba(30,18,12,0.3)"},{offset:1,color:"rgba(30,18,12,0.72)"}]})}));
+const zhd=zcHead(zW*.085,zW*.84,zH*.26,"#FFFFFF",null);zhd.set({shadow:new zFb.Shadow({color:"rgba(0,0,0,0.3)",blur:zW*.02,offsetX:0,offsetY:2})});zcStapel([zcKicker("#FFFFFF"),zcSchrift(zcSkript,zcOR),zhd],null,zH*.93)}
+else if(zcTyp==="oxblood"){e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,...zNo,fill:new zFb.Gradient({type:"radial",coords:{x1:zW/2,y1:zH*.3,r1:0,x2:zW/2,y2:zH*.3,r2:zH*.8},colorStops:[{offset:0,color:"#6A2029"},{offset:1,color:"#3A0F14"}]})}));
+zcStapel([zcKicker("#E2BFB2"),zcSchrift(zcSkript,zcOR),zcHead(zW*.1,zW*.82,zH*.45,zcCR,null)],zH*.46);zcFuss("CARINA ANNA PRAV","#D7B3A6",zH*.925)}
+else if(zcTyp==="papier"){await zcPapier();const zteile=[zcKicker(zcOX)];zcNotiz&&zteile.push(zcSchrift(zcNotiz,zcOX));zteile.push(zcHead(zW*.105,zW*.82,zH*.5,zcINK,zcOX));zcStapel(zteile,zH*.46);zcFuss("FÜR DIE JA-SAGERINNEN","#6A5A52",zH*.925)}
+else if(zcTyp==="abzug"){const zc=zcFotoCanvas();await zcPapier();zcAbzug(zc,zW/2,zH*.29,zW*.5,zH*.4,-3);const zhd=zcHead(zW*.078,zW*.82,zH*.24,zcINK,zcOX);zcStapel([zcSchrift(zcSkript,zcOX,zW*.07),zhd],null,zH*.93)}
+else{const zc=zcFotoCanvas();await zcPapier();const ztitel=zcSaetze[0].replace(/\*+/g,"").toLocaleUpperCase("de-DE");let ztf=zW*.105,zto=null;for(let k=0;k<30;k++){zto=new zFb.Textbox(ztitel,{width:zW*.84,fontFamily:zcHN,fontWeight:"700",fontSize:ztf,lineHeight:.92,charSpacing:-20,fill:zcINK,textAlign:"center",originX:"center",left:zW/2,top:zH*.07,...zNo});const zlw=Math.max(0,...ztitel.split(/\s+/).map(zwd=>new zFb.Text(zwd,{fontFamily:zcHN,fontWeight:"700",fontSize:ztf,charSpacing:-20}).width||0));if(zto.height<=zH*.26&&zlw<=zW*.84)break;ztf*=.93}e.add(zto);
+e.add(new zFb.Text(zcKick,{fontFamily:zcPF,fontSize:zW*.026,charSpacing:320,fill:zcOX,originX:"center",left:zW/2,top:zH*.07+zto.height+zH*.025,...zNo}));
+zcAbzug(zc,zW*.3,zH*.6,zW*.3,zH*.3,-5);const zliste=zcSaetze.slice(1,4).map(q=>q.replace(/\*+/g,"").trim()).join("\n\n");let zlf=zW*.036,zlo=null;for(let k=0;k<25;k++){zlo=new zFb.Textbox(zliste,{width:zW*.42,fontFamily:zcPF,fontSize:zlf,lineHeight:1.18,fill:zcINK,left:zW*.5,top:zH*.45,...zNo});if(zlo.height<=zH*.36)break;zlf*=.93}e.add(zlo);
+const zax=zW*.52,zay=zH*.45+zlo.height+zH*.03;e.add(new zFb.Path(`M ${zax} ${zay} C ${zax+zW*.01} ${zay+zH*.07}, ${zax+zW*.1} ${zay+zH*.085}, ${zax+zW*.2} ${zay+zH*.055} M ${zax+zW*.178} ${zay+zH*.04} L ${zax+zW*.2} ${zay+zH*.055} L ${zax+zW*.18} ${zay+zH*.073}`,{fill:"",stroke:zcINK,strokeWidth:Math.max(2,zW*.003),strokeLineCap:"round",...zNo}));
+e.add(new zFb.Text("@CARINAANNAPRAV",{fontFamily:zcPF,fontSize:zW*.018,charSpacing:300,fill:"#6A5A52",originX:"center",left:zW/2,top:zH*.94,...zNo}))}
+t.overlayImage&&await Ae(t.overlayImage).catch(()=>{});e.renderAll();return}}

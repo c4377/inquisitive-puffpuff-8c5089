@@ -10,13 +10,14 @@
  */
 (function () {
   var LOOKS = [
+    ["editorial-carina", "Papier & Porträt"],
     ["editorial-stift", "Carinas Stift"],
     ["editorial-kontrast", "Oxblood · Kontrast"],
     ["editorial-klar", "Klar · Instrument Serif"],
     ["editorial-klar-playfair", "Klar · Playfair"]
   ];
   function jetzt() {
-    try { var k = localStorage.getItem("BS_MARKE") || ""; return /^editorial-(klar|kontrast|stift)/.test(k) ? k : "editorial-stift"; } catch (e) { return "editorial-stift"; }
+    try { var k = localStorage.getItem("BS_MARKE") || ""; return /^editorial-(klar|kontrast|stift|carina)/.test(k) ? k : "editorial-carina"; } catch (e) { return "editorial-carina"; }
   }
   function name(k) {
     for (var i = 0; i < LOOKS.length; i++) if (LOOKS[i][0] === k) return LOOKS[i][1];
