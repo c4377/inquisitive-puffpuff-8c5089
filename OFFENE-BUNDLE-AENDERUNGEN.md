@@ -12496,3 +12496,10 @@ Alle Adressen laden **karten511**.
   (`statementDunkelAkzent`), Sticker orange statt rosa.
 
 Alle Adressen laden **karten512**.
+
+## 464 — Statement: Blau und Olive dunkler
+
+- Carina: „dünkler“. Dunkelblau #1B2A3D → #0F1A28; Olive #3E4A3F → #2A3530, tief #1C2620 → #0F1714.
+  Orange unverändert.
+
+Alle Adressen laden **karten513**.
