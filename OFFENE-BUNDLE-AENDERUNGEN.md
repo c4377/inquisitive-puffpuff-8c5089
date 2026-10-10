@@ -12449,3 +12449,15 @@ Alle Adressen laden **karten507**.
 - Look-Menü: „Statement“ zuerst, einmalige Umstellung über `BS_STATEMENT_EIN`.
 
 Alle Adressen laden **karten508**.
+
+## 460 — Statement: Zeitungs-Kacheln aus Carinas Referenzen
+
+- Zwei neue Kacheltypen im Look „Statement“ (`magStatementFeed: zitatfoto|creme|foto|zitatfoto|flaeche|creme`):
+  - **zitatfoto**: gedämpftes Farbfoto (Sättigung 60 %, leichter Schleier), riesige weiße Instrument Serif
+    mittig, ein Wort kursiv (*Sternchen*, sonst ohne/nicht/nur/wirklich … bzw. letztes Wort), Serif-Unterzeile.
+  - **creme**: Creme-Fläche (#F7F4EF), schwarze Instrument Serif, letzter Satz kursiv mit letztem Wort
+    orange (Sternchen-Wörter kursiv orange), Unterzeile mit unterstrichenem Anfang.
+  - Beide mit Name oben: „Carina“ + kursiv „Anna Prav“.
+- Bisherige Statement-Kacheln (Foto/Oxblood mit Sticker) bleiben im Wechsel.
+
+Alle Adressen laden **karten509**.
