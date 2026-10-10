@@ -12486,3 +12486,13 @@ Alle Adressen laden **karten510**.
   (#F4EEE2), Kursivwort warm-creme (#E9DCC0). Folgefolien dieser Posts in Very Deep Olive.
 
 Alle Adressen laden **karten511**.
+
+## 463 — Statement: Dunkelblau, blaustichiges Olive, Orange
+
+- Carina: „dunkelblau, blaueres Oliv und orange“.
+- Dunkelblau #1B2A3D ersetzt Oxblood (`statementGrund`: oxzeitung-Kachel und Folgefolien).
+- Olive blaustichiger: #3E4A3F → #1C2620 (`statementOlive`/`statementOliveTief`).
+- Orange: Akzent #E8692E (Creme, Folgefolien), auf dunklen Kacheln Kursivwort #EC7438
+  (`statementDunkelAkzent`), Sticker orange statt rosa.
+
+Alle Adressen laden **karten512**.
