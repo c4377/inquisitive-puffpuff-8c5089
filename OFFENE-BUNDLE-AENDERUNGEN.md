@@ -12624,3 +12624,11 @@ Alle Adressen laden **karten521**.
 - Look heißt im Code weiter editorial-kontrast (Name im Schalter: „Kontrast · Oliv“, Schalter ist ausgeblendet).
 
 Alle Adressen laden **karten522**.
+
+## 476 — Kontrast in Carinas Palette #000000 · #003322 · #FFFFFF (karten523)
+
+- Carina schickt die Coolors-Palette Schwarz #000000, Dunkelgrün #003322, Weiß #FFFFFF: „Diese.“
+- kontrastOx → #003322, Schrift-Schwarz #0A0706 → #000000. Schreibschrift auf der Fläche #CFE0D7,
+  Kopf-/Fußzeilen auf Grün #B9CEC4 / #A6BCB2, Grautöne kühl (#6E7773, #535B57), Papier-Grund #ECEFED.
+
+Alle Adressen laden **karten523**.
