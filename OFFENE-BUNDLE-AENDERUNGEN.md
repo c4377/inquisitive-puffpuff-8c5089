@@ -12583,3 +12583,11 @@ Alle Adressen laden **karten518**.
 - Look-Menü auf einen Eintrag reduziert; bei nur einem Look zeigt marken-schalter.js keinen Knopf mehr (?v=13).
 - index.html stellt jeden anderen gespeicherten Look (auch über ?look=) fest auf `editorial-kontrast`.
 - Zeichner-Code der übrigen Looks bleibt im Bundle, ist aber nicht mehr erreichbar. Bundle unverändert (**karten518**).
+
+## 472 — Kontrast: Handschrift unter dem Hook (karten519)
+
+- Carina: „Das Handschriftliche gehört doch nach der Hook.“ Die Schreibschrift (Text nach „&“) steht jetzt
+  auf papier, weiss und flaeche unter dem Hook statt darüber. Auf fotozeilen/fotoetikett rücken die
+  Zeilen-Kästchen hoch und die Handschrift sitzt darunter am unteren Rand. cutwort war schon unten.
+
+Alle Adressen laden **karten519**.

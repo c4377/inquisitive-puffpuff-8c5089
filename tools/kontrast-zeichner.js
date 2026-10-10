@@ -1,6 +1,6 @@
 /* Look „Oxblood · Kontrast“ (magKontrastFeed): Weiß, warmes Hellbeige und Oxblood, Fotos in
    Farbe mit etwas mehr Kontrast (kontrastSW:1 schaltet Schwarz-Weiß ein). Schrift: kontrastSerif (Instrument Serif)
-   aufrecht + kursiv, gesperrtes Etikett, feine Schreibschrift (Text nach „&“), Absender unten.
+   aufrecht + kursiv, gesperrtes Etikett, feine Schreibschrift (Text nach „&“) immer unter dem Hook, Absender unten.
    papier: weißes Papier auf Hellbeige, Text schwarz, Akzentwort kursiv Oxblood.
    flaeche: Oxblood-Fläche, große weiße Schrift, erster Satz kursiv.
    fotozeilen: Foto, Text in weißen Zeilen-Kästchen, letzter Satz Oxblood kursiv.
@@ -46,12 +46,11 @@ let zxFoto=null;if(zxTyp==="fotozeilen"||zxTyp==="fotoetikett"){e.getObjects().f
 e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:zxTyp==="papier"?(K.kontrastPapierGrund||"#EADFD3"):zxTyp==="flaeche"?zxOX:"#FFFFFF",...zNo}));
 if(zxTyp==="papier"){const zpw=zW*.84,zph=zH*.86,zpc=document.createElement("canvas");zpc.width=420;zpc.height=520;const zpx=zpc.getContext("2d");zpx.fillStyle="#FFFFFF";zpx.fillRect(0,0,420,520);for(let k=0;k<26;k++){const zgx=zxR()*420,zgy=zxR()*520,zgr=40+zxR()*140,zg=zpx.createRadialGradient(zgx,zgy,0,zgx,zgy,zgr);zg.addColorStop(0,`rgba(0,0,0,${.025+zxR()*.03})`);zg.addColorStop(1,"rgba(0,0,0,0)");zpx.fillStyle=zg;zpx.fillRect(0,0,420,520)}
 e.add(new zFb.Image(zpc,{left:zW/2,top:zH/2,originX:"center",originY:"center",scaleX:zpw/420,scaleY:zph/520,angle:-.8,shadow:zxSh(.22,.045),...zNo}));
-const ztb=zxBox(zxSegs(zxTitel,"wort"),zW*.11,zpw*.8,zph*.5,"#0A0706",zxOX);const zteile=[zxKick(zxOX)];zxSkriptT&&zteile.push(zxSkr(zxOX));zteile.push(ztb);zxStapel(zteile,zH*.47,null,-.8);zxFuss("#6A5A52",zH*.87)}
-else if(zxTyp==="flaeche"){const ztb=zxBox(zxSegs(zxTitel,"erster"),zW*.16,zW*.86,zH*.5,"#FFFFFF","#FFFFFF");const zteile=[zxKick("#E2BFB2")];zxSkriptT&&zteile.push(zxSkr(zxOR));zteile.push(ztb);zxStapel(zteile,zH*.47);zxFuss("#D7B3A6",zH*.925)}
-else if(zxTyp==="fotozeilen"||zxTyp==="fotoetikett"){zxFotoBG(zxSW(zxFoto,1.38));const zoben=zxZeilen(zxSegs(zxTitel,"wort"),zW*.062,zW*.82,zH*.92,zxOX);
-if(zxTyp==="fotozeilen"&&zxSkriptT)zxStapel([zxSkr("#FFFFFF",1)],null,zoben-zH*.015);
-if(zxTyp==="fotoetikett"){const zkt=zxKickT,zt=new zFb.Text(zkt,{fontFamily:zxHN,fontWeight:"700",fontSize:zW*.034,charSpacing:300,fill:"#FFFFFF",originX:"center",left:zW/2,...zNo}),zbw=(zt.width||0)+zW*.06,zbh=zW*.034*1.9,zby=zoben-zbh-zH*.03;e.add(new zFb.Rect({left:zW/2-zbw/2,top:zby,width:zbw,height:zbh,fill:"#0A0706",...zNo}));zt.set({top:zby+(zbh-(zt.height||0))/2+zW*.002});e.add(zt);zxSkriptT&&zxStapel([zxSkr("#FFFFFF",1)],null,zby-zH*.015)}}
-else if(zxTyp==="weiss"){const ztb=zxBox(zxSegs(zxTitel,"erster"),zW*.17,zW*.86,zH*.5,"#0A0706",zxOX);const zteile=[zxKick(zxOX)];zxSkriptT&&zteile.push(zxSkr(zxOX));zteile.push(ztb);zxStapel(zteile,zH*.47);zxFuss("#8A7A72",zH*.925)}
+const ztb=zxBox(zxSegs(zxTitel,"wort"),zW*.11,zpw*.8,zph*.5,"#0A0706",zxOX);const zteile=[zxKick(zxOX),ztb];zxSkriptT&&zteile.push(zxSkr(zxOX));zxStapel(zteile,zH*.47,null,-.8);zxFuss("#6A5A52",zH*.87)}
+else if(zxTyp==="flaeche"){const ztb=zxBox(zxSegs(zxTitel,"erster"),zW*.16,zW*.86,zH*.5,"#FFFFFF","#FFFFFF");const zteile=[zxKick("#E2BFB2"),ztb];zxSkriptT&&zteile.push(zxSkr(zxOR));zxStapel(zteile,zH*.47);zxFuss("#D7B3A6",zH*.925)}
+else if(zxTyp==="fotozeilen"||zxTyp==="fotoetikett"){zxFotoBG(zxSW(zxFoto,1.38));const zsk=zxSkriptT?zxSkr("#FFFFFF",1):null,zskh=zsk?(zsk.height||0)*.85:0,zoben=zxZeilen(zxSegs(zxTitel,"wort"),zW*.062,zW*.82,zH*.92-zskh,zxOX);zsk&&zxStapel([zsk],null,zH*.955);
+if(zxTyp==="fotoetikett"){const zkt=zxKickT,zt=new zFb.Text(zkt,{fontFamily:zxHN,fontWeight:"700",fontSize:zW*.034,charSpacing:300,fill:"#FFFFFF",originX:"center",left:zW/2,...zNo}),zbw=(zt.width||0)+zW*.06,zbh=zW*.034*1.9,zby=zoben-zbh-zH*.03;e.add(new zFb.Rect({left:zW/2-zbw/2,top:zby,width:zbw,height:zbh,fill:"#0A0706",...zNo}));zt.set({top:zby+(zbh-(zt.height||0))/2+zW*.002});e.add(zt)}}
+else if(zxTyp==="weiss"){const ztb=zxBox(zxSegs(zxTitel,"erster"),zW*.17,zW*.86,zH*.5,"#0A0706",zxOX);const zteile=[zxKick(zxOX),ztb];zxSkriptT&&zteile.push(zxSkr(zxOX));zxStapel(zteile,zH*.47);zxFuss("#8A7A72",zH*.925)}
 else{const zplain=zxTitel.replace(/\*+/g,"").trim(),zwd=(zplain.split(/\s+/).pop()||"Ja.").replace(/^[„"»]+|[“"«]+$/g,"");
 const zwo=new zFb.Text(zwd,{fontFamily:zxIS,fontStyle:"italic",fontSize:zW*.6,charSpacing:-40,fill:zxOX,originX:"center",left:zW/2,top:zH*.1,...zNo});const zww=zwo.width||1;zww>zW*.96&&zwo.set({fontSize:zW*.6*zW*.96/zww});e.add(zwo);
 const zkop=zxSans(zplain.toLocaleUpperCase("de-DE"),zW*.02,zW*.84,"#0A0706","500");zkop.set({left:zW/2,top:zH*.045,originX:"center",charSpacing:300});e.add(zkop);
