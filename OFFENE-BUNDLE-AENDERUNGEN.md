@@ -12554,3 +12554,16 @@ Alle Adressen laden **karten515**.
   marken-schalter.js?v=11.
 
 Alle Adressen laden **karten516**.
+
+## 469 — Neuer Look „Foto & Serif“ als Standard (karten517)
+
+- Nach Carinas Explore-Referenz („Ok nein so“): Foto in Farbe, leicht abgedunkelt (30 % + weicher Verlauf
+  hinter dem Text), Hook in weißer Instrument Serif zentriert mit leichtem Schatten.
+- Erster Satz als eigener Absatz, Rest darunter (enger Absatzabstand, zwei Textboxen).
+- Kursiv: *Sternchen*, sonst das erste du/dein/dich/dir …, sonst das längste Wort. Text nach „&“ entfällt.
+- Zeichner `tools/fotoserif-zeichner.js`, Look `editorial-fotoserif`. Folgefolien warmes Dunkel (#1E1915),
+  helle Schrift, Akzent #D9B99B.
+- Look-Menü: „Foto & Serif“ zuerst, einmalige Umstellung über `BS_FOTOSERIF_EIN`. Untertitel und Burgund
+  bleiben im Menü. marken-schalter.js?v=12.
+
+Alle Adressen laden **karten517**.

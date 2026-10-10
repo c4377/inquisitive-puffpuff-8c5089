@@ -10,6 +10,7 @@
  */
 (function () {
   var LOOKS = [
+    ["editorial-fotoserif", "Foto & Serif"],
     ["editorial-untertitel", "Untertitel"],
     ["editorial-burgund", "Burgund"],
     ["editorial-statement", "Statement"],
@@ -20,7 +21,7 @@
     ["editorial-klar-playfair", "Klar · Playfair"]
   ];
   function jetzt() {
-    try { var k = localStorage.getItem("BS_MARKE") || ""; return /^editorial-(klar|kontrast|stift|carina|statement|burgund|untertitel)/.test(k) ? k : "editorial-untertitel"; } catch (e) { return "editorial-untertitel"; }
+    try { var k = localStorage.getItem("BS_MARKE") || ""; return /^editorial-(klar|kontrast|stift|carina|statement|burgund|untertitel|fotoserif)/.test(k) ? k : "editorial-fotoserif"; } catch (e) { return "editorial-fotoserif"; }
   }
   function name(k) {
     for (var i = 0; i < LOOKS.length; i++) if (LOOKS[i][0] === k) return LOOKS[i][1];
