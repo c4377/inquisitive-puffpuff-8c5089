@@ -12613,3 +12613,14 @@ Alle Adressen laden **karten520**.
   groß gesetzt (vorher stand dann alles in Fließtext).
 
 Alle Adressen laden **karten521**.
+
+## 475 — Kontrast in Schwarz, Weiß, Olivgrün statt Oxblood (karten522)
+
+- Carina: „Mach lieber schwarz und weiß und Olivgrün statt Oxblood.“
+- kontrastOx #5E1A21 → #4E5A2B (Fläche, Zeilen-Kästchen, Akzentwörter, großes Cutwort, Handschrift,
+  letzte Folgefolie, Unterstreichung). Schreibschrift auf der Fläche #D9DFB8 statt Orange.
+- Rosé-Töne auf der Fläche → Salbei (#D2D7B6, #C2C8A3), Warmgrau → neutrales Grau (#7C7E74, #5C5E55),
+  Papier-Grund #E9EAE3 statt Beige.
+- Look heißt im Code weiter editorial-kontrast (Name im Schalter: „Kontrast · Oliv“, Schalter ist ausgeblendet).
+
+Alle Adressen laden **karten522**.
