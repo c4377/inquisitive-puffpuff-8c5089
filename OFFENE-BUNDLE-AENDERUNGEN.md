@@ -12461,3 +12461,18 @@ Alle Adressen laden **karten508**.
 - Bisherige Statement-Kacheln (Foto/Oxblood mit Sticker) bleiben im Wechsel.
 
 Alle Adressen laden **karten509**.
+
+## 461 — Statement aufgeräumt: ein System, wärmere Fotos, keine Streifen
+
+- Carinas Feed-Check: senkrechte Streifen, zwei Schriften/Systeme, zu grau, Floskel-Nachsätze.
+- Wechsel jetzt 7 Kacheln (`zitatfoto|creme|zitatfoto|oxzeitung|zitatfoto|creme|zitatfoto`), damit
+  im 3er-Raster keine Spalte immer dieselbe Kachel-Art bekommt.
+- Ein System: nur noch Zeitungs-Kacheln in Instrument Serif mit „Carina *Anna Prav*“ oben. Die alten
+  Baskerville-Sticker-Kacheln laufen nicht mehr; Oxblood als `oxzeitung` (gleiche Typo, kleiner rosa
+  Sticker) nur 1 von 7. Folgefolien ebenfalls Instrument Serif.
+- Fotos: Sättigung 92 %, leicht warm, nur 16 % Schleier plus weicher Mittelschatten hinter der Schrift
+  (vorher 60 % Sättigung + 40 % Grau).
+- Stock-Nachsätze nach „&“ („so änderst du das“, „das hab ich daraus gelernt“, „so geht's besser“ …)
+  werden weggelassen; inhaltliche Unterzeilen bleiben.
+
+Alle Adressen laden **karten510**.
