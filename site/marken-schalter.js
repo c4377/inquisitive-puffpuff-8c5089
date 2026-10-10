@@ -9,19 +9,13 @@
  * Er sitzt links unten ueber dem Schwarz-Regler.
  */
 (function () {
+  /* Carina 10.10.: nur noch Oxblood · Kontrast, alle anderen Looks raus. Mit einem Look kein Knopf. */
   var LOOKS = [
-    ["editorial-fotoserif", "Foto & Serif"],
-    ["editorial-untertitel", "Untertitel"],
-    ["editorial-burgund", "Burgund"],
-    ["editorial-statement", "Statement"],
-    ["editorial-kontrast", "Oxblood · Kontrast"],
-    ["editorial-carina", "Papier & Porträt"],
-    ["editorial-stift", "Carinas Stift"],
-    ["editorial-klar", "Klar · Instrument Serif"],
-    ["editorial-klar-playfair", "Klar · Playfair"]
+    ["editorial-kontrast", "Oxblood · Kontrast"]
   ];
+  if (LOOKS.length < 2) return;
   function jetzt() {
-    try { var k = localStorage.getItem("BS_MARKE") || ""; return /^editorial-(klar|kontrast|stift|carina|statement|burgund|untertitel|fotoserif)/.test(k) ? k : "editorial-fotoserif"; } catch (e) { return "editorial-fotoserif"; }
+    try { var k = localStorage.getItem("BS_MARKE") || ""; return /^editorial-kontrast/.test(k) ? k : "editorial-kontrast"; } catch (e) { return "editorial-kontrast"; }
   }
   function name(k) {
     for (var i = 0; i < LOOKS.length; i++) if (LOOKS[i][0] === k) return LOOKS[i][1];

@@ -12576,3 +12576,10 @@ Alle Adressen laden **karten517**.
   (kurze Hooks unter 45 Zeichen 15 %, lange über 120 Zeichen 8,8 %), Textblock bis 60 % der Höhe.
 
 Alle Adressen laden **karten518**.
+
+## 471 — Nur noch Oxblood · Kontrast
+
+- Carina 10.10.: „Wir bleiben bei Kontrast und Oxblood und löschen alle anderen Varianten.“
+- Look-Menü auf einen Eintrag reduziert; bei nur einem Look zeigt marken-schalter.js keinen Knopf mehr (?v=13).
+- index.html stellt jeden anderen gespeicherten Look (auch über ?look=) fest auf `editorial-kontrast`.
+- Zeichner-Code der übrigen Looks bleibt im Bundle, ist aber nicht mehr erreichbar. Bundle unverändert (**karten518**).
