@@ -12602,3 +12602,14 @@ Alle Adressen laden **karten519**.
 - Absender per `kontrastHandle` änderbar.
 
 Alle Adressen laden **karten520**.
+
+## 474 — Folgefolien: Zitate werden nicht mehr zerschnitten (karten521)
+
+- Carina: „Das ist falsch aufgeteilt.“ Die Satztrennung (zSaetze) hat innerhalb von Anführungszeichen
+  getrennt, dadurch stand der Trennstrich mitten im Zitat.
+- zSaetze trennt jetzt nicht mehr innerhalb von „…“, »…« oder "…". Bleibt ein Anführungszeichen offen,
+  gilt die alte Trennung.
+- Variante 1 der Folgefolie: Ist der zweite Satz zu lang für die große Serifzeile, wird der erste Satz
+  groß gesetzt (vorher stand dann alles in Fließtext).
+
+Alle Adressen laden **karten521**.
