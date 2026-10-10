@@ -10,7 +10,6 @@
  */
 (function () {
   var LOOKS = [
-    ["editorial-leinen", "Leinen"],
     ["editorial-statement", "Statement"],
     ["editorial-kontrast", "Oxblood · Kontrast"],
     ["editorial-carina", "Papier & Porträt"],
@@ -19,7 +18,7 @@
     ["editorial-klar-playfair", "Klar · Playfair"]
   ];
   function jetzt() {
-    try { var k = localStorage.getItem("BS_MARKE") || ""; return /^editorial-(klar|kontrast|stift|carina|statement|leinen)/.test(k) ? k : "editorial-leinen"; } catch (e) { return "editorial-leinen"; }
+    try { var k = localStorage.getItem("BS_MARKE") || ""; return /^editorial-(klar|kontrast|stift|carina|statement)/.test(k) ? k : "editorial-statement"; } catch (e) { return "editorial-statement"; }
   }
   function name(k) {
     for (var i = 0; i < LOOKS.length; i++) if (LOOKS[i][0] === k) return LOOKS[i][1];

@@ -12519,3 +12519,9 @@ Alle Adressen laden **karten513**.
 - Look-Menü: „Leinen“ zuerst, einmalige Umstellung über `BS_LEINEN_EIN`.
 
 Alle Adressen laden **karten514**.
+
+## 466 — Leinen verworfen, zurück auf Statement
+
+- Carina: „Find ich nicht schön, lass es.“ Look „Leinen“ aus dem Menü genommen; wer ihn aktiv hat, landet
+  wieder auf „Statement“ (einmalig über `BS_STATEMENT2_EIN`). Code und Texturen bleiben im Bundle ungenutzt.
+- Bundle unverändert (**karten514**).
