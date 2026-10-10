@@ -12591,3 +12591,14 @@ Alle Adressen laden **karten518**.
   Zeilen-Kästchen hoch und die Handschrift sitzt darunter am unteren Rand. cutwort war schon unten.
 
 Alle Adressen laden **karten519**.
+
+## 473 — Kontrast: @carinaannaprav überall (karten520)
+
+- Carina: „Und überall carinaannaprav dazu.“
+- Text-Kacheln (papier, weiss, flaeche): unter „CARINA ANNA PRAV“ zusätzlich @carinaannaprav.
+- Foto-Kacheln (fotozeilen, fotoetikett): @carinaannaprav oben mittig in einer kleinen dunklen Pille
+  (lesbar auch auf heller Wand). cutwort: @carinaannaprav ganz oben, Kopfzeile etwas tiefer.
+- Folgefolien: @carinaannaprav unten mittig (weiß: Grau, letzte Folie: Weiß 75 %).
+- Absender per `kontrastHandle` änderbar.
+
+Alle Adressen laden **karten520**.
