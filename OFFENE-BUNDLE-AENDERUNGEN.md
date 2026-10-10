@@ -12525,3 +12525,20 @@ Alle Adressen laden **karten514**.
 - Carina: „Find ich nicht schön, lass es.“ Look „Leinen“ aus dem Menü genommen; wer ihn aktiv hat, landet
   wieder auf „Statement“ (einmalig über `BS_STATEMENT2_EIN`). Code und Texturen bleiben im Bundle ungenutzt.
 - Bundle unverändert (**karten514**).
+
+## 467 — Neuer Look „Burgund“ als Standard (karten515)
+
+- Nach Carinas Etsy-Vorlagen (Burgund-Canva-Templates), freigegeben mit „Setz das Burgund live“.
+  Zeichner `tools/burgund-zeichner.js`, Look `editorial-burgund`, Zyklus
+  `zweiton|flaeche|leise|freisteller|suche|fotocaps|flaeche` (7er-Zyklus, keine Streifen im Raster).
+- Oxblood #3F1519, Helvetica Neue (HelveticaNeueBrand), Betonung fett-kursiv (synthetisch geneigt),
+  Schreibschrift Mrs Saint Delafield, leichtes Korn auf den Flächen.
+- zweiton: Foto, zweifarbige Schrift (helles Foto: Burgund/Weinrot, sonst Weiß/Rosé), Pille „SCHREIB MIR | STARTEN“.
+  suche: Hook in burgunderroter Suchleiste mit Lupe. leise: dünne Kleinschrift + letztes Wort als Schreibschrift,
+  Balken, TEILEN/SPEICHERN (nur bis 70 Zeichen, sonst fotocaps). flaeche: Burgund-Fläche, Weiter-Zeile ▶▶▶.
+  freisteller: Cutout k3/k2/k7/k4/k5 links, Text + Knopf rechts. fotocaps: Foto, Text unten links, Name.
+- Hooks bis 90 Zeichen in Versalien, längere in normaler Schreibung (lesbarer).
+- Folgefolien Creme mit Helvetica, letzte Folie Burgund.
+- Look-Menü: „Burgund“ zuerst, einmalige Umstellung über `BS_BURGUND_EIN`. marken-schalter.js?v=10.
+
+Alle Adressen laden **karten515**.
