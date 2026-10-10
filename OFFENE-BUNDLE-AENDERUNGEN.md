@@ -12674,3 +12674,11 @@ Alle Adressen laden **karten526**.
 - Flächen, großes Cutwort und Foto-Kacheln bleiben ohne Orange.
 
 Alle Adressen laden **karten527**.
+
+## 481 — Anthrazit mit Oxblood-Akzent statt Orange (karten528)
+
+- Carina: „Statt Orange Oxblood.“ kontrastAkzent #5E1A21 (betonte Wörter, Rubrik, Handschrift auf Weiß/Papier,
+  Unterstreichung), auf Anthrazit Rosé #E2BFB2 (letzte Folgefolie, Handschrift auf der Fläche).
+  Flächen bleiben Anthrazit #33363A.
+
+Alle Adressen laden **karten528**.
