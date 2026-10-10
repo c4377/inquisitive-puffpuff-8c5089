@@ -12434,3 +12434,18 @@ Alle Adressen laden **karten506**.
 - Look-Menü: „Oxblood · Kontrast“ wieder zuerst, einmalige Umstellung über `BS_KONTRAST2_EIN`.
 
 Alle Adressen laden **karten507**.
+
+## 459 — Neuer Look „Statement“ (jetzt Standard)
+
+- Nach Carinas Pinterest-Referenz: entsättigtes, abgedunkeltes Foto (2 von 3 Kacheln) oder tiefe
+  Oxblood-Fläche (#3E141B). Zentriert: Einleitung in Montserrat („Hör mal …“, „Klartext:“ oder
+  „[TAG]:“), großes Zitat in Libre Baskerville (neu, SIL OFL, `site/fonts/LibreBaskerville-*`),
+  Akzentwörter fett in Orange (#F2603C), ein Verneinungswort (nicht/kein/nie/nur …) unterstrichen,
+  Nachsatz in Montserrat (Text nach „&“).
+- Schräger rosa Oval-Sticker mit Kontur („SO GEHT'S“, „LIES WEITER“, „SWIPE →“, „ERKLÄR ICH DIR“),
+  unten links „FÜR DIE JA-SAGERINNEN.“, oben rechts „CARINA ANNA PRAV“.
+- Akzent: *Sternchen*-Wörter, sonst die längsten Nomen (1, bei langen Texten 2).
+- Folgefolien: Oxblood-Fläche, weiße Schrift, Akzent Orange. Neues Modul `tools/statement-zeichner.js`.
+- Look-Menü: „Statement“ zuerst, einmalige Umstellung über `BS_STATEMENT_EIN`.
+
+Alle Adressen laden **karten508**.
