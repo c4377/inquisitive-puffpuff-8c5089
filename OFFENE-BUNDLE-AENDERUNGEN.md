@@ -12383,3 +12383,20 @@ Alle Adressen laden **karten503**.
 - Oxblood-Fläche und weiße Kacheln unverändert. `tools/kontrast-zeichner.js`.
 
 Alle Adressen laden **karten504**.
+
+## 456 — Neuer Look „Carinas Stift“ (jetzt Standard)
+
+- Freigegebenes Konzept: volle Farbfotos mit großer weißer Schrift im Wechsel mit schwarzen
+  Text-Kacheln (`magStiftFeed: foto|schwarz`, neues Modul `tools/stift-zeichner.js`).
+- Schriften: Gloock für alle Titel (auch Folgefolien), Caveat („CaveatV3“) für den Stift,
+  Helvetica für „BY CARINA ANNA PRAV“.
+- Pro Deckblatt genau ein orangener Stift-Handgriff (#F07A3A), im Wechsel:
+  Handstrich unter einem Wort, Wort eingekreist, oder Nachsatz in Handschrift.
+  `*Wort*` bestimmt das Stift-Wort (sonst das letzte Wort), Text nach „&“ wird immer zur Notiz.
+  Wortposition wird selbst vermessen (Fabrics Zeichen-Cache war hier leer).
+- Fotos: Farbe, minimal mehr Kontrast, Verlauf nur unter der Schrift (oben, wenn das Gesicht
+  unten im Bild ist). Schwarze Kacheln mit kleinem Oxblood-Punkt und Absenderzeile.
+- Folgefolien weiß mit schwarzer Gloock-Schrift, letzte Folie schwarz mit Orange-Akzent.
+- Look-Menü: „Carinas Stift“ zuerst; einmalige Umstellung über `BS_STIFT_EIN`.
+
+Alle Adressen laden **karten505**.

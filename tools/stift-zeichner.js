@@ -1,0 +1,40 @@
+/* Look „Carinas Stift“ (magStiftFeed): volle Farbfotos mit großer weißer Gloock-Schrift im
+   Wechsel mit schwarzen Text-Kacheln. Pro Post genau ein orangener „Stift“-Handgriff:
+   unter (Handstrich unter einem Wort), kreis (Wort eingekreist) oder notiz (Nachsatz in
+   Caveat). Wort mit *Sternchen* bestimmt das Stift-Wort, sonst das letzte Wort; Text nach
+   „&“ wird immer zur Notiz. Folgefolien: weiß mit schwarzer Schrift, letzte Folie schwarz.
+   Wird von editorial-look.py eingesetzt; alle Zeilenumbrüche werden entfernt. */
+if(K.magStiftFeed){const zfL=String(K.magStiftFeed).split("|").filter(Boolean),zfTg=Number(t._tag)||0,zfTyp=zfL[(zfTg%zfL.length+zfL.length)%zfL.length];
+const zfOR=K.stiftOrange||"#F07A3A",zfOX=K.stiftOx||"#5E1A21",zfSW=K.stiftSchwarz||"#0F0D0C",zfGL=K.stiftTitel||"Gloock",zfHA=K.stiftHand||"CaveatV3",zfHN="HelveticaNeueBrand";
+if(!zCover){const zfN=(i&&i.slideIndex)||0,zfTot=(i&&i.totalSlides)||0,zfLetzte=zfTot>1&&zfN>=zfTot-1;e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:zfLetzte?zfSW:"#FFFFFF",...zNo}));TXT=zfLetzte?"#FFFFFF":"#0F0D0C";AK=zfLetzte?zfOR:zfOX;zkKeinSchatten=!0;zkObenA=0}
+else{
+try{await Promise.race([Promise.all([`400 40px "${zfGL}"`,`700 40px "${zfHA}"`,`700 40px "${zfHN}"`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,4e3))])}catch(zz){}
+const zfW=(za,zl)=>za[((zl%za.length)+za.length)%za.length],zfI=Math.floor(zfTg/zfL.length);
+let zfS=(zfTg*7919+11)%233280;const zfR=()=>(zfS=(zfS*9301+49297)%233280)/233280;
+const zfRaw=String(zRoh||t.text||"").split(/\n/).map(q=>q.trim()).filter(Boolean).join(" "),zfAi=zfRaw.search(/(^|\s)&\s/);
+const zfTitelRoh=(zfAi>=0?zfRaw.slice(0,zfAi):zfRaw).replace(/__/g,"").trim(),zfNotizText=zfAi>=0?zfRaw.slice(zfAi).replace(/^\s*&\s*/,"").replace(/\*+|__/g,"").trim():"";
+let zfPlain="",zfA=-1,zfB=-1;zfTitelRoh.split(/(\*[^*]+\*)/).filter(Boolean).forEach(zp=>{const zk=/^\*.*\*$/.test(zp),ztx=zk?zp.slice(1,-1):zp;zk&&zfA<0&&(zfA=zfPlain.length,zfB=zfPlain.length+ztx.length);zfPlain+=ztx});zfPlain=zfPlain.replace(/\s+/g," ").trim();
+if(zfA<0){const zl=zfPlain.lastIndexOf(" ");zfA=zl>=0?zl+1:0;zfB=zfPlain.length}
+const zfStiftL=String(K.stiftArten||"unter|kreis|notiz").split("|").filter(Boolean);let zfStift=zfNotizText?"notiz":zfW(zfStiftL,zfTg+zfI);
+const zfNotiz=zfNotizText||zfW(String(K.stiftNotizen||"ja, du.|ehrlich jetzt.|lies weiter →|genau so.").split("|"),zfI+zfTg);
+const zfBal=(zo,zw)=>{const zn=(zo.textLines||[]).length;if(zn<2)return;let lo=zw*.5,hi=zw;for(let k=0;k<10;k++){const zm=(lo+hi)/2;zo.set({width:zm});zo.initDimensions();(zo.textLines.length>zn||Math.max(...(zo.__lineWidths||[0]))>zm*1.01)?lo=zm:hi=zm}zo.set({width:hi});zo.initDimensions()};
+const zfBox=(zfs,zw,zmaxH,zfill)=>{let zsk=1,ztb=null;for(let k=0;k<45;k++){ztb=new zFb.Textbox(zfPlain,{width:zw,fontFamily:zfGL,fontWeight:"400",fontSize:zfs*zsk,lineHeight:.98,charSpacing:-25,fill:zfill,textAlign:"center",...zNo});zfBal(ztb,zw);const zlw=Math.max(0,...zfPlain.split(/\s+/).filter(Boolean).map(zwd=>new zFb.Text(zwd,{fontFamily:zfGL,fontSize:zfs*zsk,charSpacing:-25}).width||0));if(zlw<=zw*.98&&ztb.height<=zmaxH)break;zsk*=.94}return ztb};
+const zfMess=(ztx,zfs)=>new zFb.Text(String(ztx),{fontFamily:zfGL,fontWeight:"400",fontSize:zfs,charSpacing:-25}).width||0;
+const zfWortBox=ztb=>{try{const zs=ztb.get2DCursorLocation(zfA),ze=ztb.get2DCursorLocation(Math.max(zfA,zfB-1));if(zs.lineIndex!==ze.lineIndex)return null;const zli=zs.lineIndex,zl=(ztb._textLines[zli]||[]).join(""),zfs=ztb.fontSize,zlw=zfMess(zl,zfs),zoff=(ztb.width-zlw)/2,zx0=zoff+zfMess(zl.slice(0,zs.charIndex),zfs),zx1=zoff+zfMess(zl.slice(0,ze.charIndex+1),zfs);let zy=0;for(let k=0;k<zli;k++)zy+=ztb.getHeightOfLine(k);const zh=ztb.getHeightOfLine(zli)/ztb.lineHeight;return{x0:ztb.left+zx0,x1:ztb.left+zx1,y0:ztb.top+zy,y1:ztb.top+zy+zh}}catch(zz){return null}};
+const zfStrich=(zb,zfs)=>{const zw=zb.x1-zb.x0,zx=zb.x0-zw*.04,zy=zb.y1-zfs*.02,zl=zw*1.08,zsw=Math.max(3,zfs*.055),zp=`M ${zx} ${zy+zfs*.04} C ${zx+zl*.25} ${zy-zfs*.03}, ${zx+zl*.6} ${zy-zfs*.04}, ${zx+zl} ${zy} M ${zx+zl*.1} ${zy+zfs*.1} C ${zx+zl*.4} ${zy+zfs*.05}, ${zx+zl*.7} ${zy+zfs*.045}, ${zx+zl*.93} ${zy+zfs*.07}`;e.add(new zFb.Path(zp,{fill:"",stroke:zfOR,strokeWidth:zsw,strokeLineCap:"round",...zNo}))};
+const zfKreis=(zb,zfs)=>{const zcx=(zb.x0+zb.x1)/2,zcy=(zb.y0+zb.y1)/2+zfs*.04,zrx=(zb.x1-zb.x0)/2+zfs*.32,zry=(zb.y1-zb.y0)/2+zfs*.12,zp=`M ${zcx+zrx*.05} ${zcy-zry*1.02} C ${zcx+zrx*.75} ${zcy-zry*1.08}, ${zcx+zrx*1.04} ${zcy-zry*.45}, ${zcx+zrx*.98} ${zcy+zry*.1} C ${zcx+zrx*.92} ${zcy+zry*.85}, ${zcx+zrx*.2} ${zcy+zry*1.05}, ${zcx-zrx*.3} ${zcy+zry*.98} C ${zcx-zrx*.85} ${zcy+zry*.9}, ${zcx-zrx*1.05} ${zcy+zry*.3}, ${zcx-zrx*.96} ${zcy-zry*.2} C ${zcx-zrx*.85} ${zcy-zry*.8}, ${zcx-zrx*.25} ${zcy-zry*1.04}, ${zcx+zrx*.2} ${zcy-zry*.98}`;e.add(new zFb.Path(zp,{fill:"",stroke:zfOR,strokeWidth:Math.max(3,zfs*.045),strokeLineCap:"round",...zNo}))};
+const zfHand=(zcy,zfs,zfoto)=>{const zt=new zFb.Textbox(zfNotiz,{width:zW*.84,fontFamily:zfHA,fontWeight:"700",fontSize:zfs,lineHeight:.95,fill:zfOR,textAlign:"center",originX:"center",left:zW/2,top:zcy,angle:-3,...(zfoto?{shadow:new zFb.Shadow({color:"rgba(0,0,0,0.45)",blur:zW*.012,offsetX:0,offsetY:1})}:{}),...zNo});e.add(zt);return zt};
+if(zfTyp==="schwarz"){e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:zfSW,...zNo}));
+const zmaxH=zfStift==="notiz"?zH*.5:zH*.6,ztb=zfBox(zW*.15,zW*.84,zmaxH,"#FFFFFF"),zfs=ztb.fontSize,zgesamt=ztb.height+(zfStift==="notiz"?zW*.12:0);ztb.set({left:(zW-ztb.width)/2,top:zH*.46-zgesamt/2});e.add(ztb);
+if(zfStift==="notiz")zfHand(ztb.top+ztb.height+zW*.04,Math.max(zW*.062,Math.min(zW*.08,zfs*.7)),!1);else{const zb=zfWortBox(ztb);zb?(zfStift==="kreis"?zfKreis(zb,zfs):zfStrich(zb,zfs)):zfHand(ztb.top+ztb.height+zW*.04,Math.max(zW*.062,Math.min(zW*.08,zfs*.7)),!1)}
+e.add(new zFb.Circle({left:zW/2,top:zH*.905,radius:zW*.0075,originX:"center",originY:"center",fill:zfOX,...zNo}));
+e.add(new zFb.Text(String(K.stiftAbsender||"BY CARINA ANNA PRAV"),{left:zW/2,top:zH*.928,originX:"center",fontFamily:zfHN,fontWeight:"700",fontSize:zW*.0167,charSpacing:340,fill:"#8F8984",...zNo}))}
+else{let zfoto=null;e.getObjects().forEach(zo=>{zo.type!=="image"&&(zo.visible=!1)});try{zfoto=e.toCanvasElement(1)}catch(zz){}
+e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:"#2A2421",...zNo}));
+if(zfoto){const zc=document.createElement("canvas"),zsc=Math.min(1,1400/Math.max(zfoto.width,zfoto.height));zc.width=Math.round(zfoto.width*zsc);zc.height=Math.round(zfoto.height*zsc);const zx=zc.getContext("2d");zx.drawImage(zfoto,0,0,zc.width,zc.height);try{const zd=zx.getImageData(0,0,zc.width,zc.height),zq=zd.data;for(let k=0;k<zq.length;k+=4)for(let j=0;j<3;j++){const v=(zq[k+j]-128)*1.05+130;zq[k+j]=v<0?0:v>255?255:v}zx.putImageData(zd,0,0)}catch(zz){}e.add(new zFb.Image(zc,{left:0,top:0,scaleX:zW/zc.width,scaleY:zH/zc.height,...zNo}))}
+const zfb=t._zBox;let zfOben=!1;zfb&&typeof zfb.y0==="number"&&(zfOben=(zfb.y0+zfb.y1)/2>.58);
+e.add(new zFb.Rect({left:0,top:zfOben?0:zH*.42,width:zW,height:zH*.58,...zNo,fill:new zFb.Gradient({type:"linear",coords:{x1:0,y1:0,x2:0,y2:zH*.58},colorStops:zfOben?[{offset:0,color:"rgba(0,0,0,0.55)"},{offset:.6,color:"rgba(0,0,0,0.25)"},{offset:1,color:"rgba(0,0,0,0)"}]:[{offset:0,color:"rgba(0,0,0,0)"},{offset:.4,color:"rgba(0,0,0,0.25)"},{offset:1,color:"rgba(0,0,0,0.58)"}]})}));
+const ztb=zfBox(zW*.105,zW*.86,zH*.3,"#FFFFFF"),zfs=ztb.fontSize,znotizH=zfStift==="notiz"?Math.max(zW*.058,Math.min(zW*.075,zfs*.8))*1.35:zfs*.25;ztb.set({shadow:new zFb.Shadow({color:"rgba(0,0,0,0.3)",blur:zW*.022,offsetX:0,offsetY:2})});
+zfOben?ztb.set({left:(zW-ztb.width)/2,top:zH*.08}):ztb.set({left:(zW-ztb.width)/2,top:zH*.91-znotizH-ztb.height});e.add(ztb);
+if(zfStift==="notiz")zfHand(ztb.top+ztb.height+zW*.025,Math.max(zW*.058,Math.min(zW*.075,zfs*.8)),!0);else{const zb=zfWortBox(ztb);zb?(zfStift==="kreis"?zfKreis(zb,zfs):zfStrich(zb,zfs)):zfHand(ztb.top+ztb.height+zW*.025,Math.max(zW*.058,Math.min(zW*.075,zfs*.8)),!0)}}
+t.overlayImage&&await Ae(t.overlayImage).catch(()=>{});e.renderAll();return}}
