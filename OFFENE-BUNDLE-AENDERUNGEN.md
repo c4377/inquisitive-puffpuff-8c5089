@@ -12542,3 +12542,15 @@ Alle Adressen laden **karten514**.
 - Look-Menü: „Burgund“ zuerst, einmalige Umstellung über `BS_BURGUND_EIN`. marken-schalter.js?v=10.
 
 Alle Adressen laden **karten515**.
+
+## 468 — Neuer Look „Untertitel“ als Standard (karten516)
+
+- Nach Carinas Reel-Referenz („Bau das“): Foto in Farbe unverändert, Hook in fetter Helvetica Neue schwarz
+  auf weißen Zeilen-Kästchen (wie Untertitel), zentriert im unteren Drittel. Ein Wort rot (#E2262D):
+  *Sternchen*, sonst das längste Wort. Text nach „&“ entfällt.
+- Zeichner `tools/untertitel-zeichner.js`, Look `editorial-untertitel`. Folgefolien weiß mit Helvetica,
+  letzte Folie schwarz, Akzent rot.
+- Look-Menü: „Untertitel“ zuerst, einmalige Umstellung über `BS_UNTERTITEL_EIN`. Burgund bleibt im Menü.
+  marken-schalter.js?v=11.
+
+Alle Adressen laden **karten516**.

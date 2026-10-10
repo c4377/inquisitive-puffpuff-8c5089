@@ -10,6 +10,7 @@
  */
 (function () {
   var LOOKS = [
+    ["editorial-untertitel", "Untertitel"],
     ["editorial-burgund", "Burgund"],
     ["editorial-statement", "Statement"],
     ["editorial-kontrast", "Oxblood · Kontrast"],
@@ -19,7 +20,7 @@
     ["editorial-klar-playfair", "Klar · Playfair"]
   ];
   function jetzt() {
-    try { var k = localStorage.getItem("BS_MARKE") || ""; return /^editorial-(klar|kontrast|stift|carina|statement|burgund)/.test(k) ? k : "editorial-burgund"; } catch (e) { return "editorial-burgund"; }
+    try { var k = localStorage.getItem("BS_MARKE") || ""; return /^editorial-(klar|kontrast|stift|carina|statement|burgund|untertitel)/.test(k) ? k : "editorial-untertitel"; } catch (e) { return "editorial-untertitel"; }
   }
   function name(k) {
     for (var i = 0; i < LOOKS.length; i++) if (LOOKS[i][0] === k) return LOOKS[i][1];
