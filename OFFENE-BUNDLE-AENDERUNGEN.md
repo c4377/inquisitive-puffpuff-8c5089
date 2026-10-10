@@ -12419,3 +12419,18 @@ Alle Adressen laden **karten505**.
   einmalige Umstellung über `BS_CARINA_EIN`.
 
 Alle Adressen laden **karten506**.
+
+## 458 — Oxblood · Kontrast mit Etikett, Schreibschrift und Absender (wieder Standard)
+
+- Carina: „So wie Oxblood · Kontrast, aber mit den Angaben“ (Schrift, Aufteilung aus ihren Referenzen).
+- Kacheltypen von 455 bleiben (Farbfotos mit Zeilen-Kästchen, Papier auf Hellbeige, Oxblood-Fläche,
+  Weiß, Cutout vor Riesenwort, Foto mit Etikett).
+- Neu: Aufbau Etikett (gesperrte Versalien) → feine Schreibschrift (Mrs Saint Delafield) → Headline
+  → „CARINA ANNA PRAV“ unten (Papier, Oxblood, Weiß). Text nach „&“ wird zur Schreibschrift,
+  sonst jede 2. Kachel eine Standardzeile (hör mal, ehrlich jetzt, merk dir das, Achtung).
+- Headline-Schrift bleibt Instrument Serif (Carina: das erste Referenzbild ist keine Playfair).
+- Etiketten: „[TAG]“ oder eigene Rubriken (Ehrlich jetzt, Klartext, Ja-Sagerinnen wissen, Notiz an dich,
+  Aus meinem Alltag). Auf Fotos Schreibschrift weiß mit Schatten.
+- Look-Menü: „Oxblood · Kontrast“ wieder zuerst, einmalige Umstellung über `BS_KONTRAST2_EIN`.
+
+Alle Adressen laden **karten507**.

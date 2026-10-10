@@ -117,7 +117,9 @@ KLAR_PLAYFAIR = {'magCoverSerif': 'Playfair Display', 'magSerif': 'Playfair Disp
                  'premiumSerif': 'Playfair Display', 'scrapFarben': {**KLAR['scrapFarben'], 'tf': 'Playfair Display', 'rf': 'Playfair Display', 'tcs': -10, 'tsk': 1.0}}
 # Oxblood · Kontrast: Schwarz, Weiß, Oxblood, S/W-Fotos mit hartem Kontrast (tools/kontrast-zeichner.js)
 KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'fotozeilen|papier|cutwort|flaeche|fotoetikett|weiss', 'magKontrastCut': 'k3|k2|k7|k4|k5',
-            'magKontrastRubrik': 'SALES TALK|REALTALK|KLARTEXT', 'kontrastOx': '#5E1A21', 'magSkriptJede': 0,
+            'magKontrastRubrik': 'Ehrlich jetzt|Klartext|Ja-Sagerinnen wissen|Notiz an dich|Aus meinem Alltag', 'kontrastOx': '#5E1A21', 'magSkriptJede': 0,
+            'kontrastSerif': 'Instrument Serif', 'magCoverSerif': 'Instrument Serif', 'magSerif': 'Instrument Serif', 'magSerifLaufweite': -45,
+            'kontrastSkript': 'hör mal|ehrlich jetzt|merk dir das|Achtung', 'kontrastSkriptJede': 2, 'kontrastOrange': '#F4A06C',
             'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.14}
 # Carinas Stift: Farbfotos mit weißer Gloock-Schrift + schwarze Text-Kacheln, orangener Stift (tools/stift-zeichner.js)
 STIFT = {'magKlarFeed': '', 'magKontrastFeed': '', 'magStiftFeed': 'foto|schwarz', 'stiftArten': 'unter|kreis|notiz',
