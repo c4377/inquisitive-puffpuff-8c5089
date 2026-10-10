@@ -12664,3 +12664,13 @@ Alle Adressen laden **karten525**.
   Papier-Grund #E7E6E3. Schrift bleibt #0A0706, Foto-Kacheln unverändert (Text unten, Vignette).
 
 Alle Adressen laden **karten526**.
+
+## 480 — Anthrazit mit leichtem Orange-Akzent (karten527)
+
+- Carina: „Misch Orange rein, aber nur leicht.“
+- Neuer Parameter kontrastAkzent #D2703A (getrennt von der Flächenfarbe kontrastOx #33363A): betonte Wörter,
+  Rubrik und Handschrift auf Weiß/Papier, Unterstreichung der Folgefolien.
+- Letzte Folgefolie (Anthrazit): Akzent #F2A46E (kontrastAkzentHell). Handschrift auf der Anthrazit-Fläche #EFA571.
+- Flächen, großes Cutwort und Foto-Kacheln bleiben ohne Orange.
+
+Alle Adressen laden **karten527**.
