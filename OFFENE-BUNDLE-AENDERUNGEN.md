@@ -12476,3 +12476,13 @@ Alle Adressen laden **karten509**.
   werden weggelassen; inhaltliche Unterzeilen bleiben.
 
 Alle Adressen laden **karten510**.
+
+## 462 — Statement: Olive-Töne
+
+- Carinas Pinterest-Farben: Olive #393721 (mit Stoffstruktur) und Very Deep Olive #1D1D00.
+- Neue Kachel `olive` im Statement-Wechsel, jetzt 8 Kacheln
+  (`zitatfoto|creme|zitatfoto|olive|zitatfoto|creme|zitatfoto|oxzeitung`; 8 ist kein Vielfaches von 3,
+  also weiter keine Streifen): Verlauf Olive → Very Deep Olive, feine Webstruktur, Text warmweiß
+  (#F4EEE2), Kursivwort warm-creme (#E9DCC0). Folgefolien dieser Posts in Very Deep Olive.
+
+Alle Adressen laden **karten511**.

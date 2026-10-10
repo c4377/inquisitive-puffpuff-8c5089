@@ -133,7 +133,7 @@ CARINA = {'magKlarFeed': '', 'magKontrastFeed': '', 'magStiftFeed': '', 'magCari
           'magCoverSerif': 'Playfair Display', 'magSerif': 'Playfair Display', 'magSerifLaufweite': -30,
           'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.14}
 # Statement: entsättigtes Foto, Zitat in Libre Baskerville mit orangen Fettwörtern, Sticker (tools/statement-zeichner.js)
-STATEMENT = {'magKlarFeed': '', 'magKontrastFeed': '', 'magStiftFeed': '', 'magCarinaFeed': '', 'magStatementFeed': 'zitatfoto|creme|zitatfoto|oxzeitung|zitatfoto|creme|zitatfoto',
+STATEMENT = {'magKlarFeed': '', 'magKontrastFeed': '', 'magStiftFeed': '', 'magCarinaFeed': '', 'magStatementFeed': 'zitatfoto|creme|zitatfoto|olive|zitatfoto|creme|zitatfoto|oxzeitung', 'statementOlive': '#393721', 'statementOliveTief': '#1D1D00',
              'statementOrange': '#F2603C', 'statementGrund': '#3E141B', 'statementSticker': '#F4A9B8', 'magSkriptJede': 0,
              'magCoverSerif': 'Instrument Serif', 'magSerif': 'Instrument Serif', 'magSerifLaufweite': -40,
              'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.1}
