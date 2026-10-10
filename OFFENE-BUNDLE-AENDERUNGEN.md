@@ -12503,3 +12503,19 @@ Alle Adressen laden **karten512**.
   Orange unverändert.
 
 Alle Adressen laden **karten513**.
+
+## 465 — Neuer Look „Leinen“ (jetzt Standard)
+
+- Nach Carinas Moodboard, eigene Umsetzung: Stoff-Texturen (`site/scrap/leinen-{sand,hell,moos,nacht}.webp`,
+  prozedural erzeugt), Instrument Serif in Versalien aufrecht + kursiv, Schreibmaschine (Courier Prime),
+  Handschrift (Homemade Apple, neu in `site/fonts`, Apache-Lizenz), kleines „Ja“-Siegel.
+- Kacheln im 7er-Wechsel (`magLeinenFeed`, Modul `tools/leinen-zeichner.js`): stoffcaps (Sand-Leinen),
+  fotolinks (Foto, Versalien links), notiz (Moos-Leinen, Papier, Handschrift, Siegel), marke (Briefmarke
+  mit Siegel + Schreibmaschinen-Etikett), nachtcaps (Nachtblau-Leinen, Nachsatz orange Handschrift),
+  fotostreifen (Foto + Leinen-Streifen).
+- Kursiv: *Sternchen*, sonst letzter Satz bzw. hintere Worthälfte. Hooks über 110 Zeichen in gemischter
+  Schreibung statt Versalien. Text nach „&“: je Kachel Unterzeile, Handschrift oder Etikett.
+- Fotos leicht entsättigt und warm. Folgefolien helles Leinen, letzte Nachtblau-Leinen.
+- Look-Menü: „Leinen“ zuerst, einmalige Umstellung über `BS_LEINEN_EIN`.
+
+Alle Adressen laden **karten514**.
