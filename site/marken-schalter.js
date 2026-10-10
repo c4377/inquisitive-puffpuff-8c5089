@@ -11,7 +11,7 @@
 (function () {
   /* Carina 10.10.: nur noch Oxblood · Kontrast, alle anderen Looks raus. Mit einem Look kein Knopf. */
   var LOOKS = [
-    ["editorial-kontrast", "Kontrast · Grün"]
+    ["editorial-kontrast", "Oxblood · Kontrast"]
   ];
   if (LOOKS.length < 2) return;
   function jetzt() {

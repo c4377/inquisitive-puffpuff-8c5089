@@ -12645,3 +12645,13 @@ Alle Adressen laden **karten523**.
 - @carinaannaprav-Pille unten (bzw. oben, wenn der Text unten steht).
 
 Alle Adressen laden **karten524**.
+
+## 478 — Zurück auf Oxblood, Foto-Text unten mit Vignette (karten525)
+
+- Carina: „Zurück zum Dunkelrot davor. Runter setzen den Text und abdunkeln das Bild mit Vignette.“
+- Farben wieder wie vor 475: kontrastOx #5E1A21, Schreibschrift #F4A06C, Rosé-Töne #E2BFB2/#D7B3A6,
+  Warmgrau #8A7A72/#6A5A52, Papier-Grund #EADFD3, Schrift #0A0706.
+- Foto-Kacheln: Text immer unten (Unterkante 90 %), Bild 14 % abgedunkelt + radiale Vignette (Rand 72 %)
+  + Verlauf unten (70 %). @carinaannaprav-Pille oben.
+
+Alle Adressen laden **karten525**.

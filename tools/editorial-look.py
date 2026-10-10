@@ -115,11 +115,11 @@ KLAR = {'magTitelVersal': 0, 'magCoverSerif': 'Instrument Serif', 'magCoverSerif
         'magDunkelCover': 0, 'magVerlaufCover': 0.1, 'magDunkel': 0, 'magKursivBetonung': 0}
 KLAR_PLAYFAIR = {'magCoverSerif': 'Playfair Display', 'magSerif': 'Playfair Display', 'magSerifLaufweite': -15, 'magCoverFs': 0.066, 'magH2Fs': 0.074,
                  'premiumSerif': 'Playfair Display', 'scrapFarben': {**KLAR['scrapFarben'], 'tf': 'Playfair Display', 'rf': 'Playfair Display', 'tcs': -10, 'tsk': 1.0}}
-# Kontrast: Schwarz #000000, Weiß, Dunkelgrün #003322 (Carinas Palette 10.10., vorher Oxblood/Oliv), S/W-Fotos mit hartem Kontrast (tools/kontrast-zeichner.js)
+# Oxblood · Kontrast: Schwarz, Weiß, Oxblood (10.10. kurz Oliv/Grün, zurück auf Oxblood), S/W-Fotos mit hartem Kontrast (tools/kontrast-zeichner.js)
 KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'fotozeilen|papier|cutwort|flaeche|fotoetikett|weiss', 'magKontrastCut': 'k3|k2|k7|k4|k5',
-            'magKontrastRubrik': 'Ehrlich jetzt|Klartext|Ja-Sagerinnen wissen|Notiz an dich|Aus meinem Alltag', 'kontrastOx': '#003322', 'magSkriptJede': 0,
+            'magKontrastRubrik': 'Ehrlich jetzt|Klartext|Ja-Sagerinnen wissen|Notiz an dich|Aus meinem Alltag', 'kontrastOx': '#5E1A21', 'magSkriptJede': 0,
             'kontrastSerif': 'Instrument Serif', 'magCoverSerif': 'Instrument Serif', 'magSerif': 'Instrument Serif', 'magSerifLaufweite': -45,
-            'kontrastSkript': 'hör mal|ehrlich jetzt|merk dir das|Achtung', 'kontrastSkriptJede': 2, 'kontrastOrange': '#CFE0D7',
+            'kontrastSkript': 'hör mal|ehrlich jetzt|merk dir das|Achtung', 'kontrastSkriptJede': 2, 'kontrastOrange': '#F4A06C',
             'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.14}
 # Carinas Stift: Farbfotos mit weißer Gloock-Schrift + schwarze Text-Kacheln, orangener Stift (tools/stift-zeichner.js)
 STIFT = {'magKlarFeed': '', 'magKontrastFeed': '', 'magStiftFeed': 'foto|schwarz', 'stiftArten': 'unter|kreis|notiz',
