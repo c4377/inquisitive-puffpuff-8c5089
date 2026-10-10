@@ -12567,3 +12567,12 @@ Alle Adressen laden **karten516**.
   bleiben im Menü. marken-schalter.js?v=12.
 
 Alle Adressen laden **karten517**.
+
+## 470 — Foto & Serif: wärmer, sichtbarer, größer (karten518)
+
+- Carina: „Wärmer, stärker sichtbar und Schrift größer.“
+- Foto warm getönt (#F0BE8C multiply 55 %) plus 20 % warmes Dunkel, Verlauf hinter dem Text kräftiger (42 %).
+- Schrift cremeweiß mit stärkerem Schatten; Textbreite 86 % statt 76 %, Grundgröße 10,5 % der Breite
+  (kurze Hooks unter 45 Zeichen 15 %, lange über 120 Zeichen 8,8 %), Textblock bis 60 % der Höhe.
+
+Alle Adressen laden **karten518**.
