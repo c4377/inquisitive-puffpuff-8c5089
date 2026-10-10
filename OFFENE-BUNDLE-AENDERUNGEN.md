@@ -12371,3 +12371,15 @@ Alle Adressen laden **karten502**.
   einmalig auf den neuen Look umgestellt (`BS_KONTRAST_EIN`), danach bleibt die eigene Wahl.
 
 Alle Adressen laden **karten503**.
+
+## 455 — Oxblood · Kontrast heller und in Farbe
+
+- Carina: „Zu dunkel und nur schwarz weiß will ich nicht.“
+- Fotos und Cutouts wieder in Farbe, nur etwas knackiger und leicht aufgehellt
+  (Schwarz-Weiß bleibt über `kontrastSW: 1` abrufbar, ist aber aus).
+- Text-Kästchen auf Fotos jetzt weiß mit schwarzer Schrift, letzter Satz Oxblood mit weißer Schrift;
+  Etikett schwarz mit weißer Schrift.
+- Papier-Kachel liegt auf warmem Hellbeige (#EADFD3) statt Schwarz, weicherer Schatten.
+- Oxblood-Fläche und weiße Kacheln unverändert. `tools/kontrast-zeichner.js`.
+
+Alle Adressen laden **karten504**.
