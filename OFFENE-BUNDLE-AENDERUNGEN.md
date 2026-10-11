@@ -12711,3 +12711,11 @@ Alle Adressen laden **karten529**.
 - Folgefolien unverändert (weiß, letzte Anthrazit).
 
 Alle Adressen laden **karten530**.
+
+## 484 — Story-Schreiber: eigene Geschichte nur noch sparsam (Function, kein Bundle)
+
+- Carina: „Ich will immer nur so 10 % drinnen haben und die Story eher als Text, nicht premade.“
+- netlify/functions/story-studio.mjs: Block „Material, das du nutzen darfst“ ersetzt durch „Meine Geschichte“,
+  pro Serie zufällig: ca. 50 % ohne Biografie, sonst genau EIN Element (aus 6) in höchstens 1–2 Sätzen,
+  nur wenn es das Thema stützt, als erzählter Moment statt übernommener Fakt.
+- Gefühle-Liste ohne biografische Klammern; Zusatz: Gefühle entstehen über Haltung und Ton, nicht über Biografie.

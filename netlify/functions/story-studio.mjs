@@ -29,15 +29,13 @@ STIMME
 GEFÜHLE, DIE SIE BEIM LESEN HABEN SOLL
 - „Sie kennt meine Wünsche."
 - „Sie hält mich nicht für zu viel."
-- „Sie hat selbst Scheiße durchlebt." (zweimal ohne Mentoring im Business, als Kind keine Mentorin gehabt, Mentoren immer selbst gesucht)
-- „Sie hat ein Kind." (Mama, Job, Business, Videos entstehen auch mal am Abend)
+- „Sie hat selbst Scheiße durchlebt."
+- „Sie hat ein Kind."
 - „Sie judgt nichts, außer wenn ich's nicht umsetze."
+Diese Gefühle entstehen über Haltung, Ton und wie genau ich ihre Situation beschreibe, NICHT dadurch, dass ich meine Biografie erzähle.
 
-MATERIAL, DAS DU NUTZEN DARFST
-- Mit 15 den Traum, als Sängerin nach Amerika zu gehen, mit 21 dort. Bühnen-, US-Radio- und TV-Erfahrung.
-- 18 Jahre in Businesses jeder Größe, vom Millionenprojekt bis zum kleinen Business Case.
-- Hands-on: Ich schau jedes Video meiner Mentees an und sag die Lücke sofort.
-- Kundinnen: Membership-Plätze verkauft, 1:1-Plätze vergeben, vierstellige Umsätze generiert.
+MEINE GESCHICHTE
+{{GESCHICHTE}}
 
 AUSSCHLUSS (wenn passend, vor dem Hauptteil)
 Wer nicht passt, wird freundlich, aber klar rausgeschickt, rein über Haltung: wer wartet, bis sie „bereit" ist, wer rabattiert, wer nie umsetzt.
@@ -99,7 +97,20 @@ export default async (req) => {
   }
   if (!thema) return new Response(JSON.stringify({ error: 'Bitte ein Thema eintragen.' }), { status: 400 });
 
-  let prompt = PROMPT.replace('{{THEMA}}', thema).replace('{{ANZAHL}}', String(count));
+  // Meine Geschichte nur sparsam (Carina: „immer nur so 10 %", „als Text, nicht premade"):
+  // Bei etwa der Hälfte der Serien gar nicht, sonst EIN Element, zufällig gewählt, in 1–2 Sätzen erzählt.
+  const MATERIAL = [
+    'Mit 15 der Traum, als Sängerin nach Amerika zu gehen, mit 21 dort. Bühnen-, US-Radio- und TV-Erfahrung.',
+    '18 Jahre in Businesses jeder Größe, vom Millionenprojekt bis zum kleinen Business Case.',
+    'Zweimal im Business ohne Mentoring gestanden, als Kind keine Mentorin gehabt, Mentoren immer selbst gesucht.',
+    'Mama mit Job und Business, Videos entstehen auch mal am Abend.',
+    'Hands-on: Ich schau jedes Video meiner Mentees an und sag die Lücke sofort.',
+    'Kundinnen: Membership-Plätze verkauft, 1:1-Plätze vergeben, vierstellige Umsätze generiert.',
+  ];
+  const geschichte = Math.random() < 0.5
+    ? '- In DIESER Serie kommt meine Biografie NICHT vor. Keine Erwähnung von Amerika, Singen, meinen Jahren im Business, meinem Kind oder meinen Kundinnen-Ergebnissen. Die Serie lebt nur vom Thema und von ihr.'
+    : `- In dieser Serie darf höchstens dieses EINE Element vorkommen, und nur wenn es das Thema wirklich stützt (sonst weglassen):\n  ${MATERIAL[Math.floor(Math.random() * MATERIAL.length)]}\n- Höchstens 1–2 Sätze in der ganzen Serie, das sind etwa 10 % des Texts. Der Rest gehört ihr und dem Thema.\n- Nicht als fertigen Satz übernehmen und nicht aufzählen. Erzähl es als kleinen, konkreten Moment in meinen eigenen Worten, eingewoben in den Gedankengang, so als würde es mir gerade beim Reden einfallen.`;
+  let prompt = PROMPT.replace('{{THEMA}}', thema).replace('{{ANZAHL}}', String(count)).replace('{{GESCHICHTE}}', geschichte);
   if (post) {
     prompt += ZUM_POST.replace('{{PTITEL}}', post.titel || '—')
       .replace('{{PSLIDES}}', post.slides.length ? post.slides.map((x, k) => `${k + 1}. ${x.slice(0, 500)}`).join('\n') : '—')
