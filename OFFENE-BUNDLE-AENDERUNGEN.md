@@ -12696,3 +12696,18 @@ Alle Adressen laden **karten528**.
   kursivem Zitat statt eines einzelnen Worts in der Versalzeile.
 
 Alle Adressen laden **karten529**.
+
+## 483 — Kontrast „mehr wie Eva“: dunkler, kontrastreicher, größer (karten530)
+
+- Carina (Referenz-Feed eva.siebenhaar): „Von der Weite seh ich nicht genug, mach alles dunkler, die Bilder
+  mehr Kontrast und mehr wie Eva.“
+- Fotos: Sättigung 0,86, Kontrast 1,3, dunkler (+112 statt +136), leicht warm. Foto-Kacheln zusätzlich 26 %
+  abgedunkelt, Vignette-Rand 82 %, Verlauf unten 80 %.
+- Foto-Kacheln: Hook-Serif 18 % statt 15 % der Breite (bis 64 % der Höhe), Versalzeilen größer, keine Rubrik
+  mehr oben, Handschrift größer. Ein Wort kursiv (*Sternchen*, sonst letztes Wort des großen Satzes).
+- weiss → Fast-Schwarz #161718 mit weißer Schrift, Akzent Rosé. cutwort → Fast-Schwarz, großes Wort #ECE6E0,
+  Freisteller hell bearbeitet. Papier-Karte liegt auf Anthrazit #2B2D30. Flächen-Schrift größer.
+- Feed-Zyklus 7 statt 6 (keine Streifen): fotozeilen|papier|fotoetikett|flaeche|fotozeilen|cutwort|weiss.
+- Folgefolien unverändert (weiß, letzte Anthrazit).
+
+Alle Adressen laden **karten530**.

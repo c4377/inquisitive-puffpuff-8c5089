@@ -116,7 +116,7 @@ KLAR = {'magTitelVersal': 0, 'magCoverSerif': 'Instrument Serif', 'magCoverSerif
 KLAR_PLAYFAIR = {'magCoverSerif': 'Playfair Display', 'magSerif': 'Playfair Display', 'magSerifLaufweite': -15, 'magCoverFs': 0.066, 'magH2Fs': 0.074,
                  'premiumSerif': 'Playfair Display', 'scrapFarben': {**KLAR['scrapFarben'], 'tf': 'Playfair Display', 'rf': 'Playfair Display', 'tcs': -10, 'tsk': 1.0}}
 # Kontrast: Schwarz, Weiß, Anthrazit #33363A, leichter Oxblood-Akzent #5E1A21 (seit 10.10. abends, vorher Oxblood), S/W-Fotos mit hartem Kontrast (tools/kontrast-zeichner.js)
-KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'fotozeilen|papier|cutwort|flaeche|fotoetikett|weiss', 'magKontrastCut': 'k3|k2|k7|k4|k5',
+KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'fotozeilen|papier|fotoetikett|flaeche|fotozeilen|cutwort|weiss', 'kontrastPapierGrund': '#2B2D30', 'magKontrastCut': 'k3|k2|k7|k4|k5',
             'magKontrastRubrik': 'Ehrlich jetzt|Klartext|Ja-Sagerinnen wissen|Notiz an dich|Aus meinem Alltag', 'kontrastOx': '#33363A', 'magSkriptJede': 0,
             'kontrastSerif': 'Instrument Serif', 'magCoverSerif': 'Instrument Serif', 'magSerif': 'Instrument Serif', 'magSerifLaufweite': -45,
             'kontrastSkript': 'hör mal|ehrlich jetzt|merk dir das|Achtung', 'kontrastSkriptJede': 2, 'kontrastOrange': '#E2BFB2', 'kontrastAkzent': '#5E1A21', 'kontrastAkzentHell': '#E2BFB2',
