@@ -12682,3 +12682,17 @@ Alle Adressen laden **karten527**.
   Flächen bleiben Anthrazit #33363A.
 
 Alle Adressen laden **karten528**.
+
+## 482 — Kontrast: eigener Stil für Gedankensätze (karten529)
+
+- Carina zu „Der Fehler, den du nach „Krieg ich selbst hin“ machst (Drei Absätze raus, ein Daumen zurück)“:
+  „Wir brauchen einen Stil, der diesen Gedankensatz anders darstellt.“
+- Einschub in (Klammern, ab 8 Zeichen) wird aus dem Hook genommen. Text-Kacheln (papier, weiss, flaeche):
+  Hook → kurzer Strich in Akzentfarbe → Einschub als kleine Versalzeile → Handschrift.
+  Foto-Kacheln: Einschub als kleine Versalzeile in Klammern unter dem Hook.
+- Enthält der Hook ein Zitat „…“ (ohne *Sternchen*), ist genau das Zitat die Betonung (kursiv, Akzentfarbe)
+  statt erster Satz/letztes Wort.
+- Foto-Kacheln: bleibt nach dem Zitat nur ein kurzer Rest (< 22 Zeichen), steht der ganze Satz groß mit
+  kursivem Zitat statt eines einzelnen Worts in der Versalzeile.
+
+Alle Adressen laden **karten529**.
