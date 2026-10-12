@@ -12795,3 +12795,9 @@ Alle Adressen laden **karten533**.
 - VORLAGE-BULK-IMPORT.md aktualisiert.
 
 Alle Adressen laden **karten534**.
+
+## 489 — Letzte Folie mit CTA-Foto im Kontrast-Look (karten535)
+
+- Im Kontrast-Look schaltet die CTA-Folie nicht mehr auf das alte Brand-Layout `brand_photo_gradient` um (editorial-look.py: `zBrand` und `zLayF` prüfen `!BS_KACHEL.magKontrastFeed`). Das Foto wird nur noch als `t.background` gesetzt, markiert mit `_ktCta`.
+- kontrast-zeichner.js (Folgefolien-Zweig): Hat die letzte Folie ein Hintergrundbild, liegt darüber ein Anthrazit-Overlay (50 %) plus Verlauf nach unten (bis 72 %). Text weiß, zentriert in Instrument Serif mit Schatten, @carinaannaprav unten.
+- Foto = das in der Galerie mit „Als CTA-Foto“ gewählte Bild. Ohne CTA-Foto bleibt die letzte Folie Anthrazit.

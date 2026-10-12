@@ -24,6 +24,8 @@
    Vorher/Nachher mit Screenshots (seit 13.10.): „Vorher: W-XXXXX | Nachher: W-YYYYY & Satz“ oder „Beispiel: W-XXXXX & Satz“
    → Anthrazit, Screenshots aus der Bibliothek (au.loadScreenshotLibrary, Kennung per zKennung) mit Schatten,
    dünne Versal-Labels darüber, Satz in Instrument Serif. Bis zu drei Posts nebeneinander.
+   Letzte Folie (seit 13.10.): CTA-Foto (Galerie „Als CTA-Foto“, sonst Foto des Posts) mit Anthrazit-Overlay 50 % +
+   Verlauf unten, weiße Schrift mit Schatten. Das alte Brand-CTA-Layout ist im Kontrast-Look abgeschaltet.
    Absender @carinaannaprav auf jeder Kachel und Folgefolie.
    Folgefolien: weiß mit schwarzer Schrift, letzte Folie Oxblood mit weißer Schrift.
    Wird von editorial-look.py eingesetzt; alle Zeilenumbrüche werden entfernt. */
@@ -77,7 +79,7 @@ else e.add(new zFb.Textbox("Screenshot konnte nicht geladen werden",{left:zW*.1,
 zxESk&&e.add(new zFb.Text(zxESk,{fontFamily:zxSC,fontSize:zW*.075,fill:zxEH,originX:"center",left:zW/2,top:zH*.825,angle:-3,...zNo}));
 e.add(new zFb.Text(String(K.kontrastAbsender||"CARINA ANNA PRAV"),{fontFamily:zxHN,fontWeight:"500",fontSize:zW*.0145,charSpacing:450,fill:"#85898C",originX:"center",left:zW/2,top:zH*.925,...zNo}));e.add(new zFb.Text(String(K.kontrastHandle||"@carinaannaprav"),{fontFamily:zxHN,fontWeight:"500",fontSize:zW*.022,charSpacing:100,fill:"#85898C",originX:"center",left:zW/2,top:zH*.925+zW*.03,...zNo}));
 e.renderAll();return}
-if(!zCover){const zxN=(i&&i.slideIndex)||0,zxTot=(i&&i.totalSlides)||0,zxLetzte=zxTot>1&&zxN>=zxTot-1;e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:zxLetzte?zxOX:(K.kontrastHell||"#FFFFFF"),...zNo}));e.add(new zFb.Text(String(K.kontrastHandle||"@carinaannaprav"),{fontFamily:"HelveticaNeueBrand",fontWeight:"500",fontSize:zW*.022,charSpacing:100,fill:zxLetzte?"rgba(255,255,255,0.75)":"#85898C",originX:"center",left:zW/2,top:zH*.935,...zNo}));TXT=zxLetzte?"#FFFFFF":"#0A0706";AK=zxLetzte?(K.kontrastAkzentHell||"#FFFFFF"):zxAK;zkKeinSchatten=!0;zkObenA=0}
+if(!zCover){const zxN=(i&&i.slideIndex)||0,zxTot=(i&&i.totalSlides)||0,zxLetzte=zxTot>1&&zxN>=zxTot-1;const zxCtaFoto=zxLetzte&&typeof t.background=="string"&&t.background.length>5;zxCtaFoto?(e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:"rgba(30,32,35,0.5)",...zNo})),e.add(new zFb.Rect({left:0,top:zH*.3,width:zW,height:zH*.7,...zNo,fill:new zFb.Gradient({type:"linear",coords:{x1:0,y1:0,x2:0,y2:zH*.7},colorStops:[{offset:0,color:"rgba(30,32,35,0)"},{offset:1,color:"rgba(30,32,35,0.72)"}]})}))):e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:zxLetzte?zxOX:(K.kontrastHell||"#FFFFFF"),...zNo}));e.add(new zFb.Text(String(K.kontrastHandle||"@carinaannaprav"),{fontFamily:"HelveticaNeueBrand",fontWeight:"500",fontSize:zW*.022,charSpacing:100,fill:zxLetzte?"rgba(255,255,255,0.75)":"#85898C",originX:"center",left:zW/2,top:zH*.935,...zNo}));TXT=zxLetzte?"#FFFFFF":"#0A0706";AK=zxLetzte?(K.kontrastAkzentHell||"#FFFFFF"):zxAK;zkKeinSchatten=!zxCtaFoto;zkObenA=0}
 else{
 try{await Promise.race([Promise.all([`400 40px "${zxIS}"`,`italic 400 40px "${zxIS}"`,`500 40px "${zxHN}"`,`700 40px "${zxHN}"`,`400 40px "${zxSC}"`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,4e3))])}catch(zz){}
 const zxW=(za,zl)=>za[((zl%za.length)+za.length)%za.length],zxI=Math.floor(zxTg/zxL.length);

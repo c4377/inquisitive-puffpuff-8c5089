@@ -295,5 +295,8 @@ ersetze('i.length>0&&v.jsx("div",{className:"space-y-2",children:i.map(b=>v.jsxs
 ersetze('children:r.length===0?v.jsxs("p",{className:"text-sm text-gray-500 bg-gray-50 rounded-xl p-4",children:["Keine ",v.jsx("span",{className:"font-mono text-xs",children:"S-XXXXX"}),', 'children:[r.length===0&&v.jsxs("p",{className:"text-sm text-gray-500 bg-gray-50 rounded-xl p-4",children:["Keine ",v.jsx("span",{className:"font-mono text-xs",children:"T-/W-/S-XXXXX"}),', 1)
 ersetze('"Slide 2: S-PXQPF"})]}):v.jsxs(v.Fragment,{children:[', '"Slide 2: Screenshot: T-PXQPF"})]}),v.jsxs(v.Fragment,{children:[', 1)
 ersetze(']})]})}),r.length>0&&v.jsxs("div",{className:"sticky bottom-0', ']})]})]}),r.length>0&&v.jsxs("div",{className:"sticky bottom-0', 1)
+# Kontrast: letzte Folie (CTA) nicht ins alte Brand-Layout, sondern in den Kontrast-Zeichner
+ersetze('zBrand=zL.indexOf("brand_")===0||BS_KACHEL.folgeLayouts===1,zLay2=BS_KACHEL.ctaLayout||"brand_photo_gradient";t={...t,background:zCtaBild||t.background,isCtaSlide:!0,', 'zBrand=!BS_KACHEL.magKontrastFeed&&(zL.indexOf("brand_")===0||BS_KACHEL.folgeLayouts===1),zLay2=BS_KACHEL.ctaLayout||"brand_photo_gradient";t={...t,background:zCtaBild||t.background,isCtaSlide:BS_KACHEL.magKontrastFeed?t.isCtaSlide:!0,_ktCta:!0,', 1)
+ersetze('if(zCta===!0&&zF&&typeof ea=="string"&&ea.length>5)return "brand_photo_gradient";', 'if(zCta===!0&&zF&&typeof ea=="string"&&ea.length>5&&!BS_KACHEL.magKontrastFeed)return "brand_photo_gradient";', 1)
 open(Z, 'w', encoding='utf-8').write(s)
 print('ok')
