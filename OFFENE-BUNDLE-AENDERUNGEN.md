@@ -13053,3 +13053,11 @@ Alle Adressen laden **karten563**.
 - `kontrastFotoOriginal: 1`: zxFarbe gibt das Foto unverändert zurück (keine Tonwert-, Farb- und Wärmebearbeitung). `kino: 0`: auch die Grundbearbeitung des Bundles (Kino-Look: Kontrast, Gamma, Schwarz-/Weißpunkt, Sättigung) ist aus. Die Abdunklung hinter dem Text (Verlauf oben und textbezogener Verlauf unten) bleibt und folgt weiter dem Schwarz-Regler. Die Bearbeitung aus 505–509 bleibt im Code und lässt sich mit `kontrastFotoOriginal: 0` wieder einschalten.
 
 Alle Adressen laden **karten564**.
+
+## 519 — fotorahmen: Text weicht dem Gesicht aus (karten565)
+
+- Carina: „Die Schrift soll schon gut arrangiert sein“ (der lange Hook lag über ihrem Gesicht).
+- Die Kachel `fotorahmen` rechnet das erkannte Gesicht in Kachel-Koordinaten um (`zGes`: linke Kante, Kinn). Ist unter dem Kinn genug Platz (≥ 24 % der Höhe), steht der Text darunter, unten verankert bei 86 %, und darf über Körper/Schultern laufen. Sonst steht er in einer schmalen linken Spalte (46–62 % Breite), die vor dem Gesicht endet.
+- Lange Hooks werden kleiner (zxBox passt die Größe an Breite und maximale Höhe an), Grundgröße `kontrastRahmenGroesse` .13.
+
+Alle Adressen laden **karten565**.
