@@ -13157,3 +13157,10 @@ Alle Adressen laden **karten576**.
 - `kontrastVNVorschau: 0`: die Probe-Ansicht an der hellen Kachel ist aus (sonst wären normale Posts mit Beispiel-Cover exportiert worden).
 
 Alle Adressen laden **karten577**.
+
+## 532 — Vergleichsposts wieder an der Stelle der hellen Kachel (karten578)
+
+- Carina: „Ich verstehe nicht, warum wir das jetzt weggenommen haben und die weißen Kacheln wieder da sind.“
+- `kontrastVNVorschau: 1` wieder an: Covers im Rhythmus `weiss` zeigen die gerenderten Vergleichsposts (vier Beispiel-Nischen reihum, neuer unsicherer Vorher-Look, KI-Porträt im Nachher).
+
+Alle Adressen laden **karten578**.
