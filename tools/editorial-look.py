@@ -282,5 +282,8 @@ ersetze('children:[h&&v.jsxs("button",{onClick:()=>c(!1),className:"fixed bottom
 # Drei-Punkte-Knopf der Plan-Kacheln unter die klebende Leiste (Carina 12.10.: scrollte darüber)
 ersetze('className:"absolute top-1.5 right-1.5 z-30 w-7 h-7 rounded-full bg-black/40', 'className:"absolute top-1.5 right-1.5 z-[15] w-7 h-7 rounded-full bg-black/40', 1)
 
+# Content-Plan für den Zeichner sichtbar machen (Vergleichs-Cover lesen Vorher/Nachher-Sätze aus den Folien des Posts)
+ersetze('WH(l.contentPlan||[])', '(window.__bsPlan=l.contentPlan||[],WH(l.contentPlan||[]))', 1)
+
 open(Z, 'w', encoding='utf-8').write(s)
 print('ok')

@@ -13188,3 +13188,10 @@ Alle Adressen laden **karten580**.
 - Reiter „Vorher/Nachher“ zeigt die beiden Bildfelder jetzt immer. Setzt man auf einer normalen Folie ein Bild, wird sie zur Vorher/Nachher-Folie: Label „Vorher / Nachher“, darüber der Hook des Posts (`zxVNohne`). Hinweis im Reiter erklärt das; ✕ nimmt das Bild wieder raus.
 
 Alle Adressen laden **karten581**.
+
+## 536 — Vergleichs-Cover nehmen die Vorher/Nachher-Sätze aus dem eigenen Post (karten582)
+
+- Carina: Der Text auf den hinteren Folien (meist Folie 8: „Vorher steht auf dem Cover „…“ / Nachher steht da „…““) ist viel besser als der Cover-Hook; die Vergleichs-Cover sollen ihn nutzen.
+- `window.__bsPlan` = aktueller Content-Plan (gesetzt im Speicher-Effekt neben `WH(contentPlan)`). Der Zeichner sucht beim Vergleichs-Cover (Vorschau an der Stelle `weiss`) in den Folien 2 ff. desselben Tags die erste Folie mit „Vorher“ vor „Nachher“ und je einem Satz in Anführungszeichen („…“, “…”, "…", 6–220 Zeichen). Gefunden → Vorher-Post zeigt den ersten, Nachher-Post den zweiten Satz; Kopfzeile nur „Vorher / Nachher“, keine Überschrift, Handle @deinname.coaching, Moodbild nach dem Nachher-Satz. Nicht gefunden → Beispiele wie bisher.
+
+Alle Adressen laden **karten582**.
