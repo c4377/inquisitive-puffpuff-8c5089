@@ -7,7 +7,7 @@ if((t.karte==="ablauf"||t.reminderArt==="ablauf")&&BS_KACHEL.magKontrastFeed&&BS
 const zaIS=K.kontrastSerif||"Instrument Serif",zaHN="HelveticaNeueBrand",zaN=(i&&i.slideIndex)||0,zaTot=(i&&i.totalSlides)||0,zaDunkel=zaN%2===1;
 try{await Promise.race([Promise.all([`400 40px "${zaIS}"`,`italic 400 40px "${zaIS}"`,`300 40px ${zaHN}`,`500 40px ${zaHN}`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,4e3))])}catch(zz){}
 e.getObjects().forEach(zo=>{zo.visible=!1});
-const zaG=zaDunkel?(K.kontrastOx||"#33363A"):(K.kontrastHell||"#F7F4EF"),zaS=zaDunkel?"#FFFFFF":"#1A1714",zaA=zaDunkel?(K.kontrastAkzentHell||"#E2BFB2"):(K.kontrastAkzent||"#5E1A21"),zaL=zaDunkel?"rgba(255,255,255,0.72)":"#5C5650",zaH=zaDunkel?"rgba(255,255,255,0.22)":"rgba(26,23,20,0.16)";
+const zaG=zaDunkel?(K.kontrastOx||"#33363A"):(K.kontrastHell||"#F7F4EF"),zaS=zaDunkel?"#FFFFFF":"#1A1714",zaA=zaDunkel?(K.kontrastAkzentHell||"#E2BFB2"):(K.kontrastAkzent||"#5E1A21"),zaL=zaDunkel?"rgba(255,255,255,0.72)":"#7D6B5C",zaH=zaDunkel?"rgba(255,255,255,0.22)":"rgba(26,23,20,0.16)";
 e.backgroundColor=zaG;e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:zaG,...zNo}));
 const zaZ=String(t.text||"").split(/\n/).map(q=>q.trim()).filter(Boolean);let zaKopf="",zaTitel="",zaUnter="",zaArt="",zaPunkte=[];const zaBody=[];
 zaZ.forEach(zl=>{if(/^#/.test(zl)){zaKopf=zl.replace(/^#+\s*/,"").split("|").map(q=>q.trim()).filter(Boolean).join("  ")}else if(/^>/.test(zl)){zaUnter=zl.replace(/^>\s*/,"")}else if(/^\[(stationen|liste)\s*:/i.test(zl)){const zm=/^\[(stationen|liste)\s*:\s*(.*?)\]?$/i.exec(zl);zaArt=zm[1].toLowerCase();zaPunkte=zm[2].split("|").map(q=>q.trim()).filter(Boolean)}else if(!zaTitel){zaTitel=zl}else zaBody.push(zl)});

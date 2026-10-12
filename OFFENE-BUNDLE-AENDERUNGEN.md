@@ -13075,3 +13075,11 @@ Alle Adressen laden **karten566**.
 - Platzhalter auf der Folie jetzt: „Im Plan: drei Punkte an der Kachel → Screenshot wählen“. Die beiden Hinweise nach „Vorher/Nachher“ (Knopf und Vorlage) sagen ebenfalls „drei Punkte an der Kachel“.
 
 Alle Adressen laden **karten567**.
+
+## 522 — Farbraum Taupe/Beige (karten568)
+
+- Carina (Farbpalette, Taupe und Beige eingekreist): „Bring alles in den Farbraum der eingekreisten Farben.“
+- Kachelfarben: `kontrastOx` (dunkle Kacheln, Fotorahmen, Vorher/Nachher) #33363A → Taupe #6B5849, `kontrastHell` #F1F1EF → helles Beige #EAE2D7, `kontrastAkzent` (Oxblood) → Taupe #6B5849, `kontrastAkzentHell`/`kontrastOrange` (Rosé) → Beige #DCCDB9, `kontrastPapierGrund` → #5A493D, Ergebnis-Grund #161718 → #4E3F35.
+- Kühle Grautöne der kleinen Schriften im Zeichner durch warme Beigetöne ersetzt, Ablauf-Folien ebenso. CTA-Overlay und Textverläufe auf Fotos warm (dunkles Braun statt Schwarz/Anthrazit). Fotos bleiben im Original.
+
+Alle Adressen laden **karten568**.
