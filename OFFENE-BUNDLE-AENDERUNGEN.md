@@ -13195,3 +13195,10 @@ Alle Adressen laden **karten581**.
 - `window.__bsPlan` = aktueller Content-Plan (gesetzt im Speicher-Effekt neben `WH(contentPlan)`). Der Zeichner sucht beim Vergleichs-Cover (Vorschau an der Stelle `weiss`) in den Folien 2 ff. desselben Tags die erste Folie mit „Vorher“ vor „Nachher“ und je einem Satz in Anführungszeichen („…“, “…”, "…", 6–220 Zeichen). Gefunden → Vorher-Post zeigt den ersten, Nachher-Post den zweiten Satz; Kopfzeile nur „Vorher / Nachher“, keine Überschrift, Handle @deinname.coaching, Moodbild nach dem Nachher-Satz. Nicht gefunden → Beispiele wie bisher.
 
 Alle Adressen laden **karten582**.
+
+## 537 — Vergleichs-Cover: Coach-Nische aus dem Post abgeleitet (karten583)
+
+- Carina: „Kannst du jetzt noch implizit ableiten aus dem Post, was für ein Coach das ist, und dazu schreiben?“
+- Wurden Vorher/Nachher-Sätze im Post gefunden (536), zählt der Zeichner Stichwörter für elf Nischen (Ernährung, Fitness, Führung, Karriere, Business, Resilienz, Paar, Familie, Finanzen, Achtsamkeit, Life-Coach). Treffer im Vorher-/Nachher-Satz zählen dreifach, im restlichen Post einfach. Beste Nische → Kopfzeile „Vorher / Nachher · <Nische>“ und Handle der Beispiel-Posts (`@deinname.ernaehrung` usw.). Kein Treffer → nur „Vorher / Nachher“, Handle @deinname.coaching.
+
+Alle Adressen laden **karten583**.
