@@ -13123,3 +13123,11 @@ Alle Adressen laden **karten572**.
 - Am Post selbst ändert sich nichts. Zurück: `kontrastVNVorschau: 0`.
 
 Alle Adressen laden **karten573**.
+
+## 528 — Vorschau-Vergleichsposts mit gerenderten Beispiel-Posts (karten574)
+
+- Carina: „Ich meinte eigentlich, dass du auch diese Bilder renderst. Also einen Vorher-Post, einen Nachher-Post … ich will sehen, wie es ausschaut.“
+- Bei `kontrastVNVorschau: 1` zeichnet `zvMach` die beiden Bilder selbst (540×675 Canvas) statt Screenshots aus der Bibliothek: **Vorher** = typischer selbstgebauter Post (Pastell-Verlauf, Arial fett mittig, weißer „Swipe →“-Button), **Nachher** = derselbe Hook im Kontrast-Look (Foto des Posts mit Verlauf, sonst Graphit; Instrument Serif, letztes Wort kursiv, Rosé-Linie, Handle). Text auf beiden: Hook des Posts.
+- Überschrift des Vergleichs-Covers in der Vorschau: „Derselbe Gedanke, *zweimal*.“ Nur Ansicht; keine echten Kundenposts.
+
+Alle Adressen laden **karten574**.
