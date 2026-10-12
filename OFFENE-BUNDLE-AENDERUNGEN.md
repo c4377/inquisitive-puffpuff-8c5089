@@ -12861,3 +12861,13 @@ Alle Adressen laden **karten542**.
 - Die Farbe wird luminanzbezogen wieder aufgesetzt (Faktor L'/L, begrenzt auf 0,9–1,3) mit `kontrastFotoSaett` 1,08. Die Farbe geht beim Abdunkeln nicht mehr verloren, und es entsteht kein Orangestich (R−B im Testbild unverändert, ca. 5).
 
 Alle Adressen laden **karten543**.
+
+## 498 — Hautton als Ziel: Belichtung und Weißabgleich nach dem Gesicht (karten544)
+
+- Ziel aus Carinas Screenshot (Tag 10, 12.10.): Haut ca. RGB 134/108/93, R/G 1,25, B/G 0,85, Helligkeit ca. 112.
+- kontrast-zeichner.js: Auf Foto-Covern sucht face-api (`HV`) das Gesicht im fertigen Ausschnitt (`zxHB`, Timeout 9 s). Hautpixel werden in der inneren Gesichtsfläche gesammelt (R>G>B, Helligkeit 35–240).
+- Belichtung: Ist genug Haut da (≥120 Proben), wird das Gamma so gewählt, dass die Haut `kontrastHautZiel` (112) − 40 × zxSchwD trifft. Ohne Gesicht gilt weiter der Bildmittelwert (118).
+- Weißabgleich: Danach werden die Kanäle global so verstärkt, dass die Haut R/G `kontrastHautRG` 1,25 und B/G `kontrastHautBG` 0,85 erreicht. Stärke `kontrastHautKraft` 0,9, Faktoren 0,68–1,45, die Helligkeit bleibt erhalten. `kontrastHaut: 0` schaltet alles ab.
+- Test (gleiches Foto, Haut nachher): normal 130/103/87, Orangestich 126/98/81, Blaustich 130/104/90, blass 130/103/87.
+
+Alle Adressen laden **karten544**.
