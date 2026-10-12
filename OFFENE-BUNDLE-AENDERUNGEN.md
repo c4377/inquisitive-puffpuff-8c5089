@@ -13140,3 +13140,10 @@ Alle Adressen laden **karten574**.
 - Es sind ausgedachte Beispiel-Hooks und KI-Porträts, keine echten Kundinnen. Nur Vorschau (`kontrastVNVorschau: 1`).
 
 Alle Adressen laden **karten575**.
+
+## 530 — Vorher-Hook Life-Coach in Carinas Worten (karten576)
+
+- Carina: Der Vorher-Post darf nicht denselben Text haben wie der Nachher-Post; Kundinnen schreiben „5 Schritte, wie du zu mehr Selbstliebe kommst“, denken aber über das Thema ganz anders. (Seit 575 sind Vorher- und Nachher-Hook getrennt.)
+- Life-Coach-Vorher jetzt „5 Schritte, wie du zu mehr Selbstliebe kommst“.
+
+Alle Adressen laden **karten576**.
