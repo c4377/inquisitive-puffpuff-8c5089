@@ -12994,3 +12994,11 @@ Alle Adressen laden **karten555**.
 - Handschrift (Text nach „&“, Skript-Zeile): `kontrastSkriptFont` „Nothing You Could Do“ statt „Mrs Saint Delafield“, wie in Carinas veröffentlichtem Feed.
 
 Alle Adressen laden **karten556**.
+
+## 511 — Keine Floskel-Handschrift mehr (karten557)
+
+- Carina: „Muss unter jedem Post dieses ‚das hab ich daraus gelernt‘ stehen? Das passt oft gar nicht.“ Die Sätze stammen aus dem Plantext (Teil nach „&“). Der Floskel-Filter des alten Statement-Looks (Abschnitt 461) fiel beim Aufräumen mit dem Look weg.
+- kontrast-zeichner.js: Ein Text nach „&“ unter 60 Zeichen, der wie ein Standard-Nachsatz gebaut ist, wird weggelassen. Muster: so/das/hier/genau das/darum/deshalb … ändern/lösen/machen/gehen/lernen/verändern/besser/anders/funktionieren/klappen/wirken. Beispiele: „das hab ich daraus gelernt“, „so änderst du das“, „so löst du das“, „so machst du es ab heute anders“, „das hat alles verändert“. Inhaltliche Sätze bleiben. Abschalten mit `kontrastFloskelnWeg: 0`.
+- `kontrastSkriptJede: 0`: keine automatisch eingestreuten Handschrift-Wörter mehr („hör mal“, „Achtung“ …).
+
+Alle Adressen laden **karten557**.
