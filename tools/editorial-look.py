@@ -242,10 +242,12 @@ ersetze('await Ca(Un,Ft,or,Rt,{slideIndex:Xt,totalSlides:T.length,scale:Fr,globa
 VNMENU = open(__file__.rsplit('/', 1)[0] + '/vorher-nachher-menue.js', encoding='utf-8').read().split('*/', 1)[1].strip().replace('\n', '')
 ersetze(',zKennung=zu=>{', ',' + VNMENU + 'zKennung=zu=>{', 1)
 VNFUNK = ('vnSetzen=(vd,vs,vk,vc)=>{const vRe=/([^|&\\]\\n]{1,30}?:\\s*)([STW]-[0-9A-Z]{5})/g;const ve=i.map(He=>He.day===vd?{...He,slides:(He.slides||[]).map((De,vj)=>{if(vj!==vs||!De)return De;let vn=0;return{...De,text:String(De.text||"").replace(vRe,(vm,va,vb)=>vn++===vk?va+vc:vm)}})}:He);t({contentPlan:Rt(ve,We)})},'
-          'vnVorlage=vd=>{const vP=i.find(He=>He.day===vd);if(!vP)return;const vS=Array.isArray(vP.slides)?vP.slides:[];if(!vS.length)return;if(vS.length>2&&!window.confirm(`Tag ${vd} wird zur Vorher/Nachher-Vorlage. Cover und letzte Folie bleiben, die Folien dazwischen werden ersetzt.`))return;'
-          'const vC=vS[0],vB=vS[1]||vC,vBg=vB.background||vC.background,vT=Date.now(),vNeu=(vx,vk)=>{const vo={...vB,id:vT+vk,text:vx,background:vBg};delete vo.overlayImage;delete vo.overlayIsScreenshot;delete vo.overlayHook;return vo};'
-          'const vL=vS.length>1?vS[vS.length-1]:vNeu("Schreib mir STARTEN ↓",9);const vN=[vC,vNeu("[Vorher / Nachher] Vorher: W-00000 | Nachher: W-00000 & Derselbe Gedanke, *zweimal.*",1),vNeu("Beispiel: W-00000 & Ein Satz, in dem man *sie* erkennt.",2),vL];'
-          'const ve=i.map(He=>He.day===vd?{...He,slides:vN}:He);t({contentPlan:Rt(ve,We)});ue(`Tag ${vd} ist jetzt eine Vorher/Nachher-Vorlage. Screenshots im ⋮-Menü wählen.`);setTimeout(()=>ue(""),6e3)},')
+          'vnVorlage=vd=>{const vP=i.find(He=>He.day===vd);if(!vP)return;const vS=Array.isArray(vP.slides)?vP.slides:[];if(!vS.length)return;if(vS.length>2&&!window.confirm(`Tag ${vd} wird zum Vorher/Nachher-Post: Die erste Folie zeigt deine zwei Posts, die Folien danach bleiben als Text.`))return;'
+          'const vC=vS[0],vB=vS[1]||vC,vBg=vC.background||vB.background,vT=Date.now(),vNeu=(vx,vk,vbasis)=>{const vo={...(vbasis||vB),id:vT+vk,text:vx,background:(vbasis||vB).background||vBg};delete vo.overlayImage;delete vo.overlayIsScreenshot;delete vo.overlayHook;return vo};'
+          'const vHook=String(vC.text||"").replace(/^\\s*\\[[^\\]]*\\]\\s*/,"").split(/\\n|\\s&\\s/)[0].trim()||"Derselbe Gedanke, *zweimal.*";'
+          'const vMitte=vS.length>2?vS.slice(1,-1).filter(vx=>!/[STW]-[0-9A-Z]{5}/.test(String(vx&&vx.text||""))):[];const vL=vS.length>1?vS[vS.length-1]:vNeu("Schreib mir STARTEN ↓",9);'
+          'const vN=[vNeu("[Vorher / Nachher] Vorher: W-00000 | Nachher: W-00000 & "+vHook,1,vC),...(vMitte.length?vMitte:[vNeu("Was sich verändert hat: Hier beschreibst du in zwei, drei Sätzen, was im Nachher anders ist und warum.",2)]),vL];'
+          'const ve=i.map(He=>He.day===vd?{...He,slides:vN}:He);t({contentPlan:Rt(ve,We)});ue(`Tag ${vd} ist jetzt ein Vorher/Nachher-Post. Screenshots im ⋮-Menü wählen.`);setTimeout(()=>ue(""),6e3)},')
 ersetze('schildSetzen=(ae,_e)=>{', VNFUNK + 'schildSetzen=(ae,_e)=>{', 1)
 ersetze(' Stories dazu schreiben"]}),', ' Stories dazu schreiben"]}),v.jsx(VNWahl,{post:ae,onSet:(vs,vk,vc)=>vnSetzen(ae.day,vs,vk,vc),onVorlage:()=>{h(null);vnVorlage(ae.day)}}),', 1)
 

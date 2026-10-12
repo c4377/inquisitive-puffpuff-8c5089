@@ -13009,3 +13009,11 @@ Alle Adressen laden **karten557**.
 - Jetzt werden der Reihe nach geprüft: Porträt-Foto, CTA-Foto, dann das Foto des Posts selbst (bei Textkacheln immer ein Gesichtsfoto, coverGesichtAnteil 100). Genommen wird das erste mit erkanntem Gesicht. Ohne Gesicht gibt es keinen Kreis, stattdessen den Namen unten. Ergebnisse pro Foto in `window.__bsPortraetC`.
 
 Alle Adressen laden **karten558**.
+
+## 513 — Vorher/Nachher-Post: Vergleich ist das Cover (karten559)
+
+- Carina: Bei Vorher/Nachher braucht es keine eigene Cover-Folie, die Folie mit den zwei Posts ist das Cover. Danach kommt beschreibender Text.
+- `vnVorlage` (⋮-Menü „Als Vorher/Nachher-Post“): Folie 1 wird „[Vorher / Nachher] Vorher: W-00000 | Nachher: W-00000 & <Hook des bisherigen Covers>“. Die Folien dazwischen bleiben als Textfolien (Folien mit Kennungen fallen weg). Ohne solche Folien kommt eine Platzhalter-Textfolie dazu. Die letzte Folie bleibt die CTA. Die Beispiel-Folie entfällt in der Vorlage.
+- Der Zeichner stellt die Vergleichsfolie auch als Cover richtig dar (geprüft). VORLAGE-BULK-IMPORT.md angepasst.
+
+Alle Adressen laden **karten559**.

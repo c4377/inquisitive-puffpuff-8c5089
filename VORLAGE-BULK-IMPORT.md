@@ -65,13 +65,15 @@ Die Posts liegen auf Anthrazit, mit Schatten und Weißraum. Über jedem Post ste
 
 ```
 Tag 5: Vorher und nachher
-Slide 1: [Messaging] Derselbe Gedanke. *Zweimal.*
-Slide 2: [Messaging] Vorher: W-ABCDE | Nachher: W-FGHIJ & Derselbe Gedanke, *zweimal.*
-Slide 3: Beispiel: W-FGHIJ & Ein Satz, in dem man *sie* erkennt.
+Slide 1: [Messaging] Vorher: W-ABCDE | Nachher: W-FGHIJ & Derselbe Gedanke, *zweimal.*
+Slide 2: Was sich verändert hat: Der Satz sagt jetzt, für wen.
+Slide 3: Und warum das Anfragen bringt.
 Slide 4: Schreib mir STARTEN ↓
 ```
 
-**Ohne Kennungen tippen:** Im ⋮-Menü einer Kachel auf **„Als Vorher/Nachher-Post“** tippen. Cover und letzte Folie bleiben, dazwischen entstehen die Vorher/Nachher-Folie und die Beispiel-Folie. Darunter stehen Felder wie „Folie 2 · Vorher: Screenshot wählen“. Antippen zeigt deine Work-Screenshots, ein Tipp auf ein Bild setzt es ein. Satz und Rubrik änderst du über „Bearbeiten“.
+Die Vergleichsfolie ist das Cover (Slide 1), danach kommt der beschreibende Text, am Ende die CTA. Eine Folie „Beispiel: W-FGHIJ & Satz“ mit einem einzelnen Post kannst du zusätzlich einfügen.
+
+**Ohne Kennungen tippen:** Im ⋮-Menü einer Kachel auf **„Als Vorher/Nachher-Post“** tippen. Die erste Folie wird zur Vorher/Nachher-Folie (dein Hook steht darüber), die Folien danach bleiben als Text, die letzte als CTA. Darunter stehen Felder wie „Folie 2 · Vorher: Screenshot wählen“. Antippen zeigt deine Work-Screenshots, ein Tipp auf ein Bild setzt es ein. Satz und Rubrik änderst du über „Bearbeiten“.
 
 - **Label: Kennung**: Das Label darfst du frei wählen, zum Beispiel `Vorher`, `Nachher`, `Beispiel`, `Davor`, `Woche 1`.
 - **Mehrere Posts**: Bis zu drei Posts nebeneinander, getrennt mit `|`.
