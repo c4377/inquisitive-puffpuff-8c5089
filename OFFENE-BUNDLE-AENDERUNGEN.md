@@ -12824,3 +12824,9 @@ Alle Adressen laden **karten537**.
 - zxFarbe (dunkler Zweig, Foto-Cover): misst die mittlere Helligkeit des Fotos und hebt sie auf mindestens `kontrastFotoZiel` (150), höchstens um `kontrastFotoHub` (60). Dunkle Originalfotos landen so auf derselben Helligkeit wie helle. Helle Fotos bleiben wie in karten537.
 
 Alle Adressen laden **karten538**.
+
+## 493 — Belichtung in beide Richtungen (karten539)
+
+- Die Zielhelligkeit für Foto-Cover liegt jetzt im Band `kontrastFotoMin` 138 bis `kontrastFotoMax` 152 (Mittelwert des Fotos). Dunkle Fotos werden angehoben (höchstens um 60), sehr helle (weißer Blazer, helle Wand) leicht abgesenkt, damit die weiße Schrift trägt.
+
+Alle Adressen laden **karten539**.
