@@ -12838,3 +12838,10 @@ Alle Adressen laden **karten539**.
 - Foto-Cover: Handle nicht mehr oben in der dunklen Pille, sondern unten (94 %) als weiße Schrift mit leichtem Schatten. Freisteller-Cover: Handle ebenfalls unten, die Versalzeile oben rückt auf 6 %.
 
 Alle Adressen laden **karten540**.
+
+## 495 — Schwarz-Regler wirkt wieder auf die Kontrast-Fotos (karten541)
+
+- kontrast-zeichner.js liest denselben Wert wie früher (`BS_SCHWARZ_TAG` für den Tag, sonst `BS_SCHWARZ`, sonst schwarzGrund 0,2) als `zxSchw`. Abweichung vom Grundwert: `zxSchwD = zxSchw − 0,2`.
+- Wirkung auf die Foto-Cover: Zielhelligkeit 138–152 verschiebt sich um −40 × zxSchwD; Schwarzpunkt `60 × zxSchwD` (nur über 20 %, Tiefen werden satt schwarz); Vignette innen 0,06 + 0,15 × zxSchwD, außen 0,5 + 0,4 × zxSchwD (0,25–0,9). Bei 20 % sieht alles aus wie karten539/540.
+
+Alle Adressen laden **karten541**.
