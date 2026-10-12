@@ -12845,3 +12845,11 @@ Alle Adressen laden **karten540**.
 - Wirkung auf die Foto-Cover: Zielhelligkeit 138–152 verschiebt sich um −40 × zxSchwD; Schwarzpunkt `60 × zxSchwD` (nur über 20 %, Tiefen werden satt schwarz); Vignette innen 0,06 + 0,15 × zxSchwD, außen 0,5 + 0,4 × zxSchwD (0,25–0,9). Bei 20 % sieht alles aus wie karten539/540.
 
 Alle Adressen laden **karten541**.
+
+## 496 — Foto-Cover farbneutral, Schwarz ohne Orangestich (karten542)
+
+- zxFarbe (dunkler Zweig): Belichtung und Schwarzpunkt wirken nur noch auf die Helligkeit (Luminanz). Die Farbe wird als Abstand zur Luminanz wieder aufgesetzt, mit Sättigung `kontrastFotoSaett` (0,9) und proportional zur Abdunklung reduziert (mind. 35 %). So werden Hauttöne bei mehr Schwarz nicht oranger.
+- Wärmeverschiebung (Rot +6, Blau −6) entfernt. KONTRAST: `kinoWarm: 0`, `kinoSaettigung: 1` (vorher aus dem Grundlook 0,04 / 1,06).
+- Messwert Hautbereich Testbild (R/G/B): vorher 148/124/111, jetzt 139/124/116.
+
+Alle Adressen laden **karten542**.
