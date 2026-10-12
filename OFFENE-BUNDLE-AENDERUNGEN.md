@@ -12921,3 +12921,12 @@ Alle Adressen laden **karten546**.
 - Regressionstest karten546 gegen 547 (Feed, Cover, CTA, Vorher/Nachher mit Screenshots, Ergebnis, Ablauf, Kundenraum, Freisteller, Export): Alles ist pixelgleich bis auf die Versionsanzeige. Bewusst anders sind nur Folien im alten Format „Selbst gemacht:“/„Von mir gemacht:“, die jetzt als normale Folien erscheinen.
 
 Alle Adressen laden **karten547**.
+
+## 502 — Export in Fotos: zweiter Tipp teilt sofort (karten548)
+
+- Anlass: Carina meldet, „In Fotos“ funktioniert weiterhin nicht (karten547). Beide Exportwege zeichnen erst alle Folien neu und rufen dann `navigator.share` auf. Dauert das Zeichnen zu lange (Gesichtserkennung, Fotobearbeitung, v. a. die CTA-Folie, die vorher nie angezeigt wurde), lehnt iOS das Teilen ab (`NotAllowedError`). Bisher folgte daraus in der Post-Ansicht ein stiller ZIP-Download, in der Plan-Ansicht „Export fehlgeschlagen.“
+- Post-Ansicht (`fe`): Wird das Teilen abgelehnt, bleiben die fertigen Dateien in `window.__bsExpBereit`, mit dem Hinweis „Die Folien sind fertig. Tippe jetzt noch einmal auf „In Fotos““. Der nächste Tipp teilt sofort, ohne neu zu zeichnen (Test: 33 ms).
+- Plan-Ansicht (`Lt`, „Alle in Fotos“): ebenso pro Tag (`window.__bsExpTag`), Hinweis „Tag N ist fertig. Tippe noch einmal …“. Danach geht es wie gewohnt zum nächsten Tag.
+- Fehlermeldungen nennen jetzt den Fehlernamen. Export-Canvas wird nach jeder Folie auf 0×0 gesetzt, die temporären Canvas im Kontrast-Zeichner ebenfalls (iOS-Grenze für Canvas-Speicher).
+
+Alle Adressen laden **karten548**.
