@@ -13046,3 +13046,10 @@ Alle Adressen laden **karten562**.
 - Langes Drücken per Touch ist abgeschaltet (`onTouchStart` entfernt), am Desktop geht es per Maus weiter.
 
 Alle Adressen laden **karten563**.
+
+## 518 — Fotos in Originalfarben (karten564)
+
+- Carina: „Die Farben wieder zurück auf die Originale der Fotos.“
+- `kontrastFotoOriginal: 1`: zxFarbe gibt das Foto unverändert zurück (keine Tonwert-, Farb- und Wärmebearbeitung). `kino: 0`: auch die Grundbearbeitung des Bundles (Kino-Look: Kontrast, Gamma, Schwarz-/Weißpunkt, Sättigung) ist aus. Die Abdunklung hinter dem Text (Verlauf oben und textbezogener Verlauf unten) bleibt und folgt weiter dem Schwarz-Regler. Die Bearbeitung aus 505–509 bleibt im Code und lässt sich mit `kontrastFotoOriginal: 0` wieder einschalten.
+
+Alle Adressen laden **karten564**.
