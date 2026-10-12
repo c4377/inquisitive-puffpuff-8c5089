@@ -73,9 +73,17 @@ Slide 4: Schreib mir STARTEN ↓
 
 Die Vergleichsfolie ist das Cover (Slide 1), danach kommt der beschreibende Text, am Ende die CTA. Eine Folie „Beispiel: W-FGHIJ & Satz“ mit einem einzelnen Post kannst du zusätzlich einfügen.
 
-**Am schnellsten:** Oben in der Plan-Leiste auf **„Vorher/Nachher“** tippen. Das legt einen neuen Post mit Vergleichs-Cover, zwei Textfolien und CTA an. Dann im ⋮-Menü der neuen Kachel die beiden Screenshots wählen und den Text über „Bearbeiten“ schreiben.
+**Am schnellsten (gerenderte Beispiel-Posts):** Oben in der Plan-Leiste auf **„Vorher/Nachher“** tippen. Das legt einen neuen Post an, dessen Cover zwei Posts selbst zeichnet: links den Vorher-Post (so schreibt die Kundin heute, Look etwas unsicher), rechts den Nachher-Post (was sie eigentlich denkt, im Kontrast-Look mit einem KI-Porträt einer Frau aus der Nische). Dann im Menü mit den drei Punkten an der Kachel Nische, Vorher-Text, Nachher-Text und Überschrift eintragen, „Übernehmen“. „Neues Gesicht“ erzeugt ein anderes Porträt. Es sind Beispiele, keine echten Kundinnen: im Post als Beispiel kennzeichnen.
 
-**Ohne Kennungen tippen:** Im ⋮-Menü einer Kachel auf **„Als Vorher/Nachher-Post“** tippen. Die erste Folie wird zur Vorher/Nachher-Folie (dein Hook steht darüber), die Folien danach bleiben als Text, die letzte als CTA. Darunter stehen Felder wie „Folie 2 · Vorher: Screenshot wählen“. Antippen zeigt deine Work-Screenshots, ein Tipp auf ein Bild setzt es ein. Satz und Rubrik änderst du über „Bearbeiten“.
+Im Bulk Import sieht die Folie so aus (Anführungszeichen „…“ um die beiden Texte):
+
+```
+Slide 1: [Vorher / Nachher · Life-Coach] Vorher: „5 Schritte, wie du zu mehr Selbstliebe kommst“ | Nachher: „Du musst dich nicht erst lieben, um *anzufangen*.“ & Aus fünf Tipps wird *eine Haltung*.
+```
+
+**Mit Screenshots:** Im selben Menü „Mit Screenshots“ wählen, dann die beiden Screenshots aussuchen (siehe unten).
+
+**Ohne Kennungen tippen:** Im Menü mit den drei Punkten an einer Kachel auf **„Mit Screenshots“** tippen. Die erste Folie wird zur Vorher/Nachher-Folie (dein Hook steht darüber), die Folien danach bleiben als Text, die letzte als CTA. Darunter stehen Felder wie „Folie 2 · Vorher: Screenshot wählen“. Antippen zeigt deine Work-Screenshots, ein Tipp auf ein Bild setzt es ein. Satz und Rubrik änderst du über „Bearbeiten“.
 
 - **Label: Kennung**: Das Label darfst du frei wählen, zum Beispiel `Vorher`, `Nachher`, `Beispiel`, `Davor`, `Woche 1`.
 - **Mehrere Posts**: Bis zu drei Posts nebeneinander, getrennt mit `|`.

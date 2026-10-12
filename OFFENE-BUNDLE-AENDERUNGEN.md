@@ -13147,3 +13147,13 @@ Alle Adressen laden **karten575**.
 - Life-Coach-Vorher jetzt „5 Schritte, wie du zu mehr Selbstliebe kommst“.
 
 Alle Adressen laden **karten576**.
+
+## 531 — Vorher/Nachher mit gerenderten Beispiel-Posts als echter Ablauf (karten577)
+
+- Carina: Sie will die „falschen“ Posts nicht in Canva bauen; Menü oder so wie die Vorschau. Es geht ums Wording (Vorher-Text ≠ Nachher-Text, Nachher muss treffen), der Vorher-Look ist „kein komplett falsches Branding“, nur unsicher (Proportionen nicht eingehalten o. ä.).
+- Neues Folienformat: `[Vorher / Nachher · Nische] Vorher: „Text“ | Nachher: „Text“ & Überschrift`. Der Zeichner (`zxVNR`) erkennt es und zeichnet beide Posts selbst (zvMach). Hero: KI-Porträt nach Nische (bekannte Nischen mit eigenem Prompt, sonst allgemeiner Prompt), `localStorage` `BS_VN_HERO_<nische>_<variante>`.
+- Vorher-Look neu „unsicher“: Beige-Grund, Foto hart als Kasten oben ohne Rücksicht aufs Gesicht, Georgia fett in Terrakotta, zu groß und randnah, Versalzeile „SPEICHERN & TEILEN!“, Terrakotta-Pille „Swipe >>“ rechts unten, Handle kursiv links unten (uneinheitliche Ausrichtung).
+- Menü (drei Punkte, VNWahl): bei gerenderten Posts Felder Nische, Vorher, Nachher, Überschrift, „Übernehmen“ (`vnText`) und „Neues Gesicht“ (Variante +1). Zwei Vorlagen-Knöpfe: „Mit Beispiel-Posts“ / „Mit Screenshots“ (`vnVorlage(tag, "r"|"s")`). Plan-Knopf „Vorher/Nachher“ legt die gerenderte Variante mit dem Life-Coach-Beispiel an.
+- `kontrastVNVorschau: 0`: die Probe-Ansicht an der hellen Kachel ist aus (sonst wären normale Posts mit Beispiel-Cover exportiert worden).
+
+Alle Adressen laden **karten577**.
