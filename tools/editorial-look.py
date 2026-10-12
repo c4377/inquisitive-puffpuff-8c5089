@@ -233,5 +233,10 @@ ersetze('ct.dispose(),pt.parentNode&&pt.parentNode.removeChild(pt),Vt&&ut.push('
 ersetze('catch(Je){if((Je==null?void 0:Je.name)==="AbortError"){ue("Abgebrochen. Tippe erneut, um fortzusetzen."),Y(!1);return}throw Je}', 'catch(Je){if((Je==null?void 0:Je.name)==="AbortError"){ue("Abgebrochen. Tippe erneut, um fortzusetzen."),Y(!1);return}window.__bsExpTag={i:dt,files:st,day:ut.day};ue(`Tag ${ut.day} ist fertig. Tippe noch einmal auf „In Fotos“ zum Sichern.`),Y(!1);return}', 1)
 ersetze('catch(_e){console.error("Export Failed",_e),ue("Export fehlgeschlagen.")}finally{Y(!1)}', 'catch(_e){console.error("Export Failed",_e),ue("Export fehlgeschlagen ("+(_e&&(_e.name||_e.message)||"")+").")}finally{Y(!1)}', 1)
 
+# Export aus dem Editor (12.10. Carina: falsches CTA-Bild): ctaImage und typography mitgeben wie Vorschau und Plan-Export.
+ersetze('await Ca(or,We,At,Xt,{slideIndex:Ke,totalSlides:$.length,scale:Lr,globalBrandName:be})', 'await Ca(or,We,At,Xt,{slideIndex:Ke,totalSlides:$.length,scale:Lr,globalBrandName:be,typography:(e.currentBrandConfig||{}).typography,ctaImage:(e.currentBrandConfig||{}).ctaImage})', 1)
+ersetze('await Ca(Ft,Ke,We,Bt,{slideIndex:f,totalSlides:T.length,scale:We/At,globalBrandName:((Me=e.currentBrandConfig)==null?void 0:Me.brandText)||""})', 'await Ca(Ft,Ke,We,Bt,{slideIndex:f,totalSlides:T.length,scale:We/At,globalBrandName:((Me=e.currentBrandConfig)==null?void 0:Me.brandText)||"",typography:(e.currentBrandConfig||{}).typography,ctaImage:(e.currentBrandConfig||{}).ctaImage})', 1)
+ersetze('await Ca(Un,Ft,or,Rt,{slideIndex:Xt,totalSlides:T.length,scale:Fr,globalBrandName:Bt})', 'await Ca(Un,Ft,or,Rt,{slideIndex:Xt,totalSlides:T.length,scale:Fr,globalBrandName:Bt,typography:(e.currentBrandConfig||{}).typography,ctaImage:(e.currentBrandConfig||{}).ctaImage})', 1)
+
 open(Z, 'w', encoding='utf-8').write(s)
 print('ok')

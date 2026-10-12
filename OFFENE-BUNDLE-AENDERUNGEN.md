@@ -12930,3 +12930,10 @@ Alle Adressen laden **karten547**.
 - Fehlermeldungen nennen jetzt den Fehlernamen. Export-Canvas wird nach jeder Folie auf 0×0 gesetzt, die temporären Canvas im Kontrast-Zeichner ebenfalls (iOS-Grenze für Canvas-Speicher).
 
 Alle Adressen laden **karten548**.
+
+## 503 — Export aus dem Editor mit CTA-Foto (karten549)
+
+- Anlass: Carina exportiert Tag 2, auf der letzten Folie ist ein anderes Bild als das CTA-Foto. Ursache: Der Export im geöffneten Post („Alle (N) in Fotos“) und zwei weitere Editor-Exporte (ZIP, einzelne Folie) riefen den Zeichner ohne `ctaImage` und `typography` auf. Die letzte Folie fiel dadurch auf das Foto des Posts zurück. Vorschau und Plan-Export gaben beides schon mit.
+- Jetzt bekommen alle drei Aufrufe `ctaImage` und `typography` aus `e.currentBrandConfig`. Test: Ein grünes Test-CTA-Foto ist im exportierten letzten Bild zu sehen.
+
+Alle Adressen laden **karten549**.
