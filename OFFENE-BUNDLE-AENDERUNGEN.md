@@ -12818,3 +12818,9 @@ Alle Adressen laden **karten536**.
 - kontrast-zeichner.js, Foto-Cover: Tonung heller (Kontrast 1,12 um Mitte 138 statt 1,3 um 112, Sättigung 0,92), Grundabdunklung 6 % statt 26 %, Vignette außen 50 % statt 82 %, Verlauf unten 66 % statt 80 %. Die Wand im Testbild ist damit statt ca. 121 jetzt ca. 165 hell (Original 211).
 
 Alle Adressen laden **karten537**.
+
+## 492 — Automatische Belichtung der Foto-Cover (karten538)
+
+- zxFarbe (dunkler Zweig, Foto-Cover): misst die mittlere Helligkeit des Fotos und hebt sie auf mindestens `kontrastFotoZiel` (150), höchstens um `kontrastFotoHub` (60). Dunkle Originalfotos landen so auf derselben Helligkeit wie helle. Helle Fotos bleiben wie in karten537.
+
+Alle Adressen laden **karten538**.
