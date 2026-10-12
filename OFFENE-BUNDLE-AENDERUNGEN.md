@@ -13107,3 +13107,11 @@ Alle Adressen laden **karten570**.
 - Bleibt aus 523: Graphit #3C3934 für die dunklen Kacheln.
 
 Alle Adressen laden **karten571**.
+
+## 526 — fotorahmen: Foto voll, Text am Foto entlang mit Verlauf; helle Kachel luftiger (karten572)
+
+- Carina: „Das Bild kleiner machen ist nicht der Weg. Der Text hätte sich entlang dem Bild aufbauen sollen oder mit einem Overlay, das so verlaufend ist, über dem Foto.“ Und: an der Stelle der hellen Textkachel mehr Weißraum, luftigeres Design (eventuell später Vergleichsposts dort, offen).
+- fotorahmen: Foto wieder fest .42W/.08H, Höhe .6H. Text unten verankert (.88H). Ist unter dem Kinn genug Platz (≥ .2H), läuft die Headline in voller Breite (.86W) über den unteren Fotorand; darüber liegt ein Verlauf in der Grundfarbe (transparent ab knapp über dem Text bzw. Kinn, .72 an der Textoberkante, .95 am Fotorand). Sonst steht der Text als Spalte links neben dem Gesicht (.46–.62W) mit seitlichem Verlauf über dem linken Fotorand (.9 → 0) und einem weichen Verlauf am unteren Fotorand. Das Gesicht bleibt frei.
+- weiss: Headline .12W (`kontrastHellGroesse`), Textbreite .66W (`kontrastHellBreite`), Höhe .4H (`kontrastHellHoehe`), zusätzliche Abstände zwischen Label, Headline und Zeile darunter. Rahmen weiter innen (.06W) und feiner (.003W).
+
+Alle Adressen laden **karten572**.
