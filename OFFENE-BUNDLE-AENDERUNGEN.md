@@ -12953,3 +12953,14 @@ Alle Adressen laden **karten549**.
 - Ein Schwarz-Weiß-Versuch in diesem Schritt wurde verworfen (Carina: „niemand hat gesagt Black and White“). Der Code für ein S/W-CTA-Foto greift nur bei `kontrastFotoSaett: 0` und ist damit aus.
 
 Alle Adressen laden **karten551**.
+
+## 506 — Schneller: Foto-Ergebnisse und Gesichter gemerkt (karten552)
+
+- Anlass: Carina „Warum dauert plötzlich alles so lange“. Messung im Testbrowser (ohne Grafikkarte): Die Gesichtserkennung lag bei 1,9–4,6 s pro Foto-Cover, die Fotobearbeitung bei 0,25–0,6 s. Beides lief bei jedem Neuzeichnen derselben Kachel erneut (8 Durchläufe für 3 Fotos). Seit karten544 (Gesicht) und 551 (Klarheit) kam das spürbar dazu.
+- zxFarbe merkt sich das fertige Ergebnis pro Foto, Ausschnitt, Schwarzwert und Größe (`window.__bsFotoR`, die letzten 12). Neuzeichnen derselben Kachel kostet damit nichts mehr.
+- Gesichtserkennung auf einer Kopie mit höchstens 480 px (Cover, CTA-Foto, Porträt). Vorher lief sie beim CTA-Foto und beim Porträt auf dem Originalfoto.
+- Gesichtsrahmen dauerhaft im Browser gespeichert (`localStorage BS_GESICHT`, die letzten 300; im Kundenraum je Raum getrennt). Der Schlüssel hängt nicht mehr vom Schwarz-Regler und vom Kacheltyp ab. Jedes Foto wird nur noch einmal erkannt, auch über Neuladen hinweg.
+- Neutral-Analyse mit einem Drittel der Stichproben.
+- Ergebnis pixelgleich mit karten551.
+
+Alle Adressen laden **karten552**.
