@@ -108,6 +108,7 @@ Diese Folien legst du nicht per Bulk Import an, sondern über **Ablauf**: Intens
 
 - Oben rechts auf **Mein Raum** tippen, dann **+ Neue Kundin**. Name und Handle eintragen.
 - Im Raum der Kundin: zuerst Fotos hochladen, dann den Bulk Import mit dieser Vorlage.
+- Unter **Settings → Freisteller** ihre freigestellten Fotos hochladen. Ohne eigene Freisteller gibt es im Kundenraum keine Freisteller-Cover.
 - In der Galerie der Kundin ein Foto **Als Porträt** und eins **Als CTA-Foto** wählen. Das Porträt erscheint rund auf ihren Textkacheln, das CTA-Foto auf der letzten Folie.
 - Ihr Name und ihr Handle stehen automatisch unten auf den Kacheln. Deine Fotos, Freisteller, Rubriken und Handschrift-Sätze sind dort nicht drin.
 - Story-Studio und Kommentare sind im Kundenraum aus, weil sie in deiner Stimme schreiben.

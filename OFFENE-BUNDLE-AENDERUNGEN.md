@@ -12830,3 +12830,11 @@ Alle Adressen laden **karten538**.
 - Die Zielhelligkeit für Foto-Cover liegt jetzt im Band `kontrastFotoMin` 138 bis `kontrastFotoMax` 152 (Mittelwert des Fotos). Dunkle Fotos werden angehoben (höchstens um 60), sehr helle (weißer Blazer, helle Wand) leicht abgesenkt, damit die weiße Schrift trägt.
 
 Alle Adressen laden **karten539**.
+
+## 494 — Eigene Freisteller, Name unten ohne Hintergrund (karten540)
+
+- Neu: site/freisteller.js (im head nach kundenraum.js). Fügt in Settings unter „Foto für den Call-to-Action“ den Bereich „Freisteller“ ein: hochladen (nur Bilder mit durchsichtigem Hintergrund, werden auf den sichtbaren Bereich zugeschnitten, max. 1600 px, PNG), Vorschau, löschen. Speicher: IndexedDB „BrandStudioFrei“ (im Kundenraum „BrandStudioFrei__<raum>“), pro Gerät. `window.__bsFreiP` liefert die Data-URLs.
+- kontrast-zeichner.js: Freisteller-Cover (cutwort) nehmen die eigenen Freisteller, sobald welche da sind, sonst die eingebauten /scrap/k*.webp. Im Kundenraum fällt cutwort ohne eigene Freisteller aus dem Rhythmus. Kundenraum-Rhythmus jetzt wie bei Carina: `fotozeilen|weiss|fotoetikett|flaeche|fotozeilen|cutwort`.
+- Foto-Cover: Handle nicht mehr oben in der dunklen Pille, sondern unten (94 %) als weiße Schrift mit leichtem Schatten. Freisteller-Cover: Handle ebenfalls unten, die Versalzeile oben rückt auf 6 %.
+
+Alle Adressen laden **karten540**.
