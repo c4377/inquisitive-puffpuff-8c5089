@@ -13017,3 +13017,10 @@ Alle Adressen laden **karten558**.
 - Der Zeichner stellt die Vergleichsfolie auch als Cover richtig dar (geprüft). VORLAGE-BULK-IMPORT.md angepasst.
 
 Alle Adressen laden **karten559**.
+
+## 514 — Textkacheln ohne Porträt, alte Handschrift, „&“-Zeile wieder da (karten560)
+
+- Carina: Bei den Textkacheln das Foto wieder weg, die frühere Schrift für den schrägen Text, und den Text wieder anzeigen.
+- KONTRAST: `kontrastPortraet: 0` (kein runder Porträt-Kreis, Name und Handle wieder unten), `kontrastSkriptFont` entfernt, damit wieder „Mrs Saint Delafield“ (Rückgängig von 510), `kontrastFloskelnWeg: 0` (der Text nach „&“ erscheint wieder vollständig, Rückgängig von 511). Die automatisch eingestreuten Wörter (`kontrastSkriptJede`) bleiben aus.
+
+Alle Adressen laden **karten560**.
