@@ -13115,3 +13115,11 @@ Alle Adressen laden **karten571**.
 - weiss: Headline .12W (`kontrastHellGroesse`), Textbreite .66W (`kontrastHellBreite`), Höhe .4H (`kontrastHellHoehe`), zusätzliche Abstände zwischen Label, Headline und Zeile darunter. Rahmen weiter innen (.06W) und feiner (.003W).
 
 Alle Adressen laden **karten572**.
+
+## 527 — Probeweise: Vergleichsposts an der Stelle der hellen Textkachel (karten573)
+
+- Carina: „Können wir an die Stelle einfach ein paar perfekte Vergleichsposts kurz setzen? Ich möchte das einmal sehen.“
+- `kontrastVNVorschau: 1`: Jedes Cover, das im Rhythmus `weiss` wäre, wird als Vorher/Nachher-Cover gezeichnet (Graphit, Label „Vorher / Nachher“, Hook des Posts in Serif, zwei Screenshots). Die Screenshots sind zwei aufeinanderfolgende Work-Screenshots (W-) aus ihrer Bibliothek, pro Post andere; es sind keine echten Vorher/Nachher-Paare, nur zum Ansehen des Looks. Ohne W-Screenshots erscheinen die Platzhalter.
+- Am Post selbst ändert sich nichts. Zurück: `kontrastVNVorschau: 0`.
+
+Alle Adressen laden **karten573**.
