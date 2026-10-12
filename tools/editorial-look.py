@@ -251,5 +251,11 @@ VNFUNK = ('vnSetzen=(vd,vs,vk,vc)=>{const vRe=/([^|&\\]\\n]{1,30}?:\\s*)([STW]-[
 ersetze('schildSetzen=(ae,_e)=>{', VNFUNK + 'schildSetzen=(ae,_e)=>{', 1)
 ersetze(' Stories dazu schreiben"]}),', ' Stories dazu schreiben"]}),v.jsx(VNWahl,{post:ae,onSet:(vs,vk,vc)=>vnSetzen(ae.day,vs,vk,vc),onVorlage:()=>{h(null);vnVorlage(ae.day)}}),', 1)
 
+# Knopf „Vorher/Nachher“ in der Plan-Leiste (Carina 12.10.): legt einen neuen Vorher/Nachher-Post am Ende an
+VNNEU = ('vnNeu=()=>{const vN=(i||[]).reduce((vx,vr)=>Math.max(vx,Number(vr&&vr.day)||0),0)+1,vMk={day:vN,title:"Vorher / Nachher",tileMode:"photo",slides:["[Vorher / Nachher] Vorher: W-00000 | Nachher: W-00000 & Derselbe Gedanke, *zweimal.*","Was sich verändert hat: Hier beschreibst du in zwei, drei Sätzen, was im Nachher anders ist.","Und warum das für deine Kundin den Unterschied macht.","Schreib mir STARTEN ↓"].map(vx=>({text:vx,visualElements:[],format:"4:5"}))};'
+         't({contentPlan:Rt([...(i||[]),vMk],We)});$("Vorher/Nachher-Post angelegt: Tag "+vN+". Im ⋮-Menü der Kachel die Screenshots wählen, Text über Bearbeiten.")},')
+ersetze('pinAnlegen=()=>{', VNNEU + 'pinAnlegen=()=>{', 1)
+ersetze('"Ablauf"]}),v.jsxs("button",{onClick:pinAnlegen,', '"Ablauf"]}),v.jsxs("button",{onClick:vnNeu,className:"px-2.5 py-1.5 bg-white text-purple-700 border border-purple-200 rounded-lg font-bold hover:bg-purple-50 transition-colors flex items-center whitespace-nowrap text-[11px]",children:[v.jsx(ke,{icon:AS,className:"mr-2"}),"Vorher/Nachher"]}),v.jsxs("button",{onClick:pinAnlegen,', 1)
+
 open(Z, 'w', encoding='utf-8').write(s)
 print('ok')

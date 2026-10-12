@@ -73,6 +73,8 @@ Slide 4: Schreib mir STARTEN ↓
 
 Die Vergleichsfolie ist das Cover (Slide 1), danach kommt der beschreibende Text, am Ende die CTA. Eine Folie „Beispiel: W-FGHIJ & Satz“ mit einem einzelnen Post kannst du zusätzlich einfügen.
 
+**Am schnellsten:** Oben in der Plan-Leiste auf **„Vorher/Nachher“** tippen. Das legt einen neuen Post mit Vergleichs-Cover, zwei Textfolien und CTA an. Dann im ⋮-Menü der neuen Kachel die beiden Screenshots wählen und den Text über „Bearbeiten“ schreiben.
+
 **Ohne Kennungen tippen:** Im ⋮-Menü einer Kachel auf **„Als Vorher/Nachher-Post“** tippen. Die erste Folie wird zur Vorher/Nachher-Folie (dein Hook steht darüber), die Folien danach bleiben als Text, die letzte als CTA. Darunter stehen Felder wie „Folie 2 · Vorher: Screenshot wählen“. Antippen zeigt deine Work-Screenshots, ein Tipp auf ein Bild setzt es ein. Satz und Rubrik änderst du über „Bearbeiten“.
 
 - **Label: Kennung**: Das Label darfst du frei wählen, zum Beispiel `Vorher`, `Nachher`, `Beispiel`, `Davor`, `Woche 1`.

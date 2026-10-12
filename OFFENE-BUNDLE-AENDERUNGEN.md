@@ -13024,3 +13024,9 @@ Alle Adressen laden **karten559**.
 - KONTRAST: `kontrastPortraet: 0` (kein runder Porträt-Kreis, Name und Handle wieder unten), `kontrastSkriptFont` entfernt, damit wieder „Mrs Saint Delafield“ (Rückgängig von 510), `kontrastFloskelnWeg: 0` (der Text nach „&“ erscheint wieder vollständig, Rückgängig von 511). Die automatisch eingestreuten Wörter (`kontrastSkriptJede`) bleiben aus.
 
 Alle Adressen laden **karten560**.
+
+## 515 — Knopf „Vorher/Nachher“ in der Plan-Leiste (karten561)
+
+- Neuer Knopf neben „Ablauf“ (`vnNeu`, gebaut wie `pinAnlegen`): legt einen neuen Post am Ende des Plans an (höchster Tag + 1, Titel „Vorher / Nachher“). Folien: Vergleich mit Platzhaltern W-00000 als Cover, zwei Textfolien zum Überschreiben, CTA „Schreib mir STARTEN ↓“. Die Fotos vergibt `Rt` wie bei allen neuen Posts. Danach wählt man die Screenshots im ⋮-Menü der Kachel.
+
+Alle Adressen laden **karten561**.
