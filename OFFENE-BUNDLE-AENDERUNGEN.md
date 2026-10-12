@@ -12979,3 +12979,10 @@ Alle Adressen laden **karten553**.
 - Ergebnis aus Testserien (normal, dunkel, hell/milchig, Orange-, Blaustich): normal, dunkel und Blau kommen gleichmäßig heraus. Ein sehr starker Orangestich bleibt teilweise (Grenze 8 %), beim künstlich flachen Testfoto entsteht ein Streifen an der Wand. Carina beurteilt mit echten Fotos in der App.
 
 Alle Adressen laden **karten554**.
+
+## 509 — Fotos leicht wärmer (karten555)
+
+- Carina: „Vielleicht machen wir alle wärmer? So wie Bild eins?“ (Foto mit weißem Top, warmes Licht). Gemessen hat Bild 1 in den neutralsten Flächen R/G 1,02, über das ganze Bild R−B 27. Das kühlere Bild 2 lag bei 21.
+- zxFarbe: Nach dem neutralen Abgleich wird Rot × (1 + `kontrastWaerme`) und Blau × (1 − 1,3 × `kontrastWaerme`) genommen, die Helligkeit bleibt erhalten. `kontrastWaerme: 0.035`.
+
+Alle Adressen laden **karten555**.
