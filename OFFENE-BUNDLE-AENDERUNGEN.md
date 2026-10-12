@@ -12964,3 +12964,10 @@ Alle Adressen laden **karten551**.
 - Ergebnis pixelgleich mit karten551.
 
 Alle Adressen laden **karten552**.
+
+## 507 — Kein Nachschärfen mehr (karten553)
+
+- Carina: „Das Problem ist die Schärfe, viel zu scharfe Bilder.“ Die Klarheit aus 505 (Detailkontrast, `kontrastKlarheit` 0,45) erzeugte überschärfte Fotos und helle Säume an Kanten (Haare vor der Wand).
+- `kontrastKlarheit: 0` im Kontrast-Look: Der Klarheits-Durchgang entfällt ganz. Gemessene Feinschärfe im Testfoto: 3,74 (552) → 2,58. Alles andere wie in 552.
+
+Alle Adressen laden **karten553**.
