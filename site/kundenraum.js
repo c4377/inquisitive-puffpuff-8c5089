@@ -44,6 +44,23 @@
   IDBFactory.prototype.open = function (n, v) { return v === undefined ? IO.call(this, db(n)) : IO.call(this, db(n), v); };
   IDBFactory.prototype.deleteDatabase = function (n) { return ID.call(this, db(n)); };
 
+  /* Carinas CTA-Foto und Porträt gehören nicht in den Raum einer Kundin. Ältere Räume haben sie beim
+     Anlegen mitkopiert: Stimmen sie mit Carinas Werten überein, werden sie hier entfernt. */
+  try {
+    var eigen = JSON.parse(rohLesen("brandSettings") || "null") || {}, ec = eigen.currentBrandConfig || {};
+    var rs = JSON.parse(rohLesen(P + "brandSettings") || "null");
+    if (rs) {
+      var geaendert = false;
+      [rs.currentBrandConfig].concat(rs.brandConfigurations || []).forEach(function (c) {
+        if (!c) return;
+        ["ctaImage", "portraitImage"].forEach(function (f) {
+          if (c[f] && (c[f] === ec.ctaImage || c[f] === ec.portraitImage)) { c[f] = null; geaendert = true; }
+        });
+      });
+      if (geaendert) rohSchreiben(P + "brandSettings", JSON.stringify(rs));
+    }
+  } catch (e) {}
+
   var name = String(info.name || "Kundin"), handle = String(info.handle || "");
   if (handle && handle.charAt(0) !== "@") handle = "@" + handle;
   window.BS_RAUM_K = {
@@ -120,7 +137,19 @@
       while (liste.some(function (r) { return r && r.id === id; })) id = basis + "-" + n++;
       liste.push({ id: id, name: name, handle: handle, angelegt: new Date().toISOString().slice(0, 10) });
       roh.schreiben("BS_RAEUME", JSON.stringify(liste));
-      ["brandSettings", "BS_STIL", "BS_MARKE"].forEach(function (k) { var v = roh.lesen(k); v !== null && roh.schreiben("R:" + id + ":" + k, v); });
+      ["brandSettings", "BS_STIL", "BS_MARKE"].forEach(function (k) {
+        var v = roh.lesen(k);
+        if (v === null) return;
+        if (k === "brandSettings") {
+          /* Ohne Carinas CTA-Foto und Porträt: die Kundin wählt ihre eigenen. */
+          try {
+            var o = JSON.parse(v);
+            [o.currentBrandConfig].concat(o.brandConfigurations || []).forEach(function (c) { if (c) { c.ctaImage = null; c.portraitImage = null; } });
+            v = JSON.stringify(o);
+          } catch (e) {}
+        }
+        roh.schreiben("R:" + id + ":" + k, v);
+      });
       wechsel(id);
     });
     m.appendChild(neu);

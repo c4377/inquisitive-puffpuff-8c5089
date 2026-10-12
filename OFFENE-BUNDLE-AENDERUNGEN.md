@@ -12917,5 +12917,7 @@ Alle Adressen laden **karten546**.
 - Gelöscht: alter React-Quellcode (`src/`, `public/`, `index.html`, `package.json`, vite/eslint/tailwind/postcss), die Werkzeuge der früheren Build-Kette (`bundle-patchen.py`, `frech-look.py` u. a.), `EINBAU.md`, `NACHGEZOGEN.md`. Alles bleibt in der Git-Historie.
 - `index.html`: Look fest auf Kontrast, `?look=` entfällt, Kommentare aktualisiert. `ziel-pruefen.py` prüft nur noch `site/index.html`, zusätzlich die Auffangregel.
 - Neu geschrieben: `README.md` und `EINSPIELEN.md`.
+- Kundenraum (kundenraum.js v3): Beim Anlegen einer Kundin wurden Carinas CTA-Foto und Porträt mit den Brand-Einstellungen kopiert, sodass ihr Gesicht in den Posts der Kundin gelandet wäre. Jetzt werden beide beim Anlegen geleert. In bestehenden Räumen werden sie beim Öffnen entfernt, wenn sie mit Carinas Werten übereinstimmen.
+- Regressionstest karten546 gegen 547 (Feed, Cover, CTA, Vorher/Nachher mit Screenshots, Ergebnis, Ablauf, Kundenraum, Freisteller, Export): Alles ist pixelgleich bis auf die Versionsanzeige. Bewusst anders sind nur Folien im alten Format „Selbst gemacht:“/„Von mir gemacht:“, die jetzt als normale Folien erscheinen.
 
 Alle Adressen laden **karten547**.
