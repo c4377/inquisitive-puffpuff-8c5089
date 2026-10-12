@@ -116,9 +116,11 @@ KLAR = {'magTitelVersal': 0, 'magCoverSerif': 'Instrument Serif', 'magCoverSerif
 KLAR_PLAYFAIR = {'magCoverSerif': 'Playfair Display', 'magSerif': 'Playfair Display', 'magSerifLaufweite': -15, 'magCoverFs': 0.066, 'magH2Fs': 0.074,
                  'premiumSerif': 'Playfair Display', 'scrapFarben': {**KLAR['scrapFarben'], 'tf': 'Playfair Display', 'rf': 'Playfair Display', 'tcs': -10, 'tsk': 1.0}}
 # Kontrast: Schwarz, Weiß, Anthrazit #33363A, leichter Oxblood-Akzent #5E1A21 (seit 10.10. abends, vorher Oxblood), S/W-Fotos mit hartem Kontrast (tools/kontrast-zeichner.js)
-KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'fotozeilen|papier|fotoetikett|flaeche|fotozeilen|cutwort|weiss', 'kontrastPapierGrund': '#2B2D30', 'bildTon': '22,23,24', 'ablaufTiefeOben': 0.84, 'ablaufTiefeMitte': 0.76, 'ablaufTiefeUnten': 0.92, 'grundA': '#33363A', 'magKontrastCut': 'k3|k2|k7|k4|k5',
+KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'fotozeilen|weiss|flaeche|papier|fotoetikett|weiss|cutwort', 'kontrastPapierGrund': '#2B2D30', 'bildTon': '22,23,24', 'ablaufTiefeOben': 0.84, 'ablaufTiefeMitte': 0.76, 'ablaufTiefeUnten': 0.92, 'grundA': '#33363A', 'magKontrastCut': 'k3|k2|k7|k4|k5',
             'magKontrastRubrik': 'Ehrlich jetzt|Klartext|Ja-Sagerinnen wissen|Notiz an dich|Aus meinem Alltag', 'kontrastOx': '#33363A', 'magSkriptJede': 0,
-            'kontrastSerif': 'Instrument Serif', 'magCoverSerif': 'Instrument Serif', 'magSerif': 'Instrument Serif', 'magSerifLaufweite': -45,
+            'kontrastSerif': 'CormorantKontrast', 'magCoverSerif': 'CormorantKontrast', 'magSerif': 'CormorantKontrast', 'magSerifLaufweite': 0, 'kontrastLaufweite': 0,
+            'kontrastPapierGroesse': 0.075, 'kontrastPapierBreite': 0.7, 'kontrastFlaecheGroesse': 0.1, 'kontrastTextBreite': 0.72, 'kontrastTextHoehe': 0.42, 'kontrastHell': '#F7F4EF',
+            'kontrastFotoGroesse': 0.1, 'kontrastFotoBreite': 0.76, 'kontrastVersal': 0.03, 'kontrastFotoSkript': 0.07, 'kontrastFotoHoehe': 0.42, 'kontrastErgebnisGroesse': 0.065, 'kontrastCutGroesse': 0.48, 'kontrastAblauf': 1,
             'kontrastSkript': 'hör mal|ehrlich jetzt|merk dir das|Achtung', 'kontrastSkriptJede': 2, 'kontrastOrange': '#E2BFB2', 'kontrastAkzent': '#5E1A21', 'kontrastAkzentHell': '#E2BFB2',
             'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.14}
 # Carinas Stift: Farbfotos mit weißer Gloock-Schrift + schwarze Text-Kacheln, orangener Stift (tools/stift-zeichner.js)
@@ -259,7 +261,8 @@ KONTZ = open(__file__.rsplit('/', 1)[0] + '/kontrast-zeichner.js', encoding='utf
 PREMZ = open(__file__.rsplit('/', 1)[0] + '/premium-zeichner.js', encoding='utf-8').read().split('*/', 1)[1].strip()
 ZEICHNER = ZEICHNER.replace('if(zCover&&!zMark&&K.magCoverInline===1)', KLARZ + PREMZ + SCRAP + KONTZ + STIFTZ + CARINAZ + STATEZ + LEINENZ + BURGZ + UNTERZ + FOTOSZ + 'if(zCover&&!zMark&&K.magCoverInline===1)', 1).replace('zTyp==="flaeche"&&(zSch=void 0);', '(zTyp==="flaeche"||zTyp0==="scrap")&&(zSch=void 0);', 1)
 ANKER = 'if($e&&(t.karte==="ablauf"||t.reminderArt==="ablauf")){const Ab=T1('
-ersetze(ANKER, ZEICHNER.replace('\n', '') + ANKER)
+ABLZ = open(__file__.rsplit('/', 1)[0] + '/kontrast-ablauf.js', encoding='utf-8').read().split('*/', 1)[1].strip()
+ersetze(ANKER, ABLZ.replace('\n', '') + ZEICHNER.replace('\n', '') + ANKER)
 ersetze('title:"Geladene Datei",children:"karten451"', f'title:"Geladene Datei",children:"karten{VERSION}"')
 # Caption-Bereich im Editor scrollbar (Kommentare + Alternativtexte machen ihn lang)
 ersetze('className:"p-4 max-w-3xl mx-auto space-y-3",children:v.jsxs("div",{children:[v.jsxs("div",{className:"flex items-center justify-between mb-1",children:[v.jsx("label",{className:"text-xs font-bold text-gray-700 uppercase tracking-wider",children:"Caption"})',

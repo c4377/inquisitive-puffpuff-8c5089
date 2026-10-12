@@ -12740,3 +12740,21 @@ Alle Adressen laden **karten530**.
   Content/1:1 sechs Monate). Für die Folien gilt die Startseite.
 
 Alle Adressen laden **karten531**.
+
+## 486 — Kontrast leiser, Vorher/Nachher-Paar, Zusammenarbeit-Folien (karten532)
+
+- Carina: „Ich fühle die Schrift nicht … insgesamt zu bossy. Zwischenbereich: Expertin, aber auch
+  Dienstleisterin … mehr White Space … helle und dunkle Slides … ein Slide und ein Slide daneben, komplett
+  anderes Branding, der erste klassisch selbstgemacht, der andere von mir gemacht.“
+- Schrift: CormorantKontrast = Cormorant Garamond, mit fontTools auf Gewicht 520 instanziert
+  (site/fonts/CormorantKontrast-520*.woff2, OFL). Laufweite 0 statt −30/−45.
+- Weißraum: Text-Kacheln 10 % statt 19 % der Breite, Textbreite 72 %, Foto-Hook 10 % statt 18 %, Versalzeilen 3 %,
+  Ergebnis-Hook 6,5 %, Cutwort 48 % (Schrumpfen nutzt jetzt denselben Wert). Alles über K-Parameter.
+- weiss-Kachel wieder hell (#F7F4EF, Schrift #1A1714, Akzent Oxblood). Zyklus hell/dunkel abwechselnd:
+  fotozeilen|weiss|flaeche|papier|fotoetikett|weiss|cutwort.
+- Vorher/Nachher: Folientext „Selbst gemacht: …“ (auch „Vorher:“) → DIY-Canva-Look; „Von mir gemacht: …“
+  (auch „Nachher:“) → ruhiges Fremd-Branding. Etikett oben rechts. Text nach „&“ = Unterzeile.
+- Zusammenarbeit/Ablauf: tools/kontrast-ablauf.js zeichnet Ablauf-Karten selbst (kontrastAblauf: 1),
+  abwechselnd hell/dunkel, Cormorant-Titel, Stationen als Punkte, Listen mit Nummern, Seitenzahl.
+
+Alle Adressen laden **karten532**.
