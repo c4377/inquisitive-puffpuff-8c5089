@@ -12986,3 +12986,11 @@ Alle Adressen laden **karten554**.
 - zxFarbe: Nach dem neutralen Abgleich wird Rot × (1 + `kontrastWaerme`) und Blau × (1 − 1,3 × `kontrastWaerme`) genommen, die Helligkeit bleibt erhalten. `kontrastWaerme: 0.035`.
 
 Alle Adressen laden **karten555**.
+
+## 510 — Export-Speicher, größere Klammerzeile, neue Handschrift (karten556)
+
+- Export: Carina meldet erneut „Export in Fotos geht nicht“ (karten554). Verdacht: Der Ergebnis-Cache aus 506 hielt bis zu 12 fertige Foto-Canvas, auch in Exportgröße (1080 × 1350, je ca. 6 MB). Das belastet die Canvas-Speichergrenze von iOS, die der Export selbst braucht. Jetzt höchstens 4 Einträge und nur bis 900 px Breite (Vorschau). Exportgröße wird nicht mehr gecacht. Im Desktop-Test läuft der Export durch (3 Folien, 11 s). Auf dem iPhone noch nicht bestätigt.
+- Klammerzeile in Versalien unter dem Hook auf Foto-Covern: Faktor `kontrastKlammerGroesse` 1,05 statt 0,76 (ca. +38 %).
+- Handschrift (Text nach „&“, Skript-Zeile): `kontrastSkriptFont` „Nothing You Could Do“ statt „Mrs Saint Delafield“, wie in Carinas veröffentlichtem Feed.
+
+Alle Adressen laden **karten556**.
