@@ -12853,3 +12853,11 @@ Alle Adressen laden **karten541**.
 - Messwert Hautbereich Testbild (R/G/B): vorher 148/124/111, jetzt 139/124/116.
 
 Alle Adressen laden **karten542**.
+
+## 497 — Foto-Cover wie Carinas veröffentlichte Posts: Gamma-Kurve statt Mittelwert-Verschiebung (karten543)
+
+- Referenz: Carinas Post vom 25.9. (Jeans-Outfit, „Du brauchst keinen neuen Kurs“). Gemessen hatte er eine mittlere Helligkeit von 120, einen Median von 104 und eine Farbigkeit von 17. Das Cover im Stand karten542 lag bei 138 / 142 / 12: grau und flach, weil helle Fotos als Ganzes in die Mitte geschoben wurden und Weiß dadurch grau wurde.
+- Neu in zxFarbe (dunkler Zweig): Schwarzpunkt `kontrastFotoSchwarz` (6) + 60 × zxSchwD, danach eine Gamma-Kurve. Das Gamma wird per Bisektion so gewählt, dass der Mittelwert `kontrastFotoZiel` (118) − 45 × zxSchwD trifft. Weiß bleibt weiß, die Mitten werden dunkler, der Kontrast steigt.
+- Die Farbe wird luminanzbezogen wieder aufgesetzt (Faktor L'/L, begrenzt auf 0,9–1,3) mit `kontrastFotoSaett` 1,08. Die Farbe geht beim Abdunkeln nicht mehr verloren, und es entsteht kein Orangestich (R−B im Testbild unverändert, ca. 5).
+
+Alle Adressen laden **karten543**.
