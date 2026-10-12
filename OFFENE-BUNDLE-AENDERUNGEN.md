@@ -13181,3 +13181,10 @@ Alle Adressen laden **karten579**.
 - Nachher-Hero: fünf Moodbild-Prompts ohne Personen und ohne Logos (`zvMood`: Marmortisch mit Designertasche/Sonnenbrille/Latte/Buch, Leinensofa mit Kaschmirdecke und Buch, Travertin-Beistelltisch mit Sonnenbrille/Espresso, Nussholz-Schreibtisch mit Lederbuch, Hotelbett mit Frühstückstablett). Auswahl nach dem Nachher-Text, `localStorage` `BS_VN_MOOD_<i>_<variante>`. Menü-Knopf „Neues Gesicht“ → „Neues Bild“.
 
 Alle Adressen laden **karten580**.
+
+## 535 — Vorher/Nachher-Bilder auf jeder Folie setzbar (karten581)
+
+- Carina (Screenshot: Vergleichs-Vorschau an der hellen Kachel, Reiter Vorher/Nachher zeigt nur „Nur bei Vorher/Nachher-Posts“): „Wo kann ich die Bilder ändern?“
+- Reiter „Vorher/Nachher“ zeigt die beiden Bildfelder jetzt immer. Setzt man auf einer normalen Folie ein Bild, wird sie zur Vorher/Nachher-Folie: Label „Vorher / Nachher“, darüber der Hook des Posts (`zxVNohne`). Hinweis im Reiter erklärt das; ✕ nimmt das Bild wieder raus.
+
+Alle Adressen laden **karten581**.
