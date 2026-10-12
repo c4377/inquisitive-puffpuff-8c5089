@@ -13173,3 +13173,11 @@ Alle Adressen laden **karten578**.
 - (3) Drei-Punkte-Knopf z-30 → z-[15] (die klebende Plan-Leiste hat z-30).
 
 Alle Adressen laden **karten579**.
+
+## 534 — Vergleichsposts: vier Vorher-Designs, Nachher mit Premium-Moodbild (karten580)
+
+- Carina: Das Vorher muss immer ein anderes Design sein, manchmal ohne Foto, aber klar lesbar. Für den Nachher-Post ein KI-Bild mit Premium-Vibe (Kaffeetisch mit Designertasche oder Sonnenbrille, Couch-Ausschnitt mit Decke und Buch), Moodbilder statt KI-Personen.
+- Vorher (`zvMach("v")`), Design nach dem Vorher-Text gewählt (Hash % 4): 0 Beige mit hart beschnittenem Bild-Kasten, Georgia fett Terrakotta, „SPEICHERN & TEILEN!“, Swipe-Pille; 1 Pastell-Verlauf, Arial fett, weiße Swipe-Pille; 2 Creme mit Doppelrahmen, „Mein Tipp für dich:“, Georgia fett, Herzchen-Handle; 3 Petrol, Versalien Arial Black, gelber Marker unter der letzten Zeile, „TEIL 1“-Badge. 1–3 ohne Foto. Alles kontrastreich.
+- Nachher-Hero: fünf Moodbild-Prompts ohne Personen und ohne Logos (`zvMood`: Marmortisch mit Designertasche/Sonnenbrille/Latte/Buch, Leinensofa mit Kaschmirdecke und Buch, Travertin-Beistelltisch mit Sonnenbrille/Espresso, Nussholz-Schreibtisch mit Lederbuch, Hotelbett mit Frühstückstablett). Auswahl nach dem Nachher-Text, `localStorage` `BS_VN_MOOD_<i>_<variante>`. Menü-Knopf „Neues Gesicht“ → „Neues Bild“.
+
+Alle Adressen laden **karten580**.
