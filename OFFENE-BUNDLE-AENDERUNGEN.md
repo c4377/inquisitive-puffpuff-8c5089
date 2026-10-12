@@ -12882,3 +12882,13 @@ Alle Adressen laden **karten544**.
 - Vignette: Die runde Vignette ist entfernt. Oben liegt ein Verlauf über 34 % der Höhe (Rand 0,55 + 0,4 × zxSchwD), unten einer über 62 % (Mitte 0,32, Rand 0,78, jeweils + Anteil × zxSchwD). Die Seiten bleiben frei. Die Abdunklung ist neutral schwarz (8,8,8) statt warm (10,7,6).
 
 Alle Adressen laden **karten545**.
+
+## 500 — Export entlastet: Foto-Analyse einmal pro Foto, gecacht (karten546)
+
+- Anlass: Carina meldet „exportiert nicht mehr in Fotos“. Beim Export (`Alle (N) in Fotos`) wird jede Folie neu gezeichnet. Seit karten544/545 liefen dabei pro Foto-Cover erneut face-api (`HV`) und eine Neutral-Analyse mit ca. 200.000 Pixel-Arrays und vier Sortierungen. Auf dem iPhone kostet das viel Zeit und Speicher.
+- zxFarbe neu: Die Analyse (Gesichtshaut, Gamma, neutrale Faktoren) läuft auf einer kleinen Kopie (max. 320 px) und wird pro Foto/Ausschnitt/Schwarzwert in `window.__bsFotoP` gecacht. Angewendet wird in einem einzigen Durchgang mit einer Gamma-Tabelle (LUT).
+- Der Gesichtsrahmen wird pro Foto/Ausschnitt in `window.__bsFotoB` gecacht. Beim Export läuft keine zweite Erkennung mehr.
+- Ergebnis farbgleich mit karten545 (Wandwerte im Test identisch). Im Test zeigte die Messung 3 statt 6 Analysen beim Öffnen plus Export.
+- Messung im Desktop-Test (3 Folien, simuliertes Teilen): karten534 13,4 s, 540 12,4 s, 545 15,0 s, 546 12,9 s. Der Grundaufwand des Exports ist alt und hängt nicht an diesen Änderungen.
+
+Alle Adressen laden **karten546**.
