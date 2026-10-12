@@ -13091,3 +13091,10 @@ Alle Adressen laden **karten568**.
 - Helle Textkachel (`weiss`): feiner Rahmen in Beige #B8A48E, Abstand .045 der Breite, Strich .004 (`kontrastRahmenHell`, `kontrastRahmenAbstand`, `kontrastRahmenStrich`, `kontrastRahmenFarbe`; `kontrastRahmenHell: 0` schaltet ihn ab).
 
 Alle Adressen laden **karten569**.
+
+## 524 — fotorahmen: Text nie über dem Foto (karten570)
+
+- Carina: „Der Text bei dem neuen Layout soll das Bild nicht übertreffen.“
+- Text (Headline .86 breit, Zeile darunter) steht jetzt immer unter dem Foto, unten verankert bei .88H. Das Foto endet .035H über dem Text: Höhe zwischen .4H (`kontrastRahmenMinH`) und .6H (`kontrastRahmenH`). Lange Hooks machen das Foto kürzer und die Schrift kleiner (Headline maximal .34H), überlappen nie. Die Ausweich-Logik aus 519 ist damit ersetzt.
+
+Alle Adressen laden **karten570**.
