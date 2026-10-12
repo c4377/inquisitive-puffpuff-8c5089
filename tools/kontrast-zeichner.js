@@ -13,11 +13,29 @@
    gesetzt; ein Zitat „…“ im Hook ist dann die Betonung (kursiv, Akzentfarbe).
    Seit 11.10. „mehr wie Eva“: Fotos dunkler/kontrastreicher, weiss und cutwort auf Fast-Schwarz, Papier auf Anthrazit,
    größere Schrift, Foto-Kacheln ohne Rubrik.
+   Ergebnis (seit 12.10.): Folien mit zugeordnetem Screenshot (overlayIsScreenshot) werden eigene Ergebnis-Folien:
+   Fast-Schwarz, Etikett ERGEBNIS, Hook (overlayHook) in Serif mit Rosé-Kursivwort, Screenshot im weißen Rahmen mit
+   Rosé-Tape und Schatten, Text nach „&“ als Handschrift, Absender unten.
    Absender @carinaannaprav auf jeder Kachel und Folgefolie.
    Folgefolien: weiß mit schwarzer Schrift, letzte Folie Oxblood mit weißer Schrift.
    Wird von editorial-look.py eingesetzt; alle Zeilenumbrüche werden entfernt. */
 if(K.magKontrastFeed){const zxL=String(K.magKontrastFeed).split("|").filter(Boolean),zxTg=Number(t._tag)||0,zxTyp=zxL[(zxTg%zxL.length+zxL.length)%zxL.length];
 const zxOX=K.kontrastOx||"#5E1A21",zxAK=K.kontrastAkzent||zxOX,zxIS=K.kontrastSerif||K.magCoverSerif||"Instrument Serif",zxHN="HelveticaNeueBrand",zxSC=K.kontrastSkriptFont||"Mrs Saint Delafield",zxOR=K.kontrastOrange||"#F4A06C";
+if(t.overlayIsScreenshot===!0&&t.overlayImage){try{await Promise.race([Promise.all([`400 40px "${zxIS}"`,`italic 400 40px "${zxIS}"`,`500 40px ${zxHN}`,`400 40px "${zxSC}"`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,4e3))])}catch(zz){}
+e.getObjects().forEach(zo=>{zo.visible=!1});const zxEG=K.kontrastErgebnisGrund||K.kontrastDunkel||"#161718",zxEH=K.kontrastAkzentHell||"#E2BFB2";e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:zxEG,...zNo}));
+const zxER=String(t.overlayHook||"").trim(),zxEA=zxER.search(/(^|\s)&\s/),zxEHk=(zxEA>=0?zxER.slice(0,zxEA):zxER).trim(),zxESk=zxEA>=0?zxER.slice(zxEA).replace(/^\s*&\s*/,"").replace(/\*+/g,"").trim():"";
+let zxEy=zH*.055;const zxEL=new zFb.Text(String(K.kontrastErgebnisLabel||"ERGEBNIS"),{fontFamily:zxHN,fontWeight:"500",fontSize:zW*.022,charSpacing:420,fill:zxEH,originX:"center",left:zW/2,top:zxEy,...zNo});e.add(zxEL);
+const zxElw=(zxEL.width||0)/2+zW*.035;e.add(new zFb.Rect({left:zW/2-zxElw-zW*.06,top:zxEy+(zxEL.height||0)/2-1,width:zW*.06,height:Math.max(2,zW*.002),fill:zxEH,...zNo}));e.add(new zFb.Rect({left:zW/2+zxElw,top:zxEy+(zxEL.height||0)/2-1,width:zW*.06,height:Math.max(2,zW*.002),fill:zxEH,...zNo}));zxEy+=(zxEL.height||0)+zH*.03;
+if(zxEHk){let zp="";const zst={};zxEHk.split(/(\*[^*]+\*)/).filter(Boolean).forEach(zq=>{const zk=/^\*.*\*$/.test(zq),ztx=zk?zq.slice(1,-1):zq;for(let k=0;k<ztx.length;k++)zk&&(zst[zp.length+k]={fontStyle:"italic",fill:zxEH});zp+=ztx});if(!Object.keys(zst).length){const zm=/([A-Za-zÄÖÜäöüß\-]+)[.!?…“”"]*\s*$/.exec(zp);if(zm)for(let k=zm.index;k<zm.index+zm[1].length;k++)zst[k]={fontStyle:"italic",fill:zxEH}}
+let zfs=zW*.085,ztb=null;for(let k=0;k<30;k++){ztb=new zFb.Textbox(zp,{width:zW*.86,fontFamily:zxIS,fontWeight:"400",fontSize:zfs,lineHeight:.9,charSpacing:-30,fill:"#FFFFFF",textAlign:"center",styles:{0:zst},...zNo});if(ztb.height<=zH*.2)break;zfs*=.93}ztb.set({left:zW*.07,top:zxEy});e.add(ztb);zxEy+=ztb.height+zH*.035}
+const zxEu=zH*(zxESk?.8:.87),zxEim=await new Promise(zr=>{const zq=new Image();/^https?:/.test(String(t.overlayImage))&&(zq.crossOrigin="anonymous");zq.onload=()=>zr(zq);zq.onerror=()=>zr(null);zq.src=t.overlayImage});
+if(zxEim){const zpad=zW*.016,zmw=zW*.78,zmh=Math.max(zH*.3,zxEu-zxEy),zs=Math.min((zmw-2*zpad)/zxEim.width,(zmh-2*zpad)/zxEim.height),ziw=zxEim.width*zs,zih=zxEim.height*zs,zang=((Number(t._tag)||0)+((i&&i.slideIndex)||0))%2?1.2:-1.2;
+const ztp=zx=>new zFb.Rect({width:zW*.13,height:zW*.04,fill:zxEH,opacity:.8,originX:"center",originY:"center",left:zx,top:-(zih/2+zpad),angle:zx<0?-8:8});
+e.add(new zFb.Group([new zFb.Rect({width:ziw+2*zpad,height:zih+2*zpad,rx:zW*.018,ry:zW*.018,fill:"#FFFFFF",originX:"center",originY:"center",left:0,top:0}),new zFb.Image(zxEim,{scaleX:zs,scaleY:zs,originX:"center",originY:"center",left:0,top:0,clipPath:new zFb.Rect({width:zxEim.width,height:zxEim.height,rx:zW*.012/zs,ry:zW*.012/zs,originX:"center",originY:"center"})}),ztp(-ziw/2+zW*.05),ztp(ziw/2-zW*.05)],{left:zW/2,top:zxEy+(zxEu-zxEy)/2,originX:"center",originY:"center",angle:zang,shadow:new zFb.Shadow({color:"rgba(0,0,0,0.5)",blur:zW*.04,offsetX:0,offsetY:zW*.015}),...zNo}))}
+else e.add(new zFb.Textbox("Screenshot konnte nicht geladen werden",{left:zW*.1,top:zH*.45,width:zW*.8,fontFamily:zxHN,fontSize:zW*.03,fill:zxEH,textAlign:"center",...zNo}));
+zxESk&&e.add(new zFb.Text(zxESk,{fontFamily:zxSC,fontSize:zW*.075,fill:zxEH,originX:"center",left:zW/2,top:zH*.825,angle:-3,...zNo}));
+e.add(new zFb.Text(String(K.kontrastAbsender||"CARINA ANNA PRAV"),{fontFamily:zxHN,fontWeight:"500",fontSize:zW*.0145,charSpacing:450,fill:"#85898C",originX:"center",left:zW/2,top:zH*.925,...zNo}));e.add(new zFb.Text(String(K.kontrastHandle||"@carinaannaprav"),{fontFamily:zxHN,fontWeight:"500",fontSize:zW*.022,charSpacing:100,fill:"#85898C",originX:"center",left:zW/2,top:zH*.925+zW*.03,...zNo}));
+e.renderAll();return}
 if(!zCover){const zxN=(i&&i.slideIndex)||0,zxTot=(i&&i.totalSlides)||0,zxLetzte=zxTot>1&&zxN>=zxTot-1;e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:zxLetzte?zxOX:"#FFFFFF",...zNo}));e.add(new zFb.Text(String(K.kontrastHandle||"@carinaannaprav"),{fontFamily:"HelveticaNeueBrand",fontWeight:"500",fontSize:zW*.022,charSpacing:100,fill:zxLetzte?"rgba(255,255,255,0.75)":"#85898C",originX:"center",left:zW/2,top:zH*.935,...zNo}));TXT=zxLetzte?"#FFFFFF":"#0A0706";AK=zxLetzte?(K.kontrastAkzentHell||"#FFFFFF"):zxAK;zkKeinSchatten=!0;zkObenA=0}
 else{
 try{await Promise.race([Promise.all([`400 40px "${zxIS}"`,`italic 400 40px "${zxIS}"`,`500 40px "${zxHN}"`,`700 40px "${zxHN}"`,`400 40px "${zxSC}"`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,4e3))])}catch(zz){}

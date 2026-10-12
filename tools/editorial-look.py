@@ -116,7 +116,7 @@ KLAR = {'magTitelVersal': 0, 'magCoverSerif': 'Instrument Serif', 'magCoverSerif
 KLAR_PLAYFAIR = {'magCoverSerif': 'Playfair Display', 'magSerif': 'Playfair Display', 'magSerifLaufweite': -15, 'magCoverFs': 0.066, 'magH2Fs': 0.074,
                  'premiumSerif': 'Playfair Display', 'scrapFarben': {**KLAR['scrapFarben'], 'tf': 'Playfair Display', 'rf': 'Playfair Display', 'tcs': -10, 'tsk': 1.0}}
 # Kontrast: Schwarz, Weiß, Anthrazit #33363A, leichter Oxblood-Akzent #5E1A21 (seit 10.10. abends, vorher Oxblood), S/W-Fotos mit hartem Kontrast (tools/kontrast-zeichner.js)
-KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'fotozeilen|papier|fotoetikett|flaeche|fotozeilen|cutwort|weiss', 'kontrastPapierGrund': '#2B2D30', 'magKontrastCut': 'k3|k2|k7|k4|k5',
+KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'fotozeilen|papier|fotoetikett|flaeche|fotozeilen|cutwort|weiss', 'kontrastPapierGrund': '#2B2D30', 'bildTon': '22,23,24', 'ablaufTiefeOben': 0.84, 'ablaufTiefeMitte': 0.76, 'ablaufTiefeUnten': 0.92, 'grundA': '#33363A', 'magKontrastCut': 'k3|k2|k7|k4|k5',
             'magKontrastRubrik': 'Ehrlich jetzt|Klartext|Ja-Sagerinnen wissen|Notiz an dich|Aus meinem Alltag', 'kontrastOx': '#33363A', 'magSkriptJede': 0,
             'kontrastSerif': 'Instrument Serif', 'magCoverSerif': 'Instrument Serif', 'magSerif': 'Instrument Serif', 'magSerifLaufweite': -45,
             'kontrastSkript': 'hör mal|ehrlich jetzt|merk dir das|Achtung', 'kontrastSkriptJede': 2, 'kontrastOrange': '#E2BFB2', 'kontrastAkzent': '#5E1A21', 'kontrastAkzentHell': '#E2BFB2',
@@ -269,5 +269,12 @@ ZK = 'JSON.stringify((%s||[]).map(x=>x&&(x.text||x.content)||"").filter(Boolean)
 ersetze("""'wird mit „Plan Speichern" gesichert'})]})""", """'wird mit „Plan Speichern" gesichert'})]}),v.jsx("div",{"data-bs-komm":String(R||""),"data-titel":q||"","data-cap":K||"","data-slides":""" + ZK % '$' + """})""")
 ersetze('v.jsx("p",{className:"text-[11px] leading-relaxed text-gray-800 whitespace-pre-wrap flex-1",children:ae.caption||"Keine Caption verfügbar."})',
         'v.jsxs("div",{className:"flex-1 min-w-0",children:[v.jsx("p",{className:"text-[11px] leading-relaxed text-gray-800 whitespace-pre-wrap",children:ae.caption||"Keine Caption verfügbar."}),v.jsx("div",{"data-bs-komm":String(ae.day||""),"data-titel":ae.title||"","data-cap":ae.caption||"","data-slides":' + ZK % 'ae.slides' + '})]})')
+# Ablauf-Folien: Carinas aktuelle Angebote laut carinaannaprav.at (tools/ablauf-folien.json)
+_ta0 = s.find('AblaufMenue=({isOpen:e,onClose:t,onAnlegen:r})=>{const TA=')
+assert _ta0 >= 0, 'AblaufMenue nicht gefunden'
+_ta1 = s.find('};const[n,i]=ce.useState("moneyroom");', _ta0)
+assert _ta1 > _ta0, 'Ablauf-Ende nicht gefunden'
+_TA = json.dumps(json.load(open(__file__.rsplit('/', 1)[0] + '/ablauf-folien.json', encoding='utf-8')), ensure_ascii=False, separators=(',', ':'))
+s = s[:_ta0] + 'AblaufMenue=({isOpen:e,onClose:t,onAnlegen:r})=>{const TA=' + _TA + ';const[n,i]=ce.useState("intensive");' + s[_ta1 + len('};const[n,i]=ce.useState("moneyroom");'):]
 open(Z, 'w', encoding='utf-8').write(s)
 print('ok')

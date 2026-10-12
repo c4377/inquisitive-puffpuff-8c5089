@@ -12719,3 +12719,24 @@ Alle Adressen laden **karten530**.
   pro Serie zufällig: ca. 50 % ohne Biografie, sonst genau EIN Element (aus 6) in höchstens 1–2 Sätzen,
   nur wenn es das Thema stützt, als erzählter Moment statt übernommener Fakt.
 - Gefühle-Liste ohne biografische Klammern; Zusatz: Gefühle entstehen über Haltung und Ton, nicht über Biografie.
+
+## 485 — Ergebnis-Folien und neue Ablauf-Folien (karten531)
+
+- Carina: „Ich brauche ein Format, das dafür gebaut ist, Ergebnisse zu teilen … als Overlay auf dem Karussell
+  selbst. Es muss farblich passen, und bitte passe die Ablauf-Folien auf meinen neuen Ablauf (carinaannaprav.at) an.“
+- **Ergebnis-Folien** (tools/kontrast-zeichner.js): Jede Folie mit zugeordnetem Screenshot (overlayIsScreenshot,
+  also über „Screenshots hochladen“ + „Screenshot: S-XXXXX“ im Text + „Screenshots zuordnen“) wird im
+  Kontrast-Look gezeichnet: Fast-Schwarz, Etikett „— ERGEBNIS —“ in Rosé, Hook in Instrument Serif mit
+  Rosé-Kursivwort (*Sternchen* oder letztes Wort), Screenshot im weißen Rahmen mit Rosé-Tape, leicht gedreht,
+  Schatten; Text nach „&“ als Handschrift; Name + @carinaannaprav unten. Gilt für Deckblatt und Folgefolien.
+- **Ablauf-Folien** (tools/ablauf-folien.json, von editorial-look.py ins AblaufMenue geschrieben): Money Room und
+  12-Monats-Mentoring raus. Neu, nur mit Angaben von carinaannaprav.at (index.html, Stand 10.10.):
+  Intensive (249 €, 90 Min, Fragebogen, Feed-Analyse, 15 Hooks; 7 Folien), Offer Incubator (990 €,
+  Interview 90 Min, schriftlich in 7 Tagen; 5 Folien), Content (Setup 1.490 €, monatlich 890 € ab 3 Monaten;
+  5 Folien), Das 1:1 (6 Monate, alle 2 Wochen Call, auf Anfrage; 3 Folien). Startauswahl: Intensive.
+- Ablauf-Folien farblich passend: grundA #33363A (Anthrazit statt Petrol), Ablauf auf Foto mit dunklem
+  Anthrazit-Verlauf (bildTon 22,23,24, ablaufTiefe .84/.76/.92).
+- Hinweis: ANGEBOTE.md im Website-Repo (Stand 23.9.) widerspricht der Startseite (249 €/Offer Incubator/
+  Content/1:1 sechs Monate). Für die Folien gilt die Startseite.
+
+Alle Adressen laden **karten531**.
