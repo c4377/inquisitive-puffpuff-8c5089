@@ -13098,3 +13098,12 @@ Alle Adressen laden **karten569**.
 - Text (Headline .86 breit, Zeile darunter) steht jetzt immer unter dem Foto, unten verankert bei .88H. Das Foto endet .035H über dem Text: Höhe zwischen .4H (`kontrastRahmenMinH`) und .6H (`kontrastRahmenH`). Lange Hooks machen das Foto kürzer und die Schrift kleiner (Headline maximal .34H), überlappen nie. Die Ausweich-Logik aus 519 ist damit ersetzt.
 
 Alle Adressen laden **karten570**.
+
+## 525 — Akzente zurück auf Oxblood, Hell kühler (karten571)
+
+- Carina: „Die hellen Karten sollen nicht in einem Beige sein und auch die Schrift oder die Akzente nicht in Beige. Bitte zurück auf oxblood. Und helles immer kühler.“
+- `kontrastHell` #EAE2D7 → kühles Hellgrau #EEF0F1 (kühler als das frühere #F1F1EF). `kontrastAkzent` → Oxblood #5E1A21, `kontrastAkzentHell`/`kontrastOrange` → Rosé #E2BFB2 wie vor 522. Kleine Schriften wieder in den kühlen Grautönen von vor 522, Ablauf-Folien ebenso.
+- Rahmen auf den hellen Kacheln jetzt in der Akzentfarbe (Oxblood) statt Beige.
+- Bleibt aus 523: Graphit #3C3934 für die dunklen Kacheln.
+
+Alle Adressen laden **karten571**.
