@@ -13002,3 +13002,10 @@ Alle Adressen laden **karten556**.
 - `kontrastSkriptJede: 0`: keine automatisch eingestreuten Handschrift-Wörter mehr („hör mal“, „Achtung“ …).
 
 Alle Adressen laden **karten557**.
+
+## 512 — Porträt-Kreis zeigt immer ein Gesicht (karten558)
+
+- Carina: Im runden Porträt auf den Textkacheln war ein Fenster statt ihrem Gesicht. Ursache: Es ist kein Porträt gewählt, also wurde das CTA-Foto genommen. Ohne erkanntes Gesicht wurde dessen Bildmitte ausgeschnitten.
+- Jetzt werden der Reihe nach geprüft: Porträt-Foto, CTA-Foto, dann das Foto des Posts selbst (bei Textkacheln immer ein Gesichtsfoto, coverGesichtAnteil 100). Genommen wird das erste mit erkanntem Gesicht. Ohne Gesicht gibt es keinen Kreis, stattdessen den Namen unten. Ergebnisse pro Foto in `window.__bsPortraetC`.
+
+Alle Adressen laden **karten558**.
