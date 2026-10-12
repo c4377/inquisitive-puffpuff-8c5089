@@ -13164,3 +13164,12 @@ Alle Adressen laden **karten577**.
 - `kontrastVNVorschau: 1` wieder an: Covers im Rhythmus `weiss` zeigen die gerenderten Vergleichsposts (vier Beispiel-Nischen reihum, neuer unsicherer Vorher-Look, KI-Porträt im Nachher).
 
 Alle Adressen laden **karten578**.
+
+## 533 — Vorher/Nachher-Bilder im Bearbeiten, Knöpfe weg beim Bearbeiten, Drei Punkte unter der Leiste (karten579)
+
+- Carina: (1) Im Bearbeiten unter Bilder einen vierten Knopf neben Hintergrund / Logo / Magic Gen, der nur bei Vergleichsposts wirkt: zwei Bilder, eins für Vorher, eins für Nachher. (2) Im Bearbeiten-Modus keine Knöpfe „Stories“ und „Instagram-Ansicht“ mehr, sie liegen über allem. (3) Die drei Punkte an den Plan-Kacheln scrollen über die klebende Leiste.
+- (1) `FT` bekommt den Reiter „Vorher/Nachher“ (Props `vnSlide`, `onVN`, in beiden Editoren an die aktuelle Folie gebunden). Bei einer Folie mit Vorher/Nachher-Kopf oder Kennung: zwei Felder „Vorher“ / „Nachher“ (Bild wählen, verkleinert auf 1400 px JPEG, ✕ entfernt) → `vnBildVorher` / `vnBildNachher`. Sonst Hinweis „Nur bei Vorher/Nachher-Posts“. Zeichner (`zxVNU`): hochgeladene Bilder haben Vorrang vor Screenshots und Beispiel-Posts; Platzhalter-Text „Bild wählen: Bearbeiten → Bilder → Vorher/Nachher“.
+- (2) Im Post-Ansicht-Editor steht bei aktivem Bearbeiten ein unsichtbares `#bs-bearbeiten`; CSS in index.html blendet damit `#bs-story-knopf` und `#bs-insta-knopf` aus.
+- (3) Drei-Punkte-Knopf z-30 → z-[15] (die klebende Plan-Leiste hat z-30).
+
+Alle Adressen laden **karten579**.

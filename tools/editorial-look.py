@@ -262,5 +262,25 @@ ersetze('"Ablauf"]}),v.jsxs("button",{onClick:pinAnlegen,', '"Ablauf"]}),v.jsxs(
 ersetze('"Vorher/Nachher"]}),v.jsxs("button",{onClick:pinAnlegen,', '"Vorher/Nachher"]}),v.jsx("button",{onClick:()=>{c?yn():(f(!0),g([]))},className:`px-2.5 py-1.5 border rounded-lg font-bold transition-colors flex items-center whitespace-nowrap text-[11px] ${c?"bg-purple-600 text-white border-purple-600":"bg-white text-gray-700 border-gray-300 hover:bg-gray-50"}`,children:c?"Auswahl beenden":"Auswählen"}),v.jsxs("button",{onClick:pinAnlegen,', 1)
 ersetze('onTouchStart:()=>{c||rn(ae.day)},onTouchEnd:Pn,onTouchMove:Pn,', 'onTouchEnd:Pn,onTouchMove:Pn,', 1)
 
+# Vorher/Nachher-Bilder im Bearbeiten-Bereich (Carina 12.10.): vierter Reiter neben Hintergrund, Logo / Sticker,
+# Magic Gen. Nur bei Vergleichsposts wirksam; setzt vnBildVorher / vnBildNachher auf der Folie (Zeichner nimmt sie
+# statt Screenshots oder Beispiel-Posts).
+ersetze('FT=({onImageSelect:e,onOverlaySelect:t,currentOverlay:r})=>{', 'FT=({onImageSelect:e,onOverlaySelect:t,currentOverlay:r,vnSlide:vnS0,onVN:vnOn})=>{const vnSlide=vnS0||{};', 1)
+ersetze('," Magic Gen"]})]}),', '," Magic Gen"]}),v.jsx("button",{onClick:()=>s("vn"),className:`flex-1 py-2 px-2 text-xs font-bold rounded-md transition-all whitespace-nowrap ${i==="vn"?"bg-white shadow text-purple-700":"text-gray-500 hover:text-gray-700"}`,children:"Vorher/Nachher"})]}),'
+ 'i==="vn"&&v.jsx("div",{className:"animate-fade-in",children:(()=>{const vnT=String(vnSlide.text||""),vnIst=/^\\s*\\[[^\\]]*vorher/i.test(vnT)||/[STW]-[0-9A-Z]{5}/.test(vnT)||!!(vnSlide.vnBildVorher||vnSlide.vnBildNachher);'
+ 'if(!vnIst||!vnOn)return v.jsx("p",{className:"text-xs text-gray-500 bg-gray-50 rounded-xl p-4",children:"Nur bei Vorher/Nachher-Posts: Auf der ersten Folie eines Vergleichsposts setzt du hier dein Vorher- und dein Nachher-Bild ein."});'
+ 'const vnLade=(ev,feld)=>{const f=ev.target.files&&ev.target.files[0];ev.target.value="";if(!f)return;const fr=new FileReader;fr.onload=()=>{const im=new Image;im.onload=()=>{const sc=Math.min(1,1400/Math.max(im.naturalWidth,im.naturalHeight)),cv=document.createElement("canvas");cv.width=Math.round(im.naturalWidth*sc);cv.height=Math.round(im.naturalHeight*sc);const cx=cv.getContext("2d");cx.fillStyle="#fff";cx.fillRect(0,0,cv.width,cv.height);cx.drawImage(im,0,0,cv.width,cv.height);vnOn({[feld]:cv.toDataURL("image/jpeg",.88)})};im.onerror=()=>vnOn({[feld]:fr.result});im.src=fr.result};fr.readAsDataURL(f)};'
+ 'const vnFeld=(feld,titel)=>v.jsxs("div",{className:"flex-1 min-w-0",children:[v.jsx("span",{className:"block text-[11px] font-bold text-gray-600 mb-1.5",children:titel}),vnSlide[feld]?v.jsxs("div",{className:"relative",children:[v.jsx("img",{src:vnSlide[feld],className:"w-full aspect-[4/5] object-cover rounded-lg border border-gray-200"}),v.jsx("button",{onClick:()=>vnOn({[feld]:null}),className:"absolute top-1 right-1 w-6 h-6 rounded-full bg-white/90 text-red-600 text-xs",children:"✕"})]}):null,v.jsxs("label",{className:"mt-1.5 block w-full border-2 border-dashed border-gray-300 rounded-lg py-3 text-center text-[11px] font-bold text-gray-600 cursor-pointer hover:border-purple-300",children:[vnSlide[feld]?"Anderes Bild":"Bild wählen",v.jsx("input",{type:"file",accept:"image/*",onChange:ev=>vnLade(ev,feld),className:"hidden"})]})]});'
+ 'return v.jsxs("div",{children:[v.jsxs("div",{className:"flex gap-3",children:[vnFeld("vnBildVorher","Vorher"),vnFeld("vnBildNachher","Nachher")]}),v.jsx("p",{className:"text-[10px] text-gray-400 mt-2",children:"Die Bilder ersetzen auf dieser Folie die Screenshots bzw. die Beispiel-Posts."})]})})()}),', 1)
+ersetze('currentOverlay:R.overlayImage})', 'currentOverlay:R.overlayImage,vnSlide:R,onVN:Me=>Q(Me)})', 1)
+ersetze('currentOverlay:_.overlayImage})', 'currentOverlay:_.overlayImage,vnSlide:_,onVN:J=>U(J)})', 1)
+
+# Bearbeiten-Modus markieren (Carina 12.10.): #bs-bearbeiten blendet per CSS in index.html „Stories“ und
+# „Instagram-Ansicht“ aus, solange bearbeitet wird.
+ersetze('children:[h&&v.jsxs("button",{onClick:()=>c(!1),className:"fixed bottom-5 right-5 z-40', 'children:[!h&&v.jsx("span",{id:"bs-bearbeiten",style:{display:"none"}}),h&&v.jsxs("button",{onClick:()=>c(!1),className:"fixed bottom-5 right-5 z-40', 1)
+
+# Drei-Punkte-Knopf der Plan-Kacheln unter die klebende Leiste (Carina 12.10.: scrollte darüber)
+ersetze('className:"absolute top-1.5 right-1.5 z-30 w-7 h-7 rounded-full bg-black/40', 'className:"absolute top-1.5 right-1.5 z-[15] w-7 h-7 rounded-full bg-black/40', 1)
+
 open(Z, 'w', encoding='utf-8').write(s)
 print('ok')
