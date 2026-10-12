@@ -13038,3 +13038,11 @@ Alle Adressen laden **karten561**.
 - Rhythmus: `fotozeilen|weiss|fotoetikett|flaeche|fotozeilen|fotorahmen` (auch im Kundenraum, kundenraum.js v4). Die Freisteller-Kachel `cutwort` bleibt im Code, ist aber nicht mehr im Rhythmus.
 
 Alle Adressen laden **karten562**.
+
+## 517 — Auswählen per Knopf (karten563)
+
+- Carina: Das Auswählen (zum Löschen, Sperren usw.) funktioniert nicht mehr richtig. Bisher ging der Auswahlmodus nur durch langes Drücken (450 ms) auf eine Kachel. Auf dem iPhone kollidiert das mit Scrollen und dem iOS-Bildmenü.
+- Neuer Knopf „Auswählen“ in der Plan-Leiste nach „Vorher/Nachher“. Er schaltet den Auswahlmodus ein (`f(!0)`, leere Auswahl), danach markiert jedes Antippen einer Kachel sie bzw. hebt die Markierung auf. Der Knopf heißt dann „Auswahl beenden“ (`yn`). Die bestehende Leiste unten (Sperren, Löschen …) bleibt.
+- Langes Drücken per Touch ist abgeschaltet (`onTouchStart` entfernt), am Desktop geht es per Maus weiter.
+
+Alle Adressen laden **karten563**.

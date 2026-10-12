@@ -257,5 +257,9 @@ VNNEU = ('vnNeu=()=>{const vN=(i||[]).reduce((vx,vr)=>Math.max(vx,Number(vr&&vr.
 ersetze('pinAnlegen=()=>{', VNNEU + 'pinAnlegen=()=>{', 1)
 ersetze('"Ablauf"]}),v.jsxs("button",{onClick:pinAnlegen,', '"Ablauf"]}),v.jsxs("button",{onClick:vnNeu,className:"px-2.5 py-1.5 bg-white text-purple-700 border border-purple-200 rounded-lg font-bold hover:bg-purple-50 transition-colors flex items-center whitespace-nowrap text-[11px]",children:[v.jsx(ke,{icon:AS,className:"mr-2"}),"Vorher/Nachher"]}),v.jsxs("button",{onClick:pinAnlegen,', 1)
 
+# Auswählen per Knopf statt langem Drücken (Carina 12.10.: „das Auswählen geht nicht mehr gescheit“)
+ersetze('"Vorher/Nachher"]}),v.jsxs("button",{onClick:pinAnlegen,', '"Vorher/Nachher"]}),v.jsx("button",{onClick:()=>{c?yn():(f(!0),g([]))},className:`px-2.5 py-1.5 border rounded-lg font-bold transition-colors flex items-center whitespace-nowrap text-[11px] ${c?"bg-purple-600 text-white border-purple-600":"bg-white text-gray-700 border-gray-300 hover:bg-gray-50"}`,children:c?"Auswahl beenden":"Auswählen"}),v.jsxs("button",{onClick:pinAnlegen,', 1)
+ersetze('onTouchStart:()=>{c||rn(ae.day)},onTouchEnd:Pn,onTouchMove:Pn,', 'onTouchEnd:Pn,onTouchMove:Pn,', 1)
+
 open(Z, 'w', encoding='utf-8').write(s)
 print('ok')
