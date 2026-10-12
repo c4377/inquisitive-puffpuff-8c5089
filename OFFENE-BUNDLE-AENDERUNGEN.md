@@ -13083,3 +13083,11 @@ Alle Adressen laden **karten567**.
 - Kühle Grautöne der kleinen Schriften im Zeichner durch warme Beigetöne ersetzt, Ablauf-Folien ebenso. CTA-Overlay und Textverläufe auf Fotos warm (dunkles Braun statt Schwarz/Anthrazit). Fotos bleiben im Original.
 
 Alle Adressen laden **karten568**.
+
+## 523 — Graphit statt Taupe, Rahmen auf hellen Kacheln (karten569)
+
+- Carina: „Eher das Graphit bitte und bei den weißen bitte einen Rand machen.“
+- Dunkle Kacheln (`kontrastOx`) jetzt Graphit #3C3934 aus ihrer Palette, `kontrastPapierGrund` und Ergebnis-Grund #2F2C28, CTA-Overlay und Textverläufe graphit-warm. Akzente bleiben Taupe (#6B5849) und Beige (#DCCDB9).
+- Helle Textkachel (`weiss`): feiner Rahmen in Beige #B8A48E, Abstand .045 der Breite, Strich .004 (`kontrastRahmenHell`, `kontrastRahmenAbstand`, `kontrastRahmenStrich`, `kontrastRahmenFarbe`; `kontrastRahmenHell: 0` schaltet ihn ab).
+
+Alle Adressen laden **karten569**.
