@@ -12971,3 +12971,11 @@ Alle Adressen laden **karten552**.
 - `kontrastKlarheit: 0` im Kontrast-Look: Der Klarheits-Durchgang entfällt ganz. Gemessene Feinschärfe im Testfoto: 3,74 (552) → 2,58. Alles andere wie in 552.
 
 Alle Adressen laden **karten553**.
+
+## 508 — Fotobearbeitung zurückhaltend mit festen Grenzen (karten554)
+
+- Anlass: In Carinas Feed waren einzelne Cover „katastrophal gegraded“. Tag 66 (dunkles Foto, Gesicht im Schatten) wirkte hart, Schatten abgeschnitten (p5 13, Mitte 179). Tag 60 (sehr helles Foto) blieb milchig ohne Schwarz (p5 67). Ursache: Das Gamma durfte zwischen 0,45 und 4,2 schwanken, um Gesicht bzw. Bildmittel auf einen festen Zielwert zu zwingen. Der Schwarzpunkt war fest.
+- Neu in zxFarbe: Schwarzpunkt pro Foto aus dem 1-%-Wert (× 0,85, höchstens 70, plus Schwarz-Regler × 45), Weißpunkt aus dem 99,7-%-Wert (190–255). Das Gamma ist auf 0,78–1,3 begrenzt, Ziel Haut 118 bzw. Bild 128. Neutraler Weißabgleich mit Stärke 0,5 und höchstens ±8 %. Sättigung 1,05, Farbfaktor 0,9–1,15. S-Kurve 0,15. Keine Klarheit.
+- Ergebnis aus Testserien (normal, dunkel, hell/milchig, Orange-, Blaustich): normal, dunkel und Blau kommen gleichmäßig heraus. Ein sehr starker Orangestich bleibt teilweise (Grenze 8 %), beim künstlich flachen Testfoto entsteht ein Streifen an der Wand. Carina beurteilt mit echten Fotos in der App.
+
+Alle Adressen laden **karten554**.
