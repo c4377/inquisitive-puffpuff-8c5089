@@ -12871,3 +12871,14 @@ Alle Adressen laden **karten543**.
 - Test (gleiches Foto, Haut nachher): normal 130/103/87, Orangestich 126/98/81, Blaustich 130/104/90, blass 130/103/87.
 
 Alle Adressen laden **karten544**.
+
+## 499 — Immer neutral, tieferes Schwarz, Vignette oben und unten (karten545)
+
+- Der Weißabgleich nach dem Hautton (498) ist ersetzt. Bei warmen Fotos wurde damit das ganze Bild blau.
+- Neu ist ein neutraler Abgleich. Zuerst wird der Grauwelt-Mittelwert genommen (Pixel mit Helligkeit 80–240). Danach wird viermal nachgeschärft: Von den aktuell korrigierten Werten gelten die 30 % mit der geringsten Farbigkeit als Grau, ihr Mittel wird neutral gestellt. Stärke `kontrastNeutralKraft` 0,92, Faktoren 0,72–1,38, die Helligkeit bleibt erhalten. `kontrastNeutral: 0` schaltet den Abgleich ab.
+- Test, Wand nachher (R/G/B): normal 160/161/161, Orangestich 160/159/158, Blaustich 161/162/165. Haut jeweils ca. 140/100/82.
+- Die Belichtung nach dem Gesicht (Haut ca. 112) bleibt.
+- Schwarzpunkt-Grundwert `kontrastFotoSchwarz` 20 statt 6 (plus 60 × zxSchwD). Das Schwarz ist dadurch satter und der Kontrast höher.
+- Vignette: Die runde Vignette ist entfernt. Oben liegt ein Verlauf über 34 % der Höhe (Rand 0,55 + 0,4 × zxSchwD), unten einer über 62 % (Mitte 0,32, Rand 0,78, jeweils + Anteil × zxSchwD). Die Seiten bleiben frei. Die Abdunklung ist neutral schwarz (8,8,8) statt warm (10,7,6).
+
+Alle Adressen laden **karten545**.
