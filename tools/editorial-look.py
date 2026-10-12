@@ -279,5 +279,7 @@ _ta1 = s.find('};const[n,i]=ce.useState("moneyroom");', _ta0)
 assert _ta1 > _ta0, 'Ablauf-Ende nicht gefunden'
 _TA = json.dumps(json.load(open(__file__.rsplit('/', 1)[0] + '/ablauf-folien.json', encoding='utf-8')), ensure_ascii=False, separators=(',', ':'))
 s = s[:_ta0] + 'AblaufMenue=({isOpen:e,onClose:t,onAnlegen:r})=>{const TA=' + _TA + ';const[n,i]=ce.useState("intensive");' + s[_ta1 + len('};const[n,i]=ce.useState("moneyroom");'):]
+# Kundenraum (site/kundenraum.js): Look-Überschreibungen der Kundin nach dem Marken-Look
+ersetze('if(typeof window<"u"&&window.BS_STIL==="v3"&&window.BS_MARKE&&BS_MARKEN[window.BS_MARKE])Object.assign(BS_KACHEL,BS_MARKEN[window.BS_MARKE])}catch(zz){}', 'if(typeof window<"u"&&window.BS_STIL==="v3"&&window.BS_MARKE&&BS_MARKEN[window.BS_MARKE])Object.assign(BS_KACHEL,BS_MARKEN[window.BS_MARKE])}catch(zz){}try{typeof window<"u"&&window.BS_RAUM_K&&Object.assign(BS_KACHEL,window.BS_RAUM_K)}catch(zz){}')
 open(Z, 'w', encoding='utf-8').write(s)
 print('ok')

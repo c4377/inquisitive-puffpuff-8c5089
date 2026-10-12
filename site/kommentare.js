@@ -10,6 +10,7 @@
  * geschrieben werden.
  */
 (function () {
+  if (window.BS_RAUM) return; /* Kundenraum: Kommentare/Alt-Text sind in Carinas Stimme, dort aus. */
   var OX = "#5E1A21";
   var laufend = {}, fehler = {};
 

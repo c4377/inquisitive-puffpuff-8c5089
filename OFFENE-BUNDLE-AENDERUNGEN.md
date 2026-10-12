@@ -12758,3 +12758,22 @@ Alle Adressen laden **karten531**.
   abwechselnd hell/dunkel, Cormorant-Titel, Stationen als Punkte, Listen mit Nummern, Seitenzahl.
 
 Alle Adressen laden **karten532**.
+
+## 487 — Kundenräume für Done-for-you + Bulk-Import-Vorlage (karten533)
+
+- Carina: „Wenn ein Kunde Done-for-you-Content kauft, brauche ich für den einen eigenen Space … Bulk Import,
+  eigene Fotos, greift nicht auf meine Fotos zu … und eine Vorlage für den Bulk Import.“
+- site/kundenraum.js (erstes Skript im <head>): Raum-Schalter oben rechts („Mein Raum“ / „Kundin: …“,
+  „+ Neue Kundin“, ✕ löscht einen Kundenraum samt Datenbank). In einem Kundenraum werden
+  IndexedDB „BrandStudioDB“ → „BrandStudioDB__<raum>“ und alle localStorage-Schlüssel → „R:<raum>:…“
+  umgeleitet (außer BS_RAUM/BS_RAEUME). Keine Supabase-Daten im Raum → keine Cloud-Sync mit Carinas Konto.
+  Beim Anlegen werden brandSettings, BS_STIL und BS_MARKE aus Carinas Raum kopiert (kein Plan, keine Fotos).
+- window.BS_RAUM_K überschreibt den Look nach BS_MARKEN (Patch in editorial-look.py): Name/Handle der Kundin
+  (kontrastAbsender, kontrastHandle, vnHandle, vnMarke), Feed ohne Cutwort (keine Carina-Freisteller),
+  neutrale Rubriken, keine Carina-Handschriftsätze.
+- Story-Studio (v6) und Kommentare (v4) sind im Kundenraum aus (Carinas Stimme).
+- Getestet: Kundin anlegen → eigener Plan (3 Tage), eigene Fotos, Carinas Marker nicht sichtbar, zwei getrennte
+  Datenbanken; zurück in Carinas Raum ist alles unverändert.
+- VORLAGE-BULK-IMPORT.md: Grundgerüst, Regeln, Vorher/Nachher, Ergebnis, Kundenraum.
+
+Alle Adressen laden **karten533**.

@@ -10,6 +10,7 @@
  * hin; die letzte Story zeigt das Titelbild des Posts als Karte mit „Neuer Post ↓“.
  */
 (function () {
+  if (window.BS_RAUM) return; /* Kundenraum: Story-Studio schreibt in Carinas Stimme, dort aus. */
   var W = 1080, H = 1920, OX = "#5E1A21", OX2 = "#4A1219", SW = "#0E0E0E", OFF = "#F3EEE7", INK = "#17110F";
   var DESIGNS = ["foto", "oxblood", "papier", "schwarz"];
   var ELEMENTE = ["e1", "e3", "e7", "e11", "e15", "e2", "e8", "e14", "e10", "e9", "e13", "e4", "e12", "e5"];
