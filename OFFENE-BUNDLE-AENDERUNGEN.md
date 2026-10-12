@@ -12777,3 +12777,21 @@ Alle Adressen laden **karten532**.
 - VORLAGE-BULK-IMPORT.md: Grundgerüst, Regeln, Vorher/Nachher, Ergebnis, Kundenraum.
 
 Alle Adressen laden **karten533**.
+
+## 488 — Alte Schrift zurück, kühles Hell, Vorher/Nachher mit Screenshots, Testimonial/Work (karten534)
+
+- Carina nach Entwurf (hell2/entwurf-kuehl.jpg): „Anthrazit und das Helle etwas kühler … ja, leg los.“
+- Schrift: Instrument Serif zurück (Laufweite −15), mittelgroß mit Weißraum (Text 12,5 %, Foto 12,5 %, Papier 9,5 %,
+  Ergebnis 7,5 %, Cutwort 55 %). Labels/Rubriken/Absender in Helvetica Neue Light 300 (kontrastLabelGewicht).
+  Helles Grau kühler: kontrastHell #F1F1EF (weiss-Kachel, helle Ablauf-Folien, Folgefolien).
+- Vorher/Nachher/Beispiel (kontrast-zeichner.js): Folientext mit „Label: T-/W-/S-XXXXX“ (bis 3, getrennt mit „|“,
+  „Screenshot:“ ausgenommen) → Anthrazit, Screenshots aus der Supabase-Bibliothek (au.loadScreenshotLibrary,
+  5 Min. Cache, Kennung über zKennung) mit Schatten, dünne Versal-Labels, Satz nach „&“ in Instrument Serif,
+  [Rubrik] oben. Fehlende Kennung → gestrichelter Platzhalter. Posts vertikal im freien Raum zentriert.
+- Screenshot-Bibliothek: Upload mit „Testimonial hochladen“ / „Work hochladen“ (Dateiname shared/testimonial-… bzw.
+  shared/work-…), Kennung T-/W- nach URL, alte bleiben S-. Reiter Alle/Testimonials/Work/Ältere. Alle
+  Kennungs-Regexe auf [STW]. Folien im Vorher/Nachher-Format zählen nicht als Platzhalter (q$), damit
+  „Screenshots zuordnen“ sie nicht überschreibt. Upload-Bereich erscheint jetzt auch ohne Platzhalter im Plan.
+- VORLAGE-BULK-IMPORT.md aktualisiert.
+
+Alle Adressen laden **karten534**.

@@ -48,44 +48,52 @@ Slide 1: …
 
 ---
 
-## Vorher / Nachher (zwei Folien nebeneinander)
+## Screenshots: Testimonial und Work
 
-Zeigt, wie ein Post selbst gemacht aussieht und wie er aussieht, wenn du ihn machst. Beide Folien sind in einem fremden Branding, nicht in deinem.
+Unter **Screenshots** gibt es zwei Knöpfe:
 
-```
-Tag 5: Vorher und nachher
-Slide 1: [Messaging] So sieht derselbe Gedanke *zweimal* aus. & Wisch weiter
-Slide 2: Selbst gemacht: Ich begleite Frauen auf ihrem Weg zu mehr Selbstliebe & Link in Bio
-Slide 3: Von mir gemacht: Allen wird gesagt, sie sollen kürzertreten. Ich glaube, du musst zuerst *aufhören, dich zu schämen.* & Für Frauen, die müde sind und trotzdem weitermachen.
-Slide 4: Der erste Satz kann von jeder sein. Im zweiten erkennt man, *was sie denkt.*
-Slide 5: Schreib mir STARTEN ↓
-Caption:
-…
-```
+- **Testimonial hochladen**: Nachrichten und Feedback von Kundinnen. Die Kennung beginnt mit **T-**.
+- **Work hochladen**: Posts, Karussells und Reels, die du gemacht hast. Die Kennung beginnt mit **W-**.
 
-- `Selbst gemacht:` (oder `Vorher:`) ergibt den typischen Canva-Look: Pastell, fette Großbuchstaben, weiße Karte.
-- `Von mir gemacht:` (oder `Nachher:`) ergibt das ruhige, professionelle Branding.
-- Der Text nach `&` wird jeweils die Unterzeile.
-- In deinem Raum steht unten „@deinbusiness“ und „Deine Marke“, im Kundenraum ihr Handle und ihr Name.
+In der Liste kannst du nach Alle, Testimonials, Work und Ältere filtern. Ältere Screenshots behalten ihre **S-**Kennung und funktionieren weiter.
 
 ---
 
-## Ergebnis (Screenshot im Rahmen)
+## Vorher / Nachher und Beispiel (eine Folie mit deinen Posts)
 
-1. Screenshot unter **Screenshots hochladen** hochladen. Er bekommt eine Kennung, zum Beispiel `S-PXQPF`.
+Die Posts liegen auf Anthrazit, mit Schatten und Weißraum. Über jedem Post steht ein dünnes Label.
+
+```
+Tag 5: Vorher und nachher
+Slide 1: [Messaging] Derselbe Gedanke. *Zweimal.*
+Slide 2: [Messaging] Vorher: W-ABCDE | Nachher: W-FGHIJ & Derselbe Gedanke, *zweimal.*
+Slide 3: Beispiel: W-FGHIJ & Ein Satz, in dem man *sie* erkennt.
+Slide 4: Schreib mir STARTEN ↓
+```
+
+- **Label: Kennung**: Das Label darfst du frei wählen, zum Beispiel `Vorher`, `Nachher`, `Beispiel`, `Davor`, `Woche 1`.
+- **Mehrere Posts**: Bis zu drei Posts nebeneinander, getrennt mit `|`.
+- **Satz nach `&`**: Er steht in der Serifenschrift über den Posts bzw. unter einem einzelnen Post. Das Wort mit \*Sternchen\* wird kursiv.
+- **Rubrik**: `[Messaging]` am Anfang ergibt die kleine Zeile ganz oben.
+- **Fehlende Kennung**: Gibt es eine Kennung nicht, siehst du an der Stelle einen gestrichelten Platzhalter.
+- **Nicht zuordnen nötig**: Diese Folien musst du **nicht** über „Screenshots zuordnen“ laufen lassen. Die App holt die Bilder selbst.
+
+---
+
+## Ergebnis (ein Testimonial im Rahmen)
+
+1. Screenshot als **Testimonial** hochladen, zum Beispiel `T-PXQPF`.
 2. In die Folie schreiben:
 
 ```
 Tag 6: Ergebnis
 Slide 1: [Ergebnisse] Was sich ändert, wenn der Satz *sitzt.*
-Slide 2: Screenshot: S-PXQPF Ihr Karussell, *mit ihrem Satz* gebaut. & und dann kamen die Anfragen.
-Slide 3: Screenshot: S-ABCDE Vorher drei Absätze. Jetzt *ein Satz.*
-Slide 4: Schreib mir STARTEN ↓
+Slide 2: Screenshot: T-PXQPF Ihr Karussell, *mit ihrem Satz* gebaut. & und dann kamen die Anfragen.
+Slide 3: Schreib mir STARTEN ↓
 ```
 
 3. **Screenshots zuordnen** drücken.
 
-Der Text hinter der Kennung wird die Überschrift über dem Screenshot. Das Wort mit \*Sternchen\* wird kursiv, und der Teil nach `&` wird Handschrift darunter.
 Nur echte Ergebnisse verwenden, keine ausgedachten Zahlen oder Nachrichten.
 
 ---
