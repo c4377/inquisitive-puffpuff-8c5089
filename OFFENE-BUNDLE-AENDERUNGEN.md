@@ -12801,3 +12801,14 @@ Alle Adressen laden **karten534**.
 - Im Kontrast-Look schaltet die CTA-Folie nicht mehr auf das alte Brand-Layout `brand_photo_gradient` um (editorial-look.py: `zBrand` und `zLayF` prüfen `!BS_KACHEL.magKontrastFeed`). Das Foto wird nur noch als `t.background` gesetzt, markiert mit `_ktCta`.
 - kontrast-zeichner.js (Folgefolien-Zweig): Hat die letzte Folie ein Hintergrundbild, liegt darüber ein Anthrazit-Overlay (50 %) plus Verlauf nach unten (bis 72 %). Text weiß, zentriert in Instrument Serif mit Schatten, @carinaannaprav unten.
 - Foto = das in der Galerie mit „Als CTA-Foto“ gewählte Bild. Ohne CTA-Foto bleibt die letzte Folie Anthrazit.
+
+## 490 — Gesicht auf jedem Cover (karten536)
+
+- Kontrast-Rhythmus neu: `fotozeilen|weiss|fotoetikett|flaeche|fotozeilen|cutwort`. Jeder zweite Post hat ein großes Foto-Cover, der Freisteller kommt einmal pro Runde, Papier fällt raus.
+- `coverGesichtAnteil: 100` im Kontrast-Look: Das Cover-Foto ist immer eins mit erkanntem Gesicht (vorher 75 %).
+- Textkacheln (weiss, flaeche, papier) bekommen über der Rubrik eine Byline: rundes Porträt, daneben Name in Versalien und Handle. Die Fußzeile unten entfällt dann. Der Text wird etwas kleiner (Höhe × 0,82).
+- Porträt = `currentBrandConfig.portraitImage` (neuer Galerie-Knopf „Als Porträt“), sonst das CTA-Foto. Der Ausschnitt richtet sich nach dem Gesicht (face-api direkt über `HV`, Ergebnis in `window.__bsPortraet` gecacht). `kontrastPortraet: 0` schaltet die Byline ab.
+- Laden der Marke: Bei kuratierten Profilen (`curated_…`) wurden alle Felder außer brandText/logo/logoUrl/typography verworfen. Jetzt bleiben auch `ctaImage` und `portraitImage` erhalten.
+- CTA-Folie im Kontrast-Look: Das Foto wird selbst gesetzt, ohne Zoom. Das Gesicht steht oben (Oberkante bei 10 %) und horizontal mittig, Gesichtsposition gecacht in `window.__bsFaceC`.
+
+Alle Adressen laden **karten536**.
