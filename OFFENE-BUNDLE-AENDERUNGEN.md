@@ -12812,3 +12812,9 @@ Alle Adressen laden **karten534**.
 - CTA-Folie im Kontrast-Look: Das Foto wird selbst gesetzt, ohne Zoom. Das Gesicht steht oben (Oberkante bei 10 %) und horizontal mittig, Gesichtsposition gecacht in `window.__bsFaceC`.
 
 Alle Adressen laden **karten536**.
+
+## 491 — Fotos heller (karten537)
+
+- kontrast-zeichner.js, Foto-Cover: Tonung heller (Kontrast 1,12 um Mitte 138 statt 1,3 um 112, Sättigung 0,92), Grundabdunklung 6 % statt 26 %, Vignette außen 50 % statt 82 %, Verlauf unten 66 % statt 80 %. Die Wand im Testbild ist damit statt ca. 121 jetzt ca. 165 hell (Original 211).
+
+Alle Adressen laden **karten537**.
