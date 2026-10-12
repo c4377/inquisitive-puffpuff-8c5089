@@ -44,7 +44,7 @@
 # neuen Build die Nummer hier mitziehen (siehe EINSPIELEN.md).
 [[redirects]]
   from = "/assets/index-B5karten*"
-  to = "/assets/index-B5karten550.js"
+  to = "/assets/index-B5karten551.js"
   status = 200
 
 [[redirects]]
