@@ -14,7 +14,7 @@ Vor JEDEM Commit laufen lassen. Rueckgabewert 1 heisst: nicht einspielen.
 import os, re, sys
 
 WURZEL = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SEITEN = ["site/index.html", "site/dunkel/index.html"]
+SEITEN = ["site/index.html"]
 ASSETS = os.path.join(WURZEL, "site", "assets")
 
 def kette(name, gesehen=None):
@@ -45,6 +45,20 @@ for seite in SEITEN:
         print("  OK  %-24s -> %s -> %s (%d Byte)" % (seite, treffer[0], ziel, groesse))
     except ValueError as f:
         fehler.append("%s: %s" % (seite, f))
+
+# Die Auffangregel in netlify.toml (alte Dateinamen) muss auf dasselbe Bundle zeigen.
+try:
+    toml = open(os.path.join(WURZEL, "netlify.toml"), encoding="utf-8").read()
+    regel = re.search(r'from = "/assets/index-B5karten\*"\s*\n\s*to = "/assets/(index-B5[A-Za-z0-9_]+\.js)"', toml)
+    seite = re.findall(r'index-B5[A-Za-z0-9_]+\.js', open(os.path.join(WURZEL, SEITEN[0]), encoding="utf-8").read())
+    if not regel:
+        fehler.append("netlify.toml: Auffangregel fuer alte Bundles fehlt")
+    elif seite and regel.group(1) != seite[0]:
+        fehler.append("netlify.toml zeigt auf %s, index.html auf %s" % (regel.group(1), seite[0]))
+    else:
+        print("  OK  netlify.toml            -> %s" % regel.group(1))
+except OSError as f:
+    fehler.append("netlify.toml nicht lesbar: %s" % f)
 
 # Alle Weiterleitungen muessen ebenfalls irgendwo ankommen.
 for datei in sorted(os.listdir(ASSETS)):

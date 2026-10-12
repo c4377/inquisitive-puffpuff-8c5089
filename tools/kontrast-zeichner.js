@@ -1,34 +1,26 @@
-/* Look „Oxblood · Kontrast“ (magKontrastFeed): Weiß, warmes Hellbeige und Oxblood, Fotos in
-   Farbe mit etwas mehr Kontrast (kontrastSW:1 schaltet Schwarz-Weiß ein). Schrift: kontrastSerif (Instrument Serif)
-   aufrecht + kursiv, gesperrtes Etikett, feine Schreibschrift (Text nach „&“) immer unter dem Hook, Absender unten.
-   papier: weißes Papier auf Hellbeige, Text schwarz, Akzentwort kursiv Oxblood.
-   flaeche: Oxblood-Fläche, große weiße Schrift, erster Satz kursiv.
-   fotozeilen/fotoetikett (seit 10.10.): Foto mit Vignette, Text unten: kleine Versalzeile, Hook-Kern groß in
-   Instrument Serif weiß, Fortsetzung wieder in Versalien, Handschrift darunter. Kern = Zitat „…“, *Sternchen* (ab 14 Zeichen)
-   oder erster Satz (nach „…:“-Einleitung der zweite).
-   weiss: reinweiß, riesige Schrift, Anfang kursiv Oxblood, Ende schwarz.
-   cutwort: reinweiß, letztes Wort riesig kursiv Oxblood hinter einem Cutout.
-   Akzent (kontrastAkzent): betonte Wörter, Rubrik und Handschrift auf Weiß/Papier, Unterstreichung der Folgefolien.
-   Gedankensatz: Einschub in (Klammern) wird aus dem Hook genommen und als kleine Versalzeile mit Strich darunter
-   gesetzt; ein Zitat „…“ im Hook ist dann die Betonung (kursiv, Akzentfarbe).
-   Seit 11.10. „mehr wie Eva“: Fotos dunkler/kontrastreicher, weiss und cutwort auf Fast-Schwarz, Papier auf Anthrazit,
-   größere Schrift, Foto-Kacheln ohne Rubrik.
-   Ergebnis (seit 12.10.): Folien mit zugeordnetem Screenshot (overlayIsScreenshot) werden eigene Ergebnis-Folien:
-   Fast-Schwarz, Etikett ERGEBNIS, Hook (overlayHook) in Serif mit Rosé-Kursivwort, Screenshot im weißen Rahmen mit
-   Rosé-Tape und Schatten, Text nach „&“ als Handschrift, Absender unten.
-   Seit 12.10. „weniger bossy“: Größen/Breiten/Laufweite über K (kontrastFotoGroesse, kontrastTextBreite …),
-   Schrift CormorantKontrast (Cormorant Garamond 520), weiss-Kachel wieder hell (kontrastHell).
-   Vorher/Nachher (seit 12.10.): Folientext beginnt mit „Selbst gemacht:“/„Vorher:“ → typischer DIY-Canva-Look
-   (Pastellverlauf, Poppins-Versalien in weißer Karte, Caveat), „Von mir gemacht:“/„Nachher:“ → ruhiges Fremd-Branding
-   (Creme, Fraunces, Jost, Terracotta). Etikett oben rechts. vnHandle/vnMarke/vnKicker/vnGrund/vnSchrift/vnAkzent über K.
-   Vorher/Nachher mit Screenshots (seit 13.10.): „Vorher: W-XXXXX | Nachher: W-YYYYY & Satz“ oder „Beispiel: W-XXXXX & Satz“
-   → Anthrazit, Screenshots aus der Bibliothek (au.loadScreenshotLibrary, Kennung per zKennung) mit Schatten,
-   dünne Versal-Labels darüber, Satz in Instrument Serif. Bis zu drei Posts nebeneinander.
-   Letzte Folie (seit 13.10.): CTA-Foto (Galerie „Als CTA-Foto“, sonst Foto des Posts) mit Anthrazit-Overlay 50 % +
-   Verlauf unten, weiße Schrift mit Schatten. Das alte Brand-CTA-Layout ist im Kontrast-Look abgeschaltet.
-   Absender @carinaannaprav auf jeder Kachel und Folgefolie.
-   Folgefolien: weiß mit schwarzer Schrift, letzte Folie Oxblood mit weißer Schrift.
-   Wird von editorial-look.py eingesetzt; alle Zeilenumbrüche werden entfernt. */
+/* Look „Kontrast“ (magKontrastFeed), der einzige Look der App (Stand 12.10.).
+   Farben: Anthrazit #33363A (kontrastOx), kühles Hell #F1F1EF (kontrastHell), Akzent Oxblood #5E1A21 (kontrastAkzent),
+   auf Dunkel Rosé #E2BFB2 (kontrastAkzentHell). Schrift: Instrument Serif (kontrastSerif) aufrecht + kursiv,
+   dünne Versal-Labels in HelveticaNeueBrand (kontrastLabelGewicht), Handschrift Mrs Saint Delafield (Text nach „&“).
+
+   Reihenfolge der Sonderfolien (jede zeichnet komplett und kehrt zurück):
+   1. Vorher/Nachher und Beispiel: „Label: W-XXXXX | Label: W-YYYYY & Satz“ → Anthrazit, Screenshots aus der
+      Bibliothek (au.loadScreenshotLibrary, Kennung S-/T-/W-) mit Schatten, Versal-Labels, Satz in Serif.
+   2. Ergebnis: Folie mit zugeordnetem Screenshot (overlayIsScreenshot) → Screenshot im Rahmen, Hook, Handschrift.
+   3. Folgefolien (!zCover): kühles Hell, letzte Folie Anthrazit. Hat die letzte Folie ein Foto (CTA-Foto aus der
+      Galerie), liegt es mit Gesicht oben im Bild unter einem Anthrazit-Overlay. Schrift kommt danach vom Grundzeichner.
+   4. Cover nach Rhythmus magKontrastFeed (fotozeilen|weiss|fotoetikett|flaeche|fotozeilen|cutwort):
+      fotozeilen/fotoetikett: Foto mit Gesicht (coverGesichtAnteil 100), Text unten, Vignette oben und unten.
+      weiss/flaeche/papier: Textkachel hell/Anthrazit/Papier mit rundem Porträt + Name oben (portraitImage,
+      sonst CTA-Foto; kontrastPortraet 0 schaltet ab).
+      cutwort: großes Wort hinter einem Freisteller (eigene aus Settings → Freisteller, sonst /scrap/k*.webp).
+
+   Fotobearbeitung der Foto-Cover (zxFarbe): Schwarzpunkt 20 + Schwarz-Regler, Gamma so, dass das Gesicht
+   (face-api, HV) bzw. ohne Gesicht der Bildmittelwert die Zielhelligkeit trifft, Farbe luminanzbezogen erhalten,
+   danach neutraler Weißabgleich über die am wenigsten farbigen hellen Flächen. Analyse einmal pro Foto, gecacht
+   (window.__bsFotoP / __bsFotoB). Schwarz-Regler: BS_SCHWARZ_TAG / BS_SCHWARZ, Grundwert 0,2.
+   Absender @carinaannaprav (kontrastHandle) unten auf jeder Kachel und Folgefolie.
+   Wird von editorial-look.py eingesetzt; alle Zeilenumbrüche werden entfernt (kein // im Code). */
 if(K.magKontrastFeed){const zxSchw=(()=>{try{const zk=window.BS_SCHWARZ_TAG;if(zk&&typeof t._tag=="number"){const ze=parseFloat(zk[String(t._tag)]);if(isFinite(ze)&&ze>=0)return ze}const zv=parseFloat(window.BS_SCHWARZ);if(isFinite(zv)&&zv>=0)return zv;const zg=Number(K.schwarzGrund);return isFinite(zg)&&zg>=0?zg:.2}catch(zz){return .2}})(),zxSchwD=Math.max(-.2,Math.min(1.4,zxSchw-.2)),zxFrei=window.__bsFreiP?await window.__bsFreiP.catch(()=>[]):[],zxL=String(K.magKontrastFeed).split("|").filter(Boolean).filter(zq=>zq!=="cutwort"||zxFrei.length||!window.BS_RAUM),zxTg=Number(t._tag)||0,zxTyp=zxL[(zxTg%zxL.length+zxL.length)%zxL.length];
 const zxOX=K.kontrastOx||"#5E1A21",zxAK=K.kontrastAkzent||zxOX,zxIS=K.kontrastSerif||K.magCoverSerif||"Instrument Serif",zxHN="HelveticaNeueBrand",zxSC=K.kontrastSkriptFont||"Mrs Saint Delafield",zxOR=K.kontrastOrange||"#F4A06C";
 const zxVS=String(t.text||"").replace(/^\s*\[[^\]]*\]\s*/,""),zxVSre=/(?:^|\|)\s*([A-Za-zÄÖÜäöüß][A-Za-zÄÖÜäöüß \-]{0,28}?)\s*:\s*([STW]-[0-9A-Z]{5})/gi,zxVSl=[];let zxVSm;while((zxVSm=zxVSre.exec(zxVS))&&zxVSl.length<3)/^screenshot$/i.test(zxVSm[1].trim())||zxVSl.push({l:zxVSm[1].trim(),k:zxVSm[2].toUpperCase()});
@@ -46,23 +38,6 @@ if(zvN===1){zvCap(zxVSl[0].l,0,zH*.075,zW,zW*.02,zvH);const zmw=zW*.56,zmh=zH*(z
 else{let zy=zH*.075;zvKick&&(zy+=zvCap(zvKick,0,zy,zW,zW*.019,zvH).height+zH*.022);if(zvSatz){const zt=zvSerif(zvSatz,zy,zW*.078,zH*.16);zy+=zt.height+zH*.06}else zy+=zH*.05;
 const zgap=zW*.044,zmw=(zW*.86-zgap*(zvN-1))/zvN,zmh=zH*.86-zy-zH*.05,zhs=zvImgs.map(zi=>zi?zi.height*Math.min(zmw/zi.width,zmh/zi.height):zmw*1.25),zhm=Math.max(...zhs);zy+=Math.max(0,(zH*.89-zy-(zH*.045+zhm))/2);zxVSl.forEach((zq,k)=>{const zcx=zW*.07+zmw/2+k*(zmw+zgap);zvCap(zq.l,zcx-zmw/2,zy,zmw,zW*.019,zvL);zvKarte(zvImgs[k],zq.k,zcx,zy+zH*.045+zhm/2,zmw,zmh)})}
 e.add(new zFb.Text(String(K.kontrastHandle||"@carinaannaprav").toLocaleUpperCase("de-DE"),{left:zW/2,top:zH*.93,originX:"center",fontFamily:zxHN,fontWeight:zvLG,fontSize:zW*.017,charSpacing:320,fill:zvL,...zNo}));
-e.renderAll();return}
-const zxVN=/^\s*(selbst\s*gemacht|vorher|von\s*mir(\s*gemacht)?|nachher)\s*:\s*/i.exec(String(t.text||""));if(zxVN){const zxPro=/^(von|nachher)/i.test(zxVN[1]);try{await Promise.race([Promise.all(['600 40px "Poppins"','500 40px "Poppins"','700 40px CaveatV3','300 40px "Fraunces Mag"','italic 300 40px "Fraunces Mag"','300 40px "Jost Mag"','500 40px "Jost Mag"',`500 40px ${zxHN}`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,4e3))])}catch(zz){}
-e.getObjects().forEach(zo=>{zo.visible=!1});const zvR=String(t.text||"").slice(zxVN[0].length).split(/\n/).map(q=>q.trim()).filter(Boolean).join(" "),zvA=zvR.search(/(^|\s)&\s/),zvH=(zvA>=0?zvR.slice(0,zvA):zvR).trim(),zvS=zvA>=0?zvR.slice(zvA).replace(/^\s*&\s*/,"").replace(/\*+/g,"").trim():"",zvHandle=String(K.vnHandle||"@deinbusiness");
-const zvTag=ztx=>{const zt=new zFb.Text(ztx,{fontFamily:zxHN,fontWeight:"500",fontSize:zW*.019,charSpacing:260,fill:"#FFFFFF",originX:"center",originY:"center",left:0,top:zW*.001}),zbw=(zt.width||0)+zW*.05,zbh=zW*.019*2.4;e.add(new zFb.Group([new zFb.Rect({width:zbw,height:zbh,rx:zbh/2,ry:zbh/2,fill:"#161718",originX:"center",originY:"center",left:0,top:0}),zt],{left:zW-zW*.055-zbw/2,top:zW*.055+zbh/2,originX:"center",originY:"center",...zNo}))};
-if(!zxPro){e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,...zNo,fill:new zFb.Gradient({type:"linear",coords:{x1:0,y1:0,x2:zW,y2:zH},colorStops:[{offset:0,color:"#F9D6DD"},{offset:1,color:"#E6D5F3"}]})}));
-[[.12,.18,.2],[.86,.82,.26],[.9,.12,.12]].forEach(([zx,zy,zr])=>e.add(new zFb.Circle({left:zW*zx,top:zH*zy,radius:zW*zr,originX:"center",originY:"center",fill:"rgba(255,255,255,0.45)",...zNo})));
-const zstern=(zx,zy,zr)=>e.add(new zFb.Polygon([{x:0,y:-zr},{x:zr*.22,y:-zr*.22},{x:zr,y:0},{x:zr*.22,y:zr*.22},{x:0,y:zr},{x:-zr*.22,y:zr*.22},{x:-zr,y:0},{x:-zr*.22,y:-zr*.22}],{left:zx,top:zy,originX:"center",originY:"center",fill:"#C79BDB",...zNo}));zstern(zW*.2,zH*.27,zW*.035);zstern(zW*.82,zH*.7,zW*.028);zstern(zW*.74,zH*.24,zW*.018);
-let zfs=zW*.07,ztb=null;const zcap=zvH.replace(/\*+/g,"").toLocaleUpperCase("de-DE");for(let k=0;k<30;k++){ztb=new zFb.Textbox(zcap,{width:zW*.66,fontFamily:"Poppins",fontWeight:"600",fontSize:zfs,lineHeight:1.15,fill:"#5B3A5E",textAlign:"center",...zNo});if(ztb.height<=zH*.4)break;zfs*=.93}
-const zbw=zW*.78,zbh=ztb.height+zW*.16+(zvS?zW*.09:0),zby=zH*.5-zbh/2;e.add(new zFb.Rect({left:(zW-zbw)/2,top:zby,width:zbw,height:zbh,rx:zW*.05,ry:zW*.05,fill:"#FFFFFF",shadow:new zFb.Shadow({color:"rgba(91,58,94,0.25)",blur:zW*.03,offsetX:zW*.01,offsetY:zW*.015}),...zNo}));
-ztb.set({left:(zW-zW*.66)/2,top:zby+zW*.08});e.add(ztb);zvS&&e.add(new zFb.Textbox(zvS,{left:(zW-zW*.66)/2,top:zby+zW*.08+ztb.height+zW*.03,width:zW*.66,fontFamily:"CaveatV3",fontWeight:"700",fontSize:zW*.055,fill:"#D16BA5",textAlign:"center",...zNo}));
-e.add(new zFb.Text(zvHandle,{fontFamily:"Poppins",fontWeight:"500",fontSize:zW*.03,fill:"#5B3A5E",originX:"center",left:zW/2,top:zH*.88,...zNo}));zvTag(String(K.vnLabelVorher||"SELBST GEMACHT"))}
-else{e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:K.vnGrund||"#F2EDE4",...zNo}));const zG=K.vnSchrift||"#24382F",zT=K.vnAkzent||"#B5643C",zL=zW*.12;
-e.add(new zFb.Text(String(K.vnKicker||"NOTIZ FÜR DICH").toLocaleUpperCase("de-DE"),{left:zL,top:zH*.25,fontFamily:"Jost Mag",fontWeight:"500",fontSize:zW*.022,charSpacing:300,fill:zT,...zNo}));e.add(new zFb.Rect({left:zL,top:zH*.25+zW*.05,width:zW*.07,height:Math.max(2,zW*.002),fill:zT,...zNo}));
-let zp="";const zst={};zvH.split(/(\*[^*]+\*)/).filter(Boolean).forEach(zq=>{const zk=/^\*.*\*$/.test(zq),ztx=zk?zq.slice(1,-1):zq;for(let k=0;k<ztx.length;k++)zk&&(zst[zp.length+k]={fontStyle:"italic",fill:zT});zp+=ztx});if(!Object.keys(zst).length){const zm=/([A-Za-zÄÖÜäöüß\-]+)[.!?…“”"]*\s*$/.exec(zp);if(zm)for(let k=zm.index;k<zm.index+zm[1].length;k++)zst[k]={fontStyle:"italic",fill:zT}}
-let zfs=zW*.075,ztb=null;for(let k=0;k<30;k++){ztb=new zFb.Textbox(zp,{width:zW*.72,fontFamily:"Fraunces Mag",fontWeight:"300",fontSize:zfs,lineHeight:1.08,fill:zG,textAlign:"left",styles:{0:zst},...zNo});if(ztb.height<=zH*.36)break;zfs*=.93}ztb.set({left:zL,top:zH*.25+zW*.1});e.add(ztb);
-zvS&&e.add(new zFb.Textbox(zvS,{left:zL,top:zH*.25+zW*.1+ztb.height+zW*.05,width:zW*.6,fontFamily:"Jost Mag",fontWeight:"300",fontSize:zW*.032,lineHeight:1.4,fill:"#4E5F55",...zNo}));
-e.add(new zFb.Text(String(K.vnMarke||"Deine Marke"),{left:zL,top:zH*.875,fontFamily:"Fraunces Mag",fontStyle:"italic",fontWeight:"300",fontSize:zW*.036,fill:zG,...zNo}));e.add(new zFb.Text(zvHandle,{left:zW-zL,top:zH*.882,originX:"right",fontFamily:"Jost Mag",fontWeight:"400",fontSize:zW*.024,charSpacing:80,fill:"#4E5F55",...zNo}));zvTag(String(K.vnLabelNachher||"VON MIR GEMACHT"))}
 e.renderAll();return}
 if(t.overlayIsScreenshot===!0&&t.overlayImage){try{await Promise.race([Promise.all([`400 40px "${zxIS}"`,`italic 400 40px "${zxIS}"`,`500 40px ${zxHN}`,`400 40px "${zxSC}"`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,4e3))])}catch(zz){}
 e.getObjects().forEach(zo=>{zo.visible=!1});const zxEG=K.kontrastErgebnisGrund||K.kontrastDunkel||"#161718",zxEH=K.kontrastAkzentHell||"#E2BFB2";e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:zxEG,...zNo}));

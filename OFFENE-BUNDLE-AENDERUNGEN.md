@@ -1,4 +1,17 @@
-# Direkt am Bundle geaendert — noch nicht im Quellcode
+# Änderungsprotokoll der App (Bundle)
+
+**Was heute gilt, steht in `README.md`. Wie gebaut wird, steht in `EINSPIELEN.md`.**
+
+Dieses Protokoll ist der Verlauf aller Änderungen am Bundle seit August, die neuesten
+stehen ganz unten. Ältere Abschnitte beschreiben Looks, Dateien und Abläufe, die es
+nicht mehr gibt: alle Looks außer Kontrast, die Quellcode-„Drops“, `src/`, `/dunkel/`,
+die Werkzeuge `bundle-patchen.py` und `frech-look.py`. Sie bleiben als Verlauf stehen.
+Seit dem Aufräumen am 12.10. (Abschnitt 501) wird nur noch aus `tools/basis/k451.js`
+mit `tools/editorial-look.py` gebaut.
+
+---
+
+## Ursprünglicher Titel: Direkt am Bundle geaendert — noch nicht im Quellcode
 
 Diese Aenderungen wurden im gebauten Bundle vorgenommen, weil sie hier
 sofort gebraucht wurden. Im Quellcode der Bau-Session stehen sie NICHT.
@@ -12892,3 +12905,17 @@ Alle Adressen laden **karten545**.
 - Messung im Desktop-Test (3 Folien, simuliertes Teilen): karten534 13,4 s, 540 12,4 s, 545 15,0 s, 546 12,9 s. Der Grundaufwand des Exports ist alt und hängt nicht an diesen Änderungen.
 
 Alle Adressen laden **karten546**.
+
+
+## 501 — Aufräumen (karten547)
+
+- Build-Grundlage gesichert: `tools/basis/k451.js` (lag bisher nur im Arbeitsordner einer Session). Der Build aus dieser Datei ergab karten546 Byte für Byte.
+- Alte Looks aus dem Build entfernt: Klar, Premium, Stift, Papier & Porträt, Statement, Leinen, Burgund, Untertitel, Foto & Serif, Scrap samt Zeichner-Dateien und Look-Einstellungen. In BS_MARKEN stehen nur noch `editorial` und `editorial-kontrast`. Das Bundle ist ca. 175 KB kleiner. Folien und CTA sind im Vergleich zu karten546 pixelgleich.
+- Alter Text-Vorher/Nachher-Block („Selbst gemacht:“/„Von mir gemacht:“ mit Fremd-Branding) aus kontrast-zeichner.js entfernt, ersetzt durch die Screenshot-Version. `vnHandle`/`vnMarke` im Kundenraum entfernt.
+- Kopf von kontrast-zeichner.js und editorial-look.py auf den heutigen Stand geschrieben. CormorantKontrast-Rückfall auf Instrument Serif.
+- Gelöscht: 543 alte Weiterleitungsdateien (behalten: karten537–546). Dafür gibt es die Auffangregel `/assets/index-B5karten*` in netlify.toml. Ebenfalls gelöscht: `site/_redirects` (doppelt, hätte die Auffangregel verdeckt), `site/marken-schalter.js` (Look-Schalter ohne Funktion), 33 Bilder alter Looks in `site/scrap` (behalten: k1–k8 Freisteller, e1–e15 Story-Studio), die Schriften CormorantV3, CormorantKontrast, Homemade Apple, Libre Baskerville und Castoro samt @font-face sowie die Aliase Manrope und Literata.
+- Gelöscht: alter React-Quellcode (`src/`, `public/`, `index.html`, `package.json`, vite/eslint/tailwind/postcss), die Werkzeuge der früheren Build-Kette (`bundle-patchen.py`, `frech-look.py` u. a.), `EINBAU.md`, `NACHGEZOGEN.md`. Alles bleibt in der Git-Historie.
+- `index.html`: Look fest auf Kontrast, `?look=` entfällt, Kommentare aktualisiert. `ziel-pruefen.py` prüft nur noch `site/index.html`, zusätzlich die Auffangregel.
+- Neu geschrieben: `README.md` und `EINSPIELEN.md`.
+
+Alle Adressen laden **karten547**.

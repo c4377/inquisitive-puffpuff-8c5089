@@ -1,153 +1,103 @@
-# Einspielen — wie dieses Projekt veröffentlicht wird
+# Einspielen — wie dieses Projekt gebaut und veröffentlicht wird
 
 Der Publish-Skill in `.claude/skills/publish` liest diese Datei zuerst.
 Was hier steht, gilt vor seinen allgemeinen Regeln.
 
-## Ausgangslage — bitte einmal lesen
+## Ausgangslage
 
-Der Quellcode in `src` ist **älter als die laufende App**. Es fehlen
-unter anderem: die Reminder-Folien, der Kartenpfad, die Bandzeile und
-sechs der acht Netlify-Funktionen. Ein neuerer `src` existiert nicht —
-weder hier noch auf dem Rechner.
+Netlify baut nichts. Veröffentlicht wird der Ordner `site/` genau so, wie er im
+Repo liegt (`netlify.toml`: `publish = "site"`, `command = ""`). Ein Push auf
+`main` löst den Deploy aus.
 
-Der aktuelle Stand der App liegt **ausschließlich als gebautes Bundle**
-vor: `assets/index-*.js`. Der wird gepflegt, indem diese Datei direkt
-bearbeitet wird.
-
-Daraus folgt die Regel für dieses Repo:
-
-> **Nicht bauen. Veröffentlicht wird der fertige Ordner.**
-
-Wird `vite build` ausgeführt, entsteht die App aus dem alten `src` und
-alles Neuere ist weg. `src` bleibt trotzdem im Repo — als Archiv, nicht
-als Quelle.
-
-## Vor jedem Commit: die Verweise prüfen
+Die App selbst ist eine einzige gebaute Datei: `site/assets/index-B5kartenNNN.js`.
+Einen React-Quellcode dazu gibt es nicht mehr (der alte `src/` war veraltet und
+ist gelöscht, liegt aber in der Git-Historie). Die App entsteht so:
 
 ```
-python3 tools/ziel-pruefen.py
+tools/basis/k451.js          gesicherte Grundlage (nie von Hand ändern)
+  + tools/editorial-look.py  alle Änderungen am App-Code (ersetze(...)) und die Look-Einstellungen
+  + tools/kontrast-zeichner.js  der Look Kontrast (Cover, Folgefolien, Fotobearbeitung)
+  + tools/kontrast-ablauf.js    die Ablauf-/Zusammenarbeit-Folien
+  + tools/ablauf-folien.json    Inhalte der Ablauf-Folien (Angebote laut carinaannaprav.at)
+  = site/assets/index-B5kartenNNN.js
 ```
 
-Bricht das Skript ab, **nicht einspielen**.
+Neben der App liegen in `site/` kleine eigenständige Skripte, die ohne Neubau
+geändert werden können: `kundenraum.js`, `freisteller.js`, `stil-schalter.js`
+(Schwarz-Regler), `insta-ansicht.js`, `story-studio.js`, `kommentare.js`, die Seite
+`profilbilder/` und das Feed Studio unter `v2/` (eigener Quellcode im Wurzelordner `v2/`).
 
-Der Grund dafür ist einmal passiert und kostet sofort die ganze Seite: die
-Testläufe schreiben `site/index.html` auf das gerade geprüfte Bundle um. Wird
-diese Probe danach gelöscht und das Nachziehen greift daneben, bleibt ein
-Verweis auf eine Datei stehen, die es nicht mehr gibt. Netlify antwortet mit
-404, die Seite bleibt **weiß** — ohne Fehlermeldung im Browser, ohne dass am
-Bundle selbst irgendetwas falsch wäre.
+## Eine Änderung an der App bauen
 
-Das Skript folgt beiden `index.html` durch die ganze Kette der Weiterleitungen
-bis zum echten Bundle und prüft zusätzlich, dass keine der alten
-Weiterleitungen ins Leere zeigt.
+1. Änderung in `tools/` machen (Zeichner-Dateien: keine `//`-Kommentare, die
+   Zeilenumbrüche werden entfernt).
+2. Neue Nummer NNN = bisherige + 1. Bauen:
 
-## netlify.toml — so muss sie aussehen
+   ```
+   cd site/assets
+   python3 ../../tools/editorial-look.py ../../tools/basis/k451.js index-B5kartenNNN.js NNN
+   node --check index-B5kartenNNN.js
+   ```
 
-```toml
-# KEIN [build]-Block. Der Ordner "site" wird unverändert veröffentlicht.
+3. Die bisherige Datei durch eine Weiterleitung ersetzen und alle Verweise nachziehen
+   (ALT = bisherige Nummer):
 
-[build]
-  publish = "site"
+   ```
+   for f in $(grep -l "kartenALT\.js" index-B5karten*.js); do sed -i "s/kartenALT\.js/kartenNNN.js/g" $f; done
+   echo 'import "./index-B5kartenNNN.js";' > index-B5kartenALT.js
+   sed -i "s/kartenALT\.js/kartenNNN.js/g" ../index.html ../../netlify.toml
+   ```
 
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+4. Prüfen:
 
-[functions]
-  directory = "netlify/functions"
+   ```
+   python3 tools/ziel-pruefen.py
+   ```
 
-[[headers]]
-  for = "/index.html"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
+   Bricht das Skript ab: **nicht einspielen.** Es prüft, dass `site/index.html` und
+   die Auffangregel in `netlify.toml` auf dasselbe vorhandene Bundle zeigen und keine
+   Weiterleitung ins Leere läuft. Sonst bleibt die Seite weiß.
 
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-```
+5. In der App ansehen (lokal `cd site && python3 -m http.server 8899`), dann einen
+   Abschnitt in `OFFENE-BUNDLE-AENDERUNGEN.md` ergänzen, committen, pushen.
 
-Kein `command`. Steht dort wieder `npm run build`, ist das ein Fehler.
+## Warum die Datei bei jeder Änderung einen neuen Namen bekommt
+
+`assets/*` wird ein Jahr lang als `immutable` ausgeliefert. Ein Browser lädt eine
+geänderte Datei mit gleichem Namen nicht neu. Deshalb steht oben in der App neben
+„BrandStudio“ der Name der geladenen Datei (z. B. `karten547`). Ändert er sich nach
+dem Deploy nicht, hängt der Browser an einer alten `index.html`: einmal neu laden.
+
+## Alte Dateinamen
+
+Es bleiben nur die letzten etwa zehn Namen als Weiterleitung liegen. Ältere werden
+gelöscht. Fragt ein Browser mit einer sehr alten, zwischengespeicherten `index.html`
+nach einem gelöschten Namen, greift die Auffangregel in `netlify.toml`
+(`/assets/index-B5karten*` → aktuelles Bundle). Deshalb muss diese Regel bei jedem
+Build mitgezogen werden (Schritt 3), `ziel-pruefen.py` kontrolliert das.
+
+Eine Datei `site/_redirects` darf es nicht geben: ihre Regeln würden vor denen aus
+`netlify.toml` greifen, und die Auffangregel `/*` würde alte Bundle-Namen mit der
+HTML-Seite beantworten.
 
 ## Wenn ein ZIP kommt
 
-Carina lädt den fertigen Ordner als ZIP hoch. Erkennbar an
-`assets/index-*.js`, `fonts/`, `models/` und **keinem** `src`.
+Carina lädt manchmal einen fertigen Ordner aus einer anderen Session hoch.
 
-1. Inhalt nach `site/` kopieren — nicht ins Wurzelverzeichnis.
-2. `rsync -a` ohne `--delete`. Fehlt eine Datei im ZIP, wird sie nicht
-   gelöscht.
-3. `src/`, `.claude/` und `netlify/functions/` dabei **nicht** anfassen.
-4. `netlify/functions/*.mjs` aus dem ZIP separat übernehmen — das ist
-   echter Quelltext und wird nicht gebaut.
-5. Committen und auf `main` pushen.
-
-Die Schrift- und Modelldateien in `fonts/` und `models/` sind binär und
-müssen mit. Ohne sie misst der Zeichner mit einer Ersatzschrift, und
-der Text läuft über den Rand.
-
-## Alte Bundles entfernen
-
-Die Regel "nichts loeschen, nur weil es im ZIP fehlt" gilt weiter — mit
-einer Ausnahme, die Carina freigegeben hat: das **abgeloeste Bundle**.
-
-Wird `assets/index-*.js` umbenannt, bleibt die alte Datei sonst liegen
-und wird bei jedem Einspielen zwei Megabyte schwerer. Sie darf weg —
-aber **nicht ersatzlos**.
-
-Der Grund: im Repo verweist danach nichts mehr auf den alten Namen, im
-Browser aber schon. Wer die `index.html` zwischengespeichert hat, fragt
-weiter nach der alten Datei. Ist sie ersatzlos geloescht, antwortet
-Netlify mit 404, und die Seite laedt gar nicht mehr — auch nicht die
-neue Fassung. Genau das ist am 26. August passiert.
-
-Deshalb: den alten Namen als **Weiterleitung** stehen lassen. Fuenf
-Zeilen statt zwei Megabyte:
-
-    import "./index-B5kartenNN.js";   // der aktuelle Name
-
-Damit startet auch eine alte `index.html` die aktuelle App. Ein echtes
-Bundle wird also durch seine Weiterleitung ersetzt, nicht geloescht.
-
-Beim naechsten Einspielen zeigen alle vorhandenen Weiterleitungen auf
-den neuen Namen — ein `sed` ueber `site/assets/index-B5karten*.js`
-genuegt.
-
-**Weiterleitungen werden nicht mehr geloescht.** Erst hiess es hier, sie
-duerften nach etwa fuenf Fassungen weg. Das war falsch: niemand weiss,
-wie alt die `index.html` in einem fremden Zwischenspeicher ist, und ein
-Handy, das wochenlang nicht neu geladen hat, faellt sonst auf 404. Jede
-Weiterleitung kostet 300 Byte — alle Namen zusammen sind ein Bruchteil
-eines einzigen Bundles. Sie bleiben liegen.
-
-Fuer alles andere gilt weiter: nicht loeschen.
+1. Inhalt nach `site/` kopieren, nicht ins Wurzelverzeichnis.
+2. `rsync -a` ohne `--delete`: Fehlt eine Datei im ZIP, wird sie nicht gelöscht.
+3. `.claude/`, `tools/` und `netlify/functions/` dabei nicht überschreiben, ohne
+   genau hinzusehen. `netlify/functions/*.mjs` ist echter Quelltext.
+4. Kommt ein neues Bundle im ZIP, ist es außerhalb von `tools/` entstanden: Carina
+   fragen, ob die Änderung in `tools/` nachgezogen werden soll, sonst geht sie beim
+   nächsten Build verloren.
 
 ## Netlify-Funktionen
 
-Alle brauchen `GEMINI_API_KEY` in den Netlify-Umgebungsvariablen.
-Fehlt der Schlüssel, antworten sie mit einem Fehler — das ist kein
-Codefehler und nichts zum Reparieren.
-
-## Wie der Deploy ausgeloest wird
-
-Die Netlify-Seite ist mit diesem Repo verbunden. Ein Push auf `main`
-loest den Deploy aus — es muss nichts mehr von Hand abgelegt werden.
-
-Netlify liest die `netlify.toml` aus dem Repo; was im Netlify-Formular
-unter Build-Befehl und Publish-Ordner steht, wird davon ueberstimmt.
-Der Build-Befehl ist dort ausdruecklich leer gesetzt. Steht da je wieder
-`npm run build`, wird die App aus dem veralteten `src/` gebaut und alles
-Neuere ist weg.
+`netlify/functions/*.mjs` (Story-Studio, Kommentare, Pins, Reminder, Stories, Bilder,
+Webinar, Ads). Sie brauchen keine npm-Pakete. Der Schlüssel `GEMINI_API_KEY` steht
+in den Netlify-Umgebungsvariablen, nie im Repo.
 
 ## Adresse
 
 https://inquisitive-puffpuff-8c5089.netlify.app
-
-## Prüfen, ob es wirklich live ist
-
-Oben im Kopf der App steht neben „BrandStudio" der Name der geladenen
-Bundle-Datei, zum Beispiel `karten19`. Ändert er sich nach dem Deploy
-nicht, hängt der Browser am Cache — `assets/*` wird ein Jahr lang als
-`immutable` ausgeliefert. Dann hilft nur ein **neuer Dateiname**, kein
-Neuladen. Deshalb wird die Bundle-Datei bei jeder Änderung umbenannt.

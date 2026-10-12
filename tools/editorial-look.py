@@ -1,13 +1,18 @@
-"""Look „editorial“: jede Folie ist ein Foto, abgedunkelt, darauf Text wie im
-Magazin-Karussell (Carinas Vorlage vom 5. Oktober): große Serif-Titel (Fraunces
-Light), breite fette Versalien (Syne ExtraBold), schlichter Fließtext (Poppins),
-Pfeil-Listen, handgezogene Unterstreichungen, senkrechter Trennstrich, Monogramm
-oben rechts.
+"""Baut die App (das Bundle) aus der gesicherten Grundlage tools/basis/k451.js.
 
-Aufruf: python3 tools/editorial-look.py <eingabe.js> <ausgabe.js> <version>
-Die Eingabe ist das Ergebnis von tools/frech-look.py.
+Aufruf (im Ordner site/assets):
+  python3 ../../tools/editorial-look.py ../../tools/basis/k451.js index-B5kartenNNN.js NNN
 
-Textauszeichnung pro Folie (jede Zeile eine Rolle, Leerzeile = Absatz):
+Eingebaut werden:
+  - der Grundzeichner „editorial“ (ZEICHNER unten, Magazin-Logik, Folgefolien),
+  - der Look Kontrast (KONTRAST, tools/kontrast-zeichner.js) als einziger Look in BS_MARKEN,
+  - die Ablauf-Folien (tools/kontrast-ablauf.js, Inhalte aus tools/ablauf-folien.json),
+  - alle Änderungen am App-Code über ersetze(alt, neu, anzahl): bricht ab, wenn eine Stelle
+    nicht genau so oft gefunden wird.
+Die Zeichner-Dateien werden ohne Zeilenumbrüche eingesetzt (kein // im Code).
+Ablauf, Prüfung und Veröffentlichen: EINSPIELEN.md.
+
+Textauszeichnung des Grundzeichners pro Folie (jede Zeile eine Rolle, Leerzeile = Absatz):
   # Titel            große Serif (auf dem Deckblatt sehr groß)
   ## Titel           mittlere Serif
   > TEXT             breite fette Versalien
@@ -57,28 +62,6 @@ look.update({
     'kinoSchwarz': 2, 'kinoWeiss': 252, 'kinoGamma': 0.88, 'kinoSplit': 1, 'kinoVignette': 0,
     'kinoBlauAnteil': 2, 'zuschnittZoom': 1.1,
 })
-AKZENTE = [('pfirsich', '#F6C8A8'), ('himmel', '#BFDDF0'), ('butter', '#F1E3B8')]
-PREMIUM = {'magAkzent': '#F1F0A0', 'magFeed': 'serif|mitte|band|serif|kringel|flaeche|serif|durch|mitte|zettel|band', 'magCoverSerif': 'Roxborough CF', 'magCoverSerifGewicht': '400', 'magTitelSkala': 0.9, 'magTextSkala': 0.92, 'magTextLaufweite': 30, 'magHandSkala': 0.9, 'magCapsLaufweite': 240, 'magRahmen': 1, 'magFlaeche': '#EEECE5', 'magFlaecheText': '#1E2426', 'magFlaecheAkzent': '#3F6E78', 'kinoSaettigung': 0.9, 'kinoKontrast': 0.98, 'kinoHeben': 14, 'kinoVignette': 0.08, 'magDunkelCover': 0.18}
-TYPO_BASIS = {'magMono': '#F7F1C4', 'magFeed': 'serif|mitte|band|serif|kringel|band|serif|mitte|serif|band|kringel',
-              'magHandArt': 'kursiv|versal|balken|kursiv|versal|kursiv|balken', 'magCapsLaufweite': 260, 'magTextLaufweite': 20}
-TYPO = [  # Titel immer Roxborough; Text, Versalien und kursive Zeile je Variante
-    ('', {'magSans': 'HelveticaNeueBrand', 'magSansGewicht': '300', 'magBreit': 'HelveticaNeueBrand', 'magBreitGewicht': '500',
-          'magKursiv': 'Cormorant Garamond', 'magKursivGewicht': '400', 'magKursivSkala': 1.18, 'fliessSchrift': 'HelveticaNeueBrand'}),
-    ('-mode', {'magSans': 'Jost Mag', 'magSansGewicht': '300', 'magBreit': 'Jost Mag', 'magBreitGewicht': '500',
-               'magKursiv': 'Instrument Serif', 'magKursivGewicht': '400', 'magKursivSkala': 1.12, 'fliessSchrift': 'Jost Mag'}),
-    ('-modern', {'magSans': 'AspektaBrand', 'magSansGewicht': '400', 'magBreit': 'AspektaBrand', 'magBreitGewicht': '600',
-                 'magKursiv': 'Bodoni Moda', 'magKursivGewicht': '400', 'magKursivSkala': 1.0, 'fliessSchrift': 'AspektaBrand'}),
-]
-FEED = {'magCoverSerif': 'Instrument Serif', 'magSerif': 'Instrument Serif', 'magSerifGewicht': '400', 'magCoverSerifGewicht': '400',
-        'magKursiv': 'Instrument Serif', 'magKursivGewicht': '400', 'magKursivSkala': 1.25,
-        'magSans': 'HelveticaNeueBrand', 'magSansGewicht': '300', 'magBreit': 'HelveticaNeueBrand', 'magBreitGewicht': '500',
-        'fliessSchrift': 'HelveticaNeueBrand', 'magTitelSkala': 1.12, 'magTextSkala': 0.95, 'magTextLaufweite': 20, 'magCapsLaufweite': 300,
-        'magHandArt': 'schreib|kursiv|schreibversal|schreib|kursiv', 'magKicker': 'REALTALK|SALES|STANDING', 'magKursivBetonung': 1, 'magLage': 'unten|oben|links|mitte|oben|unten|links', 'magTitelReihe': '1|1.12|0.86|1.05|0.92', 'magCoverKnapp': 1,
-        'magFeed': 'serif|serif|band|serif|flaeche|serif|serif|band|serif|serif|flaeche', 'magAusrichtung': 'mitte', 'magCoverWechsel': 0,
-        'magMonogramm': '', 'magNummer': 0, 'magRahmen': 0, 'magSignatur': 'schrift|caps',
-        'magMono': '', 'magAkzent': '#FFFFFF', 'magFlaeche': '#63241E', 'magFlaecheText': '#F4EEE8', 'magFlaecheAkzent': '#F4EEE8',
-        'magBand': 'rgba(15,15,15,0.97)', 'magDunkelCover': 0.16, 'magDunkel': 0.24,
-        'kino': 1, 'kinoSaettigung': 0, 'kinoWarm': 0, 'kinoKontrast': 1.1, 'kinoHeben': 8, 'kinoGamma': 0.92, 'kinoVignette': 0.1, 'kinoSplit': 0}
 RUHIG = {'magCoverSerif': 'HelveticaNeueBrand', 'magSerif': 'HelveticaNeueBrand', 'magSerifGewicht': '700', 'magCoverSerifGewicht': '700',
          'magTitelVersal': 1, 'magTitelGewicht': '700', 'magTitelFs': 0.062, 'magTitelLaufweite': -15, 'magTitelSkala': 1, 'magTitelReihe': '',
          'magKursivBetonung': 1, 'magKursivLaufGewicht': '300', 'magCoverInline': 1, 'magCoverKnapp': 0,
@@ -89,19 +72,6 @@ RUHIG = {'magCoverSerif': 'HelveticaNeueBrand', 'magSerif': 'HelveticaNeueBrand'
          'magKicker': '', 'magSignatur': '', 'magMonogramm': '', 'magNummer': 0, 'magRahmen': 0, 'magMono': '#FFFFFF', 'magAkzent': '#FFFFFF',
          'magBand': 'rgba(15,15,15,0.96)', 'magDunkelCover': 0.04, 'magVerlaufCover': 0.38, 'magDunkel': 0.22,
          'kino': 1, 'kinoSaettigung': 0.95, 'kinoWarm': 0.02, 'kinoKontrast': 1.02, 'kinoHeben': 6, 'kinoGamma': 0.92, 'kinoVignette': 0, 'kinoSplit': 0}
-OXBLOOD = {'magBand': 'rgba(92,28,34,0.96)',
-           # edler: Roxborough (Carinas Lizenz) statt fetter Helvetica-Versalien, Weiterlauf Cormorant kursiv
-           'magTitelVersal': 0, 'magCoverSerif': 'Roxborough CF', 'magCoverSerifGewicht': '400', 'magSerif': 'Roxborough CF', 'magSerifGewicht': '400',
-           'magTitelSkala': 0.74, 'magKursiv': 'Cormorant Garamond', 'magKursivGewicht': '400', 'magKursivSkala': 1.0,
-           'magKursivLaufSchrift': 'Cormorant Garamond', 'magKursivLaufGewicht': '400', 'magBreit': 'HelveticaNeueBrand', 'magBreitGewicht': '400',
-           'scrapFarben': {
-    'tf': 'Roxborough CF', 'tw': '400', 'tup': 0, 'tsk': 1.12, 'tlh': 1.0, 'tcs': -10, 'rf': 'Cormorant Garamond', 'rw': '400', 'rsk': 1.1,
-    'lf': 'HelveticaNeueBrand', 'lw': '500', 'lcs': 300,
-    'bg': ['#F0E8DD', '#C9B39D', '#5C1C22', '#F4EFE8'], 'rissPapier': '#5C1C22', 'rissText': '#F0E8DD',
-    'tape1': 'rgba(201,179,157,0.85)', 'tape2': 'rgba(245,240,233,0.72)', 'tape3': 'rgba(201,179,157,0.9)',
-    'papier': '#FBF8F3', 'bon': '#F6F1E9', 'hell': '#FBF8F3', 'akzent': '#D9C6B2', 'kornDunkel': 16,
-    'gitter': 'rgba(90,75,65,0.15)', 'linie': '#DDD5CB', 'rand': '#B98A8A', 'polNotiz': '#0F0F0F',
-    'st': {'riss': ['r1', 'r2', 'r3', 'r4', 'r5'], 'pol': ['o1', 'o2'], 'bon': ['w1', 'w2', 'w3', 'w4'], 'todo': ['s1', 's2', 's3', 's4']}}}
 KLAR = {'magTitelVersal': 0, 'magCoverSerif': 'Instrument Serif', 'magCoverSerifGewicht': '400', 'magSerif': 'Instrument Serif', 'magSerifGewicht': '400',
         'magTitelSkala': 1, 'magCoverFs': 0.076, 'magH2Fs': 0.088, 'magSerifLaufweite': -45, 'magCoverInline': 0, 'magCoverKnapp': 0, 'magCoverEinTitel': 1,
         'magSkriptStandard': "schau mal|lies weiter|so geht's|ehrlich jetzt", 'magHandArt': 'skript', 'magHand': 'Nothing You Could Do', 'magHandGewicht': '400', 'magHandSkala': 1,
@@ -113,8 +83,6 @@ KLAR = {'magTitelVersal': 0, 'magCoverSerif': 'Instrument Serif', 'magCoverSerif
         'magPremiumCut': 'k3|k2|k7|k4',
         'magCoverBreite': 0.86, 'magTextMaxH': 0.34, 'magFeed': '', 'magMono': '#FFFFFF', 'magAkzent': '#FFFFFF',
         'magDunkelCover': 0, 'magVerlaufCover': 0.1, 'magDunkel': 0, 'magKursivBetonung': 0}
-KLAR_PLAYFAIR = {'magCoverSerif': 'Playfair Display', 'magSerif': 'Playfair Display', 'magSerifLaufweite': -15, 'magCoverFs': 0.066, 'magH2Fs': 0.074,
-                 'premiumSerif': 'Playfair Display', 'scrapFarben': {**KLAR['scrapFarben'], 'tf': 'Playfair Display', 'rf': 'Playfair Display', 'tcs': -10, 'tsk': 1.0}}
 # Kontrast: Schwarz, Weiß, Anthrazit #33363A, leichter Oxblood-Akzent #5E1A21 (seit 10.10. abends, vorher Oxblood), S/W-Fotos mit hartem Kontrast (tools/kontrast-zeichner.js)
 KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'fotozeilen|weiss|fotoetikett|flaeche|fotozeilen|cutwort', 'coverGesichtAnteil': 100, 'kinoWarm': 0, 'kinoSaettigung': 1, 'kontrastPapierGrund': '#2B2D30', 'bildTon': '22,23,24', 'ablaufTiefeOben': 0.84, 'ablaufTiefeMitte': 0.76, 'ablaufTiefeUnten': 0.92, 'grundA': '#33363A', 'magKontrastCut': 'k3|k2|k7|k4|k5',
             'magKontrastRubrik': 'Ehrlich jetzt|Klartext|Ja-Sagerinnen wissen|Notiz an dich|Aus meinem Alltag', 'kontrastOx': '#33363A', 'magSkriptJede': 0,
@@ -123,44 +91,7 @@ KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'fotozeilen|weiss|fotoetikett|
             'kontrastFotoGroesse': 0.125, 'kontrastFotoBreite': 0.8, 'kontrastVersal': 0.032, 'kontrastFotoSkript': 0.075, 'kontrastFotoHoehe': 0.46, 'kontrastErgebnisGroesse': 0.075, 'kontrastCutGroesse': 0.55, 'kontrastAblauf': 1,
             'kontrastSkript': 'hör mal|ehrlich jetzt|merk dir das|Achtung', 'kontrastSkriptJede': 2, 'kontrastOrange': '#E2BFB2', 'kontrastAkzent': '#5E1A21', 'kontrastAkzentHell': '#E2BFB2',
             'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.14}
-# Carinas Stift: Farbfotos mit weißer Gloock-Schrift + schwarze Text-Kacheln, orangener Stift (tools/stift-zeichner.js)
-STIFT = {'magKlarFeed': '', 'magKontrastFeed': '', 'magStiftFeed': 'foto|schwarz', 'stiftArten': 'unter|kreis|notiz',
-         'stiftNotizen': 'ja, du.|ehrlich jetzt.|lies weiter →|genau so.', 'stiftOrange': '#F07A3A', 'stiftOx': '#5E1A21',
-         'magSkriptJede': 0, 'magCoverSerif': 'Gloock', 'magSerif': 'Gloock', 'magSerifLaufweite': -25,
-         'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.14}
-# Papier & Porträt: Playfair + Schreibschrift, Creme-Papier, Porträts, Oxblood (tools/carina-zeichner.js)
-CARINA = {'magKlarFeed': '', 'magKontrastFeed': '', 'magStiftFeed': '', 'magCarinaFeed': 'portraet|papier|abzug|portraet|oxblood|trend',
-          'carinaRubrik': 'Ehrlich jetzt|Klartext|Ja-Sagerinnen wissen|Notiz an dich|Aus meinem Alltag', 'carinaSkript': 'hör mal|ehrlich jetzt|merk dir das|Achtung',
-          'carinaOx': '#5E1A21', 'carinaOrange': '#F4A06C', 'magSkriptJede': 0,
-          'magCoverSerif': 'Playfair Display', 'magSerif': 'Playfair Display', 'magSerifLaufweite': -30,
-          'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.14}
-# Statement: entsättigtes Foto, Zitat in Libre Baskerville mit orangen Fettwörtern, Sticker (tools/statement-zeichner.js)
-STATEMENT = {'magKlarFeed': '', 'magKontrastFeed': '', 'magStiftFeed': '', 'magCarinaFeed': '', 'magStatementFeed': 'zitatfoto|creme|zitatfoto|olive|zitatfoto|creme|zitatfoto|oxzeitung', 'statementOlive': '#2A3530', 'statementOliveTief': '#0F1714', 'statementDunkelAkzent': '#EC7438',
-             'statementOrange': '#E8692E', 'statementGrund': '#0F1A28', 'statementSticker': '#EC7438', 'magSkriptJede': 0,
-             'magCoverSerif': 'Instrument Serif', 'magSerif': 'Instrument Serif', 'magSerifLaufweite': -40,
-             'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.1}
-# Leinen: Stoff-Texturen, Versal-Serif, Schreibmaschine, Handschrift, Ja-Siegel (tools/leinen-zeichner.js)
-LEINEN = {'magKlarFeed': '', 'magKontrastFeed': '', 'magStiftFeed': '', 'magCarinaFeed': '', 'magStatementFeed': '',
-          'magLeinenFeed': 'stoffcaps|fotolinks|notiz|marke|nachtcaps|fotostreifen|fotolinks', 'leinenGlut': '#E8692E', 'magSkriptJede': 0,
-          'magCoverSerif': 'Instrument Serif', 'magSerif': 'Instrument Serif', 'magSerifLaufweite': -40,
-          'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.12}
-# Burgund: Oxblood, Helvetica-Versalien, Pillen, Suchleiste, Freisteller (tools/burgund-zeichner.js)
-BURGUND = {'magKlarFeed': '', 'magKontrastFeed': '', 'magStiftFeed': '', 'magCarinaFeed': '', 'magStatementFeed': '', 'magLeinenFeed': '',
-           'magBurgundFeed': 'zweiton|flaeche|leise|freisteller|suche|fotocaps|flaeche', 'burgundFarbe': '#3F1519', 'magSkriptJede': 0,
-           'magCoverSerif': 'HelveticaNeueBrand', 'magSerif': 'HelveticaNeueBrand', 'magSerifLaufweite': -20,
-           'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.1}
-# Untertitel: Farbfoto, fette Helvetica schwarz auf weißen Zeilen-Kästchen, ein Wort rot (tools/untertitel-zeichner.js)
-UNTERTITEL = {'magKlarFeed': '', 'magKontrastFeed': '', 'magStiftFeed': '', 'magCarinaFeed': '', 'magStatementFeed': '', 'magLeinenFeed': '', 'magBurgundFeed': '',
-              'magUntertitelFeed': 'unten', 'magSkriptJede': 0,
-              'magCoverSerif': 'HelveticaNeueBrand', 'magSerif': 'HelveticaNeueBrand', 'magSerifLaufweite': -20,
-              'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.1}
-# Foto & Serif: Farbfoto abgedunkelt, weiße Instrument Serif zentriert, kursives Wort (tools/fotoserif-zeichner.js)
-FOTOSERIF = {'magKlarFeed': '', 'magKontrastFeed': '', 'magStiftFeed': '', 'magCarinaFeed': '', 'magStatementFeed': '', 'magLeinenFeed': '', 'magBurgundFeed': '', 'magUntertitelFeed': '',
-             'magFotoSerifFeed': 'mitte', 'magSkriptJede': 0,
-             'magCoverSerif': 'Instrument Serif', 'magSerif': 'Instrument Serif', 'magSerifLaufweite': -40,
-             'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.1}
-ZITRONE = [('zitrone-hell', '#F4EE6E'), ('zitrone-kraeftig', '#EDE64C'), ('zitrone-pastell', '#F1F0A0')]
-weitere = ''.join(',"editorial-' + k + '":' + json.dumps({**look, **v}, ensure_ascii=False, separators=(',', ':')) for k, v in [('b', {'magFeed': ''}), ('pop', {'magFeed': '', 'magCover': 'pop'})]) + ''.join(',"editorial-' + k + '":' + json.dumps({**look, 'magAkzent': f}, ensure_ascii=False, separators=(',', ':')) for k, f in AKZENTE) + ''.join(',"editorial-' + k + '":' + json.dumps({**look, 'magAkzent': f, 'magFlaeche': f, 'magFlaecheText': '#1E2426'}, ensure_ascii=False, separators=(',', ':')) for k, f in ZITRONE) + ',"editorial-premium":' + json.dumps({**look, **PREMIUM}, ensure_ascii=False, separators=(',', ':')) + ''.join(',"editorial-premium-' + k + '":' + json.dumps({**look, **PREMIUM, 'magMono': f, 'magFeed': 'serif|mitte|band|serif|kringel|band|serif|durch|mitte|serif|band'}, ensure_ascii=False, separators=(',', ':')) for k, f in [('gelb', '#F7F1C4'), ('weiss', '#FFFFFF')]) + ''.join(',"editorial-typo' + k + '":' + json.dumps({**look, **PREMIUM, **TYPO_BASIS, **v}, ensure_ascii=False, separators=(',', ':')) for k, v in TYPO) + ',"editorial-feed":' + json.dumps({**look, **FEED}, ensure_ascii=False, separators=(',', ':')) + ',"editorial-ruhig":' + json.dumps({**look, **RUHIG}, ensure_ascii=False, separators=(',', ':')) + ',"editorial-ruhig-oxblood":' + json.dumps({**look, **RUHIG, **OXBLOOD}, ensure_ascii=False, separators=(',', ':')) + ',"editorial-klar":' + json.dumps({**look, **RUHIG, **KLAR}, ensure_ascii=False, separators=(',', ':')) + ',"editorial-klar-playfair":' + json.dumps({**look, **RUHIG, **KLAR, **KLAR_PLAYFAIR}, ensure_ascii=False, separators=(',', ':')) + ',"editorial-leinen":' + json.dumps({**look, **RUHIG, **KLAR, **LEINEN}, ensure_ascii=False, separators=(',', ':')) + ',"editorial-fotoserif":' + json.dumps({**look, **RUHIG, **KLAR, **FOTOSERIF}, ensure_ascii=False, separators=(',', ':')) + ',"editorial-untertitel":' + json.dumps({**look, **RUHIG, **KLAR, **UNTERTITEL}, ensure_ascii=False, separators=(',', ':')) + ',"editorial-burgund":' + json.dumps({**look, **RUHIG, **KLAR, **BURGUND}, ensure_ascii=False, separators=(',', ':')) + ',"editorial-statement":' + json.dumps({**look, **RUHIG, **KLAR, **STATEMENT}, ensure_ascii=False, separators=(',', ':')) + ',"editorial-carina":' + json.dumps({**look, **RUHIG, **KLAR, **CARINA}, ensure_ascii=False, separators=(',', ':')) + ',"editorial-stift":' + json.dumps({**look, **RUHIG, **KLAR, **STIFT}, ensure_ascii=False, separators=(',', ':')) + ',"editorial-kontrast":' + json.dumps({**look, **RUHIG, **KLAR, **KONTRAST}, ensure_ascii=False, separators=(',', ':')) + ',"editorial-ruhig-pur":' + json.dumps({**look, **RUHIG, 'magFeed': 'serif|serif|band|serif|serif|serif|band'}, ensure_ascii=False, separators=(',', ':'))
+weitere = ',"editorial-kontrast":' + json.dumps({**look, **RUHIG, **KLAR, **KONTRAST}, ensure_ascii=False, separators=(',', ':'))
 ersetze('},"frech":', '},"editorial":' + json.dumps(look, ensure_ascii=False, separators=(',', ':')) + weitere + ',"frech":')
 
 ZEICHNER = r'''if($e&&BS_KACHEL.magazin===1){const zFb=Pe.fabric,K=BS_KACHEL,zW=r,zH=n;
@@ -248,18 +179,8 @@ if(zGim==="sticker"){const zr2=zW*.112,zcx=zLinks?zW*.24:zW*.76,zcy=Math.max(zH*
 if(zGim==="zettel"&&zGimZettel){const zbw=zW*.38,zfs=zW*.05,zcx=zLinks?zW*.32:zW*.68,zcy0=zH*.3,ztb=new zFb.Textbox(zGimZettel,{width:zbw-zW*.07,fontFamily:HAND,fontWeight:HW,fontSize:zfs,lineHeight:.98,fill:"#1E2B30",textAlign:"left",originX:"center",originY:"center",left:zcx,top:zcy0,angle:2.5,...zNo});const zbh=(ztb.height||zfs*3)+zW*.07,zcy=Math.max(zH*.13+zbh/2,Math.min(zH*.3,zY0-zH*.045-zbh/2));ztb.set("top",zcy);e.add(new zFb.Rect({left:zcx,top:zcy,width:zbw,height:zbh,originX:"center",originY:"center",angle:2.5,fill:"#F7F3EA",shadow:new zFb.Shadow({color:"rgba(0,0,0,0.22)",blur:zW*.035,offsetX:0,offsetY:zW*.01}),...zNo}));e.add(ztb);e.add(new zFb.Rect({left:zcx+Math.sin(2.5*Math.PI/180)*zbh/2,top:zcy-Math.cos(2.5*Math.PI/180)*zbh/2,width:zW*.1,height:zW*.028,originX:"center",originY:"center",angle:-3,fill:AK,opacity:.75,...zNo}))}
 K.magRahmen&&e.add(new zFb.Rect({left:zW*.045,top:zW*.045,width:zW*.91,height:zH-zW*.09,fill:"",stroke:TXT,strokeWidth:Math.max(1,zW*.0013),opacity:.38,...zNo}));K.magMonogramm&&e.add(new zFb.Text(String(K.magMonogramm),{left:zW*.905,top:zH*.105,originX:"right",originY:"center",fontFamily:SER,fontWeight:SW,fontSize:zW*.075,charSpacing:-40,fill:TXT,shadow:zSch,...zNo}));if(K.magNummer!==0){const zNr=zCover?(typeof t._tag=="number"?"N° "+String(t._tag).padStart(3,"0"):""):String(((i&&i.slideIndex)||0)+1).padStart(2,"0")+" / "+String((i&&i.totalSlides)||"").padStart(2,"0");zNr&&e.add(new zFb.Text(zNr,{left:L,top:zH*.105,originX:"left",originY:"center",fontFamily:SANS,fontWeight:"500",fontSize:zW*.022,charSpacing:260,fill:TXT,opacity:.82,shadow:zSch,...zNo}))}if(K.magSignatur){const zSl=String(K.magSignatur).split("|").filter(Boolean),zSa=zSl[((Number(t._tag)||0)%zSl.length+zSl.length)%zSl.length];zSa==="schrift"?e.add(new zFb.Text(K.magSigText||"carinaannaprav",{left:zW/2,top:zH*.928,originX:"center",originY:"center",fontFamily:K.magSigSchrift||"Mrs Saint Delafield",fontWeight:"400",fontSize:zW*.062,fill:TXT,opacity:.92,shadow:zSch,...zNo})):e.add(new zFb.Text(K.magSigCaps||"BY CARINA ANNA PRAV",{left:zW/2,top:zH*.935,originX:"center",originY:"center",fontFamily:SANS,fontWeight:"500",fontSize:zW*.017,charSpacing:380,fill:TXT,opacity:.85,shadow:zSch,...zNo}))}
 t.overlayImage&&await Ae(t.overlayImage).catch(()=>{});e.renderAll();return}'''
-SCRAP = open(__file__.rsplit('/', 1)[0] + '/scrap-zeichner.js', encoding='utf-8').read().split('*/', 1)[1].strip()
-KLARZ = open(__file__.rsplit('/', 1)[0] + '/klar-zeichner.js', encoding='utf-8').read().split('*/', 1)[1].strip()
-LEINENZ = open(__file__.rsplit('/', 1)[0] + '/leinen-zeichner.js', encoding='utf-8').read().split('*/', 1)[1].strip()
-FOTOSZ = open(__file__.rsplit('/', 1)[0] + '/fotoserif-zeichner.js', encoding='utf-8').read().split('*/', 1)[1].strip()
-UNTERZ = open(__file__.rsplit('/', 1)[0] + '/untertitel-zeichner.js', encoding='utf-8').read().split('*/', 1)[1].strip()
-BURGZ = open(__file__.rsplit('/', 1)[0] + '/burgund-zeichner.js', encoding='utf-8').read().split('*/', 1)[1].strip()
-STATEZ = open(__file__.rsplit('/', 1)[0] + '/statement-zeichner.js', encoding='utf-8').read().split('*/', 1)[1].strip()
-CARINAZ = open(__file__.rsplit('/', 1)[0] + '/carina-zeichner.js', encoding='utf-8').read().split('*/', 1)[1].strip()
-STIFTZ = open(__file__.rsplit('/', 1)[0] + '/stift-zeichner.js', encoding='utf-8').read().split('*/', 1)[1].strip()
 KONTZ = open(__file__.rsplit('/', 1)[0] + '/kontrast-zeichner.js', encoding='utf-8').read().split('*/', 1)[1].strip()
-PREMZ = open(__file__.rsplit('/', 1)[0] + '/premium-zeichner.js', encoding='utf-8').read().split('*/', 1)[1].strip()
-ZEICHNER = ZEICHNER.replace('if(zCover&&!zMark&&K.magCoverInline===1)', KLARZ + PREMZ + SCRAP + KONTZ + STIFTZ + CARINAZ + STATEZ + LEINENZ + BURGZ + UNTERZ + FOTOSZ + 'if(zCover&&!zMark&&K.magCoverInline===1)', 1).replace('zTyp==="flaeche"&&(zSch=void 0);', '(zTyp==="flaeche"||zTyp0==="scrap")&&(zSch=void 0);', 1)
+ZEICHNER = ZEICHNER.replace('if(zCover&&!zMark&&K.magCoverInline===1)', 'let zkObenA=null,zkKeinSchatten=!1,zkScrap="";' + KONTZ + 'if(zCover&&!zMark&&K.magCoverInline===1)', 1).replace('zTyp==="flaeche"&&(zSch=void 0);', '(zTyp==="flaeche"||zTyp0==="scrap")&&(zSch=void 0);', 1)
 ANKER = 'if($e&&(t.karte==="ablauf"||t.reminderArt==="ablauf")){const Ab=T1('
 ABLZ = open(__file__.rsplit('/', 1)[0] + '/kontrast-ablauf.js', encoding='utf-8').read().split('*/', 1)[1].strip()
 ersetze(ANKER, ABLZ.replace('\n', '') + ZEICHNER.replace('\n', '') + ANKER)

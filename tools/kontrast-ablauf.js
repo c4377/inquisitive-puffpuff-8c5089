@@ -1,10 +1,10 @@
 /* Ablauf-/Zusammenarbeit-Folien im Kontrast-Look (kontrastAblauf: 1). Liest das Ablauf-Format
    (#KOPF | ZEILE, Titel, >UNTERZEILE, [stationen: …] oder [liste: …], Fließtext) und setzt es luftig:
-   abwechselnd hell (#F7F4EF) und dunkel (Anthrazit), Titel in CormorantKontrast, Rest in Helvetica Light,
+   abwechselnd hell (kontrastHell) und dunkel (Anthrazit), Titel in Instrument Serif, Rest in Helvetica Light,
    Stationen als Punkte auf einer feinen Linie, Listen mit Nummern und Haarlinien, Seitenzahl unten.
    Wird von editorial-look.py VOR dem Magazin-Zeichner eingesetzt; alle Zeilenumbrüche werden entfernt. */
 if((t.karte==="ablauf"||t.reminderArt==="ablauf")&&BS_KACHEL.magKontrastFeed&&BS_KACHEL.kontrastAblauf===1){const zFb=Pe.fabric,K=BS_KACHEL,zW=r,zH=n,zNo={selectable:!1,evented:!1};
-const zaIS=K.kontrastSerif||"CormorantKontrast",zaHN="HelveticaNeueBrand",zaN=(i&&i.slideIndex)||0,zaTot=(i&&i.totalSlides)||0,zaDunkel=zaN%2===1;
+const zaIS=K.kontrastSerif||"Instrument Serif",zaHN="HelveticaNeueBrand",zaN=(i&&i.slideIndex)||0,zaTot=(i&&i.totalSlides)||0,zaDunkel=zaN%2===1;
 try{await Promise.race([Promise.all([`400 40px "${zaIS}"`,`italic 400 40px "${zaIS}"`,`300 40px ${zaHN}`,`500 40px ${zaHN}`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,4e3))])}catch(zz){}
 e.getObjects().forEach(zo=>{zo.visible=!1});
 const zaG=zaDunkel?(K.kontrastOx||"#33363A"):(K.kontrastHell||"#F7F4EF"),zaS=zaDunkel?"#FFFFFF":"#1A1714",zaA=zaDunkel?(K.kontrastAkzentHell||"#E2BFB2"):(K.kontrastAkzent||"#5E1A21"),zaL=zaDunkel?"rgba(255,255,255,0.72)":"#5C5650",zaH=zaDunkel?"rgba(255,255,255,0.22)":"rgba(26,23,20,0.16)";

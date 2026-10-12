@@ -1,7 +1,0 @@
-# Alte Versionen zuerst auf die Hauptadresse, sonst schluckt sie die Regel darunter.
-/dunkel/*    /                    301
-/noir/*      /                    301
-/v3/*        /                    301
-/v2          /v2/                 301
-/profilbilder/*  /profilbilder/index.html  200
-/*           /index.html          200

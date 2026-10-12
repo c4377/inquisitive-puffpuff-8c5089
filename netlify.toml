@@ -1,16 +1,14 @@
 # KEIN Build-Schritt. Der Ordner "site" wird unveraendert veroeffentlicht.
-# Der Quellcode in src/ ist aelter als die laufende App und dient nur als Archiv.
-# Siehe EINSPIELEN.md.
+# Gebaut wird lokal mit tools/editorial-look.py, siehe EINSPIELEN.md.
 
 [build]
   publish = "site"
   # Leerer Befehl = ausdruecklich kein Build. Muss dastehen: laesst man
-  # "command" ganz weg, greift der Build-Befehl aus den Netlify-Einstellungen,
-  # und der wuerde die App aus dem veralteten src/ neu bauen.
+  # "command" ganz weg, greift der Build-Befehl aus den Netlify-Einstellungen.
   command = ""
 
-# /dunkel/, /noir/ und /v3/ waren eigene Versionen. Es gibt nur noch die
-# Hauptadresse im v3-Look; alte Lesezeichen landen dort.
+# /dunkel/, /noir/ und /v3/ waren eigene Versionen. Alte Lesezeichen landen
+# auf der Hauptadresse.
 # Feed Studio (Version 2 zum Verkaufen) liegt fertig gebaut unter /v2/.
 # Ohne Schraegstrich wuerden die relativen Pfade nicht stimmen.
 [[redirects]]
@@ -39,6 +37,14 @@
 [[redirects]]
   from = "/profilbilder/*"
   to = "/profilbilder/index.html"
+  status = 200
+
+# Alte App-Dateinamen (index-B5kartenNNN.js), die es nicht mehr gibt, landen
+# auf der aktuellen Version. Greift nur, wenn die Datei fehlt. Bei jedem
+# neuen Build die Nummer hier mitziehen (siehe EINSPIELEN.md).
+[[redirects]]
+  from = "/assets/index-B5karten*"
+  to = "/assets/index-B5karten547.js"
   status = 200
 
 [[redirects]]
@@ -76,11 +82,6 @@
 
 [[headers]]
   for = "/v2/index.html"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/marken-schalter.js"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 

@@ -51,9 +51,7 @@
     kontrastHandle: handle || "@" + name.toLowerCase().replace(/[^a-z0-9äöüß]+/g, ""),
     magKontrastFeed: "fotozeilen|weiss|fotoetikett|flaeche|fotozeilen|cutwort",
     magKontrastRubrik: info.rubriken || "Gut zu wissen|Klartext|Notiz",
-    kontrastSkriptJede: 0,
-    vnHandle: handle || "@deinbusiness",
-    vnMarke: name
+    kontrastSkriptJede: 0
   };
 })();
 
