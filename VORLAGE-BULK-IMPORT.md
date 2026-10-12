@@ -71,6 +71,8 @@ Slide 3: Beispiel: W-FGHIJ & Ein Satz, in dem man *sie* erkennt.
 Slide 4: Schreib mir STARTEN ↓
 ```
 
+**Ohne Kennungen tippen:** Im ⋮-Menü einer Kachel auf **„Als Vorher/Nachher-Post“** tippen. Cover und letzte Folie bleiben, dazwischen entstehen die Vorher/Nachher-Folie und die Beispiel-Folie. Darunter stehen Felder wie „Folie 2 · Vorher: Screenshot wählen“. Antippen zeigt deine Work-Screenshots, ein Tipp auf ein Bild setzt es ein. Satz und Rubrik änderst du über „Bearbeiten“.
+
 - **Label: Kennung**: Das Label darfst du frei wählen, zum Beispiel `Vorher`, `Nachher`, `Beispiel`, `Davor`, `Woche 1`.
 - **Mehrere Posts**: Bis zu drei Posts nebeneinander, getrennt mit `|`.
 - **Satz nach `&`**: Er steht in der Serifenschrift über den Posts bzw. unter einem einzelnen Post. Das Wort mit \*Sternchen\* wird kursiv.

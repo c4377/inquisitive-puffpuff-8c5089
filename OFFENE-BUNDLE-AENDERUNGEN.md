@@ -12937,3 +12937,19 @@ Alle Adressen laden **karten548**.
 - Jetzt bekommen alle drei Aufrufe `ctaImage` und `typography` aus `e.currentBrandConfig`. Test: Ein grünes Test-CTA-Foto ist im exportierten letzten Bild zu sehen.
 
 Alle Adressen laden **karten549**.
+
+## 504 — Vorher/Nachher-Vorlage und Screenshot-Auswahl im ⋮-Menü (karten551)
+
+- Neu: tools/vorher-nachher-menue.js wird als Komponente `VNWahl` neben `zKennung` ins Bundle gesetzt und im ⋮-Menü jeder Kachel nach „Stories dazu schreiben“ angezeigt (Abschnitt VORHER / NACHHER).
+- „Als Vorher/Nachher-Post“ (`vnVorlage`) behält Cover und letzte Folie und setzt dazwischen „[Vorher / Nachher] Vorher: W-00000 | Nachher: W-00000 & Derselbe Gedanke, *zweimal.*“ und „Beispiel: W-00000 & Ein Satz, in dem man *sie* erkennt.“ Bei mehr als zwei Folien wird vorher nachgefragt.
+- Für jede Kennung in einer Folie gibt es ein Feld. Antippen lädt die Screenshot-Bibliothek (Cache `window.__bsShotLib`, sonst `au.loadScreenshotLibrary`), mit den Filtern Work/Testimonials/Alle. Ein Tipp setzt die Kennung (`vnSetzen`, die n-te Kennung der Folie wird ersetzt).
+- `W-00000` ist der Platzhalter. Der Zeichner schreibt dort „Screenshot im ⋮-Menü wählen“ statt „… nicht gefunden“.
+
+## 505 — Foto-Cover wie Carinas Post vom 5.9. (karten551)
+
+- Referenz: Carinas Post „Ich dachte ewig, ich bekomm keine Kundinnen“. Gemessen hatte er im oberen Bildteil Mitten bei 161, Sättigung 58, Klarheit 12,7; im unteren Teil hinter dem Text 124. Die App (karten549, 0 %) hatte 143 / 42 / 7,8 und unten 82: flach, grau, unten zu dunkel.
+- zxFarbe: Weißpunkt aus dem 99,5-%-Wert des Fotos (die hellste Stelle wird fast weiß), dann die Gamma-Kurve auf Hautziel `kontrastHautZiel` 128 bzw. Bildziel `kontrastFotoZiel` 138, eine leichte S-Kurve `kontrastFotoKurve` 0,3 und Farbe `kontrastFotoSaett` 1,3. Danach Klarheit (`kontrastKlarheit` 0,45): Detailkontrast gegen eine auf 1/24 verkleinerte, weich hochskalierte Kopie. Schwarzpunkt-Grundwert `kontrastFotoSchwarz` 10.
+- Abdunklung: Die feste Vignette unten ist ersetzt durch einen Verlauf, der knapp über dem Textblock beginnt (`kontrastVerlaufVor` 0,2 der Höhe) und hinter dem Text am stärksten wird (`kontrastVerlauf` 0,4 + Schwarz-Regler). Oben nur noch ein leichter Verlauf (`kontrastVerlaufOben` 0,12). Die flache 4-%-Abdunklung entfällt.
+- Ein Schwarz-Weiß-Versuch in diesem Schritt wurde verworfen (Carina: „niemand hat gesagt Black and White“). Der Code für ein S/W-CTA-Foto greift nur bei `kontrastFotoSaett: 0` und ist damit aus.
+
+Alle Adressen laden **karten551**.
