@@ -13030,3 +13030,11 @@ Alle Adressen laden **karten560**.
 - Neuer Knopf neben „Ablauf“ (`vnNeu`, gebaut wie `pinAnlegen`): legt einen neuen Post am Ende des Plans an (höchster Tag + 1, Titel „Vorher / Nachher“). Folien: Vergleich mit Platzhaltern W-00000 als Cover, zwei Textfolien zum Überschreiben, CTA „Schreib mir STARTEN ↓“. Die Fotos vergibt `Rt` wie bei allen neuen Posts. Danach wählt man die Screenshots im ⋮-Menü der Kachel.
 
 Alle Adressen laden **karten561**.
+
+## 516 — Neue Kachel „fotorahmen“ statt Freisteller-Wort (karten562)
+
+- Carina: Statt der Kachel mit dem großen Wort ein Layout wie bei @lisa.contentdesign („In Zeiten von krasser KI …“, „Du schuldest niemandem ein Follow“).
+- kontrast-zeichner.js, Typ `fotorahmen`: Anthrazit-Grund (`kontrastRahmenGrund`), das bearbeitete Foto als Ausschnitt oben rechts (x 42 %–100 %, y 8 %–68 %, `kontrastRahmenX/Y/H`), auf das Gesicht zugeschnitten. Der Hook steht groß in Instrument Serif linksbündig (`kontrastRahmenGroesse` 0,15, Breite 80 %), ragt ins Foto und trägt ein Akzentwort in Rosé. Darunter steht der Text nach „&“ bzw. der Klammer-Einschub in Helvetica Light, unten links das Handle.
+- Rhythmus: `fotozeilen|weiss|fotoetikett|flaeche|fotozeilen|fotorahmen` (auch im Kundenraum, kundenraum.js v4). Die Freisteller-Kachel `cutwort` bleibt im Code, ist aber nicht mehr im Rhythmus.
+
+Alle Adressen laden **karten562**.

@@ -66,7 +66,7 @@
   window.BS_RAUM_K = {
     kontrastAbsender: name.toLocaleUpperCase("de-DE"),
     kontrastHandle: handle || "@" + name.toLowerCase().replace(/[^a-z0-9äöüß]+/g, ""),
-    magKontrastFeed: "fotozeilen|weiss|fotoetikett|flaeche|fotozeilen|cutwort",
+    magKontrastFeed: "fotozeilen|weiss|fotoetikett|flaeche|fotozeilen|fotorahmen",
     magKontrastRubrik: info.rubriken || "Gut zu wissen|Klartext|Notiz",
     kontrastSkriptJede: 0
   };
