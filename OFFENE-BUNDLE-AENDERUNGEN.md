@@ -13068,3 +13068,10 @@ Alle Adressen laden **karten565**.
 - Hell und Anthrazit: Headline-Grundgröße .125 → .155 der Breite, Textbreite .74 → .86, maximale Texthöhe .46 → .58. Der ganze Block (Label, Headline, Zeile darunter, Schreibschrift) steht mittig auf .5 statt .47 der Höhe (gilt auch für Papier).
 
 Alle Adressen laden **karten566**.
+
+## 521 — Vorher/Nachher-Hinweis ohne ⋮ (karten567)
+
+- Carina: „Was heißt das -Menü?“ Das Zeichen ⋮ fehlt in der Schrift auf der Folie, zu sehen war nur „Screenshot im :-Menü wählen“.
+- Platzhalter auf der Folie jetzt: „Im Plan: drei Punkte an der Kachel → Screenshot wählen“. Die beiden Hinweise nach „Vorher/Nachher“ (Knopf und Vorlage) sagen ebenfalls „drei Punkte an der Kachel“.
+
+Alle Adressen laden **karten567**.
