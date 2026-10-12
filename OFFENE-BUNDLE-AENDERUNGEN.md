@@ -13131,3 +13131,12 @@ Alle Adressen laden **karten573**.
 - Überschrift des Vergleichs-Covers in der Vorschau: „Derselbe Gedanke, *zweimal*.“ Nur Ansicht; keine echten Kundenposts.
 
 Alle Adressen laden **karten574**.
+
+## 529 — Vorschau-Vergleichsposts mit Beispiel-Kundinnen (karten575)
+
+- Carina: „Der Nachher-Post soll ja als Hero meine Kundin haben. Meine Kundin bin nicht ich … aus dem Spektrum Life-Coach, Führungskräfte-Coach, irgend sowas.“
+- Vier Beispiele (`zxVNBsp`), reihum je Vergleichs-Cover: Life-Coach, Führungskräfte-Coach, Karriere-Coach, Resilienz-Coach. Je ein generischer Vorher-Hook (Tipp-Post, Pastell, Arial fett, „Swipe →“, Handle `@deinname.…`) und ein Nachher-Hook im Kontrast-Look. Cover: „Vorher / Nachher · <Nische>“ plus eine Zeile wie „Aus fünf Tipps wird *eine Haltung*.“
+- Hero im Nachher-Post: KI-Porträt einer Frau aus der Nische über `/.netlify/functions/generate-ad-image` (Rork, sonst Gemini), einmal pro Beispiel erzeugt, als JPEG (≤ 720 px) in `localStorage` `BS_VN_HERO_<0–3>` gespeichert. Schlägt die Erzeugung fehl, Graphit statt Foto; beim nächsten Zeichnen neuer Versuch.
+- Es sind ausgedachte Beispiel-Hooks und KI-Porträts, keine echten Kundinnen. Nur Vorschau (`kontrastVNVorschau: 1`).
+
+Alle Adressen laden **karten575**.
