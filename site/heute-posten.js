@@ -60,6 +60,33 @@
     return sb.storage.from("brand-images").getPublicUrl(pfad).data.publicUrl;
   }
 
+  /* Story 1080×1920 aus dem 4:5-Cover: Instagram würde das Cover sonst auf 9:16 hochzoomen und
+     links/rechts abschneiden (Carina 13.10.). Cover ganz sichtbar als Karte, Hintergrund in der Randfarbe. */
+  async function storyBild(datei) {
+    var img = await new Promise(function (ok, nein) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = nein; i.src = URL.createObjectURL(datei); });
+    var W = 1080, H = 1920, c = document.createElement("canvas"); c.width = W; c.height = H;
+    var g = c.getContext("2d");
+    var p = document.createElement("canvas"); p.width = 1; p.height = 1;
+    var pg = p.getContext("2d"); pg.drawImage(img, 0, 0, img.width, 4, 0, 0, 1, 1);
+    var f = pg.getImageData(0, 0, 1, 1).data, hell = (f[0] * 299 + f[1] * 587 + f[2] * 114) / 1000 > 140;
+    g.fillStyle = "rgb(" + Math.round(f[0] * .82) + "," + Math.round(f[1] * .82) + "," + Math.round(f[2] * .82) + ")";
+    g.fillRect(0, 0, W, H);
+    var bw = 940, bh = Math.round(bw * img.height / img.width), x = (W - bw) / 2, y = Math.round((H - bh) / 2) + 40;
+    g.save(); g.shadowColor = "rgba(0,0,0,.35)"; g.shadowBlur = 40; g.shadowOffsetY = 12;
+    g.fillStyle = "#000"; g.fillRect(x, y, bw, bh); g.restore();
+    g.drawImage(img, x, y, bw, bh);
+    g.fillStyle = hell ? "rgba(23,17,15,.75)" : "rgba(255,255,255,.85)";
+    g.font = "600 30px -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif";
+    g.textAlign = "center";
+    var t = "NEUER POST", sp = 8, breite = 0;
+    for (var k = 0; k < t.length; k++) breite += g.measureText(t[k]).width + sp;
+    var cx = W / 2 - breite / 2;
+    g.textAlign = "left";
+    for (var m = 0; m < t.length; m++) { g.fillText(t[m], cx, y - 50); cx += g.measureText(t[m]).width + sp; }
+    var blob = await new Promise(function (ok) { c.toBlob(ok, "image/jpeg", .92); });
+    return new File([blob], "story.jpg", { type: "image/jpeg" });
+  }
+
   function plan() { return Array.isArray(window.__bsPlan) ? window.__bsPlan.filter(function (t) { return t && t.slides && t.slides.length; }) : []; }
 
   function vorschlag() {
@@ -189,7 +216,7 @@
       los.disabled = true; los.style.opacity = ".5"; protokoll.textContent = "";
       try {
         var urls = [];
-        if (cbPost.checked || cbStory.checked) {
+        if (cbPost.checked) {
           log("Folien hochladen …");
           for (var i = 0; i < bilder.length; i++) { log("Folie " + (i + 1) + "/" + bilder.length + " hochladen …"); urls.push(await hochladen(bilder[i], tagObj.day, i + 1)); await warte(400); }
         }
@@ -208,7 +235,9 @@
           log("✓ Post Tag " + tagObj.day + " ist online.");
         }
         if (cbStory.checked) {
-          var sid = (await ruf({ aktion: "container", art: "story", url: urls[0] })).id;
+          log("Story-Bild 9:16 bauen …");
+          var sUrl = await hochladen(await storyBild(bilder[0]), tagObj.day, "story");
+          var sid = (await ruf({ aktion: "container", art: "story", url: sUrl })).id;
           await fertig(sid, log, "Story");
           await ruf({ aktion: "veroeffentlichen", id: sid });
           log("✓ Cover-Story ist online.");
