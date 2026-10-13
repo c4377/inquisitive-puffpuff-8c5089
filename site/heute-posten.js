@@ -160,6 +160,16 @@
         reihe.innerHTML = "";
         fs.forEach(function (f) { var i = el("img", "height:120px;border-radius:6px;flex:none"); i.src = URL.createObjectURL(f); reihe.appendChild(i); });
         bilder = fs;
+        /* Vorschau der Story (9:16), genau so, wie sie gepostet wird */
+        if (fs[0]) {
+          var sb = await storyBild(fs[0]);
+          var w = el("div", "flex:none;text-align:center;font:600 10px/1 -apple-system,sans-serif;letter-spacing:.08em;color:#9a7f78");
+          var si = el("img", "height:120px;border-radius:6px;display:block;margin-bottom:4px;outline:2px solid " + OX);
+          si.src = URL.createObjectURL(sb); si.style.cursor = "zoom-in";
+          si.onclick = function () { var gross = el("div", "position:fixed;inset:0;z-index:2147483003;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center"); var gi = el("img", "max-height:92vh;max-width:92vw;border-radius:10px"); gi.src = si.src; gross.appendChild(gi); gross.onclick = function () { gross.remove(); }; document.body.appendChild(gross); };
+          w.appendChild(si); w.appendChild(document.createTextNode("STORY"));
+          reihe.insertBefore(w, reihe.firstChild);
+        }
       } catch (e) { reihe.textContent = "Folien gingen nicht: " + e.message; }
     }
     wahl.onchange = ladeTag; ladeTag();
