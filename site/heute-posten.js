@@ -147,7 +147,7 @@
     var cap = el("textarea", "width:100%;box-sizing:border-box;min-height:140px;padding:9px 10px;border:1px solid #ddd;border-radius:8px;font:13px/1.45 -apple-system,sans-serif;margin-bottom:8px");
     box.appendChild(cap);
     var cbPost = haken(box, "Post im Feed veröffentlichen", true);
-    var cbStory = haken(box, "Cover als Story posten", true);
+    var cbStory = haken(box, "Cover als Story posten", false);
 
     async function ladeTag() {
       tagObj = plan().find(function (t) { return String(t.day) === String(wahl.value); }) || null;
@@ -244,6 +244,12 @@
           try { postLink = (await ruf({ aktion: "link", id: mid })).permalink || ""; } catch (e) {}
           merke("BS_IG_LETZTER", String(tagObj.day));
           log("✓ Post Tag " + tagObj.day + " ist online.");
+          if (postLink) {
+            log("Link zum Post (für einen Story-Sticker):");
+            var lk = knopf("Post-Link kopieren"); lk.style.margin = "4px 0 8px";
+            lk.onclick = function () { try { navigator.clipboard.writeText(postLink).then(function () { lk.textContent = "Kopiert ✓"; }); } catch (e) { prompt("Link kopieren:", postLink); } };
+            protokoll.appendChild(lk); protokoll.appendChild(document.createTextNode("\n"));
+          }
         }
         if (cbStory.checked) {
           log("Story-Bild 9:16 bauen …");
@@ -252,12 +258,6 @@
           await fertig(sid, log, "Story");
           await ruf({ aktion: "veroeffentlichen", id: sid });
           log("✓ Cover-Story ist online.");
-          if (postLink) {
-            log("Jetzt in Instagram die Story öffnen → Sticker → Link → einfügen:");
-            var lk = knopf("Post-Link kopieren"); lk.style.margin = "4px 0 8px";
-            lk.onclick = function () { try { navigator.clipboard.writeText(postLink).then(function () { lk.textContent = "Kopiert ✓"; }); } catch (e) { prompt("Link kopieren:", postLink); } };
-            protokoll.appendChild(lk); protokoll.appendChild(document.createTextNode("\n"));
-          }
         }
         if (cbReel && cbReel.checked) {
           var r = reelWahl();
