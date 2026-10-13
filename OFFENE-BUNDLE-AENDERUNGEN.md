@@ -13209,3 +13209,9 @@ Alle Adressen laden **karten583**.
 - fotozeilen/fotoetikett: `kontrastFotoGroesse` .125 → .16, `kontrastFotoBreite` .8 → .88, `kontrastFotoHoehe` .46 → .52 (damit lange Hooks nicht gleich wieder verkleinert werden). fotorahmen: Grundgröße .13 → .15.
 
 Alle Adressen laden **karten584**.
+
+## karten585 — Heute posten (13.10.)
+
+- Bundle: `window.__bsTagBilder(tag)` zeichnet die Folien eines Tages als JPEG (wie „In Fotos speichern“), `window.__bsSupa` = Supabase-Client für den Bild-Upload. Sonst unverändert (geprüft: 585 minus Einschub == 584).
+- Neu: `site/heute-posten.js` (Knopf „↑ Posten“: Tag wählen, Folien + Caption prüfen, Post/Cover-Story/Reel/Story-Video posten), `netlify/functions/instagram.mjs` (Instagram API, braucht IG_ACCESS_TOKEN, IG_USER_ID, POST_PIN), `netlify/functions/instagram-erneuern.mjs` (verlängert den Schlüssel wöchentlich).
+- Reel und Story-Video liest die Freigabe aus `site/heute.json` (schreibt der tägliche Agent).
