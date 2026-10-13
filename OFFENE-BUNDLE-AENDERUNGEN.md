@@ -13202,3 +13202,10 @@ Alle Adressen laden **karten582**.
 - Wurden Vorher/Nachher-Sätze im Post gefunden (536), zählt der Zeichner Stichwörter für elf Nischen (Ernährung, Fitness, Führung, Karriere, Business, Resilienz, Paar, Familie, Finanzen, Achtsamkeit, Life-Coach). Treffer im Vorher-/Nachher-Satz zählen dreifach, im restlichen Post einfach. Beste Nische → Kopfzeile „Vorher / Nachher · <Nische>“ und Handle der Beispiel-Posts (`@deinname.ernaehrung` usw.). Kein Treffer → nur „Vorher / Nachher“, Handle @deinname.coaching.
 
 Alle Adressen laden **karten583**.
+
+## 538 — Größere Schrift auf den Foto-Kacheln (karten584)
+
+- Carina: „Die Schrift bei den Foto-Posts muss größer sein.“
+- fotozeilen/fotoetikett: `kontrastFotoGroesse` .125 → .16, `kontrastFotoBreite` .8 → .88, `kontrastFotoHoehe` .46 → .52 (damit lange Hooks nicht gleich wieder verkleinert werden). fotorahmen: Grundgröße .13 → .15.
+
+Alle Adressen laden **karten584**.
