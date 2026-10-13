@@ -1,1 +1,1 @@
-import "./index-B5karten584.js";
+import "./index-B5karten585.js";

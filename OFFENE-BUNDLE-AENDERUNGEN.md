@@ -13209,3 +13209,11 @@ Alle Adressen laden **karten583**.
 - fotozeilen/fotoetikett: `kontrastFotoGroesse` .125 → .16, `kontrastFotoBreite` .8 → .88, `kontrastFotoHoehe` .46 → .52 (damit lange Hooks nicht gleich wieder verkleinert werden). fotorahmen: Grundgröße .13 → .15.
 
 Alle Adressen laden **karten584**.
+
+## 539 — Fast Schwarz statt Graphit, Hochglanz auf den Fotos (karten585)
+
+- Carina: Statt Anthrazit lieber fast Schwarz. Bei den Bildern mehr Glanz, wie Hochglanz, eher kühle Richtung, aber nichts, was vorher weiß war, darf blau werden. (Endgültig erst mit den neuen Fotos beurteilbar.)
+- Dunkle Kacheln `kontrastOx` #3C3934 → #141414, `kontrastPapierGrund` → #0E0E0E, Ergebnis-Grund → #101010, CTA-Overlay rgba(18,18,18).
+- `kontrastFotoOriginal: 2` = Hochglanz (`zxGlanz`, läuft über den Ergebnis-Cache): sanfte S-Kurve (`kontrastGlanzKurve` .14), Glanz in den Lichtern ab 72 % Helligkeit (`kontrastGlanzLicht` .12), Schatten und Mitteltöne leicht kühl (`kontrastGlanzKuehl` .035, Gewicht (1−L)^1,4, Lichter unberührt). Helle, wenig farbige Flächen (L > 0,8, Buntheit < 0,14) werden zur Neutralen gezogen: Weiß bleibt weiß. Stichprobe: 240/238/235 → 248/248/248, 225/228/232 → 239/239/240, Haut 205/160/135 → 213/164/137. Zurück zum Original: `kontrastFotoOriginal: 1`.
+
+Alle Adressen laden **karten585**.
