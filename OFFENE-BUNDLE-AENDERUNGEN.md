@@ -13210,10 +13210,18 @@ Alle Adressen laden **karten583**.
 
 Alle Adressen laden **karten584**.
 
-## 539 — Fast Schwarz statt Graphit, Hochglanz auf den Fotos (karten585)
+## karten585 — Heute posten (13.10.)
+
+- Bundle: `window.__bsTagBilder(tag)` zeichnet die Folien eines Tages als JPEG (wie „In Fotos speichern“), `window.__bsSupa` = Supabase-Client für den Bild-Upload. Sonst unverändert (geprüft: 585 minus Einschub == 584).
+- Neu: `site/heute-posten.js` (Knopf „↑ Posten“: Tag wählen, Folien + Caption prüfen, Post/Cover-Story/Reel/Story-Video posten), `netlify/functions/instagram.mjs` (Instagram API, braucht IG_ACCESS_TOKEN, IG_USER_ID, POST_PIN), `netlify/functions/instagram-erneuern.mjs` (verlängert den Schlüssel wöchentlich).
+- Reel und Story-Video liest die Freigabe aus `site/heute.json` (schreibt der tägliche Agent).
+
+## 539 — Fast Schwarz statt Graphit, Hochglanz auf den Fotos (karten586)
 
 - Carina: Statt Anthrazit lieber fast Schwarz. Bei den Bildern mehr Glanz, wie Hochglanz, eher kühle Richtung, aber nichts, was vorher weiß war, darf blau werden. (Endgültig erst mit den neuen Fotos beurteilbar.)
 - Dunkle Kacheln `kontrastOx` #3C3934 → #141414, `kontrastPapierGrund` → #0E0E0E, Ergebnis-Grund → #101010, CTA-Overlay rgba(18,18,18).
 - `kontrastFotoOriginal: 2` = Hochglanz (`zxGlanz`, läuft über den Ergebnis-Cache): sanfte S-Kurve (`kontrastGlanzKurve` .14), Glanz in den Lichtern ab 72 % Helligkeit (`kontrastGlanzLicht` .12), Schatten und Mitteltöne leicht kühl (`kontrastGlanzKuehl` .035, Gewicht (1−L)^1,4, Lichter unberührt). Helle, wenig farbige Flächen (L > 0,8, Buntheit < 0,14) werden zur Neutralen gezogen: Weiß bleibt weiß. Stichprobe: 240/238/235 → 248/248/248, 225/228/232 → 239/239/240, Haut 205/160/135 → 213/164/137. Zurück zum Original: `kontrastFotoOriginal: 1`.
 
-Alle Adressen laden **karten585**.
+Alle Adressen laden **karten586**.
+
+karten586 ist aus beiden Ständen gebaut: „Heute posten“ (karten585 der anderen Sitzung) plus diese Änderung.

@@ -285,5 +285,17 @@ ersetze('className:"absolute top-1.5 right-1.5 z-30 w-7 h-7 rounded-full bg-blac
 # Content-Plan für den Zeichner sichtbar machen (Vergleichs-Cover lesen Vorher/Nachher-Sätze aus den Folien des Posts)
 ersetze('WH(l.contentPlan||[])', '(window.__bsPlan=l.contentPlan||[],WH(l.contentPlan||[]))', 1)
 
+# „Heute posten“ (Carina 13.10., site/heute-posten.js): Tages-Folien als JPEG rendern und den Supabase-Client
+# für den Bild-Upload bereitstellen. Gleiche Zeichnung wie „In Fotos speichern“ (Zt), nur JPEG statt PNG,
+# weil Instagram für Feed-Bilder JPEG verlangt.
+ersetze('Et=ae=>{n("/editor",{state:{slides:ae.slides,dayId:ae.day,dayTitle:ae.title}})};',
+        'Et=ae=>{n("/editor",{state:{slides:ae.slides,dayId:ae.day,dayTitle:ae.title}})};'
+        'window.__bsSupa=Kr;window.__bsTagBilder=async ae=>{const He=((e.currentBrandConfig)==null?void 0:e.currentBrandConfig.brandText)||"",De=[];'
+        'for(let Ze=0;Ze<ae.slides.length;Ze++){const ot=ae.slides[Ze],dt=1080,ut=ot.format==="9:16"?1920:1350,st=dt/400,It=document.createElement("canvas");'
+        'It.width=dt,It.height=ut,It.style.display="none",document.body.appendChild(It);const Je=new Pe.fabric.StaticCanvas(It,{width:dt,height:ut});'
+        'await Ca(Je,{...ot,visualElements:ot.visualElements||[]},dt,ut,{slideIndex:Ze,totalSlides:ae.slides.length,scale:st,globalBrandName:He,typography:We==null?void 0:We.typography,ctaImage:We==null?void 0:We.ctaImage});'
+        'const rt=Je.toDataURL({format:"jpeg",quality:.92,multiplier:1}),Ve=await(await fetch(rt)).blob();Je.dispose(),It.width=It.height=0,It.parentNode&&It.parentNode.removeChild(It),'
+        'Ve&&De.push(new File([Ve],`Tag${ae.day}_Slide${Ze+1}.jpg`,{type:"image/jpeg"}))}return De};', 1)
+
 open(Z, 'w', encoding='utf-8').write(s)
 print('ok')
