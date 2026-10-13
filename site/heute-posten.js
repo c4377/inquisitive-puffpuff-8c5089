@@ -49,8 +49,14 @@
     if (!sb) throw new Error("Nicht angemeldet. Erst in der App einloggen.");
     var d = new Date().toISOString().slice(0, 10);
     var pfad = "ig/" + d + "/tag" + tag + "-" + nr + "-" + Math.random().toString(36).slice(2, 8) + ".jpg";
-    var up = await sb.storage.from("brand-images").upload(pfad, datei, { contentType: "image/jpeg", cacheControl: "31536000", upsert: false });
-    if (up.error) throw new Error("Bild-Upload: " + up.error.message);
+    /* Supabase meldet bei vielen Anfragen kurz „Too many connections“: dann warten und nochmal. */
+    var up = null;
+    for (var v = 1; v <= 6; v++) {
+      up = await sb.storage.from("brand-images").upload(pfad, datei, { contentType: "image/jpeg", cacheControl: "31536000", upsert: true });
+      if (!up.error) break;
+      if (v < 6) await warte(1500 * v);
+    }
+    if (up.error) throw new Error("Bild-Upload: " + up.error.message + " (Supabase ist gerade überlastet, in ein paar Minuten nochmal tippen)");
     return sb.storage.from("brand-images").getPublicUrl(pfad).data.publicUrl;
   }
 
@@ -185,7 +191,7 @@
         var urls = [];
         if (cbPost.checked || cbStory.checked) {
           log("Folien hochladen …");
-          for (var i = 0; i < bilder.length; i++) urls.push(await hochladen(bilder[i], tagObj.day, i + 1));
+          for (var i = 0; i < bilder.length; i++) { log("Folie " + (i + 1) + "/" + bilder.length + " hochladen …"); urls.push(await hochladen(bilder[i], tagObj.day, i + 1)); await warte(400); }
         }
         if (cbPost.checked) {
           var id;
