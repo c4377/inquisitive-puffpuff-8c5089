@@ -42,8 +42,14 @@ async function erneuern() {
   return r.json().catch(() => ({ error: { message: `HTTP ${r.status}` } }));
 }
 
-function nutzer() {
-  return process.env.IG_USER_ID || 'me';
+// Die ID fuers Posten kommt direkt von Instagram (/me → user_id). Die Nummer aus dem Meta-Dashboard
+// passt bei Instagram-Login nicht immer (Fehler „Object … does not exist“), deshalb nicht IG_USER_ID.
+let meineId = null;
+async function nutzer() {
+  if (meineId) return meineId;
+  const d = await ig('me', { fields: 'user_id' }, 'GET');
+  meineId = String(d.user_id || d.id);
+  return meineId;
 }
 
 function pruefeUrl(u) {
@@ -77,13 +83,13 @@ export default async (req) => {
         else if (b.art === 'story-video') Object.assign(p, { video_url: url, media_type: 'STORIES' });
         else if (b.art === 'reel') Object.assign(p, { video_url: url, media_type: 'REELS', caption, share_to_feed: 'true' });
         else return antwort({ error: 'Unbekannte Art.' }, 400);
-        const d = await ig(`${nutzer()}/media`, p);
+        const d = await ig(`${await nutzer()}/media`, p);
         return antwort({ id: d.id });
       }
       case 'karussell': {
         const kinder = (Array.isArray(b.kinder) ? b.kinder : []).map(String).filter((x) => /^\d+$/.test(x));
         if (kinder.length < 2) return antwort({ error: 'Ein Karussell braucht mindestens 2 Bilder.' }, 400);
-        const d = await ig(`${nutzer()}/media`, { media_type: 'CAROUSEL', children: kinder.join(','), caption });
+        const d = await ig(`${await nutzer()}/media`, { media_type: 'CAROUSEL', children: kinder.join(','), caption });
         return antwort({ id: d.id });
       }
       case 'status': {
@@ -93,7 +99,7 @@ export default async (req) => {
       }
       case 'veroeffentlichen': {
         if (!/^\d+$/.test(String(b.id || ''))) return antwort({ error: 'id fehlt' }, 400);
-        const d = await ig(`${nutzer()}/media_publish`, { creation_id: String(b.id) });
+        const d = await ig(`${await nutzer()}/media_publish`, { creation_id: String(b.id) });
         return antwort({ id: d.id });
       }
       case 'erneuern': {
