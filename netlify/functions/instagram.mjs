@@ -102,6 +102,11 @@ export default async (req) => {
         const d = await ig(`${await nutzer()}/media_publish`, { creation_id: String(b.id) });
         return antwort({ id: d.id });
       }
+      case 'link': {
+        if (!/^\d+$/.test(String(b.id || ''))) return antwort({ error: 'id fehlt' }, 400);
+        const d = await ig(String(b.id), { fields: 'permalink' }, 'GET');
+        return antwort({ permalink: d.permalink || '' });
+      }
       case 'erneuern': {
         const d = await erneuern();
         if (d.error) return antwort({ error: d.error.message || 'Erneuern fehlgeschlagen' }, 502);

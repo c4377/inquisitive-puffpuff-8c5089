@@ -225,7 +225,7 @@
       if (!confirm("Jetzt öffentlich auf Instagram:\n\n• " + schritte.join("\n• "))) return;
       los.disabled = true; los.style.opacity = ".5"; protokoll.textContent = "";
       try {
-        var urls = [];
+        var urls = [], postLink = "";
         if (cbPost.checked) {
           log("Folien hochladen …");
           for (var i = 0; i < bilder.length; i++) { log("Folie " + (i + 1) + "/" + bilder.length + " hochladen …"); urls.push(await hochladen(bilder[i], tagObj.day, i + 1)); await warte(400); }
@@ -240,7 +240,8 @@
             id = (await ruf({ aktion: "karussell", kinder: kinder, caption: cap.value })).id;
           }
           await fertig(id, log, "Post");
-          await ruf({ aktion: "veroeffentlichen", id: id });
+          var mid = (await ruf({ aktion: "veroeffentlichen", id: id })).id;
+          try { postLink = (await ruf({ aktion: "link", id: mid })).permalink || ""; } catch (e) {}
           merke("BS_IG_LETZTER", String(tagObj.day));
           log("✓ Post Tag " + tagObj.day + " ist online.");
         }
@@ -251,6 +252,12 @@
           await fertig(sid, log, "Story");
           await ruf({ aktion: "veroeffentlichen", id: sid });
           log("✓ Cover-Story ist online.");
+          if (postLink) {
+            log("Jetzt in Instagram die Story öffnen → Sticker → Link → einfügen:");
+            var lk = knopf("Post-Link kopieren"); lk.style.margin = "4px 0 8px";
+            lk.onclick = function () { try { navigator.clipboard.writeText(postLink).then(function () { lk.textContent = "Kopiert ✓"; }); } catch (e) { prompt("Link kopieren:", postLink); } };
+            protokoll.appendChild(lk); protokoll.appendChild(document.createTextNode("\n"));
+          }
         }
         if (cbReel && cbReel.checked) {
           var r = reelWahl();
