@@ -13256,3 +13256,11 @@ Alle Adressen laden **karten589**.
 - Kein Oxblood/Rosé mehr: `kontrastAkzent` (Kursive, Labels, Rahmen, Handschrift auf hell) → Grau #6F6A64, `kontrastAkzentHell`/`kontrastOrange` (auf dunkel) → Hellgrau #A8A39C. Kleine Schriften auf dunkel #C9C6C0 / #DAD7D1. Kontrast: Grau auf Kreide 5,0 : 1, Hellgrau auf Graphit 5,6 : 1.
 
 Alle Adressen laden **karten590**.
+
+## 543 — Espresso & Weiß, keine Akzentfarbe mehr (karten590)
+
+- Carina: „Ich hasse Farben … Schwarz, weiß, grau, braun. Die sprechen nicht. Die begleiten.“ Aus fünf neutralen Systemen gewählt: Espresso & Weiß.
+- `kontrastOx` → Espresso #221D1A, `kontrastHell` → #F4F3F1, `kontrastPapierGrund`/Ergebnis-Grund → #1C1815, CTA-Overlay rgba(34,29,26), Textverläufe auf Fotos rgba(28,23,20).
+- Kein Oxblood/Rosé mehr: `kontrastAkzent` (Kursive, Labels, Rahmen, Handschrift auf hell) → warmes Grau #7A716A, `kontrastAkzentHell`/`kontrastOrange` (auf dunkel) → #ABA199. Kleine Schriften auf dunkel #CBC3BC / #DDD6D0.
+
+Alle Adressen laden **karten590**.
