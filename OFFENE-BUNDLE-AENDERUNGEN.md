@@ -13248,3 +13248,11 @@ Alle Adressen laden **karten588**.
 - `kontrastOx` → #3B2633, `kontrastPapierGrund`/Ergebnis-Grund → #2F1E29, CTA-Overlay rgba(50,30,43), Textverläufe auf Fotos rgba(34,20,30). Akzent auf dunkel wieder Rosé #E2BFB2, kleine Schriften auf dunkel #D9C6CC / #E6D6DB. Kontrast auf #3B2633: Weiß 13,7 : 1, Rosé 8,4 : 1. Oxblood auf den kühlen hellen Kacheln bleibt.
 
 Alle Adressen laden **karten589**.
+
+## 543 — Graphit & Kreide, keine Akzentfarbe mehr (karten590)
+
+- Carina: „Ich hasse Farben … Schwarz, weiß, grau, braun. Die sprechen nicht. Die begleiten.“ Aus fünf neutralen Systemen gewählt: Graphit & Kreide.
+- `kontrastOx` → Graphit #2E2D2B, `kontrastHell` → Kreide #F1F0EC, `kontrastPapierGrund`/Ergebnis-Grund → #262523, CTA-Overlay rgba(40,39,37), Textverläufe auf Fotos rgba(30,29,27).
+- Kein Oxblood/Rosé mehr: `kontrastAkzent` (Kursive, Labels, Rahmen, Handschrift auf hell) → Grau #6F6A64, `kontrastAkzentHell`/`kontrastOrange` (auf dunkel) → Hellgrau #A8A39C. Kleine Schriften auf dunkel #C9C6C0 / #DAD7D1. Kontrast: Grau auf Kreide 5,0 : 1, Hellgrau auf Graphit 5,6 : 1.
+
+Alle Adressen laden **karten590**.
