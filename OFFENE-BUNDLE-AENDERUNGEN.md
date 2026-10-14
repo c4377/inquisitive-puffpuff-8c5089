@@ -13257,10 +13257,11 @@ Alle Adressen laden **karten589**.
 
 Alle Adressen laden **karten590**.
 
-## 543 — Espresso & Weiß, keine Akzentfarbe mehr (karten590)
 
-- Carina: „Ich hasse Farben … Schwarz, weiß, grau, braun. Die sprechen nicht. Die begleiten.“ Aus fünf neutralen Systemen gewählt: Espresso & Weiß.
+## 544 — Espresso & Weiß statt Graphit (karten591)
+
+- Carina hat die Graphit-Umstellung (543, karten590) abgebrochen und Espresso gewählt; 543 war da schon live. (Der Eintrag „Espresso“ unter karten590 im Verlauf enthielt noch Graphit.)
 - `kontrastOx` → Espresso #221D1A, `kontrastHell` → #F4F3F1, `kontrastPapierGrund`/Ergebnis-Grund → #1C1815, CTA-Overlay rgba(34,29,26), Textverläufe auf Fotos rgba(28,23,20).
-- Kein Oxblood/Rosé mehr: `kontrastAkzent` (Kursive, Labels, Rahmen, Handschrift auf hell) → warmes Grau #7A716A, `kontrastAkzentHell`/`kontrastOrange` (auf dunkel) → #ABA199. Kleine Schriften auf dunkel #CBC3BC / #DDD6D0.
+- Keine Akzentfarbe: `kontrastAkzent` (auf hell) → warmes Grau #7A716A (4,3 : 1), `kontrastAkzentHell`/`kontrastOrange` (auf dunkel) → #ABA199 (6,6 : 1). Kleine Schriften auf dunkel #CBC3BC / #DDD6D0.
 
-Alle Adressen laden **karten590**.
+Alle Adressen laden **karten591**.
