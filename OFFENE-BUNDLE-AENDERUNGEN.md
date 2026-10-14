@@ -13233,3 +13233,11 @@ karten586 ist aus beiden Ständen gebaut: „Heute posten“ (karten585 der ande
 - Hochglanz ohne Kühlung: `kontrastGlanzKuehl: 0`. S-Kurve, Glanz in den Lichtern und neutrales Weiß bleiben.
 
 Alle Adressen laden **karten587**.
+
+## 541 — Goldenes Rehbraun (Wildbuche) statt Schoko (karten588)
+
+- Carina: „Wir müssen heller, sonst bin ich im Kopieren von jemandem. Geh auf das Blond von meinen Haaren … goldenes Rehbraun … Richtung Wildbuche.“
+- `kontrastOx` #2E1C19 → #A07B56 (Haar-Mitteltöne im Selfie ≈ #786048–#9B7158), `kontrastPapierGrund`/Ergebnis-Grund → #8E6C4A, CTA-Overlay rgba(70,50,34).
+- Auf dem helleren Grund wären Rosé und kühle Grautöne zu schwach: `kontrastAkzentHell`/`kontrastOrange` → Creme #F7EFE4, kleine Schriften auf dunklen Kacheln #B3B7BA → #F1E6D8, #C9CCCF → #F4EADF. Kontrast auf #A07B56: Weiß 3,8 : 1, Creme 3,4 : 1 (für große Schrift ausreichend, kleine Labels knapp). Oxblood auf den hellen Kacheln bleibt.
+
+Alle Adressen laden **karten588**.
