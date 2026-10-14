@@ -13241,3 +13241,10 @@ Alle Adressen laden **karten587**.
 - Auf dem helleren Grund wären Rosé und kühle Grautöne zu schwach: `kontrastAkzentHell`/`kontrastOrange` → Creme #F7EFE4, kleine Schriften auf dunklen Kacheln #B3B7BA → #F1E6D8, #C9CCCF → #F4EADF. Kontrast auf #A07B56: Weiß 3,8 : 1, Creme 3,4 : 1 (für große Schrift ausreichend, kleine Labels knapp). Oxblood auf den hellen Kacheln bleibt.
 
 Alle Adressen laden **karten588**.
+
+## 542 — Pflaume für die dunklen Kacheln (karten589)
+
+- Carina wählt aus acht dunklen Varianten (Bordeaux, Pflaume, Tannengrün, Mitternachtsblau, Olive, Rauchtaupe, Schiefer, Cognac) Pflaume.
+- `kontrastOx` → #3B2633, `kontrastPapierGrund`/Ergebnis-Grund → #2F1E29, CTA-Overlay rgba(50,30,43), Textverläufe auf Fotos rgba(34,20,30). Akzent auf dunkel wieder Rosé #E2BFB2, kleine Schriften auf dunkel #D9C6CC / #E6D6DB. Kontrast auf #3B2633: Weiß 13,7 : 1, Rosé 8,4 : 1. Oxblood auf den kühlen hellen Kacheln bleibt.
+
+Alle Adressen laden **karten589**.
