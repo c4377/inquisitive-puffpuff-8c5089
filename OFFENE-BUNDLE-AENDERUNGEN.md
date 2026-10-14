@@ -13225,3 +13225,11 @@ Alle Adressen laden **karten584**.
 Alle Adressen laden **karten586**.
 
 karten586 ist aus beiden Ständen gebaut: „Heute posten“ (karten585 der anderen Sitzung) plus diese Änderung.
+
+## 540 — Schoko-Braun wie das Leder, Fotos natürlich statt kühl (karten587)
+
+- Carina (Spiegel-Selfie, Lederset in Schokobraun): „Diese Farben“ – auf Rückfrage: für die Kacheln und für den Foto-Look.
+- `kontrastOx` #141414 → Schoko #2E1C19, `kontrastPapierGrund` → #24150F, Ergebnis-Grund → #22150F, CTA-Overlay rgba(40,24,21), Textverläufe auf Fotos rgba(30,18,15). Akzente bleiben (Oxblood auf hell, Rosé auf dunkel), helle Kacheln bleiben kühl.
+- Hochglanz ohne Kühlung: `kontrastGlanzKuehl: 0`. S-Kurve, Glanz in den Lichtern und neutrales Weiß bleiben.
+
+Alle Adressen laden **karten587**.
