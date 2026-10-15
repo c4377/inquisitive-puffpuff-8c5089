@@ -13282,3 +13282,15 @@ Alle Adressen laden **karten592**.
 - `magKontrastFeed` wieder `fotozeilen|weiss|fotoetikett|flaeche|fotozeilen|fotorahmen` (wie karten591). Der Code der Kachel-Familie (f7*) bleibt im Bundle, wird aber nicht mehr verwendet. Neue Richtung erst als Entwurf gezeigt.
 
 Alle Adressen laden **karten593**.
+
+## 547 — Look „Moody“ nach petri_martina_ (karten594)
+
+- Carina: Vignette und dunkle Fotos, Vibe, ein Spritzer Oxblood bis Magenta („opposite“), und die Schrift genauer anschauen. Entwurf „Moody, mutig, ein Spritzer Oxblood“ abgenommen: „Mach mal in die App.“
+- Schrift: neue `site/fonts/CarinaSerif-Regular.woff2` / `-Italic.woff2` = Noto Serif Display (OFL), Instanz wdth 62,5 / wght 400, auf Latein beschnitten; @font-face „Carina Serif“ in index.html; `kontrastSerif`, `magSerif`, `magCoverSerif` → Carina Serif. (Verglichen mit Instrument Serif, Bodoni Moda und gestauchter Playfair; Noto Serif Display schmal trifft die Schrift im Beispiel am besten.)
+- Fotos: `kontrastFotoOriginal: 3` → `zxMoody`: Sättigung .82, Kontrast 1.12, Helligkeit .8, warm (R ×1.04, B ×.94), Vignette (Ellipse um 50/45 %, Stärke .8) und Abdunklung nach unten (.5), alles einstellbar (`kontrastMoody*`).
+- Flächen: `kontrastOx`/`kontrastPapierGrund` Espresso #2A221E; Espresso-Kachel (`flaeche`) mit radialem Lichtkegel (`kontrastLichtkegel`); helle Kachel #F1EFEB mit Grau-Verlauf nach unten (`kontrastHellVerlauf`), ohne Rahmen.
+- Farbe: `kontrastAkzent` Oxblood-Magenta #8E1838, auf hellen Flächen nur für ein Wort (`kontrastHellSegs: 'wort'`); Labels, Zusatzzeilen auf Hell und Papier neutral (`kontrastHellLabel` #6F6A64).
+- Zeile nach „&“ als kleine Helvetica statt Handschrift (`kontrastSkriptSans: 1`). Automatische Rubrik-Labels aus (`magKontrastRubrik: ' '`), ein Label erscheint nur bei eigener [Rubrik].
+- Rhythmus `fotozeilen|flaeche|papier|fotoetikett|weiss|fotozeilen`; Vergleichs-Vorschau aus (`kontrastVNVorschau: 0`). Lokal mit zwölf Covers gerendert, keine Fehler.
+
+Alle Adressen laden **karten594**.

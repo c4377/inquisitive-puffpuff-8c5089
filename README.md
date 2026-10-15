@@ -7,7 +7,7 @@ Live: https://inquisitive-puffpuff-8c5089.netlify.app
 
 ## Was gilt (Stand 12.10.)
 
-- **Cover: Kachel-Familie** (15.10.): sieben Typen im Wechsel (Serif mittig, Versal-Einstieg, Hell, Riesenwort, Reel-Kästen, Schwarz, Zitat, Serif + fette Zeile), Fotos in Farbe, Instrument Serif mit kursivem Wort, Helvetica fett als Gegenspielerin, keine Akzentfarbe. Code: `tools/kontrast-familie.js`. Folgefolien weiter im Kontrast-Look (Espresso & Weiß).
+- **Look „Moody“** (15.10.): Schrift Carina Serif (Noto Serif Display, schmal, hoher Kontrast), Fotos dunkel mit Vignette, warm, leicht entsättigt (`kontrastFotoOriginal: 3`), Espresso #2A221E mit Lichtkegel, helle Kachel #F1EFEB mit Grau-Verlauf nach unten, Papierbogen auf Espresso, ein einziges Wort in Oxblood-Magenta #8E1838 auf hellen Flächen. Cover-Rhythmus: Foto · Espresso · Papier · Foto · Hell · Foto. (Die Kachel-Familie f7* liegt ungenutzt in `tools/kontrast-familie.js`.)
 - **Gesicht auf jedem Cover.** Foto-Cover nehmen nur Fotos mit erkanntem Gesicht. Textkacheln
   tragen ein rundes Porträt mit Namen (Galerie: „Als Porträt“). Die letzte Folie zeigt das
   CTA-Foto (Galerie: „Als CTA-Foto“) unter einem Anthrazit-Overlay.
