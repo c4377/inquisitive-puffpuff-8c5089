@@ -13301,3 +13301,11 @@ Alle Adressen laden **karten594**.
 - `kontrastSerif`, `magSerif`, `magCoverSerif` zurück auf Instrument Serif. Alles andere aus 547 bleibt (Moody-Fotos mit Vignette, Espresso mit Lichtkegel, heller Grau-Verlauf, Papier, Highlight-Wort auf hellen Flächen in Oxblood #8E1838, kleine Helvetica-Zeile, keine automatischen Labels). Die Carina-Serif-Dateien bleiben in /fonts, werden aber nicht genutzt. Lokal gerendert, keine Fehler.
 
 Alle Adressen laden **karten595**.
+
+## 549 — Knopf „Cover“: nur die Cover von Tag x bis y als Fotos (karten596)
+
+- Carina: Knopf, mit dem sie auswählt, wie viele Cover sie will; dann nur die Cover der angegebenen Tage als Fotos, für eine Feed-Vorschau-App.
+- Plan-Leiste: neuer Knopf „Cover“ vor „Auswählen“, ruft `window.__bsCoverDialog` auf.
+- Neu `site/cover-export.js` (in index.html eingebunden): Fenster „Cover als Fotos“ mit „von Tag … bis Tag …“ (Vorschlag: erster Tag bis +19). „Cover erstellen“ rendert für jeden Tag nur die erste Folie über `window.__bsTagBilder` (gleiche Zeichnung wie der Export, JPEG 1080×1350, `_tag` gesetzt, damit der Cover-Rhythmus stimmt), zeigt Vorschaubilder und bietet die Dateien `Cover_TagNN.jpg` in Paketen zu 10 zum Sichern an (zweiter Tipp wegen iOS-Teilen-Regel; ohne Teilen-Funktion Download). Lokal mit zwölf Posts getestet: 12 Cover, keine Fehler.
+
+Alle Adressen laden **karten596**.

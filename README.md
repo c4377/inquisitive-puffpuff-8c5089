@@ -28,7 +28,7 @@ Live: https://inquisitive-puffpuff-8c5089.netlify.app
 |---|---|
 | `site/` | wird unverändert veröffentlicht (Netlify baut nichts) |
 | `site/assets/index-B5kartenNNN.js` | die App, gebaut aus `tools/` |
-| `site/*.js` | eigenständige Zusätze: Kundenraum, Freisteller, Schwarz-Regler, Instagram-Ansicht, Story-Studio, Kommentare |
+| `site/*.js` | eigenständige Zusätze: Kundenraum, Freisteller, Schwarz-Regler, Instagram-Ansicht, Story-Studio, Kommentare, Heute posten, Cover-Export |
 | `site/profilbilder/` | Seite für runde Profilbilder |
 | `site/v2/` + `v2/` | Feed Studio, die Version zum Verkaufen (gebaut + Quellcode) |
 | `tools/` | Build: Grundlage `basis/k451.js`, `editorial-look.py`, Kontrast-Zeichner, Ablauf-Folien, `ziel-pruefen.py` |
