@@ -13342,3 +13342,10 @@ Alle Adressen laden **karten599**.
 - Alle Funktionen seit 586 bleiben (Cover-Knopf, Vorher/Nachher-Bilder, Vergleichsposts mit eigenen Sätzen und Nische, Heute posten). Der Schwarz-Weiß-Stand (karten597–599) liegt als `tools/kontrast-stand-schwarzweiss-597.txt` zum Zurückholen.
 
 Alle Adressen laden **karten600**.
+
+## 554 — Folgefolien invertiert, Butter Yellow als Highlight (karten601)
+
+- Carina: „Die Slides bitte invertieren, also schwarz und Text hell“ und „Butter Yellow als Highlight“.
+- Neuer Parameter `kontrastFolgeDunkel: 1`: Folgefolien (außer der letzten, die schon dunkel ist) auf `kontrastOx` (#141414), Text weiß, Handle hell. Akzent auf diesen Folien `kontrastFolgeAkzent` = Butter Yellow #F2E3A0 (Unterstreichung `*…*`, Pfeile, Trennstriche, Versal-Schlusszeile). Cover unverändert (Look karten586). Lokal gerendert: mittlere Folie dunkel mit gelber Unterstreichung, keine Fehler.
+
+Alle Adressen laden **karten601**.
