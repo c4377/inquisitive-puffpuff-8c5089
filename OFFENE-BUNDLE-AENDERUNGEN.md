@@ -13349,3 +13349,10 @@ Alle Adressen laden **karten600**.
 - Neuer Parameter `kontrastFolgeDunkel: 1`: Folgefolien (außer der letzten, die schon dunkel ist) auf `kontrastOx` (#141414), Text weiß, Handle hell. Akzent auf diesen Folien `kontrastFolgeAkzent` = Butter Yellow #F2E3A0 (Unterstreichung `*…*`, Pfeile, Trennstriche, Versal-Schlusszeile). Cover unverändert (Look karten586). Lokal gerendert: mittlere Folie dunkel mit gelber Unterstreichung, keine Fehler.
 
 Alle Adressen laden **karten601**.
+
+## 555 — Butter Yellow statt Oxblood und Rosé (karten602)
+
+- Carina: „Butter Yellow, nicht Oxblood.“
+- `kontrastAkzentHell`/`kontrastOrange` (Akzent auf dunklen Kacheln, Fotos, Vergleichs-Cover, letzte Folie) #E2BFB2 → Butter Yellow #F2E3A0 (14,3 : 1 auf #141414). `kontrastAkzent` (Akzent auf hellen Flächen) #5E1A21 → tieferes Butter-Gold #A88A2C, weil das helle Gelb auf Hell kaum sichtbar wäre (2,9 : 1 auf #EEF0F1, für große Schrift knapp). Folgefolien bleiben dunkel mit #F2E3A0. Lokal gerendert, keine Fehler.
+
+Alle Adressen laden **karten602**.

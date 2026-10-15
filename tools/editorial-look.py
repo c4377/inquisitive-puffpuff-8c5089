@@ -89,7 +89,7 @@ KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'fotozeilen|weiss|fotoetikett|
             'kontrastSerif': 'Instrument Serif', 'magCoverSerif': 'Instrument Serif', 'magSerif': 'Instrument Serif', 'magSerifLaufweite': -30, 'kontrastLaufweite': -15, 'kontrastLabelGewicht': '300',
             'kontrastPapierGroesse': 0.095, 'kontrastPapierBreite': 0.72, 'kontrastFlaecheGroesse': 0.155, 'kontrastTextBreite': 0.86, 'kontrastTextHoehe': 0.58, 'kontrastHell': '#EEF0F1', 'kontrastVNVorschau': 1,
             'kontrastFotoGroesse': 0.16, 'kontrastFotoBreite': 0.88, 'kontrastVersal': 0.032, 'kontrastFotoSkript': 0.075, 'kontrastFotoHoehe': 0.52, 'kontrastErgebnisGroesse': 0.075, 'kontrastCutGroesse': 0.55, 'kontrastAblauf': 1,
-            'kontrastSkript': 'hör mal|ehrlich jetzt|merk dir das|Achtung', 'kontrastSkriptJede': 0, 'kontrastOrange': '#E2BFB2', 'kontrastAkzent': '#5E1A21', 'kontrastAkzentHell': '#E2BFB2',
+            'kontrastSkript': 'hör mal|ehrlich jetzt|merk dir das|Achtung', 'kontrastSkriptJede': 0, 'kontrastOrange': '#F2E3A0', 'kontrastAkzent': '#A88A2C', 'kontrastAkzentHell': '#F2E3A0',
             'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.14, 'kontrastLichtkegel': 0, 'kontrastHellVerlauf': 0, 'kontrastFolgeDunkel': 1, 'kontrastFolgeAkzent': '#F2E3A0'}
 weitere = ',"editorial-kontrast":' + json.dumps({**look, **RUHIG, **KLAR, **KONTRAST}, ensure_ascii=False, separators=(',', ':'))
 ersetze('},"frech":', '},"editorial":' + json.dumps(look, ensure_ascii=False, separators=(',', ':')) + weitere + ',"frech":')
