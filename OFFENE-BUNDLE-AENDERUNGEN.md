@@ -13334,3 +13334,11 @@ Alle Adressen laden **karten598**.
 - `kontrastVNVorschau: 1`, Rhythmus `fotozeilen|weiss|papier|fotoetikett|flaeche|fotozeilen`: die Stelle `weiss` (Tag 1, 7, 13, 19, 25 …) zeigt wieder die Vergleichs-Cover (Sätze aus dem eigenen Post, sonst Beispiele). Lokal gerendert: Tag 1 und 7 als Vergleichs-Cover, keine Fehler.
 
 Alle Adressen laden **karten599**.
+
+## 553 — Look von karten586 geladen (karten600)
+
+- Carina: „Kannst du karten586 mal laden?“
+- `KONTRAST`-Einstellungen exakt aus dem Stand karten586 (Commit 3eadb1e) übernommen: fast Schwarz #141414, Hochglanz-Fotos (`kontrastFotoOriginal: 2`, mit kühler Verschiebung), helles #EEF0F1, Akzent Oxblood #5E1A21 / Rosé #E2BFB2, Handschrift, Rubrik-Labels, Rhythmus `fotozeilen|weiss|fotoetikett|flaeche|fotozeilen|fotorahmen`, Vergleichs-Vorschau an. Dazu `kontrastLichtkegel: 0` und `kontrastHellVerlauf: 0`, weil es die damals nicht gab.
+- Alle Funktionen seit 586 bleiben (Cover-Knopf, Vorher/Nachher-Bilder, Vergleichsposts mit eigenen Sätzen und Nische, Heute posten). Der Schwarz-Weiß-Stand (karten597–599) liegt als `tools/kontrast-stand-schwarzweiss-597.txt` zum Zurückholen.
+
+Alle Adressen laden **karten600**.
