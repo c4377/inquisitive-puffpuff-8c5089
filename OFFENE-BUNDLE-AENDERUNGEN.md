@@ -13309,3 +13309,14 @@ Alle Adressen laden **karten595**.
 - Neu `site/cover-export.js` (in index.html eingebunden): Fenster „Cover als Fotos“ mit „von Tag … bis Tag …“ (Vorschlag: erster Tag bis +19). „Cover erstellen“ rendert für jeden Tag nur die erste Folie über `window.__bsTagBilder` (gleiche Zeichnung wie der Export, JPEG 1080×1350, `_tag` gesetzt, damit der Cover-Rhythmus stimmt), zeigt Vorschaubilder und bietet die Dateien `Cover_TagNN.jpg` in Paketen zu 10 zum Sichern an (zweiter Tipp wegen iOS-Teilen-Regel; ohne Teilen-Funktion Download). Lokal mit zwölf Posts getestet: 12 Cover, keine Fehler.
 
 Alle Adressen laden **karten596**.
+
+## 550 — Schwarz-Weiß, Orange nur für Unterstreichungen in den Folien (karten597)
+
+- Carina: „Kehren wir zurück zu ganz normalem Schwarz-Weiß.“ Auf Rückfrage: alles, auch Fotos, auch das Highlight-Wort ohne Farbe. „Aber die unterstrichenen Worte dann in den Slides machen wir orange.“
+- Flächen: `kontrastOx`/`kontrastPapierGrund` #111111, `kontrastHell` #FFFFFF, Ergebnis-Grund #111111; Lichtkegel und Grau-Verlauf neutral grau statt warm; Textverläufe rgba(14,14,14), CTA-Overlay rgba(17,17,17); kleine Schriften #C8C8C8/#DDDDDD; `kontrastAkzentHell`/`kontrastOrange` #A8A8A8, `kontrastHellLabel` #6E6E6E.
+- Fotos: Moody-Bearbeitung mit `kontrastMoodySaett: 0` (schwarz-weiß), ohne Wärme (`kontrastMoodyRot`/`Blau`: 1), Vignette neutral (`kontrastMoodyNeutral: 1`).
+- Cover: `kontrastAkzent` #111111 → Highlight-Wort nur kursiv.
+- Folgefolien: neuer Parameter `kontrastFolgeAkzent` (Zeichner: `AK=…(K.kontrastFolgeAkzent||zxAK)`) = Orange #E8641E für Unterstreichung (`*…*` im Fließtext), Pfeile, Trennstriche, Versal-Schlusszeile. Letzte Folie (CTA) unverändert.
+- Lokal getestet: zwölf Cover schwarz-weiß, mittlere Folie mit orangefarbener Unterstreichung, keine Fehler.
+
+Alle Adressen laden **karten597**.

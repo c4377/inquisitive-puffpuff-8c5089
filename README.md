@@ -7,7 +7,7 @@ Live: https://inquisitive-puffpuff-8c5089.netlify.app
 
 ## Was gilt (Stand 12.10.)
 
-- **Look „Moody“** (15.10.): Schrift Instrument Serif, Fotos dunkel mit Vignette, warm, leicht entsättigt (`kontrastFotoOriginal: 3`), Espresso #2A221E mit Lichtkegel, helle Kachel #F1EFEB mit Grau-Verlauf nach unten, Papierbogen auf Espresso, ein einziges Wort in Oxblood-Magenta #8E1838 auf hellen Flächen. Cover-Rhythmus: Foto · Espresso · Papier · Foto · Hell · Foto. (Die Kachel-Familie f7* liegt ungenutzt in `tools/kontrast-familie.js`.)
+- **Schwarz-Weiß** (15.10.): Instrument Serif, dunkle Kacheln #111111, helle #FFFFFF, Fotos schwarz-weiß mit Vignette (`kontrastFotoOriginal: 3`, `kontrastMoodySaett: 0`), Papierbogen auf Schwarz. Highlight-Wort auf Covern nur kursiv, ohne Farbe. Einzige Farbe: Orange #E8641E für Unterstreichungen, Pfeile und Akzente auf den Folgefolien (`kontrastFolgeAkzent`). Cover-Rhythmus: Foto · Schwarz · Papier · Foto · Weiß · Foto.
 - **Gesicht auf jedem Cover.** Foto-Cover nehmen nur Fotos mit erkanntem Gesicht. Textkacheln
   tragen ein rundes Porträt mit Namen (Galerie: „Als Porträt“). Die letzte Folie zeigt das
   CTA-Foto (Galerie: „Als CTA-Foto“) unter einem Anthrazit-Overlay.
