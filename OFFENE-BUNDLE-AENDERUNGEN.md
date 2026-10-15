@@ -13275,3 +13275,10 @@ Alle Adressen laden **karten591**.
 - Kundenräume behalten ihren eigenen Rhythmus (kundenraum.js). Die Vergleichs-Vorschau an der Stelle `weiss` greift nicht mehr, weil der Typ im Rhythmus fehlt; Vergleichsposts gehen weiter über den Knopf „Vorher/Nachher“.
 
 Alle Adressen laden **karten592**.
+
+## 546 — Cover zurück auf den vorherigen Rhythmus (karten593)
+
+- Carina zur Kachel-Familie: „Nee, ich fand das andere schon besser. Ich glaube nur, so mehr wie hier“ (Beispiel petri_martina_: große, eng gesetzte Serif auf Espresso/Creme, Foto-Kacheln mit kleiner Serif-Unterschrift).
+- `magKontrastFeed` wieder `fotozeilen|weiss|fotoetikett|flaeche|fotozeilen|fotorahmen` (wie karten591). Der Code der Kachel-Familie (f7*) bleibt im Bundle, wird aber nicht mehr verwendet. Neue Richtung erst als Entwurf gezeigt.
+
+Alle Adressen laden **karten593**.
