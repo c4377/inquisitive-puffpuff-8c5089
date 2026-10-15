@@ -13294,3 +13294,10 @@ Alle Adressen laden **karten593**.
 - Rhythmus `fotozeilen|flaeche|papier|fotoetikett|weiss|fotozeilen`; Vergleichs-Vorschau aus (`kontrastVNVorschau: 0`). Lokal mit zwölf Covers gerendert, keine Fehler.
 
 Alle Adressen laden **karten594**.
+
+## 548 — Moody mit Instrument Serif (karten595)
+
+- Carina: „Wir nehmen nicht die Schrift von Martina, aber wir nutzen die Farbe und die Vignette. Bei den hellen Kacheln möchte ich, dass das Highlight-Wort in Oxblood ist.“
+- `kontrastSerif`, `magSerif`, `magCoverSerif` zurück auf Instrument Serif. Alles andere aus 547 bleibt (Moody-Fotos mit Vignette, Espresso mit Lichtkegel, heller Grau-Verlauf, Papier, Highlight-Wort auf hellen Flächen in Oxblood #8E1838, kleine Helvetica-Zeile, keine automatischen Labels). Die Carina-Serif-Dateien bleiben in /fonts, werden aber nicht genutzt. Lokal gerendert, keine Fehler.
+
+Alle Adressen laden **karten595**.
