@@ -7,8 +7,7 @@ Live: https://inquisitive-puffpuff-8c5089.netlify.app
 
 ## Was gilt (Stand 12.10.)
 
-- **Ein Look: Kontrast.** Anthrazit, kühles Hell, Akzent Oxblood/Rosé, Instrument Serif mit
-  dünnen Versal-Labels. Cover im Rhythmus Foto · Hell · Foto · Anthrazit · Foto · Freisteller.
+- **Cover: Kachel-Familie** (15.10.): sieben Typen im Wechsel (Serif mittig, Versal-Einstieg, Hell, Riesenwort, Reel-Kästen, Schwarz, Zitat, Serif + fette Zeile), Fotos in Farbe, Instrument Serif mit kursivem Wort, Helvetica fett als Gegenspielerin, keine Akzentfarbe. Code: `tools/kontrast-familie.js`. Folgefolien weiter im Kontrast-Look (Espresso & Weiß).
 - **Gesicht auf jedem Cover.** Foto-Cover nehmen nur Fotos mit erkanntem Gesicht. Textkacheln
   tragen ein rundes Porträt mit Namen (Galerie: „Als Porträt“). Die letzte Folie zeigt das
   CTA-Foto (Galerie: „Als CTA-Foto“) unter einem Anthrazit-Overlay.

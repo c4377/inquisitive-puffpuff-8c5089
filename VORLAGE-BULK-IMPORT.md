@@ -30,6 +30,17 @@ Slide 1: …
 
 ---
 
+## Wie das Cover aussieht (Kachel-Familie, seit 15.10.)
+
+Die Cover wechseln automatisch zwischen sieben Typen, alle mit deinem Foto (außer Schwarz), in Farbe, unten warm abgedunkelt:
+Serif mittig · Versal-Einstieg · Hell · Riesenwort · Reel-Kästen · Schwarz · Zitat · Serif + fette Zeile.
+Was du im ersten Slide schreibst, steuert die Typen:
+
+- **Hook** (vor dem `&`): steht groß in der Serif. Ein Wort in `*Sternchen*` wird kursiv. Ohne Sternchen wird das letzte Wort des ersten Satzes kursiv.
+- **Schleifen-Zeile** (nach dem `&`): kleine Zeile darunter, die neugierig macht, z. B. `& Und warum genau das der Grund ist, warum dein Wissen dir nichts bringt.`
+- **[Rubrik]**: wird beim Versal-Einstieg als fette Überschrift oben gezeigt, z. B. `[Die teuerste Gewohnheit!]`. Ist die Rubrik ein einziges Wort, z. B. `[Umsetzen]`, kann sie das Riesenwort sein. Ohne Rubrik wird statt Versal die Serif-Kachel und statt Riesenwort das Zitat genommen (beim Riesenwort zählt auch ein kurzes `*Wort*` aus dem Hook).
+- **Zwei Sätze im Hook**: bei Reel-Kästen kommt der erste Satz in den weißen, der zweite in den dunklen Kasten; bei Serif + fette Zeile wird der zweite Satz fett.
+
 ## Die Regeln
 
 | Schreibweise | Was passiert |

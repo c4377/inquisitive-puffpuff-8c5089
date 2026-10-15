@@ -13265,3 +13265,13 @@ Alle Adressen laden **karten590**.
 - Keine Akzentfarbe: `kontrastAkzent` (auf hell) → warmes Grau #7A716A (4,3 : 1), `kontrastAkzentHell`/`kontrastOrange` (auf dunkel) → #ABA199 (6,6 : 1). Kleine Schriften auf dunkel #CBC3BC / #DDD6D0.
 
 Alle Adressen laden **karten591**.
+
+## 545 — Kachel-Familie: sieben Cover-Typen (karten592)
+
+- Carina: Der Look zeigt nicht, wer sie ist (sagt, was andere nicht sagen; der Feed wirkt „gepflastert in Wörtern“). Nach Beispielen (sarah.verkaufspsychologie, juliamueller._) und mehreren Entwürfen gewählt: „Eine Familie, keine Schablone“ mit Fotos in Farbe. „Ja, bau das so in die App ein.“
+- Neu `tools/kontrast-familie.js`, von editorial-look.py vor den Papier-Zweig des Kontrast-Zeichners gesetzt (KFAM; die f7-Foto-Typen holen das Foto wie fotozeilen). Rhythmus `magKontrastFeed`: f7serif · f7versal · f7hell · f7riesen · f7reel · f7schwarz · f7zitat · f7serif · f7mix · f7versal · f7hell · f7riesen.
+- Typen: Serif mittig unten (Hook + Schleifen-Zeile nach „&“); Versal-Einstieg (Rubrik fett oben, Schleifen-Zeile im dunklen Kasten); Hell (Foto verblasst ins #F6F4F1, dunkle Schrift, abwechselnd oben/unten); Riesenwort (Anton, Rubrik aus einem Wort oder kurzes *markiertes* Wort); Reel-Kästen (erster Satz weiß, Rest dunkel, Play-Zeichen); Schwarz (#0D0D0D); Zitat (großes „““); Serif + fette Helvetica (zweiter Satz), linksbündig. Ohne Rubrik: Versal → Serif, Riesenwort → Zitat. Warme Abdunklung rgba(20,14,10), Handle in Serif unten.
+- Fix beim Einbau: `.strip()` hatte das Leerzeichen nach dem abschließenden `else` entfernt („elseif“), die App lud nicht; KFAM bekommt ein Leerzeichen angehängt. Lokal mit zwölf Covers gerendert, keine Fehler.
+- Kundenräume behalten ihren eigenen Rhythmus (kundenraum.js). Die Vergleichs-Vorschau an der Stelle `weiss` greift nicht mehr, weil der Typ im Rhythmus fehlt; Vergleichsposts gehen weiter über den Knopf „Vorher/Nachher“.
+
+Alle Adressen laden **karten592**.
