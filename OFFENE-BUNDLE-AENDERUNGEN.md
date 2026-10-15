@@ -13327,3 +13327,10 @@ Alle Adressen laden **karten597**.
 - `kontrastFotoOriginal: 1` (Foto unverändert, wie 518/karten564–565), `kino: 0` war schon gesetzt; Abdunklung hinter dem Text (`kontrastVerlauf` .4, `kontrastVerlaufOben` .12) unverändert. Flächen bleiben schwarz-weiß, Orange auf den Folgefolien bleibt.
 
 Alle Adressen laden **karten598**.
+
+## 552 — Vergleichsposts wieder an Tag 1, 7, 13 … (karten599)
+
+- Carina: „Wo sind meine Vorher-Nachher-Posts?“ Seit 547 war `kontrastVNVorschau` aus und die helle Kachel im Rhythmus auf Platz 5 gerückt.
+- `kontrastVNVorschau: 1`, Rhythmus `fotozeilen|weiss|papier|fotoetikett|flaeche|fotozeilen`: die Stelle `weiss` (Tag 1, 7, 13, 19, 25 …) zeigt wieder die Vergleichs-Cover (Sätze aus dem eigenen Post, sonst Beispiele). Lokal gerendert: Tag 1 und 7 als Vergleichs-Cover, keine Fehler.
+
+Alle Adressen laden **karten599**.
