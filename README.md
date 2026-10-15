@@ -7,7 +7,7 @@ Live: https://inquisitive-puffpuff-8c5089.netlify.app
 
 ## Was gilt (Stand 12.10.)
 
-- **Schwarz-Weiß** (15.10.): Instrument Serif, dunkle Kacheln #111111, helle #FFFFFF, Fotos schwarz-weiß mit Vignette (`kontrastFotoOriginal: 3`, `kontrastMoodySaett: 0`), Papierbogen auf Schwarz. Highlight-Wort auf Covern nur kursiv, ohne Farbe. Einzige Farbe: Orange #E8641E für Unterstreichungen, Pfeile und Akzente auf den Folgefolien (`kontrastFolgeAkzent`). Cover-Rhythmus: Foto · Schwarz · Papier · Foto · Weiß · Foto.
+- **Schwarz-Weiß** (15.10.): Instrument Serif, dunkle Kacheln #111111, helle #FFFFFF, Fotos in Originalfarben wie karten565 (`kontrastFotoOriginal: 1`, nur Abdunklung hinter dem Text), Papierbogen auf Schwarz. Highlight-Wort auf Covern nur kursiv, ohne Farbe. Einzige Farbe: Orange #E8641E für Unterstreichungen, Pfeile und Akzente auf den Folgefolien (`kontrastFolgeAkzent`). Cover-Rhythmus: Foto · Schwarz · Papier · Foto · Weiß · Foto.
 - **Gesicht auf jedem Cover.** Foto-Cover nehmen nur Fotos mit erkanntem Gesicht. Textkacheln
   tragen ein rundes Porträt mit Namen (Galerie: „Als Porträt“). Die letzte Folie zeigt das
   CTA-Foto (Galerie: „Als CTA-Foto“) unter einem Anthrazit-Overlay.

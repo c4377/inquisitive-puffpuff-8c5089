@@ -13320,3 +13320,10 @@ Alle Adressen laden **karten596**.
 - Lokal getestet: zwölf Cover schwarz-weiß, mittlere Folie mit orangefarbener Unterstreichung, keine Fehler.
 
 Alle Adressen laden **karten597**.
+
+## 551 — Fotos wieder in Originalfarben wie karten565 (karten598)
+
+- Carina: „Nicht die Bilder schwarz-weiß … die Bilder wie bei karten565.“
+- `kontrastFotoOriginal: 1` (Foto unverändert, wie 518/karten564–565), `kino: 0` war schon gesetzt; Abdunklung hinter dem Text (`kontrastVerlauf` .4, `kontrastVerlaufOben` .12) unverändert. Flächen bleiben schwarz-weiß, Orange auf den Folgefolien bleibt.
+
+Alle Adressen laden **karten598**.
