@@ -84,13 +84,13 @@ KLAR = {'magTitelVersal': 0, 'magCoverSerif': 'Instrument Serif', 'magCoverSerif
         'magCoverBreite': 0.86, 'magTextMaxH': 0.34, 'magFeed': '', 'magMono': '#FFFFFF', 'magAkzent': '#FFFFFF',
         'magDunkelCover': 0, 'magVerlaufCover': 0.1, 'magDunkel': 0, 'magKursivBetonung': 0}
 # Kontrast: Schwarz, Weiß, Anthrazit #33363A, leichter Oxblood-Akzent #5E1A21 (seit 10.10. abends, vorher Oxblood), S/W-Fotos mit hartem Kontrast (tools/kontrast-zeichner.js)
-KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'fotozeilen|weiss|fotoetikett|flaeche|fotozeilen|fotorahmen', 'coverGesichtAnteil': 100, 'kontrastFotoKurve': 0.15, 'kontrastHautZiel': 118, 'kontrastFotoZiel': 128, 'kontrastFotoSaett': 1.05, 'kontrastWaerme': 0.035, 'kontrastPortraet': 0, 'kontrastFotoOriginal': 2, 'kino': 0, 'kontrastFloskelnWeg': 0, 'kontrastVerlauf': 0.4, 'kontrastVerlaufOben': 0.12, 'kontrastFotoSchwarz': 0, 'kinoWarm': 0, 'kinoSaettigung': 1, 'kontrastPapierGrund': '#0E0E0E', 'bildTon': '22,23,24', 'ablaufTiefeOben': 0.84, 'ablaufTiefeMitte': 0.76, 'ablaufTiefeUnten': 0.92, 'grundA': '#33363A', 'magKontrastCut': 'k3|k2|k7|k4|k5',
-            'magKontrastRubrik': 'Ehrlich jetzt|Klartext|Ja-Sagerinnen wissen|Notiz an dich|Aus meinem Alltag', 'kontrastOx': '#141414', 'magSkriptJede': 0,
+KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'fotozeilen|weiss|fotoetikett|flaeche|fotozeilen|fotorahmen', 'coverGesichtAnteil': 100, 'kontrastFotoKurve': 0.15, 'kontrastHautZiel': 118, 'kontrastFotoZiel': 128, 'kontrastFotoSaett': 1.05, 'kontrastWaerme': 0.035, 'kontrastPortraet': 0, 'kontrastFotoOriginal': 2, 'kino': 0, 'kontrastFloskelnWeg': 0, 'kontrastVerlauf': 0.4, 'kontrastVerlaufOben': 0.12, 'kontrastFotoSchwarz': 0, 'kinoWarm': 0, 'kinoSaettigung': 1, 'kontrastPapierGrund': '#1A1613', 'bildTon': '22,23,24', 'ablaufTiefeOben': 0.84, 'ablaufTiefeMitte': 0.76, 'ablaufTiefeUnten': 0.92, 'grundA': '#33363A', 'magKontrastCut': 'k3|k2|k7|k4|k5',
+            'magKontrastRubrik': 'Ehrlich jetzt|Klartext|Ja-Sagerinnen wissen|Notiz an dich|Aus meinem Alltag', 'kontrastOx': '#1E1A17', 'magSkriptJede': 0,
             'kontrastSerif': 'Instrument Serif', 'magCoverSerif': 'Instrument Serif', 'magSerif': 'Instrument Serif', 'magSerifLaufweite': -30, 'kontrastLaufweite': -15, 'kontrastLabelGewicht': '300',
-            'kontrastPapierGroesse': 0.095, 'kontrastPapierBreite': 0.72, 'kontrastFlaecheGroesse': 0.155, 'kontrastTextBreite': 0.86, 'kontrastTextHoehe': 0.58, 'kontrastHell': '#EEF0F1', 'kontrastVNVorschau': 1,
+            'kontrastPapierGroesse': 0.095, 'kontrastPapierBreite': 0.72, 'kontrastFlaecheGroesse': 0.155, 'kontrastTextBreite': 0.86, 'kontrastTextHoehe': 0.58, 'kontrastHell': '#F1EEE9', 'kontrastVNVorschau': 1,
             'kontrastFotoGroesse': 0.16, 'kontrastFotoBreite': 0.88, 'kontrastVersal': 0.032, 'kontrastFotoSkript': 0.075, 'kontrastFotoHoehe': 0.52, 'kontrastErgebnisGroesse': 0.075, 'kontrastCutGroesse': 0.55, 'kontrastAblauf': 1,
-            'kontrastSkript': 'hör mal|ehrlich jetzt|merk dir das|Achtung', 'kontrastSkriptJede': 0, 'kontrastOrange': '#F2E3A0', 'kontrastAkzent': '#A88A2C', 'kontrastAkzentHell': '#F2E3A0',
-            'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.14, 'kontrastLichtkegel': 0, 'kontrastHellVerlauf': 0, 'kontrastFolgeDunkel': 1, 'kontrastFolgeAkzent': '#F2E3A0'}
+            'kontrastSkript': 'hör mal|ehrlich jetzt|merk dir das|Achtung', 'kontrastSkriptJede': 0, 'kontrastOrange': '#E8DDB5', 'kontrastAkzent': '#9C8650', 'kontrastAkzentHell': '#E8DDB5',
+            'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.14, 'kontrastLichtkegel': 0, 'kontrastHellVerlauf': 0, 'kontrastFolgeDunkel': 1, 'kontrastFolgeAkzent': '#E8DDB5', 'kontrastWeiss': '#F3EFE8'}
 weitere = ',"editorial-kontrast":' + json.dumps({**look, **RUHIG, **KLAR, **KONTRAST}, ensure_ascii=False, separators=(',', ':'))
 ersetze('},"frech":', '},"editorial":' + json.dumps(look, ensure_ascii=False, separators=(',', ':')) + weitere + ',"frech":')
 
@@ -306,6 +306,12 @@ ersetze('Et=ae=>{n("/editor",{state:{slides:ae.slides,dayId:ae.day,dayTitle:ae.t
 
 # Knopf „Cover“ in der Plan-Leiste (Carina 15.10.): öffnet site/cover-export.js (nur Cover von Tag x bis y als Fotos)
 ersetze('v.jsx("button",{onClick:()=>{c?yn():(f(!0),g([]))},', 'v.jsx("button",{onClick:()=>{window.__bsCoverDialog&&window.__bsCoverDialog()},className:"px-2.5 py-1.5 bg-white text-purple-700 border border-purple-200 rounded-lg font-bold hover:bg-purple-50 transition-colors flex items-center whitespace-nowrap text-[11px]",children:"Cover"}),v.jsx("button",{onClick:()=>{c?yn():(f(!0),g([]))},', 1)
+
+# Auswahl sichtbarer (Carina 15.10.): im Auswahlmodus direkt neben „Auswahl beenden“ die Knöpfe „Alle“/„Keine“ und „Von–bis“
+ersetze('children:c?"Auswahl beenden":"Auswählen"}),', 'children:c?"Auswahl beenden":"Auswählen"}),'
+        'c&&v.jsx("button",{onClick:()=>{p.length&&p.length>=i.length?g([]):g(i.map(ae=>ae.day))},className:"px-2.5 py-1.5 bg-white text-purple-700 border border-purple-300 rounded-lg font-bold hover:bg-purple-50 transition-colors flex items-center whitespace-nowrap text-[11px]",children:p.length&&p.length>=i.length?"Keine":"Alle"}),'
+        'c&&v.jsx("button",{onClick:()=>{const vb=window.prompt("Welche Tage? z. B. 1-20 oder 3,5,8");if(!vb)return;const vs=new Set;String(vb).split(/[,;\\s]+/).forEach(vt=>{const vm=/^(\\d+)\\s*[-–]\\s*(\\d+)$/.exec(vt);if(vm){let va=+vm[1],ve=+vm[2];va>ve&&([va,ve]=[ve,va]);for(let vk=va;vk<=ve;vk++)vs.add(vk)}else if(/^\\d+$/.test(vt))vs.add(+vt)});g(i.map(ae=>ae.day).filter(vd=>vs.has(vd)))},className:"px-2.5 py-1.5 bg-white text-purple-700 border border-purple-300 rounded-lg font-bold hover:bg-purple-50 transition-colors flex items-center whitespace-nowrap text-[11px]",children:"Von–bis"}),'
+        'c&&v.jsx("span",{className:"text-[11px] font-bold text-gray-500 self-center whitespace-nowrap",children:p.length+" ausgewählt"}),', 1)
 
 open(Z, 'w', encoding='utf-8').write(s)
 print('ok')

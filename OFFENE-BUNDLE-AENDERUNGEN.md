@@ -13356,3 +13356,18 @@ Alle Adressen laden **karten601**.
 - `kontrastAkzentHell`/`kontrastOrange` (Akzent auf dunklen Kacheln, Fotos, Vergleichs-Cover, letzte Folie) #E2BFB2 → Butter Yellow #F2E3A0 (14,3 : 1 auf #141414). `kontrastAkzent` (Akzent auf hellen Flächen) #5E1A21 → tieferes Butter-Gold #A88A2C, weil das helle Gelb auf Hell kaum sichtbar wäre (2,9 : 1 auf #EEF0F1, für große Schrift knapp). Folgefolien bleiben dunkel mit #F2E3A0. Lokal gerendert, keine Fehler.
 
 Alle Adressen laden **karten602**.
+
+## 556 — Auswahl: Alle/Keine und Von–bis direkt in der Leiste (karten603)
+
+- Carina: „Bau da was Besseres als lange drauf bleiben.“
+- Neben „Auswählen“ erscheinen im Auswahlmodus: „Alle“/„Keine“ (markiert alle Tage oder hebt alles auf), „Von–bis“ (Eingabe wie `1-20` oder `3,5,8`) und die Anzahl „N ausgewählt“. Einzelne Tage weiter per Tipp.
+
+## 557 — Farben sanfter, edler (karten604)
+
+- Carina: „Bitte mach die Farben sanfter, edler, nicht so hart.“ (Vorbild: carinaannaprav.at)
+- Hartes Fast-Schwarz → weiches warmes Schwarz: `kontrastOx` #1E1A17, `kontrastPapierGrund` #1A1613; Foto-Abdunklungen im Zeichner von rgba(14,14,14)/rgba(17,17,17) auf warme Töne rgba(26,21,18)/rgba(30,25,21).
+- Reines Weiß → Elfenbein `kontrastWeiss` #F3EFE8 (alle #FFFFFF im Zeichner laufen darüber); helle Flächen `kontrastHell` #F1EEE9.
+- Butter Yellow gedämpft und cremiger: #E8DDB5 (`kontrastAkzentHell`, `kontrastOrange`, `kontrastFolgeAkzent`); Akzent auf Hell #9C8650.
+- Lokal gerendert, keine Fehler.
+
+Alle Adressen laden **karten604**.
