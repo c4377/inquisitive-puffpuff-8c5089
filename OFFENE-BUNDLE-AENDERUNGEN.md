@@ -13386,3 +13386,12 @@ Alle Adressen laden **karten604**.
 - Lokal gerendert (12 Cover + Folgefolien), keine Fehler.
 
 Alle Adressen laden **karten605**.
+
+## 559 — Ohne Mappe, größere Schrift auf Fotos (karten606)
+
+- Carina: „Bei den Fotos gehört die Schrift größer drauf … entweder das Briefkuvert oder das Polaroid … zeig's mir ohne den Briefschlitz.“
+- Rhythmus jetzt `m8polaroid|weiss|m8papier|m8espresso|m8foto` (m8mappe raus, Code bleibt).
+- Hook-Größe: Foto pur .066 → .10, Karte auf Foto .07 → .092 (Karte breiter .66 → .76), Polaroid .074 → .095 (Polaroid schmaler .6 → .54).
+- Lokal gerendert, keine Fehler.
+
+Alle Adressen laden **karten606**.
