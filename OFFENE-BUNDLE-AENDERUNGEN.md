@@ -13431,3 +13431,13 @@ Alle Adressen laden **karten608**.
 - Lokal gerendert (12 Cover und Folgefolien), keine Fehler.
 
 Alle Adressen laden **karten609**.
+
+## 563 — Ein Wort in Versalien über jedem Hook (karten610)
+
+- Carina: „Es haben alle Content Pieces ein erstes Wort gehört in All Caps über dem Text klein.“
+- Foto- und Textkacheln: ein Wort klein in Versalien direkt über dem Hook. Ein-Wort-Label in eckigen Klammern (z. B. `[Umsetzen]`) wird übernommen, sonst wechselnd aus `kontrastTkWoerter` (Realtalk|Klartext|Übrigens|Ehrlich|Wichtig|Notiz).
+- Textkacheln: Label nicht mehr am oberen Rand, die Handschrift „Übrigens …“ ist aus (wieder an mit `kontrastTkKickerAn: 1`).
+- Vorher/Nachher hat ihr Versal-Label schon über dem Text.
+- Lokal gerendert, keine Fehler.
+
+Alle Adressen laden **karten610**.
