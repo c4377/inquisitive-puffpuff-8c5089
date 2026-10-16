@@ -13415,3 +13415,19 @@ Alle Adressen laden **karten607**.
 - Lokal gerendert, keine Fehler.
 
 Alle Adressen laden **karten608**.
+
+## 562 — Ganzer Stil nach tanja.kammler: Schrift, Textkacheln, Fotokacheln (karten609)
+
+- Carina: „Ich meinte alles. Die Schrift, die Textkacheln, alles … jetzt nehmen wir mal den Stil.“ (Später wird wieder davon weggeschraubt.)
+- Neue Schriften (Google Fonts, OFL, `site/fonts/FeedFonts-LICENSE.txt`):
+  - **Feed Serif:** Newsreader, statische Instanz opsz 72 / wght 300. Jetzt `kontrastSerif`, `magCoverSerif` und `magSerif`.
+  - **Feed Serif Fett:** DM Serif Display.
+  - **Feed Hand:** Nothing You Could Do, jetzt `kontrastSkriptFont`.
+- Neue Cover-Typen in `tools/kontrast-tanja.js`, Rhythmus `tkfoto|weiss|tkreminder|tkfett|tkfoto|tkbraun`:
+  - **Foto-Kacheln:** schwarzer Verlauf unten, Versal-Label, Hook groß (fein oder fett), Handschrift-Zeile darunter.
+  - **Textkacheln:** Taupe #BFB7AC bzw. Taupe-Braun #5E544B mit Papierkorn, Label oben, kurze Handschrift links („Übrigens …“, `kontrastTkKicker`), Hook in Feed Serif, Text nach „&“ als Notiz in Klammern, Handle in Versalien unten.
+- Vorher/Nachher bleibt am „weiss“-Platz.
+- Folgefolien (`kontrastFolgeLabel: 1`): Rubrik in Versalien oben, Handle in Versalien unten, wie „CEO PERSONALITIES / DEEP DIVE“.
+- Lokal gerendert (12 Cover und Folgefolien), keine Fehler.
+
+Alle Adressen laden **karten609**.

@@ -84,13 +84,13 @@ KLAR = {'magTitelVersal': 0, 'magCoverSerif': 'Instrument Serif', 'magCoverSerif
         'magCoverBreite': 0.86, 'magTextMaxH': 0.34, 'magFeed': '', 'magMono': '#FFFFFF', 'magAkzent': '#FFFFFF',
         'magDunkelCover': 0, 'magVerlaufCover': 0.1, 'magDunkel': 0, 'magKursivBetonung': 0}
 # Kontrast: Schwarz, Weiß, Anthrazit #33363A, leichter Oxblood-Akzent #5E1A21 (seit 10.10. abends, vorher Oxblood), S/W-Fotos mit hartem Kontrast (tools/kontrast-zeichner.js)
-KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'm8polaroid|weiss|m8papier|m8espresso|m8foto', 'coverGesichtAnteil': 100, 'kontrastFotoKurve': 0.15, 'kontrastHautZiel': 118, 'kontrastFotoZiel': 128, 'kontrastFotoSaett': 1.05, 'kontrastWaerme': 0.035, 'kontrastPortraet': 0, 'kontrastFotoOriginal': 2, 'kino': 0, 'kontrastFloskelnWeg': 0, 'kontrastVerlauf': 0.4, 'kontrastVerlaufOben': 0.12, 'kontrastFotoSchwarz': 0, 'kinoWarm': 0, 'kinoSaettigung': 1, 'kontrastPapierGrund': '#121110', 'bildTon': '22,23,24', 'ablaufTiefeOben': 0.84, 'ablaufTiefeMitte': 0.76, 'ablaufTiefeUnten': 0.92, 'grundA': '#33363A', 'magKontrastCut': 'k3|k2|k7|k4|k5',
+KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'tkfoto|weiss|tkreminder|tkfett|tkfoto|tkbraun', 'coverGesichtAnteil': 100, 'kontrastFotoKurve': 0.15, 'kontrastHautZiel': 118, 'kontrastFotoZiel': 128, 'kontrastFotoSaett': 1.05, 'kontrastWaerme': 0.035, 'kontrastPortraet': 0, 'kontrastFotoOriginal': 2, 'kino': 0, 'kontrastFloskelnWeg': 0, 'kontrastVerlauf': 0.4, 'kontrastVerlaufOben': 0.12, 'kontrastFotoSchwarz': 0, 'kinoWarm': 0, 'kinoSaettigung': 1, 'kontrastPapierGrund': '#121110', 'bildTon': '22,23,24', 'ablaufTiefeOben': 0.84, 'ablaufTiefeMitte': 0.76, 'ablaufTiefeUnten': 0.92, 'grundA': '#33363A', 'magKontrastCut': 'k3|k2|k7|k4|k5',
             'magKontrastRubrik': 'Ehrlich jetzt|Klartext|Ja-Sagerinnen wissen|Notiz an dich|Aus meinem Alltag', 'kontrastOx': '#141312', 'magSkriptJede': 0,
-            'kontrastSerif': 'Instrument Serif', 'magCoverSerif': 'Instrument Serif', 'magSerif': 'Instrument Serif', 'magSerifLaufweite': -30, 'kontrastLaufweite': -15, 'kontrastLabelGewicht': '300',
+            'kontrastSerif': 'Feed Serif', 'magCoverSerif': 'Feed Serif', 'magSerif': 'Feed Serif', 'magSerifLaufweite': -15, 'kontrastLaufweite': -15, 'kontrastLabelGewicht': '300',
             'kontrastPapierGroesse': 0.095, 'kontrastPapierBreite': 0.72, 'kontrastFlaecheGroesse': 0.155, 'kontrastTextBreite': 0.86, 'kontrastTextHoehe': 0.58, 'kontrastHell': '#E9E5DF', 'kontrastVNVorschau': 1,
             'kontrastFotoGroesse': 0.16, 'kontrastFotoBreite': 0.88, 'kontrastVersal': 0.032, 'kontrastFotoSkript': 0.075, 'kontrastFotoHoehe': 0.52, 'kontrastErgebnisGroesse': 0.075, 'kontrastCutGroesse': 0.55, 'kontrastAblauf': 1,
             'kontrastSkript': 'hör mal|ehrlich jetzt|merk dir das|Achtung', 'kontrastSkriptJede': 0, 'kontrastOrange': '#F3EFE8', 'kontrastAkzentHell': '#F3EFE8',
-            'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.14, 'kontrastLichtkegel': 0, 'kontrastHellVerlauf': 0, 'kontrastFolgeDunkel': 1, 'kontrastFolgeAkzent': '#F3EFE8', 'kontrastWeiss': '#F3EFE8', 'kontrastMoodEspresso': '#121110', 'kontrastMoodBordeaux': '#5F554C', 'kontrastMoodCreme': '#F3EFE8', 'kontrastMoodGreige': '#BDB5AA', 'kontrastMoodTinte': '#2A2522', 'kontrastAkzent': '#2A2522', 'kontrastMoodTaupe': '#BDB5AA', 'kontrastMoodWechsel': 1, 'kontrastFolgeUnscharf': 1}
+            'magSansGewicht': '400', 'magKursivLaufGewicht': '400', 'magTextSkala': 1.14, 'kontrastLichtkegel': 0, 'kontrastHellVerlauf': 0, 'kontrastFolgeDunkel': 1, 'kontrastFolgeAkzent': '#F3EFE8', 'kontrastWeiss': '#F3EFE8', 'kontrastMoodEspresso': '#121110', 'kontrastMoodBordeaux': '#5F554C', 'kontrastMoodCreme': '#F3EFE8', 'kontrastMoodGreige': '#BDB5AA', 'kontrastMoodTinte': '#2A2522', 'kontrastAkzent': '#2A2522', 'kontrastMoodTaupe': '#BDB5AA', 'kontrastMoodWechsel': 1, 'kontrastFolgeUnscharf': 1, 'kontrastSkriptFont': 'Feed Hand', 'kontrastFolgeLabel': 1}
 weitere = ',"editorial-kontrast":' + json.dumps({**look, **RUHIG, **KLAR, **KONTRAST}, ensure_ascii=False, separators=(',', ':'))
 ersetze('},"frech":', '},"editorial":' + json.dumps(look, ensure_ascii=False, separators=(',', ':')) + weitere + ',"frech":')
 
@@ -186,10 +186,13 @@ KFAM = open(__file__.rsplit('/', 1)[0] + '/kontrast-familie.js', encoding='utf-8
 assert KONTZ.count('if(zxTyp==="papier"){') == 1 and KONTZ.count('if(zxTyp==="fotozeilen"||zxTyp==="fotoetikett"||zxTyp==="fotorahmen"){e.getObjects()') == 1
 KONTZ = KONTZ.replace('if(zxTyp==="papier"){', KFAM + 'if(zxTyp==="papier"){', 1).replace(
     'if(zxTyp==="fotozeilen"||zxTyp==="fotoetikett"||zxTyp==="fotorahmen"){e.getObjects()',
-    'if(zxTyp==="fotozeilen"||zxTyp==="fotoetikett"||zxTyp==="fotorahmen"||(zxTyp.slice(0,2)==="f7"&&zxTyp!=="f7schwarz")||(zxTyp.slice(0,2)==="m8"&&zxTyp!=="m8espresso")){e.getObjects()', 1)
+    'if(zxTyp==="fotozeilen"||zxTyp==="fotoetikett"||zxTyp==="fotorahmen"||(zxTyp.slice(0,2)==="f7"&&zxTyp!=="f7schwarz")||(zxTyp.slice(0,2)==="m8"&&zxTyp!=="m8espresso")||zxTyp==="tkfoto"||zxTyp==="tkfett"){e.getObjects()', 1)
 # Moodboard-Vibe (Carina 16.10., tools/kontrast-moodboard.js): Cover-Typen m8*, ebenfalls vor dem Papier-Zweig.
 KMOOD = open(__file__.rsplit('/', 1)[0] + '/kontrast-moodboard.js', encoding='utf-8').read().split('*/', 1)[1].strip() + ' '
 KONTZ = KONTZ.replace('if(zxTyp==="papier"){', KMOOD + 'if(zxTyp==="papier"){', 1)
+# Stil nach tanja.kammler (Carina 16.10., tools/kontrast-tanja.js): Cover-Typen tk*, ebenfalls vor dem Papier-Zweig.
+KTANJA = open(__file__.rsplit('/', 1)[0] + '/kontrast-tanja.js', encoding='utf-8').read().split('*/', 1)[1].strip() + ' '
+KONTZ = KONTZ.replace('if(zxTyp==="papier"){', KTANJA + 'if(zxTyp==="papier"){', 1)
 ZEICHNER = ZEICHNER.replace('if(zCover&&!zMark&&K.magCoverInline===1)', 'let zkObenA=null,zkKeinSchatten=!1,zkScrap="";' + KONTZ + 'if(zCover&&!zMark&&K.magCoverInline===1)', 1).replace('zTyp==="flaeche"&&(zSch=void 0);', '(zTyp==="flaeche"||zTyp0==="scrap")&&(zSch=void 0);', 1)
 ANKER = 'if($e&&(t.karte==="ablauf"||t.reminderArt==="ablauf")){const Ab=T1('
 ABLZ = open(__file__.rsplit('/', 1)[0] + '/kontrast-ablauf.js', encoding='utf-8').read().split('*/', 1)[1].strip()
