@@ -13481,3 +13481,11 @@ Alle Adressen laden **karten613**.
 - Lokal gerendert, keine Fehler.
 
 Alle Adressen laden **karten614**.
+
+## 568 — Handle auf Folgefolien überlappt langen Text nicht mehr (karten615)
+
+- Carina (Screenshot Folie 8/10, langer Vorher/Nachher-Text): „Überlappung unten.“
+- Das Versal-Handle unten auf den Folgefolien (`kontrastFolgeLabel`) saß bei 89 % der Höhe, mitten im Textbereich. Jetzt bei 94,8 %, unter dem Text.
+- Lokal mit langer Folgefolie gerendert, keine Fehler.
+
+Alle Adressen laden **karten615**.
