@@ -13441,3 +13441,13 @@ Alle Adressen laden **karten609**.
 - Lokal gerendert, keine Fehler.
 
 Alle Adressen laden **karten610**.
+
+## 564 — Das erste Wort aus dem Bulk Import wird das Label, nicht doppelt (karten611)
+
+- Carina: „Im Text, den ich mittels Bulk Import reingebe, steht als erstes Wort das. Jetzt stehen sie doppelt drin.“
+- Beginnt Slide 1 mit einem bis drei Wörtern in Versalien, gefolgt von normalem Text, z. B. `REALTALK Du bist …`, `HEY QUEEN Hör auf …` oder `ÜBRIGENS: …`, wird das zur Rubrik: klein in Versalien über dem Hook und aus dem Hook gestrichen, wie `[Rubrik]`. Mindestens drei Großbuchstaben, damit z. B. „KI“ im Satz bleibt.
+- Die erfundenen Wörter (Realtalk/Klartext/…) aus karten610 sind raus. Ohne eigenes Wort steht nichts über dem Hook.
+- Folgefolien: Das Label oben ist jetzt das Wort vom Cover desselben Posts statt einer wechselnden Rubrik; ohne Wort kein Label.
+- Lokal gerendert, keine Fehler.
+
+Alle Adressen laden **karten611**.
