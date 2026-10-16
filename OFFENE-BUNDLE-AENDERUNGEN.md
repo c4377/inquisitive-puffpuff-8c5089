@@ -13459,3 +13459,13 @@ Alle Adressen laden **karten611**.
 - Lokal mit `FÜR DICH · …`, `WERDE KAUFBAR · …`, `RÖNTGENBLICK · …` gerendert, keine Fehler.
 
 Alle Adressen laden **karten612**.
+
+## 566 — Textkacheln in den Farben der Website-Regel (karten613)
+
+- Carina: „Nimm nur die Farben für die Textkacheln“ (Regel: Weiß #FFFFFF, Schwarz #141414, Grau #8A8A8A, Hellgrau #CFCCC8, Rosé #C08276 für kleine Überschrift, helles Rosé #E7CCC6 für Kursiv auf Dunkel). Schrift und Aufbau bleiben.
+- Helle Textkachel (tkreminder): Weiß ohne Korn, Hook #141414, Kursiv Rosé #C08276, Label Rosé, Notiz und Handle Grau #8A8A8A.
+- Dunkle Textkachel (tkbraun): #141414, Hook Weiß, Kursiv helles Rosé #E7CCC6, Label Rosé, Notiz und Handle Hellgrau #CFCCC8.
+- Neue Schlüssel: `kontrastTkTinteDunkel`, `kontrastTkLabel`, `kontrastTkKursivHell/Dunkel`, `kontrastTkNotizHell/Dunkel`, `kontrastTkKorn`.
+- Lokal gerendert, keine Fehler.
+
+Alle Adressen laden **karten613**.
