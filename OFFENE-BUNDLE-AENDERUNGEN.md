@@ -13489,3 +13489,10 @@ Alle Adressen laden **karten614**.
 - Lokal mit langer Folgefolie gerendert, keine Fehler.
 
 Alle Adressen laden **karten615**.
+
+## 569 — Vorher-Designs wieder in ihren ursprünglichen Farben (karten616)
+
+- Carina: „Na dann lass die Vorher wie sie sind.“
+- Die Umfärbung aus 567 (karten614) ist zurückgenommen: `zvMach` ist wieder identisch mit karten613 (Smaragd/Gelb, Rosa/Mint, Creme/Terrakotta, Beige/Terrakotta). Das Handle-Update aus 568 bleibt.
+
+Alle Adressen laden **karten616**.
