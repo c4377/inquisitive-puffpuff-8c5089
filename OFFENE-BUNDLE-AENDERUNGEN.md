@@ -13407,3 +13407,11 @@ Alle Adressen laden **karten606**.
 - Lokal gerendert, keine Fehler.
 
 Alle Adressen laden **karten607**.
+
+## 561 — Folgefolien mit verschwommenem Foto statt Farbfläche (karten608)
+
+- Carina (Screenshots tanja.kammler, „CEO Personalities“): „Verschwommene Bilder statt Farben für die Follow Slides.“
+- `kontrastFolgeUnscharf: 1`: Folgefolien (nicht die letzte mit CTA-Foto) bekommen als Hintergrund das Foto des Tages (`__bsTagFoto`, sonst Cover-Hintergrund aus `__bsPlan`, sonst ein Galeriebild), schwarz-weiß, abgedunkelt (`kontrastFolgeUnscharfHell` 0,62) und stark weichgezeichnet (Herunterrechnen auf 27 px und stufenweise Hochrechnen, funktioniert auch in Safari ohne Canvas-Filter), dazu eine leichte dunkle Vignette. Ohne Foto bleibt die Farbfläche. Ergebnis pro Foto gecacht.
+- Lokal gerendert, keine Fehler.
+
+Alle Adressen laden **karten608**.
