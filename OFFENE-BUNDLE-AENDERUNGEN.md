@@ -13371,3 +13371,18 @@ Alle Adressen laden **karten602**.
 - Lokal gerendert, keine Fehler.
 
 Alle Adressen laden **karten604**.
+
+## 558 — Moodboard-Vibe: Espresso, Bordeaux, Creme-Papier, Collage (karten605)
+
+- Carina (Pinterest-Board „TSM“): „Bitte baue diesen Vibe.“
+- Neue Cover-Typen in `tools/kontrast-moodboard.js` (m8*), Rhythmus `m8polaroid|weiss|m8papier|m8espresso|m8foto|m8mappe`:
+  - Polaroid mit schwarzer Klemme auf Greige-Papier, Handschrift im Polaroid-Rand.
+  - Creme-Karte mit Büroklammer auf dem Foto, gegenüber vom Gesicht.
+  - Espresso-Fläche mit Papierkorn und Handschrift-Zeile.
+  - Vollbild-Foto mit warmer Vignette und feinen Versal-Labels.
+  - Bordeaux-Mappe mit Reiter, in der das Foto steckt.
+- Vorher/Nachher-Vorschau bleibt am „weiss“-Platz (jetzt auf Espresso).
+- Farben: Espresso #2C231E (`kontrastOx`, auch Folgefolien), Bordeaux #5A1E24 (Mappe und Akzent auf Hell), Creme #EFE9E1, Greige #D9D3CB, Tinte #2A211D. Akzent auf Dunkel bleibt cremiges Butter Yellow #E8DDB5.
+- Lokal gerendert (12 Cover + Folgefolien), keine Fehler.
+
+Alle Adressen laden **karten605**.
