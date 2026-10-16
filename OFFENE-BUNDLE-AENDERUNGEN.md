@@ -13469,3 +13469,15 @@ Alle Adressen laden **karten612**.
 - Lokal gerendert, keine Fehler.
 
 Alle Adressen laden **karten613**.
+
+## 567 — Vorher-Designs in der Farbwelt statt Smaragdgrün (karten614)
+
+- Carina: „Beim Vorher … trotz allem in der richtigen Farbwelt bleiben. Also nicht Smaragdgrün.“
+- Die vier Vorher-Varianten in `zvMach` bleiben bewusst „unsicher“ gestaltet (Arial/Georgia, Swipe-Button, Herzchen), nur die Farben wechseln auf Weiß/Schwarz/Grau/Rosé:
+  - Foto + Text: Beige #EFE4D6 → #F2F0ED, Terrakotta → Rosé #C08276.
+  - Verlauf: Rosa/Mint → helles Rosé #E7CCC6 / Weiß.
+  - Rahmen-Karte: Creme #F3EBDD → #FAF9F7, Terrakotta → Rosé #C08276.
+  - Versalien: Smaragd #1F4E4A → Grau #8A8A8A, Gelb #F2C94C → Badge helles Rosé, Markierung Rosé #C08276. Grau statt Schwarz, damit sich Vorher vom schwarzen Nachher abhebt.
+- Lokal gerendert, keine Fehler.
+
+Alle Adressen laden **karten614**.
