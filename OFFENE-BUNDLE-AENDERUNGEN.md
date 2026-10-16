@@ -13395,3 +13395,15 @@ Alle Adressen laden **karten605**.
 - Lokal gerendert, keine Fehler.
 
 Alle Adressen laden **karten606**.
+
+## 560 — Farbwelt wie tanja.kammler (karten607)
+
+- Carina (Screenshots tanja.kammler): „Wie sie Farbwelt mal übernehmen, das ändere ich, wenn ich die Bilder habe.“ Layouts und Fotobearbeitung bleiben.
+- Dunkel: fast Schwarz #141312 (`kontrastOx`, Folgefolien, Vorher/Nachher) bzw. #121110 (Espresso-Kachel, `kontrastPapierGrund`).
+- Hell: warmes Taupe #BDB5AA (Polaroid-Grund, neue Wechsel-Kachel), Karte #F3EFE8, `kontrastHell` #E9E5DF.
+- Kein Farbakzent mehr: Kursive bleibt in der Schriftfarbe (Creme #F3EFE8 auf Dunkel, #2A2522 auf Hell); Butter Yellow raus, auch bei Unterstreichungen der Folgefolien.
+- Verläufe und Vignetten auf Fotos neutral-schwarz statt braun.
+- Die Textkachel wechselt pro Rhythmus-Durchgang zwischen Schwarz und Taupe mit dunkler Schrift (`kontrastMoodWechsel`).
+- Lokal gerendert, keine Fehler.
+
+Alle Adressen laden **karten607**.
