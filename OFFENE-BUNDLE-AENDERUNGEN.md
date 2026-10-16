@@ -13451,3 +13451,11 @@ Alle Adressen laden **karten610**.
 - Lokal gerendert, keine Fehler.
 
 Alle Adressen laden **karten611**.
+
+## 565 — Rubrik-Wort mit „·“ getrennt wird erkannt (karten612)
+
+- Carina (Screenshot karten611): Ihre Texte lauten `FÜR DICH · Für den 1. Schritt …`, `WERDE KAUFBAR · Warum …`, `KLARTEXT · …`. Der Mittelpunkt wurde nicht als Trenner erkannt, das Wort blieb im Hook.
+- Erkennung: Trenner `·`, `•`, `:`, `|`, `–`, `—` (mit oder ohne Leerzeichen, auch Zeilenumbruch danach) werden vor dem Leerzeichen geprüft. Führende Trenner werden aus dem Hook entfernt. Gilt für Cover und das Label oben auf den Folgefolien.
+- Lokal mit `FÜR DICH · …`, `WERDE KAUFBAR · …`, `RÖNTGENBLICK · …` gerendert, keine Fehler.
+
+Alle Adressen laden **karten612**.
