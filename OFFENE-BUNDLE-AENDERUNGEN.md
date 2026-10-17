@@ -13535,3 +13535,12 @@ Alle Adressen laden **karten618**.
 - Lokal gerendert, keine Fehler.
 
 Alle Adressen laden **karten619**.
+
+## 573 — Verschwommenes Foto unter den Textkacheln (karten620)
+
+- Carina: „Können wir unter die Textkacheln ein verschwommenes Bild legen?“
+- `kontrastTkUnscharf: 1`: helle und dunkle Textkachel bekommen das Foto des Tages (`__bsTagFoto`, sonst Hintergrund der Folie, sonst Galeriebild) schwarz-weiß und stark weichgezeichnet, wie die Folgefolien (gleicher Cache).
+- Darüber ein Schleier in der Kachelfarbe: Weiß 72 % (`kontrastTkSchleierHell`), Schwarz 55 % (`kontrastTkSchleierDunkel`). Ohne Foto bleibt die glatte Fläche.
+- Lokal gerendert, keine Fehler.
+
+Alle Adressen laden **karten620**.
