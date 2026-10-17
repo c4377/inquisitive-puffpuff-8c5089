@@ -13610,4 +13610,19 @@ Alle Adressen laden **karten619**.
 - `__bsVNTeile` gibt Foto und Schleier weiter, das VN-Reel setzt denselben Hintergrund formatfüllend (9:16 und 3:4).
 - Lokal getestet (Kachel, Reel-Bilder, Aufnahme MP4), keine Fehler.
 
-Alle Adressen laden **karten625**.
+## 582 — Absturz Stories-Seite behoben; Story-Schreiber baut die Brücke Alltag → Hook → Angebot → Post (karten626, story-studio.js v8)
+
+- Carina (Screenshot karten625): „undefined is not an object (evaluating 'e.currentBrandConfig.typography.fontFamily')“ im Stories-Menü.
+  - Ursache: Marken-Einstellungen ohne `typography`/`colors`.
+  - editorial-look.py ersetzt jetzt am Ende alle `e.currentBrandConfig.typography.` / `.colors.` durch abgesicherte Zugriffe (`(…||{}).`).
+- Carina: „Ich möchte dort auswählen können, welchen Tag ich gerade habe … Story, die zum Post hinführt … vor allem die Hook lesen … aus einem tagtäglichen Gedanken eine Brücke bauen zur Hook, eine Brücke zu meinen Angeboten.“
+  - Story-Studio („Stories zum Post“): Der Tag ist vorausgewählt, nämlich der zuletzt dort gewählte (`BS_STORY_POSTTAG`), sonst der Tag nach dem zuletzt geposteten (`BS_IG_LETZTER` + 1). Das Thema wird zur Hinführung auf diesen Hook.
+  - Der Hook wird ohne `[Rubrik]` und ohne Versal-Label (`FÜR DICH · …`) gelesen und als eigenes Feld `hook` an die Funktion geschickt.
+  - netlify/functions/story-studio.mjs, Teil ZUM_POST: Der Hook steht als wichtigster Anker oben. Fester Aufbau:
+    1. Alltagsgedanke als Gedanke oder Frage, kein erfundenes Erlebnis.
+    2. Brücke zum Hook, ohne ihn wortgleich zu verraten.
+    3. Brücke zu genau einem passenden echten Angebot, ohne STARTEN.
+    4. „Neuer Post ↓“.
+- Lokal getestet: Vorauswahl Tag 3 bei zuletzt gepostetem Tag 2, Hook ohne Label, keine Fehler. Die KI-Antwort selbst läuft nur auf Netlify (GEMINI_API_KEY).
+
+Alle Adressen laden **karten626**.

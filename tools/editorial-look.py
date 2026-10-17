@@ -319,5 +319,8 @@ ersetze('children:c?"Auswahl beenden":"Auswählen"}),', 'children:c?"Auswahl bee
         'c&&v.jsx("button",{onClick:()=>{const vb=window.prompt("Welche Tage? z. B. 1-20 oder 3,5,8");if(!vb)return;const vs=new Set;String(vb).split(/[,;\\s]+/).forEach(vt=>{const vm=/^(\\d+)\\s*[-–]\\s*(\\d+)$/.exec(vt);if(vm){let va=+vm[1],ve=+vm[2];va>ve&&([va,ve]=[ve,va]);for(let vk=va;vk<=ve;vk++)vs.add(vk)}else if(/^\\d+$/.test(vt))vs.add(+vt)});g(i.map(ae=>ae.day).filter(vd=>vs.has(vd)))},className:"px-2.5 py-1.5 bg-white text-purple-700 border border-purple-300 rounded-lg font-bold hover:bg-purple-50 transition-colors flex items-center whitespace-nowrap text-[11px]",children:"Von–bis"}),'
         'c&&v.jsx("span",{className:"text-[11px] font-bold text-gray-500 self-center whitespace-nowrap",children:p.length+" ausgewählt"}),', 1)
 
+# Absturz Stories-Seite (Carina 17.10.): Marken-Einstellungen ohne typography/colors. Zugriffe absichern.
+s = s.replace('e.currentBrandConfig.typography.', '(e.currentBrandConfig.typography||{}).').replace('e.currentBrandConfig.colors.', '(e.currentBrandConfig.colors||{}).')
+
 open(Z, 'w', encoding='utf-8').write(s)
 print('ok')

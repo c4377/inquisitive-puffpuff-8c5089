@@ -56,6 +56,7 @@
   // ── Content-Plan (Tag 1 … x) aus der App-Datenbank ─────────────────────────
   function hookAus(t) {
     t = String(t || "").replace(/^\s*\[[^\]\n]{1,24}\]\s*/, "").replace(/\*+|__/g, "").replace(/\s+/g, " ").trim();
+    t = t.replace(/^((?:[A-ZÄÖÜ][A-ZÄÖÜß0-9'’&\-]*[A-ZÄÖÜß0-9](?:[ \t]*[:|·•–—][ \t]*|[ \t]+)){1,3})(?=[a-zäöüß„"]|[A-ZÄÖÜ][a-zäöüß])/, "").trim();
     var a = t.search(/(^|\s)&\s/); if (a > 0) t = t.slice(0, a).trim();
     var m = /^(.{12,}?[.!?])\s/.exec(t + " "); if (m) t = m[1];
     return t.length > 110 ? t.slice(0, t.lastIndexOf(" ", 107)) + " …" : t;
@@ -507,7 +508,7 @@
       themen.appendChild(w);
     });
     var postBlock = document.createElement("div"); postBlock.style.cssText = "margin:0 0 18px";
-    postBlock.innerHTML = "<div style=\"font:600 13px/1 -apple-system,sans-serif;color:" + OX + ";letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px\">Stories zum Post</div><div style=\"font:13px/1.4 -apple-system,sans-serif;color:#7a6a66;margin-bottom:8px\">Tag wählen: die Stories führen zu diesem Post, der Post ist das Ende.</div>";
+    postBlock.innerHTML = "<div style=\"font:600 13px/1 -apple-system,sans-serif;color:" + OX + ";letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px\">Stories zum Post</div><div style=\"font:13px/1.4 -apple-system,sans-serif;color:#7a6a66;margin-bottom:8px\">Tag wählen: die Stories gehen von einem Alltagsgedanken über deinen Hook zu deinem passenden Angebot, der Post ist das Ende.</div>";
     var tagReihe = document.createElement("div"); tagReihe.style.cssText = "display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px";
     var tagInfo = document.createElement("div"); tagInfo.style.cssText = "font:13px/1.4 -apple-system,sans-serif;color:#3b2a27;margin-top:6px;min-height:0";
     postBlock.appendChild(tagReihe); postBlock.appendChild(tagInfo);
@@ -524,10 +525,18 @@
         c.onclick = function () {
           if (zumPost && zumPost.tag === d.tag) { setzePost(null); return; }
           setzePost(d); thema.value = "Hinführung zu meinem neuen Post: " + d.hook;
+          try { localStorage.setItem("BS_STORY_POSTTAG", String(d.tag)); } catch (e) {}
         };
         tagReihe.appendChild(c);
       });
       if (zumPost) setzePost(tage.filter(function (d) { return d.tag === zumPost.tag; })[0] || null);
+      else {
+        /* Tag, den sie gerade dran hat: zuletzt hier gewählt, sonst der Tag nach dem zuletzt geposteten („Posten“). */
+        var gm = 0; try { gm = Number(localStorage.getItem("BS_STORY_POSTTAG")) || (Number(localStorage.getItem("BS_IG_LETZTER")) || 0) + 1; } catch (e) {}
+        var dv = tage.filter(function (d) { return d.tag === gm; })[0];
+        if (dv) { setzePost(dv); if (!thema.value.trim() || thema.value === themaDesTages()) thema.value = "Hinführung zu meinem neuen Post: " + dv.hook; }
+      }
+      [].forEach.call(tagReihe.children, function (c) { if (zumPost && c.__tag === zumPost.tag && c.scrollIntoView) try { c.scrollIntoView({ block: "nearest", inline: "center" }); } catch (e) {} });
     };
     fuelleTage();
     var zeile = document.createElement("div"); zeile.style.cssText = "display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0";
@@ -539,7 +548,7 @@
       var t = thema.value.trim(); if (!t) { status.textContent = "Bitte zuerst ein Thema eintragen."; return; }
       try { localStorage.setItem("BS_STORY_THEMA", t); localStorage.setItem("BS_STORY_TAG", heute()); } catch (e) {}
       los.disabled = true; status.textContent = "Schreibe Stories … (dauert etwa 20 Sekunden)";
-      fetch("/.netlify/functions/story-studio", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ thema: t, count: Number(anz.value), post: zumPost ? { titel: zumPost.titel, slides: zumPost.slides, caption: zumPost.caption } : undefined }) })
+      fetch("/.netlify/functions/story-studio", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ thema: t, count: Number(anz.value), post: zumPost ? { titel: zumPost.titel, slides: zumPost.slides, caption: zumPost.caption, hook: zumPost.hook } : undefined }) })
         .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d && d.error || "Fehlgeschlagen"); return d; }); })
         .then(function (d) { stories = d.stories || []; postFuer = zumPost; return ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length + " Stories fertig. Texte kannst du direkt ändern."; }); })
         .catch(function (e) { status.textContent = "Fehler: " + (e.message || e); })

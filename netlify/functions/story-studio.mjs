@@ -63,8 +63,15 @@ const ZUM_POST = `
 
 STORIES ZUM POST (für diese Serie gilt zusätzlich):
 Diese Stories führen zu meinem neuen Feed-Post hin. Der Post ist das Ende der Serie.
-- Bau Neugier und das Problem des Posts auf, nimm aber die Lösung aus dem Post NICHT vorweg.
-- Die letzte Story kündigt den Post an und schickt sie hin. Sie endet statt mit „Schreib mir STARTEN ↓" mit genau dieser Zeile: „Neuer Post ↓"
+
+DER HOOK DES POSTS (das Wichtigste, lies ihn zuerst und bau alles darauf auf):
+„{{PHOOK}}"
+
+AUFBAU ALS BRÜCKE:
+1. Story 1 startet bei einem Alltagsgedanken, den sie heute selbst haben könnte: beim Kaffee, beim Scrollen, kurz bevor sie postet, beim Angebot-Überarbeiten, abends nach einem Kundinnen-Call. Als Gedanke oder Frage, die sie kennt, NICHT als erfundenes Erlebnis von mir.
+2. Die nächsten Stories bauen die Brücke von diesem Alltagsgedanken zum Hook: denselben Gedanken zu Ende denken, bis der Hook fast ausgesprochen ist. Den Hook nicht wortgleich verraten und die Lösung aus dem Post NICHT vorwegnehmen.
+3. Eine Story vor der letzten baut die Brücke zu dem EINEN Angebot von mir, das am besten zum Hook passt (nur: Das Intensive, Das 1:1, Done-for-you Content, Offer Incubator). In ein, zwei Sätzen, als logische Folge des Gedankens, ohne Druck, ohne „STARTEN".
+4. Die letzte Story kündigt den Post an und schickt sie hin. Sie endet mit genau dieser Zeile: „Neuer Post ↓"
 - STARTEN kommt in dieser Serie nicht vor.
 
 DER POST:
@@ -89,7 +96,8 @@ export default async (req) => {
     count = Math.min(Math.max(parseInt(body.count, 10) || 6, 5), 7);
     if (body.post && typeof body.post === 'object') {
       const sl = (Array.isArray(body.post.slides) ? body.post.slides : []).map((x) => String(x || '').trim()).filter(Boolean).slice(0, 12);
-      post = { titel: String(body.post.titel || '').trim().slice(0, 200), slides: sl, caption: String(body.post.caption || '').trim().slice(0, 3000) };
+      post = { titel: String(body.post.titel || '').trim().slice(0, 200), slides: sl, caption: String(body.post.caption || '').trim().slice(0, 3000), hook: String(body.post.hook || '').replace(/\s+/g, ' ').trim().slice(0, 300) };
+      if (!post.hook && sl.length) post.hook = sl[0].replace(/^\s*\[[^\]\n]{1,24}\]\s*/, '').split(/\s&\s/)[0].replace(/\*+|__/g, '').replace(/\s+/g, ' ').trim().slice(0, 300);
       if (!post.slides.length && !post.caption) post = null;
     }
   } catch {
@@ -112,7 +120,7 @@ export default async (req) => {
     : `- In dieser Serie darf höchstens dieses EINE Element vorkommen, und nur wenn es das Thema wirklich stützt (sonst weglassen):\n  ${MATERIAL[Math.floor(Math.random() * MATERIAL.length)]}\n- Höchstens 1–2 Sätze in der ganzen Serie, das sind etwa 10 % des Texts. Der Rest gehört ihr und dem Thema.\n- Nicht als fertigen Satz übernehmen und nicht aufzählen. Erzähl es als kleinen, konkreten Moment in meinen eigenen Worten, eingewoben in den Gedankengang, so als würde es mir gerade beim Reden einfallen.`;
   let prompt = PROMPT.replace('{{THEMA}}', thema).replace('{{ANZAHL}}', String(count)).replace('{{GESCHICHTE}}', geschichte);
   if (post) {
-    prompt += ZUM_POST.replace('{{PTITEL}}', post.titel || '—')
+    prompt += ZUM_POST.replace('{{PHOOK}}', post.hook || post.titel || '—').replace('{{PTITEL}}', post.titel || '—')
       .replace('{{PSLIDES}}', post.slides.length ? post.slides.map((x, k) => `${k + 1}. ${x.slice(0, 500)}`).join('\n') : '—')
       .replace('{{PCAPTION}}', post.caption || '—');
   }
