@@ -34,6 +34,13 @@
 
   // Papierstruktur wie die Vergleichskachel (Korn, Flecken, Sprenkel), einmal pro Format.
   function grund(T, w, h) {
+    if (T.foto) {
+      var cf = document.createElement("canvas"); cf.width = w; cf.height = h;
+      var xf = cf.getContext("2d"), fw = T.foto.naturalWidth || T.foto.width, fh = T.foto.naturalHeight || T.foto.height, fs = Math.max(w / fw, h / fh);
+      xf.drawImage(T.foto, (w - fw * fs) / 2, Math.min(0, (h - fh * fs) * 0.3), fw * fs, fh * fs);
+      xf.fillStyle = T.fotoTon || "rgba(140,118,96,0.68)"; xf.fillRect(0, 0, w, h);
+      return cf;
+    }
     var c = document.createElement("canvas"); c.width = Math.round(w / 2); c.height = Math.round(h / 2);
     var x = c.getContext("2d"), cw = c.width, ch = c.height; x.fillStyle = T.bg || "#B5A08A"; x.fillRect(0, 0, cw, ch);
     var s = 271; function R() { s = (s * 9301 + 49297) % 233280; return s / 233280; }

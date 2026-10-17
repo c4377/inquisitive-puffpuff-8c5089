@@ -13602,4 +13602,12 @@ Alle Adressen laden **karten619**.
 - Rhythmus `tkfoto|weiss|tkreminder|tkfett|tkfoto|tkbraun` → `tkfoto|weiss|tkbraun|tkfett|tkfoto|tkbraun`. Die helle Textkachel (tkreminder, Weiß) kommt nicht mehr vor, beide Textplätze sind die dunkle Kachel (#141414 mit verschwommenem Foto, Rosé-Akzenten).
 - Lokal gerendert (12 Tage), keine Fehler.
 
-Alle Adressen laden **karten624**.
+## 581 — Vergleichsposts und VN-Reels: Foto mit Beige-Schleier statt Sandfläche (karten625, vn-reel.js v5)
+
+- Carina (Vorlage bossbabe.inc): „Wenn schon Beige, dann so.“
+- `kontrastVNFoto: 1`: Hintergrund der Vorher/Nachher-Kachel ist das Foto des Tages (`__bsTagFoto`, sonst Folienhintergrund, sonst Galeriebild), darüber ein warmer Beige-Taupe-Schleier `kontrastVNFotoTon` rgba(140,118,96,0.68). Ohne Foto bleibt die Sandfläche mit Struktur.
+- Weiße Schrift, Karten mit Schatten wie bisher.
+- `__bsVNTeile` gibt Foto und Schleier weiter, das VN-Reel setzt denselben Hintergrund formatfüllend (9:16 und 3:4).
+- Lokal getestet (Kachel, Reel-Bilder, Aufnahme MP4), keine Fehler.
+
+Alle Adressen laden **karten625**.
