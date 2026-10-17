@@ -398,7 +398,7 @@
       b1.onclick = function () { speichere([st]); };
       b2.onclick = function () { var D = st.post ? DESIGNS.concat(["post"]) : DESIGNS, k = D.indexOf(st.design); st.design = D[(k + 1) % D.length]; if (st.design === "foto" && !fotos.length) st.design = D[(k + 2) % D.length]; st.el = (st.el || 0) + 1; neu(); };
       b3.onclick = function () { kopiere(st.text + (st.sticker ? "\n" + st.sticker : ""), b3); };
-      reihe.appendChild(b1); reihe.appendChild(b2); reihe.appendChild(b3);
+      reihe.appendChild(b1); reihe.appendChild(b3); /* Kein „Design wechseln“ (Carina 17.10.: keine Designentscheidungen, immer „Talk“). */
       rechts.appendChild(kopf); rechts.appendChild(ta); rechts.appendChild(stk); rechts.appendChild(reihe);
       karte.appendChild(cv); karte.appendChild(rechts); liste.appendChild(karte);
       st._img = cv; neu();

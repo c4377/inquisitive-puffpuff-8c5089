@@ -13625,4 +13625,12 @@ Alle Adressen laden **karten619**.
     4. „Neuer Post ↓“.
 - Lokal getestet: Vorauswahl Tag 3 bei zuletzt gepostetem Tag 2, Hook ohne Label, keine Fehler. Die KI-Antwort selbst läuft nur auf Netlify (GEMINI_API_KEY).
 
-Alle Adressen laden **karten626**.
+## 583 — Aufgeräumt: Posten-Knopf weg, Stories nur noch im Story-Studio (karten627, story-studio.js v9)
+
+- Carina: „Den Stories-Button sehe ich nicht, seit wir den Posten-Button haben … Posten-Button wieder löschen … Stories-Menü lassen, aber nicht zu viele Designentscheidungen … ‚Stories dazu schreiben‘ im Kontextmenü vom Post muss raus, falscher Prompt, wir brauchen nicht drei Stellen.“
+- `site/heute-posten.js` gelöscht und aus index.html genommen. Der Knopf „↑ Posten“ lag genau über „✦ Stories“ (beide unten links), jetzt ist „✦ Stories“ wieder sichtbar und anklickbar. Die Netlify-Funktionen für Instagram bleiben ungenutzt liegen.
+- Story-Studio: Knopf „Design wechseln“ entfernt; alle Stories im Design „Talk“ (Post-Karte am Ende bei „Stories zum Post“).
+- Kontextmenü eines Posts: „Stories dazu schreiben“ (alte Funktion write-stories mit eigenem Prompt) entfernt, per Patch in editorial-look.py.
+- Lokal getestet: kein Posten-Knopf, Stories-Knopf obenauf, nur „Bild speichern“/„Text kopieren“ pro Story, Eintrag nicht mehr im Bundle, keine Fehler.
+
+Alle Adressen laden **karten627**.
