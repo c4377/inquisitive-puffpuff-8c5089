@@ -13596,4 +13596,10 @@ Alle Adressen laden **karten619**.
 - Unter jedem gefundenen Vorher/Nachher-Tag steht jetzt die Caption aus dem Plan (`caption` am Tag) in einem bearbeitbaren Feld (16 px, damit Safari nicht zoomt) mit Knopf „Caption kopieren“. Ohne Caption im Plan steht ein Hinweis im Feld.
 - Lokal getestet (Tag mit und ohne Caption), keine Fehler.
 
-Alle Adressen laden **karten623**.
+## 580 — Alle Textkacheln dunkel (karten624)
+
+- Carina: „Können wir die Textkacheln alle in dunkel machen?“
+- Rhythmus `tkfoto|weiss|tkreminder|tkfett|tkfoto|tkbraun` → `tkfoto|weiss|tkbraun|tkfett|tkfoto|tkbraun`. Die helle Textkachel (tkreminder, Weiß) kommt nicht mehr vor, beide Textplätze sind die dunkle Kachel (#141414 mit verschwommenem Foto, Rosé-Akzenten).
+- Lokal gerendert (12 Tage), keine Fehler.
+
+Alle Adressen laden **karten624**.
