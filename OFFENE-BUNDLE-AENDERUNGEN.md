@@ -13496,3 +13496,17 @@ Alle Adressen laden **karten615**.
 - Die Umfärbung aus 567 (karten614) ist zurückgenommen: `zvMach` ist wieder identisch mit karten613 (Smaragd/Gelb, Rosa/Mint, Creme/Terrakotta, Beige/Terrakotta). Das Handle-Update aus 568 bleibt.
 
 Alle Adressen laden **karten616**.
+
+## 570 — Vergleichsposts auf hellem Grund mit Schatten hinter den Bildern (karten617)
+
+- Carina: „Vorher/Nachher soll einen Schatten hinter den Bildern, bitte daher nicht schwarz.“
+- Neue Schlüssel für die Vorher/Nachher-Kachel:
+  - `kontrastVNGrund`: Hellgrau #F2F0ED.
+  - `kontrastVNTinte`: Satz in #141414.
+  - `kontrastVNAkzent`: Rosé #C08276 für die kleine Zeile oben.
+  - `kontrastVNLabel`: Grau #8A8A8A für VORHER/NACHHER und Handle.
+  - `kontrastVNSchatten`: 0,3, weicher Schatten (Unschärfe 5 %, Versatz 2,5 %).
+- Vorher-Designs und Nachher-Bild selbst unverändert.
+- Lokal gerendert, keine Fehler.
+
+Alle Adressen laden **karten617**.
