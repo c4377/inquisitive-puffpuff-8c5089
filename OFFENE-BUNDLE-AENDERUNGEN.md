@@ -13581,4 +13581,13 @@ Alle Adressen laden **karten619**.
 - Die VN-Reels übernehmen die Farben automatisch über `__bsVNTeile`.
 - Lokal gerendert, keine Fehler.
 
-Alle Adressen laden **karten622**.
+## 578 — Vergleichsposts/Reels: Hook vom Cover als Satz, Nische „Coach für Mütter“ (karten623)
+
+- Carina: „Bei den Reels muss auch ein Satz dabei stehen, der hookt, wie bei den Vergleichsposts. Und beim ersten mit den Müttern soll nicht Business Coach stehen, oder?“
+- Vorher/Nachher-Vorschau aus dem Plan: Der Satz über den Karten (`ue`) war leer. Jetzt ist es der Hook vom Cover des Posts: Text von Slide 1 ohne `[Rubrik]`, Teil vor „&“, max. 180 Zeichen, nicht wenn er selbst „Vorher/Nachher“ enthält. Damit steht er auf der Kachel und im VN-Reel.
+- Nischen-Erkennung:
+  - „Familiencoach“ → „Coach für Mütter“; erkennt jetzt auch „Mütter“, „Mamas“, „Muttersein“, „Baby“, „schwanger“ (vorher fand „mutter“ das Wort „Mütter“ nicht).
+  - Die Vorher/Nachher-Sätze selbst zählen doppelt so stark (×6 statt ×3), damit Wörter wie „Kundin“ im restlichen Post die Nische nicht kippen.
+- Lokal getestet mit „Mütter dürfen auch an sich denken.“ und „Kundin“ im Text: „Vorher / Nachher · Coach für Mütter“, Hook über den Karten und im Reel, Video MP4, keine Fehler.
+
+Alle Adressen laden **karten623**.
