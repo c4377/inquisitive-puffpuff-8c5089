@@ -13543,4 +13543,16 @@ Alle Adressen laden **karten619**.
 - Darüber ein Schleier in der Kachelfarbe: Weiß 72 % (`kontrastTkSchleierHell`), Schwarz 55 % (`kontrastTkSchleierDunkel`). Ohne Foto bleibt die glatte Fläche.
 - Lokal gerendert, keine Fehler.
 
+## 575 — Story-Studio: neues Standard-Design „Talk“ (story-studio.js v7, kein neues Bundle)
+
+- Carina (Vorlage-Story „LET'S TALK“): „Der Story-Schreiber soll diesen Stil ausspucken (mit Bulk-Import-Text).“
+- Design „talk“ ist jetzt Standard für alle Stories (außer der Post-Karte am Ende bei „Stories zum Post“); „Design wechseln“ führt weiter durch Foto/Oxblood/Papier/Schwarz:
+  - Foto aus der Galerie, stark abgedunkelt (70 %, Vignette, unten dunkler), feines Korn.
+  - Kleines Versal-Label: die erste Zeile, wenn sie in Versalien steht (`LET'S TALK`), oder `WORT · Satz` in der ersten Zeile.
+  - Großer Satz in **Story Serif**, darunter kleiner der Rest, alles mittig.
+  - CTA („Schreib mir STARTEN“) als dünn umrandete weiße Pille.
+- Neue Schrift **Story Serif**: Newsreader, statische Instanz opsz 20 / wght 400, aufrecht und kursiv, `site/fonts/StorySerif-*.woff2`, Lizenz in FeedFonts-LICENSE.txt.
+- Platzhalter bei „Eigene Texte einfügen“ zeigt das Format.
+- Lokal mit drei Beispiel-Stories gerendert, keine Fehler.
+
 Alle Adressen laden **karten620**.

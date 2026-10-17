@@ -1,5 +1,6 @@
 Feed Serif = Newsreader (Google Fonts), statische Instanz opsz 72 / wght 300, aufrecht und kursiv, Latein (Oktober 2026).
 Feed Serif Fett = DM Serif Display (Google Fonts), aufrecht und kursiv, Latein.
+Story Serif = Newsreader (Google Fonts), statische Instanz opsz 20 / wght 400, aufrecht und kursiv, Latein.
 Feed Hand = Nothing You Could Do (Google Fonts), Latein.
 
 Copyright 2020 The Newsreader Project Authors (http://github.com/productiontype/Newsreader)

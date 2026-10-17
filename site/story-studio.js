@@ -3,7 +3,8 @@
  * Knopf „✦ Stories“ links unten öffnet ein eigenes Menü: Thema eintragen, Anzahl
  * wählen, „Stories schreiben“. Die Texte kommen aus /.netlify/functions/story-studio
  * (Carinas Story-Prompt, Gemini). Jede Story wird als Bild 1080×1920 im Klar-Stil
- * gesetzt: Foto mit weißem Text, Oxblood mit Gold-Element, Büttenpapier oder Schwarz.
+ * gesetzt: Standard ist „Talk“ (Foto stark abgedunkelt, Versal-Label, Story Serif mittig); per Knopf
+ * auch Foto mit weißem Text, Oxblood mit Gold-Element, Büttenpapier oder Schwarz.
  * Texte sind direkt editierbar, das Bild zieht sofort nach. Eigene Texte lassen sich
  * auch einfügen („Story 1 … Story 2 …“), dann braucht es keine KI.
  * „Stories zum Post“: Tag aus dem Content-Plan wählen, die Stories führen zu diesem Post
@@ -12,7 +13,7 @@
 (function () {
   if (window.BS_RAUM) return; /* Kundenraum: Story-Studio schreibt in Carinas Stimme, dort aus. */
   var W = 1080, H = 1920, OX = "#5E1A21", OX2 = "#4A1219", SW = "#0E0E0E", OFF = "#F3EEE7", INK = "#17110F";
-  var DESIGNS = ["foto", "oxblood", "papier", "schwarz"];
+  var DESIGNS = ["talk", "foto", "oxblood", "papier", "schwarz"];
   var ELEMENTE = ["e1", "e3", "e7", "e11", "e15", "e2", "e8", "e14", "e10", "e9", "e13", "e4", "e12", "e5"];
   var stories = [], fotos = [], bilder = {}, panel = null, liste = null, status = null;
   var tage = [], zumPost = null, postFuer = null, fuelleTage = null;
@@ -152,6 +153,65 @@
     ctx.moveTo(rx + 52, cy); ctx.arcTo(rx + tw, cy, rx + tw, cy + rh, 52); ctx.arcTo(rx + tw, cy + rh, rx, cy + rh, 52); ctx.arcTo(rx, cy + rh, rx, cy, 52); ctx.arcTo(rx, cy, rx + tw, cy, 52); ctx.fill(); ctx.restore();
     ctx.fillStyle = "#3a2608"; ctx.textAlign = "center"; ctx.fillText(cta, W / 2, cy + 68);
   }
+  // „Talk“ (Carina 17.10., Vorlage „LET'S TALK“): Foto stark abgedunkelt, kleines Versal-Label,
+  // großer Satz in Story Serif, darunter kleiner der Rest, alles mittig. Das Label ist die erste
+  // Zeile, wenn sie in Versalien steht („LET'S TALK“), oder „WORT · Satz“ in der ersten Zeile.
+  function zeichneTalk(ctx, st, zeilen, cta, bild) {
+    var F = "Story Serif", z = zeilen.slice(), lab = "";
+    if (z.length) {
+      var m = /^([A-ZÄÖÜ][A-ZÄÖÜß0-9'’ &\-]{1,30}?)\s*[·:|–—]\s*(.+)$/.exec(z[0]);
+      if (m && /[a-zäöüß]/.test(m[2])) { lab = m[1]; z[0] = m[2]; }
+      else if (z.length > 1 && z[0].length <= 32 && !/[a-zäöüß]/.test(z[0]) && /[A-ZÄÖÜ]{2}/.test(z[0])) lab = z.shift();
+    }
+    ctx.clearRect(0, 0, W, H);
+    if (bild) {
+      var s = Math.max(W / bild.width, H / bild.height), bw = bild.width * s, bh = bild.height * s;
+      ctx.drawImage(bild, (W - bw) / 2, Math.min(0, (H - bh) * 0.3), bw, bh);
+      ctx.fillStyle = "rgba(14,11,10,.7)"; ctx.fillRect(0, 0, W, H);
+      var v = ctx.createRadialGradient(W / 2, H * 0.42, W * 0.2, W / 2, H * 0.5, H * 0.75);
+      v.addColorStop(0, "rgba(0,0,0,0)"); v.addColorStop(1, "rgba(0,0,0,.55)"); ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+      var g = ctx.createLinearGradient(0, H * 0.6, 0, H); g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, "rgba(0,0,0,.45)"); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    } else { ctx.fillStyle = "#141414"; ctx.fillRect(0, 0, W, H); }
+    korn(ctx, 10);
+    var unten = H - 330 - (st.sticker ? 330 : 0) - (cta ? 170 : 0), oben = 300, sk = 1, plan = [], hoehe = 0, labH = lab ? 30 : 0, labG = lab ? 84 : 0;
+    for (var k = 0; k < 40; k++) {
+      plan = []; hoehe = labH + labG;
+      z.forEach(function (a, j) {
+        var fs = (j === 0 ? 84 : 48) * sk, lh = fs * (j === 0 ? 1.12 : 1.3), br = j === 0 ? W - 200 : W - 300;
+        ctx.font = "400 " + fs + "px \"" + F + "\"";
+        var zl = ausgeglichen(ctx, a, br);
+        if (j) hoehe += j === 1 ? 110 * sk : 34 * sk;
+        plan.push({ fs: fs, lh: lh, zl: zl, y: hoehe });
+        hoehe += zl.length * lh;
+      });
+      if (hoehe <= unten - oben) break;
+      sk *= 0.95;
+    }
+    var y0 = Math.max(oben, Math.min(H * 0.52, (oben + unten) / 2) - hoehe / 2);
+    ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+    if (lab) {
+      ctx.font = "500 30px \"HelveticaNeueBrand\""; ctx.fillStyle = "rgba(255,255,255,.92)";
+      if ("letterSpacing" in ctx) ctx.letterSpacing = "11px";
+      ctx.fillText(lab.toLocaleUpperCase("de-DE"), W / 2 + 5, y0 + 26);
+      if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
+    }
+    plan.forEach(function (p, j) {
+      ctx.font = "400 " + p.fs + "px \"" + F + "\""; ctx.fillStyle = j === 0 ? "#FFFFFF" : "rgba(255,255,255,.9)";
+      p.zl.forEach(function (t, q) { ctx.fillText(t, W / 2, y0 + p.y + p.lh * q + p.fs * 0.82); });
+    });
+    if (st.sticker) {
+      ctx.save(); ctx.setLineDash([14, 12]); ctx.lineWidth = 3; ctx.strokeStyle = "rgba(255,255,255,.35)";
+      ctx.strokeRect(170, unten + 40, W - 340, 250); ctx.restore();
+    }
+    if (cta) {
+      ctx.font = "500 36px \"HelveticaNeueBrand\""; if ("letterSpacing" in ctx) ctx.letterSpacing = "4px";
+      var t = cta.toLocaleUpperCase("de-DE"), tw = ctx.measureText(t).width + 120, cy = H - 330 - 110, rh = 96, rx = W / 2 - tw / 2;
+      ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.lineWidth = 2; ctx.beginPath();
+      ctx.moveTo(rx + 48, cy); ctx.arcTo(rx + tw, cy, rx + tw, cy + rh, 48); ctx.arcTo(rx + tw, cy + rh, rx, cy + rh, 48); ctx.arcTo(rx, cy + rh, rx, cy, 48); ctx.arcTo(rx, cy, rx + tw, cy, 48); ctx.stroke();
+      ctx.fillStyle = "#FFFFFF"; ctx.fillText(t, W / 2 + 2, cy + 61);
+      if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
+    }
+  }
   // Letzte Story „zum Post“: Text oben, Titelbild des Posts als Karte, goldene Pille.
   function zeichnePost(ctx, st, zeilen, cta, bild, fam) {
     ctx.clearRect(0, 0, W, H);
@@ -195,15 +255,16 @@
     var cta = "";
     zeilen = zeilen.filter(function (z) { if ((/STARTEN/.test(z) || /^Neuer Post\b/i.test(z)) && z.length < 60) { cta = z; return false; } return true; });
     var design = st.design || DESIGNS[0];
-    var foto = design === "foto" && fotos.length && !st._ohneFoto ? fotos[(i * 3 + 1) % fotos.length] : "";
+    var foto = (design === "foto" || design === "talk") && fotos.length && !st._ohneFoto ? fotos[(i * 3 + 1) % fotos.length] : "";
     if (design === "foto" && !foto) design = "oxblood";
     return Promise.all([
       foto ? ladeBild(foto) : design === "post" && st.post && st.post.bild ? ladeBild(st.post.bild) : null,
       design === "oxblood" || design === "schwarz" ? ladeBild("/scrap/" + ELEMENTE[(i * 5 + (st.el || 0)) % ELEMENTE.length] + ".webp") : null,
-      document.fonts.load("400 60px \"" + fam + "\""), document.fonts.load("500 30px \"HelveticaNeueBrand\""), document.fonts.load("400 40px \"Nothing You Could Do\"")
+      document.fonts.load("400 60px \"" + fam + "\""), document.fonts.load("500 30px \"HelveticaNeueBrand\""), document.fonts.load("400 40px \"Nothing You Could Do\""), document.fonts.load("400 60px \"Story Serif\"")
     ].map(function (p) { return Promise.resolve(p).catch(function () { return null; }); })).then(function (r) {
       var bild = r[0], el = r[1], weiss = design !== "papier";
       if (design === "post") { zeichnePost(ctx, st, zeilen, cta, bild, fam); return; }
+      if (design === "talk") { zeichneTalk(ctx, st, zeilen, cta, bild); return; }
       ctx.clearRect(0, 0, W, H);
       if (design === "foto" && bild) {
         var s = Math.max(W / bild.width, H / bild.height), bw = bild.width * s, bh = bild.height * s;
@@ -308,7 +369,7 @@
   function startDesigns() {
     stories.forEach(function (s, i) {
       s.post = postFuer || null;
-      s.design = i === stories.length - 1 ? (postFuer ? "post" : "oxblood") : i === 0 ? (fotos.length ? "foto" : "oxblood") : ["oxblood", "foto", "papier", "schwarz"][(i - 1) % 4];
+      s.design = i === stories.length - 1 && postFuer ? "post" : "talk";
     });
   }
   function zeigeStories() {
@@ -487,7 +548,7 @@
     zeile.appendChild(anz); zeile.appendChild(los);
     var eigen = document.createElement("details"); eigen.style.cssText = "margin:4px 0 16px;font:14px -apple-system,sans-serif;color:#5b4a46";
     eigen.innerHTML = "<summary style=\"cursor:pointer\">Eigene Texte einfügen (Story 1 … Story 2 …)</summary>";
-    var eta = document.createElement("textarea"); eta.rows = 6; eta.placeholder = "Story 1\nText …\n\nStory 2\nText …";
+    var eta = document.createElement("textarea"); eta.rows = 6; eta.placeholder = "Story 1\nLET'S TALK\nDer große Satz.\nDer kleinere Absatz darunter.\n\nStory 2\nText …";
     eta.style.cssText = "width:100%;margin-top:8px;border:1px solid #e5ddd8;border-radius:12px;padding:10px;font:15px/1.4 -apple-system,sans-serif;background:#fff";
     var eb = knopf("Als Stories setzen"); eb.style.marginTop = "8px";
     eb.onclick = function () { stories = parseEigen(eta.value); postFuer = zumPost; ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length ? stories.length + " Stories gesetzt." : "Keine Stories erkannt – schreib „Story 1“, „Story 2“ … davor."; }); };
