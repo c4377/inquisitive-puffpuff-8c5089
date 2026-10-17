@@ -13571,4 +13571,14 @@ Alle Adressen laden **karten619**.
 - `window.__bsVNReelBild(T, t, H)` liefert ein Einzelbild (für Tests).
 - Lokal getestet: 2 Vorher/Nachher-Tage gefunden, Einzelbilder geprüft, Aufnahme ergibt MP4 1080×1920, keine Fehler.
 
-Alle Adressen laden **karten621**.
+## 577 — Weiße Schrift auf den Sand-Vergleichskacheln (karten622)
+
+- Carina: „Die Schrift auf Sand muss weiß sein.“
+- Farben:
+  - `kontrastVNTinte` → #FFFFFF.
+  - `kontrastVNAkzent` (kleine Zeile oben) → #FFFFFF.
+  - `kontrastVNLabel` (VORHER/NACHHER, Handle) → rgba(255,255,255,0.88).
+- Die VN-Reels übernehmen die Farben automatisch über `__bsVNTeile`.
+- Lokal gerendert, keine Fehler.
+
+Alle Adressen laden **karten622**.
