@@ -21,7 +21,7 @@ FORMAT (jede Story ist gleich aufgebaut, wie ein ruhiges Gespräch unter vier Au
 - Darunter der kleine Absatz, 2–3 ruhige Sätze, höchstens 40 Wörter. Er ordnet ein, widerspricht oder führt weiter, so wie: „Hört man oft. Und ich will dir mitgeben, warum ich das für falsch halte."
 - Keine erfundenen Situationen aus meinem Alltag (kein „in meinem Call gesagt", kein „eine Kundin hat mir geschrieben"), außer es steht unten bei MEINE GESCHICHTE oder HEUTE BEI MIR. Stattdessen: „Hört man oft", „Sagen viele", „Kennst du den Satz?".
 - Ausgabe nur die Texte: „Story 1", „Story 2" … ohne Erklärungen.
-- Optional Umfrage- oder Fragesticker mit 📊 / 💬 markieren.
+- Keine Umfrage-, Quiz- oder Fragesticker vorschlagen. Die Stories stehen für sich.
 
 STIMME
 - Kurze, einfache Sätze, aber fließend verbunden („das heißt", „und zwar", „im Endeffekt", „weil", „also"). Keine abgehackten Fragmente.
@@ -61,8 +61,7 @@ Antworte NUR mit JSON, ohne Vorwort, ohne Markdown:
 {"stories":[{"text":"…","sticker":""}]}
 - "text": der Story-Text genau so, wie er auf die Story kommt: großer Satz\\nkleiner Absatz,
   bei Story 1 davor noch LABEL\\n. Kein „Story 1" davor.
-- "sticker": nur wenn diese Story einen Umfrage- oder Fragesticker hat, z. B.
-  "📊 Bist du gerade eher A oder B?" oder "💬 Was hält dich zurück?". Sonst "".
+- "sticker": immer "".
   Der Sticker-Text steht NICHT zusätzlich in "text".
 - Die CTA „Schreib mir STARTEN ↓" steht als letzte Zeile im "text" der letzten Story.`;
 
@@ -168,7 +167,7 @@ export default async (req) => {
       out = a >= 0 && b > a ? JSON.parse(sauber.slice(a, b + 1)) : { stories: [] };
     }
     const stories = (Array.isArray(out.stories) ? out.stories : []).slice(0, 7)
-      .map((s) => ({ text: String(s?.text || '').trim(), sticker: String(s?.sticker || '').trim() }))
+      .map((s) => ({ text: String(s?.text || '').trim(), sticker: '' }))
       .filter((s) => s.text);
     if (!stories.length) return new Response(JSON.stringify({ error: 'Keine Stories erhalten. Nochmal versuchen.' }), { status: 502 });
     return new Response(JSON.stringify({ stories }), { status: 200, headers: { 'Content-Type': 'application/json' } });

@@ -13675,4 +13675,11 @@ Alle Adressen laden **karten619**.
   - Block höchstens 48 % der Höhe, Mitte bei 55 % (knapp unter der Mitte wie in der Vorlage).
 - Lokal gerendert neben der Vorlage, keine Fehler.
 
+## 589 — Keine Sticker mehr in den Stories (story-studio.js v14)
+
+- Carina (Screenshot mit Umfrage-Sticker und gestricheltem Platz): „Die Sticker sind nicht so.“
+- Prompt: keine Umfrage-, Quiz- oder Fragesticker; JSON-Feld `sticker` immer leer, die Funktion setzt es zusätzlich leer.
+- App: Sticker aus KI-Antworten werden verworfen. zeichneTalk zeichnet keinen gestrichelten Platzhalter mehr und reserviert keinen Platz dafür. Bei selbst eingefügten Texten bleibt eine 📊/💬-Zeile nur als Hinweis „Sticker-Idee (setzt du selbst in Instagram)“, ohne Platzhalter im Bild.
+- Lokal getestet (simulierte Antwort mit Sticker → kein Sticker, kein Hinweis), keine Fehler.
+
 Alle Adressen laden **karten627**.

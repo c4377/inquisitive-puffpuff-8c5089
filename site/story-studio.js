@@ -174,7 +174,7 @@
       var g = ctx.createLinearGradient(0, H * 0.6, 0, H); g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, "rgba(0,0,0,.45)"); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
     } else { ctx.fillStyle = "#141414"; ctx.fillRect(0, 0, W, H); }
     korn(ctx, 10);
-    var unten = H - 330 - (st.sticker ? 330 : 0) - (cta ? 170 : 0), oben = 300, sk = 1, plan = [], hoehe = 0, labH = lab ? 28 : 0, labG = lab ? 90 : 0;
+    var unten = H - 330 - (cta ? 170 : 0), oben = 300, sk = 1, plan = [], hoehe = 0, labH = lab ? 28 : 0, labG = lab ? 90 : 0;
     for (var k = 0; k < 40; k++) {
       plan = []; hoehe = labH + labG;
       z.forEach(function (a, j) {
@@ -200,10 +200,6 @@
       ctx.font = "400 " + p.fs + "px \"" + F + "\""; ctx.fillStyle = j === 0 ? "#FFFFFF" : "rgba(255,255,255,.9)";
       p.zl.forEach(function (t, q) { ctx.fillText(t, W / 2, y0 + p.y + p.lh * q + p.fs * 0.82); });
     });
-    if (st.sticker) {
-      ctx.save(); ctx.setLineDash([14, 12]); ctx.lineWidth = 3; ctx.strokeStyle = "rgba(255,255,255,.35)";
-      ctx.strokeRect(170, unten + 40, W - 340, 250); ctx.restore();
-    }
     if (cta) {
       ctx.font = "500 36px \"HelveticaNeueBrand\""; if ("letterSpacing" in ctx) ctx.letterSpacing = "4px";
       var t = cta.toLocaleUpperCase("de-DE"), tw = ctx.measureText(t).width + 120, cy = H - 330 - 110, rh = 96, rx = W / 2 - tw / 2;
@@ -401,7 +397,7 @@
       var ta = document.createElement("textarea"); ta.value = st.text; ta.rows = 8;
       ta.style.cssText = "width:100%;border:1px solid #e5ddd8;border-radius:12px;padding:10px;font:15px/1.45 -apple-system,sans-serif;resize:vertical";
       var stk = document.createElement("div"); stk.style.cssText = "font:13px/1.4 -apple-system,sans-serif;color:#5b4a46";
-      stk.textContent = st.sticker ? "Sticker in Instagram setzen (gestrichelter Platz): " + st.sticker : "";
+      stk.textContent = st.sticker ? "Sticker-Idee (setzt du selbst in Instagram): " + st.sticker : "";
       var reihe = document.createElement("div"); reihe.style.cssText = "display:flex;gap:6px;flex-wrap:wrap";
       var b1 = knopf("Bild speichern", true), b2 = knopf("Design wechseln"), b3 = knopf("Text kopieren");
       var neu = function () { rendere(st, i); };
@@ -568,7 +564,7 @@
       los.disabled = true; status.textContent = "Schreibe Stories … (dauert etwa 20 Sekunden)";
       fetch("/.netlify/functions/story-studio", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ thema: t, heute: heuteFeld.value.trim(), count: Number(anz.value), post: zumPost ? { titel: zumPost.titel, slides: zumPost.slides, caption: zumPost.caption, hook: zumPost.hook } : undefined }) })
         .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d && d.error || "Fehlgeschlagen"); return d; }); })
-        .then(function (d) { stories = nurEinLabel(d.stories || []); postFuer = zumPost; return ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length + " Stories fertig. Texte kannst du direkt ändern."; }); })
+        .then(function (d) { stories = nurEinLabel(d.stories || []).map(function (x) { return Object.assign({}, x, { sticker: "" }); }); postFuer = zumPost; return ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length + " Stories fertig. Texte kannst du direkt ändern."; }); })
         .catch(function (e) { status.textContent = "Fehler: " + (e.message || e); })
         .then(function () { los.disabled = false; });
     };
