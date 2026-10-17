@@ -13664,4 +13664,15 @@ Alle Adressen laden **karten619**.
 - Carina: „Nein, es gibt Real Talk und dann eine sehr ehrliche Frage/Feststellung/Meinung.“
 - story-studio.mjs, FORMAT: Story 1 beginnt immer mit dem Label REAL TALK, darunter als großer Satz eine sehr ehrliche Frage, Feststellung oder Meinung. Keine anderen Labels; alle weiteren Stories ohne Label (App-Sicherung `nurEinLabel` bleibt).
 
+## 588 — Story-Text braucht nur so viel Fläche wie in der Vorlage (story-studio.js v13)
+
+- Carina: „Der Look wird noch nicht ganz erreicht, weil es vor allem darum geht, nur den Space zu brauchen wie beim Beispiel.“
+- zeichneTalk:
+  - Großer Satz 84 → 66 px, max. 760 px breit (ca. 70 %).
+  - Absatz 48 → 40 px, max. 640 px breit.
+  - Label 27 px.
+  - Abstand Satz → Absatz 130 px.
+  - Block höchstens 48 % der Höhe, Mitte bei 55 % (knapp unter der Mitte wie in der Vorlage).
+- Lokal gerendert neben der Vorlage, keine Fehler.
+
 Alle Adressen laden **karten627**.
