@@ -360,6 +360,17 @@
       (primaer ? "background:" + OX + ";color:#fff" : "background:#fff;color:" + OX + ";box-shadow:inset 0 0 0 1.5px " + OX);
     return b;
   }
+  /* Label nur auf Story 1 (Carina 17.10.: „überall UNTER UNS ist lächerlich“): gleiche Versal-Zeile ab Story 2 weg. */
+  function nurEinLabel(a) {
+    var istLabel = function (z) { z = String(z || "").trim(); return z.length <= 32 && !/[a-zäöüß]/.test(z) && /[A-ZÄÖÜ]{2}/.test(z); };
+    var erste = a.length ? String(a[0].text || "").split("\n")[0].trim() : "";
+    return a.map(function (st, i) {
+      if (!i) return st;
+      var z = String(st.text || "").split("\n");
+      if (z.length > 1 && istLabel(z[0]) && (z[0].trim() === erste || i > 0)) z.shift();
+      return Object.assign({}, st, { text: z.join("\n") });
+    });
+  }
   function parseEigen(t) {
     var teile = String(t).split(/\n?\s*Story\s*\d+\s*[:.\-–]?\s*\n?/i).map(function (x) { return x.trim(); }).filter(Boolean);
     return teile.map(function (x) {
@@ -557,7 +568,7 @@
       los.disabled = true; status.textContent = "Schreibe Stories … (dauert etwa 20 Sekunden)";
       fetch("/.netlify/functions/story-studio", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ thema: t, heute: heuteFeld.value.trim(), count: Number(anz.value), post: zumPost ? { titel: zumPost.titel, slides: zumPost.slides, caption: zumPost.caption, hook: zumPost.hook } : undefined }) })
         .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d && d.error || "Fehlgeschlagen"); return d; }); })
-        .then(function (d) { stories = d.stories || []; postFuer = zumPost; return ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length + " Stories fertig. Texte kannst du direkt ändern."; }); })
+        .then(function (d) { stories = nurEinLabel(d.stories || []); postFuer = zumPost; return ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length + " Stories fertig. Texte kannst du direkt ändern."; }); })
         .catch(function (e) { status.textContent = "Fehler: " + (e.message || e); })
         .then(function () { los.disabled = false; });
     };

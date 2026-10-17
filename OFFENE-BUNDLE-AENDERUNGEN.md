@@ -13650,4 +13650,13 @@ Alle Adressen laden **karten619**.
   - Die Regel „keine erfundenen Situationen“ erlaubt ausdrücklich HEUTE BEI MIR.
 - Lokal getestet (Antwort simuliert): Feld da, `heute`, `hook` und Thema kommen an, keine Fehler.
 
+## 586 — Story-Label nur auf Story 1, keine Floskel-Labels (story-studio.js v12, kein neues Bundle)
+
+- Carina: „Da ist jeder ‚unter uns‘, das ist lächerlich.“
+- Prompt (story-studio.mjs, FORMAT):
+  - Nur Story 1 beginnt mit einem Label, das das Thema benennt (z. B. DEIN PREIS); hat der Post ein eigenes Versal-Wort (FÜR DICH, KLARTEXT), genau dieses.
+  - Floskeln wie UNTER UNS, LET'S TALK, REALTALK, KURZ GESAGT sind ausgeschlossen. Alle anderen Stories ohne Label.
+- App-Sicherung `nurEinLabel`: Kommt trotzdem eine Versal-Zeile auf Story 2 ff., wird sie entfernt.
+- Lokal getestet mit simulierter Antwort (Label auf Story 1, 2 und 3 → bleibt nur auf Story 1), keine Fehler.
+
 Alle Adressen laden **karten627**.

@@ -13,9 +13,10 @@ THEMA HEUTE: {{THEMA}}
 
 FORMAT (jede Story ist gleich aufgebaut, wie ein ruhiges Gespräch unter vier Augen)
 - {{ANZAHL}} Stories.
-- Zeile 1: ein kurzes LABEL in Versalien, ein bis zwei Wörter, z. B. LET'S TALK, REALTALK, KURZ GESAGT, UNTER UNS. Dasselbe Label auf JEDER Story der Serie, wie ein Serientitel.
-- Zeile 2: der große Satz. Ein Gedanke, den sie kennt, ein Satz, den sie sich selbst sagt oder den man oft hört, gern in „…". Höchstens 25 Wörter, keine Aufzählung.
-- Zeile 3: der kleine Absatz darunter, 2–3 ruhige Sätze, höchstens 40 Wörter. Er ordnet ein, widerspricht oder führt weiter, so wie: „Hört man oft. Und ich will dir mitgeben, warum ich das für falsch halte."
+- NUR Story 1 beginnt mit einem LABEL in Versalien (eigene Zeile, ein bis zwei Wörter), das das Thema benennt, z. B. DEIN PREIS, SICHTBARKEIT, ANGEBOT, JA SAGEN. Hat der Post ein eigenes Wort in Versalien am Anfang (z. B. FÜR DICH, KLARTEXT), nimm genau dieses. Keine Floskel-Labels wie UNTER UNS, LET'S TALK, REALTALK, KURZ GESAGT.
+- Alle anderen Stories haben KEIN Label.
+- Dann der große Satz. Ein Gedanke, den sie kennt, ein Satz, den sie sich selbst sagt oder den man oft hört, gern in „…". Höchstens 25 Wörter, keine Aufzählung.
+- Darunter der kleine Absatz, 2–3 ruhige Sätze, höchstens 40 Wörter. Er ordnet ein, widerspricht oder führt weiter, so wie: „Hört man oft. Und ich will dir mitgeben, warum ich das für falsch halte."
 - Keine erfundenen Situationen aus meinem Alltag (kein „in meinem Call gesagt", kein „eine Kundin hat mir geschrieben"), außer es steht unten bei MEINE GESCHICHTE oder HEUTE BEI MIR. Stattdessen: „Hört man oft", „Sagen viele", „Kennst du den Satz?".
 - Ausgabe nur die Texte: „Story 1", „Story 2" … ohne Erklärungen.
 - Optional Umfrage- oder Fragesticker mit 📊 / 💬 markieren.
@@ -56,8 +57,8 @@ const TECHNIK = `
 TECHNISCHE AUSGABE (nur für die App, ändert nichts am Inhalt oben):
 Antworte NUR mit JSON, ohne Vorwort, ohne Markdown:
 {"stories":[{"text":"…","sticker":""}]}
-- "text": der Story-Text genau so, wie er auf die Story kommt: LABEL\\ngroßer Satz\\nkleiner Absatz
-  (drei Zeilen, getrennt mit \\n). Kein „Story 1" davor.
+- "text": der Story-Text genau so, wie er auf die Story kommt: großer Satz\\nkleiner Absatz,
+  bei Story 1 davor noch LABEL\\n. Kein „Story 1" davor.
 - "sticker": nur wenn diese Story einen Umfrage- oder Fragesticker hat, z. B.
   "📊 Bist du gerade eher A oder B?" oder "💬 Was hält dich zurück?". Sonst "".
   Der Sticker-Text steht NICHT zusätzlich in "text".
