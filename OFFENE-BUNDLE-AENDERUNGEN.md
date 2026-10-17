@@ -13510,3 +13510,16 @@ Alle Adressen laden **karten616**.
 - Lokal gerendert, keine Fehler.
 
 Alle Adressen laden **karten617**.
+
+## 571 — Vergleichsposts auf sandigem Cognac mit Struktur (karten618)
+
+- Carina: „Eher ein sandiges Orange-Beige, Cognac, mit Struktur statt dem hellen Ton.“
+- Hintergrund und Farben:
+  - `kontrastVNGrund` #C49A70.
+  - `kontrastVNKorn` 16: Papierkorn und weiche helle/dunkle Flecken, einmal pro Farbe gecacht.
+  - Schrift dunkelbraun #1E1611, kleine Zeile #3B2A1E, Labels rgba(30,22,17,0.72).
+  - Schatten 0,38.
+- Die kurze Linie im Nachher-Bild nimmt wieder `kontrastAkzentHell` (sonst dunkel auf Schwarz).
+- Lokal gerendert, keine Fehler.
+
+Alle Adressen laden **karten618**.
