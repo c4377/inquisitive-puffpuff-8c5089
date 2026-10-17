@@ -311,7 +311,7 @@ ersetze('Et=ae=>{n("/editor",{state:{slides:ae.slides,dayId:ae.day,dayTitle:ae.t
         'Ve&&De.push(new File([Ve],`Tag${ae.day}_Slide${Ze+1}.jpg`,{type:"image/jpeg"}))}return De};', 1)
 
 # Knopf „Cover“ in der Plan-Leiste (Carina 15.10.): öffnet site/cover-export.js (nur Cover von Tag x bis y als Fotos)
-ersetze('v.jsx("button",{onClick:()=>{c?yn():(f(!0),g([]))},', 'v.jsx("button",{onClick:()=>{window.__bsCoverDialog&&window.__bsCoverDialog()},className:"px-2.5 py-1.5 bg-white text-purple-700 border border-purple-200 rounded-lg font-bold hover:bg-purple-50 transition-colors flex items-center whitespace-nowrap text-[11px]",children:"Cover"}),v.jsx("button",{onClick:()=>{c?yn():(f(!0),g([]))},', 1)
+ersetze('v.jsx("button",{onClick:()=>{c?yn():(f(!0),g([]))},', 'v.jsx("button",{onClick:()=>{window.__bsCoverDialog&&window.__bsCoverDialog()},className:"px-2.5 py-1.5 bg-white text-purple-700 border border-purple-200 rounded-lg font-bold hover:bg-purple-50 transition-colors flex items-center whitespace-nowrap text-[11px]",children:"Cover"}),v.jsx("button",{onClick:()=>{window.__bsVNReelDialog&&window.__bsVNReelDialog()},className:"px-2.5 py-1.5 bg-white text-purple-700 border border-purple-200 rounded-lg font-bold hover:bg-purple-50 transition-colors flex items-center whitespace-nowrap text-[11px]",children:"VN-Reels"}),v.jsx("button",{onClick:()=>{c?yn():(f(!0),g([]))},', 1)
 
 # Auswahl sichtbarer (Carina 15.10.): im Auswahlmodus direkt neben „Auswahl beenden“ die Knöpfe „Alle“/„Keine“ und „Von–bis“
 ersetze('children:c?"Auswahl beenden":"Auswählen"}),', 'children:c?"Auswahl beenden":"Auswählen"}),'

@@ -13555,4 +13555,20 @@ Alle Adressen laden **karten619**.
 - Platzhalter bei „Eigene Texte einfügen“ zeigt das Format.
 - Lokal mit drei Beispiel-Stories gerendert, keine Fehler.
 
-Alle Adressen laden **karten620**.
+## 576 — Vorher/Nachher als animiertes Reel, 9:16 und 3:4 (karten621, vn-reel.js)
+
+- Carina: „Bau außerdem die Vorher/Nachher als Reels, 7 Sekunden, also animiert, einmal in 9:16, einmal in 3:4.“
+- Neuer Knopf **„VN-Reels“** neben „Cover“ (Patch in editorial-look.py) öffnet `site/vn-reel.js`:
+  - „Tage durchsuchen“ rendert die Cover im Bereich. Vorher/Nachher-Kacheln legen ihre Teile in `window.__bsVNTeile[tag]` ab (neu im Zeichner: Label, Satz, VORHER/NACHHER-Beschriftung, beide Bilder, Farben, Struktur-Werte).
+  - Pro gefundenem Tag je ein Knopf für 9:16 (1080×1920) und 3:4 (1080×1440). Erster Tipp nimmt auf (7 s, 30 fps, MediaRecorder: MP4 wenn möglich, sonst WebM), zweiter Tipp sichert über das Teilen-Menü. Vorschau-Video im Fenster.
+- Ablauf (7 s):
+  1. Label und Satz blenden ein.
+  2. Vorher gleitet von unten herein.
+  3. Nachher gleitet von rechts herein.
+  4. Vorher tritt zurück (blasser, kleiner), Nachher wird größer mit stärkerem Schatten.
+  5. Handle blendet ein.
+- Hintergrund: Sand mit Struktur wie die Kachel.
+- `window.__bsVNReelBild(T, t, H)` liefert ein Einzelbild (für Tests).
+- Lokal getestet: 2 Vorher/Nachher-Tage gefunden, Einzelbilder geprüft, Aufnahme ergibt MP4 1080×1920, keine Fehler.
+
+Alle Adressen laden **karten621**.
