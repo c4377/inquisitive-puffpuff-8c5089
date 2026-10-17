@@ -13543,4 +13543,15 @@ Alle Adressen laden **karten619**.
 - Darüber ein Schleier in der Kachelfarbe: Weiß 72 % (`kontrastTkSchleierHell`), Schwarz 55 % (`kontrastTkSchleierDunkel`). Ohne Foto bleibt die glatte Fläche.
 - Lokal gerendert, keine Fehler.
 
+## 574 — Story-Highlight-Cover als eigene Seite /highlights/ (kein neues Bundle)
+
+- Carina: „Mach Highlight-Bilder und mach's damit echt zur Boutique.“
+- 7 Cover (Über mich, Verkaufslücke, Storytelling, Vorher/Nachher, Stimmen, Notizen, Buchen) in zwei Reihen:
+  - hell: #F4F1EC mit Papierkorn, Schrift #141414
+  - dunkel: #141414, Schrift Weiß
+- Gemeinsamer Look: kurze rosé Linie, Wort in Feed Serif kursiv mittig (im Instagram-Kreis), „N° 01“ in feinen Versalien.
+- Erzeugt mit `node tools/highlights.mjs` aus `site/highlights/vorlage.html` (lokaler Server auf 8899 nötig). Ergebnis: `site/highlights/hell-01.jpg` … `dunkel-07.jpg`.
+- Seite `site/highlights/index.html`: Tipp auf ein Cover sichert dieses, Knöpfe sichern eine ganze Reihe (Teilen-Menü, sonst Download), kurze Anleitung zum Einsetzen.
+- netlify.toml: Weiterleitung `/highlights` → `/highlights/`, eigene Regel vor der Auffangregel, Cache-Header.
+
 Alle Adressen laden **karten620**.

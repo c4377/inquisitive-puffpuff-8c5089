@@ -39,6 +39,17 @@
   to = "/profilbilder/index.html"
   status = 200
 
+# Highlight-Cover (Story-Highlights) sind ebenfalls eine eigene Seite.
+[[redirects]]
+  from = "/highlights"
+  to = "/highlights/"
+  status = 301
+
+[[redirects]]
+  from = "/highlights/*"
+  to = "/highlights/index.html"
+  status = 200
+
 # Alte App-Dateinamen (index-B5kartenNNN.js), die es nicht mehr gibt, landen
 # auf der aktuellen Version. Greift nur, wenn die Datei fehlt. Bei jedem
 # neuen Build die Nummer hier mitziehen (siehe EINSPIELEN.md).
@@ -67,6 +78,11 @@
 
 [[headers]]
   for = "/profilbilder/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/highlights/*"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
