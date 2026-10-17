@@ -13590,4 +13590,10 @@ Alle Adressen laden **karten619**.
   - Die Vorher/Nachher-Sätze selbst zählen doppelt so stark (×6 statt ×3), damit Wörter wie „Kundin“ im restlichen Post die Nische nicht kippen.
 - Lokal getestet mit „Mütter dürfen auch an sich denken.“ und „Kundin“ im Text: „Vorher / Nachher · Coach für Mütter“, Hook über den Karten und im Reel, Video MP4, keine Fehler.
 
+## 579 — Caption im Reel-Ersteller (vn-reel.js v4, kein neues Bundle)
+
+- Carina: „Die Caption bitte auch anzeigen im Reel-Ersteller.“
+- Unter jedem gefundenen Vorher/Nachher-Tag steht jetzt die Caption aus dem Plan (`caption` am Tag) in einem bearbeitbaren Feld (16 px, damit Safari nicht zoomt) mit Knopf „Caption kopieren“. Ohne Caption im Plan steht ein Hinweis im Feld.
+- Lokal getestet (Tag mit und ohne Caption), keine Fehler.
+
 Alle Adressen laden **karten623**.

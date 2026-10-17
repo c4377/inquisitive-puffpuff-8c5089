@@ -5,6 +5,7 @@
  * Satz → Vorher gleitet herein → Nachher gleitet herein → Vorher tritt zurück, Nachher nach vorn.
  * Aufnahme über canvas.captureStream + MediaRecorder (iPhone: MP4, sonst WebM).
  * Das iPhone erlaubt das Teilen nur direkt nach einem Tipp, deshalb: erst erstellen, dann sichern.
+ * Pro Tag steht die Caption aus dem Plan darunter (bearbeitbar, „Caption kopieren“).
  */
 (function () {
   var DAUER = 7, FPS = 30;
@@ -19,6 +20,7 @@
     "#bs-vnr .k.a{background:#7C3AED;color:#fff}#bs-vnr .k.b{background:#111;color:#fff}#bs-vnr .k.c{background:#F3F4F6;color:#111}" +
     "#bs-vnr .k:disabled{opacity:.5}#bs-vnr .m{font-size:12px;color:#374151;margin-top:10px;min-height:16px}#bs-vnr .m.f{color:#B91C1C}" +
     "#bs-vnr .tag{border-top:1px solid #eee;padding:12px 0}#bs-vnr .tag b{font-size:14px}#bs-vnr .tag .s{font-size:12px;color:#6B7280;margin:2px 0 4px}" +
+    "#bs-vnr .cap{width:100%;box-sizing:border-box;margin:8px 0 2px;border:1px solid #E5E7EB;border-radius:10px;padding:9px 10px;font:16px/1.4 -apple-system,Helvetica,Arial,sans-serif;color:#111;resize:vertical}" +
     "#bs-vnr video{width:46%;margin:8px 2% 0 0;border-radius:8px;background:#111;vertical-align:top}";
   document.head.appendChild(css);
 
@@ -168,9 +170,16 @@
       if (navigator.canShare && navigator.canShare({ files: [f] })) { navigator.share({ files: [f] }).catch(function (e) { if (e && e.name !== "AbortError") meld("Teilen ging nicht: " + (e.name || e), true); }); return; }
       var a = document.createElement("a"); a.href = URL.createObjectURL(f); a.download = f.name; document.body.appendChild(a); a.click(); a.remove();
     }
-    function zeile(tag, T) {
+    function zeile(tag, T, cap) {
       var d = document.createElement("div"); d.className = "tag";
       d.innerHTML = "<b>Tag " + tag + "</b><div class='s'></div>"; d.querySelector(".s").textContent = String(T.satz || "").replace(/\*/g, "");
+      var ct = document.createElement("textarea"); ct.className = "cap"; ct.rows = 5; ct.value = String(cap || ""); ct.placeholder = "Für diesen Tag ist keine Caption im Plan.";
+      var ck = document.createElement("button"); ck.className = "k c"; ck.textContent = "Caption kopieren";
+      ck.onclick = function () {
+        var fertig = function () { ck.textContent = "Kopiert ✓"; setTimeout(function () { ck.textContent = "Caption kopieren"; }, 1400); };
+        try { navigator.clipboard.writeText(ct.value).then(fertig, function () { ct.select(); document.execCommand("copy"); fertig(); }); } catch (e) { ct.select(); try { document.execCommand("copy"); fertig(); } catch (e2) {} }
+      };
+      d.appendChild(ct); d.appendChild(ck); d.appendChild(document.createElement("br"));
       [["9:16", 1920, "9x16"], ["3:4", 1440, "3x4"]].forEach(function (fm) {
         var b = document.createElement("button"); b.className = "k b"; b.textContent = "Reel " + fm[0] + " erstellen";
         b.onclick = function () {
@@ -202,7 +211,7 @@
           window.__bsVNTeile && delete window.__bsVNTeile[String(p.day)];
           await window.__bsTagBilder(Object.assign({}, p, { slides: [Object.assign({}, p.slides[0], { _tag: p.day })] }));
           var T = window.__bsVNTeile && window.__bsVNTeile[String(p.day)];
-          if (T && T.bilder && T.bilder[0] && T.bilder[1]) { zeile(p.day, T); n++; }
+          if (T && T.bilder && T.bilder[0] && T.bilder[1]) { zeile(p.day, T, p.caption); n++; }
         } catch (e) { console.warn("VN-Reel Tag " + p.day, e); }
       }
       such.disabled = false;
