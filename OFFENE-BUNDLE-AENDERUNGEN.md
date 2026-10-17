@@ -13659,4 +13659,9 @@ Alle Adressen laden **karten619**.
 - App-Sicherung `nurEinLabel`: Kommt trotzdem eine Versal-Zeile auf Story 2 ff., wird sie entfernt.
 - Lokal getestet mit simulierter Antwort (Label auf Story 1, 2 und 3 → bleibt nur auf Story 1), keine Fehler.
 
+## 587 — Story 1: „REAL TALK“ + sehr ehrliche Frage/Feststellung/Meinung (nur Funktion)
+
+- Carina: „Nein, es gibt Real Talk und dann eine sehr ehrliche Frage/Feststellung/Meinung.“
+- story-studio.mjs, FORMAT: Story 1 beginnt immer mit dem Label REAL TALK, darunter als großer Satz eine sehr ehrliche Frage, Feststellung oder Meinung. Keine anderen Labels; alle weiteren Stories ohne Label (App-Sicherung `nurEinLabel` bleibt).
+
 Alle Adressen laden **karten627**.

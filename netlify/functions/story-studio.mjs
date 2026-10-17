@@ -13,9 +13,11 @@ THEMA HEUTE: {{THEMA}}
 
 FORMAT (jede Story ist gleich aufgebaut, wie ein ruhiges Gespräch unter vier Augen)
 - {{ANZAHL}} Stories.
-- NUR Story 1 beginnt mit einem LABEL in Versalien (eigene Zeile, ein bis zwei Wörter), das das Thema benennt, z. B. DEIN PREIS, SICHTBARKEIT, ANGEBOT, JA SAGEN. Hat der Post ein eigenes Wort in Versalien am Anfang (z. B. FÜR DICH, KLARTEXT), nimm genau dieses. Keine Floskel-Labels wie UNTER UNS, LET'S TALK, REALTALK, KURZ GESAGT.
+- Story 1 beginnt mit genau diesem Label in einer eigenen Zeile: REAL TALK
+  Darunter als großer Satz eine sehr ehrliche Frage, Feststellung oder Meinung, die sie trifft, weil sie stimmt. Kein Weichzeichnen, keine Floskel.
+  Kein anderes Label (nicht UNTER UNS, LET'S TALK, KURZ GESAGT usw.).
 - Alle anderen Stories haben KEIN Label.
-- Dann der große Satz. Ein Gedanke, den sie kennt, ein Satz, den sie sich selbst sagt oder den man oft hört, gern in „…". Höchstens 25 Wörter, keine Aufzählung.
+- Jede Story hat den großen Satz: ein Gedanke, den sie kennt, ein Satz, den sie sich selbst sagt oder den man oft hört, gern in „…". Höchstens 25 Wörter, keine Aufzählung.
 - Darunter der kleine Absatz, 2–3 ruhige Sätze, höchstens 40 Wörter. Er ordnet ein, widerspricht oder führt weiter, so wie: „Hört man oft. Und ich will dir mitgeben, warum ich das für falsch halte."
 - Keine erfundenen Situationen aus meinem Alltag (kein „in meinem Call gesagt", kein „eine Kundin hat mir geschrieben"), außer es steht unten bei MEINE GESCHICHTE oder HEUTE BEI MIR. Stattdessen: „Hört man oft", „Sagen viele", „Kennst du den Satz?".
 - Ausgabe nur die Texte: „Story 1", „Story 2" … ohne Erklärungen.
