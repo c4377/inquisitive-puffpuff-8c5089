@@ -13523,3 +13523,15 @@ Alle Adressen laden **karten617**.
 - Lokal gerendert, keine Fehler.
 
 Alle Adressen laden **karten618**.
+
+## 572 — Vergleichsposts kühler, mehr Struktur (karten619)
+
+- Carina: „Mehr Struktur und kälter.“
+- `kontrastVNGrund` #C49A70 → kühles Sandbeige #B5A08A.
+- Struktur:
+  - Korn 16 → 30.
+  - Neu `kontrastVNFlecken` 1,8: mehr und stärkere Flecken, dunkle jetzt neutral statt orange.
+  - Neu `kontrastVNSprenkel` 900: feine dunkle Fasern/Sprenkel wie Recyclingpapier.
+- Lokal gerendert, keine Fehler.
+
+Alle Adressen laden **karten619**.
