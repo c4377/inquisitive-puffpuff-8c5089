@@ -13633,4 +13633,11 @@ Alle Adressen laden **karten619**.
 - Kontextmenü eines Posts: „Stories dazu schreiben“ (alte Funktion write-stories mit eigenem Prompt) entfernt, per Patch in editorial-look.py.
 - Lokal getestet: kein Posten-Knopf, Stories-Knopf obenauf, nur „Bild speichern“/„Text kopieren“ pro Story, Eintrag nicht mehr im Bundle, keine Fehler.
 
+## 584 — Stories nur noch im Talk-Stil, auch die Schreibweise (story-studio.js v10, kein neues Bundle)
+
+- Carina (Vorlage „LET'S TALK“): „Nur mehr so die Stories, und auch die Art zu schreiben.“
+- Letzte Story „zum Post“ ebenfalls im Talk-Stil: Post-Cover abgedunkelt als Hintergrund, Label, Text, umrandete Pille „NEUER POST ↓“ (statt Karte mit goldener Pille).
+- netlify/functions/story-studio.mjs, FORMAT: jede Story = Zeile 1 LABEL (1–2 Wörter, Versalien, gleich auf allen Stories der Serie), Zeile 2 großer Satz (max. 25 Wörter, gern ein bekannter Gedanke in „…“), Zeile 3 kleiner Absatz (2–3 ruhige Sätze, max. 40 Wörter). Keine erfundenen Situationen („in meinem Call gesagt“) außer aus MEINE GESCHICHTE; stattdessen „Hört man oft“, „Sagen viele“. TECHNIK: text = LABEL\ngroßer Satz\nkleiner Absatz.
+- Lokal gerendert (Talk-Story und Post-Story), keine Fehler. KI-Antwort nur live prüfbar.
+
 Alle Adressen laden **karten627**.

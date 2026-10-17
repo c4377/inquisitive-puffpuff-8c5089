@@ -8,7 +8,7 @@
  * Texte sind direkt editierbar, das Bild zieht sofort nach. Eigene Texte lassen sich
  * auch einfügen („Story 1 … Story 2 …“), dann braucht es keine KI.
  * „Stories zum Post“: Tag aus dem Content-Plan wählen, die Stories führen zu diesem Post
- * hin; die letzte Story zeigt das Titelbild des Posts als Karte mit „Neuer Post ↓“.
+ * hin; die letzte Story zeigt das Titelbild des Posts abgedunkelt im Talk-Stil mit „Neuer Post ↓“.
  */
 (function () {
   if (window.BS_RAUM) return; /* Kundenraum: Story-Studio schreibt in Carinas Stimme, dort aus. */
@@ -264,7 +264,7 @@
       document.fonts.load("400 60px \"" + fam + "\""), document.fonts.load("500 30px \"HelveticaNeueBrand\""), document.fonts.load("400 40px \"Nothing You Could Do\""), document.fonts.load("400 60px \"Story Serif\"")
     ].map(function (p) { return Promise.resolve(p).catch(function () { return null; }); })).then(function (r) {
       var bild = r[0], el = r[1], weiss = design !== "papier";
-      if (design === "post") { zeichnePost(ctx, st, zeilen, cta, bild, fam); return; }
+      if (design === "post") { zeichneTalk(ctx, st, zeilen, cta || "Neuer Post ↓", bild); return; }
       if (design === "talk") { zeichneTalk(ctx, st, zeilen, cta, bild); return; }
       ctx.clearRect(0, 0, W, H);
       if (design === "foto" && bild) {
