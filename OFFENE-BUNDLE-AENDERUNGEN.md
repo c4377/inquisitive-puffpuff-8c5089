@@ -13640,4 +13640,14 @@ Alle Adressen laden **karten619**.
 - netlify/functions/story-studio.mjs, FORMAT: jede Story = Zeile 1 LABEL (1–2 Wörter, Versalien, gleich auf allen Stories der Serie), Zeile 2 großer Satz (max. 25 Wörter, gern ein bekannter Gedanke in „…“), Zeile 3 kleiner Absatz (2–3 ruhige Sätze, max. 40 Wörter). Keine erfundenen Situationen („in meinem Call gesagt“) außer aus MEINE GESCHICHTE; stattdessen „Hört man oft“, „Sagen viele“. TECHNIK: text = LABEL\ngroßer Satz\nkleiner Absatz.
 - Lokal gerendert (Talk-Story und Post-Story), keine Fehler. KI-Antwort nur live prüfbar.
 
+## 585 — Story-Studio: „Was war heute bei dir?“ wird zum Post gerahmt (story-studio.js v11, kein neues Bundle)
+
+- Carina: „Ich kann ja auch was mitgeben, was heute dran war, und du framest es zum Post.“
+- Neues Feld unter der Tag-Auswahl („Was war heute bei dir?“, 16 px, pro Kalendertag gemerkt). Wird als `heute` an die Funktion geschickt.
+- netlify/functions/story-studio.mjs:
+  - Neuer Block HEUTE BEI MIR. Story 1 startet bei diesem echten Moment, nur mit den eingetragenen Details, nichts dazuerfunden. Von dort geht die Brücke zur Hook, dann zum passenden Angebot, dann „Neuer Post ↓“.
+  - Ohne Eintrag bleibt der Alltagsgedanke.
+  - Die Regel „keine erfundenen Situationen“ erlaubt ausdrücklich HEUTE BEI MIR.
+- Lokal getestet (Antwort simuliert): Feld da, `heute`, `hook` und Thema kommen an, keine Fehler.
+
 Alle Adressen laden **karten627**.

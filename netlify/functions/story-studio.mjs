@@ -16,7 +16,7 @@ FORMAT (jede Story ist gleich aufgebaut, wie ein ruhiges Gespräch unter vier Au
 - Zeile 1: ein kurzes LABEL in Versalien, ein bis zwei Wörter, z. B. LET'S TALK, REALTALK, KURZ GESAGT, UNTER UNS. Dasselbe Label auf JEDER Story der Serie, wie ein Serientitel.
 - Zeile 2: der große Satz. Ein Gedanke, den sie kennt, ein Satz, den sie sich selbst sagt oder den man oft hört, gern in „…". Höchstens 25 Wörter, keine Aufzählung.
 - Zeile 3: der kleine Absatz darunter, 2–3 ruhige Sätze, höchstens 40 Wörter. Er ordnet ein, widerspricht oder führt weiter, so wie: „Hört man oft. Und ich will dir mitgeben, warum ich das für falsch halte."
-- Keine erfundenen Situationen aus meinem Alltag (kein „in meinem Call gesagt", kein „eine Kundin hat mir geschrieben"), außer es steht unten bei MEINE GESCHICHTE. Stattdessen: „Hört man oft", „Sagen viele", „Kennst du den Satz?".
+- Keine erfundenen Situationen aus meinem Alltag (kein „in meinem Call gesagt", kein „eine Kundin hat mir geschrieben"), außer es steht unten bei MEINE GESCHICHTE oder HEUTE BEI MIR. Stattdessen: „Hört man oft", „Sagen viele", „Kennst du den Satz?".
 - Ausgabe nur die Texte: „Story 1", „Story 2" … ohne Erklärungen.
 - Optional Umfrage- oder Fragesticker mit 📊 / 💬 markieren.
 
@@ -72,7 +72,7 @@ DER HOOK DES POSTS (das Wichtigste, lies ihn zuerst und bau alles darauf auf):
 „{{PHOOK}}"
 
 AUFBAU ALS BRÜCKE:
-1. Story 1 startet bei einem Alltagsgedanken, den sie heute selbst haben könnte: beim Kaffee, beim Scrollen, kurz bevor sie postet, beim Angebot-Überarbeiten, abends nach einem Kundinnen-Call. Als Gedanke oder Frage, die sie kennt, NICHT als erfundenes Erlebnis von mir.
+1. Steht unten HEUTE BEI MIR, startet Story 1 genau bei diesem echten Moment von heute und die Brücke geht von dort aus. Sonst startet Story 1 bei einem Alltagsgedanken, den sie heute selbst haben könnte: beim Kaffee, beim Scrollen, kurz bevor sie postet, beim Angebot-Überarbeiten, abends nach einem Kundinnen-Call. Als Gedanke oder Frage, die sie kennt, NICHT als erfundenes Erlebnis von mir.
 2. Die nächsten Stories bauen die Brücke von diesem Alltagsgedanken zum Hook: denselben Gedanken zu Ende denken, bis der Hook fast ausgesprochen ist. Den Hook nicht wortgleich verraten und die Lösung aus dem Post NICHT vorwegnehmen.
 3. Eine Story vor der letzten baut die Brücke zu dem EINEN Angebot von mir, das am besten zum Hook passt (nur: Das Intensive, Das 1:1, Done-for-you Content, Offer Incubator). In ein, zwei Sätzen, als logische Folge des Gedankens, ohne Druck, ohne „STARTEN".
 4. Die letzte Story kündigt den Post an und schickt sie hin. Sie endet mit genau dieser Zeile: „Neuer Post ↓"
@@ -93,11 +93,12 @@ export default async (req) => {
   if (!key) {
     return new Response(JSON.stringify({ error: 'GEMINI_API_KEY fehlt (Netlify → Environment variables).' }), { status: 500 });
   }
-  let thema = '', count = 6, post = null;
+  let thema = '', count = 6, post = null, heute = '';
   try {
     const body = await req.json();
     thema = String(body.thema || '').replace(/\s+/g, ' ').trim().slice(0, 600);
     count = Math.min(Math.max(parseInt(body.count, 10) || 6, 5), 7);
+    heute = String(body.heute || '').replace(/\s+/g, ' ').trim().slice(0, 1200);
     if (body.post && typeof body.post === 'object') {
       const sl = (Array.isArray(body.post.slides) ? body.post.slides : []).map((x) => String(x || '').trim()).filter(Boolean).slice(0, 12);
       post = { titel: String(body.post.titel || '').trim().slice(0, 200), slides: sl, caption: String(body.post.caption || '').trim().slice(0, 3000), hook: String(body.post.hook || '').replace(/\s+/g, ' ').trim().slice(0, 300) };
@@ -127,6 +128,9 @@ export default async (req) => {
     prompt += ZUM_POST.replace('{{PHOOK}}', post.hook || post.titel || '—').replace('{{PTITEL}}', post.titel || '—')
       .replace('{{PSLIDES}}', post.slides.length ? post.slides.map((x, k) => `${k + 1}. ${x.slice(0, 500)}`).join('\n') : '—')
       .replace('{{PCAPTION}}', post.caption || '—');
+  }
+  if (heute) {
+    prompt += `\n\nHEUTE BEI MIR (echt, von mir selbst eingetragen):\n${heute}\n- Erzähl diesen Moment in meinen Worten, nur mit den Details, die hier stehen. Nichts dazuerfinden, keine Zahlen, Namen oder Zitate ergänzen.\n- ${post ? 'Von diesem Moment aus baust du die Brücke zur Hook des Posts.' : 'Von diesem Moment aus baust du die Brücke zum Thema.'}`;
   }
   prompt += post ? TECHNIK.replace('Die CTA „Schreib mir STARTEN ↓" steht als letzte Zeile im "text" der letzten Story.', 'Die Zeile „Neuer Post ↓" steht als letzte Zeile im "text" der letzten Story.') : TECHNIK;
 

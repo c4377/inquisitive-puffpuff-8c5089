@@ -512,6 +512,13 @@
     var tagReihe = document.createElement("div"); tagReihe.style.cssText = "display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px";
     var tagInfo = document.createElement("div"); tagInfo.style.cssText = "font:13px/1.4 -apple-system,sans-serif;color:#3b2a27;margin-top:6px;min-height:0";
     postBlock.appendChild(tagReihe); postBlock.appendChild(tagInfo);
+    /* „Was war heute bei dir?“ (Carina 17.10.): echter Moment von heute, die KI rahmt ihn zum Post. Pro Tag gemerkt. */
+    var heuteFeld = document.createElement("textarea"); heuteFeld.rows = 3;
+    heuteFeld.placeholder = "Was war heute bei dir? z. B. ein Gedanke beim Kaffee, ein Satz aus einem Call, etwas, das dich genervt hat. Die Stories starten dort und führen zum Post.";
+    heuteFeld.style.cssText = "width:100%;box-sizing:border-box;margin-top:10px;border:1px solid #e5ddd8;border-radius:12px;padding:10px;font:16px/1.4 -apple-system,sans-serif;background:#fff";
+    try { if (localStorage.getItem("BS_STORY_HEUTE_TAG") === heute()) heuteFeld.value = localStorage.getItem("BS_STORY_HEUTE") || ""; } catch (e) {}
+    heuteFeld.oninput = function () { try { localStorage.setItem("BS_STORY_HEUTE", heuteFeld.value); localStorage.setItem("BS_STORY_HEUTE_TAG", heute()); } catch (e) {} };
+    postBlock.appendChild(heuteFeld);
     function setzePost(d) {
       zumPost = d;
       [].forEach.call(tagReihe.children, function (c) { var an = d && c.__tag === d.tag; c.style.background = an ? OX : "#fff"; c.style.color = an ? "#fff" : OX; });
@@ -548,7 +555,7 @@
       var t = thema.value.trim(); if (!t) { status.textContent = "Bitte zuerst ein Thema eintragen."; return; }
       try { localStorage.setItem("BS_STORY_THEMA", t); localStorage.setItem("BS_STORY_TAG", heute()); } catch (e) {}
       los.disabled = true; status.textContent = "Schreibe Stories … (dauert etwa 20 Sekunden)";
-      fetch("/.netlify/functions/story-studio", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ thema: t, count: Number(anz.value), post: zumPost ? { titel: zumPost.titel, slides: zumPost.slides, caption: zumPost.caption, hook: zumPost.hook } : undefined }) })
+      fetch("/.netlify/functions/story-studio", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ thema: t, heute: heuteFeld.value.trim(), count: Number(anz.value), post: zumPost ? { titel: zumPost.titel, slides: zumPost.slides, caption: zumPost.caption, hook: zumPost.hook } : undefined }) })
         .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d && d.error || "Fehlgeschlagen"); return d; }); })
         .then(function (d) { stories = d.stories || []; postFuer = zumPost; return ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length + " Stories fertig. Texte kannst du direkt ändern."; }); })
         .catch(function (e) { status.textContent = "Fehler: " + (e.message || e); })
