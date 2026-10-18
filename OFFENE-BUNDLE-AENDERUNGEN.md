@@ -13692,4 +13692,16 @@ Alle Adressen laden **karten619**.
 - App: Anführungszeichen, die eine ganze Zeile umschließen, werden aus KI-Antworten entfernt; Zitate mitten im Satz bleiben.
 - Lokal getestet (simulierte Antwort), keine Fehler.
 
+## 591 — Stories kürzer und als ein Gedankengang (story-studio.js v16)
+
+- Carina: „Text ist zu lang und es hängt null zusammen.“
+- Prompt (story-studio.mjs):
+  - Großer Satz max. 15 Wörter (vorher 25), Absatz max. 2 kurze Sätze / 22 Wörter (vorher 2–3 / 40), „weniger ist mehr“, ein Gedanke pro Story.
+  - Neuer Block ZUSAMMENHANG:
+    - Eine Aussage pro Serie festlegen.
+    - Jede Story greift genau dort auf, wo die vorige aufgehört hat; natürliche Übergänge.
+    - Kein neues Thema, keine Tipp-Liste.
+    - Schlussprüfung „liest sich wie ein Absatz, nur auf Bildschirme verteilt“.
+- Standard 5 Stories statt 6 (Auswahl und Funktion).
+
 Alle Adressen laden **karten627**.

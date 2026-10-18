@@ -17,9 +17,17 @@ FORMAT (jede Story ist gleich aufgebaut, wie ein ruhiges Gespräch unter vier Au
   Darunter als großer Satz eine sehr ehrliche Frage, Feststellung oder Meinung, die sie trifft, weil sie stimmt. Kein Weichzeichnen, keine Floskel.
   Kein anderes Label (nicht UNTER UNS, LET'S TALK, KURZ GESAGT usw.).
 - Alle anderen Stories haben KEIN Label.
-- Jede Story hat den großen Satz: eine klare Aussage von mir als Leaderin, eine ehrliche Feststellung oder eine Frage, die sitzt. Höchstens 25 Wörter, keine Aufzählung.
+- Jede Story hat den großen Satz: eine klare Aussage von mir als Leaderin, eine ehrliche Feststellung oder eine Frage, die sitzt. Höchstens 15 Wörter, keine Aufzählung.
 - KEINE Anführungszeichen um den großen Satz oder den Absatz. „…" nur, wenn wirklich jemand einen Satz wörtlich sagt, und das höchstens einmal in der ganzen Serie.
-- Darunter der kleine Absatz, 2–3 ruhige Sätze, höchstens 40 Wörter. Er ordnet ein, bezieht Position oder gibt die Richtung vor.
+- Darunter der kleine Absatz: höchstens 2 kurze Sätze, höchstens 22 Wörter. Er ordnet ein, bezieht Position oder gibt die Richtung vor.
+- WENIGER IST MEHR: Lieber zu kurz als zu lang. Jede Story trägt genau EINEN Gedanken.
+
+ZUSAMMENHANG (das Wichtigste)
+- Leg dir vor dem Schreiben die EINE Aussage der ganzen Serie fest (nicht ausgeben). Jede Story dient nur dieser Aussage.
+- Die Serie ist EIN Gedankengang, kein Sammelsurium: Jede Story greift genau dort auf, wo die vorige aufgehört hat (gleiches Bild, gleiche Frage, gleiches Wort), und führt einen Schritt weiter.
+- Verbinde mit Übergängen wie „Und genau da …", „Das heißt …", „Weil …", „Also …", aber nur, wo es natürlich klingt.
+- Kein neues Thema mitten in der Serie, keine zweite Botschaft, keine Liste von Tipps.
+- Prüf am Ende: Liest sich Story 1 bis zur letzten wie ein einziger Absatz, der nur in Bildschirme aufgeteilt ist? Wenn eine Story auch allein stehen könnte, verbinde sie oder streich sie.
 - Keine erfundenen Situationen aus meinem Alltag (kein „in meinem Call gesagt", kein „eine Kundin hat mir geschrieben"), außer es steht unten bei MEINE GESCHICHTE oder HEUTE BEI MIR. Stattdessen: „Hört man oft", „Sagen viele", „Kennst du den Satz?".
 - Ausgabe nur die Texte: „Story 1", „Story 2" … ohne Erklärungen.
 - Keine Umfrage-, Quiz- oder Fragesticker vorschlagen. Die Stories stehen für sich.
@@ -101,7 +109,7 @@ export default async (req) => {
   try {
     const body = await req.json();
     thema = String(body.thema || '').replace(/\s+/g, ' ').trim().slice(0, 600);
-    count = Math.min(Math.max(parseInt(body.count, 10) || 6, 5), 7);
+    count = Math.min(Math.max(parseInt(body.count, 10) || 5, 5), 7);
     heute = String(body.heute || '').replace(/\s+/g, ' ').trim().slice(0, 1200);
     if (body.post && typeof body.post === 'object') {
       const sl = (Array.isArray(body.post.slides) ? body.post.slides : []).map((x) => String(x || '').trim()).filter(Boolean).slice(0, 12);
