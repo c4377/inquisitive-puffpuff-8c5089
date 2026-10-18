@@ -13738,4 +13738,14 @@ Alle Adressen laden **karten619**.
 - Story-Prompt: „Einfach normale Gedanken teilen“ statt Haltung/Zuspitzung. Wie einer Freundin erzählt, keine Tipps, kein Marketing erklären, KEINE Angebote nennen, kein Pitch.
 - Aufbau zum Post: normaler Gedanke (REAL TALK) → laut weiterdenken Richtung Hook → wo ich lande (die eine Pointe) → „heute dazu ein Post“ ohne Inhaltsangabe → „Neuer Post ↓“.
 
+## 596 — Story-Texte nach Carinas eigener Überarbeitung (nur Funktion)
+
+Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify/functions/story-studio.mjs`):
+- Bis 35 Wörter pro Story (statt 25), 2 Absätze, getrennt mit Leerzeile.
+- Kurzer gesprochener Nachsatz am Ende erlaubt („Weil du du bist.“, „Was ihr wirklich denkt.“), kein Slogan.
+- Übergangswörter am Story-Anfang („Und“, „Aber“, „Denn“), keine Halbsätze („Weil …“ ohne Hauptsatz).
+- Konkrete Alltagswörter statt Business-Wörter; eigene Geschichte immer mit dem Faden der Serie verbunden.
+- Ihre überarbeitete Serie steht als Rhythmus-Beispiel im Prompt (nur Rhythmus übernehmen, nie Sätze).
+- Letzte Story: beiläufiger ganzer Satz zum Post, dann „Neuer Post ↓“.
+
 Alle Adressen laden **karten628**.
