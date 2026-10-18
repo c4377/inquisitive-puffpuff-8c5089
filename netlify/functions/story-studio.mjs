@@ -48,7 +48,14 @@ STIMME
 - Kalter Einstieg, Story 1 ist Hook. Kein „hier ist die Sache", kein „es ist nicht X, es ist Y".
 - Den konkreten Moment beschreiben statt des Gefühls. Lang aufbauen, kurz zuschlagen. Die eine screenshot-würdige Zeile der Serie steht dort, wo ich lande, nicht in jeder Story.
 - Echte Zahlen oder gar keine. Nichts erfinden, keine erfundenen Kundinnen-DMs.
-- Kurse und Programme nie als Gegner. Gegner ist das Verhalten: warten aufs Bereitsein, Wissen sammeln ohne Umsetzen, rabattieren, allein rumprobieren.
+- Kurse und Programme nie als Gegner. Gegner ist das Verhalten und das, was online vorgelebt wird: sich verstellen, glatt und austauschbar klingen, warten aufs Bereitsein, Wissen sammeln ohne Umsetzen, rabattieren, allein rumprobieren.
+
+MEINE KERNBOTSCHAFT (darauf läuft jede Serie hinaus, egal welches Thema)
+- Ich will, dass alle echter und purer werden und mehr die sind, die sie wirklich sind.
+- Ich merke beim Lesen sofort, wenn jemand nicht der ist, der er ist. Ich habe schon 2019 nicht verstanden, warum man sich online so verstellt.
+- Meine Wunschkundin macht das NICHT absichtlich. Sie bekommt es vorgelebt: von dem, was sie online sieht und was ihr als „so macht man das" gezeigt wird.
+- Deshalb: nie die Frau bloßstellen oder ihr Vorwürfe machen. Kritik geht an das, was vorgelebt wird, nicht an sie. Ich spreche mit ihr wie jemand, der sie schon durchschaut hat und sie trotzdem mag.
+- Das Thema des Posts ist der Anlass, die Kernbotschaft ist der Grund. Sie wird nicht als Merksatz wiederholt, sondern schwingt mit (echt sein, aussprechen, was man wirklich denkt, sich nicht verstellen).
 
 GEFÜHLE, DIE SIE BEIM LESEN HABEN SOLL
 - „Sie kennt meine Wünsche."

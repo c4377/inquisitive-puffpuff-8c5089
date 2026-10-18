@@ -13748,4 +13748,10 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Ihre überarbeitete Serie steht als Rhythmus-Beispiel im Prompt (nur Rhythmus übernehmen, nie Sätze).
 - Letzte Story: beiläufiger ganzer Satz zum Post, dann „Neuer Post ↓“.
 
+## 597 — Kernbotschaft in den Story-Prompt (nur Funktion)
+
+- Neuer Block MEINE KERNBOTSCHAFT in `netlify/functions/story-studio.mjs`: alle sollen echter, purer und mehr sie selbst werden; Carina merkt beim Lesen, wenn jemand nicht er selbst ist; versteht seit 2019 nicht, warum man sich online verstellt.
+- Die Wunschkundin macht das nicht absichtlich, sie bekommt es vorgelebt. Kritik geht an das Vorgelebte, nie an sie.
+- Gegner-Zeile ergänzt um „sich verstellen, glatt und austauschbar klingen“.
+
 Alle Adressen laden **karten628**.
