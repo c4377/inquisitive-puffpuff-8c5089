@@ -13754,4 +13754,10 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Die Wunschkundin macht das nicht absichtlich, sie bekommt es vorgelebt. Kritik geht an das Vorgelebte, nie an sie.
 - Gegner-Zeile ergänzt um „sich verstellen, glatt und austauschbar klingen“.
 
+## 598 — Story-Schrift: Helvetica Light statt Story Serif (story-studio.js v19)
+
+- `site/story-studio.js` `zeichneTalk`: Schrift `HelveticaNeueBrand` (Light 300, schon in der App) statt „Story Serif“.
+- Größen leicht angepasst, weil Helvetica breiter läuft: mit Label 60/36 px (statt 66/40), ohne Label 40 px (statt 44), Zeilenabstand etwas luftiger.
+- Carina hat aus 6 Schriften auf ihrem Foto Nr. 6 (Helvetica Light) gewählt.
+
 Alle Adressen laden **karten628**.

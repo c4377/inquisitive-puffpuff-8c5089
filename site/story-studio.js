@@ -3,7 +3,7 @@
  * Knopf „✦ Stories“ links unten öffnet ein eigenes Menü: Thema eintragen, Anzahl
  * wählen, „Stories schreiben“. Die Texte kommen aus /.netlify/functions/story-studio
  * (Carinas Story-Prompt, Gemini). Jede Story wird als Bild 1080×1920 im Klar-Stil
- * gesetzt: Standard ist „Talk“ (Foto stark abgedunkelt, Versal-Label, Story Serif mittig); per Knopf
+ * gesetzt: Standard ist „Talk“ (Foto stark abgedunkelt, Versal-Label, Helvetica Light mittig); per Knopf
  * auch Foto mit weißem Text, Oxblood mit Gold-Element, Büttenpapier oder Schwarz.
  * Texte sind direkt editierbar, das Bild zieht sofort nach. Eigene Texte lassen sich
  * auch einfügen („Story 1 … Story 2 …“), dann braucht es keine KI.
@@ -155,11 +155,11 @@
     ctx.fillStyle = "#3a2608"; ctx.textAlign = "center"; ctx.fillText(cta, W / 2, cy + 68);
   }
   // „Talk“ (Carina 17.10., Vorlage „LET'S TALK“): Foto stark abgedunkelt, kleines Versal-Label,
-  // großer Satz in Story Serif, darunter kleiner der Rest, alles mittig. Ohne Label (Story 2 ff.) wie bei
+  // großer Satz in Helvetica Light, darunter kleiner der Rest, alles mittig. Ohne Label (Story 2 ff.) wie bei
   // tanja.kammler: alle Absätze gleich klein, mit Leerzeile dazwischen. Das Label ist die erste
   // Zeile, wenn sie in Versalien steht („LET'S TALK“), oder „WORT · Satz“ in der ersten Zeile.
   function zeichneTalk(ctx, st, zeilen, cta, bild) {
-    var F = "Story Serif", z = zeilen.slice(), lab = "";
+    var F = "HelveticaNeueBrand", z = zeilen.slice(), lab = "";
     if (z.length) {
       var m = /^([A-ZÄÖÜ][A-ZÄÖÜß0-9'’ &\-]{1,30}?)\s*[·:|–—]\s*(.+)$/.exec(z[0]);
       if (m && /[a-zäöüß]/.test(m[2])) { lab = m[1]; z[0] = m[2]; }
@@ -179,8 +179,8 @@
     for (var k = 0; k < 40; k++) {
       plan = []; hoehe = labH + labG;
       z.forEach(function (a, j) {
-        var fs = (lab ? (j === 0 ? 66 : 40) : 44) * sk, lh = fs * (lab ? (j === 0 ? 1.13 : 1.32) : 1.24), br = lab ? (j === 0 ? 760 : 640) : 640;
-        ctx.font = "400 " + fs + "px \"" + F + "\"";
+        var fs = (lab ? (j === 0 ? 60 : 36) : 40) * sk, lh = fs * (lab ? (j === 0 ? 1.16 : 1.36) : 1.3), br = lab ? (j === 0 ? 760 : 640) : 640;
+        ctx.font = "300 " + fs + "px \"" + F + "\"";
         var zl = ausgeglichen(ctx, a, br);
         if (j) hoehe += (lab ? (j === 1 ? 130 : 34) : 52) * sk;
         plan.push({ fs: fs, lh: lh, zl: zl, y: hoehe });
@@ -198,7 +198,7 @@
       if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
     }
     plan.forEach(function (p, j) {
-      ctx.font = "400 " + p.fs + "px \"" + F + "\""; ctx.fillStyle = j === 0 || !lab ? "#FFFFFF" : "rgba(255,255,255,.9)";
+      ctx.font = "300 " + p.fs + "px \"" + F + "\""; ctx.fillStyle = j === 0 || !lab ? "#FFFFFF" : "rgba(255,255,255,.9)";
       p.zl.forEach(function (t, q) { ctx.fillText(t, W / 2, y0 + p.y + p.lh * q + p.fs * 0.82); });
     });
     if (cta) {
@@ -258,7 +258,7 @@
     return Promise.all([
       foto ? ladeBild(foto) : design === "post" && st.post && st.post.bild ? ladeBild(st.post.bild) : null,
       design === "oxblood" || design === "schwarz" ? ladeBild("/scrap/" + ELEMENTE[(i * 5 + (st.el || 0)) % ELEMENTE.length] + ".webp") : null,
-      document.fonts.load("400 60px \"" + fam + "\""), document.fonts.load("500 30px \"HelveticaNeueBrand\""), document.fonts.load("400 40px \"Nothing You Could Do\""), document.fonts.load("400 60px \"Story Serif\"")
+      document.fonts.load("400 60px \"" + fam + "\""), document.fonts.load("500 30px \"HelveticaNeueBrand\""), document.fonts.load("400 40px \"Nothing You Could Do\""), document.fonts.load("300 60px \"HelveticaNeueBrand\"")
     ].map(function (p) { return Promise.resolve(p).catch(function () { return null; }); })).then(function (r) {
       var bild = r[0], el = r[1], weiss = design !== "papier";
       if (design === "post") { zeichneTalk(ctx, st, zeilen, cta || "Neuer Post ↓", bild); return; }
