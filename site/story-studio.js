@@ -155,7 +155,8 @@
     ctx.fillStyle = "#3a2608"; ctx.textAlign = "center"; ctx.fillText(cta, W / 2, cy + 68);
   }
   // „Talk“ (Carina 17.10., Vorlage „LET'S TALK“): Foto stark abgedunkelt, kleines Versal-Label,
-  // großer Satz in Story Serif, darunter kleiner der Rest, alles mittig. Das Label ist die erste
+  // großer Satz in Story Serif, darunter kleiner der Rest, alles mittig. Ohne Label (Story 2 ff.) wie bei
+  // tanja.kammler: alle Absätze gleich klein, mit Leerzeile dazwischen. Das Label ist die erste
   // Zeile, wenn sie in Versalien steht („LET'S TALK“), oder „WORT · Satz“ in der ersten Zeile.
   function zeichneTalk(ctx, st, zeilen, cta, bild) {
     var F = "Story Serif", z = zeilen.slice(), lab = "";
@@ -178,10 +179,10 @@
     for (var k = 0; k < 40; k++) {
       plan = []; hoehe = labH + labG;
       z.forEach(function (a, j) {
-        var fs = (j === 0 ? 66 : 40) * sk, lh = fs * (j === 0 ? 1.13 : 1.32), br = j === 0 ? 760 : 640;
+        var fs = (lab ? (j === 0 ? 66 : 40) : 44) * sk, lh = fs * (lab ? (j === 0 ? 1.13 : 1.32) : 1.24), br = lab ? (j === 0 ? 760 : 640) : 640;
         ctx.font = "400 " + fs + "px \"" + F + "\"";
         var zl = ausgeglichen(ctx, a, br);
-        if (j) hoehe += j === 1 ? 130 * sk : 34 * sk;
+        if (j) hoehe += (lab ? (j === 1 ? 130 : 34) : 52) * sk;
         plan.push({ fs: fs, lh: lh, zl: zl, y: hoehe });
         hoehe += zl.length * lh;
       });
@@ -197,7 +198,7 @@
       if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
     }
     plan.forEach(function (p, j) {
-      ctx.font = "400 " + p.fs + "px \"" + F + "\""; ctx.fillStyle = j === 0 ? "#FFFFFF" : "rgba(255,255,255,.9)";
+      ctx.font = "400 " + p.fs + "px \"" + F + "\""; ctx.fillStyle = j === 0 || !lab ? "#FFFFFF" : "rgba(255,255,255,.9)";
       p.zl.forEach(function (t, q) { ctx.fillText(t, W / 2, y0 + p.y + p.lh * q + p.fs * 0.82); });
     });
     if (cta) {

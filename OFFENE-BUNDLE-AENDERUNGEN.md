@@ -13704,4 +13704,14 @@ Alle Adressen laden **karten619**.
     - Schlussprüfung „liest sich wie ein Absatz, nur auf Bildschirme verteilt“.
 - Standard 5 Stories statt 6 (Auswahl und Funktion).
 
+## 592 — Stories ab Nr. 2 wie tanja.kammler schreiben und setzen (story-studio.js v17)
+
+- Carina (Screenshot tanja.kammler, „mir geht's blendend … Cooperation over Community.“): „Mehr wie Tanja würde.“
+- Prompt:
+  - Story 1 bleibt REAL TALK + großer Satz + kleiner Absatz.
+  - Story 2 ff.: kein Label, kein großer Satz. 2–3 sehr kurze Absätze, zusammen max. 35 Wörter, letzter Absatz eine Pointe mit max. 6 Wörtern allein in der Zeile, lockerer Einstieg darf klein anfangen.
+  - Neu unter STIMME „WIE TANJA KAMMLER“: unbeeindruckt, gut gelaunt, knapp, ein bisschen geheimnisvoll, setzend statt erklärend, Denglisch-Pointen erlaubt.
+- Darstellung: Stories ohne Label setzen alle Absätze gleich klein (44 px, 640 px breit, Leerzeile dazwischen), weiß, mittig.
+- Lokal gerendert, keine Fehler.
+
 Alle Adressen laden **karten627**.
