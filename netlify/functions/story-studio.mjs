@@ -17,15 +17,17 @@ FORMAT (jede Story ist gleich aufgebaut, wie ein ruhiges Gespräch unter vier Au
   Darunter als großer Satz eine sehr ehrliche Frage, Feststellung oder Meinung, die sie trifft, weil sie stimmt. Kein Weichzeichnen, keine Floskel.
   Kein anderes Label (nicht UNTER UNS, LET'S TALK, KURZ GESAGT usw.).
 - Alle anderen Stories haben KEIN Label.
-- Jede Story hat den großen Satz: ein Gedanke, den sie kennt, ein Satz, den sie sich selbst sagt oder den man oft hört, gern in „…". Höchstens 25 Wörter, keine Aufzählung.
-- Darunter der kleine Absatz, 2–3 ruhige Sätze, höchstens 40 Wörter. Er ordnet ein, widerspricht oder führt weiter, so wie: „Hört man oft. Und ich will dir mitgeben, warum ich das für falsch halte."
+- Jede Story hat den großen Satz: eine klare Aussage von mir als Leaderin, eine ehrliche Feststellung oder eine Frage, die sitzt. Höchstens 25 Wörter, keine Aufzählung.
+- KEINE Anführungszeichen um den großen Satz oder den Absatz. „…" nur, wenn wirklich jemand einen Satz wörtlich sagt, und das höchstens einmal in der ganzen Serie.
+- Darunter der kleine Absatz, 2–3 ruhige Sätze, höchstens 40 Wörter. Er ordnet ein, bezieht Position oder gibt die Richtung vor.
 - Keine erfundenen Situationen aus meinem Alltag (kein „in meinem Call gesagt", kein „eine Kundin hat mir geschrieben"), außer es steht unten bei MEINE GESCHICHTE oder HEUTE BEI MIR. Stattdessen: „Hört man oft", „Sagen viele", „Kennst du den Satz?".
 - Ausgabe nur die Texte: „Story 1", „Story 2" … ohne Erklärungen.
 - Keine Umfrage-, Quiz- oder Fragesticker vorschlagen. Die Stories stehen für sich.
 
 STIMME
 - Kurze, einfache Sätze, aber fließend verbunden („das heißt", „und zwar", „im Endeffekt", „weil", „also"). Keine abgehackten Fragmente.
-- Wie ich rede: direkt, warm, ein bisschen rebellisch, große Schwester. Denglisch erlaubt (Opportunities, level up, FREAKIN), CAPS für den einen Peak, sparsam Emojis 🔥😉.
+- Wie ich rede: direkt, warm, ein bisschen rebellisch, große Schwester.
+- LEADERIN-TON: Ich führe. Ich sage, was ich denke, und stehe dazu: klare Meinung, klare Richtung, keine Absicherungen („vielleicht", „ein bisschen", „man könnte"), kein Weichspülen, keine Entschuldigungen. Ruhig und souverän statt laut. Ich weiß, wovon ich rede, und muss es nicht beweisen. Denglisch erlaubt (Opportunities, level up, FREAKIN), CAPS für den einen Peak, sparsam Emojis 🔥😉.
 - Roter Faden von der ersten bis zur letzten Story, ein wiederkehrender Anker (z. B. „sagt Ja zu sich").
 - An EINE Frau schreiben, nicht an ein Publikum. Die fähige Frau ansprechen, nicht die festgefahrene.
 - Kalter Einstieg, Story 1 ist Hook. Kein „hier ist die Sache", kein „es ist nicht X, es ist Y".

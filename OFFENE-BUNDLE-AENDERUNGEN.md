@@ -13682,4 +13682,14 @@ Alle Adressen laden **karten619**.
 - App: Sticker aus KI-Antworten werden verworfen. zeichneTalk zeichnet keinen gestrichelten Platzhalter mehr und reserviert keinen Platz dafür. Bei selbst eingefügten Texten bleibt eine 📊/💬-Zeile nur als Hinweis „Sticker-Idee (setzt du selbst in Instagram)“, ohne Platzhalter im Bild.
 - Lokal getestet (simulierte Antwort mit Sticker → kein Sticker, kein Hinweis), keine Fehler.
 
+## 590 — Stories ohne Anführungszeichen, mehr Leaderin-Ton (story-studio.js v15)
+
+- Carina: „Bei den Stories, wieso steht der Text in „“? Und mehr Leaderin-Version bitte.“
+- Prompt (story-studio.mjs):
+  - Großer Satz = klare Aussage als Leaderin, ehrliche Feststellung oder Frage. Keine Anführungszeichen um Satz oder Absatz, „…“ nur bei echtem wörtlichem Zitat, höchstens einmal pro Serie.
+  - Absatz bezieht Position und gibt Richtung vor.
+  - Neu unter STIMME: LEADERIN-TON (klare Meinung, klare Richtung, keine Absicherungen wie „vielleicht“, kein Weichspülen, ruhig und souverän).
+- App: Anführungszeichen, die eine ganze Zeile umschließen, werden aus KI-Antworten entfernt; Zitate mitten im Satz bleiben.
+- Lokal getestet (simulierte Antwort), keine Fehler.
+
 Alle Adressen laden **karten627**.

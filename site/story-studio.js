@@ -564,7 +564,7 @@
       los.disabled = true; status.textContent = "Schreibe Stories … (dauert etwa 20 Sekunden)";
       fetch("/.netlify/functions/story-studio", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ thema: t, heute: heuteFeld.value.trim(), count: Number(anz.value), post: zumPost ? { titel: zumPost.titel, slides: zumPost.slides, caption: zumPost.caption, hook: zumPost.hook } : undefined }) })
         .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d && d.error || "Fehlgeschlagen"); return d; }); })
-        .then(function (d) { stories = nurEinLabel(d.stories || []).map(function (x) { return Object.assign({}, x, { sticker: "" }); }); postFuer = zumPost; return ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length + " Stories fertig. Texte kannst du direkt ändern."; }); })
+        .then(function (d) { stories = nurEinLabel(d.stories || []).map(function (x) { return Object.assign({}, x, { sticker: "", text: String(x.text || "").split("\n").map(function (z) { var m = /^\s*[„"»“]([^„“”"«»]+)[“”"«]\s*([.!?…]?)\s*$/.exec(z); return m ? m[1].trim() + m[2] : z; }).join("\n") }); }); postFuer = zumPost; return ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length + " Stories fertig. Texte kannst du direkt ändern."; }); })
         .catch(function (e) { status.textContent = "Fehler: " + (e.message || e); })
         .then(function () { los.disabled = false; });
     };
