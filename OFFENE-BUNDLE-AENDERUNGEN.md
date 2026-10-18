@@ -13722,4 +13722,14 @@ Alle Adressen laden **karten619**.
   - Ausdrückliches Verbot, Sätze, Begriffe, Wortspiele oder Pointen anderer Creatorinnen zu übernehmen. Alles in Carinas Worten und zu ihren Themen.
 - Story-Aufbau bleibt (Story 1 REAL TALK; ab Story 2 kurze Absätze mit eigener Pointe).
 
+## 594 — Story-Texte: Haltung statt Erklärung, eine Pointe, richtige Reihenfolge (nur Funktion)
+
+- `netlify/functions/story-studio.mjs`, neuer FORMAT- und Aufbau-Block:
+  - Jede Story höchstens 25 Wörter. Story 1: REAL TALK + ein Satz in Ich-Perspektive (Position oder Eingeständnis), keine Lebensweisheit.
+  - HALTUNG STATT ERKLÄRUNG: kein Marketing erklären, kein Fachjargon, keine „Weil deine Kundin …“-Sätze.
+  - Genau EINE Pointe in der ganzen Serie (in der Zuspitzung). Die anderen Stories enden offen statt mit Merksatz.
+  - Reihenfolge: Position → Spannung → Zuspitzung → (optional) Angebot → Neugier auf den Post. Das Angebot kommt nicht mehr in Story 2.
+  - Letzte Story ohne Inhaltsangabe des Posts, endet mit „Neuer Post ↓“.
+  - Alter ZUSAMMENHANG-Block ersetzt (Serie = ein Gedankengang).
+
 Alle Adressen laden **karten627**.

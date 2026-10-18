@@ -12,25 +12,19 @@ const PROMPT = `Du schreibst Instagram-Stories für mich, Carina Anna Prav (@car
 THEMA HEUTE: {{THEMA}}
 
 FORMAT (ruhig, wie ein Gespräch unter vier Augen)
-- {{ANZAHL}} Stories.
+- {{ANZAHL}} Stories, jede höchstens 25 Wörter. Lieber zu kurz als zu lang.
 - Story 1 beginnt mit genau diesem Label in einer eigenen Zeile: REAL TALK
-  Darunter als großer Satz eine sehr ehrliche Frage, Feststellung oder Meinung, die sie trifft, weil sie stimmt. Kein Weichzeichnen, keine Floskel.
-  Kein anderes Label (nicht UNTER UNS, LET'S TALK, KURZ GESAGT usw.).
-- Story 1: nach REAL TALK der große Satz (höchstens 15 Wörter), darunter ein kleiner Absatz (höchstens 2 kurze Sätze, höchstens 22 Wörter).
-- Alle anderen Stories haben KEIN Label und keinen großen Satz. Sie bestehen aus 2–3 sehr kurzen Absätzen, alle gleich groß, zusammen höchstens 35 Wörter. Der letzte Absatz ist eine Pointe in meinen eigenen Worten, höchstens 6 Wörter, allein in einer Zeile. Ein lockerer Einstieg darf klein anfangen.
-- Absätze in "text" mit \\n trennen.
-- KEINE Anführungszeichen um ganze Sätze. „…" nur, wenn wirklich jemand einen Satz wörtlich sagt, höchstens einmal in der ganzen Serie.
-- WENIGER IST MEHR: Lieber zu kurz als zu lang. Jede Story trägt genau EINEN Gedanken.
+  Darunter ein großer Satz (höchstens 14 Wörter) in der Ich-Perspektive: eine Position, die ich beziehe, oder etwas, das ich zugebe. KEINE Lebensweisheit, kein Ratgeber-Satz, nichts, was auf einer Kaffeetasse stehen könnte. Darunter höchstens ein kurzer Satz.
+  Kein anderes Label.
+- Alle anderen Stories: kein Label, 1–3 sehr kurze Absätze, alle gleich groß, getrennt mit \\n.
+- KEINE Anführungszeichen um ganze Sätze. „…" nur, wenn wirklich jemand einen Satz wörtlich sagt.
 
-ZUSAMMENHANG (das Wichtigste)
-- Leg dir vor dem Schreiben die EINE Aussage der ganzen Serie fest (nicht ausgeben). Jede Story dient nur dieser Aussage.
-- Die Serie ist EIN Gedankengang, kein Sammelsurium: Jede Story greift genau dort auf, wo die vorige aufgehört hat (gleiches Bild, gleiche Frage, gleiches Wort), und führt einen Schritt weiter.
-- Verbinde mit Übergängen wie „Und genau da …", „Das heißt …", „Weil …", „Also …", aber nur, wo es natürlich klingt.
-- Kein neues Thema mitten in der Serie, keine zweite Botschaft, keine Liste von Tipps.
-- Prüf am Ende: Liest sich Story 1 bis zur letzten wie ein einziger Absatz, der nur in Bildschirme aufgeteilt ist? Wenn eine Story auch allein stehen könnte, verbinde sie oder streich sie.
-- Keine erfundenen Situationen aus meinem Alltag (kein „in meinem Call gesagt", kein „eine Kundin hat mir geschrieben"), außer es steht unten bei MEINE GESCHICHTE oder HEUTE BEI MIR. Stattdessen: „Hört man oft", „Sagen viele", „Kennst du den Satz?".
-- Ausgabe nur die Texte: „Story 1", „Story 2" … ohne Erklärungen.
-- Keine Umfrage-, Quiz- oder Fragesticker vorschlagen. Die Stories stehen für sich.
+HALTUNG STATT ERKLÄRUNG (das Wichtigste)
+- Ich erkläre kein Marketing. Ich zeige, wie ich etwas sehe, was ich gerade erlebe, was mich nervt oder freut. Gefühl und Haltung, keine Anleitung.
+- Kein Fachjargon (Module, High-Ticket, Funnel, Conversion, Verkaufslücke als Schlagwort), keine „Weil deine Kundin …"-Erklärungen.
+- In der GANZEN Serie gibt es genau EINE Pointe. Die anderen Stories enden NICHT mit einem Merksatz oder Slogan, sondern offen, damit sie weiterklickt.
+- Spannung statt Auflösung: Neugier aufbauen, nicht alles verraten.
+- Die Serie ist EIN Gedankengang: Jede Story greift auf, wo die vorige aufgehört hat. Kein neues Thema, keine Tipp-Liste.
 
 STIMME
 - Kurze, einfache Sätze, aber fließend verbunden („das heißt", „und zwar", „im Endeffekt", „weil", „also"). Keine abgehackten Fragmente.
@@ -41,7 +35,7 @@ STIMME
 - Roter Faden von der ersten bis zur letzten Story, ein wiederkehrender Anker (z. B. „sagt Ja zu sich").
 - An EINE Frau schreiben, nicht an ein Publikum. Die fähige Frau ansprechen, nicht die festgefahrene.
 - Kalter Einstieg, Story 1 ist Hook. Kein „hier ist die Sache", kein „es ist nicht X, es ist Y".
-- Den konkreten Moment beschreiben statt des Gefühls. Lang aufbauen, kurz zuschlagen. Eine screenshot-würdige Zeile.
+- Den konkreten Moment beschreiben statt des Gefühls. Lang aufbauen, kurz zuschlagen. Die eine screenshot-würdige Zeile der Serie steht in der Zuspitzung, nicht in jeder Story.
 - Echte Zahlen oder gar keine. Nichts erfinden, keine erfundenen Kundinnen-DMs.
 - Kurse und Programme nie als Gegner. Gegner ist das Verhalten: warten aufs Bereitsein, Wissen sammeln ohne Umsetzen, rabattieren, allein rumprobieren.
 
@@ -85,11 +79,12 @@ Diese Stories führen zu meinem neuen Feed-Post hin. Der Post ist das Ende der S
 DER HOOK DES POSTS (das Wichtigste, lies ihn zuerst und bau alles darauf auf):
 „{{PHOOK}}"
 
-AUFBAU ALS BRÜCKE:
-1. Steht unten HEUTE BEI MIR, startet Story 1 genau bei diesem echten Moment von heute und die Brücke geht von dort aus. Sonst startet Story 1 bei einem Alltagsgedanken, den sie heute selbst haben könnte: beim Kaffee, beim Scrollen, kurz bevor sie postet, beim Angebot-Überarbeiten, abends nach einem Kundinnen-Call. Als Gedanke oder Frage, die sie kennt, NICHT als erfundenes Erlebnis von mir.
-2. Die nächsten Stories bauen die Brücke von diesem Alltagsgedanken zum Hook: denselben Gedanken zu Ende denken, bis der Hook fast ausgesprochen ist. Den Hook nicht wortgleich verraten und die Lösung aus dem Post NICHT vorwegnehmen.
-3. Eine Story vor der letzten baut die Brücke zu dem EINEN Angebot von mir, das am besten zum Hook passt (nur: Das Intensive, Das 1:1, Done-for-you Content, Offer Incubator). In ein, zwei Sätzen, als logische Folge des Gedankens, ohne Druck, ohne „STARTEN".
-4. Die letzte Story kündigt den Post an und schickt sie hin. Sie endet mit genau dieser Zeile: „Neuer Post ↓"
+AUFBAU (in dieser Reihenfolge):
+1. REAL TALK: meine Position oder ein Moment von mir. Steht unten HEUTE BEI MIR, startet es genau dort.
+2. Die Spannung: was ich gerade beobachte oder was mich daran nicht loslässt, in Richtung der Hook des Posts. Nicht erklären.
+3. Die Zuspitzung: die eine ehrliche Meinung dazu. Hier, und nur hier, darf die Pointe der Serie stehen.
+4. Wenn es natürlich passt: ein Satz, dass genau das meine Arbeit ist (nur echte Angebote: Das Intensive, Das 1:1, Done-for-you Content, Offer Incubator). Kein Pitch, kein „damit du …". Sonst weglassen.
+5. Letzte Story: Neugier auf den Post, ohne den Inhalt zu verraten (keine Inhaltsangabe, kein „Schritt für Schritt"). Sie endet mit genau dieser Zeile: „Neuer Post ↓"
 - STARTEN kommt in dieser Serie nicht vor.
 
 DER POST:
