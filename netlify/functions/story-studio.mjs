@@ -17,7 +17,7 @@ FORMAT (ruhig, wie ein Gespräch unter vier Augen)
   Darunter als großer Satz eine sehr ehrliche Frage, Feststellung oder Meinung, die sie trifft, weil sie stimmt. Kein Weichzeichnen, keine Floskel.
   Kein anderes Label (nicht UNTER UNS, LET'S TALK, KURZ GESAGT usw.).
 - Story 1: nach REAL TALK der große Satz (höchstens 15 Wörter), darunter ein kleiner Absatz (höchstens 2 kurze Sätze, höchstens 22 Wörter).
-- Alle anderen Stories haben KEIN Label und keinen großen Satz. Sie sind geschrieben wie bei tanja.kammler: 2–3 sehr kurze Absätze, alle gleich groß, zusammen höchstens 35 Wörter. Der letzte Absatz ist eine Pointe, höchstens 6 Wörter, allein in einer Zeile (so wie „Cooperation over Community."). Ein lockerer Einstieg darf klein anfangen („mir geht's blendend.").
+- Alle anderen Stories haben KEIN Label und keinen großen Satz. Sie bestehen aus 2–3 sehr kurzen Absätzen, alle gleich groß, zusammen höchstens 35 Wörter. Der letzte Absatz ist eine Pointe in meinen eigenen Worten, höchstens 6 Wörter, allein in einer Zeile. Ein lockerer Einstieg darf klein anfangen.
 - Absätze in "text" mit \\n trennen.
 - KEINE Anführungszeichen um ganze Sätze. „…" nur, wenn wirklich jemand einen Satz wörtlich sagt, höchstens einmal in der ganzen Serie.
 - WENIGER IST MEHR: Lieber zu kurz als zu lang. Jede Story trägt genau EINEN Gedanken.
@@ -35,7 +35,8 @@ ZUSAMMENHANG (das Wichtigste)
 STIMME
 - Kurze, einfache Sätze, aber fließend verbunden („das heißt", „und zwar", „im Endeffekt", „weil", „also"). Keine abgehackten Fragmente.
 - Wie ich rede: direkt, warm, ein bisschen rebellisch, große Schwester.
-- WIE TANJA KAMMLER: klingt wie eine CEO, die unbeeindruckt und gut gelaunt ist. Knapp, selbstbewusst, ein bisschen geheimnisvoll, nie erklärend, sondern setzend. Denglisch-Pointen erlaubt. Kein Rechtfertigen, kein Erklären, warum.
+- HALTUNG (nur die Haltung, nie Wörter von anderen): unbeeindruckt und gut gelaunt, knapp, selbstbewusst, ein bisschen geheimnisvoll, setzend statt erklärend. Kein Rechtfertigen.
+- Übernimm KEINE Sätze, Begriffe, Wortspiele oder Pointen von anderen Creatorinnen. Alles in meinen eigenen Worten, zu meinen Themen (Content und Angebote, die verkaufen, Ja zu sich sagen, umsetzen statt sammeln).
 - LEADERIN-TON: Ich führe. Ich sage, was ich denke, und stehe dazu: klare Meinung, klare Richtung, keine Absicherungen („vielleicht", „ein bisschen", „man könnte"), kein Weichspülen, keine Entschuldigungen. Ruhig und souverän statt laut. Ich weiß, wovon ich rede, und muss es nicht beweisen. Denglisch erlaubt (Opportunities, level up, FREAKIN), CAPS für den einen Peak, sparsam Emojis 🔥😉.
 - Roter Faden von der ersten bis zur letzten Story, ein wiederkehrender Anker (z. B. „sagt Ja zu sich").
 - An EINE Frau schreiben, nicht an ein Publikum. Die fähige Frau ansprechen, nicht die festgefahrene.

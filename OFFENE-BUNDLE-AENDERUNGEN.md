@@ -13714,4 +13714,12 @@ Alle Adressen laden **karten619**.
 - Darstellung: Stories ohne Label setzen alle Absätze gleich klein (44 px, 640 px breit, Leerzeile dazwischen), weiß, mittig.
 - Lokal gerendert, keine Fehler.
 
+## 593 — Voice heißt Haltung, nicht Text kopieren (nur Funktion)
+
+- Carina: „Nein nein nein, die Voice heißt nicht den Text kopieren.“
+- story-studio.mjs: Alle wörtlichen Beispiele aus der Vorlage entfernt („mir geht's blendend“, „Cooperation over Community“, Name der Creatorin).
+  - Stattdessen HALTUNG: unbeeindruckt, gut gelaunt, knapp, selbstbewusst, ein bisschen geheimnisvoll, setzend statt erklärend.
+  - Ausdrückliches Verbot, Sätze, Begriffe, Wortspiele oder Pointen anderer Creatorinnen zu übernehmen. Alles in Carinas Worten und zu ihren Themen.
+- Story-Aufbau bleibt (Story 1 REAL TALK; ab Story 2 kurze Absätze mit eigener Pointe).
+
 Alle Adressen laden **karten627**.
