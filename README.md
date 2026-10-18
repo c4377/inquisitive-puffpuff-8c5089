@@ -15,7 +15,7 @@ Live: https://inquisitive-puffpuff-8c5089.netlify.app
   Vignette oben und unten. Der **Schwarz-Regler** unten links (Grundwert 20 %) macht dunkler
   oder heller, für alle Posts oder einen einzelnen Tag.
 - **Sonderfolien:** Vorher/Nachher und Beispiel mit Screenshots (W-/T-Kennungen), Ergebnis-Folien,
-  Ablauf-Folien zu den Angeboten (Intensive, Offer Incubator, Content, Das 1:1).
+  Ablauf-Folien zu den Angeboten (Intensive, Content, Das 1:1).
 - **Screenshots:** getrennt in Testimonial (T-) und Work (W-), gespeichert in Supabase.
 - **Freisteller:** eigene unter Settings → Freisteller (pro Gerät), sonst die eingebauten.
 - **Kundenraum:** oben rechts „Mein Raum“ → „+ Neue Kundin“. Komplett getrennter Plan, eigene

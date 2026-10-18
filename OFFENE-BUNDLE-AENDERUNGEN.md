@@ -13732,4 +13732,10 @@ Alle Adressen laden **karten619**.
   - Letzte Story ohne Inhaltsangabe des Posts, endet mit „Neuer Post ↓“.
   - Alter ZUSAMMENHANG-Block ersetzt (Serie = ein Gedankengang).
 
-Alle Adressen laden **karten627**.
+## 595 — Offer Incubator raus, Stories = normale Gedanken (karten628)
+
+- Offer Incubator gibt es nicht mehr: aus `tools/ablauf-folien.json` (Ablauf-Menü), Story-Themen (`site/story-studio.js`, v18), den Prompts von Story-Studio und Kommentaren, README und Bulk-Vorlage entfernt.
+- Story-Prompt: „Einfach normale Gedanken teilen“ statt Haltung/Zuspitzung. Wie einer Freundin erzählt, keine Tipps, kein Marketing erklären, KEINE Angebote nennen, kein Pitch.
+- Aufbau zum Post: normaler Gedanke (REAL TALK) → laut weiterdenken Richtung Hook → wo ich lande (die eine Pointe) → „heute dazu ein Post“ ohne Inhaltsangabe → „Neuer Post ↓“.
+
+Alle Adressen laden **karten628**.

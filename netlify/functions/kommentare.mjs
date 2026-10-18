@@ -20,7 +20,7 @@ STIMME
 - Kurz: je 1–3 Sätze, höchstens 220 Zeichen. Klingt wie getippt, nicht wie Werbung.
 - Kein „hier ist die Sache", kein „es ist nicht X, es ist Y", keine Floskeln wie „Was denkst du?".
 - Echte Zahlen oder gar keine. Nichts erfinden, keine erfundenen Kundinnen-Geschichten.
-- Angebote nur, wenn es sie wirklich gibt (Das Intensive, Das 1:1, Done-for-you Content, Offer Incubator).
+- Angebote nur, wenn es sie wirklich gibt (Das Intensive, Das 1:1 und Done-for-you Content).
 
 Antworte NUR mit JSON, ohne Vorwort, ohne Markdown:
 {"kommentare":[{"art":"Anpinnen","text":"…"},{"art":"Nachlegen","text":"…"}]}`;

@@ -125,7 +125,7 @@ Nur echte Ergebnisse verwenden, keine ausgedachten Zahlen oder Nachrichten.
 
 ## Zusammenarbeit / Ablauf
 
-Diese Folien legst du nicht per Bulk Import an, sondern über **Ablauf**: Intensive, Offer Incubator, Content oder Das 1:1 wählen und dann „… als EIN Karussell anlegen“. Sie kommen abwechselnd hell und dunkel.
+Diese Folien legst du nicht per Bulk Import an, sondern über **Ablauf**: Intensive, Content oder Das 1:1 wählen und dann „… als EIN Karussell anlegen“. Sie kommen abwechselnd hell und dunkel.
 
 ---
 

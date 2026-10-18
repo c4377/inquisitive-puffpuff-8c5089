@@ -14,16 +14,16 @@ THEMA HEUTE: {{THEMA}}
 FORMAT (ruhig, wie ein Gespräch unter vier Augen)
 - {{ANZAHL}} Stories, jede höchstens 25 Wörter. Lieber zu kurz als zu lang.
 - Story 1 beginnt mit genau diesem Label in einer eigenen Zeile: REAL TALK
-  Darunter ein großer Satz (höchstens 14 Wörter) in der Ich-Perspektive: eine Position, die ich beziehe, oder etwas, das ich zugebe. KEINE Lebensweisheit, kein Ratgeber-Satz, nichts, was auf einer Kaffeetasse stehen könnte. Darunter höchstens ein kurzer Satz.
+  Darunter ein großer Satz (höchstens 14 Wörter): ein ganz normaler Gedanke von mir, so wie er mir heute durch den Kopf geht. KEINE Lebensweisheit, kein Ratgeber-Satz, nichts, was auf einer Kaffeetasse stehen könnte. Darunter höchstens ein kurzer Satz.
   Kein anderes Label.
 - Alle anderen Stories: kein Label, 1–3 sehr kurze Absätze, alle gleich groß, getrennt mit \\n.
 - KEINE Anführungszeichen um ganze Sätze. „…" nur, wenn wirklich jemand einen Satz wörtlich sagt.
 
-HALTUNG STATT ERKLÄRUNG (das Wichtigste)
-- Ich erkläre kein Marketing. Ich zeige, wie ich etwas sehe, was ich gerade erlebe, was mich nervt oder freut. Gefühl und Haltung, keine Anleitung.
-- Kein Fachjargon (Module, High-Ticket, Funnel, Conversion, Verkaufslücke als Schlagwort), keine „Weil deine Kundin …"-Erklärungen.
-- In der GANZEN Serie gibt es genau EINE Pointe. Die anderen Stories enden NICHT mit einem Merksatz oder Slogan, sondern offen, damit sie weiterklickt.
-- Spannung statt Auflösung: Neugier aufbauen, nicht alles verraten.
+EINFACH NORMALE GEDANKEN TEILEN (das Wichtigste)
+- Ich teile, was mir gerade durch den Kopf geht, so wie ich es einer Freundin erzählen würde. Alltag, Beobachtungen, was mich nervt oder freut, was ich mich frage.
+- Ich erkläre kein Marketing, ich gebe keine Tipps, ich verkaufe nichts. Kein Fachjargon (Module, High-Ticket, Funnel, Conversion, Verkaufslücke), keine „Weil deine Kundin …"-Erklärungen.
+- Ich nenne in den Stories KEINE Angebote und mache keinen Pitch.
+- Höchstens EINE Pointe in der ganzen Serie. Die anderen Stories enden offen, wie ein Gedanke, der weitergeht, nicht mit einem Merksatz oder Slogan.
 - Die Serie ist EIN Gedankengang: Jede Story greift auf, wo die vorige aufgehört hat. Kein neues Thema, keine Tipp-Liste.
 
 STIMME
@@ -35,7 +35,7 @@ STIMME
 - Roter Faden von der ersten bis zur letzten Story, ein wiederkehrender Anker (z. B. „sagt Ja zu sich").
 - An EINE Frau schreiben, nicht an ein Publikum. Die fähige Frau ansprechen, nicht die festgefahrene.
 - Kalter Einstieg, Story 1 ist Hook. Kein „hier ist die Sache", kein „es ist nicht X, es ist Y".
-- Den konkreten Moment beschreiben statt des Gefühls. Lang aufbauen, kurz zuschlagen. Die eine screenshot-würdige Zeile der Serie steht in der Zuspitzung, nicht in jeder Story.
+- Den konkreten Moment beschreiben statt des Gefühls. Lang aufbauen, kurz zuschlagen. Die eine screenshot-würdige Zeile der Serie steht dort, wo ich lande, nicht in jeder Story.
 - Echte Zahlen oder gar keine. Nichts erfinden, keine erfundenen Kundinnen-DMs.
 - Kurse und Programme nie als Gegner. Gegner ist das Verhalten: warten aufs Bereitsein, Wissen sammeln ohne Umsetzen, rabattieren, allein rumprobieren.
 
@@ -54,9 +54,8 @@ AUSSCHLUSS (wenn passend, vor dem Hauptteil)
 Wer nicht passt, wird freundlich, aber klar rausgeschickt, rein über Haltung: wer wartet, bis sie „bereit" ist, wer rabattiert, wer nie umsetzt.
 
 SCHLUSS
-Die letzte Zeile vor der CTA ist der schärfste Punkt, keine Zusammenfassung. Dann:
+Die letzte Zeile vor der CTA ist der Gedanke, bei dem ich lande, keine Zusammenfassung und kein Pitch. Dann:
 „Schreib mir STARTEN ↓"
-Nenne nur Angebote, die es wirklich gibt (Das Intensive, Das 1:1, Done-for-you Content, Offer Incubator).
 
 Bevor du lieferst: Frag dich, was es noch ehrlicher und mutiger machen würde, und schreib es so.`;
 
@@ -80,11 +79,11 @@ DER HOOK DES POSTS (das Wichtigste, lies ihn zuerst und bau alles darauf auf):
 „{{PHOOK}}"
 
 AUFBAU (in dieser Reihenfolge):
-1. REAL TALK: meine Position oder ein Moment von mir. Steht unten HEUTE BEI MIR, startet es genau dort.
-2. Die Spannung: was ich gerade beobachte oder was mich daran nicht loslässt, in Richtung der Hook des Posts. Nicht erklären.
-3. Die Zuspitzung: die eine ehrliche Meinung dazu. Hier, und nur hier, darf die Pointe der Serie stehen.
-4. Wenn es natürlich passt: ein Satz, dass genau das meine Arbeit ist (nur echte Angebote: Das Intensive, Das 1:1, Done-for-you Content, Offer Incubator). Kein Pitch, kein „damit du …". Sonst weglassen.
-5. Letzte Story: Neugier auf den Post, ohne den Inhalt zu verraten (keine Inhaltsangabe, kein „Schritt für Schritt"). Sie endet mit genau dieser Zeile: „Neuer Post ↓"
+1. REAL TALK: ein normaler Gedanke von mir. Steht unten HEUTE BEI MIR, startet es genau dort.
+2. Ich denke laut weiter: was mir dazu auffällt, in Richtung der Hook des Posts. Nicht erklären, nicht belehren.
+3. Wo ich lande: meine ehrliche Meinung dazu. Hier darf die eine Pointe der Serie stehen.
+4. Letzte Story: dass ich genau darüber heute einen Post gemacht habe, ohne den Inhalt zu verraten (keine Inhaltsangabe, kein „Schritt für Schritt"). Sie endet mit genau dieser Zeile: „Neuer Post ↓"
+- Keine Angebote nennen, kein Pitch.
 - STARTEN kommt in dieser Serie nicht vor.
 
 DER POST:

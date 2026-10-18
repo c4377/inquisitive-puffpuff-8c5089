@@ -327,8 +327,7 @@
       "Rabattieren fühlt sich nett an und kostet dich deinen Wert",
       "Was ein Angebot hat, das sich verkauft",
       "Content, der verkauft, statt Content, der nur gefällt",
-      "Warum du deinen Content nicht selbst schreiben musst (Done-for-you Content)",
-      "Vom Wissen im Kopf zum fertigen Angebot (Offer Incubator)"
+      "Warum du deinen Content nicht selbst schreiben musst (Done-for-you Content)"
     ] },
     { s: "Mama & Business", t: [
       "Mama, Job, Business: meine Videos entstehen auch mal am Abend",
