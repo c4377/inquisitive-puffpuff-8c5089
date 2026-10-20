@@ -13798,4 +13798,9 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 
 - Story 1 hatte „Bleib kurz genau hier stehen.“ (aus dem Prompt-Beispiel „bleib kurz da“ abgeleitet). Neue Zeile im Einstieg: offene Schleife kurz und gesprochen („Tipp mal weiter …“, „Warte kurz.“, „Ich zeig dir was.“), nie „bleib (genau) hier stehen“.
 
+## 605 — Fakten nie lose: Brücke zu Social Media (nur Funktion)
+
+- Carina zu „Ich war 18 Jahre hinter *Firmenzahlen*“: „Was haben Firmenzahlen mit Social Media zu tun?“ Fakt jetzt mit Brücke (wie auf der Website): früher in Firmenzahlen gesehen, wo es hakt, heute genauso schnell in Posts, wo aus Interesse keine Anfrage wird.
+- Allgemeine Regel unter den Fakten: jede Tatsache im selben oder nächsten Satz mit der Bedeutung für die Zielkundin verbinden.
+
 Alle Adressen laden **karten630**.

@@ -52,7 +52,7 @@ Der Tag folgt Carinas Sichtbarkeits-Loop:
 
 ## Carinas Fakten (nur diese, Gefühle darf man ausschmücken, Fakten nicht)
 - Mit 15 hatte sie den Traum, Sängerin in Amerika zu werden, mit 21 ist sie gegangen. Sie stand auf Bühnen, war im US-Radio und im TV.
-- IT, Product Owner, 18 Jahre hinter Firmenzahlen.
+- IT, Product Owner, 18 Jahre hinter Firmenzahlen. Die Brücke zu Social Media, immer mitsagen: Früher hat sie in Firmenzahlen gesehen, wo es hakt, heute sieht sie genauso schnell in Posts, an welcher Stelle aus Interesse keine Anfrage wird. Nie die Zahlen ohne diese Brücke erwähnen.
 - 3 Mal gegründet. Limitless Selling hat sie eingestellt.
 - Mama eines Sohnes (4). Sie filmt abends am Schreibtisch und kann nicht ständig filmen.
 - Auf Vinted hat sie Brautkleider für 1–100 € eingekauft und für rund 400 € verkauft, 4.000 € in 30 Tagen.
@@ -62,6 +62,8 @@ Der Tag folgt Carinas Sichtbarkeits-Loop:
 - 25 Coaches begleitet. Sie schaut jedes Video ihrer Mentees an.
 - Für ihre Erfolge hatte sie nie eine Mentorin.
 - Ihre Lebensregel: öfter Ja sagen.
+
+Jede Tatsache, die du verwendest, verbindest du im selben oder nächsten Satz damit, was sie für die Zielkundin und ihren Content bedeutet. Nie eine Tatsache lose hinstellen.
 
 Kundinnen-Ergebnisse, nur diese:
 - Sarina hatte ihr Investment direkt wieder drin, weil bei ihr ein 1:1 gebucht wurde.
