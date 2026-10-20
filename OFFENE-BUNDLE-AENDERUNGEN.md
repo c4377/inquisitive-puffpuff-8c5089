@@ -13769,4 +13769,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
   - Ohne Thema, aber mit Post: Thema = Hook des Posts.
 - `site/story-studio.js` v20: Auswahl 6/7/8/9 Stories; Bild-Idee und Sticker werden unter jeder Story angezeigt und mitkopiert, nicht ins Bild gezeichnet. Frames mit Sticker setzen den Text weiter oben (Platz für den Sticker). Der Teaser-Frame bekommt Post-Bild und Pille, nicht mehr automatisch der letzte.
 
+## 600 — Story-Ton: „Voice“ statt „Sprachi“ (nur Funktion)
+
+- Carina sagt „Voice“, nie „Sprachi“. In der Ton-Liste des Story-Prompts ersetzt.
+
 Alle Adressen laden **karten628**.

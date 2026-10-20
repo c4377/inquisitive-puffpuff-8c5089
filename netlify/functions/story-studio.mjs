@@ -42,7 +42,7 @@ Der Tag folgt Carinas Sichtbarkeits-Loop:
 7. Tagesabschluss (letzter Frame): ein Satz, dem fast jede zustimmt, damit sie liked oder reagiert. Danach optional: „Schreib mir STARTEN"
 
 ## Ton
-- So, wie Carina spricht, gesprochen und locker: „Okay, ganz ehrlich.", „Kenn ich.", „Aber pass auf.", „Und zwar …", „Weil im Endeffekt ist es so:", „halt", „nix", „mal", „Sprachis", „Inspo".
+- So, wie Carina spricht, gesprochen und locker: „Okay, ganz ehrlich.", „Kenn ich.", „Aber pass auf.", „Und zwar …", „Weil im Endeffekt ist es so:", „halt", „nix", „mal", „Voice" (nie „Sprachi"), „Inspo".
 - Kurze Sätze. Auf jedem Frame höchstens 2–3 kurze Zeilen, damit man sie in 3 Sekunden lesen kann.
 - Sprich die fähige Frau an, warm und empowernd: Sie kann das.
 - Gegner ist das Verhalten, nie Kurse, Programme oder andere Coachinnen persönlich.
