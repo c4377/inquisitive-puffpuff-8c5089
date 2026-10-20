@@ -47,6 +47,9 @@ Der Tag folgt Carinas Sichtbarkeits-Loop:
 - Kurze Sätze. Auf jedem Frame höchstens 2–3 kurze Zeilen, damit man sie in 3 Sekunden lesen kann.
 - Sprich die fähige Frau an, warm und empowernd: Sie kann das.
 - Gegner ist das Verhalten, nie Kurse, Programme oder andere Coachinnen persönlich.
+- Carina teilt ihr Insider-Wissen mit eigener Analyse und ehrlicher Abwägung, z. B. „Auch wenn die Reels mehr Views holen … Viel wichtiger ist …", „Denn wenn wir uns anschauen, wer auf Instagram was tut …", gern mit „1. … 2. …". Sie behauptet nichts, sie begründet.
+- Der Tag ist EIN Gedankengang: Jede Story knüpft an die vorige an. Keine Story steht als lose Behauptung allein.
+- Keine Behauptungen, die niemand prüfen kann und die Carina nicht gesagt hat (z. B. „das sorgt seit Jahren dafür, dass gekauft wird").
 {{GESCHICHTE}}
 - Übernimm keine Sätze, Begriffe oder Pointen von anderen Creatorinnen.
 
@@ -139,7 +142,7 @@ export default async (req) => {
         .replace('{{PCAPTION}}', post.caption || '—')
       : TEASER_OHNE);
   if (heute) {
-    prompt += `\n\nHEUTE BEI CARINA (echt, von ihr selbst eingetragen):\n${heute}\n- Nutz diesen Moment für Einstieg oder Szene, nur mit den Details, die hier stehen. Nichts dazuerfinden, keine Zahlen, Namen oder Zitate ergänzen.`;
+    prompt += `\n\nHEUTE BEI CARINA (echt, von ihr selbst eingetragen):\n${heute}\n- Nutz diesen Moment für Einstieg oder Szene, nur mit den Details, die hier stehen. Nichts dazuerfinden, keine Zahlen, Namen oder Zitate ergänzen.\n- Ist es eine Entscheidung oder Erkenntnis von heute, bekommt sie 2–3 Frames als eigenen Gedankengang: die Entscheidung, das ehrliche „auch wenn“, dann Carinas Begründung. Begründungen NUR aus dem, was hier steht, möglichst in ihren Worten. Steht keine Begründung da, erfindest du keine.`;
   }
   prompt += TECHNIK.replace('{{ANZAHL}}', String(count));
 

@@ -13807,4 +13807,10 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 
 - Carina: „ich sehs auch weil ich seit 2018 auf Instagram bin und seh wieso jemand verkauft und wieso jemand nicht verkauft“. Als eigener Fakt im Story-Prompt, als zweiter Grund neben den Firmenzahlen.
 
+## 607 — Story-Ton: begründen statt behaupten, Heute-Entscheidung als Gedankengang (nur Funktion)
+
+- Anlass: Story „Ich hab mich heute entschieden, mich komplett auf Karussells zu spezialisieren. Weil genau sie seit Jahren dafür sorgen, dass … gekauft wird.“ Carina hätte es mit Abwägung und Algorithmus-Wissen geschrieben (Reels mehr Views, aber gelesen wird in der Business-Bubble; Karussells gehen 1. an Follower, 2. an ähnliche Profile).
+- Ton: Insider-Wissen mit Analyse und ehrlicher Abwägung („Auch wenn … Viel wichtiger …“, „1. … 2. …“); der Tag als ein Gedankengang; keine unprüfbaren Behauptungen.
+- HEUTE-Feld: Entscheidung/Erkenntnis bekommt 2–3 Frames (Entscheidung → „auch wenn“ → Begründung), Begründung nur aus ihrem Eintrag.
+
 Alle Adressen laden **karten630**.
