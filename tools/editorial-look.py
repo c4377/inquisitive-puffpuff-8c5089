@@ -206,13 +206,13 @@ ZK = 'JSON.stringify((%s||[]).map(x=>x&&(x.text||x.content)||"").filter(Boolean)
 ersetze("""'wird mit „Plan Speichern" gesichert'})]})""", """'wird mit „Plan Speichern" gesichert'})]}),v.jsx("div",{"data-bs-komm":String(R||""),"data-titel":q||"","data-cap":K||"","data-slides":""" + ZK % '$' + """})""")
 ersetze('v.jsx("p",{className:"text-[11px] leading-relaxed text-gray-800 whitespace-pre-wrap flex-1",children:ae.caption||"Keine Caption verfügbar."})',
         'v.jsxs("div",{className:"flex-1 min-w-0",children:[v.jsx("p",{className:"text-[11px] leading-relaxed text-gray-800 whitespace-pre-wrap",children:ae.caption||"Keine Caption verfügbar."}),v.jsx("div",{"data-bs-komm":String(ae.day||""),"data-titel":ae.title||"","data-cap":ae.caption||"","data-slides":' + ZK % 'ae.slides' + '})]})')
-# Ablauf-Folien: Carinas aktuelle Angebote laut carinaannaprav.at (tools/ablauf-folien.json)
+# Ablauf-Folien: Carinas aktuelle Angebote laut carinaannaprav.at (tools/ablauf-folien.json, Stand 20.10. von der Website abgeleitet)
 _ta0 = s.find('AblaufMenue=({isOpen:e,onClose:t,onAnlegen:r})=>{const TA=')
 assert _ta0 >= 0, 'AblaufMenue nicht gefunden'
 _ta1 = s.find('};const[n,i]=ce.useState("moneyroom");', _ta0)
 assert _ta1 > _ta0, 'Ablauf-Ende nicht gefunden'
 _TA = json.dumps(json.load(open(__file__.rsplit('/', 1)[0] + '/ablauf-folien.json', encoding='utf-8')), ensure_ascii=False, separators=(',', ':'))
-s = s[:_ta0] + 'AblaufMenue=({isOpen:e,onClose:t,onAnlegen:r})=>{const TA=' + _TA + ';const[n,i]=ce.useState("intensive");' + s[_ta1 + len('};const[n,i]=ce.useState("moneyroom");'):]
+s = s[:_ta0] + 'AblaufMenue=({isOpen:e,onClose:t,onAnlegen:r})=>{const TA=' + _TA + ';const[n,i]=ce.useState(Object.keys(TA)[0]);' + s[_ta1 + len('};const[n,i]=ce.useState("moneyroom");'):]
 # Kundenraum (site/kundenraum.js): Look-Überschreibungen der Kundin nach dem Marken-Look
 ersetze('if(typeof window<"u"&&window.BS_STIL==="v3"&&window.BS_MARKE&&BS_MARKEN[window.BS_MARKE])Object.assign(BS_KACHEL,BS_MARKEN[window.BS_MARKE])}catch(zz){}', 'if(typeof window<"u"&&window.BS_STIL==="v3"&&window.BS_MARKE&&BS_MARKEN[window.BS_MARKE])Object.assign(BS_KACHEL,BS_MARKEN[window.BS_MARKE])}catch(zz){}try{typeof window<"u"&&window.BS_RAUM_K&&Object.assign(BS_KACHEL,window.BS_RAUM_K)}catch(zz){}')
 

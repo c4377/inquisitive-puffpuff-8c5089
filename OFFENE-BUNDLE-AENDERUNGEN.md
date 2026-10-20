@@ -13773,4 +13773,11 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 
 - Carina sagt „Voice“, nie „Sprachi“. In der Ton-Liste des Story-Prompts ersetzt.
 
-Alle Adressen laden **karten628**.
+## 601 — Ablauf-Folien von der Website abgeleitet und im Website-Look (karten629)
+
+- `tools/ablauf-folien.json` neu, Inhalte aus carinaannaprav.at (Repo-Stand 18.10.): Lückencheck (6 Folien, 249 €), Kaufbar in 30 Tagen (5, 990 €), Verkaufsstarker Content (5, Setup 1.490 € / monatlich 890 €), Verkaufsstarke Präsenz (4, auf Anfrage). Intensive und Das 1:1 sind raus, weil sie nicht mehr auf der Website stehen.
+- `tools/kontrast-ablauf.js` neu: Look der Website. Weiß, Titel Playfair Display kursiv, Text Montserrat (#4A4A4A), Etiketten Cognac #9E5A2C in Versalien, Nummern-Kästchen „01“, Aufzählung mit Cognac-Punkten, Preis in Playfair kursiv, schwarzer Knopf; Schlussfolie dunkel #141414 mit weißem Knopf. Kopf „Carina Anna *Prav*“ wie im Website-Header, unten Haarlinie und carinaannaprav.at.
+- Neue Format-Zeilen: `[nr: 01]`, `~Unterzeile`, `[preis: … | …]`, `[knopf: …]`, `[dunkel]`.
+- Ablauf-Menü startet beim ersten Eintrag (statt fest „intensive“).
+
+Alle Adressen laden **karten629**.
