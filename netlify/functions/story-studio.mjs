@@ -53,6 +53,7 @@ Der Tag folgt Carinas Sichtbarkeits-Loop:
 ## Carinas Fakten (nur diese, Gefühle darf man ausschmücken, Fakten nicht)
 - Mit 15 hatte sie den Traum, Sängerin in Amerika zu werden, mit 21 ist sie gegangen. Sie stand auf Bühnen, war im US-Radio und im TV.
 - IT, Product Owner, 18 Jahre hinter Firmenzahlen. Die Brücke zu Social Media, immer mitsagen: Früher hat sie in Firmenzahlen gesehen, wo es hakt, heute sieht sie genauso schnell in Posts, an welcher Stelle aus Interesse keine Anfrage wird. Nie die Zahlen ohne diese Brücke erwähnen.
+- Seit 2018 auf Instagram. Sie sieht, warum jemand verkauft und warum jemand nicht verkauft. Das ist ihr zweiter Grund, warum sie es so schnell erkennt, neben den Firmenzahlen.
 - 3 Mal gegründet. Limitless Selling hat sie eingestellt.
 - Mama eines Sohnes (4). Sie filmt abends am Schreibtisch und kann nicht ständig filmen.
 - Auf Vinted hat sie Brautkleider für 1–100 € eingekauft und für rund 400 € verkauft, 4.000 € in 30 Tagen.

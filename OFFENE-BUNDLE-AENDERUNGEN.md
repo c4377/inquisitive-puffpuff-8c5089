@@ -13803,4 +13803,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Carina zu „Ich war 18 Jahre hinter *Firmenzahlen*“: „Was haben Firmenzahlen mit Social Media zu tun?“ Fakt jetzt mit Brücke (wie auf der Website): früher in Firmenzahlen gesehen, wo es hakt, heute genauso schnell in Posts, wo aus Interesse keine Anfrage wird.
 - Allgemeine Regel unter den Fakten: jede Tatsache im selben oder nächsten Satz mit der Bedeutung für die Zielkundin verbinden.
 
+## 606 — Neuer Fakt: seit 2018 auf Instagram (nur Funktion)
+
+- Carina: „ich sehs auch weil ich seit 2018 auf Instagram bin und seh wieso jemand verkauft und wieso jemand nicht verkauft“. Als eigener Fakt im Story-Prompt, als zweiter Grund neben den Firmenzahlen.
+
 Alle Adressen laden **karten630**.
