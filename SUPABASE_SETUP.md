@@ -20,6 +20,10 @@ CREATE TABLE IF NOT EXISTS public.user_state (
     updated_at timestamptz DEFAULT now()
 );
 
+-- 1b. Zugriff für die App freigeben (ab 30.10.2026 bei neuen Tabellen Pflicht)
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.user_state TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.user_state TO service_role;
+
 -- 2. Row Level Security (RLS) aktivieren (Datenschutz)
 ALTER TABLE public.user_state ENABLE ROW LEVEL SECURITY;
 
