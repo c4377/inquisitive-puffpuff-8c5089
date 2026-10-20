@@ -593,7 +593,7 @@
     fuelleTage();
     var zeile = document.createElement("div"); zeile.style.cssText = "display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0";
     var anz = document.createElement("select"); anz.style.cssText = "border:1px solid #e5ddd8;border-radius:999px;padding:11px 14px;font:600 14px -apple-system,sans-serif;background:#fff";
-    [6, 7, 8, 9].forEach(function (n) { var o = document.createElement("option"); o.value = n; o.textContent = n + " Stories"; n === 7 && (o.selected = true); anz.appendChild(o); });
+    [3, 4, 5].forEach(function (n) { var o = document.createElement("option"); o.value = n; o.textContent = n + " Stories"; n === 5 && (o.selected = true); anz.appendChild(o); });
     var los = knopf("Stories schreiben", true);
     status = document.createElement("div"); status.style.cssText = "font:14px/1.4 -apple-system,sans-serif;color:#5b4a46;min-height:20px;margin:6px 0";
     los.onclick = function () {

@@ -13813,4 +13813,14 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Ton: Insider-Wissen mit Analyse und ehrlicher Abwägung („Auch wenn … Viel wichtiger …“, „1. … 2. …“); der Tag als ein Gedankengang; keine unprüfbaren Behauptungen.
 - HEUTE-Feld: Entscheidung/Erkenntnis bekommt 2–3 Frames (Entscheidung → „auch wenn“ → Begründung), Begründung nur aus ihrem Eintrag.
 
+## 608 — Story-Schreiber nach Carinas Storyselling-Prompt (Funktion + story-studio.js v22)
+
+- `netlify/functions/story-studio.mjs`: Prompt durch Carinas Story-Writer-Prompt ersetzt (3–5 Slides, nur Text, Mechanik: Zum Punkt → großes Missverständnis → Antwort → Frame → Entscheidung; Stil, Inhalt, feste Regeln). Zielkundin und Fakten aus dem „Kunden“-Prompt bleiben als Hintergrund, Fakten nur wenn sie zum Rohtext passen.
+  - „Sprachnotiz“ oder „Voice“, nie „Sprachi“ (beide Ansagen von Carina).
+  - Mit Post: letzte Slide macht neugierig, endet mit „Tipp auf den Post ↓“. Ohne Post: CTA „Schreib mir STARTEN ↓“ nur auf Verlangen.
+  - Das HEUTE-Feld ist der Rohtext für die Sequenz; Begründung daraus = Kern von Schritt 3.
+  - Kein Sticker, keine Bild-Idee mehr; keine automatische Ausrufezeichen-Ersetzung mehr (die alten harten Regeln „kein sondern, keine !“ gelten im neuen Prompt nicht).
+  - Kursives Schlüsselwort `*…*` bleibt (Design C).
+- `site/story-studio.js` v22: Auswahl 3/4/5 Stories, Standard 5.
+
 Alle Adressen laden **karten630**.
