@@ -13780,4 +13780,11 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Neue Format-Zeilen: `[nr: 01]`, `~Unterzeile`, `[preis: … | …]`, `[knopf: …]`, `[dunkel]`.
 - Ablauf-Menü startet beim ersten Eintrag (statt fest „intensive“).
 
-Alle Adressen laden **karten629**.
+## 602 — Ablauf-Folien mit Fotos (karten630)
+
+- `tools/kontrast-ablauf.js`: Fotos aus den Markenbildern, schwarz-weiß wie auf der Website (Graustufen per Pixel, leicht mehr Kontrast; klappt auch auf dem iPhone, das kein Canvas-Filter kann).
+  - Deckblatt (Folie mit `[nr: …]`) und `[dunkel]`: Foto vollflächig, dunkler Verlauf, weiße Schrift unten wie der Website-Hero.
+  - Alle anderen: Fotostreifen oben (38 % der Höhe), Marke und Handle weiß darauf, Inhalt darunter auf Weiß.
+  - Je Folie ein anderes Foto. `[ohne foto]` schaltet es pro Folie ab; ohne Markenbilder bleibt alles wie in 601.
+
+Alle Adressen laden **karten630**.
