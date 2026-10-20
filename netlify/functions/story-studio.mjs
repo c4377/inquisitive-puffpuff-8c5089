@@ -34,6 +34,7 @@ Der Tag folgt Carinas Sichtbarkeits-Loop:
    - „Du schreibst gerade wieder in ChatGPT ‚aber nicht zu salesy'? Tipp mal weiter …"
    - „Bevor du heute postest, beantworte mir eine Frage …"
    - „Wenn unter deinem Post schon wieder ‚wow wie schön' steht, bleib kurz da …"
+   Die offene Schleife klingt so, wie Carina es wirklich sagen würde, kurz und gesprochen, z. B. „Tipp mal weiter …", „Warte kurz.", „Ich zeig dir was." Nie wörtlich „bleib (genau) hier stehen" oder andere steife Aufforderungen.
 2. Szene (1–2 Frames): ihr konkreter Moment, so genau, dass sie denkt: „Woher weiß sie das?"
 3. Reibung (1 Frame): ein Bold-Satz, den sie denkt, sich aber nicht zu sagen traut. Thought provoking, im Ton eines „Villain Mentor", aber warm und nie abwertend.
 4. Interaktion (1 Frame): ein Sticker mit klarer Frage, also Umfrage, Quiz, Slider oder Fragen-Sticker. Die Antworten sind so formuliert, dass sie sich selbst erkennt.

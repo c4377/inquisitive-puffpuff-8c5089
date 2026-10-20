@@ -13794,4 +13794,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Sternchen werden beim Kopieren und in den alten Designs entfernt.
 - `netlify/functions/story-studio.mjs`: Die KI markiert pro Frame genau EIN Schlüsselwort im ersten Satz mit `*…*`.
 
+## 604 — Offene Schleife gesprochen statt steif (nur Funktion)
+
+- Story 1 hatte „Bleib kurz genau hier stehen.“ (aus dem Prompt-Beispiel „bleib kurz da“ abgeleitet). Neue Zeile im Einstieg: offene Schleife kurz und gesprochen („Tipp mal weiter …“, „Warte kurz.“, „Ich zeig dir was.“), nie „bleib (genau) hier stehen“.
+
 Alle Adressen laden **karten630**.
