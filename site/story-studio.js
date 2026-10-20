@@ -189,7 +189,7 @@
       if (hoehe <= Math.min(unten - oben, H * 0.48)) break;
       sk *= 0.95;
     }
-    var y0 = Math.max(oben, Math.min(H * 0.55 - hoehe / 2, unten - hoehe));
+    var y0 = Math.max(oben, Math.min(H * (st.sticker ? 0.36 : 0.55) - hoehe / 2, unten - hoehe));
     ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
     if (lab) {
       ctx.font = "500 27px \"HelveticaNeueBrand\""; ctx.fillStyle = "rgba(255,255,255,.92)";
@@ -251,7 +251,7 @@
     var ctx = canvas.getContext("2d"), fam = serif();
     var zeilen = String(st.text || "").split(/\n+/).map(function (z) { return z.trim(); }).filter(Boolean);
     var cta = "";
-    zeilen = zeilen.filter(function (z) { if ((/STARTEN/.test(z) || /^Neuer Post\b/i.test(z)) && z.length < 60) { cta = z; return false; } return true; });
+    zeilen = zeilen.filter(function (z) { if ((/STARTEN/.test(z) || /^(Neuer Post|Tipp auf den Post)\b/i.test(z)) && z.length < 60) { cta = z; return false; } return true; });
     var design = st.design || DESIGNS[0];
     var foto = (design === "foto" || design === "talk") && fotos.length && !st._ohneFoto ? fotos[(i * 3 + 1) % fotos.length] : "";
     if (design === "foto" && !foto) design = "oxblood";
@@ -377,7 +377,8 @@
   function startDesigns() {
     stories.forEach(function (s, i) {
       s.post = postFuer || null;
-      s.design = i === stories.length - 1 && postFuer ? "post" : "talk";
+      // Der Teaser-Frame („Tipp auf den Post ↓“) bekommt das Post-Bild und die Pille, alle anderen Talk.
+      s.design = postFuer && /(^|\n)\s*(Tipp auf den Post|Neuer Post)\b/i.test(String(s.text || "")) ? "post" : "talk";
     });
   }
   function zeigeStories() {
@@ -385,7 +386,7 @@
     if (!stories.length) return;
     var leiste = document.createElement("div"); leiste.style.cssText = "display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 14px";
     var alle = knopf("Alle Bilder speichern", true); alle.onclick = alleSpeichern; leiste.appendChild(alle);
-    var tx = knopf("Alle Texte kopieren"); tx.onclick = function () { kopiere(stories.map(function (s, i) { return "Story " + (i + 1) + "\n" + s.text + (s.sticker ? "\n" + s.sticker : ""); }).join("\n\n"), tx); }; leiste.appendChild(tx);
+    var tx = knopf("Alle Texte kopieren"); tx.onclick = function () { kopiere(stories.map(function (s, i) { return "Story " + (i + 1) + "\n" + s.text + (s.visual ? "\nVisual: " + s.visual : "") + (s.sticker ? "\nSticker: " + s.sticker : ""); }).join("\n\n"), tx); }; leiste.appendChild(tx);
     liste.appendChild(leiste);
     stories.forEach(function (st, i) {
       var karte = document.createElement("div");
@@ -397,7 +398,7 @@
       var ta = document.createElement("textarea"); ta.value = st.text; ta.rows = 8;
       ta.style.cssText = "width:100%;border:1px solid #e5ddd8;border-radius:12px;padding:10px;font:15px/1.45 -apple-system,sans-serif;resize:vertical";
       var stk = document.createElement("div"); stk.style.cssText = "font:13px/1.4 -apple-system,sans-serif;color:#5b4a46";
-      stk.textContent = st.sticker ? "Sticker-Idee (setzt du selbst in Instagram): " + st.sticker : "";
+      stk.textContent = [st.visual ? "Bild-Idee: " + st.visual : "", st.sticker ? "Sticker (setzt du selbst in Instagram): " + st.sticker : ""].filter(Boolean).join("  ·  ");
       var reihe = document.createElement("div"); reihe.style.cssText = "display:flex;gap:6px;flex-wrap:wrap";
       var b1 = knopf("Bild speichern", true), b2 = knopf("Design wechseln"), b3 = knopf("Text kopieren");
       var neu = function () { rendere(st, i); };
@@ -555,7 +556,7 @@
     fuelleTage();
     var zeile = document.createElement("div"); zeile.style.cssText = "display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0";
     var anz = document.createElement("select"); anz.style.cssText = "border:1px solid #e5ddd8;border-radius:999px;padding:11px 14px;font:600 14px -apple-system,sans-serif;background:#fff";
-    [5, 6, 7].forEach(function (n) { var o = document.createElement("option"); o.value = n; o.textContent = n + " Stories"; n === 5 && (o.selected = true); anz.appendChild(o); });
+    [6, 7, 8, 9].forEach(function (n) { var o = document.createElement("option"); o.value = n; o.textContent = n + " Stories"; n === 7 && (o.selected = true); anz.appendChild(o); });
     var los = knopf("Stories schreiben", true);
     status = document.createElement("div"); status.style.cssText = "font:14px/1.4 -apple-system,sans-serif;color:#5b4a46;min-height:20px;margin:6px 0";
     los.onclick = function () {
@@ -564,7 +565,7 @@
       los.disabled = true; status.textContent = "Schreibe Stories … (dauert etwa 20 Sekunden)";
       fetch("/.netlify/functions/story-studio", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ thema: t, heute: heuteFeld.value.trim(), count: Number(anz.value), post: zumPost ? { titel: zumPost.titel, slides: zumPost.slides, caption: zumPost.caption, hook: zumPost.hook } : undefined }) })
         .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d && d.error || "Fehlgeschlagen"); return d; }); })
-        .then(function (d) { stories = nurEinLabel(d.stories || []).map(function (x) { return Object.assign({}, x, { sticker: "", text: String(x.text || "").split("\n").map(function (z) { var m = /^\s*[„"»“]([^„“”"«»]+)[“”"«]\s*([.!?…]?)\s*$/.exec(z); return m ? m[1].trim() + m[2] : z; }).join("\n") }); }); postFuer = zumPost; return ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length + " Stories fertig. Texte kannst du direkt ändern."; }); })
+        .then(function (d) { stories = nurEinLabel(d.stories || []).map(function (x) { return Object.assign({}, x, { sticker: String(x.sticker || ""), visual: String(x.visual || ""), text: String(x.text || "").split("\n").map(function (z) { var m = /^\s*[„"»“]([^„“”"«»]+)[“”"«]\s*([.!?…]?)\s*$/.exec(z); return m ? m[1].trim() + m[2] : z; }).join("\n") }); }); postFuer = zumPost; return ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length + " Stories fertig. Texte kannst du direkt ändern."; }); })
         .catch(function (e) { status.textContent = "Fehler: " + (e.message || e); })
         .then(function () { los.disabled = false; });
     };

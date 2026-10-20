@@ -13760,4 +13760,13 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Größen leicht angepasst, weil Helvetica breiter läuft: mit Label 60/36 px (statt 66/40), ohne Label 40 px (statt 44), Zeilenabstand etwas luftiger.
 - Carina hat aus 6 Schriften auf ihrem Foto Nr. 6 (Helvetica Light) gewählt.
 
+## 599 — Story-Schreiber nach Carinas Prompt aus dem „Kunden“-Chat (Funktion + story-studio.js v20)
+
+- `netlify/functions/story-studio.mjs`: Prompt komplett durch Carinas eingefügten Prompt ersetzt (Zielkundin, Kernbild „Funkstille zwischen Like und Anfrage“, Sichtbarkeits-Loop, Ton, Fakten, Kundinnen-Ergebnisse, harte Regeln). Dazu ihr Satz „Was Carina antreibt“ (echt sein, es wird vorgelebt).
+  - 6–9 Frames (Standard 7). Teaser-Frame nur mit Post des Tages, endet mit „Tipp auf den Post ↓“. Beweis-Frame entfällt (keine Screenshots übergeben).
+  - Eigene Geschichte: per Zufall jeden 2. Tag ein Satz, sonst gar nicht.
+  - Antwort jetzt mit `visual` und `sticker` je Frame. Ausrufezeichen werden serverseitig zu Punkten.
+  - Ohne Thema, aber mit Post: Thema = Hook des Posts.
+- `site/story-studio.js` v20: Auswahl 6/7/8/9 Stories; Bild-Idee und Sticker werden unter jeder Story angezeigt und mitkopiert, nicht ins Bild gezeichnet. Frames mit Sticker setzen den Text weiter oben (Platz für den Sticker). Der Teaser-Frame bekommt Post-Bild und Pille, nicht mehr automatisch der letzte.
+
 Alle Adressen laden **karten628**.

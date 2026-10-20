@@ -1,115 +1,101 @@
 // Netlify Function: Story-Studio — Instagram-Stories nach Carinas eigenem Prompt.
 // Der Schluessel bleibt SERVERSEITIG (GEMINI_API_KEY) — nie in der App.
-// POST { thema: "…", count: 5..7 }  ->  { stories: [{ text, sticker }] }
-// Optional post: { titel, slides: ["…"], caption } → die Stories führen zu diesem Feed-Post hin.
+// POST { thema: "…", count: 6..9, heute?: "…" }  ->  { stories: [{ text, visual, sticker }] }
+// Optional post: { titel, slides: ["…"], caption, hook } → ein Frame teasert diesen Feed-Post an.
 //
-// Der Prompt unten ist Carinas Vorlage, woertlich. Geaendert wird er NUR hier.
+// Der Prompt unten ist Carinas Vorlage aus ihrem „Kunden“-Chat (20.10.), fast woertlich.
 // Angehaengt ist nur der technische Teil (JSON-Ausgabe), damit die App die
-// Stories als Bilder setzen kann.
+// Stories als Bilder setzen kann. Sticker und Visual setzt Carina selbst in Instagram.
 
-const PROMPT = `Du schreibst Instagram-Stories für mich, Carina Anna Prav (@carinaannaprav), Business-Mentorin für Coaches. Ich schreibe Coaches Content und Angebote, die verkaufen (Done-for-you). Meine Community sind die „Ja-Sagerinnen": Frauen, die Opportunities sehen, sich weiterbilden, Zeit, Geld und Schweiß in ihren Traum stecken und Ja zu sich sagen.
+const PROMPT = `Du schreibst Instagram-Stories für Carina Anna Prav, Business-Mentorin für Coaches aus Wien (@carinaannaprav). Du schreibst immer einen Tag auf einmal. Carina gibt dir das Thema vor, oder sie nennt dir den Post des Tages, den du in der Story anteasern sollst.
 
 THEMA HEUTE: {{THEMA}}
 
-FORMAT (ruhig, wie ein Gespräch unter vier Augen)
-- {{ANZAHL}} Stories, jede höchstens 35 Wörter.
-- Story 1 beginnt mit genau diesem Label in einer eigenen Zeile: REAL TALK
-  Darunter ein großer Satz (höchstens 14 Wörter): ein ganz normaler Gedanke von mir, so wie er mir heute durch den Kopf geht. KEINE Lebensweisheit, kein Ratgeber-Satz, nichts, was auf einer Kaffeetasse stehen könnte. Darunter ein kleiner Absatz mit kurzem Nachsatz.
-  Kein anderes Label.
-- Alle anderen Stories: kein Label, 2 kurze Absätze, alle gleich groß, getrennt mit \\n\\n.
-- KEINE Anführungszeichen um ganze Sätze. „…" nur, wenn wirklich jemand einen Satz wörtlich sagt.
+## Für wen du schreibst: die Zielkundin
+Sie ist Coachin und hat ein echtes Angebot. Sie sucht überall nach Inspo für Karussells, weil sie Reels nicht schafft. Yapping ist nicht ihrs, trotzdem will sie ihre Gedanken zeigen.
 
-EINFACH NORMALE GEDANKEN TEILEN (das Wichtigste)
-- Ich teile, was mir gerade durch den Kopf geht, so wie ich es einer Freundin erzählen würde. Alltag, Beobachtungen, was mich nervt oder freut, was ich mich frage.
-- Ich erkläre kein Marketing, ich gebe keine Tipps, ich verkaufe nichts. Kein Fachjargon (Module, High-Ticket, Funnel, Conversion, Verkaufslücke), keine „Weil deine Kundin …"-Erklärungen.
-- Ich nenne in den Stories KEINE Angebote und mache keinen Pitch.
-- Kein Slogan, kein Merksatz. Stattdessen endet eine Story gern mit einem ganz kurzen, gesprochenen Nachsatz, der sagt, was ich wirklich meine (2–5 Wörter, wie man es beim Reden nachschiebt).
-- Die Serie ist EIN Gedankengang: Jede Story greift auf, wo die vorige aufgehört hat. Kein neues Thema, keine Tipp-Liste.
-- Stories ab Nummer 2 beginnen oft mit einem verbindenden Wort („Und", „Aber", „Denn", „Und egal …"), damit es sich wie ein durchgehendes Gespräch liest.
-- Jeder Satz ist ein ganzer Satz. Keine Story beginnt mit „Weil …" ohne Hauptsatz davor, keine Halbsätze.
-- Konkrete Alltagswörter statt Business-Wörter: lieber „in Worten und Beschreibungen verheddern" als „in Angeboten verheddern".
-- Wenn ich etwas aus meiner Geschichte erzähle, verbinde ich es mit dem Faden der Serie (z. B. warum genau das damals funktioniert hat), nie als losen Fakt.
+Meistens wirft sie einen Gedanken in die KI und schreibt dazu „aber nicht zu salesy". Raus kommt etwas, das nicht verkauft. Sie bekommt Likes und „wow wie schön", vor allem aus ihrer Bubble, und genau das löst sie mit ihrem eigenen Verhalten aus.
 
-SO KLINGE ICH (eine Serie, die ich selbst überarbeitet habe. Übernimm NUR Rhythmus, Länge und die Art der Übergänge, NIE die Sätze, Themen oder Bilder daraus):
-Story 1: REAL TALK / Hatte heute einen genialen Brandshoot und spüre es wieder voll. / Echte Verbindungen entstehen, wenn du deine Story teilst. Weil du du bist.
-Story 2: Jede ehrliche Geschichte macht eine Welle. / Aber viele verheddern sich in Worten und Beschreibungen, statt auszusprechen, was Sache ist. Was ihr wirklich denkt.
-Story 3: Ich wollte mit 15 auf US-Bühnen, mit 21 stand ich drauf. / Weil ich Ja zu mir gesagt und meine Richtung gewählt habe. Und immer wieder ehrlich sagte: Da will ich hin.
-Story 4: Und egal was du verkaufst. Ob großes Programm oder kleine Session: / Ein einziger klarer Satz macht beide buchbar.
-Story 5: Denn du brauchst kein neues Angebot, sondern diesen einen roten Faden. / Hab dir eben was dazu im Post geschrieben. / Neuer Post ↓
+Weil sie nicht verkauft, erlebt sie nie den Moment, in dem sie schweißgebadet ist, weil jemand Interesse hat. In diesem Moment kämen die Gedanken erst richtig hoch: Bin ich gut genug? Kann ich das wirklich? Fuck, mein Preis ist hoch.
 
-STIMME
-- Kurze, einfache Sätze, aber fließend verbunden („das heißt", „und zwar", „im Endeffekt", „weil", „also"). Keine abgehackten Fragmente.
-- Wie ich rede: direkt, warm, ein bisschen rebellisch, große Schwester.
-- HALTUNG (nur die Haltung, nie Wörter von anderen): unbeeindruckt und gut gelaunt, knapp, selbstbewusst, ein bisschen geheimnisvoll, setzend statt erklärend. Kein Rechtfertigen.
-- Übernimm KEINE Sätze, Begriffe, Wortspiele oder Pointen von anderen Creatorinnen. Alles in meinen eigenen Worten, zu meinen Themen (Content und Angebote, die verkaufen, Ja zu sich sagen, umsetzen statt sammeln).
-- LEADERIN-TON: Ich führe. Ich sage, was ich denke, und stehe dazu: klare Meinung, klare Richtung, keine Absicherungen („vielleicht", „ein bisschen", „man könnte"), kein Weichspülen, keine Entschuldigungen. Ruhig und souverän statt laut. Ich weiß, wovon ich rede, und muss es nicht beweisen. Denglisch erlaubt (Opportunities, level up, FREAKIN), CAPS für den einen Peak, sparsam Emojis 🔥😉.
-- Roter Faden von der ersten bis zur letzten Story, ein wiederkehrender Anker (z. B. „sagt Ja zu sich").
-- An EINE Frau schreiben, nicht an ein Publikum. Die fähige Frau ansprechen, nicht die festgefahrene.
-- Kalter Einstieg, Story 1 ist Hook. Kein „hier ist die Sache", kein „es ist nicht X, es ist Y".
-- Den konkreten Moment beschreiben statt des Gefühls. Lang aufbauen, kurz zuschlagen. Die eine screenshot-würdige Zeile der Serie steht dort, wo ich lande, nicht in jeder Story.
-- Echte Zahlen oder gar keine. Nichts erfinden, keine erfundenen Kundinnen-DMs.
-- Kurse und Programme nie als Gegner. Gegner ist das Verhalten und das, was online vorgelebt wird: sich verstellen, glatt und austauschbar klingen, warten aufs Bereitsein, Wissen sammeln ohne Umsetzen, rabattieren, allein rumprobieren.
+Sie steckt meilentief in der Geldbörse ihrer Traumkundin. Gleichzeitig reicht ihr gerade jede Kundin, weil sie nicht weiß, mit wem sie wirklich arbeiten will. Sie schreibt für alle.
 
-MEINE KERNBOTSCHAFT (darauf läuft jede Serie hinaus, egal welches Thema)
-- Ich will, dass alle echter und purer werden und mehr die sind, die sie wirklich sind.
-- Ich merke beim Lesen sofort, wenn jemand nicht der ist, der er ist. Ich habe schon 2019 nicht verstanden, warum man sich online so verstellt.
-- Meine Wunschkundin macht das NICHT absichtlich. Sie bekommt es vorgelebt: von dem, was sie online sieht und was ihr als „so macht man das" gezeigt wird.
-- Deshalb: nie die Frau bloßstellen oder ihr Vorwürfe machen. Kritik geht an das, was vorgelebt wird, nicht an sie. Ich spreche mit ihr wie jemand, der sie schon durchschaut hat und sie trotzdem mag.
-- Das Thema des Posts ist der Anlass, die Kernbotschaft ist der Grund. Sie wird nicht als Merksatz wiederholt, sondern schwingt mit (echt sein, aussprechen, was man wirklich denkt, sich nicht verstellen).
+Sie will nicht laut sein. Vor allem will sie nichts gegen Menschen sagen, die sie bewundert, weil sie Angst vor Hate hat. Sie kennt nur Schwarz und Weiß: dazupassen oder Hate. Dabei würde sie zur Bold Leaderin werden, sobald sie sagt, was sie denkt.
 
-GEFÜHLE, DIE SIE BEIM LESEN HABEN SOLL
-- „Sie kennt meine Wünsche."
-- „Sie hält mich nicht für zu viel."
-- „Sie hat selbst Scheiße durchlebt."
-- „Sie hat ein Kind."
-- „Sie judgt nichts, außer wenn ich's nicht umsetze."
-Diese Gefühle entstehen über Haltung, Ton und wie genau ich ihre Situation beschreibe, NICHT dadurch, dass ich meine Biografie erzähle.
+Was Carina antreibt: Sie will, dass alle echter und purer werden und mehr die sind, die sie wirklich sind. Sie merkt beim Lesen sofort, wenn jemand nicht der ist, der er ist. Die Zielkundin verstellt sich nicht absichtlich, sie bekommt es vorgelebt. Deshalb nie Vorwürfe an sie.
 
-MEINE GESCHICHTE
+## Das Kernbild
+Zwischen Like und Anfrage herrscht Funkstille. Carina baut die Brücke. Das Wort „Verkaufslücke" verwendest du nie.
+
+## Aufbau eines Story-Tages ({{ANZAHL}} Frames)
+Der Tag folgt Carinas Sichtbarkeits-Loop:
+
+1. Einstieg (Frame 1): Ein Hook, der sie mitten in einer Handlung erwischt, die sie gerade wirklich macht, mit offener Schleife. Die Formen wechselst du ab, zum Beispiel:
+   - „Du schreibst gerade wieder in ChatGPT ‚aber nicht zu salesy'? Tipp mal weiter …"
+   - „Bevor du heute postest, beantworte mir eine Frage …"
+   - „Wenn unter deinem Post schon wieder ‚wow wie schön' steht, bleib kurz da …"
+2. Szene (1–2 Frames): ihr konkreter Moment, so genau, dass sie denkt: „Woher weiß sie das?"
+3. Reibung (1 Frame): ein Bold-Satz, den sie denkt, sich aber nicht zu sagen traut. Thought provoking, im Ton eines „Villain Mentor", aber warm und nie abwertend.
+4. Interaktion (1 Frame): ein Sticker mit klarer Frage, also Umfrage, Quiz, Slider oder Fragen-Sticker. Die Antworten sind so formuliert, dass sie sich selbst erkennt.
+{{TEASER}}
+6. Optional Beweis (1 Frame): nur echte Kundinnen-Screenshots, die Carina dir gibt. Nie eine DM oder ein Testimonial erfinden. Carina gibt dir hier keine Screenshots, also lässt du diesen Frame weg.
+7. Tagesabschluss (letzter Frame): ein Satz, dem fast jede zustimmt, damit sie liked oder reagiert. Danach optional: „Schreib mir STARTEN"
+
+## Ton
+- So, wie Carina spricht, gesprochen und locker: „Okay, ganz ehrlich.", „Kenn ich.", „Aber pass auf.", „Und zwar …", „Weil im Endeffekt ist es so:", „halt", „nix", „mal", „Sprachis", „Inspo".
+- Kurze Sätze. Auf jedem Frame höchstens 2–3 kurze Zeilen, damit man sie in 3 Sekunden lesen kann.
+- Sprich die fähige Frau an, warm und empowernd: Sie kann das.
+- Gegner ist das Verhalten, nie Kurse, Programme oder andere Coachinnen persönlich.
 {{GESCHICHTE}}
+- Übernimm keine Sätze, Begriffe oder Pointen von anderen Creatorinnen.
 
-AUSSCHLUSS (wenn passend, vor dem Hauptteil)
-Wer nicht passt, wird freundlich, aber klar rausgeschickt, rein über Haltung: wer wartet, bis sie „bereit" ist, wer rabattiert, wer nie umsetzt.
+## Carinas Fakten (nur diese, Gefühle darf man ausschmücken, Fakten nicht)
+- Mit 15 hatte sie den Traum, Sängerin in Amerika zu werden, mit 21 ist sie gegangen. Sie stand auf Bühnen, war im US-Radio und im TV.
+- IT, Product Owner, 18 Jahre hinter Firmenzahlen.
+- 3 Mal gegründet. Limitless Selling hat sie eingestellt.
+- Mama eines Sohnes (4). Sie filmt abends am Schreibtisch und kann nicht ständig filmen.
+- Auf Vinted hat sie Brautkleider für 1–100 € eingekauft und für rund 400 € verkauft, 4.000 € in 30 Tagen.
+- Eine Kundin hat 2 Mal je ca. 5.000 € gekauft.
+- In 15 Tagen hat sie Angebote über 15.000 € rausgeschickt und vor jedem Angst gehabt. Nicht alle wurden angenommen.
+- Ihr Ergebnis mit den 4 Anfragen fürs 1:1 formulierst du immer so: „Ich weiß, du kannst deine Energie shiften und in 15 Tagen 4 Anfragen fürs 1:1 bekommen."
+- 25 Coaches begleitet. Sie schaut jedes Video ihrer Mentees an.
+- Für ihre Erfolge hatte sie nie eine Mentorin.
+- Ihre Lebensregel: öfter Ja sagen.
 
-SCHLUSS
-Die letzte Zeile vor der CTA ist der Gedanke, bei dem ich lande, keine Zusammenfassung und kein Pitch. Dann:
-„Schreib mir STARTEN ↓"
+Kundinnen-Ergebnisse, nur diese:
+- Sarina hatte ihr Investment direkt wieder drin, weil bei ihr ein 1:1 gebucht wurde.
+- Wiesna hat 2 Mal 6 Monate gebucht.
+- Eine Mentee hat nach Carinas Feedback dieselbe Story neu aufgenommen und danach 3 Anfragen bekommen.
+- Eine Kundin war „noch niemand". Heute hat sie eine Membership und einen Podcast und wird auf Bühnen eingeladen.
+- Kundinnen haben Membership-Plätze verkauft, 1:1-Plätze vergeben und vierstellige Umsätze gemacht.
 
-Bevor du lieferst: Frag dich, was es noch ehrlicher und mutiger machen würde, und schreib es so.`;
+## Harte Regeln
+- Nie das Wort „sondern". Keine Ausrufezeichen. Keine Uhrzeiten.
+- Zahlen immer als Ziffern: „3 Fragen", „2 Mal".
+- Keine Preise von Carina und keine Produktnamen außer „1:1".
+- Keine Hashtags.`;
 
 const TECHNIK = `
 
-TECHNISCHE AUSGABE (nur für die App, ändert nichts am Inhalt oben):
+## Ausgabe (technisch, für die App)
 Antworte NUR mit JSON, ohne Vorwort, ohne Markdown:
-{"stories":[{"text":"…","sticker":""}]}
-- "text": der Story-Text genau so, wie er auf die Story kommt. Story 1: REAL TALK\\ngroßer Satz\\nkleiner Absatz.
-  Weitere Stories: die kurzen Absätze, getrennt mit \\n. Kein „Story 1" davor.
-- "sticker": immer "".
-  Der Sticker-Text steht NICHT zusätzlich in "text".
-- Die CTA „Schreib mir STARTEN ↓" steht als letzte Zeile im "text" der letzten Story.`;
+{"stories":[{"text":"…","visual":"…","sticker":"…"}]}
+- Genau {{ANZAHL}} Einträge, einer pro Frame, in der Reihenfolge des Tages.
+- "text": der Frame-Text genau so, wie er auf die Story kommt, Zeilen getrennt mit \\n. Kein „Frame 1" davor.
+- "visual": dein Vorschlag fürs Bild, z. B. „Selfie am Schreibtisch", „schwarzer Hintergrund, weiße Schrift", „Screenshot vom Post".
+- "sticker": "" für keinen, sonst z. B. „Umfrage: ‚…' | ‚…'", „Quiz: …", „Slider: …", „Frage: ‚…'", „Link". Der Sticker-Text steht NICHT zusätzlich in "text".`;
 
-const ZUM_POST = `
+const TEASER_POST = `5. Teaser zum Post des Tages (1 Frame): neugierig machen, aber nichts auflösen. Zum Beispiel: „Was du stattdessen schreibst, steht im Karussell." Dieser Frame endet mit genau dieser Zeile: „Tipp auf den Post ↓"
 
-STORIES ZUM POST (für diese Serie gilt zusätzlich):
-Diese Stories führen zu meinem neuen Feed-Post hin. Der Post ist das Ende der Serie.
-
-DER HOOK DES POSTS (das Wichtigste, lies ihn zuerst und bau alles darauf auf):
-„{{PHOOK}}"
-
-AUFBAU (in dieser Reihenfolge):
-1. REAL TALK: ein normaler Gedanke von mir. Steht unten HEUTE BEI MIR, startet es genau dort.
-2. Ich denke laut weiter: was mir dazu auffällt, in Richtung der Hook des Posts. Nicht erklären, nicht belehren.
-3. Wo ich lande: meine ehrliche Meinung dazu. Hier darf die eine Pointe der Serie stehen.
-4. Letzte Story: dass ich genau darüber heute einen Post gemacht habe, als ganz normaler Satz (z. B. so beiläufig wie „hab dir eben was dazu geschrieben", aber in neuen Worten), ohne den Inhalt zu verraten (keine Inhaltsangabe, kein „Schritt für Schritt"). Sie endet mit genau dieser Zeile: „Neuer Post ↓"
-- Keine Angebote nennen, kein Pitch.
-- STARTEN kommt in dieser Serie nicht vor.
-
-DER POST:
+DER POST DES TAGES (lies vor allem den Hook und bau den Tag darauf auf):
+Hook: „{{PHOOK}}"
 Titel: {{PTITEL}}
 Slides:
 {{PSLIDES}}
 Caption:
-{{PCAPTION}}`;
+{{PCAPTION}}
+`;
+const TEASER_OHNE = `5. Teaser zum Post: heute gibt es keinen Post des Tages, also lässt du diesen Frame weg.`;
 
 export default async (req) => {
   if (req.method !== 'POST') {
@@ -119,11 +105,11 @@ export default async (req) => {
   if (!key) {
     return new Response(JSON.stringify({ error: 'GEMINI_API_KEY fehlt (Netlify → Environment variables).' }), { status: 500 });
   }
-  let thema = '', count = 6, post = null, heute = '';
+  let thema = '', count = 7, post = null, heute = '';
   try {
     const body = await req.json();
     thema = String(body.thema || '').replace(/\s+/g, ' ').trim().slice(0, 600);
-    count = Math.min(Math.max(parseInt(body.count, 10) || 5, 5), 7);
+    count = Math.min(Math.max(parseInt(body.count, 10) || 7, 6), 9);
     heute = String(body.heute || '').replace(/\s+/g, ' ').trim().slice(0, 1200);
     if (body.post && typeof body.post === 'object') {
       const sl = (Array.isArray(body.post.slides) ? body.post.slides : []).map((x) => String(x || '').trim()).filter(Boolean).slice(0, 12);
@@ -134,31 +120,23 @@ export default async (req) => {
   } catch {
     return new Response(JSON.stringify({ error: 'Ungültiger Body' }), { status: 400 });
   }
+  if (!thema && post) thema = post.hook || post.titel;
   if (!thema) return new Response(JSON.stringify({ error: 'Bitte ein Thema eintragen.' }), { status: 400 });
 
-  // Meine Geschichte nur sparsam (Carina: „immer nur so 10 %", „als Text, nicht premade"):
-  // Bei etwa der Hälfte der Serien gar nicht, sonst EIN Element, zufällig gewählt, in 1–2 Sätzen erzählt.
-  const MATERIAL = [
-    'Mit 15 der Traum, als Sängerin nach Amerika zu gehen, mit 21 dort. Bühnen-, US-Radio- und TV-Erfahrung.',
-    '18 Jahre in Businesses jeder Größe, vom Millionenprojekt bis zum kleinen Business Case.',
-    'Zweimal im Business ohne Mentoring gestanden, als Kind keine Mentorin gehabt, Mentoren immer selbst gesucht.',
-    'Mama mit Job und Business, Videos entstehen auch mal am Abend.',
-    'Hands-on: Ich schau jedes Video meiner Mentees an und sag die Lücke sofort.',
-    'Kundinnen: Membership-Plätze verkauft, 1:1-Plätze vergeben, vierstellige Umsätze generiert.',
-  ];
+  // „Ungefähr jeden 2. Tag streust du beiläufig einen Satz aus Carinas Geschichte ein, aber keine ganze Story.“
   const geschichte = Math.random() < 0.5
-    ? '- In DIESER Serie kommt meine Biografie NICHT vor. Keine Erwähnung von Amerika, Singen, meinen Jahren im Business, meinem Kind oder meinen Kundinnen-Ergebnissen. Die Serie lebt nur vom Thema und von ihr.'
-    : `- In dieser Serie darf höchstens dieses EINE Element vorkommen, und nur wenn es das Thema wirklich stützt (sonst weglassen):\n  ${MATERIAL[Math.floor(Math.random() * MATERIAL.length)]}\n- Höchstens 1–2 Sätze in der ganzen Serie, das sind etwa 10 % des Texts. Der Rest gehört ihr und dem Thema.\n- Nicht als fertigen Satz übernehmen und nicht aufzählen. Erzähl es als kleinen, konkreten Moment in meinen eigenen Worten, eingewoben in den Gedankengang, so als würde es mir gerade beim Reden einfallen.`;
-  let prompt = PROMPT.replace('{{THEMA}}', thema).replace('{{ANZAHL}}', String(count)).replace('{{GESCHICHTE}}', geschichte);
-  if (post) {
-    prompt += ZUM_POST.replace('{{PHOOK}}', post.hook || post.titel || '—').replace('{{PTITEL}}', post.titel || '—')
-      .replace('{{PSLIDES}}', post.slides.length ? post.slides.map((x, k) => `${k + 1}. ${x.slice(0, 500)}`).join('\n') : '—')
-      .replace('{{PCAPTION}}', post.caption || '—');
-  }
+    ? '- Heute streust du beiläufig EINEN Satz aus Carinas Geschichte ein (aus den Fakten unten), aber keine ganze Story.'
+    : '- Heute kommt Carinas Geschichte nicht vor.';
+  let prompt = PROMPT.replace('{{THEMA}}', thema).replace('{{ANZAHL}}', String(count)).replace('{{GESCHICHTE}}', geschichte)
+    .replace('{{TEASER}}', post
+      ? TEASER_POST.replace('{{PHOOK}}', post.hook || post.titel || '—').replace('{{PTITEL}}', post.titel || '—')
+        .replace('{{PSLIDES}}', post.slides.length ? post.slides.map((x, k) => `${k + 1}. ${x.slice(0, 500)}`).join('\n') : '—')
+        .replace('{{PCAPTION}}', post.caption || '—')
+      : TEASER_OHNE);
   if (heute) {
-    prompt += `\n\nHEUTE BEI MIR (echt, von mir selbst eingetragen):\n${heute}\n- Erzähl diesen Moment in meinen Worten, nur mit den Details, die hier stehen. Nichts dazuerfinden, keine Zahlen, Namen oder Zitate ergänzen.\n- ${post ? 'Von diesem Moment aus baust du die Brücke zur Hook des Posts.' : 'Von diesem Moment aus baust du die Brücke zum Thema.'}`;
+    prompt += `\n\nHEUTE BEI CARINA (echt, von ihr selbst eingetragen):\n${heute}\n- Nutz diesen Moment für Einstieg oder Szene, nur mit den Details, die hier stehen. Nichts dazuerfinden, keine Zahlen, Namen oder Zitate ergänzen.`;
   }
-  prompt += post ? TECHNIK.replace('Die CTA „Schreib mir STARTEN ↓" steht als letzte Zeile im "text" der letzten Story.', 'Die Zeile „Neuer Post ↓" steht als letzte Zeile im "text" der letzten Story.') : TECHNIK;
+  prompt += TECHNIK.replace('{{ANZAHL}}', String(count));
 
   // Wie in write-stories: Modelle der Reihe nach, falls Google eines umbenennt.
   const MODELLE = ['gemini-3.6-flash', 'gemini-3-flash', 'gemini-flash-latest', 'gemini-2.5-flash'];
@@ -190,8 +168,10 @@ export default async (req) => {
       const a = sauber.indexOf('{'), b = sauber.lastIndexOf('}');
       out = a >= 0 && b > a ? JSON.parse(sauber.slice(a, b + 1)) : { stories: [] };
     }
-    const stories = (Array.isArray(out.stories) ? out.stories : []).slice(0, 7)
-      .map((s) => ({ text: String(s?.text || '').trim(), sticker: '' }))
+    // Harte Regel „Keine Ausrufezeichen“ sicherheitshalber auch hier.
+    const ohneRufz = (t) => String(t || '').replace(/!+/g, '.').replace(/\.\.+/g, '.').trim();
+    const stories = (Array.isArray(out.stories) ? out.stories : []).slice(0, 9)
+      .map((s) => ({ text: ohneRufz(s?.text), visual: String(s?.visual || '').trim(), sticker: ohneRufz(s?.sticker) }))
       .filter((s) => s.text);
     if (!stories.length) return new Response(JSON.stringify({ error: 'Keine Stories erhalten. Nochmal versuchen.' }), { status: 502 });
     return new Response(JSON.stringify({ stories }), { status: 200, headers: { 'Content-Type': 'application/json' } });
