@@ -13787,4 +13787,11 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
   - Alle anderen: Fotostreifen oben (38 % der Höhe), Marke und Handle weiß darauf, Inhalt darunter auf Weiß.
   - Je Folie ein anderes Foto. `[ohne foto]` schaltet es pro Folie ab; ohne Markenbilder bleibt alles wie in 601.
 
+## 603 — Story-Schrift Variante C: Montserrat + ein Wort in Playfair kursiv (story-studio.js v21)
+
+- Carina fand „nur Helvetica“ flach und hat aus 3 Mischungen C gewählt.
+- `site/story-studio.js` `zeichneTalk`: Montserrat (großer Satz 500, Rest 400), Wörter zwischen `*…*` in Playfair Display kursiv (1,12-fach). Eigener Zeilenumbruch für gemischte Schriften (`mixUmbruch`/`mixZeile`). Erster Absatz jetzt deutlich größer (66 px, Breite 800), Rest 42 px. Label und Pille in Montserrat.
+- Sternchen werden beim Kopieren und in den alten Designs entfernt.
+- `netlify/functions/story-studio.mjs`: Die KI markiert pro Frame genau EIN Schlüsselwort im ersten Satz mit `*…*`.
+
 Alle Adressen laden **karten630**.

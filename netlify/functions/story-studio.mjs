@@ -82,6 +82,7 @@ Antworte NUR mit JSON, ohne Vorwort, ohne Markdown:
 {"stories":[{"text":"…","visual":"…","sticker":"…"}]}
 - Genau {{ANZAHL}} Einträge, einer pro Frame, in der Reihenfolge des Tages.
 - "text": der Frame-Text genau so, wie er auf die Story kommt, Zeilen getrennt mit \\n. Kein „Frame 1" davor.
+- In jedem "text" markierst du genau EIN Schlüsselwort im ersten Satz mit Sternchen, z. B. „Likes zahlen deine *Miete* nicht." Höchstens 1–3 Wörter zwischen den Sternchen, nur eine Markierung pro Frame. Nicht in der Zeile „Tipp auf den Post ↓".
 - "visual": dein Vorschlag fürs Bild, z. B. „Selfie am Schreibtisch", „schwarzer Hintergrund, weiße Schrift", „Screenshot vom Post".
 - "sticker": "" für keinen, sonst z. B. „Umfrage: ‚…' | ‚…'", „Quiz: …", „Slider: …", „Frage: ‚…'", „Link". Der Sticker-Text steht NICHT zusätzlich in "text".`;
 

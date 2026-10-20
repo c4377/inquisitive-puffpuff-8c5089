@@ -155,11 +155,11 @@
     ctx.fillStyle = "#3a2608"; ctx.textAlign = "center"; ctx.fillText(cta, W / 2, cy + 68);
   }
   // „Talk“ (Carina 17.10., Vorlage „LET'S TALK“): Foto stark abgedunkelt, kleines Versal-Label,
-  // großer Satz in Helvetica Light, darunter kleiner der Rest, alles mittig. Ohne Label (Story 2 ff.) wie bei
+  // großer Satz in Montserrat (ein Wort in Playfair kursiv), darunter kleiner der Rest, alles mittig. Ohne Label (Story 2 ff.) wie bei
   // tanja.kammler: alle Absätze gleich klein, mit Leerzeile dazwischen. Das Label ist die erste
   // Zeile, wenn sie in Versalien steht („LET'S TALK“), oder „WORT · Satz“ in der ersten Zeile.
   function zeichneTalk(ctx, st, zeilen, cta, bild) {
-    var F = "HelveticaNeueBrand", z = zeilen.slice(), lab = "";
+    var z = zeilen.slice(), lab = "";
     if (z.length) {
       var m = /^([A-ZÄÖÜ][A-ZÄÖÜß0-9'’ &\-]{1,30}?)\s*[·:|–—]\s*(.+)$/.exec(z[0]);
       if (m && /[a-zäöüß]/.test(m[2])) { lab = m[1]; z[0] = m[2]; }
@@ -179,11 +179,10 @@
     for (var k = 0; k < 40; k++) {
       plan = []; hoehe = labH + labG;
       z.forEach(function (a, j) {
-        var fs = (lab ? (j === 0 ? 60 : 36) : 40) * sk, lh = fs * (lab ? (j === 0 ? 1.16 : 1.36) : 1.3), br = lab ? (j === 0 ? 760 : 640) : 640;
-        ctx.font = "300 " + fs + "px \"" + F + "\"";
-        var zl = ausgeglichen(ctx, a, br);
-        if (j) hoehe += (lab ? (j === 1 ? 130 : 34) : 52) * sk;
-        plan.push({ fs: fs, lh: lh, zl: zl, y: hoehe });
+        var fs = (j === 0 ? 66 : 42) * sk, lh = fs * (j === 0 ? 1.28 : 1.4), br = j === 0 ? 800 : 720, gew = j === 0 ? "500" : "400";
+        var zl = mixAusgeglichen(ctx, a, br, fs, gew);
+        if (j) hoehe += (j === 1 ? 90 : 40) * sk;
+        plan.push({ fs: fs, lh: lh, zl: zl, y: hoehe, gew: gew });
         hoehe += zl.length * lh;
       });
       if (hoehe <= Math.min(unten - oben, H * 0.48)) break;
@@ -192,17 +191,17 @@
     var y0 = Math.max(oben, Math.min(H * (st.sticker ? 0.36 : 0.55) - hoehe / 2, unten - hoehe));
     ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
     if (lab) {
-      ctx.font = "500 27px \"HelveticaNeueBrand\""; ctx.fillStyle = "rgba(255,255,255,.92)";
+      ctx.font = "600 26px \"" + MO + "\""; ctx.fillStyle = "rgba(255,255,255,.92)";
       if ("letterSpacing" in ctx) ctx.letterSpacing = "10px";
       ctx.fillText(lab.toLocaleUpperCase("de-DE"), W / 2 + 5, y0 + 26);
       if ("letterSpacing" in ctx) ctx.letterSpacing = "0px";
     }
     plan.forEach(function (p, j) {
-      ctx.font = "300 " + p.fs + "px \"" + F + "\""; ctx.fillStyle = j === 0 || !lab ? "#FFFFFF" : "rgba(255,255,255,.9)";
-      p.zl.forEach(function (t, q) { ctx.fillText(t, W / 2, y0 + p.y + p.lh * q + p.fs * 0.82); });
+      ctx.fillStyle = j === 0 ? "#FFFFFF" : "rgba(255,255,255,.9)";
+      p.zl.forEach(function (t, q) { mixZeile(ctx, t, W / 2, y0 + p.y + p.lh * q + p.fs * 0.82, p.fs, p.gew); });
     });
     if (cta) {
-      ctx.font = "500 36px \"HelveticaNeueBrand\""; if ("letterSpacing" in ctx) ctx.letterSpacing = "4px";
+      ctx.font = "500 32px \"" + MO + "\""; if ("letterSpacing" in ctx) ctx.letterSpacing = "4px";
       var t = cta.toLocaleUpperCase("de-DE"), tw = ctx.measureText(t).width + 120, cy = H - 330 - 110, rh = 96, rx = W / 2 - tw / 2;
       ctx.strokeStyle = "rgba(255,255,255,.85)"; ctx.lineWidth = 2; ctx.beginPath();
       ctx.moveTo(rx + 48, cy); ctx.arcTo(rx + tw, cy, rx + tw, cy + rh, 48); ctx.arcTo(rx + tw, cy + rh, rx, cy + rh, 48); ctx.arcTo(rx, cy + rh, rx, cy, 48); ctx.arcTo(rx, cy, rx + tw, cy, 48); ctx.stroke();
@@ -253,12 +252,13 @@
     var cta = "";
     zeilen = zeilen.filter(function (z) { if ((/STARTEN/.test(z) || /^(Neuer Post|Tipp auf den Post)\b/i.test(z)) && z.length < 60) { cta = z; return false; } return true; });
     var design = st.design || DESIGNS[0];
+    if (design !== "talk" && design !== "post") zeilen = zeilen.map(ohneSterne);
     var foto = (design === "foto" || design === "talk") && fotos.length && !st._ohneFoto ? fotos[(i * 3 + 1) % fotos.length] : "";
     if (design === "foto" && !foto) design = "oxblood";
     return Promise.all([
       foto ? ladeBild(foto) : design === "post" && st.post && st.post.bild ? ladeBild(st.post.bild) : null,
       design === "oxblood" || design === "schwarz" ? ladeBild("/scrap/" + ELEMENTE[(i * 5 + (st.el || 0)) % ELEMENTE.length] + ".webp") : null,
-      document.fonts.load("400 60px \"" + fam + "\""), document.fonts.load("500 30px \"HelveticaNeueBrand\""), document.fonts.load("400 40px \"Nothing You Could Do\""), document.fonts.load("300 60px \"HelveticaNeueBrand\"")
+      document.fonts.load("400 60px \"" + fam + "\""), document.fonts.load("500 30px \"HelveticaNeueBrand\""), document.fonts.load("400 40px \"Nothing You Could Do\""), document.fonts.load("500 60px \"Montserrat\""), document.fonts.load("400 40px \"Montserrat\""), document.fonts.load("italic 400 60px \"Playfair Display\"")
     ].map(function (p) { return Promise.resolve(p).catch(function () { return null; }); })).then(function (r) {
       var bild = r[0], el = r[1], weiss = design !== "papier";
       if (design === "post") { zeichneTalk(ctx, st, zeilen, cta || "Neuer Post ↓", bild); return; }
@@ -412,7 +412,44 @@
       st._img = cv; neu();
     });
   }
+  // Variante C (Carina 20.10.): Montserrat, ein Wort pro Story in Playfair kursiv, markiert mit *Wort*.
+  var MO = "Montserrat", PF = "Playfair Display";
+  function mixFont(ctx, fs, gew, kursiv) { ctx.font = kursiv ? "italic 400 " + Math.round(fs * 1.12) + "px \"" + PF + "\"" : gew + " " + fs + "px \"" + MO + "\""; }
+  function mixWorte(text) {
+    var out = [], k = false;
+    String(text).split(/(\*)/).forEach(function (teil) {
+      if (teil === "*") { k = !k; return; }
+      teil.split(/(\s+)/).forEach(function (w) { if (!w) return; if (/^\s+$/.test(w)) { out.length && (out[out.length - 1].sp = true); return; } out.push({ w: w, k: k, sp: false }); });
+    });
+    return out;
+  }
+  function mixBreite(ctx, worte, fs, gew) {
+    var b = 0; mixFont(ctx, fs, gew, false); var sp = ctx.measureText(" ").width;
+    worte.forEach(function (w, i) { mixFont(ctx, fs, gew, w.k); b += ctx.measureText(w.w).width; if (i < worte.length - 1 && w.sp) b += sp; });
+    return b;
+  }
+  function mixUmbruch(ctx, text, breite, fs, gew) {
+    var worte = mixWorte(text), zeilen = [], z = [];
+    worte.forEach(function (w) { var t = z.concat([w]); if (z.length && mixBreite(ctx, t, fs, gew) > breite) { zeilen.push(z); z = [w]; } else z = t; });
+    z.length && zeilen.push(z);
+    return zeilen;
+  }
+  function mixAusgeglichen(ctx, text, breite, fs, gew) {
+    var n = mixUmbruch(ctx, text, breite, fs, gew).length;
+    if (n < 2) return mixUmbruch(ctx, text, breite, fs, gew);
+    var lo = breite * 0.5, hi = breite;
+    for (var k = 0; k < 10; k++) { var m = (lo + hi) / 2; mixUmbruch(ctx, text, m, fs, gew).length > n ? (lo = m) : (hi = m); }
+    return mixUmbruch(ctx, text, hi, fs, gew);
+  }
+  function mixZeile(ctx, worte, xm, y, fs, gew) {
+    var x = xm - mixBreite(ctx, worte, fs, gew) / 2; mixFont(ctx, fs, gew, false); var sp = ctx.measureText(" ").width;
+    ctx.textAlign = "left";
+    worte.forEach(function (w, i) { mixFont(ctx, fs, gew, w.k); ctx.fillText(w.w, x, y); x += ctx.measureText(w.w).width + (i < worte.length - 1 && w.sp ? sp : 0); });
+    ctx.textAlign = "center";
+  }
+  function ohneSterne(t) { return String(t || "").replace(/\*/g, ""); }
   function kopiere(t, b) {
+    t = ohneSterne(t);
     try { navigator.clipboard.writeText(t); var a = b.textContent; b.textContent = "Kopiert ✓"; setTimeout(function () { b.textContent = a; }, 1400); } catch (e) {}
   }
   // Bilder werden nach jedem Zeichnen schon als Datei vorbereitet: iPhone/Safari erlaubt
