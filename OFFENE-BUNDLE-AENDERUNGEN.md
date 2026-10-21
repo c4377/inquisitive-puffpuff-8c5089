@@ -13887,4 +13887,15 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Inhalte nur aus den Aussagen der Website, keine neuen Versprechen.
 - Folienzahl: Lückencheck 6, Kaufbar 6, Content 6, Präsenz 4.
 
-Alle Adressen laden **karten637**.
+## 616 — Heller Balken über dem Foto bei jedem 3. Post (karten638)
+
+- Vorlage: Anzeige auratemplates.co, weißer Balken quer über dem Bild. Carina: „eher dieser Balken drüber bitte statt nur der Schrift bei jedem 3. Post“.
+- Neuer Typ `tkbalken` in `tools/kontrast-tanja.js`:
+  - Foto wie tkfoto, nur leicht abgedunkelt.
+  - Heller Balken #FFFDF9 (6 % Rand links und rechts, leichter Schatten), sitzt im unteren Drittel.
+  - Im Balken: das CAPS-Wort klein in Grau, darunter der Hook in Feed Serif schwarz, das kursive Wort in Rosé.
+  - Unter dem Balken: die Unterzeile als weiße Handschrift.
+  - Farben über `kontrastBalkenFarbe` und `kontrastBalkenTinte` änderbar.
+- Rhythmus `magKontrastFeed`: `tkfoto|tkbraun|tkbalken|tkfett|weiss|tkbalken` (Vorher/Nachher und dunkle Textkachel bleiben drin). `tkbalken` ist in der Foto-Bedingung ergänzt.
+
+Alle Adressen laden **karten638**.
