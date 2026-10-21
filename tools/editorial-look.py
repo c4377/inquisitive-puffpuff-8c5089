@@ -186,7 +186,7 @@ KFAM = open(__file__.rsplit('/', 1)[0] + '/kontrast-familie.js', encoding='utf-8
 assert KONTZ.count('if(zxTyp==="papier"){') == 1 and KONTZ.count('if(zxTyp==="fotozeilen"||zxTyp==="fotoetikett"||zxTyp==="fotorahmen"){e.getObjects()') == 1
 KONTZ = KONTZ.replace('if(zxTyp==="papier"){', KFAM + 'if(zxTyp==="papier"){', 1).replace(
     'if(zxTyp==="fotozeilen"||zxTyp==="fotoetikett"||zxTyp==="fotorahmen"){e.getObjects()',
-    'if(zxTyp==="fotozeilen"||zxTyp==="fotoetikett"||zxTyp==="fotorahmen"||(zxTyp.slice(0,2)==="f7"&&zxTyp!=="f7schwarz")||(zxTyp.slice(0,2)==="m8"&&zxTyp!=="m8espresso")||zxTyp==="tkfoto"||zxTyp==="tkfett"||zxTyp==="hgfoto"){e.getObjects()', 1)
+    'if(zxTyp==="fotozeilen"||zxTyp==="fotoetikett"||zxTyp==="fotorahmen"||(zxTyp.slice(0,2)==="f7"&&zxTyp!=="f7schwarz")||(zxTyp.slice(0,2)==="m8"&&zxTyp!=="m8espresso")||zxTyp==="tkfoto"||zxTyp==="tkfett"||(zxTyp.slice(0,2)==="hg"&&zxTyp!=="hgcreme"&&zxTyp!=="hgrost")){e.getObjects()', 1)
 # Moodboard-Vibe (Carina 16.10., tools/kontrast-moodboard.js): Cover-Typen m8*, ebenfalls vor dem Papier-Zweig.
 KMOOD = open(__file__.rsplit('/', 1)[0] + '/kontrast-moodboard.js', encoding='utf-8').read().split('*/', 1)[1].strip() + ' '
 KONTZ = KONTZ.replace('if(zxTyp==="papier"){', KMOOD + 'if(zxTyp==="papier"){', 1)

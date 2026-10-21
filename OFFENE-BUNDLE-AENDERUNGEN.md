@@ -13849,4 +13849,23 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Umschalter `site/look-schalter.js`: Schildchen links unten über dem Schwarz-Regler („Look: Kontrast“ / „Look: Studio ↺“), Antippen speichert und lädt neu.
 - Im Studio-Look gibt es keine Vorher/Nachher-Vorschau im Rhythmus; Folgefolien bleiben im Look Kontrast.
 
-Alle Adressen laden **karten634**.
+## 613 — Look „Studio“ nah an der Pinterest-Vorlage (karten635)
+
+- Carina: „Das sind 20 % von dem, was ich dir geschickt habe. Bitte 100 %.“
+- `tools/kontrast-studio.js` neu geschrieben:
+  - Hook in Kleinbuchstaben, Inter 800, Zeilenabstand 0.84, Laufweite −60, so groß, dass er die Breite füllt, oben links.
+  - Lange Hooks: der erste Satz groß, der Rest klein unten links.
+  - Akzent auf dem markierten Wort (sonst auf dem letzten Wort):
+    - Creme: wechselt zwischen dicker Unterstreichung, schräg und Kuli-Kreis
+    - Foto: schräg in Rost
+    - Rost-Fläche: Unterstreichung
+  - Mikro-Texte:
+    - Name fett oben links
+    - gestapelte Versalien oben rechts (CAPS-Wort, sonst „Content / Angebote / Verkauf“ und Ähnliches)
+    - Unterzeile in Versalien unten links
+    - langer dünner Pfeil unten rechts
+  - Neue Typen `hgfotorost` (helles Foto, Schrift in Rost) und `hgblob` (Creme, Foto in organischer Klecks-Form); Fotos warm getönt (Multiply).
+- Rhythmus (index.html, BS_LOOK_K): `hgcreme|hgfoto|hgfotorost|hgfoto|hgfoto|hgcreme|hgfoto|hgrost|hgschwarz|hgcreme|hgfoto|hgblob`, wie die vier Reihen der Vorlage.
+- editorial-look.py: Foto-Bedingung gilt jetzt für alle hg-Typen außer `hgcreme` und `hgrost`.
+
+Alle Adressen laden **karten635**.
