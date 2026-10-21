@@ -13830,4 +13830,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Dunkle Textkacheln: Schleier über dem unscharfen Foto `kontrastTkSchleierDunkel` 0.55 → 0.8 (fast schwarz statt mittelgrau).
 - Vorher/Nachher-Hintergrund dunkler getönt: `kontrastVNFotoTon` rgba(140,118,96,0.68) → rgba(108,86,66,0.8).
 
-Alle Adressen laden **karten631**.
+## 610 — Vorher/Nachher-Überschrift größer (karten632)
+
+- `tools/kontrast-zeichner.js`, VN-Kachel: Satz oben `zvSerif(zvSatz, …, zW*.105, zH*.27)` statt `zW*.078, zH*.16`, Abstand danach 0.04 H. Die Mockups darunter rechnen ihre Höhe aus dem Restplatz und werden etwas kleiner.
+
+Alle Adressen laden **karten632**.
