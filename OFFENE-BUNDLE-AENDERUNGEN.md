@@ -13840,4 +13840,13 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Neuer Typ `tkkuli` in `tools/kontrast-tanja.js`: helles Papier #F7F4EF mit leichtem Korn, CAPS-Wort oben links (grau), Hook linksbündig in Feed Serif (Tinte #141414), jedes mit `*…*` markierte Wort mit Cognac-Kuli #9E5A2C eingekreist (über zwei Zeilen: unterstrichen), Unterzeile (`&`-Teil) als Kuli-Handschrift in Cognac, Handle unten links. Farben über `kontrastKuliPapier` / `kontrastKuliTinte` änderbar.
 - Rhythmus `magKontrastFeed`: `tkfoto|tkbraun|tkkuli|tkfett|weiss|tkkuli` (vorher `tkfoto|weiss|tkbraun|tkfett|tkfoto|tkbraun`). Jede 3. Kachel ist Kuli; Foto, dunkle Textkachel, Fett-Foto und Vorher/Nachher wechseln sich dazwischen ab.
 
-Alle Adressen laden **karten633**.
+## 612 — Look „Studio“ zum Ausprobieren, umschaltbar (karten634)
+
+- Vorlage: Pinterest-Pin „Herground“ (fette enge Grotesk, Weinrot/Rost auf Creme, dunkle Fotos, Mikro-Texte in den Ecken). Carina: „Ginge das mal zum ausprobieren“.
+- Neu `tools/kontrast-studio.js` (Cover-Typen `hgcreme`, `hgrost`, `hgschwarz`, `hgfoto`), von editorial-look.py vor den Papier-Zweig gesetzt; `hgfoto` in der Foto-Bedingung ergänzt. Hook in Inter 800, Zeilenabstand 0.86, Laufweite −55, markiertes Wort schräg in Rost; oben links „CARINA ANNA PRAV“, oben rechts das CAPS-Wort, unten links die Unterzeile in Versalien, unten rechts →.
+- Farben: Creme #F2ECE4 / Weinrot #3A0E0E / Rost #A3321B / Schwarz #151111.
+- Nur aktiv mit `localStorage.BS_LOOK = "studio"`: index.html setzt dann `window.BS_LOOK_K = {magKontrastFeed: "hgcreme|hgfoto|hgfoto|hgfoto|hgfoto|hgcreme|hgfoto|hgrost|hgschwarz"}`, der Zeichner legt es nach BS_RAUM_K über BS_KACHEL.
+- Umschalter `site/look-schalter.js`: Schildchen links unten über dem Schwarz-Regler („Look: Kontrast“ / „Look: Studio ↺“), Antippen speichert und lädt neu.
+- Im Studio-Look gibt es keine Vorher/Nachher-Vorschau im Rhythmus; Folgefolien bleiben im Look Kontrast.
+
+Alle Adressen laden **karten634**.
