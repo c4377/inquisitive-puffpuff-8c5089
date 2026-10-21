@@ -13868,4 +13868,11 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Rhythmus (index.html, BS_LOOK_K): `hgcreme|hgfoto|hgfotorost|hgfoto|hgfoto|hgcreme|hgfoto|hgrost|hgschwarz|hgcreme|hgfoto|hgblob`, wie die vier Reihen der Vorlage.
 - editorial-look.py: Foto-Bedingung gilt jetzt für alle hg-Typen außer `hgcreme` und `hgrost`.
 
-Alle Adressen laden **karten635**.
+## 614 — Studio raus, Kuli-Plätze zurück (karten636)
+
+- Carina nach dem Lifestyle-Versuch: „Ok nein, löschen Studio und die Folie zurückstellen, die wir auf Kuli umgebaut haben.“
+- Look „Studio“ komplett entfernt: `tools/kontrast-studio.js`, `site/look-schalter.js`, `window.BS_LOOK_K` in index.html und im Zeichner, hg-Typen in der Foto-Bedingung. Ein gespeichertes `BS_LOOK` im Browser wirkt nicht mehr.
+- Look „Lifestyle“ (iPhone-Elemente, nur lokal gebaut) nicht eingebaut, Datei gelöscht.
+- Rhythmus wieder wie vor 611: `tkfoto|weiss|tkbraun|tkfett|tkfoto|tkbraun`. Der Kuli-Typ `tkkuli` bleibt in `tools/kontrast-tanja.js`, wird aber nicht mehr verwendet.
+
+Alle Adressen laden **karten636**.
