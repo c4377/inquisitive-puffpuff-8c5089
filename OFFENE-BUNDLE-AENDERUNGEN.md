@@ -13875,4 +13875,16 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Look „Lifestyle“ (iPhone-Elemente, nur lokal gebaut) nicht eingebaut, Datei gelöscht.
 - Rhythmus wieder wie vor 611: `tkfoto|weiss|tkbraun|tkfett|tkfoto|tkbraun`. Der Kuli-Typ `tkkuli` bleibt in `tools/kontrast-tanja.js`, wird aber nicht mehr verwendet.
 
-Alle Adressen laden **karten636**.
+## 615 — Ablauf-Folien: Kundin als Heldin, nur Problem und danach (karten637)
+
+- Carina: „Wo bezahlt wird, ist egal. Mach meine Kundin zur Heldin und schreibe nur über das Problem und die Situation danach.“
+- `tools/ablauf-folien.json` neu geschrieben. Jeder Ablauf erzählt in Du-Form aus ihrer Sicht:
+  - Deckblatt: ihr Problem in ihren Worten
+  - DEIN JETZT und was am meisten nervt bzw. kostet
+  - DANACH (zweimal)
+  - Schlussfolie mit dem Satz für danach, Preis und Knopf
+- Entfernt: Ablauf-Details (Fragebogen, Zoom, Lieferumfang als Liste) und „Auf carinaannaprav.at · Bezahlt wird bei der Buchung“.
+- Inhalte nur aus den Aussagen der Website, keine neuen Versprechen.
+- Folienzahl: Lückencheck 6, Kaufbar 6, Content 6, Präsenz 4.
+
+Alle Adressen laden **karten637**.
