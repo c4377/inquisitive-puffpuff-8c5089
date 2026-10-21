@@ -99,3 +99,6 @@ INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
 DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
 OTHER DEALINGS IN THE FONT SOFTWARE.
+
+Feed Serif ab 21.10.2026: FeedSerif-Regular.woff2 / FeedSerif-Italic.woff2 = Newsreader (Production Type, SIL OFL 1.1),
+Instanz opsz 72 / wght 420 statt wght 300, auf Latein beschnitten. Grund: im Instagram-Raster besser lesbar.

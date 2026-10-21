@@ -13823,4 +13823,11 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
   - Kursives Schlüsselwort `*…*` bleibt (Design C).
 - `site/story-studio.js` v22: Auswahl 3/4/5 Stories, Standard 5.
 
-Alle Adressen laden **karten630**.
+## 609 — Feed besser lesbar im Instagram-Raster (karten631)
+
+- Carina zum Profil-Raster: „Man müsste es besser lesen können“.
+- „Feed Serif“ kräftiger: neue Dateien `site/fonts/FeedSerif-Regular.woff2` / `FeedSerif-Italic.woff2` (Newsreader, opsz 72, wght 420 statt 300), @font-face in index.html umgestellt. Alte Light-Dateien bleiben liegen.
+- Dunkle Textkacheln: Schleier über dem unscharfen Foto `kontrastTkSchleierDunkel` 0.55 → 0.8 (fast schwarz statt mittelgrau).
+- Vorher/Nachher-Hintergrund dunkler getönt: `kontrastVNFotoTon` rgba(140,118,96,0.68) → rgba(108,86,66,0.8).
+
+Alle Adressen laden **karten631**.
