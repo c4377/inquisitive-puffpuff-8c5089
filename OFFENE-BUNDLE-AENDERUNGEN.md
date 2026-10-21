@@ -13834,4 +13834,10 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 
 - `tools/kontrast-zeichner.js`, VN-Kachel: Satz oben `zvSerif(zvSatz, …, zW*.105, zH*.27)` statt `zW*.078, zH*.16`, Abstand danach 0.04 H. Die Mockups darunter rechnen ihre Höhe aus dem Restplatz und werden etwas kleiner.
 
-Alle Adressen laden **karten632**.
+## 611 — Kuli-Kachel an jeder 3. Stelle (karten633)
+
+- Aus dem Designer-Konzept „Randnotiz“, angepasst an Carinas Branding: Carina „Gerade noch so der Kuli aber passend zu meinem branding bitte mal jede 3. Folie“ → „Bau es mal ein“.
+- Neuer Typ `tkkuli` in `tools/kontrast-tanja.js`: helles Papier #F7F4EF mit leichtem Korn, CAPS-Wort oben links (grau), Hook linksbündig in Feed Serif (Tinte #141414), jedes mit `*…*` markierte Wort mit Cognac-Kuli #9E5A2C eingekreist (über zwei Zeilen: unterstrichen), Unterzeile (`&`-Teil) als Kuli-Handschrift in Cognac, Handle unten links. Farben über `kontrastKuliPapier` / `kontrastKuliTinte` änderbar.
+- Rhythmus `magKontrastFeed`: `tkfoto|tkbraun|tkkuli|tkfett|weiss|tkkuli` (vorher `tkfoto|weiss|tkbraun|tkfett|tkfoto|tkbraun`). Jede 3. Kachel ist Kuli; Foto, dunkle Textkachel, Fett-Foto und Vorher/Nachher wechseln sich dazwischen ab.
+
+Alle Adressen laden **karten633**.
