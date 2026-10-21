@@ -13898,4 +13898,9 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
   - Farben über `kontrastBalkenFarbe` und `kontrastBalkenTinte` änderbar.
 - Rhythmus `magKontrastFeed`: `tkfoto|tkbraun|tkbalken|tkfett|weiss|tkbalken` (Vorher/Nachher und dunkle Textkachel bleiben drin). `tkbalken` ist in der Foto-Bedingung ergänzt.
 
-Alle Adressen laden **karten638**.
+## 617 — Balken wieder raus (karten639)
+
+- Carina: „Nein, zurück. Ich fürchte, erst mit den neuen Bildern wird das was.“
+- Rhythmus wieder `tkfoto|weiss|tkbraun|tkfett|tkfoto|tkbraun`. Die Typen `tkbalken` und `tkkuli` bleiben in `tools/kontrast-tanja.js` und stehen für die neuen Bilder bereit, sind aber nicht im Rhythmus.
+
+Alle Adressen laden **karten639**.
