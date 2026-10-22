@@ -13930,4 +13930,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Unterschied zur Vorlage: eigenes Gelb statt Beige, Unterstreichung am kursiven Wort, eigene Handschrift, Fotokacheln im Echt-Stil dazwischen.
 - Rhythmus: `ecfoto|ectext|ecfoto|ecfoto|ecnotiz|ectext`.
 
-Alle Adressen laden **karten641**.
+## 620 — Textposts wieder raus (karten642)
+
+- Carina: „Das ist exakt wie sie, das will ich nicht.“ Rhythmus wieder nur `ecfoto`. Die Typen `ectext`/`ecnotiz` bleiben im Code, werden aber nicht verwendet. Eigene Varianten folgen erst nach ihrer Wahl.
+
+Alle Adressen laden **karten642**.
