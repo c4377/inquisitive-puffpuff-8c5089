@@ -13954,4 +13954,13 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
   - Danach erscheint oben eine Meldung mit allem, was umverteilt wurde oder zu lang bleibt. Grenzwerte über `BS_BULK_HOOK`, `BS_BULK_ZEILE`, `BS_BULK_FOLIE`, abschalten mit `BS_BULK_AUS = 1`.
 - Lokal getestet: Post mit langem Cover und langer Folie 2 wird von 3 auf 5 Folien verteilt, Meldung erscheint, keine Fehler.
 
-Alle Adressen laden **karten644**.
+## 623 — Look „Mokka & Taupe“ mit den Ideen A–D (karten645)
+
+- Carina: Farbwelt 4 (Mokka & Taupe aus ihrem Pin), alle vier Ideen „gehen“, veröffentlichen.
+- Neu: `tools/kontrast-mokka.js`, Titelkacheln `mkfoto`, `mkdunkel` (#3A2E25), `mktaupe` (#79674F), `mkhell` (#EDE7DD), leichtes Papierkorn, Instrument Serif mittig, Name klein in Versalien unten (`kontrastAbsender`).
+- Rhythmus `magKontrastFeed`: `mkfoto|mkdunkel|mkhell|mkfoto|mktaupe|mkdunkel` (vorher `ecfoto`). Der Kundenraum hat seinen eigenen Rhythmus und bleibt unverändert.
+- Gesteuert über Slide 1: `~alt|neu~` (A, durchgestrichen und korrigiert), `[Was ich lese]` (B), `[22.10.]`/`[Tagebuch]` (C), `{Wort}` und `[01]` (D). `*Wort*` färbt nur. B und C nie auf Foto.
+- Folgefolien bleiben karten600.
+- Lokal 12 Cover gerendert, alle Ideen auf allen Flächen, keine Fehler.
+
+Alle Adressen laden **karten645**.

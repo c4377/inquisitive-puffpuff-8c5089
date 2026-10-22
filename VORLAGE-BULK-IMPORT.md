@@ -41,6 +41,21 @@ Was du im ersten Slide schreibst, steuert die Typen:
 - **[Rubrik]**: wird beim Versal-Einstieg als fette Überschrift oben gezeigt, z. B. `[Die teuerste Gewohnheit!]`. Ist die Rubrik ein einziges Wort, z. B. `[Umsetzen]`, kann sie das Riesenwort sein. Ohne Rubrik wird statt Versal die Serif-Kachel und statt Riesenwort das Zitat genommen (beim Riesenwort zählt auch ein kurzes `*Wort*` aus dem Hook).
 - **Zwei Sätze im Hook**: bei Reel-Kästen kommt der erste Satz in den weißen, der zweite in den dunklen Kasten; bei Serif + fette Zeile wird der zweite Satz fett.
 
+## Look Mokka & Taupe (seit 22.10.)
+
+Die Cover wechseln automatisch: Foto, Mokka, Hell, Foto, Taupe, Mokka. Mit diesen Zeichen in Slide 1 bekommt ein Post dein Erkennungszeichen:
+
+| Idee | So schreibst du | Ergebnis |
+|---|---|---|
+| A · Durchgestrichen | `Du musst nicht ~perfekt|echt~ sein.` | „perfekt“ durchgestrichen, „echt“ in Handschrift darüber |
+| B · Was ich lese | `[Was ich lese] „Mehr Infos im Link.“ & Ich trau mich nicht zu fragen.` | oben blass „Was du schreibst“, unten groß „Was ich lese“ |
+| C · Tagebuch | `[Dienstag, 21.10.] Heute entschieden: Karussells zuerst.` oder `[Tagebuch] …` | Datum in Handschrift oben |
+| D · Kasten | `[01] Likes zahlen deine {Miete} nicht.` | „Miete“ im feinen Kasten, „01“ im Kästchen oben |
+
+- `*Wort*` färbt ein Wort hell ein (nicht kursiv).
+- Eine andere `[Rubrik]` steht klein in Versalien über dem Hook, der Text nach `&` als ruhige Zeile darunter.
+- B und C kommen nie auf ein Foto, an Foto-Tagen nimmt die App dafür Mokka oder Hell.
+
 ## Marken-Check (automatisch, seit 22.10.)
 
 Beim Klick auf **Plan erstellen** prüft die App jeden Post auf zu viel Text und verteilt ihn um. Deine Worte bleiben dabei gleich, sie werden nur an Satzgrenzen auf weitere Folien verteilt:

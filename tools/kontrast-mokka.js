@@ -1,0 +1,41 @@
+/* Look „Mokka & Taupe“ (Carina 22.10.: Farben aus ihrem Pin „Use these shades of brown“, ihre Schrift, warmes Weiß,
+   „sowas wie beyondeve, aber anders“ → eigenes Zeichen statt kursivem Wort). Titelkacheln, vor dem Papier-Zweig eingesetzt:
+      mkfoto    Foto, Text mittig unten, Verlauf in Mokka.
+      mkdunkel  Mokka #3A2E25, Schrift warmes Weiß.   mktaupe  Taupe #79674F.   mkhell  warmes Weiß #EDE7DD, Schrift Mokka.
+   Alle mit leichtem Papierkorn, Instrument Serif mittig, Name klein in Versalien unten (kontrastAbsender).
+   Die vier Ideen steuert der Text in Slide 1 (alle frei kombinierbar):
+      A  ~alt|neu~        „alt“ durchgestrichen, „neu“ in Handschrift darüber (Korrekturfarbe).
+      B  [Was ich lese]   Hook = was viele schreiben (blass, mit Label WAS DU SCHREIBST), Text nach „&“ = was ankommt (groß).
+      C  [22.10.] oder [Mittwoch, 22.10.] oder [Tagebuch]   Datum in Handschrift oben, wie ein Tagebucheintrag.
+      D  {Wort}           Wort im feinen Kasten wie auf der Website. [01] als Rubrik ergibt das Nummernkästchen oben.
+   *Wort* färbt ein Wort in der Korrekturfarbe (nicht kursiv). Andere Rubriken stehen als kleines Versal-Label über dem Hook,
+   der Text nach „&“ als ruhige Zeile darunter. B und C landen nie auf einem Foto (dann Mokka bzw. Hell).
+   Alle Zeilenumbrüche werden entfernt: jede Anweisung endet mit Semikolon, keine // Kommentare. */
+if(zxTyp==="mkfoto"||zxTyp==="mkdunkel"||zxTyp==="mktaupe"||zxTyp==="mkhell"){const mS=K.kontrastSerif||"Instrument Serif",mH="Nothing You Could Do",mI="Inter";
+const mKick=String(zKickT||"").trim(),mB=/^was ich lese$/i.test(mKick),mC=!mB&&(/\d{1,2}\.\s?\d{1,2}\.?/.test(mKick)||/^tagebuch$/i.test(mKick)),mNr=/^\d{1,2}$/.test(mKick)?mKick.padStart(2,"0"):"";
+let mTyp=zxTyp;mTyp==="mkfoto"&&mB&&(mTyp="mkdunkel");mTyp==="mkfoto"&&mC&&(mTyp="mkhell");
+const mPal={mkdunkel:{bg:K.mokkaDunkel||"#3A2E25",ink:"#EDE7DD",fix:K.mokkaFix||"#B9A68A"},mktaupe:{bg:K.mokkaTaupe||"#79674F",ink:"#F3EDE4",fix:"#E9DCC6"},mkhell:{bg:K.mokkaHell||"#EDE7DD",ink:"#3A2E25",fix:"#79674F"},mkfoto:{bg:"#3A2E25",ink:"#F6F0E6",fix:"#DCC8AA"}}[mTyp];
+try{await Promise.race([Promise.all([`400 40px "${mS}"`,`400 40px "${mH}"`,`400 40px "${mI}"`,`600 40px "${mI}"`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,4e3))])}catch(zz){}
+if(mTyp==="mkfoto"){zxFotoBG(zxFoto);e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,...zNo,fill:new zFb.Gradient({type:"linear",coords:{x1:0,y1:0,x2:0,y2:zH},colorStops:[{offset:0,color:"rgba(58,46,37,0.12)"},{offset:.36,color:"rgba(58,46,37,0)"},{offset:.68,color:"rgba(58,46,37,0.55)"},{offset:1,color:"rgba(58,46,37,0.9)"}]})}))}
+else{e.getObjects().forEach(zo=>{zo.visible=!1});e.backgroundColor=mPal.bg;e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:mPal.bg,...zNo}))}
+try{let zk=window.__bsKorn;if(!zk){zk=document.createElement("canvas");zk.width=zk.height=256;const zc=zk.getContext("2d"),zd=zc.createImageData(256,256);for(let k=0;k<zd.data.length;k+=4){const zv=Math.random()*255;zd.data[k]=zd.data[k+1]=zd.data[k+2]=zv;zd.data[k+3]=Math.random()<.5?14:0}zc.putImageData(zd,0,0);window.__bsKorn=zk}e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:new zFb.Pattern({source:zk,repeat:"repeat"}),opacity:mTyp==="mkhell"?.55:.8,...zNo}))}catch(zz){}
+const mBreit=new Map(),mMiss=(zt,zf,zfs)=>{const zq=zf+"|"+zfs+"|"+zt;if(!mBreit.has(zq))mBreit.set(zq,new zFb.Text(zt||" ",{fontFamily:zf,fontSize:zfs}).width||0);return mBreit.get(zq)};
+const mTokens=zs=>{const zo=[];String(zs||"").replace(/\s+/g," ").trim().split(/(~[^~|]+\|[^~]+~|\{[^{}]+\}|\*[^*]+\*)/).filter(zp=>zp&&zp.trim()).forEach(zp=>{let zm;if(zm=/^~([^~|]+)\|([^~]+)~$/.exec(zp))zo.push({t:zm[1].trim(),neu:zm[2].trim(),art:"x",an:!/^\s/.test(zp)});else if(zm=/^\{([^{}]+)\}$/.exec(zp))zo.push({t:zm[1].trim(),art:"box"});else if(zm=/^\*([^*]+)\*$/.exec(zp))zm[1].trim().split(" ").forEach(zw=>zo.push({t:zw,art:"mark"}));else zp.split(" ").forEach(zw=>{zw&&zo.push({t:zw,art:""})})});
+for(let k=1;k<zo.length;k++){/^[.,!?:;…“”"»«)]+$/.test(zo[k].t)&&(zo[k-1].nach=(zo[k-1].nach||"")+zo[k].t,zo.splice(k,1),k--)}return zo};
+const mZeilen=(zto,zfs,zbr)=>{const zsp=zfs*.17,zz=[];let zak=[],zbw=0;zto.forEach(ztk=>{const zw=mMiss(ztk.t,mS,zfs)+mMiss(ztk.nach||"",mS,zfs);if(zak.length&&zbw+zsp+zw>zbr){zz.push({tk:zak,w:zbw});zak=[];zbw=0}zak.length&&(zbw+=zsp);ztk.w=zw;ztk.tw=mMiss(ztk.t,mS,zfs);zak.push(ztk);zbw+=zw});zak.length&&zz.push({tk:zak,w:zbw});return zz};
+const mSatz=(zs,zfs0,zbr,zmaxH,zlh)=>{const zto=mTokens(zs);let zfs=zfs0,zz=[];for(let k=0;k<45;k++){zz=mZeilen(zto,zfs,zbr);const zlang=Math.max(0,...zto.map(ztk=>ztk.w||0)),zh=zz.reduce((za,zl)=>za+zfs*zlh+(zl.tk.some(ztk=>ztk.art==="x")?zfs*.5:0),0);if(zlang<=zbr&&zh<=zmaxH)return{zz,zfs,zh,zlh};zfs*=.95}const zh=zz.reduce((za,zl)=>za+zfs*zlh+(zl.tk.some(ztk=>ztk.art==="x")?zfs*.5:0),0);return{zz,zfs,zh,zlh}};
+const mZeichne=(zsatz,ztop,zink,zop)=>{const{zz,zfs,zlh}=zsatz,zsp=zfs*.17;let zy=ztop;zz.forEach(zl=>{zl.tk.some(ztk=>ztk.art==="x")&&(zy+=zfs*.5);let zx=zW/2-zl.w/2;zl.tk.forEach(ztk=>{const zfarbe=ztk.art==="mark"?mPal.fix:zink;e.add(new zFb.Text(ztk.t+(ztk.nach||""),{left:zx,top:zy,fontFamily:mS,fontSize:zfs,fill:zfarbe,opacity:ztk.art==="x"?.6*(zop||1):(zop||1),...zNo}));
+if(ztk.art==="x"){const zx0=zx-zfs*.04,zx1=zx+ztk.tw+zfs*.04,zym=zy+zfs*.6;e.add(new zFb.Path(`M ${zx0} ${zym+zfs*.03} C ${zx0+(zx1-zx0)*.3} ${zym-zfs*.05}, ${zx0+(zx1-zx0)*.6} ${zym+zfs*.06}, ${zx1} ${zym-zfs*.02}`,{fill:"",stroke:mPal.fix,strokeWidth:Math.max(2,zfs*.045),strokeLineCap:"round",...zNo}));e.add(new zFb.Text(ztk.neu,{left:zx+ztk.tw/2,top:zy+zfs*.1,originX:"center",originY:"bottom",angle:-5,fontFamily:mH,fontSize:zfs*.66,fill:mPal.fix,...zNo}))}
+if(ztk.art==="box"){e.add(new zFb.Rect({left:zx-zfs*.1,top:zy+zfs*.1,width:ztk.tw+zfs*.2,height:zfs*1.02,fill:"",stroke:mPal.fix,strokeWidth:Math.max(1.5,zfs*.03),...zNo}))}
+zx+=ztk.w+zsp});zy+=zfs*zlh});return zy};
+const mLabel=(ztx,zy,zfarbe)=>{e.add(new zFb.Text(String(ztx).toLocaleUpperCase("de-DE"),{left:zW/2,top:zy,originX:"center",fontFamily:mI,fontWeight:"600",fontSize:zW*.019,charSpacing:300,fill:zfarbe||mPal.fix,...zNo}))};
+const mSub=String(zxSub||zxKl||"").trim(),mBr=zW*.8,mFoto=mTyp==="mkfoto";
+if(mB){const zq=String(zxTitel||"").replace(/\*+/g,"").trim(),zr=mSub||"",zsq=mSatz(zq,zW*.064,mBr,zH*.2,1.2),zsr=mSatz(zr,zW*.1,mBr,zH*.3,1.12),zges=zW*.04+zsq.zh+zW*.1+zW*.04+zsr.zh;let zy=zH*.47-zges/2;
+mLabel("Was du schreibst",zy);zy+=zW*.045;zy=mZeichne(zsq,zy,mPal.ink,.5);zy+=zW*.035;e.add(new zFb.Rect({left:zW/2-zW*.04,top:zy,width:zW*.08,height:Math.max(1,zW*.0022),fill:mPal.fix,...zNo}));zy+=zW*.045;mLabel("Was ich lese",zy);zy+=zW*.045;mZeichne(zsr,zy,mPal.ink,1)}
+else{const zsh=mSatz(zxTitel,mFoto?zW*.09:zW*.108,mBr,mFoto?zH*.34:zH*.5,1.14),zlab=!mC&&!mNr&&mKick?mKick:"",zsubH=mSub?zW*.075:0,zlabH=zlab?zW*.05:0,zges=zlabH+zsh.zh+zsubH;let zy=mFoto?zH*.855-zges:zH*.48-zges/2;
+mC&&e.add(new zFb.Text(/^tagebuch$/i.test(mKick)?"heute":mKick,{left:zW/2,top:zH*.085,originX:"center",fontFamily:mH,fontSize:zW*.05,fill:mPal.fix,...zNo}));
+if(mNr){const zt=new zFb.Text(mNr,{fontFamily:mI,fontWeight:"600",fontSize:zW*.026,charSpacing:100,fill:mPal.fix,originX:"center",left:zW/2,top:zH*.085,...zNo});e.add(new zFb.Rect({left:zW/2-(zt.width||0)/2-zW*.022,top:zH*.085-zW*.016,width:(zt.width||0)+zW*.044,height:(zt.height||0)+zW*.03,fill:"",stroke:mPal.fix,strokeWidth:Math.max(1.5,zW*.0025),...zNo}));e.add(zt)}
+zlab&&(mLabel(zlab,zy),zy+=zlabH);zy=mZeichne(zsh,zy,mPal.ink,1);
+mSub&&e.add(new zFb.Textbox(mSub.replace(/\*+/g,""),{left:zW*.14,top:zy+zW*.02,width:zW*.72,textAlign:"center",fontFamily:mI,fontWeight:"400",fontSize:zW*.031,lineHeight:1.3,fill:mPal.ink,opacity:.78,...zNo}))}
+e.add(new zFb.Text(String(K.kontrastAbsender||"Carina Anna Prav").toLocaleUpperCase("de-DE"),{left:zW/2,top:zH*.945,originX:"center",originY:"center",fontFamily:mI,fontWeight:"600",fontSize:zW*.017,charSpacing:420,fill:mPal.ink,opacity:.55,...zNo}));
+t.overlayImage&&await Ae(t.overlayImage).catch(()=>{});e.renderAll();return}
