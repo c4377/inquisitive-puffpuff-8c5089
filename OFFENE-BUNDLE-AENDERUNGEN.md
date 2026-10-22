@@ -13921,4 +13921,13 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - `magKontrastFeed` jetzt `ecfoto`. **Zurück zum alten Look:** in KONTRAST `'magKontrastFeed': 'tkfoto|weiss|tkbraun|tkfett|tkfoto|tkbraun'` und `kontrastEcht` entfernen.
 - Vorher/Nachher-Vorschauen sind in diesem Rhythmus nicht dabei.
 
-Alle Adressen laden **karten640**.
+## 619 — Textposts im Look „Echt“ (karten641)
+
+- Vorlage abovebeyond.coaching, Carina: „Mach die Textposts ähnlich wie hier, aber nicht gleich.“
+- `tools/kontrast-echt.js`, zwei neue Titelkacheln:
+  - `ectext`: Espresso #2B231E, Hook groß in Instrument Serif creme #F3EBDD, markiertes Wort (sonst das letzte) kursiv in Gelb #F0F462 und dünn gelb unterstrichen, Unterzeile als Handschrift (Feed Hand) unten rechts, sonst Handle.
+  - `ecnotiz`: helles Papier #F4EEE4, Hook und Unterzeile komplett in Handschrift Espresso, kleines ✦ und Handle unten.
+- Unterschied zur Vorlage: eigenes Gelb statt Beige, Unterstreichung am kursiven Wort, eigene Handschrift, Fotokacheln im Echt-Stil dazwischen.
+- Rhythmus: `ecfoto|ectext|ecfoto|ecfoto|ecnotiz|ectext`.
+
+Alle Adressen laden **karten641**.
