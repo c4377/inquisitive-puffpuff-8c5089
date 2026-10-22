@@ -13991,4 +13991,11 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 
 - Carina: „Kuli blau.“ Tinte der `mkkuli`-Notiz #22409A (Kugelschreiber-Blau) statt Schwarz, auch „— C.“ und Name.
 
-Alle Adressen laden **karten650**.
+## 629 — Quote auch auf dem Foto, in Weiß (karten651)
+
+- Carina: „Wo sind die Quotes? Vor allem auch am Foto weiß.“
+- Neu `mkfotoquote`: Hook als Quote auf dem Foto (Verlauf in Mokka nach unten), Zitat, Unterstreichung und Handschrift reinweiß, Block mittig bei 60 % der Höhe.
+- Rhythmus `mkfoto|mkdunkel|mkquote|mkfoto|mktaupe|mkkuli|mkfotoquote|mkhell`: Quote auf Tag 2, 10, 18 …, Foto-Quote auf Tag 6, 14, 22 …, Kuli-Notiz auf Tag 5, 13, 21 …
+- Hat der Hook ein Zeichen A–D, wird aus der Foto-Quote eine normale Fotokachel.
+
+Alle Adressen laden **karten651**.
