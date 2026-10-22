@@ -41,6 +41,16 @@ Was du im ersten Slide schreibst, steuert die Typen:
 - **[Rubrik]**: wird beim Versal-Einstieg als fette Überschrift oben gezeigt, z. B. `[Die teuerste Gewohnheit!]`. Ist die Rubrik ein einziges Wort, z. B. `[Umsetzen]`, kann sie das Riesenwort sein. Ohne Rubrik wird statt Versal die Serif-Kachel und statt Riesenwort das Zitat genommen (beim Riesenwort zählt auch ein kurzes `*Wort*` aus dem Hook).
 - **Zwei Sätze im Hook**: bei Reel-Kästen kommt der erste Satz in den weißen, der zweite in den dunklen Kasten; bei Serif + fette Zeile wird der zweite Satz fett.
 
+## Marken-Check (automatisch, seit 22.10.)
+
+Beim Klick auf **Plan erstellen** prüft die App jeden Post auf zu viel Text und verteilt ihn um. Deine Worte bleiben dabei gleich, sie werden nur an Satzgrenzen auf weitere Folien verteilt:
+
+- **Cover:** Der Hook bleibt bei höchstens etwa 90 Zeichen. Weitere Sätze kommen auf eine neue Folie 2. Die Handschrift-Zeile nach dem `&` bleibt bei einem Satz.
+- **Folgefolien:** Mehr als etwa 230 Zeichen werden auf mehrere Folien verteilt, bevorzugt an deinen Absätzen.
+- **Was nicht geht:** Einen einzelnen sehr langen Satz kann die App nicht teilen. Den meldet sie, dann bitte selbst kürzen.
+
+Danach erscheint oben eine Meldung, was umverteilt wurde. Vorher/Nachher- und Screenshot-Folien bleiben, wie du sie schreibst.
+
 ## Die Regeln
 
 | Schreibweise | Was passiert |

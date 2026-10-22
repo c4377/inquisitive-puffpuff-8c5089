@@ -13944,4 +13944,14 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - `kontrastEcht` ist raus, die Echt-Folgefolien sind also aus. Die Titelkacheln bleiben `ecfoto`.
 - Lokal mit dem Original-Bundle von karten600 verglichen: Textfolie und Schlussfolie sehen gleich aus.
 
-Alle Adressen laden **karten643**.
+## 622 — Marken-Check beim Bulk Import (karten644)
+
+- Carina: „Ich erstelle immer Posts, die dann das Branding sprengen.“ Grund laut ihr: zu viel Text.
+- Neu: `tools/bulk-marke.js`, eingesetzt als `__bsMarkeF` und aufgerufen in „Plan erstellen“ direkt nach dem Einlesen (`JK`). Worte werden nicht geändert, nur an Satzgrenzen umverteilt:
+  - Cover: Hook über 90 Zeichen (ohne Rubrik und Versal-Einstieg) → erste Sätze bleiben, der Rest wird neue Folie 2. Ein einzelner langer Satz wird am Doppelpunkt oder Gedankenstrich geteilt, sonst gemeldet. Handschrift-Zeile über 80 Zeichen → nur ihr erster Satz bleibt.
+  - Folgefolien über 230 Zeichen → gleichmäßig auf mehrere Folien, bevorzugt an Absätzen. Ausgezeichnete Zeilen (Listen, #, >) bleiben ganz, eine Zeile mit „:“ bleibt bei der nächsten.
+  - Vorher/Nachher-, Screenshot- und Kennungs-Folien bleiben unangetastet.
+  - Danach erscheint oben eine Meldung mit allem, was umverteilt wurde oder zu lang bleibt. Grenzwerte über `BS_BULK_HOOK`, `BS_BULK_ZEILE`, `BS_BULK_FOLIE`, abschalten mit `BS_BULK_AUS = 1`.
+- Lokal getestet: Post mit langem Cover und langer Folie 2 wird von 3 auf 5 Folien verteilt, Meldung erscheint, keine Fehler.
+
+Alle Adressen laden **karten644**.

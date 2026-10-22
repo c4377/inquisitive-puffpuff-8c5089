@@ -333,5 +333,11 @@ s = s.replace(_sk, '', 1)
 # Absturz Stories-Seite (Carina 17.10.): Marken-Einstellungen ohne typography/colors. Zugriffe absichern.
 s = s.replace('e.currentBrandConfig.typography.', '(e.currentBrandConfig.typography||{}).').replace('e.currentBrandConfig.colors.', '(e.currentBrandConfig.colors||{}).')
 
+# Marken-Check beim Bulk Import (Carina 22.10., tools/bulk-marke.js): zu lange Hooks und Folien an Satzgrenzen
+# auf weitere Folien verteilen, bevor der Plan angelegt wird.
+MARKE = open(__file__.rsplit('/', 1)[0] + '/bulk-marke.js', encoding='utf-8').read().split('*/', 1)[1].strip().replace('\n', '')
+ersetze(',AG=({isOpen:e,onClose:t,onImportPlan:r})=>', ',__bsMarkeF=' + MARKE + ',AG=({isOpen:e,onClose:t,onImportPlan:r})=>', 1)
+ersetze('const A=JK(n);if(A.length===0)', 'const A=__bsMarkeF(JK(n));if(A.length===0)', 1)
+
 open(Z, 'w', encoding='utf-8').write(s)
 print('ok')
