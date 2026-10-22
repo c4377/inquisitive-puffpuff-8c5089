@@ -13987,4 +13987,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 
 - Carina: „Mach die Schrift in Mokka und Taupe doch reinweiß.“ `mkdunkel` und `mktaupe` jetzt #FFFFFF (vorher #EDE7DD bzw. #F3EDE4), ebenso die Schrift auf der Vorher/Nachher-Folie (`kontrastVNTinte`), die auch auf Mokka liegt.
 
-Alle Adressen laden **karten649**.
+## 628 — Kuli-Notiz in Blau (karten650)
+
+- Carina: „Kuli blau.“ Tinte der `mkkuli`-Notiz #22409A (Kugelschreiber-Blau) statt Schwarz, auch „— C.“ und Name.
+
+Alle Adressen laden **karten650**.

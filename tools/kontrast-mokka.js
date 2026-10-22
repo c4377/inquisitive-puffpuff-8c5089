@@ -14,11 +14,11 @@
    unterstrichen, _Wort_ kursiv und eingekreist (Taupe), Handschrift oben links und unten rechts in Taupe.
    Im Rhythmus (Carina 22.10.: Quotes mit festem Platz, dazu eine Handschrift „mit Kuli“, schwarz):
       mkquote   der Hook des Posts als Quote-Karte (Rubrik = Handschrift oben, Text nach „&“ = Handschrift unten rechts).
-      mkkuli    Notiz in schwarzer Kuli-Handschrift auf warmem Weiß, linksbündig, *Wort* unterstrichen, unterschrieben „— C.“.
+      mkkuli    Notiz in blauer Kuli-Handschrift (Carina 22.10.: „Kuli blau“) auf warmem Weiß, linksbündig, *Wort* unterstrichen, unterschrieben „— C.“.
       Beide nur bei schlichtem Hook; mit A/B/C/D-Zeichen wird daraus Mokka (mkquote) bzw. Hell (mkkuli).
    Alle Zeilenumbrüche werden entfernt: jede Anweisung endet mit Semikolon, keine // Kommentare. */
 const mkPlain=(()=>{const zk=String(zKickT||"").trim();return!/^was ich lese$/i.test(zk)&&!/\d{1,2}\.\s?\d{1,2}\.?|^tagebuch$|^\d{1,2}$/i.test(zk)&&!/~[^~|]+\|[^~]+~|\{[^{}]+\}/.test(String(zxTitel||""))})();
-if(zxTyp==="mkkuli"&&mkPlain){const kH="Nothing You Could Do",kI="Inter",kBg=K.mokkaPapier||"#F3EEE6",kInk=K.mokkaKuli||"#1B1B1E";
+if(zxTyp==="mkkuli"&&mkPlain){const kH="Nothing You Could Do",kI="Inter",kBg=K.mokkaPapier||"#F3EEE6",kInk=K.mokkaKuli||"#22409A";
 try{await Promise.race([Promise.all([`400 40px "${kH}"`,`600 40px "${kI}"`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,4e3))])}catch(zz){}
 e.getObjects().forEach(zo=>{zo.visible=!1});e.backgroundColor=kBg;e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:kBg,...zNo}));
 try{let zk=window.__bsKornM;if(!zk){zk=document.createElement("canvas");zk.width=zk.height=256;const zc=zk.getContext("2d"),zd=zc.createImageData(256,256);for(let k=0;k<zd.data.length;k+=4){const zv=Math.random()*255;zd.data[k]=zd.data[k+1]=zd.data[k+2]=zv;zd.data[k+3]=Math.random()<.5?14:0}zc.putImageData(zd,0,0);window.__bsKornM=zk}e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:new zFb.Pattern({source:zk,repeat:"repeat"}),opacity:.55,...zNo}))}catch(zz){}

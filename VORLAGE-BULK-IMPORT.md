@@ -43,7 +43,7 @@ Was du im ersten Slide schreibst, steuert die Typen:
 
 ## Look Mokka & Taupe (seit 22.10.)
 
-Die Cover wechseln automatisch in 8 Schritten: Foto, Mokka, **Quote**, Foto, Taupe, **Kuli-Notiz**, Foto, Hell. Quote und Kuli-Notiz nehmen deinen Hook: bei der Quote wird die `[Rubrik]` zur Handschrift oben und der Text nach `&` zur Handschrift unten rechts, bei der Kuli-Notiz steht alles in schwarzer Handschrift, unterschrieben mit „— C.“. Hat der Hook ein Zeichen A–D, kommt an diesem Tag stattdessen Mokka bzw. Hell. Mit diesen Zeichen in Slide 1 bekommt ein Post dein Erkennungszeichen:
+Die Cover wechseln automatisch in 8 Schritten: Foto, Mokka, **Quote**, Foto, Taupe, **Kuli-Notiz**, Foto, Hell. Quote und Kuli-Notiz nehmen deinen Hook: bei der Quote wird die `[Rubrik]` zur Handschrift oben und der Text nach `&` zur Handschrift unten rechts, bei der Kuli-Notiz steht alles in blauer Kuli-Handschrift, unterschrieben mit „— C.“. Hat der Hook ein Zeichen A–D, kommt an diesem Tag stattdessen Mokka bzw. Hell. Mit diesen Zeichen in Slide 1 bekommt ein Post dein Erkennungszeichen:
 
 | Idee | So schreibst du | Ergebnis |
 |---|---|---|
