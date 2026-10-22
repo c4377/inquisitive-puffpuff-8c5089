@@ -28,14 +28,14 @@ const mZeichne=(zsatz,ztop,zink,zop)=>{const{zz,zfs,zlh}=zsatz,zsp=zfs*.17;let z
 if(ztk.art==="x"){const zx0=zx-zfs*.04,zx1=zx+ztk.tw+zfs*.04,zym=zy+zfs*.6;e.add(new zFb.Path(`M ${zx0} ${zym+zfs*.03} C ${zx0+(zx1-zx0)*.3} ${zym-zfs*.05}, ${zx0+(zx1-zx0)*.6} ${zym+zfs*.06}, ${zx1} ${zym-zfs*.02}`,{fill:"",stroke:mPal.fix,strokeWidth:Math.max(2,zfs*.045),strokeLineCap:"round",...zNo}));e.add(new zFb.Text(ztk.neu,{left:zx+ztk.tw/2,top:zy+zfs*.1,originX:"center",originY:"bottom",angle:-5,fontFamily:mH,fontSize:zfs*.66,fill:mPal.fix,...zNo}))}
 if(ztk.art==="box"){e.add(new zFb.Rect({left:zx-zfs*.1,top:zy+zfs*.1,width:ztk.tw+zfs*.2,height:zfs*1.02,fill:"",stroke:mPal.fix,strokeWidth:Math.max(1.5,zfs*.03),...zNo}))}
 zx+=ztk.w+zsp});zy+=zfs*zlh});return zy};
-const mLabel=(ztx,zy,zfarbe)=>{e.add(new zFb.Text(String(ztx).toLocaleUpperCase("de-DE"),{left:zW/2,top:zy,originX:"center",fontFamily:mI,fontWeight:"600",fontSize:zW*.019,charSpacing:300,fill:zfarbe||mPal.fix,...zNo}))};
-const mSub=String(zxSub||zxKl||"").trim(),mBr=zW*.8,mFoto=mTyp==="mkfoto";
-if(mB){const zq=String(zxTitel||"").replace(/\*+/g,"").trim(),zr=mSub||"",zsq=mSatz(zq,zW*.064,mBr,zH*.2,1.2),zsr=mSatz(zr,zW*.1,mBr,zH*.3,1.12),zges=zW*.04+zsq.zh+zW*.1+zW*.04+zsr.zh;let zy=zH*.47-zges/2;
-mLabel("Was du schreibst",zy);zy+=zW*.045;zy=mZeichne(zsq,zy,mPal.ink,.5);zy+=zW*.035;e.add(new zFb.Rect({left:zW/2-zW*.04,top:zy,width:zW*.08,height:Math.max(1,zW*.0022),fill:mPal.fix,...zNo}));zy+=zW*.045;mLabel("Was ich lese",zy);zy+=zW*.045;mZeichne(zsr,zy,mPal.ink,1)}
-else{const zsh=mSatz(zxTitel,mFoto?zW*.09:zW*.108,mBr,mFoto?zH*.34:zH*.5,1.14),zlab=!mC&&!mNr&&mKick?mKick:"",zsubH=mSub?zW*.075:0,zlabH=zlab?zW*.05:0,zges=zlabH+zsh.zh+zsubH;let zy=mFoto?zH*.855-zges:zH*.48-zges/2;
-mC&&e.add(new zFb.Text(/^tagebuch$/i.test(mKick)?"heute":mKick,{left:zW/2,top:zH*.085,originX:"center",fontFamily:mH,fontSize:zW*.05,fill:mPal.fix,...zNo}));
+const mLabel=(ztx,zy,zfarbe)=>{e.add(new zFb.Text(String(ztx).toLocaleUpperCase("de-DE"),{left:zW/2,top:zy,originX:"center",fontFamily:mI,fontWeight:"600",fontSize:zW*.024,charSpacing:300,fill:zfarbe||mPal.fix,...zNo}))};
+const mSub=String(zxSub||zxKl||"").trim(),mBr=zW*.86,mFoto=mTyp==="mkfoto";
+if(mB){const zq=String(zxTitel||"").replace(/\*+/g,"").trim(),zr=mSub||"",zsq=mSatz(zq,zW*.08,mBr,zH*.22,1.18),zsr=mSatz(zr,zW*.13,mBr,zH*.36,1.1),zges=zW*.05+zsq.zh+zW*.12+zW*.05+zsr.zh;let zy=zH*.47-zges/2;
+mLabel("Was du schreibst",zy);zy+=zW*.055;zy=mZeichne(zsq,zy,mPal.ink,.5);zy+=zW*.035;e.add(new zFb.Rect({left:zW/2-zW*.04,top:zy,width:zW*.08,height:Math.max(1,zW*.0022),fill:mPal.fix,...zNo}));zy+=zW*.045;mLabel("Was ich lese",zy);zy+=zW*.055;mZeichne(zsr,zy,mPal.ink,1)}
+else{const zsh=mSatz(zxTitel,mFoto?zW*.118:zW*.145,mBr,mFoto?zH*.4:zH*.58,1.1),zlab=!mC&&!mNr&&mKick?mKick:"",zsubH=mSub?zW*.11:0,zlabH=zlab?zW*.06:0,zges=zlabH+zsh.zh+zsubH;let zy=mFoto?zH*.855-zges:zH*.48-zges/2;
+mC&&e.add(new zFb.Text(/^tagebuch$/i.test(mKick)?"heute":mKick,{left:zW/2,top:zH*.085,originX:"center",fontFamily:mH,fontSize:zW*.065,fill:mPal.fix,...zNo}));
 if(mNr){const zt=new zFb.Text(mNr,{fontFamily:mI,fontWeight:"600",fontSize:zW*.026,charSpacing:100,fill:mPal.fix,originX:"center",left:zW/2,top:zH*.085,...zNo});e.add(new zFb.Rect({left:zW/2-(zt.width||0)/2-zW*.022,top:zH*.085-zW*.016,width:(zt.width||0)+zW*.044,height:(zt.height||0)+zW*.03,fill:"",stroke:mPal.fix,strokeWidth:Math.max(1.5,zW*.0025),...zNo}));e.add(zt)}
 zlab&&(mLabel(zlab,zy),zy+=zlabH);zy=mZeichne(zsh,zy,mPal.ink,1);
-mSub&&e.add(new zFb.Textbox(mSub.replace(/\*+/g,""),{left:zW*.14,top:zy+zW*.02,width:zW*.72,textAlign:"center",fontFamily:mI,fontWeight:"400",fontSize:zW*.031,lineHeight:1.3,fill:mPal.ink,opacity:.78,...zNo}))}
+mSub&&e.add(new zFb.Textbox(mSub.replace(/\*+/g,""),{left:zW*.1,top:zy+zW*.025,width:zW*.8,textAlign:"center",fontFamily:mI,fontWeight:"400",fontSize:zW*.04,lineHeight:1.3,fill:mPal.ink,opacity:.78,...zNo}))}
 e.add(new zFb.Text(String(K.kontrastAbsender||"Carina Anna Prav").toLocaleUpperCase("de-DE"),{left:zW/2,top:zH*.945,originX:"center",originY:"center",fontFamily:mI,fontWeight:"600",fontSize:zW*.017,charSpacing:420,fill:mPal.ink,opacity:.55,...zNo}));
 t.overlayImage&&await Ae(t.overlayImage).catch(()=>{});e.renderAll();return}

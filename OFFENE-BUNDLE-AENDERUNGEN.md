@@ -13963,4 +13963,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Folgefolien bleiben karten600.
 - Lokal 12 Cover gerendert, alle Ideen auf allen Flächen, keine Fehler.
 
-Alle Adressen laden **karten645**.
+## 624 — Mokka & Taupe: größerer Text (karten646)
+
+- Carina: „Größer der Text.“ Hook auf Textkacheln zW·0,145 (vorher 0,108), auf Fotos 0,118 (0,09), Satzbreite 86 %. B: Zitat 0,08, „Was ich lese“ 0,13. Unterzeile 0,04, Labels 0,024, Datum 0,065.
+
+Alle Adressen laden **karten646**.
