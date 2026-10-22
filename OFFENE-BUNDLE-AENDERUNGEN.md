@@ -13974,4 +13974,13 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Vorher/Nachher mit Posts: `kontrastVNFoto` 0, Grund Mokka #3A2E25 mit leichtem Korn, Akzent #B9A68A, Schrift #EDE7DD.
 - Korn-Cache der Mokka-Kacheln heißt jetzt `__bsKornM` (vorher Kollision mit dem Vorher/Nachher-Korn `__bsKorn`).
 
-Alle Adressen laden **karten647**.
+## 626 — Quotes mit festem Platz im Feed und Kuli-Notiz (karten648)
+
+- Carina: „Wo sind die Quotes immer wieder“ → fester Platz im Rhythmus; „bitte eine handwritten mit Kuli“ → schwarz.
+- Rhythmus jetzt `mkfoto|mkdunkel|mkquote|mkfoto|mktaupe|mkkuli|mkfoto|mkhell` (jeder 4. Post Quote oder Notiz).
+- `mkquote`: der Hook des Posts als Quote-Karte im Quote-Stil (Rubrik als Handschrift oben, Text nach „&“ unten rechts, `*Wort*` kursiv unterstrichen).
+- `mkkuli`: schwarze Kuli-Handschrift (Nothing You Could Do, #1B1B1E) auf warmem Weiß #F3EEE6 mit Korn, linksbündig, leicht schräg, `*Wort*` unterstrichen, „— C.“ (Initiale aus `kontrastAbsender`).
+- Beide nur bei schlichtem Hook; mit den Zeichen A/B/C/D wird daraus Mokka bzw. Hell, damit das Zeichen sichtbar bleibt.
+- Lokal 14 Tage gerendert, keine Fehler.
+
+Alle Adressen laden **karten648**.
