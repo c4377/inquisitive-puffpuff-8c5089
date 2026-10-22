@@ -17,6 +17,8 @@
       mkkuli    Notiz in blauer Kuli-Handschrift (Carina 22.10.: „Kuli blau“) auf warmem Weiß, linksbündig, *Wort* unterstrichen, unterschrieben „— C.“.
       mkfotoquote dieselbe Quote auf dem Foto, Schrift und Handschrift reinweiß (Carina: „vor allem auch am Foto weiß“).
       Alle drei nur bei schlichtem Hook; mit A/B/C/D-Zeichen wird daraus Mokka (mkquote) bzw. Hell (mkkuli).
+   Quotes (Carina 22.10.: „render eine Quote wie eine Quote“) mit großem Anführungszeichen „“ in Taupe über dem Zitat.
+   Ohne dunkles Braun (Carina 22.10.): Mokka-Plätze im Rhythmus sind Taupe, B auf Foto und Quote-Ersatz werden Taupe.
    Alle Zeilenumbrüche werden entfernt: jede Anweisung endet mit Semikolon, keine // Kommentare. */
 const mkPlain=(()=>{const zk=String(zKickT||"").trim();return!/^was ich lese$/i.test(zk)&&!/\d{1,2}\.\s?\d{1,2}\.?|^tagebuch$|^\d{1,2}$/i.test(zk)&&!/~[^~|]+\|[^~]+~|\{[^{}]+\}/.test(String(zxTitel||""))})();
 if(zxTyp==="mkkuli"&&mkPlain){const kH="Nothing You Could Do",kI="Inter",kBg=K.mokkaPapier||"#F3EEE6",kInk=K.mokkaKuli||"#22409A";
@@ -37,17 +39,17 @@ if(qFoto){zxFotoBG(zxFoto);e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,.
 if(!qFoto)try{let zk=window.__bsKornM;if(!zk){zk=document.createElement("canvas");zk.width=zk.height=256;const zc=zk.getContext("2d"),zd=zc.createImageData(256,256);for(let k=0;k<zd.data.length;k+=4){const zv=Math.random()*255;zd.data[k]=zd.data[k+1]=zd.data[k+2]=zv;zd.data[k+3]=Math.random()<.5?14:0}zc.putImageData(zd,0,0);window.__bsKornM=zk}e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:new zFb.Pattern({source:zk,repeat:"repeat"}),opacity:.55,...zNo}))}catch(zz){}
 const qM=(zw,zg,zi)=>new zFb.Text(String(zw),{fontSize:zg,fontFamily:qS,fontStyle:zi?"italic":"normal"}).width||0,qMax=zW*.82;let qG=zW*.115,qZeilen=[];
 for(let k=0;k<40;k++){const zsp=zg=>zg*.2;qZeilen=[];let zz=[],zb=0;qW.forEach(zo=>{const zi=zo.u||zo.k,zww=qM(zo.w,qG,zi),zbw=zww+(zo.n?qM(zo.n,qG,!1):0);if(zz.length&&zb+zsp(qG)+zbw>qMax){qZeilen.push({w:zz,b:zb});zz=[];zb=0}zb+=(zz.length?zsp(qG):0)+zbw;zz.push({...zo,b:zbw,ww:zww,i:zi})});zz.length&&qZeilen.push({w:zz,b:zb});if(qZeilen.length<=6&&qZeilen.length*qG*1.12<=zH*(qFoto?.32:.5)&&Math.max(0,...qZeilen.map(zl=>zl.b))<=qMax)break;qG*=.95}
-const qHoch=qZeilen.length*qG*1.12;let qY=(qFoto?zH*.6:zH*.5)-qHoch/2;const qY0=qY;
+const qHoch=qZeilen.length*qG*1.12,qZg=qG*3.6;let qY=(qFoto?zH*.62:zH*.54)-qHoch/2;const qY0=qY;e.add(new zFb.Text("\u201C",{left:zW/2,top:qY-qZg*.08,originX:"center",originY:"center",fontFamily:qS,fontSize:qZg,fill:qFix,opacity:qFoto?.95:.85,...zNo}));
 qZeilen.forEach(zl=>{let zx=zW/2-zl.b/2;zl.w.forEach(zo=>{e.add(new zFb.Text(zo.w,{left:zx,top:qY,fontFamily:qS,fontStyle:zo.i?"italic":"normal",fontSize:qG,fill:qInk,...zNo}));zo.n&&e.add(new zFb.Text(zo.n,{left:zx+zo.ww,top:qY,fontFamily:qS,fontSize:qG,fill:qInk,...zNo}));
 zo.u&&e.add(new zFb.Path(`M ${zx-qG*.03} ${qY+qG*1.0} C ${zx+zo.ww*.35} ${qY+qG*.96}, ${zx+zo.ww*.7} ${qY+qG*1.03}, ${zx+zo.ww+qG*.03} ${qY+qG*.98}`,{fill:"",stroke:qFix,strokeWidth:Math.max(2,qG*.04),strokeLineCap:"round",...zNo}));
 zo.k&&e.add(new zFb.Ellipse({left:zx+zo.ww/2,top:qY+qG*.6,originX:"center",originY:"center",rx:zo.ww*.62,ry:qG*.5,angle:-4,fill:"",stroke:qFix,strokeWidth:Math.max(2,qG*.03),...zNo}));zx+=zo.b+qG*.2});qY+=qG*1.12});
-qOben&&e.add(new zFb.Text(qOben,{left:zW*.12,top:qY0-zW*.03,originX:"left",originY:"bottom",angle:-6,fontFamily:qH,fontSize:Math.max(zW*.042,qG*.42),fill:qFix,...zNo}));
+qOben&&e.add(new zFb.Text(qOben,{left:zW*.12,top:qY0-qZg*.3,originX:"left",originY:"bottom",angle:-6,fontFamily:qH,fontSize:Math.max(zW*.042,qG*.42),fill:qFix,...zNo}));
 qUnten&&e.add(new zFb.Text(qUnten,{left:zW*.86,top:qY+zW*.04,originX:"right",originY:"top",angle:-5,fontFamily:qH,fontSize:Math.max(zW*.038,qG*.38),fill:qFix,...zNo}));
 e.add(new zFb.Text(String(K.kontrastAbsender||"Carina Anna Prav").toLocaleUpperCase("de-DE"),{left:zW/2,top:zH*.945,originX:"center",originY:"center",fontFamily:qI,fontWeight:"600",fontSize:zW*.017,charSpacing:420,fill:qInk,opacity:.55,...zNo}));
 t.overlayImage&&await Ae(t.overlayImage).catch(()=>{});e.renderAll();return}
 if(zxTyp==="mkfoto"||zxTyp==="mkdunkel"||zxTyp==="mktaupe"||zxTyp==="mkhell"||zxTyp==="mkquote"||zxTyp==="mkkuli"||zxTyp==="mkfotoquote"){const mS=K.kontrastSerif||"Instrument Serif",mH="Nothing You Could Do",mI="Inter";
 const mKick=String(zKickT||"").trim(),mB=/^was ich lese$/i.test(mKick),mC=!mB&&(/\d{1,2}\.\s?\d{1,2}\.?/.test(mKick)||/^tagebuch$/i.test(mKick)),mNr=/^\d{1,2}$/.test(mKick)?mKick.padStart(2,"0"):"";
-let mTyp=zxTyp==="mkquote"?"mkdunkel":zxTyp==="mkkuli"?"mkhell":zxTyp==="mkfotoquote"?"mkfoto":zxTyp;mTyp==="mkfoto"&&mB&&(mTyp="mkdunkel");mTyp==="mkfoto"&&mC&&(mTyp="mkhell");
+let mTyp=zxTyp==="mkquote"?"mktaupe":zxTyp==="mkkuli"?"mkhell":zxTyp==="mkfotoquote"?"mkfoto":zxTyp;mTyp==="mkfoto"&&mB&&(mTyp="mktaupe");mTyp==="mkfoto"&&mC&&(mTyp="mkhell");
 const mPal={mkdunkel:{bg:K.mokkaDunkel||"#3A2E25",ink:"#FFFFFF",fix:K.mokkaFix||"#B9A68A"},mktaupe:{bg:K.mokkaTaupe||"#79674F",ink:"#FFFFFF",fix:"#E9DCC6"},mkhell:{bg:K.mokkaHell||"#EDE7DD",ink:"#3A2E25",fix:"#79674F"},mkfoto:{bg:"#3A2E25",ink:"#F6F0E6",fix:"#DCC8AA"}}[mTyp];
 try{await Promise.race([Promise.all([`400 40px "${mS}"`,`400 40px "${mH}"`,`400 40px "${mI}"`,`600 40px "${mI}"`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,4e3))])}catch(zz){}
 if(mTyp==="mkfoto"){zxFotoBG(zxFoto);e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,...zNo,fill:new zFb.Gradient({type:"linear",coords:{x1:0,y1:0,x2:0,y2:zH},colorStops:[{offset:0,color:"rgba(58,46,37,0.12)"},{offset:.36,color:"rgba(58,46,37,0)"},{offset:.68,color:"rgba(58,46,37,0.55)"},{offset:1,color:"rgba(58,46,37,0.9)"}]})}))}

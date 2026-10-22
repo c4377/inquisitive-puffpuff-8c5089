@@ -43,7 +43,7 @@ Was du im ersten Slide schreibst, steuert die Typen:
 
 ## Look Mokka & Taupe (seit 22.10.)
 
-Die Cover wechseln automatisch in 8 Schritten: Foto, Mokka, **Quote**, Foto, Taupe, **Kuli-Notiz**, **Foto-Quote in Weiß**, Hell. Quotes kommen also an Tag 2, 6, 10, 14, 18 …, die Kuli-Notiz an Tag 5, 13, 21 …. Quote und Kuli-Notiz nehmen deinen Hook: bei der Quote wird die `[Rubrik]` zur Handschrift oben und der Text nach `&` zur Handschrift unten rechts, bei der Kuli-Notiz steht alles in blauer Kuli-Handschrift, unterschrieben mit „— C.“. Hat der Hook ein Zeichen A–D, kommt an diesem Tag stattdessen Mokka bzw. Hell. Mit diesen Zeichen in Slide 1 bekommt ein Post dein Erkennungszeichen:
+Die Cover wechseln automatisch in 8 Schritten: Foto, Taupe, **Quote**, Foto, Taupe, **Kuli-Notiz**, **Foto-Quote in Weiß**, Hell. Quotes kommen also an Tag 2, 6, 10, 14, 18 …, die Kuli-Notiz an Tag 5, 13, 21 …. Quote und Kuli-Notiz nehmen deinen Hook: bei der Quote wird die `[Rubrik]` zur Handschrift oben und der Text nach `&` zur Handschrift unten rechts, bei der Kuli-Notiz steht alles in blauer Kuli-Handschrift, unterschrieben mit „— C.“. Hat der Hook ein Zeichen A–D, kommt an diesem Tag stattdessen Taupe bzw. Hell. Mit diesen Zeichen in Slide 1 bekommt ein Post dein Erkennungszeichen:
 
 | Idee | So schreibst du | Ergebnis |
 |---|---|---|
@@ -54,7 +54,7 @@ Die Cover wechseln automatisch in 8 Schritten: Foto, Mokka, **Quote**, Foto, Tau
 
 - `*Wort*` färbt ein Wort hell ein (nicht kursiv).
 - Eine andere `[Rubrik]` steht klein in Versalien über dem Hook, der Text nach `&` als ruhige Zeile darunter.
-- B und C kommen nie auf ein Foto, an Foto-Tagen nimmt die App dafür Mokka oder Hell.
+- B und C kommen nie auf ein Foto, an Foto-Tagen nimmt die App dafür Taupe oder Hell.
 
 ## Marken-Check (automatisch, seit 22.10.)
 

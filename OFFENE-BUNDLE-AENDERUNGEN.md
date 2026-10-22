@@ -13998,4 +13998,10 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Rhythmus `mkfoto|mkdunkel|mkquote|mkfoto|mktaupe|mkkuli|mkfotoquote|mkhell`: Quote auf Tag 2, 10, 18 …, Foto-Quote auf Tag 6, 14, 22 …, Kuli-Notiz auf Tag 5, 13, 21 …
 - Hat der Hook ein Zeichen A–D, wird aus der Foto-Quote eine normale Fotokachel.
 
-Alle Adressen laden **karten651**.
+## 630 — Ohne dunkles Braun, Quote mit großem Anführungszeichen (karten652)
+
+- Carina: „Nimm das dunkle Braun raus und render eine Quote bitte wie eine Quote.“
+- Rhythmus `mkfoto|mktaupe|mkquote|mkfoto|mktaupe|mkkuli|mkfotoquote|mkhell` (kein `mkdunkel` mehr). B auf Fototagen und Quote-Ersatz bei Zeichen A–D werden Taupe statt Mokka. Vorher/Nachher mit Posts auf Taupe #79674F, Akzent #E9DCC6.
+- Quote-Karten (Quotes-Knopf, `mkquote`, `mkfotoquote`): großes öffnendes Anführungszeichen „“ in Instrument Serif über dem Zitat (Taupe, auf Foto weiß), Handschrift oben links rückt mit nach oben.
+
+Alle Adressen laden **karten652**.
