@@ -13983,4 +13983,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Beide nur bei schlichtem Hook; mit den Zeichen A/B/C/D wird daraus Mokka bzw. Hell, damit das Zeichen sichtbar bleibt.
 - Lokal 14 Tage gerendert, keine Fehler.
 
-Alle Adressen laden **karten648**.
+## 627 — Schrift auf Mokka und Taupe reinweiß (karten649)
+
+- Carina: „Mach die Schrift in Mokka und Taupe doch reinweiß.“ `mkdunkel` und `mktaupe` jetzt #FFFFFF (vorher #EDE7DD bzw. #F3EDE4), ebenso die Schrift auf der Vorher/Nachher-Folie (`kontrastVNTinte`), die auch auf Mokka liegt.
+
+Alle Adressen laden **karten649**.
