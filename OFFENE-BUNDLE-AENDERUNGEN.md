@@ -13903,4 +13903,22 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Carina: „Nein, zurück. Ich fürchte, erst mit den neuen Bildern wird das was.“
 - Rhythmus wieder `tkfoto|weiss|tkbraun|tkfett|tkfoto|tkbraun`. Die Typen `tkbalken` und `tkkuli` bleiben in `tools/kontrast-tanja.js` und stehen für die neuen Bilder bereit, sind aber nicht im Rhythmus.
 
-Alle Adressen laden **karten639**.
+## 618 — Look „Echt“ aktiv: Titelkacheln und Folgefolien (karten640)
+
+- Abgeleitet aus Carinas eigenem Karussell („Uns wurde erzählt, wir brauchen das perfekte Setup …“). Carina: „Zeig's mir in der App“.
+- Neu `tools/kontrast-echt.js`, zwei Teile, getrennt durch `===FOLGE===`:
+  - **Titelkachel** (Typ `ecfoto`, vor dem Papier-Zweig):
+    - Foto randlos, weicher Verlauf oben.
+    - Satz oben mittig in Inter 800 weiß, Satzschreibung.
+    - Das markierte Wort (sonst das letzte) in Instrument Serif kursiv in Gelb #F0F462.
+    - „wischen →“ unten rechts.
+  - **Folgefolien** (`kontrastEcht: 1`, vor dem Folgefolien-Zweig):
+    - Foto aus den Markenbildern, je Folie ein anderes; Verlauf unten.
+    - Text unten links, Zeilenumbrüche bleiben, `*Wort*` gelb kursiv.
+    - @carinaannaprav unten links, Seitenzahl unten rechts.
+    - Text über 230 Zeichen: dasselbe Foto unscharf und dunkel, Text mittig.
+- Farbe #F0F462 aus Carinas Karussell gemessen, über `kontrastEchtGelb` änderbar.
+- `magKontrastFeed` jetzt `ecfoto`. **Zurück zum alten Look:** in KONTRAST `'magKontrastFeed': 'tkfoto|weiss|tkbraun|tkfett|tkfoto|tkbraun'` und `kontrastEcht` entfernen.
+- Vorher/Nachher-Vorschauen sind in diesem Rhythmus nicht dabei.
+
+Alle Adressen laden **karten640**.

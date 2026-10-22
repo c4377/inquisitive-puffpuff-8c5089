@@ -1,0 +1,32 @@
+/* Look „Echt“ (Carina 22.10., abgeleitet aus ihrem eigenen Karussell „Uns wurde erzählt, wir brauchen das perfekte Setup“).
+   Echtes Foto randlos, weiße fette Schrift (Inter 800, Satzschreibung), genau ein Wort in Instrument Serif kursiv in Gelb #F0F462,
+   Overlay nur als weicher Verlauf hinter dem Text. Zwei Teile in dieser Datei, getrennt durch die Zeile ===FOLGE===:
+   1. Titelkachel (Typ ecfoto, vor dem Papier-Zweig): Satz oben mittig, Verlauf oben, „wischen →“ unten rechts.
+   2. Folgefolien (vor dem Folgefolien-Zweig, wenn kontrastEcht === 1): Text unten links, Verlauf unten,
+      @carinaannaprav unten links, Seitenzahl unten rechts. Langer Text: dasselbe Foto unscharf und dunkel, Text mittig.
+   Alle Zeilenumbrüche werden entfernt: jede Anweisung endet mit Semikolon, keine // Kommentare. */
+if(zxTyp==="ecfoto"){const eF="Inter",eS="Instrument Serif",eG=K.kontrastEchtGelb||"#F0F462";
+try{await Promise.race([Promise.all([`800 40px "${eF}"`,`700 40px "${eF}"`,`italic 400 40px "${eS}"`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,4e3))])}catch(zz){}
+zxFotoBG(zxFoto);e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,...zNo,fill:new zFb.Gradient({type:"linear",coords:{x1:0,y1:0,x2:0,y2:zH},colorStops:[{offset:0,color:"rgba(0,0,0,0.5)"},{offset:.42,color:"rgba(0,0,0,0.12)"},{offset:.6,color:"rgba(0,0,0,0)"},{offset:1,color:"rgba(0,0,0,0.18)"}]})}));
+let eT=String(zxTitel||"").replace(/\s+/g," ").trim();if(!/\*[^*]+\*/.test(eT)){const zw=eT.replace(/[.!?…„“”"]+$/,"").split(" ");if(zw.length>1){const zl=zw[zw.length-1],zi=eT.lastIndexOf(zl);eT=eT.slice(0,zi)+"*"+zl+"*"+eT.slice(zi+zl.length)}}
+const eSg=zxSegs(eT,"wort");let eFs=zW*.075,eTb=null;for(let k=0;k<40;k++){const zsty={};Object.keys(eSg.st).forEach(zk=>{zsty[zk]={fontFamily:eS,fontStyle:"italic",fontWeight:"400",fontSize:eFs*1.16,fill:eG,charSpacing:0}});eTb=new zFb.Textbox(eSg.plain,{left:zW*.08,top:zH*.065,width:zW*.84,fontFamily:eF,fontWeight:"800",fontSize:eFs,lineHeight:1.06,charSpacing:-15,fill:"#FFFFFF",textAlign:"center",styles:{0:zsty},...zNo});const zlw=Math.max(0,...eSg.plain.split(/\s+/).filter(Boolean).map(zwd=>new zFb.Text(zwd,{fontFamily:eF,fontWeight:"800",fontSize:eFs,charSpacing:-15}).width||0));if(zlw<=zW*.83&&eTb.height<=zH*.42)break;eFs*=.95}e.add(eTb);
+e.add(new zFb.Text("wischen →",{left:zW*.94,top:zH*.94,originX:"right",originY:"center",fontFamily:eF,fontWeight:"700",fontSize:zW*.024,fill:"#FFFFFF",...zNo}));
+t.overlayImage&&await Ae(t.overlayImage).catch(()=>{});e.renderAll();return}
+===FOLGE===
+if(!zCover&&K.kontrastEcht===1){const eF="Inter",eS="Instrument Serif",eG=K.kontrastEchtGelb||"#F0F462",eN=(i&&i.slideIndex)||0,eTot=(i&&i.totalSlides)||0,eNo={selectable:!1,evented:!1};
+try{await Promise.race([Promise.all([`800 40px "${eF}"`,`700 40px "${eF}"`,`italic 400 40px "${eS}"`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,4e3))])}catch(zz){}
+e.getObjects().forEach(zo=>{zo.visible=!1});const eFb=Pe.fabric,eW=r,eH=n;
+let eRoh=String(t.text||"").replace(/\r/g,"").replace(/__/g,"").replace(/^\s*\[[^\]\n]{1,30}\]\s*/,"").split("\n").map(q=>q.trim()).filter(Boolean).join("\n");
+const eLang=eRoh.replace(/\*/g,"").length>230;
+const eTg=typeof t._tag=="number"?t._tag:0,ePl=(Array.isArray(window.__bsPlan)?window.__bsPlan:[]).find(zx=>zx&&zx.day===eTg),eBl=window.__bsBilder||[];
+const eSrc=(typeof t.background=="string"&&t.background.length>5?t.background:"")||(eBl.length?eBl[(eTg*5+eN*3+1)%eBl.length]:"")||(window.__bsTagFoto||{})[String(eTg)]||(ePl&&ePl.slides&&ePl.slides[0]&&typeof ePl.slides[0].background=="string"?ePl.slides[0].background:"");
+const eImg=eSrc?await new Promise(zr=>{const zq=new Image();/^https?:/.test(eSrc)&&(zq.crossOrigin="anonymous");zq.onload=()=>zr(zq);zq.onerror=()=>zr(null);zq.src=eSrc;setTimeout(()=>zr(null),8e3)}):null;
+e.backgroundColor="#2A2522";e.add(new eFb.Rect({left:0,top:0,width:eW,height:eH,fill:"#2A2522",...eNo}));
+if(eImg){const zc=document.createElement("canvas"),zsk=eLang?.25:1;zc.width=Math.round(eW*zsk);zc.height=Math.round(eH*zsk);const zx=zc.getContext("2d"),zw0=eImg.naturalWidth||eImg.width,zh0=eImg.naturalHeight||eImg.height,zs=Math.max(zc.width/zw0,zc.height/zh0);zx.drawImage(eImg,(zc.width-zw0*zs)/2,Math.min(0,(zc.height-zh0*zs)*.3),zw0*zs,zh0*zs);let zout=zc;if(eLang){const zc2=document.createElement("canvas");zc2.width=Math.round(eW*.06);zc2.height=Math.round(eH*.06);zc2.getContext("2d").drawImage(zc,0,0,zc2.width,zc2.height);zout=document.createElement("canvas");zout.width=eW;zout.height=eH;const zx3=zout.getContext("2d");zx3.imageSmoothingQuality="high";zx3.drawImage(zc2,0,0,eW,eH)}e.add(new eFb.Image(zout,{left:0,top:0,scaleX:eW/zout.width,scaleY:eH/zout.height,...eNo}))}
+e.add(new eFb.Rect({left:0,top:0,width:eW,height:eH,...eNo,fill:eLang?"rgba(0,0,0,0.48)":new eFb.Gradient({type:"linear",coords:{x1:0,y1:0,x2:0,y2:eH},colorStops:[{offset:0,color:"rgba(0,0,0,0.12)"},{offset:.38,color:"rgba(0,0,0,0)"},{offset:.62,color:"rgba(0,0,0,0.15)"},{offset:1,color:"rgba(0,0,0,0.62)"}]})}));
+let ePlain="";const eSty={};eRoh.split("\n").forEach((zl,zli)=>{let zp="",zk=!1;const zs={};zl.split(/(\*)/).forEach(zq=>{if(zq==="*"){zk=!zk;return}for(let k=0;k<zq.length;k++)zk&&(zs[zp.length+k]=1);zp+=zq});eSty[zli]=zs;ePlain+=(zli?"\n":"")+zp});
+let eFs=eW*.066,eTb=null;for(let k=0;k<45;k++){const zst={};Object.keys(eSty).forEach(zl=>{zst[zl]={};Object.keys(eSty[zl]).forEach(zc=>{zst[zl][zc]={fontFamily:eS,fontStyle:"italic",fontWeight:"400",fontSize:eFs*1.16,fill:eG,charSpacing:0}})});eTb=new eFb.Textbox(ePlain,{left:eW*.08,top:0,width:eW*.84,fontFamily:eF,fontWeight:"800",fontSize:eFs,lineHeight:1.06,charSpacing:-15,fill:"#FFFFFF",textAlign:eLang?"center":"left",styles:zst,...eNo});const zlw=Math.max(0,...ePlain.split(/\s+/).filter(Boolean).map(zwd=>new eFb.Text(zwd,{fontFamily:eF,fontWeight:"800",fontSize:eFs,charSpacing:-15}).width||0));if(zlw<=eW*.83&&eTb.height<=eH*(eLang?.7:.5))break;eFs*=.95}
+eTb.set({top:eLang?eH*.48-(eTb.height||0)/2:eH*.865-(eTb.height||0)});e.add(eTb);
+e.add(new eFb.Text(String(K.kontrastHandle||"@carinaannaprav"),{left:eW*.06,top:eH*.94,originY:"center",fontFamily:eF,fontWeight:"700",fontSize:eW*.024,fill:"#FFFFFF",opacity:.95,...eNo}));
+eTot>1&&e.add(new eFb.Text(`${eN+1} / ${eTot}`,{left:eW*.94,top:eH*.94,originX:"right",originY:"center",fontFamily:eF,fontWeight:"700",fontSize:eW*.024,fill:"#FFFFFF",opacity:.95,...eNo}));
+t.overlayImage&&await Ae(t.overlayImage).catch(()=>{});e.renderAll();return}

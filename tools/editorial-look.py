@@ -84,7 +84,7 @@ KLAR = {'magTitelVersal': 0, 'magCoverSerif': 'Instrument Serif', 'magCoverSerif
         'magCoverBreite': 0.86, 'magTextMaxH': 0.34, 'magFeed': '', 'magMono': '#FFFFFF', 'magAkzent': '#FFFFFF',
         'magDunkelCover': 0, 'magVerlaufCover': 0.1, 'magDunkel': 0, 'magKursivBetonung': 0}
 # Kontrast: Schwarz, Weiß, Anthrazit #33363A, leichter Oxblood-Akzent #5E1A21 (seit 10.10. abends, vorher Oxblood), S/W-Fotos mit hartem Kontrast (tools/kontrast-zeichner.js)
-KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'tkfoto|weiss|tkbraun|tkfett|tkfoto|tkbraun', 'coverGesichtAnteil': 100, 'kontrastFotoKurve': 0.15, 'kontrastHautZiel': 118, 'kontrastFotoZiel': 128, 'kontrastFotoSaett': 1.05, 'kontrastWaerme': 0.035, 'kontrastPortraet': 0, 'kontrastFotoOriginal': 2, 'kino': 0, 'kontrastFloskelnWeg': 0, 'kontrastVerlauf': 0.4, 'kontrastVerlaufOben': 0.12, 'kontrastFotoSchwarz': 0, 'kinoWarm': 0, 'kinoSaettigung': 1, 'kontrastPapierGrund': '#121110', 'bildTon': '22,23,24', 'ablaufTiefeOben': 0.84, 'ablaufTiefeMitte': 0.76, 'ablaufTiefeUnten': 0.92, 'grundA': '#33363A', 'magKontrastCut': 'k3|k2|k7|k4|k5',
+KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'ecfoto', 'kontrastEcht': 1, 'coverGesichtAnteil': 100, 'kontrastFotoKurve': 0.15, 'kontrastHautZiel': 118, 'kontrastFotoZiel': 128, 'kontrastFotoSaett': 1.05, 'kontrastWaerme': 0.035, 'kontrastPortraet': 0, 'kontrastFotoOriginal': 2, 'kino': 0, 'kontrastFloskelnWeg': 0, 'kontrastVerlauf': 0.4, 'kontrastVerlaufOben': 0.12, 'kontrastFotoSchwarz': 0, 'kinoWarm': 0, 'kinoSaettigung': 1, 'kontrastPapierGrund': '#121110', 'bildTon': '22,23,24', 'ablaufTiefeOben': 0.84, 'ablaufTiefeMitte': 0.76, 'ablaufTiefeUnten': 0.92, 'grundA': '#33363A', 'magKontrastCut': 'k3|k2|k7|k4|k5',
             'magKontrastRubrik': 'Ehrlich jetzt|Klartext|Ja-Sagerinnen wissen|Notiz an dich|Aus meinem Alltag', 'kontrastOx': '#141312', 'magSkriptJede': 0,
             'kontrastSerif': 'Feed Serif', 'magCoverSerif': 'Feed Serif', 'magSerif': 'Feed Serif', 'magSerifLaufweite': -15, 'kontrastLaufweite': -15, 'kontrastLabelGewicht': '300',
             'kontrastPapierGroesse': 0.095, 'kontrastPapierBreite': 0.72, 'kontrastFlaecheGroesse': 0.155, 'kontrastTextBreite': 0.86, 'kontrastTextHoehe': 0.58, 'kontrastHell': '#E9E5DF', 'kontrastVNVorschau': 1,
@@ -186,13 +186,17 @@ KFAM = open(__file__.rsplit('/', 1)[0] + '/kontrast-familie.js', encoding='utf-8
 assert KONTZ.count('if(zxTyp==="papier"){') == 1 and KONTZ.count('if(zxTyp==="fotozeilen"||zxTyp==="fotoetikett"||zxTyp==="fotorahmen"){e.getObjects()') == 1
 KONTZ = KONTZ.replace('if(zxTyp==="papier"){', KFAM + 'if(zxTyp==="papier"){', 1).replace(
     'if(zxTyp==="fotozeilen"||zxTyp==="fotoetikett"||zxTyp==="fotorahmen"){e.getObjects()',
-    'if(zxTyp==="fotozeilen"||zxTyp==="fotoetikett"||zxTyp==="fotorahmen"||(zxTyp.slice(0,2)==="f7"&&zxTyp!=="f7schwarz")||(zxTyp.slice(0,2)==="m8"&&zxTyp!=="m8espresso")||zxTyp==="tkfoto"||zxTyp==="tkfett"||zxTyp==="tkbalken"){e.getObjects()', 1)
+    'if(zxTyp==="fotozeilen"||zxTyp==="fotoetikett"||zxTyp==="fotorahmen"||(zxTyp.slice(0,2)==="f7"&&zxTyp!=="f7schwarz")||(zxTyp.slice(0,2)==="m8"&&zxTyp!=="m8espresso")||zxTyp==="tkfoto"||zxTyp==="tkfett"||zxTyp==="tkbalken"||zxTyp==="ecfoto"){e.getObjects()', 1)
 # Moodboard-Vibe (Carina 16.10., tools/kontrast-moodboard.js): Cover-Typen m8*, ebenfalls vor dem Papier-Zweig.
 KMOOD = open(__file__.rsplit('/', 1)[0] + '/kontrast-moodboard.js', encoding='utf-8').read().split('*/', 1)[1].strip() + ' '
 KONTZ = KONTZ.replace('if(zxTyp==="papier"){', KMOOD + 'if(zxTyp==="papier"){', 1)
 # Stil nach tanja.kammler (Carina 16.10., tools/kontrast-tanja.js): Cover-Typen tk*, ebenfalls vor dem Papier-Zweig.
 KTANJA = open(__file__.rsplit('/', 1)[0] + '/kontrast-tanja.js', encoding='utf-8').read().split('*/', 1)[1].strip() + ' '
 KONTZ = KONTZ.replace('if(zxTyp==="papier"){', KTANJA + 'if(zxTyp==="papier"){', 1)
+# Look „Echt“ (Carina 22.10., tools/kontrast-echt.js): Titelkachel ecfoto vor dem Papier-Zweig, Folgefolien vor dem Folgefolien-Zweig.
+_ECHT = open(__file__.rsplit('/', 1)[0] + '/kontrast-echt.js', encoding='utf-8').read().split('*/', 1)[1].strip().split('===FOLGE===')
+assert len(_ECHT) == 2 and KONTZ.count('if(!zCover){const zxN=') == 1
+KONTZ = KONTZ.replace('if(zxTyp==="papier"){', _ECHT[0].strip() + ' if(zxTyp==="papier"){', 1).replace('if(!zCover){const zxN=', _ECHT[1].strip() + ' if(!zCover){const zxN=', 1)
 ZEICHNER = ZEICHNER.replace('if(zCover&&!zMark&&K.magCoverInline===1)', 'let zkObenA=null,zkKeinSchatten=!1,zkScrap="";' + KONTZ + 'if(zCover&&!zMark&&K.magCoverInline===1)', 1).replace('zTyp==="flaeche"&&(zSch=void 0);', '(zTyp==="flaeche"||zTyp0==="scrap")&&(zSch=void 0);', 1)
 ANKER = 'if($e&&(t.karte==="ablauf"||t.reminderArt==="ablauf")){const Ab=T1('
 ABLZ = open(__file__.rsplit('/', 1)[0] + '/kontrast-ablauf.js', encoding='utf-8').read().split('*/', 1)[1].strip()
