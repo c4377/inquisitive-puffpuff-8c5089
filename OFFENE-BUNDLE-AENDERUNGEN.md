@@ -13934,4 +13934,14 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 
 - Carina: „Das ist exakt wie sie, das will ich nicht.“ Rhythmus wieder nur `ecfoto`. Die Typen `ectext`/`ecnotiz` bleiben im Code, werden aber nicht verwendet. Eigene Varianten folgen erst nach ihrer Wahl.
 
-Alle Adressen laden **karten642**.
+## 621 — Folgefolien wieder wie karten600 (karten643)
+
+- Carina: „Die Folge slides lassen wir schon zu karten600.“ Die Serif-Variante von „Echt“ (Schrift wie abovebeyond) wurde nicht live gestellt, stattdessen kommen Marken-Vorschläge.
+- Der Folgefolien-Code ist seit karten600 gleich geblieben, nur Schalter und Farben kamen dazu. Am Ende von KONTRAST setzt ein Block die Werte von damals:
+  - Schalter aus: `kontrastFolgeDunkel`, `kontrastFolgeUnscharf`, `kontrastFolgeLabel` auf 0, `kontrastFolgeAkzent` auf ''.
+  - Farben: `kontrastHell` #EEF0F1, `kontrastAkzent` #5E1A21 (Unterstreichung), `kontrastOrange` und `kontrastAkzentHell` #E2BFB2, `kontrastOx` #141414, `kontrastPapierGrund` #0E0E0E, `kontrastWeiss` #FFFFFF.
+  - Schrift: `kontrastSerif`, `magSerif` und `magCoverSerif` in Instrument Serif, `magSerifLaufweite` −30.
+- `kontrastEcht` ist raus, die Echt-Folgefolien sind also aus. Die Titelkacheln bleiben `ecfoto`.
+- Lokal mit dem Original-Bundle von karten600 verglichen: Textfolie und Schlussfolie sehen gleich aus.
+
+Alle Adressen laden **karten643**.
