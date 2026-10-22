@@ -13967,4 +13967,11 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 
 - Carina: „Größer der Text.“ Hook auf Textkacheln zW·0,145 (vorher 0,108), auf Fotos 0,118 (0,09), Satzbreite 86 %. B: Zitat 0,08, „Was ich lese“ 0,13. Unterzeile 0,04, Labels 0,024, Datum 0,065.
 
-Alle Adressen laden **karten646**.
+## 625 — Quote-Karte und Vorher/Nachher in Mokka & Taupe (karten647)
+
+- Carina: „Wir brauchen auch diesen Quote Style und einen Vergleich Stil“ – Quote wie im Quotes-Knopf eingestellt, Vergleich = Vorher/Nachher mit Posts.
+- Fehler behoben: Seit dem Mokka-Rhythmus fing die Mokka-Titelkachel auch die Quote-Karten ab (Text mit „~“ als Hook). Jetzt eigener Zweig in `tools/kontrast-mokka.js` für `karte`/`reminderArt` „hand“, wenn der Rhythmus mk* ist: warmes Weiß mit Korn, Zitat in Instrument Serif Mokka, `*Wort*` kursiv + unterstrichen, `_Wort_` kursiv + eingekreist (Taupe), Handschrift oben links und unten rechts in Taupe, Satzzeichen hängen am Wort, Name unten.
+- Vorher/Nachher mit Posts: `kontrastVNFoto` 0, Grund Mokka #3A2E25 mit leichtem Korn, Akzent #B9A68A, Schrift #EDE7DD.
+- Korn-Cache der Mokka-Kacheln heißt jetzt `__bsKornM` (vorher Kollision mit dem Vorher/Nachher-Korn `__bsKorn`).
+
+Alle Adressen laden **karten647**.
