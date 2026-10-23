@@ -14028,4 +14028,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Carina: „Bodoni gefällt mir gar nicht. Nimm die Schrift, die wir auf den zweiten Slides haben.“ Creme-, Foto- und Quote-Kacheln jetzt in Instrument Serif (wie die Folgefolien), `*Wort*` kursiv, Laufweite −10 (`shelfLaufweite`).
 - Carina: „Ich mag nicht, dass du einen Markencheck machst und dann Dinge auf Slide 2 schiebst.“ `tools/bulk-marke.js` und der Aufruf in „Plan erstellen“ sind entfernt, der Bulk Import übernimmt die Folien wieder genau so, wie sie geschrieben sind. Abschnitt in der Vorlage gestrichen.
 
-Alle Adressen laden **karten655**.
+## 634 — Vorher/Nachher: größere Schrift im Nachher-Post (karten656)
+
+- Carina: „Größer die Schrift rechts.“ Im gerenderten Nachher-Post startet der Satz bei 96 statt 60 px (Mini-Post-Leinwand), Breite 86 %, bis 46 % der Höhe (vorher 30 %).
+
+Alle Adressen laden **karten656**.
