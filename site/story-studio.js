@@ -615,7 +615,13 @@
     eb.onclick = function () { stories = parseEigen(eta.value); postFuer = zumPost; ladeFotos().then(function (f) { fotos = f; startDesigns(); zeigeStories(); status.textContent = stories.length ? stories.length + " Stories gesetzt." : "Keine Stories erkannt – schreib „Story 1“, „Story 2“ … davor."; }); };
     eigen.appendChild(eta); eigen.appendChild(eb);
     liste = document.createElement("div");
-    inhalt.insertBefore(postBlock, inhalt.firstChild); inhalt.appendChild(thema); inhalt.appendChild(tagesZeile); inhalt.appendChild(themen); inhalt.appendChild(zeile); inhalt.appendChild(status); inhalt.appendChild(eigen); inhalt.appendChild(liste);
+    /* Foto-Story (Carina 23.10., site/foto-story.js): ein echtes Foto → 3 Storylines mit je 7 Slides. */
+    var fsBlock = document.createElement("div"); fsBlock.style.cssText = "margin:0 0 18px;padding:14px;border-radius:16px;background:#271E1C;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px";
+    fsBlock.innerHTML = "<div><div style=\"font:400 22px/1.1 'Instrument Serif',serif\">Foto-Story</div><div style=\"font:13px/1.35 -apple-system,sans-serif;opacity:.8;margin-top:3px\">1 echtes Foto → 3 Storylines mit je 7 Slides</div></div>";
+    var fsB = knopf("📷 Starten"); fsB.style.flex = "none"; fsB.onclick = function () { window.BS_FOTOSTORY && window.BS_FOTOSTORY.oeffne(); };
+    fsBlock.appendChild(fsB);
+    inhalt.insertBefore(postBlock, inhalt.firstChild); inhalt.appendChild(thema);
+    inhalt.insertBefore(fsBlock, inhalt.firstChild); inhalt.appendChild(tagesZeile); inhalt.appendChild(themen); inhalt.appendChild(zeile); inhalt.appendChild(status); inhalt.appendChild(eigen); inhalt.appendChild(liste);
     panel.appendChild(inhalt); document.body.appendChild(panel);
   }
   function start() {

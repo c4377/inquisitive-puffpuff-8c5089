@@ -14040,4 +14040,12 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 
 - Carina: „Die mit der Handschrift doch wieder in Beige, also Creme.“ `mkkuli` wieder auf #F3EFE4, helle Kacheln und Quotes bleiben in `kontrastHell` #EEF0F1.
 
+## 637 — Foto-Story: 1 echtes Foto → 3 Storylines mit je 7 Slides (ohne Bundle-Änderung)
+
+- Carina: „Ich gebe dir ein Foto aus dem Real Life, du machst daraus 7 Story-Slides, Voice wie der Content, Coach, der nicht verkauft, 3 Vorschläge mit meinem Foto, Overlay, anderem Look. Ich hakel an, wir exportieren, ich poste.“
+- `netlify/functions/foto-story.mjs`: Gemini mit Bild (inline_data) und Carinas Story-Regeln, Zielkundin und Fakten aus `story-studio.mjs` (`export const HINTERGRUND`). Eine Anfrage pro Storyline (`variante` 1 „Der Moment“, 2 „Das Missverständnis“, 3 „Frag dich selbst“ mit Sticker-Hinweisen), die App fragt alle drei parallel an. Nur Sichtbares und Carinas eigene Angaben zum Moment, nichts erfinden.
+- `site/foto-story.js` (v1): Foto wählen, optional „Was ist das für ein Moment?“, 3 Karten mit je 7 Vorschaubildern. Looks Klar (Foto + Espresso-Verlauf, Instrument Serif weiß), Karte (Foto oben, Creme-Feld, Tinte, Label in Sand), Ruhig (Foto weich, Versalien weiß, letzte kurze Zeile als Signatur in Gold). Pro Slide anderer Ausschnitt. „Anderer Look“, „Texte ändern“, „Diese nehme ich“, „Exportieren (7 Bilder)“ über Teilen bzw. Galerie zum Sichern.
+- Einstieg im Story-Studio oben („📷 Starten“), `story-studio.js` v23. Kundenraum: aus.
+- Lokal mit echtem Foto und simulierten Texten getestet: 21 Bilder, Auswahl und Export-Knopf funktionieren, keine Fehler. Die echte KI-Antwort braucht Netlify (GEMINI_API_KEY).
+
 Alle Adressen laden **karten658**.

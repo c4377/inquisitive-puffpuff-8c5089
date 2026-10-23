@@ -87,6 +87,9 @@ Kundinnen-Ergebnisse, nur diese:
 - Eine Kundin war „noch niemand". Heute hat sie eine Membership und einen Podcast und wird auf Bühnen eingeladen.
 - Kundinnen haben Membership-Plätze verkauft, 1:1-Plätze vergeben und vierstellige Umsätze gemacht.`;
 
+// Zielkundin und Fakten auch für die Foto-Story (netlify/functions/foto-story.mjs).
+export const HINTERGRUND = PROMPT.slice(PROMPT.indexOf('ZIELKUNDIN ('));
+
 const TECHNIK = `
 
 AUSGABE (technisch, für die App)
