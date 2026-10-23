@@ -95,7 +95,7 @@ KONTRAST = {'magKlarFeed': '', 'magKontrastFeed': 'mkfoto|mkdunkel|mkquote|mkfot
             'kontrastFolgeDunkel': 0, 'kontrastFolgeUnscharf': 0, 'kontrastFolgeLabel': 0, 'kontrastHell': '#EEF0F1', 'kontrastAkzent': '#5E1A21',
             'kontrastSerif': 'Instrument Serif', 'magCoverSerif': 'Instrument Serif', 'magSerif': 'Instrument Serif', 'magSerifLaufweite': -30, 'kontrastLaufweite': -15, 'kontrastWeiss': '#FFFFFF', 'kontrastOrange': '#E2BFB2', 'kontrastAkzentHell': '#E2BFB2', 'kontrastOx': '#141414', 'kontrastPapierGrund': '#0E0E0E', 'kontrastFolgeAkzent': '',
             # Vorher/Nachher mit Posts in Mokka & Taupe (Carina 22.10.): flach Mokka mit leichtem Korn statt getöntem Foto
-            'kontrastVNFoto': 0, 'kontrastVNGrund': '#5C4A26', 'kontrastVNAkzent': '#E8DCC8', 'kontrastVNTinte': '#FFFFFF', 'kontrastVNLabel': 'rgba(237,231,221,0.7)', 'kontrastVNKorn': 14, 'kontrastVNFlecken': 0.6, 'kontrastVNSprenkel': 0}
+            'kontrastVNFoto': 0, 'kontrastVNGrund': '#4E3F20', 'kontrastVNAkzent': '#E8DCC8', 'kontrastVNTinte': '#FFFFFF', 'kontrastVNLabel': 'rgba(237,231,221,0.7)', 'kontrastVNKorn': 14, 'kontrastVNFlecken': 0.6, 'kontrastVNSprenkel': 0}
 weitere = ',"editorial-kontrast":' + json.dumps({**look, **RUHIG, **KLAR, **KONTRAST}, ensure_ascii=False, separators=(',', ':'))
 ersetze('},"frech":', '},"editorial":' + json.dumps(look, ensure_ascii=False, separators=(',', ':')) + weitere + ',"frech":')
 

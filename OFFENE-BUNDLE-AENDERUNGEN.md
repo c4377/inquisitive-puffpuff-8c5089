@@ -14016,4 +14016,11 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Rhythmus `mkfoto|mkdunkel|mkquote|mkfoto|mktaupe|mkkuli|mkfotoquote|mkhell` (dunkler Platz wieder drin, weil der Pin ihn hat). Vorher/Nachher auf Oliv.
 - Lokal 16 Tage gerendert, keine Fehler.
 
-Alle Adressen laden **karten653**.
+## 632 — Bodoni enger, Farben einen Tick dunkler (karten654)
+
+- Carina: „Schrift, die nicht all Caps ist, enger und alle Farben einen Tick dunkler, nur das Beige nicht.“
+- Fehler behoben: Beim Zeilenumbruch wurde für jedes Wort ohne Satzzeichen ein Leerzeichen extra gemessen (`mMiss("")` misst „ “). Dadurch standen die Wörter zu weit auseinander und Zeilen brachen zu früh, auch bei den Versalien.
+- Bodoni Moda (Creme, Foto, Quotes): Laufweite −35 (`shelfLaufweite`), Zeilenabstand 0,98 bzw. 1,02 bei Quotes.
+- Farben: Espresso #271E1C, Schokolade #3A271C, Oliv #4E3F20 (auch Vorher/Nachher), Sand #635645, Tinte #16130F, Kuli #1C3787, Foto-Verläufe dunkler. Creme #F3EFE4 bleibt.
+
+Alle Adressen laden **karten654**.
