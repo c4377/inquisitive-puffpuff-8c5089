@@ -14036,4 +14036,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 
 - Carina: „Könnten wir statt Beige die Farbe der Slide nehmen?“ (gemeint: Creme-Kacheln im Feed). `mkhell`, Quotes und Kuli-Notiz jetzt in `kontrastHell` #EEF0F1 wie die Folgefolien, statt Creme #F3EFE4.
 
-Alle Adressen laden **karten657**.
+## 636 — Kuli-Notiz wieder auf Creme (karten658)
+
+- Carina: „Die mit der Handschrift doch wieder in Beige, also Creme.“ `mkkuli` wieder auf #F3EFE4, helle Kacheln und Quotes bleiben in `kontrastHell` #EEF0F1.
+
+Alle Adressen laden **karten658**.

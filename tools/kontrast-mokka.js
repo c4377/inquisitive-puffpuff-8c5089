@@ -26,9 +26,10 @@
    23.10.: Bodoni enger (Laufweite −35, Wortabstand 0,2, Zeile 0,98), alle Farben einen Tick dunkler außer Creme.
    23.10.: Bodoni raus (Carina: „gefällt mir gar nicht“), überall Instrument Serif wie auf den Folgefolien, Laufweite −10.
    23.10.: Creme raus (Carina: „statt Beige die Farbe der Slide“), helle Kacheln, Quotes und Kuli-Notiz in der Farbe der Folgefolien (kontrastHell #EEF0F1).
+   23.10.: Kuli-Notiz wieder auf Creme #F3EFE4 (Carina: „die mit der Handschrift doch wieder in Beige“).
    Alle Zeilenumbrüche werden entfernt: jede Anweisung endet mit Semikolon, keine // Kommentare. */
 const mkPlain=(()=>{const zk=String(zKickT||"").trim();return!/^was ich lese$/i.test(zk)&&!/\d{1,2}\.\s?\d{1,2}\.?|^tagebuch$|^\d{1,2}$/i.test(zk)&&!/~[^~|]+\|[^~]+~|\{[^{}]+\}/.test(String(zxTitel||""))})();
-if(zxTyp==="mkkuli"&&mkPlain){const kH="Nothing You Could Do",kI="Inter",kBg=K.mokkaPapier||(K.kontrastHell||"#EEF0F1"),kInk=K.mokkaKuli||"#1C3787";
+if(zxTyp==="mkkuli"&&mkPlain){const kH="Nothing You Could Do",kI="Inter",kBg=K.mokkaPapier||"#F3EFE4",kInk=K.mokkaKuli||"#1C3787";
 try{await Promise.race([Promise.all([`400 40px "${kH}"`,`600 40px "${kI}"`].map(zq=>document.fonts.load(zq).catch(()=>{}))),new Promise(zr=>setTimeout(zr,4e3))])}catch(zz){}
 e.getObjects().forEach(zo=>{zo.visible=!1});e.backgroundColor=kBg;e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:kBg,...zNo}));
 try{let zk=window.__bsKornM;if(!zk){zk=document.createElement("canvas");zk.width=zk.height=256;const zc=zk.getContext("2d"),zd=zc.createImageData(256,256);for(let k=0;k<zd.data.length;k+=4){const zv=Math.random()*255;zd.data[k]=zd.data[k+1]=zd.data[k+2]=zv;zd.data[k+3]=Math.random()<.5?14:0}zc.putImageData(zd,0,0);window.__bsKornM=zk}e.add(new zFb.Rect({left:0,top:0,width:zW,height:zH,fill:new zFb.Pattern({source:zk,repeat:"repeat"}),opacity:.55,...zNo}))}catch(zz){}
