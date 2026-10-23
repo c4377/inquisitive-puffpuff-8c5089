@@ -14048,4 +14048,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Einstieg im Story-Studio oben („📷 Starten“), `story-studio.js` v23. Kundenraum: aus.
 - Lokal mit echtem Foto und simulierten Texten getestet: 21 Bilder, Auswahl und Export-Knopf funktionieren, keine Fehler. Die echte KI-Antwort braucht Netlify (GEMINI_API_KEY).
 
+## 638 — Foto-Story: keine Farbflächen, nur durchsichtige Overlays (foto-story.js v2)
+
+- Carina: „Keine Hintergrundfarbe, nur Overlays, die durchsichtig sind.“ Look Karte: Foto jetzt randlos, unten ein Creme-Schleier (Verlauf 0 → 62 % → 80 %) statt der festen Creme-Fläche. Look Ruhig: Espresso-Schleier 50 % statt 62 %.
+
 Alle Adressen laden **karten658**.

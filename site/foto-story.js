@@ -5,7 +5,7 @@
  * (Zielgruppe: Coachin, die postet und nicht verkauft), parallel, je eine Anfrage pro Storyline.
  * Jede Storyline kommt in einem eigenen Look aus dem Brandblatt, alle auf demselben Foto:
  *   Klar   Foto randlos, Verlauf in Espresso, Instrument Serif weiß, ein Wort kursiv.
- *   Karte  Foto oben, Creme-Feld unten, Instrument Serif in Tinte, kleines Label in Sand.
+ *   Karte  Foto randlos, unten ein durchsichtiger Creme-Schleier, Instrument Serif in Tinte, kleines Label in Sand.
  *   Ruhig  Foto weich unscharf unter Espresso, Versalien weiß, letzte kurze Zeile als Signatur in Gold.
  * Pro Slide ein anderer Ausschnitt des Fotos. Texte lassen sich ändern, der Look lässt sich wechseln.
  * „Diese nehme ich“ wählt eine Storyline, „Exportieren“ teilt die 7 Bilder (1080×1920 JPEG).
@@ -16,7 +16,7 @@
   var F = { espresso: "#271E1C", creme: "#F3EFE4", tinte: "#16130F", sand: "#635645", gold: "#E2C49A", weiss: "#FFFFFF", oliv: "#4E3F20" };
   var LOOKS = [
     { id: "klar", name: "Klar", info: "Foto mit Verlauf, Serif in Weiß" },
-    { id: "karte", name: "Karte", info: "Foto oben, Creme-Feld mit Text" },
+    { id: "karte", name: "Karte", info: "Foto mit Creme-Schleier unten" },
     { id: "ruhig", name: "Ruhig", info: "Foto weich, Versalien und Signatur" }
   ];
   var AUSSCHNITT = [[1, .5, .45], [1.14, .35, .3], [1.26, .62, .4], [1.08, .5, .65], [1.32, .45, .28], [1.18, .58, .55], [1.04, .5, .4]];
@@ -110,15 +110,19 @@
     var ctx = canvas.getContext("2d"), a = AUSSCHNITT[k % AUSSCHNITT.length], abs = absaetze(slide.text);
     ctx.clearRect(0, 0, W, H);
     if (look === "karte") {
-      ctx.fillStyle = F.creme; ctx.fillRect(0, 0, W, H);
-      foto && cover(ctx, foto, 0, 0, W, 1100, a);
+      /* Keine Fläche (Carina 23.10.: „keine Hintergrundfarbe, nur Overlays, die durchsichtig sind“): Foto randlos, unten ein Creme-Schleier. */
+      ctx.fillStyle = F.espresso; ctx.fillRect(0, 0, W, H);
+      foto && cover(ctx, foto, 0, 0, W, H, a);
+      var gk = ctx.createLinearGradient(0, 880, 0, H);
+      gk.addColorStop(0, "rgba(243,239,228,0)"); gk.addColorStop(0.28, "rgba(243,239,228,0.62)"); gk.addColorStop(1, "rgba(243,239,228,0.8)");
+      ctx.fillStyle = gk; ctx.fillRect(0, 880, W, H - 880);
       var r = passe(ctx, abs, 98, 900, 450, 1.06, false), y = 1150 + (560 - r.hoch) / 2;
       gesperrt(ctx, k === 0 && titel ? titel : (k + 1) + " / " + n, W / 2, 1205, 24, F.sand, 7);
       male(ctx, r, Math.max(1250, y), F.tinte);
     } else if (look === "ruhig") {
       ctx.fillStyle = F.espresso; ctx.fillRect(0, 0, W, H);
       foto && weich(ctx, foto, a);
-      ctx.fillStyle = "rgba(39,30,28,0.62)"; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = "rgba(39,30,28,0.5)"; ctx.fillRect(0, 0, W, H);
       var sig = abs.length > 1 && abs[abs.length - 1].replace(/\*/g, "").length <= 44 ? abs.pop().replace(/\*/g, "") : "";
       var r2 = passe(ctx, abs, 118, 900, 760, 0.98, true), sigH = sig ? 150 : 0, y2 = 900 - (r2.hoch + sigH) / 2;
       var yE = male(ctx, r2, y2, F.weiss);
