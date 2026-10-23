@@ -14023,4 +14023,9 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Bodoni Moda (Creme, Foto, Quotes): Laufweite −35 (`shelfLaufweite`), Zeilenabstand 0,98 bzw. 1,02 bei Quotes.
 - Farben: Espresso #271E1C, Schokolade #3A271C, Oliv #4E3F20 (auch Vorher/Nachher), Sand #635645, Tinte #16130F, Kuli #1C3787, Foto-Verläufe dunkler. Creme #F3EFE4 bleibt.
 
-Alle Adressen laden **karten654**.
+## 633 — Bodoni raus, Marken-Check raus (karten655)
+
+- Carina: „Bodoni gefällt mir gar nicht. Nimm die Schrift, die wir auf den zweiten Slides haben.“ Creme-, Foto- und Quote-Kacheln jetzt in Instrument Serif (wie die Folgefolien), `*Wort*` kursiv, Laufweite −10 (`shelfLaufweite`).
+- Carina: „Ich mag nicht, dass du einen Markencheck machst und dann Dinge auf Slide 2 schiebst.“ `tools/bulk-marke.js` und der Aufruf in „Plan erstellen“ sind entfernt, der Bulk Import übernimmt die Folien wieder genau so, wie sie geschrieben sind. Abschnitt in der Vorlage gestrichen.
+
+Alle Adressen laden **karten655**.
