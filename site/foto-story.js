@@ -116,7 +116,7 @@
       var gk = ctx.createLinearGradient(0, 880, 0, H);
       gk.addColorStop(0, "rgba(243,239,228,0)"); gk.addColorStop(0.28, "rgba(243,239,228,0.62)"); gk.addColorStop(1, "rgba(243,239,228,0.8)");
       ctx.fillStyle = gk; ctx.fillRect(0, 880, W, H - 880);
-      var r = passe(ctx, abs, 98, 900, 450, 1.06, false), y = 1150 + (560 - r.hoch) / 2;
+      var r = passe(ctx, abs, 76, 860, 420, 1.1, false), y = 1150 + (560 - r.hoch) / 2;
       gesperrt(ctx, k === 0 && titel ? titel : (k + 1) + " / " + n, W / 2, 1205, 24, F.sand, 7);
       male(ctx, r, Math.max(1250, y), F.tinte);
     } else if (look === "ruhig") {
@@ -124,16 +124,16 @@
       foto && weich(ctx, foto, a);
       ctx.fillStyle = "rgba(39,30,28,0.5)"; ctx.fillRect(0, 0, W, H);
       var sig = abs.length > 1 && abs[abs.length - 1].replace(/\*/g, "").length <= 44 ? abs.pop().replace(/\*/g, "") : "";
-      var r2 = passe(ctx, abs, 118, 900, 760, 0.98, true), sigH = sig ? 150 : 0, y2 = 900 - (r2.hoch + sigH) / 2;
+      var r2 = passe(ctx, abs, 90, 860, 700, 1.0, true), sigH = sig ? 125 : 0, y2 = 900 - (r2.hoch + sigH) / 2;
       var yE = male(ctx, r2, y2, F.weiss);
-      if (sig) { ctx.font = "400 92px \"" + SIG + "\""; ctx.fillStyle = F.gold; ctx.textAlign = "center"; ctx.fillText(sig, W / 2, yE + 105, 940); ctx.textAlign = "left"; }
+      if (sig) { ctx.font = "400 74px \"" + SIG + "\""; ctx.fillStyle = F.gold; ctx.textAlign = "center"; ctx.fillText(sig, W / 2, yE + 88, 900); ctx.textAlign = "left"; }
     } else {
       ctx.fillStyle = F.espresso; ctx.fillRect(0, 0, W, H);
       foto && cover(ctx, foto, 0, 0, W, H, a);
       var g = ctx.createLinearGradient(0, H * 0.35, 0, H);
       g.addColorStop(0, "rgba(39,30,28,0)"); g.addColorStop(0.55, "rgba(39,30,28,0.55)"); g.addColorStop(1, "rgba(39,30,28,0.9)");
       ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-      var r3 = passe(ctx, abs, 112, 920, 680, 1.04, false), y3 = 1540 - r3.hoch;
+      var r3 = passe(ctx, abs, 84, 860, 620, 1.1, false), y3 = 1540 - r3.hoch;
       k === 0 && titel && gesperrt(ctx, titel, W / 2, y3 - 40, 26, F.weiss, 8);
       male(ctx, r3, y3, F.weiss);
     }

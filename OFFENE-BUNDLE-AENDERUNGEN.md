@@ -14052,4 +14052,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 
 - Carina: „Keine Hintergrundfarbe, nur Overlays, die durchsichtig sind.“ Look Karte: Foto jetzt randlos, unten ein Creme-Schleier (Verlauf 0 → 62 % → 80 %) statt der festen Creme-Fläche. Look Ruhig: Espresso-Schleier 50 % statt 62 %.
 
+## 639 — Foto-Story: Schrift kleiner (foto-story.js v3)
+
+- Carina: „Schrift kleiner.“ Startgrößen: Klar 84 px (vorher 112), Karte 76 px (98), Ruhig 90 px (118), Signatur 74 px (92), Textbreite 860 px.
+
 Alle Adressen laden **karten658**.
