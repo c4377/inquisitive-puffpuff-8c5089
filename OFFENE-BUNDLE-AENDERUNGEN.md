@@ -14004,4 +14004,16 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Rhythmus `mkfoto|mktaupe|mkquote|mkfoto|mktaupe|mkkuli|mkfotoquote|mkhell` (kein `mkdunkel` mehr). B auf Fototagen und Quote-Ersatz bei Zeichen A–D werden Taupe statt Mokka. Vorher/Nachher mit Posts auf Taupe #79674F, Akzent #E9DCC6.
 - Quote-Karten (Quotes-Knopf, `mkquote`, `mkfotoquote`): großes öffnendes Anführungszeichen „“ in Instrument Serif über dem Zitat (Taupe, auf Foto weiß), Handschrift oben links rückt mit nach oben.
 
-Alle Adressen laden **karten652**.
+## 631 — Farben, Look und Flair nach Carinas Pin (karten653)
+
+- Carina (Pin mit Quote-Kacheln: Espresso, Schokolade mit Gold, Oliv, Creme, Didone-Serif, schmale Versalien, Signatur-Schrift): „Diese Farben, Look, Flair.“
+- `tools/kontrast-mokka.js`:
+  - Espresso #302523 (`mkdunkel`, jede 2. Runde Schokolade #442E21 mit Goldschrift #E2C49A) und Oliv #5C4A26 (`mktaupe`) in schmalen Versalien (Instrument Serif), Oliv linksbündig unten.
+  - Creme #F3EFE4 (`mkhell`) und Foto in Bodoni Moda, `*Wort*` kursiv. Auf Creme „(Nr. Tag)“ klein unten.
+  - Text nach „&“ als Signatur-Schrift (Mrs Saint Delafield). Rubrik klein in Versalien oben statt über dem Hook.
+  - Quotes in Bodoni Moda auf Creme, Tinte #1E1B18, Anführungszeichen und Signatur in Sand #736451; lange Unterzeile umbricht rechtsbündig. Kuli-Notiz auf Creme.
+  - Korn leiser, Foto-Verläufe in Espresso.
+- Rhythmus `mkfoto|mkdunkel|mkquote|mkfoto|mktaupe|mkkuli|mkfotoquote|mkhell` (dunkler Platz wieder drin, weil der Pin ihn hat). Vorher/Nachher auf Oliv.
+- Lokal 16 Tage gerendert, keine Fehler.
+
+Alle Adressen laden **karten653**.
