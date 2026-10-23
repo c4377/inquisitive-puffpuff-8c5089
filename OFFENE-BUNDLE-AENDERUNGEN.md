@@ -14032,4 +14032,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 
 - Carina: „Größer die Schrift rechts.“ Im gerenderten Nachher-Post startet der Satz bei 96 statt 60 px (Mini-Post-Leinwand), Breite 86 %, bis 46 % der Höhe (vorher 30 %).
 
-Alle Adressen laden **karten656**.
+## 635 — Helle Kacheln in der Farbe der Folgefolien (karten657)
+
+- Carina: „Könnten wir statt Beige die Farbe der Slide nehmen?“ (gemeint: Creme-Kacheln im Feed). `mkhell`, Quotes und Kuli-Notiz jetzt in `kontrastHell` #EEF0F1 wie die Folgefolien, statt Creme #F3EFE4.
+
+Alle Adressen laden **karten657**.
