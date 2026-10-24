@@ -14060,4 +14060,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 
 - Carina (Beispiel laura.hersche_, Grund #EEEDE8): „Das helle Kühle müsste weniger kühl, mehr grün, aber warm werden.“ `kontrastHell` #EEEDE7 statt #EEF0F1. Gilt für helle Kacheln, Quotes und Folgefolien gleichermaßen, damit sie zusammenpassen. Kuli-Notiz bleibt Creme.
 
-Alle Adressen laden **karten659**.
+## 641 — Quote: Handschrift oben über dem Anführungszeichen (karten660)
+
+- Carina: „Diese Anführungszeichen überlagern.“ Die Handschrift oben (Quotes-Knopf „~…“ bzw. Rubrik) stand links daneben und lief bei langen Zeilen ins Anführungszeichen. Jetzt mittig darüber, bricht bei Bedarf um, der ganze Block rückt nach unten.
+
+Alle Adressen laden **karten660**.
