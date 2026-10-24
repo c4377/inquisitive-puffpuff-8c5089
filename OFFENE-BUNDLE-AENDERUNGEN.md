@@ -14056,4 +14056,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 
 - Carina: „Schrift kleiner.“ Startgrößen: Klar 84 px (vorher 112), Karte 76 px (98), Ruhig 90 px (118), Signatur 74 px (92), Textbreite 860 px.
 
-Alle Adressen laden **karten658**.
+## 640 — Helles Grau wärmer, Richtung Grün (karten659)
+
+- Carina (Beispiel laura.hersche_, Grund #EEEDE8): „Das helle Kühle müsste weniger kühl, mehr grün, aber warm werden.“ `kontrastHell` #EEEDE7 statt #EEF0F1. Gilt für helle Kacheln, Quotes und Folgefolien gleichermaßen, damit sie zusammenpassen. Kuli-Notiz bleibt Creme.
+
+Alle Adressen laden **karten659**.
