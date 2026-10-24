@@ -14068,4 +14068,13 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 
 - Carina: „Du hast die geilste Voice, ab damit in die Stories.“ Neuer Block `STIMME` in `netlify/functions/story-studio.mjs` (exportiert), eingesetzt im Story-Studio-Prompt nach STIL und im Foto-Story-Prompt: ein Gedanke pro Slide, Haltung statt Tipp, kippende Gegensatzpaare, „nicht … sondern“, Zitate der Zielkundin plus Übersetzung, kurze Pointen-Nachsätze, warm und fair, keine Floskeln, Fakten nur mit Bedeutung für die Leserin. Mechanik und feste Regeln bleiben.
 
+## 643 — Hook-Generator (ohne Bundle-Änderung)
+
+- Carina: „Bau einen Hooksgenerator ein.“ Neu `netlify/functions/hooks.mjs` (Gemini, Stimme `STIMME` und Zielkundin/Fakten aus `story-studio.mjs`) und `site/hook-generator.js` (v1).
+- Feed: Slide 1 im Bulk-Format pro Tag, Regeln je Tag nach dem Feed-Rhythmus (Tag % 8: Foto ohne B/C, Quote/Foto-Quote/Kuli ohne Zeichen, sonst A–D erlaubt, etwa jeder 3. Hook mit Zeichen, Kasten-Nummern fortlaufend). „ab Tag“ = letzter Tag im Plan + 1. Zu lange Rubriken (> 24 Zeichen) werden entfernt.
+- Reels: Satz der ersten 2 Sekunden, Format „Kamera“ oder „Text im Bild“.
+- 10–100 Hooks, ab 20 in Paketen zu 20 parallel mit eigenem Schwerpunkt; Doppelte werden aussortiert. Abhaken, „Ausgewählte kopieren“ (Feed im Bulk-Format zum Einfügen mit „Anhängen“).
+- Einstieg: Story-Studio oben („✎ Hooks“), Knopf unten links heißt jetzt „✦ Stories · Hooks“ (`story-studio.js` v24). Kundenraum: aus.
+- Getestet: Funktion mit simulierter Gemini-Antwort (Tagesregeln, Thema, Schwerpunkt, Rubrik-Kürzung), Oberfläche mit simulierter Funktion (30 Hooks in 2 Paketen, Kopieren im Bulk-Format). Echte KI nur live.
+
 Alle Adressen laden **karten660**.

@@ -620,7 +620,13 @@
     fsBlock.innerHTML = "<div><div style=\"font:400 22px/1.1 'Instrument Serif',serif\">Foto-Story</div><div style=\"font:13px/1.35 -apple-system,sans-serif;opacity:.8;margin-top:3px\">1 echtes Foto → 3 Storylines mit je 7 Slides</div></div>";
     var fsB = knopf("📷 Starten"); fsB.style.flex = "none"; fsB.onclick = function () { window.BS_FOTOSTORY && window.BS_FOTOSTORY.oeffne(); };
     fsBlock.appendChild(fsB);
+    /* Hook-Generator (Carina 24.10., site/hook-generator.js): Feed- und Reel-Hooks in ihrer Stimme. */
+    var hkB = knopf("✎ Hooks"); hkB.style.flex = "none"; hkB.onclick = function () { window.BS_HOOKS && window.BS_HOOKS.oeffne(); };
+    var hkBlock = document.createElement("div"); hkBlock.style.cssText = "margin:-8px 0 18px;padding:14px;border-radius:16px;background:#4E3F20;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px";
+    hkBlock.innerHTML = "<div><div style=\"font:400 22px/1.1 'Instrument Serif',serif\">Hook-Generator</div><div style=\"font:13px/1.35 -apple-system,sans-serif;opacity:.8;margin-top:3px\">Feed-Hooks im Bulk-Format oder Reel-Hooks</div></div>";
+    hkBlock.appendChild(hkB);
     inhalt.insertBefore(postBlock, inhalt.firstChild); inhalt.appendChild(thema);
+    inhalt.insertBefore(hkBlock, inhalt.firstChild);
     inhalt.insertBefore(fsBlock, inhalt.firstChild); inhalt.appendChild(tagesZeile); inhalt.appendChild(themen); inhalt.appendChild(zeile); inhalt.appendChild(status); inhalt.appendChild(eigen); inhalt.appendChild(liste);
     panel.appendChild(inhalt); document.body.appendChild(panel);
   }
@@ -631,7 +637,7 @@
       "background:" + OX + ";color:#fff;font:600 12px/1 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;box-shadow:0 2px 10px rgba(0,0,0,.25)}" +
       "body.bs-insta #bs-story-knopf,body.bs-auswahl #bs-story-knopf{display:none}";
     document.head.appendChild(css);
-    var b = document.createElement("button"); b.id = "bs-story-knopf"; b.type = "button"; b.textContent = "✦ Stories"; b.onclick = oeffne;
+    var b = document.createElement("button"); b.id = "bs-story-knopf"; b.type = "button"; b.textContent = "✦ Stories · Hooks"; b.onclick = oeffne;
     document.body.appendChild(b);
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
