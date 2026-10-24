@@ -14077,4 +14077,10 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Einstieg: Story-Studio oben („✎ Hooks“), Knopf unten links heißt jetzt „✦ Stories · Hooks“ (`story-studio.js` v24). Kundenraum: aus.
 - Getestet: Funktion mit simulierter Gemini-Antwort (Tagesregeln, Thema, Schwerpunkt, Rubrik-Kürzung), Oberfläche mit simulierter Funktion (30 Hooks in 2 Paketen, Kopieren im Bulk-Format). Echte KI nur live.
 
+## 644 — Hook-Generator mit Caption (ohne Bundle-Änderung)
+
+- Carina: „Mit Caption.“ Schalter „mit Caption“ (Standard an). `hooks.mjs` mit `caption: true`: zu jedem Hook eine Caption in Carinas Stimme (4–8 kurze Absätze, Ich-Perspektive, Schluss mit Frage oder ruhiger Einladung, kein Codewort, keine Preise, keine Hashtags, nichts erfinden). Caption-Zeilen, die wie „Tag 3:“ oder „Slide 2:“ beginnen, werden entschärft („Tag 3,“), damit der Bulk Import sie nicht als neuen Tag liest.
+- Feed kopiert im Bulk-Format mit „Caption:“ darunter, Reels als Hook + Caption. Mit Caption Pakete zu 10 statt 20 (längere Antworten). `hook-generator.js` v3.
+- Getestet mit simulierter KI: Prompt enthält den Caption-Block nur mit Schalter, Kopie im Bulk-Format mit Absätzen.
+
 Alle Adressen laden **karten660**.

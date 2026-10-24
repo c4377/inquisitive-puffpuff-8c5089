@@ -1,6 +1,7 @@
 // Netlify Function: Hook-Generator — Hooks in Carinas Stimme für Feed-Posts (Bulk-Format) oder Reels.
 // Der Schluessel bleibt SERVERSEITIG (GEMINI_API_KEY) — nie in der App.
-// POST { art: "feed"|"reels", thema?: "…", start?: 1, anzahl: 1..25, winkel?: "…" }
+// POST { art: "feed"|"reels", thema?: "…", start?: 1, anzahl: 1..25, winkel?: "…", caption?: true }
+//   Mit caption: zu jedem Hook eine Caption in Carinas Stimme (Feld "caption").
 //   feed  -> { hooks: [{ tag, thema, slide1 }] }   (Slide 1 im Bulk-Format, passend zum Feed-Rhythmus)
 //   reels -> { hooks: [{ hook, format }] }
 // Die App fragt größere Mengen in Paketen zu 20 parallel an (je ein anderer Winkel), damit keine Anfrage zu lange dauert.
@@ -50,7 +51,15 @@ DIE TAGE (genau diese, in dieser Reihenfolge)
 {{TAGE}}
 
 AUSGABE: NUR JSON, ohne Vorwort:
-{"hooks":[{"tag":1,"thema":"2–4 Wörter","slide1":"…"}]}`;
+{"hooks":[{"tag":1,"thema":"2–4 Wörter","slide1":"…"{{CAPFELD}}}]}`;
+
+const CAPTION = `
+
+CAPTION (zu JEDEM Hook, Feld "caption")
+- Ich-Perspektive, du-Ansprache, Carinas Stimme. 4–8 kurze Absätze, zusammen etwa 400–800 Zeichen, Absätze getrennt mit \\n\\n.
+- Erster Satz greift den Hook auf, ohne ihn zu wiederholen. Dann der Gedanke dahinter, Carinas Sicht mit Begründung, ein Satz, der hängen bleibt.
+- Schluss: eine Frage an die Leserin oder eine ruhige Einladung („Schreib mir, wenn …“). Kein Codewort, keine Preise, keine Hashtags, Emojis höchstens eins.
+- Nichts erfinden: keine Erlebnisse, Zahlen oder Kundinnen, die nicht in den Fakten stehen.`;
 
 const REELS = `
 
@@ -60,14 +69,17 @@ FORMAT REELS
 - "format": „Kamera“ oder „Text im Bild“.
 
 AUSGABE: NUR JSON, ohne Vorwort:
-{"hooks":[{"hook":"…","format":"Kamera"}]}
+{"hooks":[{"hook":"…","format":"Kamera"{{CAPFELD}}}]}
 Genau {{ANZAHL}} Hooks.`;
+
+// Caption: Absätze behalten, keine Zeile darf wie „Tag 3:“ oder „Slide 2:“ anfangen (würde den Bulk Import zerlegen).
+const sauberCaption = (c) => String(c || '').replace(/\r/g, '').split('\n').map((z) => z.trim().replace(/^(Tag|Day|Woche|Slide|Folie|Bild|Page)\s*(\d+)\s*[:.\-–—]/i, '$1 $2,')).join('\n').replace(/\n{3,}/g, '\n\n').trim().slice(0, 2200);
 
 export default async (req) => {
   if (req.method !== 'POST') return new Response(JSON.stringify({ error: 'POST only' }), { status: 405 });
   const key = process.env.GEMINI_API_KEY;
   if (!key) return new Response(JSON.stringify({ error: 'GEMINI_API_KEY fehlt (Netlify → Environment variables).' }), { status: 500 });
-  let art = 'feed', thema = '', start = 1, anzahl = 20, winkel = '', nr = 1;
+  let art = 'feed', thema = '', start = 1, anzahl = 20, winkel = '', nr = 1, mitCaption = false;
   try {
     const b = await req.json();
     art = b.art === 'reels' ? 'reels' : 'feed';
@@ -76,6 +88,7 @@ export default async (req) => {
     anzahl = Math.min(25, Math.max(1, parseInt(b.anzahl, 10) || 20));
     winkel = String(b.winkel || '').replace(/\s+/g, ' ').trim().slice(0, 200);
     nr = Math.max(1, parseInt(b.nr, 10) || 1);
+    mitCaption = b.caption === true;
   } catch {
     return new Response(JSON.stringify({ error: 'Ungültiger Body' }), { status: 400 });
   }
@@ -86,6 +99,8 @@ export default async (req) => {
   } else {
     prompt += REELS.replace('{{ANZAHL}}', String(anzahl));
   }
+  if (mitCaption) prompt += CAPTION;
+  prompt = prompt.replace('{{CAPFELD}}', mitCaption ? ',"caption":"…"' : '');
   if (thema) prompt += `\n\nTHEMA VON CARINA (alle Hooks drehen sich darum, aus verschiedenen Richtungen): ${thema}`;
   if (winkel) prompt += `\n\nSCHWERPUNKT DIESES PAKETS (damit sich die Pakete nicht wiederholen): ${winkel}`;
 
@@ -118,10 +133,10 @@ export default async (req) => {
         let s1 = String(h?.slide1 || '').replace(/\s+/g, ' ').trim().replace(/^Slide\s*1\s*:\s*/i, '');
         const m = /^\[([^\]]*)\]\s*/.exec(s1);
         if (m && m[1].length > 24) s1 = s1.slice(m[0].length); // zu lange Rubrik würde sichtbar stehen bleiben
-        return { tag: start + k, thema: String(h?.thema || '').replace(/\s+/g, ' ').trim().slice(0, 40) || 'Thema', slide1: s1 };
+        return { tag: start + k, thema: String(h?.thema || '').replace(/\s+/g, ' ').trim().slice(0, 40) || 'Thema', slide1: s1, caption: mitCaption ? sauberCaption(h?.caption) : '' };
       }).filter((h) => h.slide1).slice(0, anzahl);
     } else {
-      hooks = liste.map((h) => ({ hook: String(h?.hook || '').replace(/\s+/g, ' ').trim(), format: /text/i.test(String(h?.format || '')) ? 'Text im Bild' : 'Kamera' }))
+      hooks = liste.map((h) => ({ hook: String(h?.hook || '').replace(/\s+/g, ' ').trim(), format: /text/i.test(String(h?.format || '')) ? 'Text im Bild' : 'Kamera', caption: mitCaption ? sauberCaption(h?.caption) : '' }))
         .filter((h) => h.hook).slice(0, anzahl);
     }
     if (!hooks.length) return new Response(JSON.stringify({ error: 'Keine Hooks erhalten. Nochmal versuchen.' }), { status: 502 });

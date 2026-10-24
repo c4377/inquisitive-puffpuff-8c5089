@@ -5,6 +5,8 @@
  * Tag im Plan, damit der Rhythmus beim Anhängen stimmt. Reels: Satz der ersten 2 Sekunden plus Format.
  * Mehr als 20 Hooks werden in Paketen zu 20 parallel geschrieben, jedes Paket mit eigenem Schwerpunkt.
  * Hooks lassen sich abhaken; „Kopieren“ legt die ausgewählten in die Zwischenablage (Feed im Bulk-Format).
+ * „mit Caption“ (Standard an, Carina 24.10.): zu jedem Hook eine Caption, im Feed als „Caption:“ im Bulk-Format;
+ * dann Pakete zu 10, weil die Antworten länger sind.
  */
 (function () {
   if (window.BS_RAUM) return;
@@ -16,7 +18,7 @@
     "Carinas Geschichte und Fakten, immer mit Bedeutung für die Leserin",
     "Haltung zu Content: Karussells, Mehrwert, Inspo sammeln, Tipps vs. Entscheidungen"
   ];
-  var panel = null, liste = null, status = null, hooks = [], art = "feed";
+  var panel = null, liste = null, status = null, hooks = [], art = "feed", mitCaption = true;
 
   function el(tag, css, txt) { var e = document.createElement(tag); css && (e.style.cssText = css); txt != null && (e.textContent = txt); return e; }
   function knopf(t, primaer) {
@@ -39,7 +41,7 @@
       } catch (e) { ok(0); }
     });
   }
-  function bulkText(h) { return "Tag " + h.tag + ": " + h.thema + "\nSlide 1: " + h.slide1; }
+  function bulkText(h) { return "Tag " + h.tag + ": " + h.thema + "\nSlide 1: " + h.slide1 + (h.caption ? "\nCaption:\n" + h.caption : ""); }
   function kopiere(t, b) {
     var fertig = function () { var a = b.textContent; b.textContent = "Kopiert ✓"; setTimeout(function () { b.textContent = a; }, 1600); };
     try { navigator.clipboard.writeText(t).then(fertig, function () { alt(); }); } catch (e) { alt(); }
@@ -59,7 +61,7 @@
     kop.onclick = function () {
       var w = hooks.filter(function (h) { return h.an; });
       if (!w.length) return;
-      kopiere(art === "feed" ? w.map(bulkText).join("\n\n") : w.map(function (h) { return h.hook; }).join("\n"), kop);
+      kopiere(art === "feed" ? w.map(bulkText).join("\n\n") : w.map(function (h) { return h.caption ? h.hook + "\n\n" + h.caption : h.hook; }).join(w.some(function (h) { return h.caption; }) ? "\n\n———\n\n" : "\n"), kop);
     };
     leiste.appendChild(kop); leiste.appendChild(alle); leiste.appendChild(keine); leiste.appendChild(zahl); liste.appendChild(leiste);
     hooks.forEach(function (h) {
@@ -74,6 +76,7 @@
         t.appendChild(el("div", "font:600 11px -apple-system,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:" + SAND, h.format));
         t.appendChild(el("div", "font:16px/1.4 -apple-system,sans-serif;color:" + TINTE + ";margin-top:3px", h.hook));
       }
+      if (h.caption) { var cap = el("details", "margin-top:8px;font:14px/1.45 -apple-system,sans-serif;color:#4a3f37"); cap.appendChild(el("summary", "cursor:pointer;color:" + SAND + ";font-weight:600", "Caption")); cap.appendChild(el("div", "white-space:pre-wrap;margin-top:6px", h.caption)); cap.onclick = function (ev) { ev.stopPropagation(); }; t.appendChild(cap); }
       z.appendChild(cb); z.appendChild(t); liste.appendChild(z);
     });
     zaehle();
@@ -82,11 +85,12 @@
   function schreibe(thema, anzahl, start, los) {
     los.disabled = true; hooks = []; zeige();
     var pakete = [], rest = anzahl, s = start, k = 0;
-    while (rest > 0) { var n = Math.min(20, rest); pakete.push({ start: s, anzahl: n, winkel: WINKEL[k % WINKEL.length], nr: k * 10 + 1 }); s += n; rest -= n; k++; }
+    var gr = mitCaption ? 10 : 20;
+    while (rest > 0) { var n = Math.min(gr, rest); pakete.push({ start: s, anzahl: n, winkel: WINKEL[k % WINKEL.length], nr: k * 10 + 1 }); s += n; rest -= n; k++; }
     var fertig = 0, fehler = [], teile = [];
-    status.textContent = "Schreibe " + anzahl + " Hooks … (etwa 20 Sekunden)";
+    status.textContent = "Schreibe " + anzahl + " Hooks" + (mitCaption ? " mit Caption" : "") + " … (etwa 20–30 Sekunden)";
     pakete.forEach(function (p, i) {
-      fetch("/.netlify/functions/hooks", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ art: art, thema: thema, start: p.start, anzahl: p.anzahl, winkel: anzahl > 20 ? p.winkel : "", nr: p.nr }) })
+      fetch("/.netlify/functions/hooks", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ art: art, thema: thema, start: p.start, anzahl: p.anzahl, winkel: anzahl > gr ? p.winkel : "", nr: p.nr, caption: mitCaption }) })
         .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d && d.error || "Fehlgeschlagen"); return d; }); })
         .then(function (d) { teile[i] = d.hooks || []; })
         .catch(function (e) { fehler.push(e.message || String(e)); teile[i] = []; })
@@ -131,9 +135,13 @@
     var start = el("input", "width:76px;border:1px solid #e6ddd0;border-radius:999px;padding:10px 12px;font:600 14px -apple-system,sans-serif;background:#fff"); start.type = "number"; start.min = "1"; start.value = "1";
     startZeile.appendChild(el("span", "", "ab Tag")); startZeile.appendChild(start);
     letzterTag().then(function (t) { start.value = String(t + 1); });
+    var capL = el("label", "display:flex;gap:6px;align-items:center;font:600 14px -apple-system,sans-serif;color:" + ES + ";cursor:pointer");
+    var capC = el("input"); capC.type = "checkbox"; capC.checked = true; capC.style.cssText = "width:18px;height:18px;accent-color:" + ES;
+    capC.onchange = function () { mitCaption = capC.checked; };
+    capL.appendChild(capC); capL.appendChild(document.createTextNode("mit Caption"));
     var los = knopf("Hooks schreiben", true);
     los.onclick = function () { schreibe(thema.value.trim(), Number(anz.value) || 20, Math.max(1, parseInt(start.value, 10) || 1), los); };
-    zeile.appendChild(anz); zeile.appendChild(startZeile); zeile.appendChild(los);
+    zeile.appendChild(anz); zeile.appendChild(startZeile); zeile.appendChild(capL); zeile.appendChild(los);
     status = el("div", "font:14px/1.4 -apple-system,sans-serif;color:#5b4f45;min-height:20px;margin:0 0 6px");
     liste = el("div");
     inhalt.appendChild(el("div", "font:15px/1.45 -apple-system,sans-serif;color:#4a3f37;margin-bottom:12px", "Hooks in deiner Stimme für die Coachin, die postet und nicht verkauft. Feed-Hooks kommen im Bulk-Format und passen zum Rhythmus (Quotes, Kuli-Notizen, Zeichen A–D)."));
