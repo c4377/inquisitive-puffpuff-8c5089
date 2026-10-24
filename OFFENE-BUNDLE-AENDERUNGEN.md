@@ -14064,4 +14064,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 
 - Carina: „Diese Anführungszeichen überlagern.“ Die Handschrift oben (Quotes-Knopf „~…“ bzw. Rubrik) stand links daneben und lief bei langen Zeilen ins Anführungszeichen. Jetzt mittig darüber, bricht bei Bedarf um, der ganze Block rückt nach unten.
 
+## 642 — Die Stimme der 100 Hooks in den Story-Schreibern (ohne Bundle-Änderung)
+
+- Carina: „Du hast die geilste Voice, ab damit in die Stories.“ Neuer Block `STIMME` in `netlify/functions/story-studio.mjs` (exportiert), eingesetzt im Story-Studio-Prompt nach STIL und im Foto-Story-Prompt: ein Gedanke pro Slide, Haltung statt Tipp, kippende Gegensatzpaare, „nicht … sondern“, Zitate der Zielkundin plus Übersetzung, kurze Pointen-Nachsätze, warm und fair, keine Floskeln, Fakten nur mit Bedeutung für die Leserin. Mechanik und feste Regeln bleiben.
+
 Alle Adressen laden **karten660**.

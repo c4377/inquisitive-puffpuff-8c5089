@@ -3,7 +3,7 @@
 // POST { bild: "data:image/jpeg;base64,…", moment?: "…", variante: 1|2|3 }  ->  { titel, idee, slides: [{ text, sticker }] }
 // Die App fragt die drei Varianten parallel an (je eine Storyline), damit keine Anfrage zu lange dauert.
 // Zielkundin und Fakten kommen aus dem Story-Studio (gleiche Stimme, gleiche Regeln).
-import { HINTERGRUND } from './story-studio.mjs';
+import { HINTERGRUND, STIMME } from './story-studio.mjs';
 
 const VARIANTEN = {
   1: `STORYLINE „DER MOMENT“
@@ -47,6 +47,8 @@ STIL (Carinas Stimme)
 - Ich-Perspektive, du-Ansprache, souverän, warm, klar. Kurze Sätze, Fragmente als Pointe.
 - Jede Slide höchstens 120 Zeichen, höchstens 3 kurze Zeilen. Keine Füllslides.
 - Denglisch erlaubt, Emojis höchstens eins pro Sequenz.
+
+${STIMME}
 
 FESTE REGELN
 - Immer Deutsch. Zahlen als Ziffern.
