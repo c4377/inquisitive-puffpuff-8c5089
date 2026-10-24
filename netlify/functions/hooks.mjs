@@ -1,6 +1,7 @@
 // Netlify Function: Hook-Generator — Hooks in Carinas Stimme für Feed-Posts (Bulk-Format) oder Reels.
 // Der Schluessel bleibt SERVERSEITIG (GEMINI_API_KEY) — nie in der App.
-// POST { art: "feed"|"reels", thema?: "…", start?: 1, anzahl: 1..25, winkel?: "…", caption?: true }
+// POST { art: "feed"|"reels", thema?: "…", start?: 1, anzahl: 1..25, winkel?: "…", caption?: true, stil?: "klartext"|"neugier" }
+//   stil "neugier" (Carina 24.10.: „Hooks mehr wie eve“): Mechanik von Neugier-Hooks, in Carinas Worten, ohne fremde Sätze.
 //   Mit caption: zu jedem Hook eine Caption in Carinas Stimme (Feld "caption").
 //   feed  -> { hooks: [{ tag, thema, slide1 }] }   (Slide 1 im Bulk-Format, passend zum Feed-Rhythmus)
 //   reels -> { hooks: [{ hook, format }] }
@@ -61,6 +62,20 @@ CAPTION (zu JEDEM Hook, Feld "caption")
 - Schluss: eine Frage an die Leserin oder eine ruhige Einladung („Schreib mir, wenn …“). Kein Codewort, keine Preise, keine Hashtags, Emojis höchstens eins.
 - Nichts erfinden: keine Erlebnisse, Zahlen oder Kundinnen, die nicht in den Fakten stehen.`;
 
+const NEUGIER = `
+
+STIL „NEUGIER“ (für diese Hooks wichtiger als die ruhigen Pointen oben)
+Diese Hooks machen neugierig und lassen etwas offen, damit man weiterwischt. Mechaniken, frei gemischt:
+- Offene Schleife mit Doppelpunkt am Ende: „Seit 2018 auf Instagram. Und das hat mir am meisten über Verkaufen gezeigt:“
+- Gegenfrage zu einer verbreiteten Annahme: „Ist Mehrwert-Content am Ende?“
+- Nummeriertes Versprechen: „3 Fragen, die dir zeigen, ob dein Post je eine Anfrage bringt:“
+- Kontrast mit Auflösung später: „Warum mehr Reichweite gut klingt, aber ein klarer Satz das eigentliche Minimum ist.“
+- Echte Autorität aus Carinas Fakten als Einstieg: „25 Coaches begleitet, jedes Video selbst angeschaut. Was fast immer fehlt:“
+- „POV:“ mit einer Szene aus dem Alltag der Zielkundin (als Szene, nicht als Behauptung über Carina).
+- Die Zeile nach „&“ ist eine kurze, lockere Einladung zum Weiterwischen in Carinas Worten, z. B. „& ich erklär's dir →“, „& kurz und ehrlich“, „& eine davon tut weh“.
+- Zahlen nur aus Carinas Fakten. Keine erfundenen Umsätze, Kundenzahlen oder Ergebnisse. Keine Sätze, Floskeln oder englischen Kürzel anderer Coaches übernehmen.
+- Die Auflösung muss Carina später liefern können: Versprich nichts, was nicht aus ihrer Arbeit oder ihren Fakten kommt.`;
+
 const REELS = `
 
 FORMAT REELS
@@ -79,7 +94,7 @@ export default async (req) => {
   if (req.method !== 'POST') return new Response(JSON.stringify({ error: 'POST only' }), { status: 405 });
   const key = process.env.GEMINI_API_KEY;
   if (!key) return new Response(JSON.stringify({ error: 'GEMINI_API_KEY fehlt (Netlify → Environment variables).' }), { status: 500 });
-  let art = 'feed', thema = '', start = 1, anzahl = 20, winkel = '', nr = 1, mitCaption = false;
+  let art = 'feed', thema = '', start = 1, anzahl = 20, winkel = '', nr = 1, mitCaption = false, stil = 'klartext';
   try {
     const b = await req.json();
     art = b.art === 'reels' ? 'reels' : 'feed';
@@ -89,6 +104,7 @@ export default async (req) => {
     winkel = String(b.winkel || '').replace(/\s+/g, ' ').trim().slice(0, 200);
     nr = Math.max(1, parseInt(b.nr, 10) || 1);
     mitCaption = b.caption === true;
+    stil = b.stil === 'neugier' ? 'neugier' : 'klartext';
   } catch {
     return new Response(JSON.stringify({ error: 'Ungültiger Body' }), { status: 400 });
   }
@@ -99,6 +115,7 @@ export default async (req) => {
   } else {
     prompt += REELS.replace('{{ANZAHL}}', String(anzahl));
   }
+  if (stil === 'neugier') prompt += NEUGIER;
   if (mitCaption) prompt += CAPTION;
   prompt = prompt.replace('{{CAPFELD}}', mitCaption ? ',"caption":"…"' : '');
   if (thema) prompt += `\n\nTHEMA VON CARINA (alle Hooks drehen sich darum, aus verschiedenen Richtungen): ${thema}`;

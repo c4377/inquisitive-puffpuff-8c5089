@@ -18,7 +18,7 @@
     "Carinas Geschichte und Fakten, immer mit Bedeutung für die Leserin",
     "Haltung zu Content: Karussells, Mehrwert, Inspo sammeln, Tipps vs. Entscheidungen"
   ];
-  var panel = null, liste = null, status = null, hooks = [], art = "feed", mitCaption = true;
+  var panel = null, liste = null, status = null, hooks = [], art = "feed", mitCaption = true, stil = "klartext";
 
   function el(tag, css, txt) { var e = document.createElement(tag); css && (e.style.cssText = css); txt != null && (e.textContent = txt); return e; }
   function knopf(t, primaer) {
@@ -90,7 +90,7 @@
     var fertig = 0, fehler = [], teile = [];
     status.textContent = "Schreibe " + anzahl + " Hooks" + (mitCaption ? " mit Caption" : "") + " … (etwa 20–30 Sekunden)";
     pakete.forEach(function (p, i) {
-      fetch("/.netlify/functions/hooks", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ art: art, thema: thema, start: p.start, anzahl: p.anzahl, winkel: anzahl > gr ? p.winkel : "", nr: p.nr, caption: mitCaption }) })
+      fetch("/.netlify/functions/hooks", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ art: art, thema: thema, start: p.start, anzahl: p.anzahl, winkel: anzahl > gr ? p.winkel : "", nr: p.nr, caption: mitCaption, stil: stil }) })
         .then(function (r) { return r.json().then(function (d) { if (!r.ok) throw new Error(d && d.error || "Fehlgeschlagen"); return d; }); })
         .then(function (d) { teile[i] = d.hooks || []; })
         .catch(function (e) { fehler.push(e.message || String(e)); teile[i] = []; })
@@ -127,6 +127,14 @@
     }
     feedB.onclick = function () { setzeArt("feed"); }; reelB.onclick = function () { setzeArt("reels"); };
     artZeile.appendChild(feedB); artZeile.appendChild(reelB);
+    /* Stil (Carina 24.10.: „Hooks mehr wie eve“): Klartext = ruhige Pointen, Neugier = offene Schleifen, Fragen, Nummern. */
+    var stilZeile = el("div", "display:flex;gap:8px;align-items:center;margin:-4px 0 12px;font:13px -apple-system,sans-serif;color:" + SAND);
+    var klarB = knopf("Klartext"), neuB = knopf("Neugier");
+    [klarB, neuB].forEach(function (b) { b.style.padding = "8px 13px"; b.style.fontSize = "13px"; });
+    var stilInfo = el("span", "");
+    function setzeStil(x) { stil = x; [[klarB, "klartext"], [neuB, "neugier"]].forEach(function (y) { var an = y[1] === x; y[0].style.background = an ? SAND : "#fff"; y[0].style.color = an ? "#fff" : SAND; }); stilInfo.textContent = x === "neugier" ? "offene Schleifen, Fragen, Nummern" : "ruhige Pointen, Haltung"; }
+    klarB.onclick = function () { setzeStil("klartext"); }; neuB.onclick = function () { setzeStil("neugier"); };
+    stilZeile.appendChild(el("span", "", "Stil:")); stilZeile.appendChild(klarB); stilZeile.appendChild(neuB); stilZeile.appendChild(stilInfo); setzeStil("klartext");
     var thema = el("textarea", "width:100%;box-sizing:border-box;border:1px solid #e6ddd0;border-radius:12px;padding:10px;font:16px/1.4 -apple-system,sans-serif;background:#fff");
     thema.rows = 2; thema.placeholder = "Optional: Thema, z. B. „Warum Coaches ihr Angebot verstecken“. Leer = quer durch deine Themen.";
     var zeile = el("div", "display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0");
@@ -145,7 +153,7 @@
     status = el("div", "font:14px/1.4 -apple-system,sans-serif;color:#5b4f45;min-height:20px;margin:0 0 6px");
     liste = el("div");
     inhalt.appendChild(el("div", "font:15px/1.45 -apple-system,sans-serif;color:#4a3f37;margin-bottom:12px", "Hooks in deiner Stimme für die Coachin, die postet und nicht verkauft. Feed-Hooks kommen im Bulk-Format und passen zum Rhythmus (Quotes, Kuli-Notizen, Zeichen A–D)."));
-    inhalt.appendChild(artZeile); inhalt.appendChild(thema); inhalt.appendChild(zeile); inhalt.appendChild(status); inhalt.appendChild(liste);
+    inhalt.appendChild(artZeile); inhalt.appendChild(stilZeile); inhalt.appendChild(thema); inhalt.appendChild(zeile); inhalt.appendChild(status); inhalt.appendChild(liste);
     panel.appendChild(inhalt); document.body.appendChild(panel);
     setzeArt("feed");
   }

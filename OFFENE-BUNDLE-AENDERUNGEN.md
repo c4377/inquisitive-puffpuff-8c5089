@@ -14083,4 +14083,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 - Feed kopiert im Bulk-Format mit „Caption:“ darunter, Reels als Hook + Caption. Mit Caption Pakete zu 10 statt 20 (längere Antworten). `hook-generator.js` v3.
 - Getestet mit simulierter KI: Prompt enthält den Caption-Block nur mit Schalter, Kopie im Bulk-Format mit Absätzen.
 
+## 645 — Hook-Generator: Stil „Neugier“ (ohne Bundle-Änderung)
+
+- Carina (Screenshots abovebeyond.coaching): „Hooks mehr wie eve.“ Neuer Stil-Schalter Klartext / Neugier (`hook-generator.js` v4, `hooks.mjs` `stil: "neugier"`). Neugier übernimmt nur die Mechanik: offene Schleife mit Doppelpunkt, Gegenfrage, nummeriertes Versprechen, Kontrast mit späterer Auflösung, Carinas echte Fakten als Autorität, „POV:“-Szene, lockere Einladung nach „&“ in Carinas Worten. Keine fremden Sätze oder englischen Kürzel, keine erfundenen Zahlen, nur Auflösungen, die Carina liefern kann.
+
 Alle Adressen laden **karten660**.
