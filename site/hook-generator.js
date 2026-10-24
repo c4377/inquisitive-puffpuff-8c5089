@@ -61,7 +61,7 @@
     kop.onclick = function () {
       var w = hooks.filter(function (h) { return h.an; });
       if (!w.length) return;
-      kopiere(art === "feed" ? w.map(bulkText).join("\n\n") : w.map(function (h) { return h.caption ? h.hook + "\n\n" + h.caption : h.hook; }).join(w.some(function (h) { return h.caption; }) ? "\n\n———\n\n" : "\n"), kop);
+      kopiere(art === "nische" ? (function () { var k = 0; return w.map(function (h) { return h.titel ? h.hook : (++k) + ". " + h.hook; }).join("\n\n"); })() : art === "feed" ? w.map(bulkText).join("\n\n") : w.map(function (h) { return h.caption ? h.hook + "\n\n" + h.caption : h.hook; }).join(w.some(function (h) { return h.caption; }) ? "\n\n———\n\n" : "\n"), kop);
     };
     leiste.appendChild(kop); leiste.appendChild(alle); leiste.appendChild(keine); leiste.appendChild(zahl); liste.appendChild(leiste);
     hooks.forEach(function (h) {
@@ -85,7 +85,7 @@
   function schreibe(thema, anzahl, start, los) {
     los.disabled = true; hooks = []; zeige();
     var pakete = [], rest = anzahl, s = start, k = 0;
-    var gr = mitCaption ? 10 : 20;
+    var gr = art === "nische" ? 25 : mitCaption ? 10 : 20; if (art === "nische") anzahl = Math.min(anzahl, 25);
     while (rest > 0) { var n = Math.min(gr, rest); pakete.push({ start: s, anzahl: n, winkel: WINKEL[k % WINKEL.length], nr: k * 10 + 1 }); s += n; rest -= n; k++; }
     var fertig = 0, fehler = [], teile = [];
     status.textContent = "Schreibe " + anzahl + " Hooks" + (mitCaption ? " mit Caption" : "") + " … (etwa 20–30 Sekunden)";
@@ -104,7 +104,7 @@
             if (gesehen[key]) return false; gesehen[key] = 1; return true;
           }).map(function (h) { h.an = true; return h; });
           los.disabled = false;
-          status.textContent = hooks.length ? hooks.length + " Hooks fertig." + (fehler.length ? " (" + fehler.length + " Paket(e) fehlgeschlagen: " + fehler[0] + ")" : "") + (art === "feed" ? " Kopieren und im Bulk Import mit „Anhängen“ einfügen." : "") : "Fehler: " + (fehler[0] || "keine Hooks erhalten");
+          status.textContent = hooks.length ? (art === "nische" && hooks[0] && hooks[0].titel ? "Fertig: Hook über die Hooks + " + (hooks.length - 1) + " Hooks." : hooks.length + " Hooks fertig.") + (fehler.length ? " (" + fehler.length + " Paket(e) fehlgeschlagen: " + fehler[0] + ")" : "") + (art === "feed" ? " Kopieren und im Bulk Import mit „Anhängen“ einfügen." : "") : "Fehler: " + (fehler[0] || "keine Hooks erhalten");
           zeige();
         });
     });
@@ -119,14 +119,18 @@
     kopf.appendChild(zu); panel.appendChild(kopf);
     var inhalt = el("div", "max-width:760px;margin:0 auto;padding:18px 16px 60px");
     var artZeile = el("div", "display:flex;gap:8px;margin-bottom:12px");
-    var feedB = knopf("Feed-Posts"), reelB = knopf("Reels");
+    var feedB = knopf("Feed-Posts"), reelB = knopf("Reels"), nischeB = knopf("Für Coach-Nische");
     var startZeile = el("div", "display:flex;gap:8px;align-items:center;font:14px -apple-system,sans-serif;color:" + SAND);
     function setzeArt(a) {
-      art = a; [[feedB, "feed"], [reelB, "reels"]].forEach(function (x) { var an = x[1] === a; x[0].style.background = an ? ES : "#fff"; x[0].style.color = an ? "#fff" : ES; });
+      art = a; [[feedB, "feed"], [reelB, "reels"], [nischeB, "nische"]].forEach(function (x) { var an = x[1] === a; x[0].style.background = an ? ES : "#fff"; x[0].style.color = an ? "#fff" : ES; });
       startZeile.style.display = a === "feed" ? "flex" : "none"; hooks = []; zeige(); status.textContent = "";
+      /* Für Coach-Nische (Carina 24.10.): Thema = Nische, 5 Hooks + Hook über die Hooks, ohne Stil, Caption und Tage. */
+      var n = a === "nische"; stilZeile.style.display = n ? "none" : "flex"; capL.style.display = n ? "none" : "flex";
+      thema.placeholder = n ? "Nische, z. B. Ernährungscoach, Mindset-Coach, Paar-Coach" : "Optional: Thema, z. B. „Warum Coaches ihr Angebot verstecken“. Leer = quer durch deine Themen.";
+      anz.value = n ? "5" : (anz.value === "5" ? "20" : anz.value);
     }
-    feedB.onclick = function () { setzeArt("feed"); }; reelB.onclick = function () { setzeArt("reels"); };
-    artZeile.appendChild(feedB); artZeile.appendChild(reelB);
+    feedB.onclick = function () { setzeArt("feed"); }; reelB.onclick = function () { setzeArt("reels"); }; nischeB.onclick = function () { setzeArt("nische"); };
+    artZeile.style.flexWrap = "wrap"; artZeile.appendChild(feedB); artZeile.appendChild(reelB); artZeile.appendChild(nischeB);
     /* Stil (Carina 24.10.: „Hooks mehr wie eve“): Klartext = ruhige Pointen, Neugier = offene Schleifen, Fragen, Nummern. */
     var stilZeile = el("div", "display:flex;gap:8px;align-items:center;margin:-4px 0 12px;font:13px -apple-system,sans-serif;color:" + SAND);
     var klarB = knopf("Klartext"), neuB = knopf("Neugier");
@@ -139,7 +143,7 @@
     thema.rows = 2; thema.placeholder = "Optional: Thema, z. B. „Warum Coaches ihr Angebot verstecken“. Leer = quer durch deine Themen.";
     var zeile = el("div", "display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0");
     var anz = el("select", "border:1px solid #e6ddd0;border-radius:999px;padding:10px 14px;font:600 14px -apple-system,sans-serif;background:#fff");
-    [10, 20, 30, 50, 100].forEach(function (n) { var o = el("option", "", n + " Hooks"); o.value = n; n === 20 && (o.selected = true); anz.appendChild(o); });
+    [5, 10, 20, 30, 50, 100].forEach(function (n) { var o = el("option", "", n + " Hooks"); o.value = n; n === 20 && (o.selected = true); anz.appendChild(o); });
     var start = el("input", "width:76px;border:1px solid #e6ddd0;border-radius:999px;padding:10px 12px;font:600 14px -apple-system,sans-serif;background:#fff"); start.type = "number"; start.min = "1"; start.value = "1";
     startZeile.appendChild(el("span", "", "ab Tag")); startZeile.appendChild(start);
     letzterTag().then(function (t) { start.value = String(t + 1); });
@@ -148,7 +152,7 @@
     capC.onchange = function () { mitCaption = capC.checked; };
     capL.appendChild(capC); capL.appendChild(document.createTextNode("mit Caption"));
     var los = knopf("Hooks schreiben", true);
-    los.onclick = function () { schreibe(thema.value.trim(), Number(anz.value) || 20, Math.max(1, parseInt(start.value, 10) || 1), los); };
+    los.onclick = function () { if (art === "nische" && !thema.value.trim()) { status.textContent = "Bitte zuerst eine Nische eintragen, z. B. Ernährungscoach."; thema.focus(); return; } schreibe(thema.value.trim(), Number(anz.value) || 20, Math.max(1, parseInt(start.value, 10) || 1), los); };
     zeile.appendChild(anz); zeile.appendChild(startZeile); zeile.appendChild(capL); zeile.appendChild(los);
     status = el("div", "font:14px/1.4 -apple-system,sans-serif;color:#5b4f45;min-height:20px;margin:0 0 6px");
     liste = el("div");

@@ -76,6 +76,24 @@ Diese Hooks machen neugierig und lassen etwas offen, damit man weiterwischt. Mec
 - Zahlen nur aus Carinas Fakten. Keine erfundenen Umsätze, Kundenzahlen oder Ergebnisse. Keine Sätze, Floskeln oder englischen Kürzel anderer Coaches übernehmen.
 - Die Auflösung muss Carina später liefern können: Versprich nichts, was nicht aus ihrer Arbeit oder ihren Fakten kommt.`;
 
+// Für eine Coach-Nische (Carina 24.10.: „eigene Hooks für Hooks, die ich als XY-Coach heute verwenden würde, danach 5 Hooks“):
+// zuerst ein Hook über die Hooks in Carinas Stimme, dann N Hooks, die eine Coachin dieser Nische heute posten kann.
+const NISCHE = `Du schreibst für Carina Anna Prav (Mentorin für Coaches). Sie zeigt ihrer Community Hooks, die eine Coachin einer bestimmten Nische heute verwenden kann.
+
+${STIMME}
+
+AUFGABE
+NISCHE: {{NISCHE}}
+1. "titel": EIN Hook in Carinas Stimme, der diese Hooks ankündigt, z. B. „5 Hooks, die du als {{NISCHE}} heute posten kannst.“ Höchstens 90 Zeichen, ein Wort in *Sternchen*.
+2. "hooks": genau {{ANZAHL}} Hooks, die eine {{NISCHE}} für IHRE Kundinnen posten kann. Konkret aus deren Alltag, in der Mechanik oben, jeder mit einer anderen Mechanik: Umdeuten („Du brauchst nicht … Du brauchst …“), Zitat der Kundin plus Übersetzung, „nicht … sondern“, kippendes Gegensatzpaar, offene Schleife mit Doppelpunkt, Gegenfrage, nummeriertes Versprechen.
+- Jeder Hook höchstens 100 Zeichen, du-Ansprache an die Kundin der Coachin.
+- Keine erfundenen Zahlen, Studien, Ergebnisse oder Erfahrungen. Nichts, was eine Coachin dieser Nische nicht ehrlich sagen kann.
+- Keine Heilversprechen, keine medizinischen oder rechtlichen Aussagen.
+- "mechanik": 1–3 Wörter, welche Mechanik es ist.
+
+AUSGABE: NUR JSON, ohne Vorwort:
+{"titel":"…","hooks":[{"hook":"…","mechanik":"…"}]}`;
+
 const REELS = `
 
 FORMAT REELS
@@ -97,7 +115,7 @@ export default async (req) => {
   let art = 'feed', thema = '', start = 1, anzahl = 20, winkel = '', nr = 1, mitCaption = false, stil = 'klartext';
   try {
     const b = await req.json();
-    art = b.art === 'reels' ? 'reels' : 'feed';
+    art = b.art === 'reels' ? 'reels' : b.art === 'nische' ? 'nische' : 'feed';
     thema = String(b.thema || '').replace(/\s+/g, ' ').trim().slice(0, 400);
     start = Math.max(1, parseInt(b.start, 10) || 1);
     anzahl = Math.min(25, Math.max(1, parseInt(b.anzahl, 10) || 20));
@@ -108,17 +126,18 @@ export default async (req) => {
   } catch {
     return new Response(JSON.stringify({ error: 'Ungültiger Body' }), { status: 400 });
   }
-  let prompt = GRUND;
+  if (art === 'nische' && !thema) return new Response(JSON.stringify({ error: 'Bitte eine Nische eintragen, z. B. Ernährungscoach.' }), { status: 400 });
+  let prompt = art === 'nische' ? NISCHE.replace(/\{\{NISCHE\}\}/g, thema).replace('{{ANZAHL}}', String(anzahl)) : GRUND;
   if (art === 'feed') {
     const tage = Array.from({ length: anzahl }, (_, k) => { const t = start + k; return `Tag ${t}: ${REGEL[PLATZ[t % 8]]}`; }).join('\n');
     prompt += FEED.replace('{{TAGE}}', tage).replace('{{NR}}', String(nr).padStart(2, '0'));
-  } else {
+  } else if (art === 'reels') {
     prompt += REELS.replace('{{ANZAHL}}', String(anzahl));
   }
-  if (stil === 'neugier') prompt += NEUGIER;
-  if (mitCaption) prompt += CAPTION;
+  if (stil === 'neugier' && art !== 'nische') prompt += NEUGIER;
+  if (mitCaption && art !== 'nische') prompt += CAPTION;
   prompt = prompt.replace('{{CAPFELD}}', mitCaption ? ',"caption":"…"' : '');
-  if (thema) prompt += `\n\nTHEMA VON CARINA (alle Hooks drehen sich darum, aus verschiedenen Richtungen): ${thema}`;
+  if (thema && art !== 'nische') prompt += `\n\nTHEMA VON CARINA (alle Hooks drehen sich darum, aus verschiedenen Richtungen): ${thema}`;
   if (winkel) prompt += `\n\nSCHWERPUNKT DIESES PAKETS (damit sich die Pakete nicht wiederholen): ${winkel}`;
 
   const MODELLE = ['gemini-3.6-flash', 'gemini-3-flash', 'gemini-flash-latest', 'gemini-2.5-flash'];
@@ -145,7 +164,10 @@ export default async (req) => {
     }
     const liste = Array.isArray(out.hooks) ? out.hooks : [];
     let hooks;
-    if (art === 'feed') {
+    if (art === 'nische') {
+      hooks = liste.map((h) => ({ hook: String(h?.hook || '').replace(/\s+/g, ' ').trim(), format: String(h?.mechanik || '').replace(/\s+/g, ' ').trim().slice(0, 30) || 'Hook', caption: '' })).filter((h) => h.hook).slice(0, anzahl);
+      if (hooks.length && out.titel) hooks.unshift({ hook: String(out.titel).replace(/\s+/g, ' ').trim(), format: 'Hook über die Hooks', caption: '', titel: true });
+    } else if (art === 'feed') {
       hooks = liste.map((h, k) => {
         let s1 = String(h?.slide1 || '').replace(/\s+/g, ' ').trim().replace(/^Slide\s*1\s*:\s*/i, '');
         const m = /^\[([^\]]*)\]\s*/.exec(s1);

@@ -14087,4 +14087,8 @@ Carina hat eine erzeugte Serie selbst überarbeitet. Daraus abgeleitet (`netlify
 
 - Carina (Screenshots abovebeyond.coaching): „Hooks mehr wie eve.“ Neuer Stil-Schalter Klartext / Neugier (`hook-generator.js` v4, `hooks.mjs` `stil: "neugier"`). Neugier übernimmt nur die Mechanik: offene Schleife mit Doppelpunkt, Gegenfrage, nummeriertes Versprechen, Kontrast mit späterer Auflösung, Carinas echte Fakten als Autorität, „POV:“-Szene, lockere Einladung nach „&“ in Carinas Worten. Keine fremden Sätze oder englischen Kürzel, keine erfundenen Zahlen, nur Auflösungen, die Carina liefern kann.
 
+## 646 — Hook-Generator: „Für Coach-Nische“ (ohne Bundle-Änderung)
+
+- Carina: „Eigene Hooks für Hooks, die ich als XY-Coach heute verwenden würde, danach 5 Hooks. Nicht als Karussell, sondern bei den Hooks.“ Dritte Art „Für Coach-Nische“ (`hook-generator.js` v5, `hooks.mjs` `art: "nische"`, Thema = Nische, Pflicht). Ergebnis: ein Hook über die Hooks in Carinas Stimme („5 Hooks, die du als … heute posten kannst.“) und N Hooks (Standard 5, bis 25) für die Kundinnen dieser Nische, jeder mit eigener Mechanik und Label. Keine erfundenen Zahlen oder Ergebnisse, keine Heilversprechen. Kopieren: Titel, dann nummerierte Hooks.
+
 Alle Adressen laden **karten660**.
